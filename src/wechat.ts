@@ -11,7 +11,7 @@ declare const wx: {
   getMenuButtonBoundingClientRect?: () => { bottom: number };
   getStorageSync(key: string): unknown; setStorageSync(key: string, value: Save): void;
   onTouchStart(callback: (e: TouchEvent) => void): void; onTouchMove(callback: (e: TouchEvent) => void): void;
-  onTouchEnd(callback: (e: TouchEvent) => void): void; onTouchCancel(callback: () => void): void;
+  onTouchEnd(callback: (e: TouchEvent) => void): void; onTouchCancel(callback: (e?: TouchEvent) => void): void;
   onHide(callback: () => void): void; onShow(callback: () => void): void;
   onWindowResize?: (callback: () => void) => void;
   createInnerAudioContext(): InnerAudio; setKeepScreenOn(options: { keepScreenOn: boolean }): void;
@@ -48,7 +48,10 @@ const runtime = new CanvasRuntime({
 wx.onTouchStart(e => { for (const t of e.changedTouches) runtime.touchStart(t.identifier, t.clientX, t.clientY); });
 wx.onTouchMove(e => { for (const t of e.changedTouches) runtime.touchMove(t.identifier, t.clientX, t.clientY); });
 wx.onTouchEnd(e => { for (const t of e.changedTouches) runtime.touchEnd(t.identifier, t.clientX, t.clientY); });
-wx.onTouchCancel(() => runtime.cancelTouch());
+wx.onTouchCancel(e => {
+  if (!e?.changedTouches?.length) { runtime.cancelTouch(); return; }
+  for (const t of e.changedTouches) runtime.cancelTouch(t.identifier);
+});
 wx.onHide(() => runtime.hide()); wx.onShow(() => runtime.show());
 wx.onWindowResize?.(() => { const next = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync(); runtime.resize(next.windowWidth, next.windowHeight, next.pixelRatio, wx.getMenuButtonBoundingClientRect?.().bottom ?? 0); });
 wx.setKeepScreenOn({ keepScreenOn: true });

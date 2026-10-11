@@ -2,6 +2,66 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import { expect, it } from 'vitest';
 
+// Observe the rendered player from the real bundle; do not expose or mutate World.
+async function inputFixture() {
+  const callbacks = {}; let nextFrame, clock = 1000, playerX;
+  const context = new Proxy({}, { get: (_target, key) => (...args) => {
+    if (key === 'drawImage' && args[7] === 160 && args[8] === 213) playerX = args[5] + 80;
+  } });
+  const wx = {
+    createCanvas: () => ({ getContext: () => context }),
+    createImage: () => { const image = { width: 768, height: 512 }; Object.defineProperty(image, 'src', { set() { queueMicrotask(() => image.onload?.()); } }); return image; },
+    getWindowInfo: () => ({ windowWidth: 720, windowHeight: 1280, pixelRatio: 1 }),
+    getStorageSync: () => null, setStorageSync() {}, setKeepScreenOn() {},
+    onTouchStart: fn => callbacks.start = fn, onTouchMove: fn => callbacks.move = fn,
+    onTouchEnd: fn => callbacks.end = fn, onTouchCancel: fn => callbacks.cancel = fn,
+    onHide() {}, onShow() {},
+    createInnerAudioContext: () => ({ play() {}, stop() {}, onEnded() {}, onError() {} }),
+  };
+  vm.runInNewContext(readFileSync('build/wechat/game.js', 'utf8'), {
+    wx, requestAnimationFrame: fn => nextFrame = fn,
+    Date: class extends Date { static now() { return clock; } }, console,
+  });
+  for (let i = 0; i < 12; i++) await Promise.resolve();
+  const frames = count => { for (let i = 0; i < count; i++) { clock += 1000 / 60; nextFrame(clock); } };
+  const touch = (callback, identifier, x, y = 1000) => callback({ changedTouches: [{ identifier, clientX: x, clientY: y }] });
+  frames(1); touch(callbacks.start, 9, 360, 1041); touch(callbacks.end, 9, 360, 1041); frames(1);
+  expect(playerX).toBe(360);
+  touch(callbacks.start, 1, 360); touch(callbacks.move, 1, 650); frames(1);
+  expect(playerX).toBeGreaterThan(360); expect(playerX).toBeLessThan(650);
+  return { callbacks, touch, frames, x: () => playerX };
+}
+
+it('WeChat secondary cancellation preserves the primary drag, while primary cancellation stops it', async () => {
+  const { callbacks, touch, frames, x } = await inputFixture();
+  const before = x();
+  touch(callbacks.start, 2, 300); touch(callbacks.cancel, 2, 300);
+  frames(3);
+  expect(x()).toBeGreaterThan(before + 10);
+  const primaryStillActive = x();
+  touch(callbacks.move, 1, 640); frames(1);
+  expect(x()).toBeGreaterThan(primaryStillActive);
+  touch(callbacks.cancel, 1, 640);
+  const cancelledAt = x(); frames(10);
+  expect(x()).toBeCloseTo(cancelledAt, 8);
+  touch(callbacks.move, 1, 68); frames(1);
+  expect(x()).toBeCloseTo(cancelledAt, 8);
+  touch(callbacks.start, 3, 400); touch(callbacks.move, 3, 500); frames(1);
+  expect(x()).toBeGreaterThan(cancelledAt);
+});
+
+it.each([
+  ['empty', { changedTouches: [] }],
+  ['missing touches', {}],
+  ['legacy callback', undefined],
+])('WeChat cancellation with %s payload safely clears pending travel', async (_name, payload) => {
+  const { callbacks, touch, frames, x } = await inputFixture();
+  callbacks.cancel(payload); const stopped = x(); frames(10);
+  expect(x()).toBeCloseTo(stopped, 8);
+  touch(callbacks.move, 1, 68); frames(1);
+  expect(x()).toBeCloseTo(stopped, 8);
+});
+
 it('the actual WeChat bundle boots and handles start/hide/resume without browser globals', async () => {
   const callbacks = {}, calls = []; let nextFrame, clock = 1000;
   let windowInfo = { windowWidth: 390, windowHeight: 844, pixelRatio: 3 };
