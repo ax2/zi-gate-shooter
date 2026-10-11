@@ -1,4 +1,4 @@
-# Future local dependencies / generated files; no game scaffold currently exists.
+# Local dependencies, generated builds and private configuration.
 node_modules/
 dist/
 build/
