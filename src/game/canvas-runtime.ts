@@ -9,6 +9,7 @@ import { BossDestruction, BOSS_VISUAL } from './boss-destruction';
 import { PlayerMotion } from './player-motion';
 import type { PlayerPose } from './player-motion';
 import { CrateDebris, crateFrame } from './crate-debris';
+import { GateFeedback } from './gate-feedback';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -44,6 +45,7 @@ export class CanvasRuntime {
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
+  private gateFeedback = new GateFeedback();
   private accumulator = 0;
   private lastTime = 0;
   private visualTime = 0;
@@ -121,6 +123,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.gateFeedback.clear();
     this.crateDebris.clear();
     this.playerMotion.reset();
     this.recoilUntil = 0;
@@ -178,7 +181,7 @@ export class CanvasRuntime {
     else if (action === 'start') this.start();
     else if (action === 'pause') this.pause();
     else if (action === 'resume') { this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.destruction = undefined; this.crateDebris.clear(); }
+    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.destruction = undefined; this.crateDebris.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -194,7 +197,8 @@ export class CanvasRuntime {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage);
     if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 48; this.recoilUntil = this.world.time + 0.048; return; }
     if (e.type === 'upgrade' || e.type === 'overload') this.upgradeUntil = this.platform.now() + 450;
-    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level') this.notify(e.text, e.type === 'victory' ? 820 : 277);
+    if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
+    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') this.crateDebris.burst(e.x, e.y);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y);
@@ -281,6 +285,8 @@ export class CanvasRuntime {
   }
   private drawWorld(dt: number) {
     const c = this.ctx, w = this.world;
+    this.gateFeedback.sync(w.bodies, w.time);
+    this.gateFeedback.advance(dt);
     this.drawDestruction(dt);
     this.crateDebris.advance(dt);
     for (const piece of this.crateDebris.pieces) {
@@ -292,7 +298,7 @@ export class CanvasRuntime {
       c.fillStyle = '#0005'; c.beginPath(); c.ellipse(b.x + 5, b.y + b.height * 0.3, b.width * 0.45, b.height * 0.2, 0, 0, Math.PI * 2); c.fill();
       if (b.kind === 'gate') {
         this.frameSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225);
-        this.hitSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225, b.hit);
+        this.hitSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225, Math.max(b.hit, this.gateFeedback.pulse(b.id, w.time) * 0.07));
         this.rect(b.x - b.width / 2 + 5, b.y - 54, b.width - 10, 108, '#071927f5');
       } else if (b.kind === 'crate') {
         const frame = crateFrame(b.hp, b.maxHp);
@@ -356,6 +362,18 @@ export class CanvasRuntime {
       c.beginPath(); c.moveTo(s.x, s.y); c.lineTo(s.x - s.vx * 0.03, s.y - s.vy * 0.03); c.stroke(); c.restore();
     }
     this.particles = this.particles.filter(s => s.life > 0);
+    for (const receipt of this.gateFeedback.receipts) {
+      const y = receipt.y - receipt.age * 18, height = receipt.lines.length > 1 ? 116 : 84;
+      // Omit this optional feedback while it overlaps a live entity or its label.
+      // Enemy bodies and other reward panels must remain identifiable too.
+      if (w.bodies.some(b => Math.abs(receipt.x - b.x) < (receipt.width + b.width * 1.4 + 40) / 2
+        && Math.abs(y - b.y - (b.kind === 'boss' ? BOSS_VISUAL.offsetY : 0)) < (height + b.height * 1.55 + 140) / 2)) continue;
+      c.save(); c.globalAlpha = Math.min(1, (0.8 - receipt.age) / 0.25);
+      this.rect(receipt.x - receipt.width / 2 + 8, y - height / 2, receipt.width - 16, height, '#102d3bf0');
+      this.text('已领取', receipt.x, y - height / 2 + 20, 28, '#b1e8f7');
+      receipt.lines.forEach((line, i) => this.text(line, receipt.x, y - height / 2 + 52 + i * 32, 30, '#effaff', 'center', true));
+      c.restore();
+    }
     // Breaking is not collecting: keep the physical module visible above smoke.
     for (const b of w.bodies) if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
     // Dangerous projectiles and native labels are always above visual explosions.
@@ -384,12 +402,14 @@ export class CanvasRuntime {
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
+        const pulse = this.gateFeedback.pulse(b.id, w.time);
+        const numberScale = 1 + Math.sin(pulse * Math.PI) * (this.save.settings.effects === 'weak' ? 0.03 : 0.08);
         this.rect(b.x - b.width / 2 + 5, b.y - (mixed ? 80 : 54), b.width - 10, mixed ? 164 : 108, '#071927f5');
         this.text(mixed ? '穿过领取' : value.power ? '穿过领取 · 火力' : value.energy ? '穿过领取 · 超载' : '储能已满', b.x, b.y - (mixed ? 60 : 33), 25, '#a4d6e9');
         if (mixed) {
-          this.text(`+${value.power}%`, b.x, b.y - 18, 50, '#effaff', 'center', true);
-          this.text(`充能 +${value.energy}`, b.x, b.y + 32, 36, '#ffe4ac', 'center', true);
-        } else this.text(`+${value.power || value.energy}${value.power ? '%' : ''}`, b.x, b.y + 8, 50, '#effaff', 'center', true);
+          this.text(`+${value.power}%`, b.x, b.y - 18, 50 * numberScale, '#effaff', 'center', true);
+          this.text(`充能 +${value.energy}`, b.x, b.y + 32, 36 * numberScale, '#ffe4ac', 'center', true);
+        } else this.text(`+${value.power || value.energy}${value.power ? '%' : ''}`, b.x, b.y + 8, 50 * numberScale, '#effaff', 'center', true);
         const tier = C.thresholds.findIndex(t => t > b.energy);
         const progress = tier < 0 ? 1 : (b.energy - C.thresholds[tier - 1]) / (C.thresholds[tier] - C.thresholds[tier - 1]);
         this.bar(b.x, b.y + (mixed ? 72 : 46), b.width - 32, progress, b.rewardKind === 'power' ? '#5bddff' : '#e5b96a');
@@ -471,6 +491,7 @@ export class CanvasRuntime {
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
+      gateReceipts: this.gateFeedback.receipts.length,
       ...this.frameTimes.snapshot() };
   }
 }

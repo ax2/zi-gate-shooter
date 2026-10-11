@@ -10,6 +10,9 @@ export function previewReward(g: Growth, nominal: number, kind: 'power' | 'energ
   const energy = Math.min(nominal - power, 100 - g.energy);
   return { power, energy, wasted: nominal - power - energy };
 }
+export function gateRewardLabel(value: { power: number; energy: number }) {
+  return [value.power ? `火力 +${value.power}%` : '', value.energy ? `充能 +${value.energy}` : ''].filter(Boolean).join(' · ') || '储能已满';
+}
 export function activateOverload(g: Growth) {
   if (g.energy >= 100 && g.overload <= 0) { g.energy = 0; g.overload = 6; return true; }
   return false;

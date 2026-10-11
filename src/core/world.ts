@@ -1,7 +1,7 @@
 import { C, clamp } from './config';
 import type { EnemyKind } from './config';
 import { sweep } from './collision';
-import { activateOverload, gateValue, grantEquipment, grantGate } from './rewards';
+import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate } from './rewards';
 import type { Growth } from './rewards';
 import { timeline } from './director';
 import type { Spawn } from './director';
@@ -241,7 +241,7 @@ export class World {
           if (chosen && this.player.hp > 0) {
             const result = grantGate(this.growth, gateValue(chosen.energy), chosen.rewardKind);
             this.gatesTaken++;
-            this.emit('gate-taken', chosen.x, C.playerY, result.power ? `火力 +${result.power}%` : result.energy ? `超载 +${result.energy}` : '储能已满');
+            this.emit('gate-taken', chosen.x, C.playerY, gateRewardLabel(result), chosen.width);
             if (result.activated) this.emit('overload', this.player.x, C.playerY, '超载启动');
           }
           for (const gate of gates) gate.active = false;

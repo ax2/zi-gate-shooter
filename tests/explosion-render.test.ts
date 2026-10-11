@@ -6,14 +6,14 @@ import { C } from '../src/core/config';
 
 function fixture(weak = false) {
   let clock = 0, next: FrameRequestCallback = () => {};
-  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; composite: string }> = [];
+  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; composite: string; font?: string }> = [];
   const state: Record<string, any> = { globalAlpha: 1, globalCompositeOperation: 'source-over' };
   const stack: Record<string, any>[] = [];
   const context = new Proxy(state, { get(target, key: string) {
     if (key in target) return target[key];
     if (key === 'save') return () => stack.push({ ...state });
     if (key === 'restore') return () => Object.assign(state, stack.pop());
-    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, composite: state.globalCompositeOperation });
+    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, composite: state.globalCompositeOperation, font: state.font });
   } });
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
@@ -24,6 +24,62 @@ function fixture(weak = false) {
   return { runtime, calls, tick() { calls.length = 0; clock += 1000 / 60; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([false, true])('a real threshold hit pulses the final number and freezes it on pause (weak=%s)', async weak => {
+  const f = fixture(weak); await f.runtime.load(); f.runtime.start();
+  const gate = f.runtime.world.spawn('gate', 360, 600); gate.row = 1; gate.energy = 20; f.tick();
+  f.runtime.world.bullets.push({ id: 9999, x: gate.x, y: gate.y, px: gate.x, py: gate.y, vx: 0, vy: 0, damage: 4, age: 0, active: true, hostile: false });
+  f.tick(); f.tick();
+  const number = () => f.calls.find(c => c.kind === 'fillText' && c.args[0] === '+15%');
+  const fontSize = () => Number(number()?.font?.match(/([\d.]+)px/)?.[1]);
+  expect(gate.energy).toBe(24); expect(fontSize()).toBeGreaterThan(50);
+  expect(fontSize()).toBeLessThanOrEqual(weak ? 51.5 : 54);
+  expect(f.runtime.world.growth.bonus).toBe(0); expect(f.runtime.world.gatesTaken).toBe(0);
+  f.runtime.pause(); f.tick(); const frozen = number();
+  for (let i = 0; i < 30; i++) f.tick(); expect(number()).toEqual(frozen);
+  f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
+  for (let i = 0; i < 9; i++) f.tick(); expect(fontSize()).toBe(50);
+});
+
+it.each([false, true])('crossing mutually exclusive gates shows one complete mixed receipt without covering danger (weak=%s)', async weak => {
+  const f = fixture(weak); await f.runtime.load(); f.runtime.start();
+  const reference = new World();
+  const setup = (w: World) => {
+    w.player.x = 222; w.growth.bonus = 95;
+    for (const x of [222, 498]) { const g = w.spawn('gate', x, 1023); g.row = 1; g.energy = 144; }
+    w.bullets.push({ id: 9999, x: 222, y: 840, px: 222, py: 840, vx: 0, vy: 0, damage: 1, age: 0, active: true, hostile: true });
+  };
+  setup(reference); setup(f.runtime.world); f.runtime.cancelTouch();
+  f.tick(); reference.step(C.step, 222); reference.drainEffects();
+  expect(f.runtime.world.growth).toEqual(reference.growth); expect(f.runtime.world.growth.bonus).toBe(100);
+  expect(f.runtime.world.growth.energy).toBe(25); expect(f.runtime.world.gatesTaken).toBe(1);
+  const taken = f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '已领取');
+  expect(taken).toHaveLength(1);
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '火力 +5%')).toBe(true);
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '充能 +25')).toBe(true);
+  const danger = f.calls.findIndex(c => c.kind === 'fillRect' && c.color === '#ffead7');
+  expect(danger).toBeGreaterThan(f.calls.lastIndexOf(taken[0]));
+  f.runtime.pause(); f.tick(); const before = f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '已领取');
+  for (let i = 0; i < 30; i++) f.tick();
+  expect(f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '已领取')).toEqual(before);
+  f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
+  for (let i = 0; i < 60; i++) { f.tick(); reference.step(C.step, 222); reference.drainEffects(); }
+  expect(f.runtime.world.growth).toEqual(reference.growth); expect(f.runtime.world.gatesTaken).toBe(1);
+  expect(f.runtime.diagnostics().gateReceipts).toBe(0);
+  f.runtime.world.emit('gate-taken', 222, 1024, '储能已满', 240); f.tick();
+  f.runtime.pause(); f.tick(); f.runtime.touchStart(1, 360, 823); f.runtime.touchEnd(1, 360, 823); f.tick();
+  expect(f.runtime.diagnostics().gateReceipts).toBe(0);
+  f.runtime.start(); f.tick(); expect(f.runtime.diagnostics().gateReceipts).toBe(0);
+});
+
+it('omits optional receipts behind live enemies and reward labels', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  f.runtime.world.spawn('armor', 360, 844);
+  f.runtime.world.emit('gate-taken', 360, 1024, '火力 +20%', 264);
+  f.tick(); expect(f.runtime.diagnostics().gateReceipts).toBe(1);
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '已领取')).toBe(false);
+  expect(f.runtime.world.bodies.some(b => b.kind === 'armor')).toBe(true);
+});
 
 it.each([false, true])('a real crate break reveals equipment above smoke without granting it early (weak=%s)', async weak => {
   const f = fixture(weak); await f.runtime.load(); f.runtime.start();
