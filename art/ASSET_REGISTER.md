@@ -39,3 +39,7 @@ art/exports/launcher-preview.html仅为资产适配说明，非原生截图。�
 ## Stage-19普通敌人动作源（拒用）
 
 source/enemies-atlas-v1.png、v2.png均为本会话内置imagegen生成，以本项目原创units为来源链；完整提示词与来源见ENEMY_CANDIDATES.md。两版均1254×1254 RGBA，哈希见阶段SOURCE_INSPECTION.json；跨格/尺度/边缘不合格，未导出或接入运行资产。随项目MIT开放，非批准角色/动作素材。
+
+## Stage-20无人机三姿态候选
+
+source/drone-strip-v1.png为本会话内置imagegen、原units参考，来源/完整提示词/源哈希/拒用源前史见DRONE_V1.md。运行图../public/assets/drone-v1.png为768×256/145507字节，全RGBA解码786432字节；源图/导出信息见docs/stages/Stage-20/ASSET_EXPORT.json，重复导出一致。随项目MIT开放，非批准角色或商标；正式边缘和动态人评待验。

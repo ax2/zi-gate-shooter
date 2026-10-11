@@ -1,0 +1,50 @@
+{
+  "source": "art/source/drone-strip-v1.png",
+  "sourceSha256": "424af03741906cc64bbed8fcddde68aadf23b840595afdcc5d942323ea1f4b68",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "frames": [
+    {
+      "frame": 0,
+      "source": {
+        "left": 8,
+        "top": 0,
+        "width": 700,
+        "height": 724
+      },
+      "visiblePixels": 109087,
+      "edgePixels": 0
+    },
+    {
+      "frame": 1,
+      "source": {
+        "left": 736,
+        "top": 0,
+        "width": 700,
+        "height": 724
+      },
+      "visiblePixels": 109801,
+      "edgePixels": 0
+    },
+    {
+      "frame": 2,
+      "source": {
+        "left": 1466,
+        "top": 0,
+        "width": 700,
+        "height": 724
+      },
+      "visiblePixels": 109102,
+      "edgePixels": 0
+    }
+  ],
+  "outputSize": [
+    768,
+    256
+  ],
+  "bytes": 145507,
+  "rgbaDecodedBytes": 786432,
+  "outputSha256": "17d912779970bb171d178011222df52ea36ca87853fe723aa5167528f597cbdf"
+}

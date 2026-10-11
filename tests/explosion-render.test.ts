@@ -18,12 +18,40 @@ function fixture(weak = false) {
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: 768, height: src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
+    image: async src => ({ src, width: 768, height: src.includes('drone-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick() { calls.length = 0; clock += 1000 / 60; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([false, true])('animates a real drone without changing simulation; hit overlay and pause use the same pose (weak=%s)', async weak => {
+  const f = fixture(weak); await f.runtime.load(); f.runtime.start();
+  const reference = new World(1337);
+  const drone = f.runtime.world.spawn('drone', 100, 320);
+  const baseline = reference.spawn('drone', 100, 320);
+  const frames = new Set<number>();
+  const draws = () => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('drone-v1.png'));
+  for (let i = 0; i < 36; i++) {
+    drone.hit = baseline.hit = 0.07;
+    f.tick(); reference.step(C.step,360); reference.drainEffects();
+    expect(f.runtime.world.player).toEqual(reference.player);
+    expect(f.runtime.world.growth).toEqual(reference.growth);
+    expect(drone).toEqual(baseline);
+    const ds=draws(); expect(ds).toHaveLength(2);
+    expect(ds[0].args.slice(1)).toEqual(ds[1].args.slice(1));
+    expect(ds[0].args.slice(2,5)).toEqual([0,256,256]);
+    expect(ds[1].composite).toBe('lighter');
+    expect(ds[1].alpha).toBeLessThanOrEqual(weak?.18:.48);
+    frames.add(ds[0].args[1]);
+  }
+  expect(frames).toEqual(new Set([0,256,512]));
+  const before=draws().map(c=>c.args.slice(1));
+  f.runtime.pause(); for(let i=0;i<30;i++)f.tick();
+  expect(draws().map(c=>c.args.slice(1))).toEqual(before);
+  expect(drone.age).toBeCloseTo(.6);
+  f.runtime.start(); f.tick(); expect(draws()).toHaveLength(0);
+});
 
 it('guides an actual first crate, pickup, single gate and paired row without changing the run', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
