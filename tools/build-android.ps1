@@ -1,3 +1,4 @@
+param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-03')
 $ErrorActionPreference = 'Stop'
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $taskSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } elseif ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { Join-Path $env:LOCALAPPDATA 'Android\Sdk' }
@@ -20,15 +21,15 @@ try {
     $taskSigner = Join-Path $taskSdk 'build-tools\36.0.0\apksigner.bat'
     & $taskSigner verify $taskApk
     if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
-    $taskOutput = Join-Path $taskRoot 'build\releases\Stage-02\android'
+    $taskOutput = Join-Path $taskRoot "build\releases\$Stage\android"
     New-Item -ItemType Directory -Path $taskOutput -Force | Out-Null
     Copy-Item -LiteralPath $taskApk -Destination (Join-Path $taskOutput 'zi-gate-shooter-debug.apk') -Force
     $taskHashAlgorithm = [Security.Cryptography.SHA256]::Create()
     $taskApkStream = [IO.File]::OpenRead($taskApk)
     try { $taskHash = [BitConverter]::ToString($taskHashAlgorithm.ComputeHash($taskApkStream)).Replace('-','') }
     finally { $taskApkStream.Dispose(); $taskHashAlgorithm.Dispose() }
-    $taskRecord = [ordered]@{ artifact = 'zi-gate-shooter-debug.apk'; bytes = (Get-Item -LiteralPath $taskApk).Length; sha256 = $taskHash; signatureVerified = $true; signing = 'Android development debug key'; deviceVerified = $false; storeSubmitted = $false }
+    $taskRecord = [ordered]@{ stage = $Stage; artifact = 'zi-gate-shooter-debug.apk'; bytes = (Get-Item -LiteralPath $taskApk).Length; sha256 = $taskHash; signatureVerified = $true; signing = 'Android development debug key'; deviceVerified = $false; storeSubmitted = $false }
     [IO.File]::WriteAllText((Join-Path $taskOutput 'BUILD_RECORD.json'), ($taskRecord | ConvertTo-Json))
-    & (Join-Path $PSScriptRoot 'verify-android-package.ps1')
+    & (Join-Path $PSScriptRoot 'verify-android-package.ps1') -Stage $Stage
     Write-Output "Android development APK saved: $taskOutput"
 } finally { $env:JAVA_TOOL_OPTIONS = $taskOldJavaOptions }

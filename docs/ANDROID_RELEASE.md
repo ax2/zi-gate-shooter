@@ -8,7 +8,7 @@
 
 本机JDK21、Android SDK36、Build Tools36，Gradle8.14.3。运行 `npm ci`、`npm run build:android`。SDK路径写入忽略的local.properties，不提交机器路径；代理只在构建子进程临时配置，不记录凭据。资源全部打入APK，不使用开发服务器。正式渠道和最低验收设备仍待确定。
 
-构建脚本执行assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-02/android。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
+构建脚本执行assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-03/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-03；历史Stage-02目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
 
 ## 交互与权限
 
@@ -30,7 +30,7 @@
 
 ## 最新启动资产修订
 
-候选与检查见stages/Stage-02/LAUNCHER_VALIDATION.md。旧包保留build/releases/Stage-02-d6002e7/android与原用户输出；最新构建仍位于build/releases/Stage-02/android。npm run assets:launcher可重复导出既有原创源图，不会重新调用生成服务。
+启动候选与检查见stages/Stage-02/LAUNCHER_VALIDATION.md。旧包保留build/releases/Stage-02-d6002e7/android、build/releases/Stage-02/android与原用户输出；最新输入修复构建位于build/releases/Stage-03/android，见Stage-03/TEST_REPORT.md。npm run assets:launcher可重复导出既有原创源图，不会重新调用生成服务。
 
 系统栏固定SystemBars DARK（浅色文字/图标）与深色窗口底，保留css安全区和cover初始提示。启动Activity在super.onCreate之前安装AndroidX SplashScreen，统一深色背景、静态机甲标记和结束主题，无额外Activity、人工延时或启动网络请求。Android12+显式排除cloud与device-transfer全部本地数据域，旧系统禁用fullBackupContent；真实系统行为待设备检查。
 

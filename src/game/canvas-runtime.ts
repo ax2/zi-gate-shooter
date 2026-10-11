@@ -4,6 +4,7 @@ import type { EffectEvent } from '../core/world';
 import { gateValue, previewReward } from '../core/rewards';
 import { bossWarningLanes } from '../core/behavior';
 import { defaults } from '../ui/storage';
+import { FrameWindow } from './frame-window';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -49,7 +50,7 @@ export class CanvasRuntime {
   private error = '';
   private started = false;
   private lastTutorial = '';
-  private frameTimes: number[] = [];
+  private frameTimes = new FrameWindow();
   private scale = 1;
   private offsetX = 0;
   private offsetY = 0;
@@ -60,13 +61,14 @@ export class CanvasRuntime {
     this.resize(platform.width, platform.height, platform.dpr, platform.menuBottom);
   }
   resize(width: number, height: number, devicePixelRatio: number, menuBottom = 0) {
+    this.cancelTouch();
+    if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) { this.pause('窗口变化，已暂停'); return; }
     this.platform.width = width; this.platform.height = height; this.platform.dpr = devicePixelRatio;
     const dpr = Math.min(2, devicePixelRatio || 1);
     this.platform.canvas.width = Math.round(width * dpr); this.platform.canvas.height = Math.round(height * dpr);
     this.scale = Math.min(width / 720, height / 1280);
     this.offsetX = (width - 720 * this.scale) / 2; this.offsetY = (height - 1280 * this.scale) / 2;
     this.hudTop = Math.max(28, (menuBottom - this.offsetY) / this.scale + 12);
-    this.pointer = null; this.downAction = '';
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   async load() {
@@ -82,7 +84,7 @@ export class CanvasRuntime {
     const elapsed = Math.max(0, (time - this.lastTime) / 1000); this.lastTime = time;
     const dt = Math.min(elapsed, 0.1);
     if (this.mode === 'playing') {
-      this.frameTimes.push(elapsed * 1000); if (this.frameTimes.length > 36000) this.frameTimes.shift();
+      this.frameTimes.add(elapsed * 1000);
       if (elapsed > 0.25) this.pause('运行中断，已暂停');
       else {
         this.accumulator += dt;
@@ -92,7 +94,7 @@ export class CanvasRuntime {
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
             if (this.world.player.hp <= 0) {
-              this.mode = 'result'; this.save.best = Math.max(this.save.best, this.world.score); this.platform.write(this.save); this.platform.silence();
+              this.mode = 'result'; this.cancelTouch(); this.save.best = Math.max(this.save.best, this.world.score); this.platform.write(this.save); this.platform.silence();
             }
           }
           if (this.accumulator > C.step * 2) this.pause('设备暂时繁忙，已暂停');
@@ -109,15 +111,16 @@ export class CanvasRuntime {
   start() {
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
+    this.frameTimes.clear(); this.downAction = '';
     this.particles = []; this.blasts = []; this.lastTutorial = ''; this.notice = ''; this.shakeUntil = 0; this.muzzleUntil = 0; this.upgradeUntil = 0;
     this.platform.silence();
   }
   pause(message = '暂停') {
     if (this.mode !== 'playing') return;
-    this.mode = 'paused'; this.pointer = null; this.accumulator = 0; this.notify(message); this.platform.silence();
+    this.mode = 'paused'; this.cancelTouch(); this.accumulator = 0; this.notify(message); this.platform.silence();
   }
-  hide() { this.pause('切换至后台，已暂停'); this.pointer = null; this.platform.silence(); }
-  show() { this.lastTime = this.platform.now(); this.accumulator = 0; this.pointer = null; }
+  hide() { this.pause('切换至后台，已暂停'); this.cancelTouch(); this.platform.silence(); }
+  show() { this.lastTime = this.platform.now(); this.accumulator = 0; this.cancelTouch(); }
   moveKeyboard(direction: number, dt: number) { if (this.mode === 'playing') this.target = clamp(this.world.player.x + direction * C.moveSpeed * dt, C.minX, C.maxX); }
   private point(x: number, y: number) { return { x: (x - this.offsetX) / this.scale, y: (y - this.offsetY) / this.scale }; }
   touchStart(id: number, x: number, y: number) {
@@ -132,11 +135,14 @@ export class CanvasRuntime {
   touchEnd(id: number, x: number, y: number) {
     if (id !== this.pointer) return;
     const p = this.point(x, y), action = this.buttons.find(b => p.x >= b.x && p.x < b.x + b.w && p.y >= b.y && p.y < b.y + b.h)?.action;
-    this.pointer = null;
-    if (action && action === this.downAction) this.action(action);
-    this.downAction = '';
+    const pressed = this.downAction;
+    this.cancelTouch();
+    if (action && action === pressed) this.action(action);
   }
-  cancelTouch() { this.pointer = null; this.downAction = ''; }
+  cancelTouch(id?: number) {
+    if (id !== undefined && id !== this.pointer) return;
+    this.pointer = null; this.downAction = ''; this.target = this.world.player.x;
+  }
   /** Native back never resumes a paused run or silently abandons a live one. */
   back(): 'stay' | 'exit' {
     this.cancelTouch();
@@ -356,11 +362,11 @@ export class CanvasRuntime {
     }
   }
   diagnostics() {
-    const sorted = [...this.frameTimes].sort((a, b) => a - b);
     return { mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth },
+      playerX: this.world.player.x,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,
-      p95: sorted[Math.floor(sorted.length * 0.95)] ?? 0, p99: sorted[Math.floor(sorted.length * 0.99)] ?? 0 };
+      ...this.frameTimes.snapshot() };
   }
 }
 

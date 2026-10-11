@@ -1,7 +1,8 @@
+param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-03')
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$taskApk = Join-Path $taskRoot 'build\releases\Stage-02\android\zi-gate-shooter-debug.apk'
+$taskApk = Join-Path $taskRoot "build\releases\$Stage\android\zi-gate-shooter-debug.apk"
 function Get-StreamDigest($taskStream) {
     $taskAlgorithm = [Security.Cryptography.SHA256]::Create()
     try { return [BitConverter]::ToString($taskAlgorithm.ComputeHash($taskStream)).Replace('-','') }
@@ -55,6 +56,6 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Compiled native artwork validation failed.' }
     if (@($taskZip.Entries | Where-Object { $_.FullName -match '^res/.*/splash\.png$' }).Count) { throw 'Template splash asset remains packaged.' }
     $taskRecord = [ordered]@{ publicFiles = $taskFiles.Count; emptyCapacitorCompatibilityStubs = 2; allPublicFileHashesMatch = $true; nativeArtworkImages = $taskArtEntries.Count; nativeArtworkPixelsMatch = $true; systemBars = 'DARK/css'; templateSplashAssets = 0; serverConfiguration = $false; nativeDeviceTest = $false }
-    [IO.File]::WriteAllText((Join-Path $taskRoot 'build\releases\Stage-02\android\PACKAGE_CHECK.json'), ($taskRecord | ConvertTo-Json))
+    [IO.File]::WriteAllText((Join-Path $taskRoot "build\releases\$Stage\android\PACKAGE_CHECK.json"), ($taskRecord | ConvertTo-Json))
     Write-Output "APK local payload verified: $($taskFiles.Count) files. Native offline execution still requires device testing."
 } finally { $taskZip.Dispose() }

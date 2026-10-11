@@ -19,7 +19,8 @@ export const runtime = new CanvasRuntime({
 canvas.addEventListener('pointerdown', e => { const r = viewport(); canvas.setPointerCapture(e.pointerId); void audio.unlock(); runtime.touchStart(e.pointerId, e.clientX - r.left, e.clientY - r.top); });
 canvas.addEventListener('pointermove', e => { const r = viewport(); runtime.touchMove(e.pointerId, e.clientX - r.left, e.clientY - r.top); });
 canvas.addEventListener('pointerup', e => { const r = viewport(); runtime.touchEnd(e.pointerId, e.clientX - r.left, e.clientY - r.top); });
-canvas.addEventListener('pointercancel', () => runtime.cancelTouch());
+canvas.addEventListener('pointercancel', e => runtime.cancelTouch(e.pointerId));
+canvas.addEventListener('lostpointercapture', e => runtime.cancelTouch(e.pointerId));
 document.addEventListener('visibilitychange', () => document.hidden ? runtime.hide() : runtime.show());
 window.addEventListener('blur', () => runtime.hide());
 const resize = () => { const r = viewport(); runtime.resize(r.width, r.height, devicePixelRatio); };
