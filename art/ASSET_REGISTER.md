@@ -43,3 +43,7 @@ source/enemies-atlas-v1.png、v2.png均为本会话内置imagegen生成，以本
 ## Stage-20无人机三姿态候选
 
 source/drone-strip-v1.png为本会话内置imagegen、原units参考，来源/完整提示词/源哈希/拒用源前史见DRONE_V1.md。运行图../public/assets/drone-v1.png为768×256/145507字节，全RGBA解码786432字节；源图/导出信息见docs/stages/Stage-20/ASSET_EXPORT.json，重复导出一致。随项目MIT开放，非批准角色或商标；正式边缘和动态人评待验。
+
+## Stage-21冲锋机三状态候选
+
+source/charger-strip-v1.png由本会话内置imagegen、原units参考，2172×724 RGBA977896字节。运行../public/assets/charger-v1.png为768×256 RGBA158309字节/解码786432字节；源/运行哈希、共同裁框及来源提示词见CHARGER_V1.md和阶段ASSET_EXPORT.json。随项目MIT开放，非批准角色/商标；正式边缘、步态、动态人评与真机待验。

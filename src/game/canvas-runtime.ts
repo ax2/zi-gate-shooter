@@ -13,6 +13,7 @@ import { GateFeedback } from './gate-feedback';
 import { contextGuide } from './context-guide';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
+import { chargerFrame } from './charger-motion';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -90,7 +91,7 @@ export class CanvasRuntime {
   }
   async load() {
     try {
-      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
+      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
       this.mode = 'menu';
     } catch { this.error = '资源加载失败，请重新进入游戏'; this.mode = 'error'; }
     this.lastTime = this.platform.now();
@@ -326,6 +327,10 @@ export class CanvasRuntime {
           const frame = droneFrame(b.age), side = b.width * 1.65;
           this.frameSprite('drone-v1.png', frame, 3, b.x, y, side, side, 1);
           this.hitSprite('drone-v1.png', frame, 3, b.x, y, side, side, b.hit, 0.07, 1);
+        } else if (b.kind === 'charger') {
+          const frame = chargerFrame(b), side = b.height * 1.35;
+          this.frameSprite('charger-v1.png', frame, 3, b.x, y, side, side, 1);
+          this.hitSprite('charger-v1.png', frame, 3, b.x, y, side, side, b.hit, 0.07, 1);
         } else {
           this.frameSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height);
           this.hitSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height, b.hit);

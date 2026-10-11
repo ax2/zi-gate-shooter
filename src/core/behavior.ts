@@ -1,4 +1,5 @@
 import type { Body, Phase } from './world';
+import { C } from './config';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 
 export function bossWarningLanes(b: Body) {
@@ -40,8 +41,8 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       }
     }
   } else if (b.kind === 'charger') {
-    if (b.age > 1.8 && b.age < 2.6) b.warning = 2.6 - b.age;
-    if (b.age >= 2.6) { b.warning = 0; b.speed = 380; }
+    if (b.age > C.chargerBehavior.warningAge && b.age < C.chargerBehavior.dashAge) b.warning = C.chargerBehavior.dashAge - b.age;
+    if (b.age >= C.chargerBehavior.dashAge) { b.warning = 0; b.speed = C.chargerBehavior.dashSpeed; }
     b.y += b.speed * dt;
   } else {
     b.y += b.speed * dt;

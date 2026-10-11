@@ -18,12 +18,39 @@ function fixture(weak = false) {
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: 768, height: src.includes('drone-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
+    image: async src => ({ src, width: 768, height: src.includes('drone-v1') || src.includes('charger-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick() { calls.length = 0; clock += 1000 / 60; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([false,true])('uses real charger states for poses, preserves danger above the art and freezes windup (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const reference=new World(1337);
+ const body=f.runtime.world.spawn('charger',100,0),baseline=reference.spawn('charger',100,0);
+ const frames=new Set<number>();let pausedWindup=false;
+ const draws=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('charger-v1.png'));
+ for(let step=0;step<180;step++){
+  body.hit=baseline.hit=.07;f.tick();reference.step(C.step,360);reference.drainEffects();
+  expect(body).toEqual(baseline);expect(f.runtime.world.player).toEqual(reference.player);
+  expect(f.runtime.world.growth).toEqual(reference.growth);expect(f.runtime.world.score).toBe(reference.score);
+  const ds=draws();expect(ds).toHaveLength(2);expect(ds[0].args.slice(1)).toEqual(ds[1].args.slice(1));
+  expect(ds[0].args.slice(2,5)).toEqual([0,256,256]);frames.add(ds[0].args[1]);
+  expect(ds[1].composite).toBe('lighter');expect(ds[1].alpha).toBeLessThanOrEqual(weak?.18:.48);
+  if(body.warning>0){
+   expect(ds[0].args[1]).toBe(256);
+   const lastArt=f.calls.indexOf(ds[1]);
+   expect(f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ff775620')).toBeGreaterThan(lastArt);
+   if(!pausedWindup){
+    const frozen={...body},pose=ds.map(c=>c.args.slice(1));f.runtime.pause();for(let i=0;i<30;i++)f.tick();
+    expect(body).toEqual(frozen);expect(draws().map(c=>c.args.slice(1))).toEqual(pose);
+    f.runtime.touchStart(1,360,603);f.runtime.touchEnd(1,360,603);expect(f.runtime.mode).toBe('playing');pausedWindup=true;
+   }
+  }
+ }
+ expect(frames).toEqual(new Set([0,256,512]));expect(pausedWindup).toBe(true);
+ f.runtime.start();f.tick();expect(draws()).toHaveLength(0);
+});
 
 it.each([false, true])('animates a real drone without changing simulation; hit overlay and pause use the same pose (weak=%s)', async weak => {
   const f = fixture(weak); await f.runtime.load(); f.runtime.start();

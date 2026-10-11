@@ -1,0 +1,14 @@
+{
+  "source": "frames/metadata.json",
+  "frames": 72,
+  "size": [
+    488,
+    1055
+  ],
+  "observedSeconds": 3.5352349281311035,
+  "encodedDurationMs": 3583,
+  "quality": 90,
+  "interpolation": false,
+  "cropped": false,
+  "scope": "mobile weak-effects render fixture, not normal play or performance measurement"
+}

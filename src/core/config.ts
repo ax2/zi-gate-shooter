@@ -3,6 +3,7 @@ export const C = {
   playerRadius: 20, moveSpeed: 680, scrollSpeed: 150, pickupRadius: 52,
   step: 1 / 60, bulletSpeed: 1200, bulletLife: 1.2, invulnerability: 1,
   thresholds: [0, 24, 56, 96, 144], rewards: [10, 15, 20, 25, 30],
+  chargerBehavior: { warningAge: 1.8, dashAge: 2.6, dashSpeed: 380 },
   weapon: [
     { rate: 8, offsets: [0], damage: [4] },
     { rate: 6, offsets: [-12, 12], damage: [4, 4] },

@@ -1,0 +1,51 @@
+{
+  "source": "art/source/charger-strip-v1.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "sourceBytes": 977896,
+  "sourceSha256": "49c7ccc7448f609abb33d7100f55b114a9cad0954836d8e2dc450b7e87070712",
+  "frames": [
+    {
+      "frame": 0,
+      "source": {
+        "left": 101,
+        "top": 0,
+        "width": 600,
+        "height": 724
+      },
+      "visiblePixels": 115922,
+      "edgePixels": 0
+    },
+    {
+      "frame": 1,
+      "source": {
+        "left": 776,
+        "top": 0,
+        "width": 600,
+        "height": 724
+      },
+      "visiblePixels": 114684,
+      "edgePixels": 0
+    },
+    {
+      "frame": 2,
+      "source": {
+        "left": 1448,
+        "top": 0,
+        "width": 600,
+        "height": 724
+      },
+      "visiblePixels": 101417,
+      "edgePixels": 0
+    }
+  ],
+  "outputSize": [
+    768,
+    256
+  ],
+  "bytes": 158309,
+  "rgbaDecodedBytes": 786432,
+  "outputSha256": "804474d21a2ceb8aed533f54652cdd3f4a812d566e30168fbb120704be8982e8"
+}

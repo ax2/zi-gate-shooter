@@ -67,3 +67,7 @@ Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD�
 ## Stage-20当前候选
 
 新增无人机三姿态，当前默认构建输出build/releases/Stage-20/android；APK6607455字节，签名/19网页文件/16原生RGBA/50+50许可坐标核验通过，app lint0错误5警告。共享层124项通过与正常网页开局、暂停证据不能替代Android安装运行/Instrumentation/触控/性能/热/后台恢复；用户暂无手机，原生验收仍缺。
+
+## Stage-21当前候选
+
+新增冲锋机三状态。默认构建输出build/releases/Stage-21/android，开发签名APK6765911字节，签名/20网页SHA/16原生RGBA/50+50许可/权限核验通过，app lint0错误5警告；128项共享/微信bundle回归通过。正常浏览器多轮和第三方原生声明清单不能替代设备安装/Instrumentation/触控/热/后台与源码嵌套许可人工审查；用户暂无Android手机，正式音画/签名/渠道仍待验。
