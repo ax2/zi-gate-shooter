@@ -1,0 +1,30 @@
+[
+  {
+    "source": "AGENTS.md",
+    "saved": "reference/AGENTS.original.md",
+    "bytes": 2858,
+    "sha256": "B1F46E2FBDC5F1C882DF8A539965BC6C850279DCC7A539015F8E2F6E8B948BBB",
+    "byte_verified": true
+  },
+  {
+    "source": "CODEX_START_PROMPT.md",
+    "saved": "reference/CODEX_START_PROMPT.original.md",
+    "bytes": 2828,
+    "sha256": "0648219FCF50FC615700C9F1C7D854C9F4333FD5334E18D4C9EC8EBCE31A91B2",
+    "byte_verified": true
+  },
+  {
+    "source": "README.md",
+    "saved": "reference/README.original.md",
+    "bytes": 1698,
+    "sha256": "D59A8ACFCAF9E2DFF8FBC0F54A2FCA1B26C23793CDEFB0A98E2FC991247466D3",
+    "byte_verified": true
+  },
+  {
+    "source": "docs/GAME_DESIGN_HANDOFF.md",
+    "saved": "reference/GAME_DESIGN_HANDOFF.v0.1.md",
+    "bytes": 28652,
+    "sha256": "1B8632F9BC65237AE894E5FCF4B2FDD8EA564083B6A3B9AE374BFDB593DD41FB",
+    "byte_verified": true
+  }
+]

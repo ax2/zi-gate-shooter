@@ -1,0 +1,10 @@
+# Future local dependencies / generated files; no game scaffold currently exists.
+node_modules/
+dist/
+build/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
