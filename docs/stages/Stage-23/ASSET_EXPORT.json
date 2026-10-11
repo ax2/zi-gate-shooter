@@ -1,0 +1,51 @@
+{
+  "source": "art/source/elite-strip-v2.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "sourceBytes": 1379085,
+  "sourceSha256": "c1d1a6ddc5e5f661e5278b556ca7dc216bc0fd605402147e385ba5903883cd11",
+  "frames": [
+    {
+      "frame": 0,
+      "source": {
+        "left": 113,
+        "top": 0,
+        "width": 600,
+        "height": 724
+      },
+      "visiblePixels": 198729,
+      "edgePixels": 0
+    },
+    {
+      "frame": 1,
+      "source": {
+        "left": 784,
+        "top": 0,
+        "width": 600,
+        "height": 724
+      },
+      "visiblePixels": 207181,
+      "edgePixels": 0
+    },
+    {
+      "frame": 2,
+      "source": {
+        "left": 1461,
+        "top": 0,
+        "width": 600,
+        "height": 724
+      },
+      "visiblePixels": 200681,
+      "edgePixels": 0
+    }
+  ],
+  "outputSize": [
+    768,
+    256
+  ],
+  "bytes": 254549,
+  "rgbaDecodedBytes": 786432,
+  "outputSha256": "cf17084ccc3d122e5e49433240292984a60d04d114d9bc729833679e8ddeccf5"
+}

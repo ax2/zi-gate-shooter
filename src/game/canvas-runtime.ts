@@ -15,6 +15,7 @@ import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
 import { chargerFrame } from './charger-motion';
 import { armorFrame } from './armor-motion';
+import { eliteFrame } from './elite-motion';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -92,7 +93,7 @@ export class CanvasRuntime {
   }
   async load() {
     try {
-      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
+      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
       this.mode = 'menu';
     } catch { this.error = '资源加载失败，请重新进入游戏'; this.mode = 'error'; }
     this.lastTime = this.platform.now();
@@ -336,6 +337,10 @@ export class CanvasRuntime {
           const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38;
           this.frameSprite('armor-v1.png', frame, 3, b.x, y, width, height, 1);
           this.hitSprite('armor-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+        } else if (b.kind === 'elite') {
+          const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36;
+          this.frameSprite('elite-v1.png', frame, 3, b.x, y, width, height, 1);
+          this.hitSprite('elite-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
         } else {
           this.frameSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height);
           this.hitSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height, b.hit);

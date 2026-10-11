@@ -1,0 +1,14 @@
+{
+  "source": "elite-frames/metadata.jsonl",
+  "frames": 77,
+  "size": [
+    488,
+    1055
+  ],
+  "observedSeconds": 4.009697198867798,
+  "encodedDurationMs": 4053,
+  "quality": 90,
+  "interpolation": false,
+  "cropped": false,
+  "scope": "mobile weak-effects render fixture, not normal play or performance measurement"
+}

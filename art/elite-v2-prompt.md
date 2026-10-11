@@ -1,0 +1,5 @@
+# Stage-23实际修订提示词
+
+edit target: art/source/elite-strip-v1.png；transparent_background=true。首版保留未接入，修订外轮廓红色杂边与留白，不改变来源链。
+
+Edit this original game sprite strip. Keep EXACTLY the same three orange heavy biped robots, their three poses, full silhouettes, camera, scale, every cannon/shoulder/leg detail and central reactor position. Main repair: REMOVE ALL stray bright red fringe, red speckling and red halo on the exterior alpha contour, especially top shoulder edges, side hands, thigh and feet edges. Repaint exterior edge pixels naturally with adjacent orange painted metal or dark gunmetal and clean native antialias alpha. Red light is allowed ONLY inside the circular central reactor in each robot, nowhere on exterior contours. Do not erode real orange armor and do not add outline. Give each complete robot at least 12% transparent padding vertically and horizontally inside its equal square cell, same uniform scale for all three. Three equal square cells in one horizontal row, 3:1 canvas, exact same core axis/height across cells. No text, shadow, background, particles, flashes or glow clouds. Native transparent background.

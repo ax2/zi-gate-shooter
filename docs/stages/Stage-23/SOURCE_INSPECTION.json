@@ -1,0 +1,146 @@
+[
+  {
+    "version": "v1",
+    "source": "art/source/elite-strip-v1.png",
+    "bytes": 1460174,
+    "sha256": "de6fd09abd837c7695bfb98e23550fdc82ac486fe6ee0c2f12e32f12bd98dafe",
+    "size": [
+      2172,
+      724
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "bounds": [
+          166,
+          34,
+          659,
+          689
+        ],
+        "edge": 0,
+        "exteriorRed": {
+          "a16": 2,
+          "a128": 2,
+          "a240": 2
+        },
+        "reactorPixels": 342,
+        "reactorCenter": [
+          414.6754385964912,
+          305.49415204678445
+        ]
+      },
+      {
+        "frame": 1,
+        "bounds": [
+          115,
+          34,
+          608,
+          669
+        ],
+        "edge": 0,
+        "exteriorRed": {
+          "a16": 0,
+          "a128": 0,
+          "a240": 0
+        },
+        "reactorPixels": 320,
+        "reactorCenter": [
+          361.090625,
+          305.28437500000024
+        ]
+      },
+      {
+        "frame": 2,
+        "bounds": [
+          65,
+          35,
+          557,
+          693
+        ],
+        "edge": 0,
+        "exteriorRed": {
+          "a16": 0,
+          "a128": 0,
+          "a240": 0
+        },
+        "reactorPixels": 308,
+        "reactorCenter": [
+          311.63636363636357,
+          305.6396103896111
+        ]
+      }
+    ]
+  },
+  {
+    "version": "v2",
+    "source": "art/source/elite-strip-v2.png",
+    "bytes": 1379085,
+    "sha256": "c1d1a6ddc5e5f661e5278b556ca7dc216bc0fd605402147e385ba5903883cd11",
+    "size": [
+      2172,
+      724
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "bounds": [
+          161,
+          33,
+          658,
+          689
+        ],
+        "edge": 0,
+        "exteriorRed": {
+          "a16": 1,
+          "a128": 1,
+          "a240": 1
+        },
+        "reactorPixels": 309,
+        "reactorCenter": [
+          412.94822006472486,
+          304.6893203883501
+        ]
+      },
+      {
+        "frame": 1,
+        "bounds": [
+          111,
+          33,
+          609,
+          669
+        ],
+        "edge": 0,
+        "exteriorRed": {
+          "a16": 3,
+          "a128": 3,
+          "a240": 3
+        },
+        "reactorPixels": 291,
+        "reactorCenter": [
+          360.07560137457057,
+          304.371134020619
+        ]
+      },
+      {
+        "frame": 2,
+        "bounds": [
+          64,
+          33,
+          561,
+          692
+        ],
+        "edge": 0,
+        "exteriorRed": {
+          "a16": 0,
+          "a128": 0,
+          "a240": 0
+        },
+        "reactorPixels": 288,
+        "reactorCenter": [
+          312.85763888888886,
+          305.02777777777777
+        ]
+      }
+    ]
+  }
+]

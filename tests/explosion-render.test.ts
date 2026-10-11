@@ -18,12 +18,40 @@ function fixture(weak = false) {
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: 768, height: src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
+    image: async src => ({ src, width: 768, height: src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick() { calls.length = 0; clock += 1000 / 60; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([false,true])('draws elite travel/preparation with matching hit, upper warning and frozen pause (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const reference=new World(1337);
+ const body=f.runtime.world.spawn('elite',100,-100),baseline=reference.spawn('elite',100,-100);
+ const frames=new Set<number>();let paused=false;
+ const draws=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('elite-v1.png'));
+ for(let i=0;i<200;i++){
+  body.hit=baseline.hit=.07;f.tick();reference.step(C.step,360);reference.drainEffects();
+  expect(body).toEqual(baseline);expect(f.runtime.world.player).toEqual(reference.player);
+  expect(f.runtime.world.growth).toEqual(reference.growth);expect(f.runtime.world.bullets).toEqual(reference.bullets);
+  expect(f.runtime.world.score).toBe(reference.score);
+  const ds=draws();expect(ds).toHaveLength(2);expect(ds[0].args.slice(1)).toEqual(ds[1].args.slice(1));
+  expect(ds[0].args.slice(2,5)).toEqual([0,256,256]);frames.add(ds[0].args[1]);
+  expect(ds[1].composite).toBe('lighter');expect(ds[1].alpha).toBeLessThanOrEqual(weak?.18:.48);
+  expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('units.png')&&c.args[1]===384&&c.args[2]===256)).toBe(false);
+  if(body.warning>0){
+   expect(ds[0].args[1]).toBe(256);
+   expect(f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ffe1a2')).toBeGreaterThan(f.calls.indexOf(ds[1]));
+   if(!paused){
+    const frozen={...body},pose=ds.map(c=>c.args.slice(1));f.runtime.pause();for(let j=0;j<30;j++)f.tick();
+    expect(body).toEqual(frozen);expect(draws().map(c=>c.args.slice(1))).toEqual(pose);
+    f.runtime.touchStart(1,360,603);f.runtime.touchEnd(1,360,603);expect(f.runtime.mode).toBe('playing');paused=true;
+   }
+  }
+ }
+ expect(frames).toEqual(new Set([0,256,512]));expect(paused).toBe(true);
+ f.runtime.start();f.tick();expect(draws()).toHaveLength(0);
+});
 
 it.each([false,true])('draws armor travel/preparation with matching hit, upper warning and frozen pause (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const reference=new World(1337);

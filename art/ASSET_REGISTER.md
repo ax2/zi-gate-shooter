@@ -51,3 +51,7 @@ source/charger-strip-v1.png由本会话内置imagegen、原units参考，2172×7
 ## Stage-22重甲候选
 
 source/armor-strip-v1.png由本会话内置imagegen、原units参考生成，2172×724RGBA；运行armor-v1.png为768×256RGBA258416字节，解码786432字节。来源/实际提示词/裁框/哈希见ARMOR_V1.md及阶段ASSET_EXPORT.json；MIT开放，未批准正式美术/品牌，边缘、人评与设备待验。
+
+## Stage-23精英候选
+
+source/elite-strip-v1.png、v2.png为本会话内置imagegen、原units参考及首版修订；第二版1379085字节为运行来源，首版保留未接入。运行elite-v1.png为768×256 RGBA254549字节，解码786432字节；实际提示词/源哈希/裁框/限制见ELITE_V1.md及阶段报告。MIT开放，非批准角色/商标/正式美术。
