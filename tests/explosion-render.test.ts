@@ -6,14 +6,14 @@ import { C } from '../src/core/config';
 
 function fixture(weak = false) {
   let clock = 0, next: FrameRequestCallback = () => {};
-  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown }> = [];
-  const state: Record<string, any> = { globalAlpha: 1 };
+  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; composite: string }> = [];
+  const state: Record<string, any> = { globalAlpha: 1, globalCompositeOperation: 'source-over' };
   const stack: Record<string, any>[] = [];
   const context = new Proxy(state, { get(target, key: string) {
     if (key in target) return target[key];
     if (key === 'save') return () => stack.push({ ...state });
     if (key === 'restore') return () => Object.assign(state, stack.pop());
-    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle });
+    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, composite: state.globalCompositeOperation });
   } });
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
@@ -42,6 +42,37 @@ it('plays every atlas cell, freezes on pause, and retires completed effects', as
     }
   }
   expect(cells.size).toBe(9); expect(blasts(f)).toHaveLength(0);
+});
+
+it.each([false, true])('uses real hit timers for local flashes, freezes on pause and preserves simulation (weak=%s)', async weak => {
+  const f = fixture(weak); await f.runtime.load(); f.runtime.start();
+  const reference = new World();
+  const setup = (world: World) => {
+    for (const [i, kind] of (['drone', 'charger', 'armor', 'elite', 'boss', 'crate', 'gate'] as const).entries()) {
+      const b = world.spawn(kind, 100 + i * 70, 400); b.hit = 0.07;
+    }
+    world.player.invulnerable = 1;
+  };
+  setup(f.runtime.world); setup(reference);
+  f.tick(); reference.step(C.step, 360); reference.drainEffects();
+  const flashes = () => f.calls.filter(c => c.kind === 'drawImage' && c.composite === 'lighter');
+  expect(flashes()).toHaveLength(8);
+  expect(flashes().every(c => c.alpha > 0 && c.alpha <= (weak ? 0.18 : 0.48))).toBe(true);
+  // The final number panel must remain opaque and use normal compositing.
+  const label = f.calls.find(c => c.kind === 'fillText' && /^\+\d+%$/.test(c.args[0]));
+  expect(label?.composite).toBe('source-over'); expect(label?.alpha).toBe(1);
+  const before = flashes().map(c => c.alpha);
+  f.runtime.pause(); for (let i = 0; i < 20; i++) f.tick();
+  expect(flashes().map(c => c.alpha)).toEqual(before);
+  f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
+  for (let i = 0; i < 60; i++) {
+    f.tick(); reference.step(C.step, 360); reference.drainEffects();
+    expect(f.runtime.world.bodies).toEqual(reference.bodies);
+    expect(f.runtime.world.player).toEqual(reference.player);
+    expect(f.runtime.world.score).toBe(reference.score);
+    if (i === 6) expect(flashes()).toHaveLength(0);
+  }
+  f.runtime.start(); f.tick(); expect(flashes()).toHaveLength(0);
 });
 
 it.each([false, true])('keeps hostile cores and gate numbers above capped explosions (weak=%s)', async weak => {

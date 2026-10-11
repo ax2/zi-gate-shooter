@@ -1,6 +1,8 @@
 # 微信小游戏发布准备与验收
 
-Stage-12最新候选：build/wechat，manifest除外1395921字节。原创循环配乐、独立开关与节点失败清理，完整82项含实际bundle测试通过；未微信工具/AppID/真机/提交，见stages/Stage-12/TEST_REPORT.md。
+Stage-13最新候选：build/wechat，manifest以外1396551字节。实体受击反馈共享入口，84项回归通过；微信合成支持/工具/AppID/真机待验，见stages/Stage-13/TEST_REPORT.md。
+
+Stage-12历史候选：build/wechat，manifest除外1395921字节。原创循环配乐、独立开关与节点失败清理，完整82项含实际bundle测试通过；未微信工具/AppID/真机/提交，见stages/Stage-12/TEST_REPORT.md。
 
 Stage-11历史候选：build/wechat，manifest除外688849字节。首领局部连续爆炸/分片消散共用Canvas入口；最终类型/构建与相关回归通过，微信工具/AppID/真机/提交审核未完成。范围见stages/Stage-11/TEST_REPORT.md。
 

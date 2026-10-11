@@ -206,6 +206,16 @@ export class CanvasRuntime {
     const sw = img.width / columns, sh = img.height / rows;
     this.ctx.drawImage(img, (frame % columns) * sw, Math.floor(frame / columns) * sh, sw, sh, x - width / 2, y - height / 2, width, height);
   }
+  /** Reuse the actual sprite alpha: no rectangular flash or extra atlas. */
+  private hitSprite(key: string, frame: number, columns: number, x: number, y: number, width: number, height: number, remaining: number, duration = 0.07) {
+    if (remaining <= 0) return;
+    const c = this.ctx;
+    c.save();
+    c.globalCompositeOperation = 'lighter';
+    c.globalAlpha *= Math.min(1, remaining / duration) * (this.save.settings.effects === 'weak' ? 0.18 : 0.48);
+    this.frameSprite(key, frame, columns, x, y, width, height);
+    c.restore();
+  }
   private bar(x: number, y: number, width: number, ratio: number, color: string) {
     this.rect(x - width / 2 - 2, y - 2, width + 4, 12, '#07121b');
     this.rect(x - width / 2, y, width, 8, '#314852'); this.rect(x - width / 2, y, width * clamp(ratio, 0, 1), 8, color);
@@ -254,10 +264,21 @@ export class CanvasRuntime {
       c.fillStyle = '#0005'; c.beginPath(); c.ellipse(b.x + 5, b.y + b.height * 0.3, b.width * 0.45, b.height * 0.2, 0, 0, Math.PI * 2); c.fill();
       if (b.kind === 'gate') {
         this.frameSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225);
+        this.hitSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225, b.hit);
         this.rect(b.x - b.width / 2 + 5, b.y - 54, b.width - 10, 108, '#071927f5');
-      } else if (b.kind === 'crate') this.frameSprite('props.png', b.hp < b.maxHp * 0.55 ? 1 : 0, 3, b.x, b.y, 124, 134);
+      } else if (b.kind === 'crate') {
+        const frame = b.hp < b.maxHp * 0.55 ? 1 : 0;
+        this.frameSprite('props.png', frame, 3, b.x, b.y, 124, 134);
+        this.hitSprite('props.png', frame, 3, b.x, b.y, 124, 134, b.hit);
+      }
       else if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
-      else this.frameSprite('units.png', unitFrames[b.kind], 4, b.x, b.y + (b.kind === 'boss' ? BOSS_VISUAL.offsetY : 0), b.kind === 'boss' ? BOSS_VISUAL.width : b.width * 1.4, b.kind === 'boss' ? BOSS_VISUAL.height : b.height * 1.55);
+      else {
+        const y = b.y + (b.kind === 'boss' ? BOSS_VISUAL.offsetY : 0);
+        const width = b.kind === 'boss' ? BOSS_VISUAL.width : b.width * 1.4;
+        const height = b.kind === 'boss' ? BOSS_VISUAL.height : b.height * 1.55;
+        this.frameSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height);
+        this.hitSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height, b.hit);
+      }
     }
     for (const b of w.bullets.filter(b => !b.hostile)) {
       c.strokeStyle = '#62dcff44'; c.lineWidth = 10; c.beginPath(); c.moveTo(b.x, b.y + 22); c.lineTo(b.x, b.y - 10); c.stroke();
@@ -267,9 +288,10 @@ export class CanvasRuntime {
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(w.player.x + 5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
     c.save();
-    if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.35;
+    if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.65;
     const recoil = this.mode === 'playing' && this.platform.now() < this.muzzleUntil ? 2.5 : 0;
     if (w.player.hp > 0) this.frameSprite('units.png', this.mode === 'menu' ? 2 : w.growth.stage - 1, 4, w.player.x, playerY + recoil, this.mode === 'menu' ? 200 : 160, this.mode === 'menu' ? 267 : 213);
+    if (w.player.hp > 0 && this.mode !== 'menu') this.hitSprite('units.png', w.growth.stage - 1, 4, w.player.x, playerY + recoil, 160, 213, w.player.invulnerable - (C.invulnerability - 0.12), 0.12);
     c.restore();
     if (this.mode === 'playing' && w.player.hp > 0 && this.platform.now() < this.muzzleUntil) {
       for (const offset of C.weapon[w.growth.stage - 1].offsets) {
