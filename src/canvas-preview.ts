@@ -2,6 +2,7 @@ import { CanvasRuntime, parseSave } from './game/canvas-runtime';
 import { GameAudio } from './game/audio';
 import { LoopMusic, browserMusicHandle } from './game/music';
 import { createLicenseViewer } from './game/license-viewer';
+import { bindBrowserKeyboard } from './game/browser-keyboard';
 import licenseText from '../legal/ANDROID_NOTICES.txt?raw';
 
 const canvas = document.createElement('canvas');
@@ -37,6 +38,7 @@ const resize = () => { const r = viewport(); runtime.resize(r.width, r.height, d
 window.addEventListener('resize', resize);
 if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(canvas);
 window.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); if (!licenses.close()) runtime.back(); } });
+bindBrowserKeyboard(window, runtime, () => { void audio.unlock(); });
 // Only read-only diagnostics are exposed; no debug rewards or automatic victories.
 Object.defineProperty(window, '__gateDiagnostics', { value: () => runtime.diagnostics() });
 void runtime.load();

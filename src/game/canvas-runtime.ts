@@ -11,6 +11,7 @@ import type { PlayerPose } from './player-motion';
 import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
 import { contextGuide } from './context-guide';
+import { HorizontalKeys } from './horizontal-keys';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -52,6 +53,8 @@ export class CanvasRuntime {
   private visualTime = 0;
   private target = 360;
   private pointer: number | null = null;
+  private keys = new HorizontalKeys();
+  private inputMode: 'touch' | 'keyboard' = 'touch';
   private pointerX = 0;
   private downAction = '';
   private notice = '';
@@ -104,6 +107,7 @@ export class CanvasRuntime {
         let steps = 0;
         try {
           while (this.accumulator + 1e-9 >= C.step && steps++ < 5 && this.mode === 'playing') {
+            if (this.keys.active) this.target = clamp(this.world.player.x + this.keys.direction * C.moveSpeed * C.step, C.minX, C.maxX);
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
             if (this.world.player.hp <= 0) {
@@ -111,7 +115,7 @@ export class CanvasRuntime {
             }
           }
           if (this.accumulator > C.step * 2) this.pause('设备暂时繁忙，已暂停');
-        } catch { this.error = '运行异常，请重新开始'; this.mode = 'error'; this.platform.silence(); }
+        } catch { this.error = '运行异常，请重新开始'; this.mode = 'error'; this.cancelTouch(); this.platform.silence(); }
       }
     }
     if (this.mode === 'playing' || this.mode === 'menu' || this.mode === 'result') this.visualTime += dt;
@@ -120,6 +124,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.keys.clear(); this.inputMode = 'touch';
     this.gateFeedback.clear();
     this.crateDebris.clear();
     this.playerMotion.reset();
@@ -142,10 +147,18 @@ export class CanvasRuntime {
     try { this.platform.music?.(this.mode === 'playing' && this.save.settings.music); }
     catch { /* An optional platform audio feature must not stop the game. */ }
   }
-  moveKeyboard(direction: number, dt: number) { if (this.mode === 'playing') this.target = clamp(this.world.player.x + direction * C.moveSpeed * dt, C.minX, C.maxX); }
+  keyDown(code: string) {
+    if (this.mode !== 'playing' || this.pointer !== null || !this.keys.press(code)) return false;
+    this.inputMode = 'keyboard'; return true;
+  }
+  keyUp(code: string) {
+    if (!this.keys.release(code)) return false;
+    this.target = this.world.player.x; return true;
+  }
   private point(x: number, y: number) { return { x: (x - this.offsetX) / this.scale, y: (y - this.offsetY) / this.scale }; }
   touchStart(id: number, x: number, y: number) {
     if (this.pointer !== null) return;
+    this.cancelTouch(); this.inputMode = 'touch';
     const p = this.point(x, y); this.pointer = id; this.pointerX = p.x;
     this.downAction = this.buttons.find(b => p.x >= b.x && p.x < b.x + b.w && p.y >= b.y && p.y < b.y + b.h)?.action ?? '';
   }
@@ -162,6 +175,7 @@ export class CanvasRuntime {
   }
   cancelTouch(id?: number) {
     if (id !== undefined && id !== this.pointer) return;
+    this.keys.clear();
     this.pointer = null; this.downAction = ''; this.target = this.world.player.x;
   }
   /** Native back never resumes a paused run or silently abandons a live one. */
@@ -459,7 +473,7 @@ export class CanvasRuntime {
       this.rect(44, 1150, 632, 106, '#081a25df');
       this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
       this.text(guide.detail, 360, 1224, 25, '#b8d4e3');
-    } else this.text('‹　左右拖动 · 自动开火　›', 360, 1230, 24, '#b8d4e3');
+    } else this.text(this.inputMode === 'keyboard' ? '‹　A/D 或 ←/→ · 自动开火　›' : '‹　左右拖动 · 自动开火　›', 360, 1230, 24, '#b8d4e3');
   }
   private drawMenu() {
     this.rect(0, 0, 720, 510, '#07111b88'); this.rect(0, 920, 720, 360, '#07111bea');
@@ -498,6 +512,7 @@ export class CanvasRuntime {
     return { mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth },
       playerX: this.world.player.x,
+      inputMode: this.inputMode,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
