@@ -13,6 +13,6 @@ Gradle :app:exportRuntimeInventory 导出当前debug/release图到忽略的build
 
 明确审阅依赖变更后，在项目根运行npm run licenses:refresh生成候选差异，再审阅全部Git diff，运行npm run licenses:check及Android构建。不要仅为让构建通过而刷新。legal文件以.gitattributes禁用换行转换和空白格式修正检查，保证上游证据字节稳定；上游POM原有CRLF及许可末尾空行按原文保留，完整性由SHA与逐字节核验检查。
 
-工程清单与静态打包校验不等于法律审查或商店审核。当前未完成源树所有嵌套第三方声明的人工审查；原生包安装与许可文件的用户可达界面尚待验证，不以本目录宣称应用可上架。
+工程清单与静态打包校验不等于法律审查或商店审核。Stage-05已在设置增加离线许可入口，正文随JS打包，浏览器实际Android网页产物核对全文与返回流程通过；原始随包文件仍保留。当前未完成源树所有嵌套第三方声明的人工审查；原生包安装、旧WebView与系统返回行为尚待验证，不以本目录宣称应用可上架。
 
 依据：[Apache许可原文](https://www.apache.org/licenses/LICENSE-2.0.html)、[Apache分发说明](https://apache.org/legal/apply-license.html)、[Cordova对应版本NOTICE](https://raw.githubusercontent.com/apache/cordova-android/rel/14.0.1/NOTICE)。

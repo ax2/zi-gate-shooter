@@ -16,6 +16,7 @@ export interface Platform {
   silence: () => void;
   now: () => number;
   requestFrame: (callback: (time: number) => void) => void;
+  openLicenses?: () => void;
   width: number; height: number; dpr: number; menuBottom: number;
 }
 interface Button { x: number; y: number; w: number; h: number; label: string; action: string }
@@ -160,6 +161,7 @@ export class CanvasRuntime {
     else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
+    else if (action === 'licenses') this.platform.openLicenses?.();
     else if (action === 'effects') this.save.settings.effects = this.save.settings.effects === 'standard' ? 'weak' : 'standard';
     else if (action === 'shake') this.save.settings.shake = !this.save.settings.shake;
     else if (action === 'sound') { this.save.settings.sound = !this.save.settings.sound; this.platform.silence(); }
@@ -343,7 +345,7 @@ export class CanvasRuntime {
   }
   private drawDialog() {
     const w = this.world;
-    this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, 640, '#122331f5');
+    this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, this.mode === 'settings' && this.platform.openLicenses ? 740 : 640, '#122331f5');
     this.buttons = [];
     if (this.mode === 'paused') {
       this.text('暂停', 360, 420, 48, '#eff8ff', 'center', true); this.text('准备好了，再继续突围。', 360, 490, 26, '#a9bfce');
@@ -353,7 +355,10 @@ export class CanvasRuntime {
       this.text('设置', 360, 415, 48, '#eff8ff', 'center', true);
       this.button(`特效　${s.effects === 'standard' ? '标准' : '弱化'}`, 490, 'effects');
       this.button(`屏幕震动　${s.shake ? '开' : '关'}`, 600, 'shake'); this.button(`音效　${s.sound ? '开' : '关'}`, 710, 'sound');
-      this.button('返回', 830, 'back', true);
+      if (this.platform.openLicenses) {
+        this.button('开源许可', 820, 'licenses');
+        this.button('返回', 930, 'back', true);
+      } else this.button('返回', 830, 'back', true);
     } else {
       this.text('本次突围结束', 360, 415, 30, '#b6d2e2'); this.text(w.score.toString(), 360, 510, 94, '#eff8ff', 'center', true);
       this.text(`最高分 ${this.save.best}`, 360, 585, 26, '#e8c88b');
