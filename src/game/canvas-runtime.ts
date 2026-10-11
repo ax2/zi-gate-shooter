@@ -10,6 +10,7 @@ import { PlayerMotion } from './player-motion';
 import type { PlayerPose } from './player-motion';
 import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
+import { contextGuide } from './context-guide';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -62,7 +63,6 @@ export class CanvasRuntime {
   private upgradeUntil = 0;
   private error = '';
   private started = false;
-  private lastTutorial = '';
   private frameTimes = new FrameWindow();
   private scale = 1;
   private offsetX = 0;
@@ -112,9 +112,6 @@ export class CanvasRuntime {
           }
           if (this.accumulator > C.step * 2) this.pause('设备暂时繁忙，已暂停');
         } catch { this.error = '运行异常，请重新开始'; this.mode = 'error'; this.platform.silence(); }
-        const t = this.world.time;
-        const tutorial = t < 2 ? '左右拖动 · 自动开火' : t > 8 && t < 10 ? '打碎装备箱，再靠近领取' : t > 20 && t < 22 ? '把奖励打高，穿过数字门领取' : '';
-        if (tutorial && tutorial !== this.lastTutorial) { this.lastTutorial = tutorial; this.notify(tutorial); }
       }
     }
     if (this.mode === 'playing' || this.mode === 'menu' || this.mode === 'result') this.visualTime += dt;
@@ -130,7 +127,7 @@ export class CanvasRuntime {
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
-    this.particles = []; this.blasts = []; this.destruction = undefined; this.lastTutorial = ''; this.notice = ''; this.shakeUntil = 0; this.muzzleUntil = 0; this.upgradeUntil = 0;
+    this.particles = []; this.blasts = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0; this.muzzleUntil = 0; this.upgradeUntil = 0;
     this.platform.silence();
     this.updateMusic();
   }
@@ -198,7 +195,7 @@ export class CanvasRuntime {
     if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 48; this.recoilUntil = this.world.time + 0.048; return; }
     if (e.type === 'upgrade' || e.type === 'overload') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
-    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken') this.notify(e.text, e.type === 'victory' ? 820 : 277);
+    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') this.crateDebris.burst(e.x, e.y);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y);
@@ -275,7 +272,6 @@ export class CanvasRuntime {
     if (this.mode === 'menu') this.drawMenu();
     else {
       this.drawHud();
-      if (this.mode === 'playing') this.text('‹　左右拖动 · 自动开火　›', 360, 1230, 24, '#b8d4e3');
       if (this.notice && this.platform.now() < this.noticeUntil && this.mode === 'playing') {
         this.rect(58, this.noticeY - 31, 604, 62, '#0a1c2af0'); this.text(this.notice, 360, this.noticeY, 28, '#d2f2ff');
       }
@@ -287,6 +283,7 @@ export class CanvasRuntime {
     const c = this.ctx, w = this.world;
     this.gateFeedback.sync(w.bodies, w.time);
     this.gateFeedback.advance(dt);
+    this.drawGuide();
     this.drawDestruction(dt);
     this.crateDebris.advance(dt);
     for (const piece of this.crateDebris.pieces) {
@@ -450,6 +447,19 @@ export class CanvasRuntime {
     this.text(w.growth.overload > 0 ? `超载 ${w.growth.overload.toFixed(1)}s` : `火力 +${w.growth.bonus}%`, 280, y + 88, 26, '#74dcff', 'left', true);
     this.text(`第${w.round}轮`, 686, y + 88, 23, '#b0c4d1', 'right');
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
+  }
+  private drawGuide() {
+    if (this.mode !== 'playing') return;
+    // Optional help is below all entities, effects, projectiles and native labels.
+    // Briefly omit it while a passing body occupies the help area: neither its
+    // silhouette nor the instruction should become an unreadable composite.
+    if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
+    const guide = contextGuide(this.world);
+    if (guide.detail) {
+      this.rect(44, 1150, 632, 106, '#081a25df');
+      this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
+      this.text(guide.detail, 360, 1224, 25, '#b8d4e3');
+    } else this.text('‹　左右拖动 · 自动开火　›', 360, 1230, 24, '#b8d4e3');
   }
   private drawMenu() {
     this.rect(0, 0, 720, 510, '#07111b88'); this.rect(0, 920, 720, 360, '#07111bea');

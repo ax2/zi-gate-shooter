@@ -25,6 +25,52 @@ function fixture(weak = false) {
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('guides an actual first crate, pickup, single gate and paired row without changing the run', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  const reference = new World(); const seen = new Set<string>();
+  f.runtime.touchStart(1, 360, 1100); f.runtime.touchMove(1, 240, 1100);
+  for (let i = 0; i < 2050; i++) {
+    f.tick(); reference.step(C.step, 240); reference.drainEffects();
+    expect(f.runtime.world.growth).toEqual(reference.growth);
+    expect(f.runtime.world.player).toEqual(reference.player);
+    expect(f.runtime.world.pickups).toBe(reference.pickups);
+    expect(f.runtime.world.gatesTaken).toBe(reference.gatesTaken);
+    for (const call of f.calls) if (call.kind === 'fillText') seen.add(call.args[0]);
+    if (f.runtime.world.pickups > 0) expect(f.calls.some(c => c.args[0] === '装备已掉落，移到它下方')).toBe(false);
+  }
+  expect(reference.pickups).toBe(1); expect(reference.gatesTaken).toBe(2);
+  expect(seen).toContain('对准装备箱持续射击');
+  expect(seen).toContain('装备已掉落，移到它下方');
+  expect(seen).toContain('持续射击，把门的奖励打高');
+  expect(seen).toContain('穿过才领取 · 同排只领一扇');
+});
+
+it.each([false, true])('keeps live danger and reward labels above context help and hides help on pause (weak=%s)', async weak => {
+  const f = fixture(weak); await f.runtime.load(); f.runtime.start();
+  // Off-path target and danger layout intentionally supplied for rendering coverage.
+  f.runtime.world.spawn('crate', 240, 600);
+  f.runtime.world.bullets.push({id:9999,x:360,y:1180,px:360,py:1180,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});
+  f.tick();
+  const help = f.calls.findIndex(c => c.kind === 'fillText' && c.args[0] === '对准装备箱持续射击');
+  expect(help).toBeGreaterThan(0);
+  expect(f.calls.findIndex(c => c.kind === 'fillRect' && c.color === '#ffead7')).toBeGreaterThan(help);
+  expect(f.calls.findIndex(c => c.kind === 'fillText' && c.args[0].startsWith?.('T2 装备'))).toBeGreaterThan(help);
+  expect(f.calls.filter(c => c.kind === 'fillText' && c.args[2] === 277)).toHaveLength(0);
+  f.runtime.pause(); for (let i = 0; i < 30; i++) f.tick();
+  expect(f.calls.some(c => c.args[0] === '对准装备箱持续射击')).toBe(false);
+  f.runtime.start(); f.tick();
+  expect(f.calls.some(c => c.args[0] === '对准装备箱持续射击')).toBe(false);
+});
+
+it('temporarily omits optional help when a passing body occupies its text area', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  f.runtime.world.spawn('crate', 240, 600);
+  const passing = f.runtime.world.spawn('drone', 480, 1200);
+  f.tick(); expect(f.calls.some(c => c.args[0] === '对准装备箱持续射击')).toBe(false);
+  passing.active = false; f.tick();
+  expect(f.calls.some(c => c.args[0] === '对准装备箱持续射击')).toBe(true);
+});
+
 it.each([false, true])('a real threshold hit pulses the final number and freezes it on pause (weak=%s)', async weak => {
   const f = fixture(weak); await f.runtime.load(); f.runtime.start();
   const gate = f.runtime.world.spawn('gate', 360, 600); gate.row = 1; gate.energy = 20; f.tick();
@@ -95,6 +141,8 @@ it.each([false, true])('a real crate break reveals equipment above smoke without
   expect(f.runtime.diagnostics().crateFragments).toBe(6);
   const pickup = f.calls.findIndex(c => c.kind === 'drawImage' && c.args[0].src.endsWith('props.png') && c.args[7] === 65);
   expect(pickup).toBeGreaterThan(f.calls.lastIndexOf(blasts(f).at(-1)!));
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '装备已掉落，移到它下方')).toBe(true);
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '靠近领取')).toBe(false);
   f.runtime.pause(); f.tick(); const fragments = f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('crate-v1.png')).map(c => ({ ...c }));
   for (let i = 0; i < 20; i++) f.tick();
   expect(f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('crate-v1.png'))).toEqual(fragments);
