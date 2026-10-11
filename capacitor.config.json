@@ -1,0 +1,7 @@
+{
+  "appId": "com.ax2.zigateshooter",
+  "appName": "火力突围",
+  "webDir": "build/android-web",
+  "loggingBehavior": "debug",
+  "android": { "allowMixedContent": false, "webContentsDebuggingEnabled": false }
+}

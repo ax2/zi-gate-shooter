@@ -10,12 +10,18 @@
     "build": "npm run typecheck && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "assets:export": "node tools/export-assets.mjs && node tools/generate-audio.mjs",
-    "build:wechat": "npm run typecheck && node tools/build-wechat.mjs"
+    "build:wechat": "npm run typecheck && node tools/build-wechat.mjs",
+    "android:sync": "npm run typecheck && node tools/build-android-web.mjs && cap sync android",
+    "build:android": "npm run android:sync && powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-android.ps1"
   },
   "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.5.3",
     "phaser": "3.90.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.4.3",
     "esbuild": "0.28.2",
     "sharp": "0.35.5",
     "typescript": "7.0.2",

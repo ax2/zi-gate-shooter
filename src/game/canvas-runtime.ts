@@ -2,6 +2,7 @@ import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
 import { gateValue, previewReward } from '../core/rewards';
+import { bossWarningLanes } from '../core/behavior';
 import { defaults } from '../ui/storage';
 import type { Save } from '../ui/storage';
 
@@ -136,6 +137,15 @@ export class CanvasRuntime {
     this.downAction = '';
   }
   cancelTouch() { this.pointer = null; this.downAction = ''; }
+  /** Native back never resumes a paused run or silently abandons a live one. */
+  back(): 'stay' | 'exit' {
+    this.cancelTouch();
+    if (this.mode === 'playing') { this.pause(); return 'stay'; }
+    if (this.mode === 'settings') { this.action('back'); return 'stay'; }
+    if (this.mode === 'paused') { this.notify('请继续战斗，或选择返回主界面'); return 'stay'; }
+    if (this.mode === 'result') { this.action('home'); return 'stay'; }
+    return 'exit';
+  }
   private action(action: string) {
     if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -269,10 +279,15 @@ export class CanvasRuntime {
     }
     for (const b of w.bodies) {
       if (b.warning > 0) {
-        const lanes = b.kind === 'boss' ? b.attack ? [200, 360] : [b.lane] : [b.x];
+        const lanes = b.kind === 'boss' ? bossWarningLanes(b) : [b.x];
         if (b.kind === 'boss' || b.kind === 'charger') for (const x of lanes) {
           this.rect(x - 36, b.y + 60, 72, 1110 - b.y, '#ff775620');
           c.strokeStyle = '#ff986eaa'; c.lineWidth = 2; c.strokeRect(x - 36, b.y + 60, 72, 1110 - b.y);
+          if (b.kind === 'boss') {
+            const label = b.attack ? x === 360 ? '第2拍' : '第1拍' : '锁定';
+            this.rect(x - 35, b.y + 132, 70, 38, '#241c1eef');
+            this.text(label, x, b.y + 151, 24, '#ffe1c8', 'center', true);
+          }
         } else this.rect(b.x - 5, b.y + b.height / 2, 10, 14, '#ffe1a2');
       }
       if (b.kind === 'crate') {

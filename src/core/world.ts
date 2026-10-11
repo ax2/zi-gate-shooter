@@ -14,6 +14,7 @@ export interface Body {
   width: number; height: number; hp: number; maxHp: number; speed: number;
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
+  attackCycle: number; burst: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
@@ -66,7 +67,7 @@ export class World {
       height: enemy?.height ?? (kind === 'gate' ? 138 : kind === 'pickup' ? 54 : 110),
       hp, maxHp: hp, speed: enemy ? enemy.speed * Math.min(1.15, 1 + (this.round - 1) * 0.05) : this.scrollSpeed,
       active: true, age: 0, timer: kind === 'boss' ? 2.8 : 2.4, warning: 0, hit: 0,
-      energy: 0, row: 0, stage, rewardKind: this.growth.bonus >= 100 ? 'energy' : 'power', attack: 0, lane: 360,
+      energy: 0, row: 0, stage, rewardKind: this.growth.bonus >= 100 ? 'energy' : 'power', attack: 0, lane: 360, attackCycle: 0, burst: 0,
     };
     this.bodies.push(body); return body;
   }
