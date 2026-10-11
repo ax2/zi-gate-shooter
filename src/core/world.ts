@@ -6,6 +6,7 @@ import type { Growth } from './rewards';
 import { timeline } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
+import { advanceBody } from './behavior';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
@@ -32,7 +33,7 @@ export class World {
   phase: Phase = 'running';
   round = 1; time = 0; roundTime = 0; phaseTime = 0; score = 0;
   shots = 0; hits = 0; kills = 0; cratesBroken = 0; pickups = 0; gatesTaken = 0;
-  maxStage = 1; peakBodies = 0; peakBullets = 0; fallbackCount = 0;
+  maxStage = 1; peakBodies = 0; peakBullets = 0; fallbackCount = 0; attackDeferrals = 0;
   private nextId = 1;
   private nextRow = 1;
   private fireTimer = 0;
@@ -40,9 +41,15 @@ export class World {
   private scheduleIndex = 0;
   private bossVictory = false;
   private secondChance = false;
+  private nextSpawnRetry = 0;
   private readonly seed: number;
 
-  constructor(seed = 1337) { this.seed = seed; this.scheduled = timeline(1, seed); }
+  // initialRound supports deterministic replay fixtures; normal UI always starts
+  // with the default round 1, T1 and zero bonus.
+  constructor(seed = 1337, initialRound = 1) {
+    this.seed = seed; this.round = Math.max(1, Math.floor(initialRound));
+    this.scheduled = timeline(this.round, seed);
+  }
   emit(type: string, x: number, y: number, text?: string, size?: number) {
     this.effects.push({ type, x, y, text, size });
   }
@@ -71,26 +78,43 @@ export class World {
       if (!pair && x === 360) g.width = 264;
     }
   }
+  private admit(candidate: Body) {
+    const horizon = Math.max(3, (C.playerY - candidate.y) / Math.max(1, candidate.speed) + 1);
+    if (safeRoute(this.player.x, this.bodies, this.bullets, horizon)) return true;
+    candidate.active = false; this.fallbackCount++;
+    this.nextSpawnRetry = this.roundTime + 0.5;
+    return false;
+  }
+  private rewardSlots(needed: number) {
+    return this.bodies.filter(b => b.active && (b.kind === 'gate' || b.kind === 'crate' || b.kind === 'pickup')).length + needed <= C.limits.rewards;
+  }
   private director(dt: number) {
     if (this.phase === 'running') {
       this.roundTime += dt;
-      if (!this.secondChance && this.roundTime >= 25 && this.growth.stage === 1) {
-        this.spawn('crate', 480, 180, 2); this.secondChance = true;
+      if (!this.secondChance && this.roundTime >= 25 && this.growth.stage === 1 && this.roundTime >= this.nextSpawnRetry && this.rewardSlots(1)) {
+        this.secondChance = this.admit(this.spawn('crate', 480, 180, 2));
       }
-      while (this.scheduleIndex < this.scheduled.length && this.scheduled[this.scheduleIndex].at <= this.roundTime) {
+      while (this.scheduleIndex < this.scheduled.length && this.scheduled[this.scheduleIndex].at <= this.roundTime && this.roundTime >= this.nextSpawnRetry) {
         const s = this.scheduled[this.scheduleIndex++];
         if (s.kind === 'gates') {
-          if (this.growth.overload > 0 && this.growth.energy >= 100) this.spawn('drone', 360);
-          else this.spawnGates(s.x, !!s.pair);
-        } else if (s.kind === 'crate') this.spawn('crate', s.x, 180, s.stage);
+          if (this.growth.overload > 0 && this.growth.energy >= 100) {
+            if (!this.admit(this.spawn('drone', 360))) { this.scheduleIndex--; break; }
+          }
+          else {
+            if (!this.rewardSlots(s.pair ? 2 : 1)) { this.scheduleIndex--; break; }
+            this.spawnGates(s.x, !!s.pair);
+          }
+        } else if (s.kind === 'crate') {
+          if (!this.rewardSlots(1)) { this.scheduleIndex--; break; }
+          if (!this.admit(this.spawn('crate', s.x, 180, s.stage))) { this.scheduleIndex--; break; }
+        }
         else {
           const enemyCount = this.bodies.filter(b => b.active && b.kind in C.enemies).length;
           if (enemyCount >= C.limits.enemies) { this.scheduleIndex--; break; }
           const candidate = this.spawn(s.kind, s.x);
-          if (!safeRoute(this.player.x, this.bodies, this.bullets, Math.max(3, (C.playerY - candidate.y) / candidate.speed + 1))) {
-            candidate.active = false; this.fallbackCount++;
-            // Defer an unsafe new threat. Existing advertised objects remain intact.
-          }
+          // Preserve the queued item; wait with an empty lane, never swallow rewards
+          // or cancel any already advertised body/attack to manufacture a safe route.
+          if (!this.admit(candidate)) { this.scheduleIndex--; break; }
         }
       }
       if (this.roundTime >= 72 && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {
@@ -108,7 +132,7 @@ export class World {
       this.phaseTime += dt;
       if (this.phaseTime >= 4) {
         this.round++; this.roundTime = 0; this.phaseTime = 0; this.phase = 'running';
-        this.scheduleIndex = 0; this.secondChance = this.growth.stage > 1;
+        this.scheduleIndex = 0; this.secondChance = this.growth.stage > 1; this.nextSpawnRetry = 0;
         this.scheduled = timeline(this.round, this.seed + this.round * 719);
         this.emit('round', 360, 400, `第 ${this.round} 轮 · 继续突围`);
       }
@@ -136,40 +160,6 @@ export class World {
     if (this.bullets.filter(b => b.active && b.hostile).length >= C.limits.hostile) return;
     this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx, vy, damage: 1, age: 0, active: true, hostile: true });
   }
-  private tickBody(b: Body, dt: number) {
-    b.age += dt; b.hit = Math.max(0, b.hit - dt); b.timer -= dt;
-    if (b.kind === 'boss') {
-      if (this.phase !== 'boss') return;
-      b.x = 360 + Math.sin(this.phaseTime * 0.4) * 65;
-      if (b.timer <= 0) {
-        if (b.warning <= 0) {
-          b.warning = 1.35; b.timer = 1.35;
-          b.attack = Math.floor(this.phaseTime / 3.5) % 2;
-          b.lane = [200, 360, 520][Math.floor(this.phaseTime / 4) % 3];
-        }
-        else {
-          const attack = b.attack;
-          const lane = b.lane;
-          if (!attack) for (let i = 0; i < 5; i++) this.hostile(lane, b.y + 90 - i * 45, 0, 320);
-          else for (const x of [200, 360]) for (let i = 0; i < 3; i++) this.hostile(x, b.y + 90 - i * 60, 0, 300);
-          b.warning = 0; b.timer = this.phaseTime > 35 ? 3.5 : 2.8;
-        }
-      }
-    } else if (b.kind === 'charger') {
-      if (b.age > 1.8 && b.age < 2.6) b.warning = 2.6 - b.age;
-      if (b.age >= 2.6) { b.warning = 0; b.speed = 380; }
-      b.y += b.speed * dt;
-    } else {
-      b.y += b.speed * dt;
-      if ((b.kind === 'armor' || b.kind === 'elite') && b.y > 0 && b.y < 600) {
-        if (b.timer <= 0) {
-          if (b.warning <= 0) { b.warning = 0.6; b.timer = 0.6; }
-          else { this.hostile(b.x, b.y + b.height / 2); b.warning = 0; b.timer = 2.4; }
-        }
-      } else if (b.y >= 600) b.warning = 0;
-    }
-  }
-
   step(dt: number, targetX = this.player.x) {
     if (this.phase === 'dead') return;
     this.time += dt;
@@ -183,7 +173,17 @@ export class World {
     }
     this.director(dt);
     this.shoot(dt);
-    for (const b of this.bodies) { b.px = b.x; b.py = b.y; this.tickBody(b, dt); }
+    for (const b of this.bodies) {
+      b.px = b.x; b.py = b.y;
+      const previousWarning = b.warning;
+      advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => this.hostile(x, y, vx, vy));
+      if (b.kind === 'boss' && previousWarning <= 0 && b.warning > 0
+        && !safeRoute(this.player.x, this.bodies, this.bullets, 4, { phase: this.phase, phaseTime: this.phaseTime })) {
+        // The warning has not been rendered yet. Delay the unannounced attack;
+        // once displayed its geometry and duration are never changed.
+        b.warning = 0; b.timer = 0.3; this.attackDeferrals++;
+      }
+    }
     for (const b of this.bullets) { b.px = b.x; b.py = b.y; b.x += b.vx * dt; b.y += b.vy * dt; b.age += dt; }
     const contacts: Contact[] = [];
     const add = (t: number | null, rank: number, id: number, apply: () => void) => { if (t !== null) contacts.push({ t, rank, id, apply }); };
