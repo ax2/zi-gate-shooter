@@ -40,6 +40,8 @@
 
 2026-10-11：Stage-02增加独立Android APK；首领严格交替与双拍攻击、实际弹道奖励窗口验证完成。最新34项自动测试通过，Android debug编译/lint/签名与资源核验通过；APK约4.65MB。详见Stage-02验证记录，真机与上架验收仍未完成。
 
+2026-10-11：继续替换启动图标/主题为原创机甲候选，修订系统栏与备份配置；新APK约4.96MB，App lint为0错误/5警告，16张包内图像像素一致。旧包保留，真机与正式美术签收待验。
+
 ## 运行与构建
 
 使用Node26环境，依赖已由package-lock.json锁定。
@@ -57,6 +59,6 @@ npm run build
 
 ## 许可证
 
-Android当前为内部debug签名候选，构建命令会运行Gradle编译、lint和签名校验。参见[Android发布准备](docs/ANDROID_RELEASE.md)与[Stage-02日志](docs/stages/Stage-02/WORK_LOG.md)。正式签名、原创图标/启动页、真机和商店验收均尚未完成。
+Android当前为内部debug签名候选，构建命令会运行Gradle编译、lint、签名与包内资源核验。参见[Android发布准备](docs/ANDROID_RELEASE.md)、[启动资产验证](docs/stages/Stage-02/LAUNCHER_VALIDATION.md)与[Stage-02日志](docs/stages/Stage-02/WORK_LOG.md)。原创候选图标/系统启动主题已接入；品牌/音画签收、真机、正式签名和商店验收尚未完成。
 
 本仓库自有内容采用 [MIT License](LICENSE)。当前不包含商业游戏素材或第三方美术音频。未来引入外部素材时，逐项记录来源与独立许可，仓库许可证不替代素材许可。

@@ -37,8 +37,23 @@
 - 浏览器宽屏实际观察到首领“第1拍/第2拍”双列预警，数字和危险层级清晰；保存截图是在弹丸阶段，不伪称预警帧或原生运行图。暂停保存当前验证局。
 - Stage-02候选APK、微信目录、验证记录与真实截图同步到用户输出，长期档案分别追踪。当前仍是开发快照。
 
+## 连续工作：启动外观与原生适配
+
+开始核查Android模板图标、启动页、系统栏、备份和合并manifest。将制作与已有原创机甲一致的启动资产候选并保留源文件/提示词，重新构建核验；候选不代表用户品牌签收。当前无真机，不能把资源预览代替原生运行证据。
+
+- 内置imagegen制作透明机甲候选；生成结果1254px且未遵守提示中的中心留白，脚本重新等比适配，五档显著alpha半径32.22–32.41dp，均小于33dp安全圆。源图、提示词、导出记录保留。
+- 接入系统SplashScreen和深色结束主题，super.onCreate前安装；按Capacitor实际源码固定SystemBars DARK浅色前景及css安全区。补新版cloud/device-transfer排除规则，旧系统fullBackupContent=false。
+- 移除11个模板启动PNG和4个无引用XML，可从d6002e7恢复。第一次新资源构建lint有11警告，其中5项legacy图标满矩形警告；加入旧版图标圆角透明外沿并删除空旧版本目录，最终0错误/5警告，没有隐藏检查。
+- 最终完整Android命令通过，34秒，APK4964969字节，签名通过。编译后解码16张本地图标/启动图，RGBA与源导出完全一致；13个Web资源哈希一致，两个空兼容文件，无模板splash.png；最终权限无新增网络/敏感项。
+- 浏览器预览初次CSS单色遮罩未显示且图标未模拟系统图层缩放；修为从alpha导出的单色示意与150%前景层，复查圆形/圆角/48px/单色。桌面和手机全页预览截图已保存，明确不是原生界面。移动预览单列，无文字横向溢出。
+- 本轮未更改共享游戏规则/渲染，未重跑34项战斗全套；沿用前轮证据。adb仍无设备，不宣称真机启动、系统栏、备份或音画体验通过。
+- 旧APK与微信交付目录保持原记录，新的候选输出至Stage-02-launcher；长期档案同步独立Git。详见LAUNCHER_VALIDATION.md。
+
 ## 官方依据
 
 - https://capacitorjs.com/docs/config
 - https://capacitorjs.com/docs/updating/8-0
 - https://capacitorjs.com/docs/apis/app
+- https://developer.android.com/develop/ui/views/launch/splash-screen/migrate
+- https://developer.android.com/develop/ui/compose/system/icon_design_adaptive
+- https://developer.android.com/identity/data/autobackup

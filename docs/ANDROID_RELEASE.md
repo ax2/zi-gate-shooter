@@ -22,8 +22,16 @@
 - 真机安装/启动/离线、返回/暂停/恢复、电话或系统打断、进程重启、存档损坏与音频恢复。
 - 低端和主流Android设备的帧时、内存、温度、触控延迟、30分钟正常长局；不能用桌面或免伤压力模拟代替。
 - 刘海/挖孔/手势区域、大屏/分屏/Android16旋转行为的实际画面与输入检查。
-- 原创启动图标、启动页、名称与完整视觉/音频签收。当前Capacitor模板图标和启动页只作内部占位，未达交付标准。
+- 原创启动图标、启动页、名称与完整视觉/音频签收。当前已替换为原创机甲候选与系统SplashScreen，五档密度和APK像素一致性已检查；真机过渡与品牌签收未完成。
 - 完整Android传递依赖许可清单；当前THIRD_PARTY_NOTICES仅含直接JavaScript运行库声明。
 - 用户持有的正式签名及备份、正式包名确认、选定渠道的资料/隐私说明与审核规则核查，必要时补AAB；尚未签名发布或提交商店。
 
 参考：[Capacitor](https://capacitorjs.com/docs)、[App API](https://capacitorjs.com/docs/apis/app)。
+
+## 最新启动资产修订
+
+候选与检查见stages/Stage-02/LAUNCHER_VALIDATION.md。旧包保留build/releases/Stage-02-d6002e7/android与原用户输出；最新构建仍位于build/releases/Stage-02/android。npm run assets:launcher可重复导出既有原创源图，不会重新调用生成服务。
+
+系统栏固定SystemBars DARK（浅色文字/图标）与深色窗口底，保留css安全区和cover初始提示。启动Activity在super.onCreate之前安装AndroidX SplashScreen，统一深色背景、静态机甲标记和结束主题，无额外Activity、人工延时或启动网络请求。Android12+显式排除cloud与device-transfer全部本地数据域，旧系统禁用fullBackupContent；真实系统行为待设备检查。
+
+依据：[Android启动迁移](https://developer.android.com/develop/ui/views/launch/splash-screen/migrate)、[自适应图标](https://developer.android.com/develop/ui/compose/system/icon_design_adaptive)、[系统备份规则](https://developer.android.com/identity/data/autobackup)。

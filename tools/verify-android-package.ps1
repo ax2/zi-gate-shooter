@@ -30,7 +30,31 @@ try {
     $taskConfigReader = [IO.StreamReader]::new($taskZip.GetEntry('assets/capacitor.config.json').Open())
     try { $taskConfig = $taskConfigReader.ReadToEnd() | ConvertFrom-Json } finally { $taskConfigReader.Dispose() }
     if ($taskConfig.server) { throw 'APK must not depend on a server configuration.' }
-    $taskRecord = [ordered]@{ publicFiles = $taskFiles.Count; emptyCapacitorCompatibilityStubs = 2; allPublicFileHashesMatch = $true; serverConfiguration = $false; nativeDeviceTest = $false }
+    if ($taskConfig.plugins.SystemBars.style -ne 'DARK' -or $taskConfig.plugins.SystemBars.insetsHandling -ne 'css') { throw 'Native system-bar contract differs.' }
+    $taskArtCheck = Join-Path $taskRoot 'build\native-art-check'
+    New-Item -ItemType Directory -Path $taskArtCheck -Force | Out-Null
+    $taskArtEntries = @()
+    foreach ($taskDensity in @('mdpi','hdpi','xhdpi','xxhdpi','xxxhdpi')) {
+        foreach ($taskName in @('ic_launcher.png','ic_launcher_foreground.png','ic_launcher_round.png')) {
+            $taskMatches = @($taskZip.Entries | Where-Object { $_.FullName -match ('^res/mipmap-' + $taskDensity + '(-v[0-9]+)?/' + [regex]::Escape($taskName) + '$') })
+            if ($taskMatches.Count -ne 1) { throw "Missing/ambiguous native icon: $taskDensity/$taskName" }
+            $taskNativeCopy = Join-Path $taskArtCheck ($taskDensity + '-' + $taskName)
+            [IO.Compression.ZipFileExtensions]::ExtractToFile($taskMatches[0], $taskNativeCopy, $true)
+            $taskArtEntries += @{ name = "$taskDensity/$taskName"; source = Join-Path $taskRoot "android\app\src\main\res\mipmap-$taskDensity\$taskName"; packaged = $taskNativeCopy }
+        }
+    }
+    $taskLaunch = $taskZip.GetEntry('res/drawable-nodpi-v4/launch_mark.png')
+    if (!$taskLaunch) { $taskLaunch = $taskZip.GetEntry('res/drawable-nodpi/launch_mark.png') }
+    if (!$taskLaunch) { throw 'Native launch artwork missing.' }
+    $taskLaunchCopy = Join-Path $taskArtCheck 'launch_mark.png'
+    [IO.Compression.ZipFileExtensions]::ExtractToFile($taskLaunch, $taskLaunchCopy, $true)
+    $taskArtEntries += @{ name = 'launch_mark'; source = Join-Path $taskRoot 'android\app\src\main\res\drawable-nodpi\launch_mark.png'; packaged = $taskLaunchCopy }
+    $taskArtManifest = Join-Path $taskArtCheck 'manifest.json'
+    [IO.File]::WriteAllText($taskArtManifest, (ConvertTo-Json -InputObject $taskArtEntries))
+    & node (Join-Path $PSScriptRoot 'verify-native-art.mjs') $taskArtManifest
+    if ($LASTEXITCODE -ne 0) { throw 'Compiled native artwork validation failed.' }
+    if (@($taskZip.Entries | Where-Object { $_.FullName -match '^res/.*/splash\.png$' }).Count) { throw 'Template splash asset remains packaged.' }
+    $taskRecord = [ordered]@{ publicFiles = $taskFiles.Count; emptyCapacitorCompatibilityStubs = 2; allPublicFileHashesMatch = $true; nativeArtworkImages = $taskArtEntries.Count; nativeArtworkPixelsMatch = $true; systemBars = 'DARK/css'; templateSplashAssets = 0; serverConfiguration = $false; nativeDeviceTest = $false }
     [IO.File]::WriteAllText((Join-Path $taskRoot 'build\releases\Stage-02\android\PACKAGE_CHECK.json'), ($taskRecord | ConvertTo-Json))
     Write-Output "APK local payload verified: $($taskFiles.Count) files. Native offline execution still requires device testing."
 } finally { $taskZip.Dispose() }

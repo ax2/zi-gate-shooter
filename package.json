@@ -10,6 +10,7 @@
     "build": "npm run typecheck && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "assets:export": "node tools/export-assets.mjs && node tools/generate-audio.mjs",
+    "assets:launcher": "node tools/export-launcher.mjs",
     "build:wechat": "npm run typecheck && node tools/build-wechat.mjs",
     "android:sync": "npm run typecheck && node tools/build-android-web.mjs && cap sync android",
     "build:android": "npm run android:sync && powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-android.ps1"

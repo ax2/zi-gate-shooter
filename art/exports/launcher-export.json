@@ -1,0 +1,38 @@
+{
+  "source": "art/source/launcher-mech-v1.png",
+  "background": "#101B28",
+  "safeCircleDp": 66,
+  "candidate": true,
+  "densities": [
+    {
+      "density": "mdpi",
+      "legacySize": 48,
+      "adaptiveSize": 108,
+      "opaqueRadiusDp": 32.32
+    },
+    {
+      "density": "hdpi",
+      "legacySize": 72,
+      "adaptiveSize": 162,
+      "opaqueRadiusDp": 32.27
+    },
+    {
+      "density": "xhdpi",
+      "legacySize": 96,
+      "adaptiveSize": 216,
+      "opaqueRadiusDp": 32.41
+    },
+    {
+      "density": "xxhdpi",
+      "legacySize": 144,
+      "adaptiveSize": 324,
+      "opaqueRadiusDp": 32.22
+    },
+    {
+      "density": "xxxhdpi",
+      "legacySize": 192,
+      "adaptiveSize": 432,
+      "opaqueRadiusDp": 32.35
+    }
+  ]
+}

@@ -17,3 +17,11 @@
 ## 跑道
 
 空环境9:16工业科幻跑道；近正交俯视、上下尺度一致，无消失点。中心83%低对比石墨水泥/金属面，细小接缝、铆钉、污损；两侧窄管道、电缆、机械和琥珀灯，保证弹道与文字清楚。上下边缘匹配以循环。无角色、敌人、弹丸、爆炸、箱、门、UI、文字数字、商标、强暗角或亮雾。
+
+## Stage-02 Android启动资产（内置imagegen）
+
+参考图art/source/units.png仅用于角色与材质，输出source/launcher-mech-v1.png；透明背景。实际最终提示词：
+
+Create one original premium mobile game Android launcher foreground artwork. The attached existing sprite sheet is STYLE AND CHARACTER REFERENCE ONLY: use the ivory ceramic armor, graphite engineering and bright cyan reactor of the third white triple-cannon mech in its top row. Do not reproduce the sheet. One isolated powerful compact sci-fi gun mech, three distinct long cannon barrels pointing upward/away, armored shoulders and cyan reactor at center, viewed at a dramatic near-top-down 3/4 angle. No humanoid face, no face-like helmet. Highly detailed, finely painted metal, crisp strong silhouette readable as a 48px app icon; ivory main shape with restrained cyan and warm brass highlights. Keep the COMPLETE subject including all barrels within the CENTRAL 56% of a square 1024 canvas, centered (about 570x570), with abundant clear TRANSPARENT padding all around for Android adaptive masking. Do not add a square tile, border, rounded corner, ground, background, shadow outside the object, particles, typography, numbers, logos, watermark, extra objects, explosions or muzzle fire. Genuine transparent alpha background. A cohesive polished game asset, not generic glowing geometry and not a commercial game character.
+
+生成结果实际1254×1254且主体未遵守56%留白要求；技术导出脚本重新等比缩放至安全圆，并以像素alpha范围核验，不冒称生成器严格遵守尺寸。
