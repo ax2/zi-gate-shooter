@@ -1,6 +1,8 @@
 # 微信小游戏发布准备与验收
 
-Stage-18最新候选：build/wechat，manifest以外1937189字节。共享输入清理，微信不绑定浏览器按键；120项通过，未微信工具/AppID/真机/提交，见stages/Stage-18/TEST_REPORT.md。
+Stage-26最新候选：manifest外3061599字节，141项完整通过。构建先清理固定输出，仅保留已有AppID；旧版夹带已删除素材的问题已通过负对照/回归修复。运行内容沿用Stage-24，未微信工具/双方真机/提交，详见stages/Stage-26/TEST_REPORT.md。
+
+Stage-18历史候选：build/wechat，manifest以外1937189字节。共享输入清理，微信不绑定浏览器按键；120项通过，未微信工具/AppID/真机/提交，见stages/Stage-18/TEST_REPORT.md。
 
 Stage-17历史候选：build/wechat，manifest以外1936302字节。实际目标同步新手说明、危险上层，107项通过；未微信工具/AppID/真机/提交，见stages/Stage-17/TEST_REPORT.md。
 

@@ -1,7 +1,7 @@
 import { build } from 'esbuild';
 import { mkdir, cp, writeFile } from 'node:fs/promises';
-const output = 'build/android-web';
-await mkdir(output, { recursive: true });
+import { prepareBuildOutput } from './prepare-build-output.mjs';
+const output = await prepareBuildOutput('android-web');
 await build({ entryPoints: ['src/android.ts'], outfile: `${output}/game.js`, bundle: true, minify: true, format: 'iife', target: 'chrome60', platform: 'browser', loader: { '.txt': 'text' } });
 await cp('public/assets', `${output}/assets`, { recursive: true });
 await cp('THIRD_PARTY_NOTICES.md', `${output}/THIRD_PARTY_NOTICES.md`);
