@@ -1,9 +1,10 @@
 import { CanvasRuntime, parseSave } from './game/canvas-runtime';
 import type { Save } from './ui/storage';
+import { LoopMusic } from './game/music';
 
 interface Touch { identifier: number; clientX: number; clientY: number }
 interface TouchEvent { changedTouches: Touch[] }
-interface InnerAudio { src: string; volume: number; play(): void; stop(): void; destroy(): void; onEnded(callback: () => void): void; onError(callback: () => void): void }
+interface InnerAudio { src: string; volume: number; loop: boolean; play(): void; pause(): void; stop(): void; destroy(): void; onEnded(callback: () => void): void; onError(callback: () => void): void }
 interface WindowInfo { windowWidth: number; windowHeight: number; pixelRatio: number }
 declare const wx: {
   createCanvas(): HTMLCanvasElement; createImage(): HTMLImageElement;
@@ -19,6 +20,13 @@ declare const wx: {
 
 const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
 const canvas = wx.createCanvas();
+const music = new LoopMusic(() => {
+  const node = wx.createInnerAudioContext();
+  try {
+    node.src = 'assets/audio/mechanical-pulse-v1.wav'; node.loop = true; node.volume = 0.18;
+    return { play: () => node.play(), pause: () => node.pause(), destroy: () => node.destroy(), onError: callback => node.onError(callback) };
+  } catch { try { node.destroy(); } catch { /* Partial allocation. */ } throw new Error('Music unavailable'); }
+}, () => Date.now());
 const audio = new Map<string, InnerAudio[]>();
 const busy = new Set<InnerAudio>();
 let lastShot = 0;
@@ -70,6 +78,7 @@ const runtime = new CanvasRuntime({
   read: () => { try { return parseSave(wx.getStorageSync('zi-gate-shooter-v1')); } catch { return parseSave(null); } },
   write: value => { try { wx.setStorageSync('zi-gate-shooter-v1', value); } catch { /* Continue in memory. */ } },
   sound, silence,
+  music: playing => music.setPlaying(playing),
   now: () => Date.now(), requestFrame: callback => requestAnimationFrame(callback),
 });
 wx.onTouchStart(e => { for (const t of e.changedTouches) runtime.touchStart(t.identifier, t.clientX, t.clientY); });

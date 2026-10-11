@@ -1,5 +1,6 @@
 import { CanvasRuntime, parseSave } from './game/canvas-runtime';
 import { GameAudio } from './game/audio';
+import { LoopMusic, browserMusicHandle } from './game/music';
 import { createLicenseViewer } from './game/license-viewer';
 import licenseText from '../legal/ANDROID_NOTICES.txt?raw';
 
@@ -11,6 +12,7 @@ const viewportHeight = supports('height', '100dvh') ? '100dvh' : '100vh';
 canvas.style.cssText = `display:block;position:fixed;left:${inset('left')};top:${inset('top')};width:calc(100vw - ${inset('left')} - ${inset('right')});height:calc(${viewportHeight} - ${inset('top')} - ${inset('bottom')});touch-action:none`;
 document.body.style.cssText = 'margin:0;background:#0a1119;overflow:hidden'; document.body.append(canvas);
 const audio = new GameAudio();
+const music = new LoopMusic(browserMusicHandle, () => performance.now());
 const viewport = () => canvas.getBoundingClientRect();
 const bounds = viewport();
 export const licenses = createLicenseViewer(licenseText, () => runtime.hide());
@@ -20,6 +22,7 @@ export const runtime = new CanvasRuntime({
   read: () => { try { return parseSave(JSON.parse(localStorage.getItem('zi-gate-shooter-v1') ?? 'null')); } catch { return parseSave(null); } },
   write: value => { try { localStorage.setItem('zi-gate-shooter-v1', JSON.stringify(value)); } catch { /* In-memory fallback. */ } },
   sound: (type, stage) => audio.event(type, stage), silence: () => audio.stop(),
+  music: playing => music.setPlaying(playing),
   now: () => performance.now(), requestFrame: callback => requestAnimationFrame(callback),
   openLicenses: () => licenses.open(),
 });

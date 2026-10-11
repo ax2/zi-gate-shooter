@@ -15,6 +15,7 @@ export interface Platform {
   write: (save: Save) => void;
   sound: (type: string, stage: number) => void;
   silence: () => void;
+  music?: (playing: boolean) => void;
   now: () => number;
   requestFrame: (callback: (time: number) => void) => void;
   openLicenses?: () => void;
@@ -109,6 +110,7 @@ export class CanvasRuntime {
       }
     }
     if (this.mode === 'playing' || this.mode === 'menu' || this.mode === 'result') this.visualTime += dt;
+    this.updateMusic();
     this.render(this.mode === 'paused' || this.mode === 'settings' ? 0 : dt);
     this.platform.requestFrame(next => this.frame(next));
   }
@@ -118,13 +120,19 @@ export class CanvasRuntime {
     this.frameTimes.clear(); this.downAction = '';
     this.particles = []; this.blasts = []; this.destruction = undefined; this.lastTutorial = ''; this.notice = ''; this.shakeUntil = 0; this.muzzleUntil = 0; this.upgradeUntil = 0;
     this.platform.silence();
+    this.updateMusic();
   }
   pause(message = '暂停') {
     if (this.mode !== 'playing') return;
     this.mode = 'paused'; this.cancelTouch(); this.accumulator = 0; this.notify(message); this.platform.silence();
+    this.updateMusic();
   }
   hide() { this.pause('切换至后台，已暂停'); this.cancelTouch(); this.platform.silence(); }
   show() { this.lastTime = this.platform.now(); this.accumulator = 0; this.cancelTouch(); }
+  private updateMusic() {
+    try { this.platform.music?.(this.mode === 'playing' && this.save.settings.music); }
+    catch { /* An optional platform audio feature must not stop the game. */ }
+  }
   moveKeyboard(direction: number, dt: number) { if (this.mode === 'playing') this.target = clamp(this.world.player.x + direction * C.moveSpeed * dt, C.minX, C.maxX); }
   private point(x: number, y: number) { return { x: (x - this.offsetX) / this.scale, y: (y - this.offsetY) / this.scale }; }
   touchStart(id: number, x: number, y: number) {
@@ -168,7 +176,9 @@ export class CanvasRuntime {
     else if (action === 'effects') this.save.settings.effects = this.save.settings.effects === 'standard' ? 'weak' : 'standard';
     else if (action === 'shake') this.save.settings.shake = !this.save.settings.shake;
     else if (action === 'sound') { this.save.settings.sound = !this.save.settings.sound; this.platform.silence(); }
+    else if (action === 'music') this.save.settings.music = !this.save.settings.music;
     this.platform.write(this.save);
+    this.updateMusic();
   }
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
@@ -369,7 +379,7 @@ export class CanvasRuntime {
   }
   private drawDialog() {
     const w = this.world;
-    this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, this.mode === 'settings' && this.platform.openLicenses ? 740 : 640, '#122331f5');
+    this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, this.mode === 'settings' ? this.platform.openLicenses ? 800 : 710 : 640, '#122331f5');
     this.buttons = [];
     if (this.mode === 'paused') {
       this.text('暂停', 360, 420, 48, '#eff8ff', 'center', true); this.text('准备好了，再继续突围。', 360, 490, 26, '#a9bfce');
@@ -379,10 +389,11 @@ export class CanvasRuntime {
       this.text('设置', 360, 415, 48, '#eff8ff', 'center', true);
       this.button(`特效　${s.effects === 'standard' ? '标准' : '弱化'}`, 490, 'effects');
       this.button(`屏幕震动　${s.shake ? '开' : '关'}`, 600, 'shake'); this.button(`音效　${s.sound ? '开' : '关'}`, 710, 'sound');
+      this.button(`音乐　${s.music ? '开' : '关'}`, 810, 'music');
       if (this.platform.openLicenses) {
-        this.button('开源许可', 820, 'licenses');
-        this.button('返回', 930, 'back', true);
-      } else this.button('返回', 830, 'back', true);
+        this.button('开源许可', 910, 'licenses');
+        this.button('返回', 1010, 'back', true);
+      } else this.button('返回', 920, 'back', true);
     } else {
       this.text('本次突围结束', 360, 415, 30, '#b6d2e2'); this.text(w.score.toString(), 360, 510, 94, '#eff8ff', 'center', true);
       this.text(`最高分 ${this.save.best}`, 360, 585, 26, '#e8c88b');

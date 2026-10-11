@@ -94,7 +94,7 @@ public class NativeFlowTest {
             assertTrue("Game must advance before pause", paused.getDouble("time") > 0);
             tap(scenario, 713);
             awaitMode(scenario, "settings");
-            tap(scenario, 863);
+            tap(scenario, 953);
             long deadline = SystemClock.uptimeMillis() + 5000;
             while (!"true".equals(read(scenario, "!!document.querySelector('dialog[open]')")) &&
                 SystemClock.uptimeMillis() < deadline) SystemClock.sleep(100);

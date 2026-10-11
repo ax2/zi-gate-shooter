@@ -1,6 +1,8 @@
 # Android发布准备
 
-Stage-11最新候选：build/releases/Stage-11/android/zi-gate-shooter-debug.apk，5144007字节。首领连续局部爆炸/分片消散，默认HUD取景与胜利通知调整；构建/签名/资源/许可/权限通过。未原生运行/正式签名/提交审核，详见stages/Stage-11/TEST_REPORT.md。
+Stage-12最新候选：build/releases/Stage-12/android/zi-gate-shooter-debug.apk，5850339字节。原创循环配乐与独立开关；完整82项通过，lint0错误/5警告，17网页文件/16原生图/许可/权限/签名核验通过。原生测试仅编译，用户暂无Android手机；未设备运行/正式签名/提交，见stages/Stage-12/TEST_REPORT.md。
+
+Stage-11历史候选：build/releases/Stage-11/android/zi-gate-shooter-debug.apk，5144007字节。首领连续局部爆炸/分片消散，默认HUD取景与胜利通知调整；构建/签名/资源/许可/权限通过。未原生运行/正式签名/提交审核，详见stages/Stage-11/TEST_REPORT.md。
 
 Stage-10历史候选：build/releases/Stage-10/android/zi-gate-shooter-debug.apk，5143282字节。原创九帧爆炸已入包，16网页文件/16原生图像/许可/权限/签名核验通过，详见stages/Stage-10/TEST_REPORT.md。用户暂时没有Android手机，原生运行与性能验收仍未完成；debug包不能用于正式上架。
 
@@ -12,7 +14,7 @@ Stage-10历史候选：build/releases/Stage-10/android/zi-gate-shooter-debug.apk
 
 本机JDK21、Android SDK36、Build Tools36，Gradle8.14.3。运行 `npm ci`、`npm run build:android`。SDK路径写入忽略的local.properties，不提交机器路径；代理只在构建子进程临时配置，不记录凭据。资源全部打入APK，不使用开发服务器。正式渠道和最低验收设备仍待确定。
 
-构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-09/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-09；历史目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
+构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-12/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-12；历史目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
 
 ## 交互与权限
 

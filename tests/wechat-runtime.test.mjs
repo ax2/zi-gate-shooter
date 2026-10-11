@@ -3,7 +3,7 @@ import vm from 'node:vm';
 import { expect, it } from 'vitest';
 
 // Observe the rendered player from the real bundle; do not expose or mutate World.
-async function inputFixture(createAudio = () => ({ play() {}, stop() {}, onEnded() {}, onError() {}, destroy() {} }), move = true) {
+async function inputFixture(createAudio = () => ({ play() {}, stop() {}, onEnded() {}, onError() {}, destroy() {} }), move = true, save = null) {
   const callbacks = {}; let nextFrame, clock = 1000, playerX, labels = [];
   const context = new Proxy({}, { get: (_target, key) => (...args) => {
     if (key === 'drawImage' && args[7] === 160 && args[8] === 213) playerX = args[5] + 80;
@@ -13,7 +13,7 @@ async function inputFixture(createAudio = () => ({ play() {}, stop() {}, onEnded
     createCanvas: () => ({ getContext: () => context }),
     createImage: () => { const image = { width: 768, height: 512 }; Object.defineProperty(image, 'src', { set() { queueMicrotask(() => image.onload?.()); } }); return image; },
     getWindowInfo: () => ({ windowWidth: 720, windowHeight: 1280, pixelRatio: 1 }),
-    getStorageSync: () => null, setStorageSync() {}, setKeepScreenOn() {},
+    getStorageSync: () => save, setStorageSync() {}, setKeepScreenOn() {},
     onTouchStart: fn => callbacks.start = fn, onTouchMove: fn => callbacks.move = fn,
     onTouchEnd: fn => callbacks.end = fn, onTouchCancel: fn => callbacks.cancel = fn,
     onHide: fn => callbacks.hide = fn, onShow: fn => callbacks.show = fn,
@@ -34,6 +34,30 @@ async function inputFixture(createAudio = () => ({ play() {}, stop() {}, onEnded
   }
   return { callbacks, touch, frames, x: () => playerX, labels: () => labels };
 }
+
+it('WeChat music loops separately from muted SFX and pauses for hide until explicit resume', async () => {
+  const nodes = [];
+  const f = await inputFixture(() => { const node = { play: () => node.plays++, pause: () => node.pauses++, stop() {}, destroy() {},
+    onError() {}, onEnded() {}, plays: 0, pauses: 0 }; nodes.push(node); return node; }, false,
+  { version: 1, best: 0, settings: { music: true, sound: false } });
+  f.frames(20); expect(nodes).toHaveLength(1);
+  expect(nodes[0].src).toBe('assets/audio/mechanical-pulse-v1.wav'); expect(nodes[0].loop).toBe(true);
+  expect(nodes[0].plays).toBe(1); f.callbacks.hide(); expect(nodes[0].pauses).toBe(1);
+  f.callbacks.show(); f.frames(10); expect(nodes[0].plays).toBe(1);
+  f.touch(f.callbacks.start, 4, 360, 603); f.touch(f.callbacks.end, 4, 360, 603); f.frames(2);
+  expect(nodes[0].plays).toBe(2); expect(nodes).toHaveLength(1);
+});
+
+it('WeChat music configuration failure releases the partial handle and retries outside battle state', async () => {
+  let healthy = false, created = 0, destroyed = 0, plays = 0;
+  const f = await inputFixture(() => { created++; return {
+    set src(_value) { if (!healthy) throw Error('fixture music source rejected'); },
+    play() { plays++; }, pause() {}, stop() {}, destroy() { destroyed++; }, onError() {}, onEnded() {},
+  }; }, false, { version: 1, best: 0, settings: { music: true, sound: false } });
+  f.frames(30); expect(created).toBe(1); expect(destroyed).toBe(1);
+  expect(f.labels()).toContain('T1 单管'); expect(f.labels()).not.toContain('运行异常，请重新开始');
+  healthy = true; f.frames(310); expect(created).toBe(2); expect(plays).toBe(1);
+});
 
 it.each(['create', 'configure', 'play'])('WeChat %s audio failure does not stop battle or retry every shot', async fault => {
   let attempts = 0, destroyed = 0, healthy = false, plays = 0;

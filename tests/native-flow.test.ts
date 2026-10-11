@@ -41,7 +41,7 @@ it('opening licenses from paused settings preserves the exact World and requires
   const click = (y: number) => { runtime.touchStart(1, 360, y); runtime.touchEnd(1, 360, y); frame(); };
   for (let i = 0; i < 10; i++) frame();
   const world = runtime.world, elapsed = world.time;
-  runtime.pause(); frame(); click(713); click(863);
+  runtime.pause(); frame(); click(713); click(953);
   expect(opened).toBe(1); expect(runtime.mode).toBe('settings');
   for (let i = 0; i < 60; i++) frame();
   expect(runtime.world).toBe(world); expect(world.time).toBe(elapsed);
