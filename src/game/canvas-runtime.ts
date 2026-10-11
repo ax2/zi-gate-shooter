@@ -6,6 +6,8 @@ import { bossWarningLanes } from '../core/behavior';
 import { defaults } from '../ui/storage';
 import { FrameWindow } from './frame-window';
 import { BossDestruction, BOSS_VISUAL } from './boss-destruction';
+import { PlayerMotion } from './player-motion';
+import type { PlayerPose } from './player-motion';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -39,6 +41,7 @@ export class CanvasRuntime {
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
   private destruction?: BossDestruction;
+  private playerMotion = new PlayerMotion();
   private accumulator = 0;
   private lastTime = 0;
   private visualTime = 0;
@@ -51,6 +54,7 @@ export class CanvasRuntime {
   private noticeUntil = 0;
   private shakeUntil = 0;
   private muzzleUntil = 0;
+  private recoilUntil = 0;
   private upgradeUntil = 0;
   private error = '';
   private started = false;
@@ -115,6 +119,8 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.playerMotion.reset();
+    this.recoilUntil = 0;
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
@@ -183,7 +189,7 @@ export class CanvasRuntime {
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage);
-    if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 48; return; }
+    if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 48; this.recoilUntil = this.world.time + 0.048; return; }
     if (e.type === 'upgrade' || e.type === 'overload') this.upgradeUntil = this.platform.now() + 450;
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
@@ -215,6 +221,18 @@ export class CanvasRuntime {
     c.globalAlpha *= Math.min(1, remaining / duration) * (this.save.settings.effects === 'weak' ? 0.18 : 0.48);
     this.frameSprite(key, frame, columns, x, y, width, height);
     c.restore();
+  }
+  private playerSprite(frame: number, x: number, y: number, pose: PlayerPose, recoil: number) {
+    const img = this.images.get('units.png'); if (!img) return;
+    const c = this.ctx, sw = img.width / 4, sh = img.height / 2;
+    const width = 160, height = 213, left = x - width / 2, top = y - height / 2;
+    // Original legs overlap the torso by 16 source pixels; torso is drawn last
+    // to cover the seam while preserving the original perspective and alpha.
+    for (let leg = 0; leg < 2; leg++) {
+      c.drawImage(img, frame * sw + leg * sw / 2, sh * 0.625, sw / 2, sh * 0.375,
+        left + leg * width / 2, top + height * 0.625 + (leg ? pose.right : pose.left), width / 2, height * 0.375);
+    }
+    c.drawImage(img, frame * sw, 0, sw, sh * 0.6875, left, top + pose.bob + recoil, width, height * 0.6875);
   }
   private bar(x: number, y: number, width: number, ratio: number, color: string) {
     this.rect(x - width / 2 - 2, y - 2, width + 4, 12, '#07121b');
@@ -289,9 +307,20 @@ export class CanvasRuntime {
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(w.player.x + 5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
     c.save();
     if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.65;
-    const recoil = this.mode === 'playing' && this.platform.now() < this.muzzleUntil ? 2.5 : 0;
-    if (w.player.hp > 0) this.frameSprite('units.png', this.mode === 'menu' ? 2 : w.growth.stage - 1, 4, w.player.x, playerY + recoil, this.mode === 'menu' ? 200 : 160, this.mode === 'menu' ? 267 : 213);
-    if (w.player.hp > 0 && this.mode !== 'menu') this.hitSprite('units.png', w.growth.stage - 1, 4, w.player.x, playerY + recoil, 160, 213, w.player.invulnerable - (C.invulnerability - 0.12), 0.12);
+    const recoil = w.time < this.recoilUntil ? 2.5 : 0;
+    const pose = this.playerMotion.sample(w.player.x, w.time);
+    if (w.player.hp > 0) {
+      if (this.mode === 'menu') this.frameSprite('units.png', 2, 4, w.player.x, playerY, 200, 267);
+      else {
+        this.playerSprite(w.growth.stage - 1, w.player.x, playerY, pose, recoil);
+        const remaining = w.player.invulnerable - (C.invulnerability - 0.12);
+        if (remaining > 0) {
+          c.save(); c.globalCompositeOperation = 'lighter';
+          c.globalAlpha *= Math.min(1, remaining / 0.12) * (this.save.settings.effects === 'weak' ? 0.18 : 0.48);
+          this.playerSprite(w.growth.stage - 1, w.player.x, playerY, pose, recoil); c.restore();
+        }
+      }
+    }
     c.restore();
     if (this.mode === 'playing' && w.player.hp > 0 && this.platform.now() < this.muzzleUntil) {
       for (const offset of C.weapon[w.growth.stage - 1].offsets) {

@@ -6,7 +6,9 @@ import { expect, it } from 'vitest';
 async function inputFixture(createAudio = () => ({ play() {}, stop() {}, onEnded() {}, onError() {}, destroy() {} }), move = true, save = null) {
   const callbacks = {}; let nextFrame, clock = 1000, playerX, labels = [];
   const context = new Proxy({}, { get: (_target, key) => (...args) => {
-    if (key === 'drawImage' && args[7] === 160 && args[8] === 213) playerX = args[5] + 80;
+    // Ground contact shadow remains anchored to the real player while the
+    // articulated sprite can use several draws with independent offsets.
+    if (key === 'ellipse' && args[2] === 53 && args[3] === 30) playerX = args[0] - 5;
     if (key === 'fillText') labels.push(args[0]);
   } });
   const wx = {

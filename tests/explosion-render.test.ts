@@ -56,7 +56,7 @@ it.each([false, true])('uses real hit timers for local flashes, freezes on pause
   setup(f.runtime.world); setup(reference);
   f.tick(); reference.step(C.step, 360); reference.drainEffects();
   const flashes = () => f.calls.filter(c => c.kind === 'drawImage' && c.composite === 'lighter');
-  expect(flashes()).toHaveLength(8);
+  expect(flashes()).toHaveLength(10); // Seven targets and three articulated player pieces.
   expect(flashes().every(c => c.alpha > 0 && c.alpha <= (weak ? 0.18 : 0.48))).toBe(true);
   // The final number panel must remain opaque and use normal compositing.
   const label = f.calls.find(c => c.kind === 'fillText' && /^\+\d+%$/.test(c.args[0]));
@@ -111,7 +111,7 @@ it.each([false, true])('a real boss kill presents distinct beats without changin
     expect(f.runtime.world.score).toBe(reference.score);
     peak = Math.max(peak, blasts(f).length);
     for (const b of blasts(f)) locations.add(`${Math.round(b.args[5] + b.args[7] / 2)},${Math.round(b.args[6] + b.args[8] / 2)}`);
-    const fragments = f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('units.png') && c.args[3] < 190);
+    const fragments = f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('units.png') && c.args[2] === 256 && c.args[3] < 190);
     expect(fragments.length).toBe(i < 80 ? 3 : 0);
     if (i === 8) expect(blasts(f).length).toBe(1);
     if (i === 12) expect(blasts(f).length).toBe(2);
@@ -121,6 +121,33 @@ it.each([false, true])('a real boss kill presents distinct beats without changin
   expect(locations.size).toBe(4); expect(peak).toBeLessThanOrEqual(4);
   expect(f.runtime.world.score).toBe(C.enemies.boss.score);
   expect(f.runtime.world.player.hp).toBe(3); expect(f.runtime.world.round).toBe(2);
+});
+
+it.each([1, 2, 3])('animates the three player pieces from real drag input without changing World (T%s)', async stage => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  f.runtime.world.growth.stage = stage;
+  const reference = new World(); reference.growth.stage = stage;
+  f.runtime.touchStart(1, 360, 1100); f.runtime.touchMove(1, 600, 1100);
+  const legY = new Set<number>();
+  for (let i = 0; i < 120; i++) {
+    f.tick(); reference.step(C.step, 600); reference.drainEffects();
+    expect(f.runtime.world.player).toEqual(reference.player);
+    expect(f.runtime.world.bullets).toEqual(reference.bullets);
+    expect(f.runtime.world.growth).toEqual(reference.growth);
+    const legs = f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('units.png') && c.args[2] === 160 && c.args[3] === 96);
+    expect(legs).toHaveLength(2);
+    expect(legs.map(c => c.args[1])).toEqual([(stage - 1) * 192, (stage - 1) * 192 + 96]);
+    legY.add(Number(legs[0].args[6].toFixed(3)));
+  }
+  expect(legY.size).toBeGreaterThan(10);
+  const playerPieces = () => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('units.png') && (c.args[2] === 160 || c.args[4] === 176)).map(c => c.args.slice(1));
+  const lastLivePose = playerPieces();
+  f.runtime.touchEnd(1, 600, 1100);
+  f.runtime.pause(); f.tick();
+  expect(playerPieces()).toEqual(lastLivePose); // Includes firing recoil, not just the legs.
+  const before = f.calls.filter(c => c.kind === 'drawImage' && c.args[2] === 160).map(c => c.args.slice(1));
+  for (let i = 0; i < 30; i++) f.tick();
+  expect(f.calls.filter(c => c.kind === 'drawImage' && c.args[2] === 160).map(c => c.args.slice(1))).toEqual(before);
 });
 
 it('freezes the boss sequence during pause and discards it on restart', async () => {
