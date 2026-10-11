@@ -74,7 +74,7 @@ export class CanvasRuntime {
   }
   async load() {
     try {
-      await Promise.all(['units.png', 'props.png', 'runway.jpg'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
+      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
       this.mode = 'menu';
     } catch { this.error = '资源加载失败，请重新进入游戏'; this.mode = 'error'; }
     this.lastTime = this.platform.now();
@@ -187,9 +187,9 @@ export class CanvasRuntime {
     const c = this.ctx; c.fillStyle = color; c.font = `${bold ? '700 ' : ''}${size}px ${fonts}`; c.textAlign = align; c.textBaseline = 'middle'; c.fillText(text, x, y);
   }
   private rect(x: number, y: number, width: number, height: number, color: string) { this.ctx.fillStyle = color; this.ctx.fillRect(x, y, width, height); }
-  private frameSprite(key: string, frame: number, columns: number, x: number, y: number, width: number, height: number) {
+  private frameSprite(key: string, frame: number, columns: number, x: number, y: number, width: number, height: number, rows = 2) {
     const img = this.images.get(key); if (!img) return;
-    const sw = img.width / columns, sh = img.height / 2;
+    const sw = img.width / columns, sh = img.height / rows;
     this.ctx.drawImage(img, (frame % columns) * sw, Math.floor(frame / columns) * sh, sw, sh, x - width / 2, y - height / 2, width, height);
   }
   private bar(x: number, y: number, width: number, ratio: number, color: string) {
@@ -270,8 +270,8 @@ export class CanvasRuntime {
     }
     for (const e of this.blasts) {
       e.life -= dt; const age = 1 - e.life / e.total;
-      c.save(); c.globalAlpha = Math.max(0, 1 - age) * (this.save.settings.effects === 'weak' ? 0.5 : 0.85);
-      this.frameSprite('props.png', 5, 3, e.x, e.y, e.size * (1.15 + age * 1.25), e.size * (1.15 + age * 1.25)); c.restore();
+      c.save(); c.globalAlpha = Math.pow(Math.max(0, 1 - age), 0.65) * (this.save.settings.effects === 'weak' ? 0.5 : 0.9);
+      this.frameSprite('explosion-v1.png', Math.min(8, Math.floor(age * 9)), 3, e.x, e.y, e.size * 2, e.size * 2, 3); c.restore();
     }
     this.blasts = this.blasts.filter(e => e.life > 0);
     for (const s of this.particles) {
@@ -370,7 +370,7 @@ export class CanvasRuntime {
     return { mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth },
       playerX: this.world.player.x,
-      bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,
+      bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
       ...this.frameTimes.snapshot() };
   }
 }

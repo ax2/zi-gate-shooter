@@ -1,5 +1,7 @@
 # Android发布准备
 
+Stage-10最新候选：build/releases/Stage-10/android/zi-gate-shooter-debug.apk，5143282字节。原创九帧爆炸已入包，16网页文件/16原生图像/许可/权限/签名核验通过，详见stages/Stage-10/TEST_REPORT.md。用户暂时没有Android手机，原生运行与性能验收仍未完成；debug包不能用于正式上架。
+
 2026-10-11。用户已确认独立Android APK与微信小游戏并行。当前为内部验证候选，不是上架包。
 
 ## 实现与复现
