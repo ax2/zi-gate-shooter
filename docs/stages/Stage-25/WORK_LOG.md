@@ -9,7 +9,7 @@
 - 复用专用 AVD `zi_gate_stage06_api35`，数据位于项目 build/emulator/stage06-api35。没有新建 AVD、安装 SDK 或接受许可。
 - 第一次以无窗口、无快照、SwiftShader、关闭 Vulkan、WHPX 启动。adb 仍 offline，QEMU CPU 时间 0.546875 秒，日志停在 WHPX 初始化。未进入 Android，不能归因为游戏故障。
 - 检查父子 PID 与该 AVD 命令行后，明确停止本次实例。改前台 exec 软件 CPU（accel off）模式；20:07:42 启动，20:08:31 仍 offline，QEMU CPU 时间停留 0.3125 秒，日志最后更新时间 20:07:43。该观察窗口未启动成功，不代表已确定故障原因或排除更长启动时间。
-- 最终按父子 PID 和专用 AVD 路径核验后停止软件实例；adb 无设备，未留下本次 emulator/qemu 进程。未修改 Windows 虚拟化、安全设置或系统网络。
+- 最终按父子 PID 和专用 AVD 路径核验后请求强制停止软件实例；launcher 已消失，但复核时 QEMU PID 79152 仍存在、CPU 0.3125 秒，adb 仍 offline，不能报告清理完成。后续应先检查该残留进程，不重复启动，也不擅自重启系统。未修改 Windows 虚拟化、安全设置或系统网络。
 
 ## 验证边界
 
@@ -18,3 +18,4 @@
 ## 遗留
 
 原生启动环境、两项流程测试、微信工具/双方设备、人评及渠道发布仍待完成。继续开发目标保持有效。
+
