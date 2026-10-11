@@ -1,4 +1,4 @@
-param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-21')
+param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-22')
 $ErrorActionPreference = 'Stop'
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $taskSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } elseif ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { Join-Path $env:LOCALAPPDATA 'Android\Sdk' }

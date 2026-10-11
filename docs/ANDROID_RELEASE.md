@@ -71,3 +71,7 @@ Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD�
 ## Stage-21当前候选
 
 新增冲锋机三状态。默认构建输出build/releases/Stage-21/android，开发签名APK6765911字节，签名/20网页SHA/16原生RGBA/50+50许可/权限核验通过，app lint0错误5警告；128项共享/微信bundle回归通过。正常浏览器多轮和第三方原生声明清单不能替代设备安装/Instrumentation/触控/热/后台与源码嵌套许可人工审查；用户暂无Android手机，正式音画/签名/渠道仍待验。
+
+## Stage-22当前候选
+
+默认build/releases/Stage-22/android，开发签名APK7024469字节，签名/21网页SHA/16原生RGBA/50+50许可/权限通过。132项回归与浏览器不替代设备安装运行/Instrumentation/性能/热/后台恢复。用户暂无Android手机；品牌/正式签名/渠道仍未验收。

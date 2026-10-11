@@ -1,0 +1,14 @@
+{
+  "source": "armor-frames/metadata.jsonl",
+  "frames": 66,
+  "size": [
+    488,
+    1055
+  ],
+  "observedSeconds": 3.5061919689178467,
+  "encodedDurationMs": 3559,
+  "quality": 90,
+  "interpolation": false,
+  "cropped": false,
+  "scope": "mobile weak-effects render fixture, not normal play or performance measurement"
+}

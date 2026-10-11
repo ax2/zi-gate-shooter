@@ -1,0 +1,51 @@
+{
+  "source": "art/source/armor-strip-v1.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "sourceBytes": 1605193,
+  "sourceSha256": "5726f056a6f2f9410f3e32084f02655ecbc7fdbce0b5d1350ae42f6e520d78ac",
+  "frames": [
+    {
+      "frame": 0,
+      "source": {
+        "left": 63,
+        "top": 0,
+        "width": 640,
+        "height": 724
+      },
+      "visiblePixels": 218191,
+      "edgePixels": 0
+    },
+    {
+      "frame": 1,
+      "source": {
+        "left": 767,
+        "top": 0,
+        "width": 640,
+        "height": 724
+      },
+      "visiblePixels": 218233,
+      "edgePixels": 0
+    },
+    {
+      "frame": 2,
+      "source": {
+        "left": 1468,
+        "top": 0,
+        "width": 640,
+        "height": 724
+      },
+      "visiblePixels": 218358,
+      "edgePixels": 0
+    }
+  ],
+  "outputSize": [
+    768,
+    256
+  ],
+  "bytes": 258416,
+  "rgbaDecodedBytes": 786432,
+  "outputSha256": "d9a1ce06c0fe715b2a555d6bb2d52d995b7c7441ab0972a6505c52a1d5757379"
+}
