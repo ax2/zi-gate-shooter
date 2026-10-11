@@ -8,7 +8,7 @@
 
 本机JDK21、Android SDK36、Build Tools36，Gradle8.14.3。运行 `npm ci`、`npm run build:android`。SDK路径写入忽略的local.properties，不提交机器路径；代理只在构建子进程临时配置，不记录凭据。资源全部打入APK，不使用开发服务器。正式渠道和最低验收设备仍待确定。
 
-构建脚本执行assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-03/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-03；历史Stage-02目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
+构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-04/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-04；历史Stage-02/03目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
 
 ## 交互与权限
 
@@ -23,14 +23,14 @@
 - 低端和主流Android设备的帧时、内存、温度、触控延迟、30分钟正常长局；不能用桌面或免伤压力模拟代替。
 - 刘海/挖孔/手势区域、大屏/分屏/Android16旋转行为的实际画面与输入检查。
 - 原创启动图标、启动页、名称与完整视觉/音频签收。当前已替换为原创机甲候选与系统SplashScreen，五档密度和APK像素一致性已检查；真机过渡与品牌签收未完成。
-- 完整Android传递依赖许可清单；当前THIRD_PARTY_NOTICES仅含直接JavaScript运行库声明。
+- Android传递运行依赖工程清单已完成：debug/release各50坐标、51份上游POM、二进制与原文哈希，APK中包含完整许可/NOTICE。详见legal/README.md与Stage-04报告；源码嵌套第三方声明人工审查及用户可达许可界面仍待完成，不能据此宣称法律/商店审核通过。
 - 用户持有的正式签名及备份、正式包名确认、选定渠道的资料/隐私说明与审核规则核查，必要时补AAB；尚未签名发布或提交商店。
 
 参考：[Capacitor](https://capacitorjs.com/docs)、[App API](https://capacitorjs.com/docs/apis/app)。
 
 ## 最新启动资产修订
 
-启动候选与检查见stages/Stage-02/LAUNCHER_VALIDATION.md。旧包保留build/releases/Stage-02-d6002e7/android、build/releases/Stage-02/android与原用户输出；最新输入修复构建位于build/releases/Stage-03/android，见Stage-03/TEST_REPORT.md。npm run assets:launcher可重复导出既有原创源图，不会重新调用生成服务。
+启动候选与检查见stages/Stage-02/LAUNCHER_VALIDATION.md。旧包保留build/releases/Stage-02-d6002e7/android、build/releases/Stage-02/android、build/releases/Stage-03/android与原用户输出；最新许可修订构建位于build/releases/Stage-04/android，见Stage-04/TEST_REPORT.md。npm run assets:launcher可重复导出既有原创源图，不会重新调用生成服务。
 
 系统栏固定SystemBars DARK（浅色文字/图标）与深色窗口底，保留css安全区和cover初始提示。启动Activity在super.onCreate之前安装AndroidX SplashScreen，统一深色背景、静态机甲标记和结束主题，无额外Activity、人工延时或启动网络请求。Android12+显式排除cloud与device-transfer全部本地数据域，旧系统禁用fullBackupContent；真实系统行为待设备检查。
 

@@ -1,6 +1,6 @@
 # Third-party notices
 
-Runtime and development dependencies retain their own licenses. This file covers the directly distributed JavaScript runtimes; transitive Android license inventory remains a release gate.
+Runtime and development dependencies retain their own licenses. This file covers the directly distributed JavaScript runtimes. The resolved Android runtime graph, POM provenance, binary hashes and unmodified upstream license/NOTICE texts are in legal/android-runtime.json and legal/ANDROID_NOTICES.txt. Both files are bundled in Android assets/public/legal. Build tools, tests and system-provided Android/WebView components are outside that distribution inventory. Phaser is used only in the early browser verification entry; it is not shipped in the Android/WeChat game payload.
 
 ## Capacitor Core / Android
 MIT License

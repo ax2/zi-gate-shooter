@@ -1,0 +1,5 @@
+[
+  { "file": "Apache-2.0.txt", "url": "https://www.apache.org/licenses/LICENSE-2.0.txt" },
+  { "file": "cordova-14.0.1-LICENSE.txt", "url": "https://raw.githubusercontent.com/apache/cordova-android/rel/14.0.1/LICENSE" },
+  { "file": "cordova-14.0.1-NOTICE.txt", "url": "https://raw.githubusercontent.com/apache/cordova-android/rel/14.0.1/NOTICE" }
+]

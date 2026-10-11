@@ -1,8 +1,16 @@
-param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-03')
+param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-04')
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $taskApk = Join-Path $taskRoot "build\releases\$Stage\android\zi-gate-shooter-debug.apk"
+$taskSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } elseif ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { Join-Path $env:LOCALAPPDATA 'Android\Sdk' }
+$taskAapt = Join-Path $taskSdk 'build-tools\36.0.0\aapt.exe'
+$taskPermissionLines = @(& $taskAapt dump permissions $taskApk)
+if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect final APK permissions.' }
+$taskExpectedApp = (Get-Content -LiteralPath (Join-Path $taskRoot 'capacitor.config.json') -Raw | ConvertFrom-Json).appId
+$taskAllowedPermission = $taskExpectedApp + '.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+$taskExpectedPermissions = @("package: $taskExpectedApp", "permission: $taskAllowedPermission", "uses-permission: name='$taskAllowedPermission'")
+if (@(Compare-Object $taskExpectedPermissions $taskPermissionLines).Count) { throw 'Final APK declares unreviewed package/permissions.' }
 function Get-StreamDigest($taskStream) {
     $taskAlgorithm = [Security.Cryptography.SHA256]::Create()
     try { return [BitConverter]::ToString($taskAlgorithm.ComputeHash($taskStream)).Replace('-','') }
@@ -55,7 +63,9 @@ try {
     & node (Join-Path $PSScriptRoot 'verify-native-art.mjs') $taskArtManifest
     if ($LASTEXITCODE -ne 0) { throw 'Compiled native artwork validation failed.' }
     if (@($taskZip.Entries | Where-Object { $_.FullName -match '^res/.*/splash\.png$' }).Count) { throw 'Template splash asset remains packaged.' }
-    $taskRecord = [ordered]@{ publicFiles = $taskFiles.Count; emptyCapacitorCompatibilityStubs = 2; allPublicFileHashesMatch = $true; nativeArtworkImages = $taskArtEntries.Count; nativeArtworkPixelsMatch = $true; systemBars = 'DARK/css'; templateSplashAssets = 0; serverConfiguration = $false; nativeDeviceTest = $false }
+    $taskLegalReader = [IO.StreamReader]::new($taskZip.GetEntry('assets/public/legal/android-runtime.json').Open())
+    try { $taskLegal = $taskLegalReader.ReadToEnd() | ConvertFrom-Json } finally { $taskLegalReader.Dispose() }
+    $taskRecord = [ordered]@{ publicFiles = $taskFiles.Count; emptyCapacitorCompatibilityStubs = 2; allPublicFileHashesMatch = $true; nativeArtworkImages = $taskArtEntries.Count; nativeArtworkPixelsMatch = $true; systemBars = 'DARK/css'; templateSplashAssets = 0; serverConfiguration = $false; finalPermissions = @($taskAllowedPermission); debugRuntimeLicenseCoordinates = $taskLegal.configurations.debugRuntimeClasspath.modules.Count; releaseRuntimeLicenseCoordinates = $taskLegal.configurations.releaseRuntimeClasspath.modules.Count; nativeDeviceTest = $false }
     [IO.File]::WriteAllText((Join-Path $taskRoot "build\releases\$Stage\android\PACKAGE_CHECK.json"), ($taskRecord | ConvertTo-Json))
     Write-Output "APK local payload verified: $($taskFiles.Count) files. Native offline execution still requires device testing."
 } finally { $taskZip.Dispose() }

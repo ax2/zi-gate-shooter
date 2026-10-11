@@ -1,3 +1,5 @@
 * text=auto
 *.md text eol=lf
 docs/reference/* -text
+# Keep upstream POM/LICENSE/NOTICE evidence byte-exact on every checkout.
+legal/** -text -whitespace

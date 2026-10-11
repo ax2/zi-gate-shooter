@@ -1,0 +1,92 @@
+import groovy.json.JsonOutput
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import org.gradle.maven.MavenModule
+import org.gradle.maven.MavenPomArtifact
+import org.gradle.api.artifacts.result.ResolvedArtifactResult
+import java.security.MessageDigest
+import java.util.zip.ZipInputStream
+
+// Export only the application's resolved runtime graph, never build tools or tests.
+tasks.register('exportRuntimeInventory') {
+    doLast {
+        def output = rootProject.file('../build/android-licenses')
+        output.mkdirs()
+        def sha = { byte[] bytes -> MessageDigest.getInstance('SHA-256').digest(bytes).encodeHex().toString() }
+        def pomCache = [:]
+        def pomEvidence
+        pomEvidence = { String group, String name, String version, Set visited ->
+            def coordinate = "${group}:${name}:${version}"
+            if (pomCache.containsKey(coordinate)) return pomCache[coordinate]
+            if (!visited.add(coordinate)) throw new GradleException("POM parent cycle: ${coordinate}")
+            // Ask Gradle for POM artifacts explicitly; do not assume a machine-specific cache layout.
+            def result = dependencies.createArtifactResolutionQuery().forModule(group, name, version)
+                .withArtifacts(MavenModule, MavenPomArtifact).execute()
+            def matches = result.resolvedComponents.collectMany { it.getArtifacts(MavenPomArtifact) }
+            if (matches.size() != 1) throw new GradleException("Missing/ambiguous upstream POM: ${coordinate}")
+            if (!(matches[0] instanceof ResolvedArtifactResult)) throw new GradleException("Unresolved upstream POM: ${coordinate}", matches[0].failure)
+            def bytes = matches[0].file.bytes
+            def text = new String(bytes, 'UTF-8')
+            def xml = new groovy.xml.XmlSlurper(false, false).parseText(text)
+            def licenses = xml.licenses.license.collect { [name: it.name.text(), url: it.url.text()] }
+            def chain = [[coordinate: coordinate, sha256: sha(bytes), text: text]]
+            if (licenses.empty && xml.parent.size()) {
+                def parent = pomEvidence(xml.parent.groupId.text(), xml.parent.artifactId.text(), xml.parent.version.text(), visited)
+                licenses = parent.licenses
+                chain.addAll(parent.chain)
+            }
+            if (licenses.empty) throw new GradleException("No upstream license declaration: ${coordinate}")
+            def evidence = [licenses: licenses, chain: chain]
+            pomCache[coordinate] = evidence
+            evidence
+        }
+        def embedded = { byte[] archive ->
+            def notices = []
+            def scan
+            scan = { byte[] bytes, String prefix, boolean nested ->
+                def stream = new ZipInputStream(new ByteArrayInputStream(bytes))
+                try {
+                    for (def entry = stream.nextEntry; entry != null; entry = stream.nextEntry) {
+                        if (entry.directory) continue
+                        def name = entry.name
+                        if (name.toLowerCase() =~ /(^|\/)(license[^\/]*|notice[^\/]*|copying[^\/]*|third.party[^\/]*)$/) {
+                            def content = stream.readAllBytes()
+                            notices.add([path: prefix + name, sha256: sha(content), text: new String(content, 'UTF-8')])
+                        } else if (nested && name.endsWith('.jar')) {
+                            scan(stream.readAllBytes(), prefix + name + '!/', false)
+                        }
+                    }
+                } finally { stream.close() }
+            }
+            scan(archive, '', true)
+            notices.sort { it.path }
+        }
+        def configurationsReport = [:]
+        ['debugRuntimeClasspath', 'releaseRuntimeClasspath'].each { configurationName ->
+            def config = configurations.getByName(configurationName)
+            def artifacts = config.incoming.artifactView {
+                componentFilter { it instanceof ModuleComponentIdentifier }
+            }.artifacts.artifacts
+            def modules = config.incoming.resolutionResult.allComponents.findAll { it.id instanceof ModuleComponentIdentifier }.collect { component ->
+                def id = component.id
+                def evidence = pomEvidence(id.group, id.module, id.version, new HashSet())
+                def ownArtifacts = artifacts.findAll { it.id.componentIdentifier == id }.collect { artifact ->
+                    def bytes = artifact.file.bytes
+                    [name: artifact.file.name, sha256: sha(bytes), notices: embedded(bytes)]
+                }.unique { "${it.name}:${it.sha256}" }.sort { it.name }
+                [coordinate: "${id.group}:${id.module}:${id.version}", licenses: evidence.licenses, pomEvidence: evidence.chain, artifacts: ownArtifacts]
+            }.sort { it.coordinate }
+            def projects = config.incoming.resolutionResult.allComponents.findAll { !(it.id instanceof ModuleComponentIdentifier) }.collect { it.id.displayName }.sort()
+            configurationsReport[configurationName] = [modules: modules, projects: projects]
+        }
+        def report = [schemaVersion: 1, configurations: configurationsReport]
+        new File(output, 'resolved.json').text = JsonOutput.prettyPrint(JsonOutput.toJson(report)) + '\n'
+        println "Resolved Android runtime inventory exported (debug and release)."
+    }
+}
+
+tasks.register('verifyRuntimeLicenses', Exec) {
+    dependsOn 'exportRuntimeInventory'
+    workingDir rootProject.file('..')
+    commandLine 'node', 'tools/android-licenses.mjs'
+}
+tasks.named('preBuild').configure { dependsOn 'verifyRuntimeLicenses' }
