@@ -3,10 +3,11 @@ import vm from 'node:vm';
 import { expect, it } from 'vitest';
 
 // Observe the rendered player from the real bundle; do not expose or mutate World.
-async function inputFixture() {
-  const callbacks = {}; let nextFrame, clock = 1000, playerX;
+async function inputFixture(createAudio = () => ({ play() {}, stop() {}, onEnded() {}, onError() {}, destroy() {} }), move = true) {
+  const callbacks = {}; let nextFrame, clock = 1000, playerX, labels = [];
   const context = new Proxy({}, { get: (_target, key) => (...args) => {
     if (key === 'drawImage' && args[7] === 160 && args[8] === 213) playerX = args[5] + 80;
+    if (key === 'fillText') labels.push(args[0]);
   } });
   const wx = {
     createCanvas: () => ({ getContext: () => context }),
@@ -15,22 +16,74 @@ async function inputFixture() {
     getStorageSync: () => null, setStorageSync() {}, setKeepScreenOn() {},
     onTouchStart: fn => callbacks.start = fn, onTouchMove: fn => callbacks.move = fn,
     onTouchEnd: fn => callbacks.end = fn, onTouchCancel: fn => callbacks.cancel = fn,
-    onHide() {}, onShow() {},
-    createInnerAudioContext: () => ({ play() {}, stop() {}, onEnded() {}, onError() {} }),
+    onHide: fn => callbacks.hide = fn, onShow: fn => callbacks.show = fn,
+    createInnerAudioContext: createAudio,
   };
   vm.runInNewContext(readFileSync('build/wechat/game.js', 'utf8'), {
     wx, requestAnimationFrame: fn => nextFrame = fn,
     Date: class extends Date { static now() { return clock; } }, console,
   });
   for (let i = 0; i < 12; i++) await Promise.resolve();
-  const frames = count => { for (let i = 0; i < count; i++) { clock += 1000 / 60; nextFrame(clock); } };
+  const frames = count => { for (let i = 0; i < count; i++) { labels = []; clock += 1000 / 60; nextFrame(clock); } };
   const touch = (callback, identifier, x, y = 1000) => callback({ changedTouches: [{ identifier, clientX: x, clientY: y }] });
   frames(1); touch(callbacks.start, 9, 360, 1041); touch(callbacks.end, 9, 360, 1041); frames(1);
-  expect(playerX).toBe(360);
-  touch(callbacks.start, 1, 360); touch(callbacks.move, 1, 650); frames(1);
-  expect(playerX).toBeGreaterThan(360); expect(playerX).toBeLessThan(650);
-  return { callbacks, touch, frames, x: () => playerX };
+  if (move) {
+    expect(playerX).toBe(360);
+    touch(callbacks.start, 1, 360); touch(callbacks.move, 1, 650); frames(1);
+    expect(playerX).toBeGreaterThan(360); expect(playerX).toBeLessThan(650);
+  }
+  return { callbacks, touch, frames, x: () => playerX, labels: () => labels };
 }
+
+it.each(['create', 'configure', 'play'])('WeChat %s audio failure does not stop battle or retry every shot', async fault => {
+  let attempts = 0, destroyed = 0, healthy = false, plays = 0;
+  const factory = () => {
+    attempts++;
+    if (!healthy && fault === 'create') throw new Error('fixture audio unavailable');
+    return { set src(_value) { if (!healthy && fault === 'configure') throw new Error('fixture source rejected'); },
+      play() { if (!healthy && fault === 'play') throw new Error('fixture playback failed'); plays++; },
+      stop() {}, destroy() { destroyed++; }, onEnded() {}, onError() {} };
+  };
+  const f = await inputFixture(factory, false);
+  f.frames(30);
+  expect(f.labels()).toContain('T1 单管');
+  expect(f.labels()).not.toContain('运行异常，请重新开始');
+  expect(attempts).toBe(1);
+  expect(destroyed).toBe(fault === 'create' ? 0 : 1);
+  healthy = true; f.frames(310);
+  expect(plays).toBeGreaterThan(0);
+  expect(f.labels()).toContain('T1 单管');
+});
+
+it('WeChat stop errors cannot abort hide, and asynchronous errors retire failed nodes', async () => {
+  let failStop = true, destroyed = 0, errorCallback;
+  const factory = () => ({ play() {}, stop() { if (failStop) throw new Error('fixture stop failed'); },
+    destroy() { destroyed++; }, onEnded() {}, onError(fn) { errorCallback = fn; } });
+  const f = await inputFixture(factory, false);
+  expect(() => f.callbacks.hide()).not.toThrow(); f.frames(1);
+  expect(f.labels()).toContain('继续战斗'); expect(destroyed).toBeGreaterThan(0);
+  failStop = false; f.frames(310); f.callbacks.show();
+  f.touch(f.callbacks.start, 4, 360, 603); f.touch(f.callbacks.end, 4, 360, 603); f.frames(12);
+  const before = destroyed;
+  const retiredError = errorCallback;
+  expect(() => retiredError()).not.toThrow(); f.frames(12);
+  expect(destroyed).toBeGreaterThan(before);
+  expect(f.labels()).toContain('T1 单管');
+  f.frames(310);
+  expect(errorCallback).not.toBe(retiredError);
+  const afterRecovery = destroyed;
+  expect(() => retiredError()).not.toThrow(); f.frames(1);
+  expect(destroyed).toBe(afterRecovery);
+});
+
+it('WeChat audio cleanup exceptions remain isolated from the game', async () => {
+  const fail = () => { throw new Error('fixture cleanup unavailable'); };
+  const f = await inputFixture(() => ({ play: fail, stop: fail, destroy: fail, onEnded() {}, onError() {} }), false);
+  f.frames(30);
+  expect(f.labels()).toContain('T1 单管');
+  expect(() => f.callbacks.hide()).not.toThrow(); f.frames(1);
+  expect(f.labels()).toContain('继续战斗');
+});
 
 it('WeChat secondary cancellation preserves the primary drag, while primary cancellation stops it', async () => {
   const { callbacks, touch, frames, x } = await inputFixture();

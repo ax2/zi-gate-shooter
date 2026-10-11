@@ -22,19 +22,46 @@ const canvas = wx.createCanvas();
 const audio = new Map<string, InnerAudio[]>();
 const busy = new Set<InnerAudio>();
 let lastShot = 0;
+let retryAudioAt = 0;
+const failAudio = () => {
+  // Detach first: late callbacks from retired nodes must not disable a new pool.
+  const retired: InnerAudio[] = [];
+  for (const pool of audio.values()) retired.push(...pool);
+  audio.clear(); busy.clear(); retryAudioAt = Date.now() + 5000;
+  for (const node of retired) {
+    try { node.stop(); } catch { /* Platform audio is unavailable. */ }
+    try { node.destroy(); } catch { /* Already retired or unavailable. */ }
+  }
+};
+const silence = () => {
+  let failed = false;
+  for (const pool of audio.values()) for (const node of pool) {
+    try { node.stop(); } catch { failed = true; }
+  }
+  busy.clear();
+  if (failed) failAudio();
+};
 const sound = (type: string, stage: number) => {
+  if (Date.now() < retryAudioAt) return;
   const key = type === 'fire' ? `shot${stage}` : type === 'upgrade' || type === 'overload' ? 'upgrade'
     : type === 'kill' || type === 'crate-break' || type === 'boss-kill' ? 'blast'
       : type === 'hurt' || type === 'death' ? 'hurt' : type === 'gate-level' || type === 'gate-taken' || type === 'pickup' ? 'reward' : '';
   if (!key) return;
   if (type === 'fire') { if (Date.now() - lastShot < 100) return; lastShot = Date.now(); }
-  let pool = audio.get(key); if (!pool) { pool = []; audio.set(key, pool); }
-  let node = pool.find(item => !busy.has(item));
-  if (!node && pool.length < 2 && busy.size < 12) {
-    node = wx.createInnerAudioContext(); node.src = `assets/audio/${key}.wav`; node.volume = type === 'fire' ? 0.35 : 0.55;
-    const created = node; node.onEnded(() => busy.delete(created)); node.onError(() => busy.delete(created)); pool.push(node);
+  try {
+    let pool = audio.get(key); if (!pool) { pool = []; audio.set(key, pool); }
+    let node = pool.find(item => !busy.has(item));
+    if (!node && pool.length < 2 && busy.size < 12) {
+      node = wx.createInnerAudioContext(); pool.push(node);
+      node.src = `assets/audio/${key}.wav`; node.volume = type === 'fire' ? 0.35 : 0.55;
+      const created = node;
+      node.onEnded(() => busy.delete(created));
+      node.onError(() => { if (audio.get(key)?.includes(created)) failAudio(); });
+    }
+    if (node && Date.now() >= retryAudioAt) { busy.add(node); node.play(); }
+  } catch {
+    failAudio();
   }
-  if (node) { busy.add(node); node.play(); }
 };
 const runtime = new CanvasRuntime({
   canvas, width: info.windowWidth, height: info.windowHeight, dpr: info.pixelRatio,
@@ -42,7 +69,7 @@ const runtime = new CanvasRuntime({
   image: src => new Promise((resolve, reject) => { const image = wx.createImage(); image.onload = () => resolve(image); image.onerror = reject; image.src = src; }),
   read: () => { try { return parseSave(wx.getStorageSync('zi-gate-shooter-v1')); } catch { return parseSave(null); } },
   write: value => { try { wx.setStorageSync('zi-gate-shooter-v1', value); } catch { /* Continue in memory. */ } },
-  sound, silence: () => { for (const pool of audio.values()) for (const item of pool) item.stop(); busy.clear(); },
+  sound, silence,
   now: () => Date.now(), requestFrame: callback => requestAnimationFrame(callback),
 });
 wx.onTouchStart(e => { for (const t of e.changedTouches) runtime.touchStart(t.identifier, t.clientX, t.clientY); });
