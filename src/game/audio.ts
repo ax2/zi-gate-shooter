@@ -1,21 +1,49 @@
 /** Original procedural sound palette. No downloaded commercial audio. */
 export class GameAudio {
   private context?: AudioContext;
-  private lastShot = 0;
-  private nodes = new Set<OscillatorNode>();
+  private lastShot = -Infinity;
+  private nodes = new Map<OscillatorNode, GainNode>();
+  private retryAt = 0;
   enabled = true;
+  constructor(private now: () => number = () => performance.now()) {}
   async unlock() {
-    try { this.context ??= new AudioContext(); await this.context.resume(); } catch { /* Silent play remains available. */ }
+    if (this.now() < this.retryAt) return;
+    try {
+      if (!this.context || this.context.state === 'closed') {
+        this.stop(); this.context = new AudioContext(); this.lastShot = -Infinity;
+      }
+      await this.context.resume();
+    } catch {
+      this.stop(); this.retryAt = this.now() + 5000;
+      const failed = this.context; this.context = undefined;
+      try { if (failed) void failed.close().catch(() => {}); } catch { /* Platform is unavailable. */ }
+    }
+  }
+  private release(osc: OscillatorNode, gain: GainNode) {
+    if (!this.nodes.delete(osc)) return;
+    osc.onended = null;
+    try { osc.disconnect(); } catch { /* Already disconnected. */ }
+    try { gain.disconnect(); } catch { /* Already disconnected. */ }
   }
   tone(frequency: number, end: number, duration: number, volume: number, type: OscillatorType = 'triangle') {
     const ctx = this.context;
-    if (!this.enabled || !ctx || ctx.state !== 'running' || this.nodes.size >= 12) return;
-    const osc = ctx.createOscillator(), gain = ctx.createGain(), now = ctx.currentTime;
-    osc.type = type; osc.frequency.setValueAtTime(frequency, now); osc.frequency.exponentialRampToValueAtTime(Math.max(15, end), now + duration);
-    gain.gain.setValueAtTime(volume, now); gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-    osc.connect(gain); gain.connect(ctx.destination); this.nodes.add(osc);
-    osc.onended = () => { this.nodes.delete(osc); osc.disconnect(); gain.disconnect(); };
-    osc.start(now); osc.stop(now + duration);
+    if (!this.enabled || !ctx || ctx.state !== 'running' || this.nodes.size >= 12 || this.now() < this.retryAt) return;
+    let osc: OscillatorNode | undefined, gain: GainNode | undefined;
+    try {
+      osc = ctx.createOscillator(); gain = ctx.createGain();
+      const now = ctx.currentTime;
+      this.nodes.set(osc, gain);
+      osc.type = type; osc.frequency.setValueAtTime(frequency, now); osc.frequency.exponentialRampToValueAtTime(Math.max(15, end), now + duration);
+      gain.gain.setValueAtTime(volume, now); gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      osc.connect(gain); gain.connect(ctx.destination);
+      const voice = osc, envelope = gain;
+      osc.onended = () => this.release(voice, envelope);
+      osc.start(now); osc.stop(now + duration);
+    } catch {
+      // A partly created voice also needs cleanup if createGain failed.
+      if (osc && !gain) { try { osc.disconnect(); } catch { /* Platform failure. */ } }
+      this.stop(); this.retryAt = this.now() + 5000;
+    }
   }
   event(type: string, stage: number) {
     if (type === 'fire') {
@@ -29,6 +57,11 @@ export class GameAudio {
     else if (type === 'hurt' || type === 'death') this.tone(160, 35, 0.25, 0.1, 'sawtooth');
     else if (type === 'kill' || type === 'crate-break' || type === 'boss-kill') this.tone(95, 22, type === 'boss-kill' ? 0.7 : 0.18, 0.055, 'sawtooth');
   }
-  stop() { for (const osc of this.nodes) { try { osc.stop(); } catch { /* Already stopped. */ } } this.nodes.clear(); }
+  stop() {
+    for (const [osc, gain] of this.nodes) {
+      try { osc.stop(); } catch { /* Already stopped or platform failure. */ }
+      this.release(osc, gain);
+    }
+  }
   get activeNodes() { return this.nodes.size; }
 }

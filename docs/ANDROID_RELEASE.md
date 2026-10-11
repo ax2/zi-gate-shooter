@@ -8,7 +8,7 @@
 
 本机JDK21、Android SDK36、Build Tools36，Gradle8.14.3。运行 `npm ci`、`npm run build:android`。SDK路径写入忽略的local.properties，不提交机器路径；代理只在构建子进程临时配置，不记录凭据。资源全部打入APK，不使用开发服务器。正式渠道和最低验收设备仍待确定。
 
-构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-06/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-06；历史Stage-02/03/04/05目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
+构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-09/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-09；历史目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
 
 ## 交互与权限
 
@@ -17,6 +17,8 @@
 源manifest未声明网络或敏感权限，未接入登录、广告、支付、后台、云存档。必须继续检查合并后的APKmanifest，不能只凭源码认定最终权限。最高分和设置只保存在本地；不保存未结束局。
 
 ## 发布退出条件（均需实际证据）
+
+Stage-09补Web Audio异常隔离、节点主动断开和上下文恢复；完整64项测试及浏览器实际产物故障对照通过，新APK4993396字节。网页结果不证明Android系统音频打断、音量、手机资源释放或性能；原生验证仍缺。
 
 Stage-06新增原生NativeFlowTest：系统返回、许可保局和Activity后台恢复；测试APK已编译，尚未执行。可用设备连接后运行`android/gradlew.bat :app:connectedDebugAndroidTest`，报告见stages/Stage-06/TEST_REPORT.md。不可用测试编译代替原生功能验收。
 
