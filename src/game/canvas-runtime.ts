@@ -16,6 +16,7 @@ import { droneFrame } from './drone-motion';
 import { chargerFrame } from './charger-motion';
 import { armorFrame } from './armor-motion';
 import { eliteFrame } from './elite-motion';
+import { bossFrame } from './boss-motion';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -34,7 +35,6 @@ export interface Platform {
 interface Button { x: number; y: number; w: number; h: number; label: string; action: string }
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; total: number; color: string }
 interface Blast { x: number; y: number; size: number; life: number; total: number }
-const unitFrames: Record<string, number> = { drone: 3, charger: 4, armor: 5, elite: 6, boss: 7 };
 const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
@@ -93,7 +93,7 @@ export class CanvasRuntime {
   }
   async load() {
     try {
-      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
+      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
       this.mode = 'menu';
     } catch { this.error = '资源加载失败，请重新进入游戏'; this.mode = 'error'; }
     this.lastTime = this.platform.now();
@@ -342,8 +342,9 @@ export class CanvasRuntime {
           this.frameSprite('elite-v1.png', frame, 3, b.x, y, width, height, 1);
           this.hitSprite('elite-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
         } else {
-          this.frameSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height);
-          this.hitSprite('units.png', unitFrames[b.kind], 4, b.x, y, width, height, b.hit);
+          const frame = bossFrame(b);
+          this.frameSprite('boss-v1.png', frame, 3, b.x, y, width, height, 1);
+          this.hitSprite('boss-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
         }
       }
     }
@@ -461,13 +462,13 @@ export class CanvasRuntime {
       this.blasts.push({ ...burst, life: 0.6, total: 0.6 });
     }
     if (wreck.finished) { this.destruction = undefined; return; }
-    const img = this.images.get('units.png'); if (!img) return;
-    const c = this.ctx, sw = img.width / 4, sh = img.height / 2;
+    const img = this.images.get('boss-v1.png'); if (!img) return;
+    const c = this.ctx, sw = img.width / 3, sh = img.height;
     for (const piece of wreck.pieces) {
       c.save(); c.globalAlpha = piece.alpha;
       c.translate(wreck.x + (piece.from + piece.width / 2 - 0.5) * BOSS_VISUAL.width + piece.dx, wreck.y + BOSS_VISUAL.offsetY + piece.dy);
       c.rotate(piece.angle);
-      c.drawImage(img, (3 + piece.from) * sw, sh, piece.width * sw, sh, -piece.width * BOSS_VISUAL.width / 2, -BOSS_VISUAL.height / 2, piece.width * BOSS_VISUAL.width, BOSS_VISUAL.height);
+      c.drawImage(img, (2 + piece.from) * sw, 0, piece.width * sw, sh, -piece.width * BOSS_VISUAL.width / 2, -BOSS_VISUAL.height / 2, piece.width * BOSS_VISUAL.width, BOSS_VISUAL.height);
       c.restore();
     }
   }

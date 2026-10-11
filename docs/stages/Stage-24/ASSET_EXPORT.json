@@ -1,0 +1,51 @@
+{
+  "source": "art/source/boss-strip-v2.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "sourceBytes": 1328693,
+  "sourceSha256": "b94a3f5f635ec705fa837e3ae9ad2ccb6243a86bbeda3693e5c5914a6e403fe3",
+  "frames": [
+    {
+      "frame": 0,
+      "source": {
+        "left": 106,
+        "top": 50,
+        "width": 600,
+        "height": 600
+      },
+      "visiblePixels": 174941,
+      "edgePixels": 0
+    },
+    {
+      "frame": 1,
+      "source": {
+        "left": 786,
+        "top": 50,
+        "width": 600,
+        "height": 600
+      },
+      "visiblePixels": 173409,
+      "edgePixels": 0
+    },
+    {
+      "frame": 2,
+      "source": {
+        "left": 1466,
+        "top": 50,
+        "width": 600,
+        "height": 600
+      },
+      "visiblePixels": 176170,
+      "edgePixels": 0
+    }
+  ],
+  "outputSize": [
+    768,
+    256
+  ],
+  "bytes": 306317,
+  "rgbaDecodedBytes": 786432,
+  "outputSha256": "199af2dc41add6599fac73da9100dd691feaecd62503fe240fc061faf84fa245"
+}

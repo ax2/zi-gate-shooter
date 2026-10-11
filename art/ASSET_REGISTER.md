@@ -55,3 +55,7 @@ source/armor-strip-v1.png由本会话内置imagegen、原units参考生成，217
 ## Stage-23精英候选
 
 source/elite-strip-v1.png、v2.png为本会话内置imagegen、原units参考及首版修订；第二版1379085字节为运行来源，首版保留未接入。运行elite-v1.png为768×256 RGBA254549字节，解码786432字节；实际提示词/源哈希/裁框/限制见ELITE_V1.md及阶段报告。MIT开放，非批准角色/商标/正式美术。
+
+## Stage-24首领候选
+
+source/boss-strip-v1.png、v2.png来自本会话内置imagegen与原创units参考；首版触边拒用，第二版1328693字节为运行来源。运行boss-v1.png为768×256 RGBA306317字节/解码786432字节；提示词/源哈希/拒用数据/共同裁框/限制见BOSS_V1.md及阶段ASSET_EXPORT.json。MIT开放，非批准正式美术/品牌。

@@ -18,12 +18,43 @@ function fixture(weak = false) {
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: 768, height: src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
+    image: async src => ({ src, width: 768, height: src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick() { calls.length = 0; clock += 1000 / 60; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([false,true])('ties boss preparation to real A/B warnings, freezes the second beat and preserves World (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const reference=new World(1337);
+ const setup=(w:World)=>{w.time=w.roundTime=80;w.phase='boss';w.player.x=68;return w.spawn('boss',360,260);};
+ const body=setup(f.runtime.world),baseline=setup(reference);
+ f.runtime.touchStart(1,360,1100);f.runtime.touchMove(1,68,1100);
+ const draws=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('boss-v1.png'));
+ const frames=new Set<number>();let paused=false,finishedB=false;
+ for(let i=0;i<620;i++){
+  body.hit=baseline.hit=.07;f.tick();reference.step(C.step,68);reference.drainEffects();
+  expect(body).toEqual(baseline);expect(f.runtime.world.bullets).toEqual(reference.bullets);
+  expect(f.runtime.world.player).toEqual(reference.player);expect(f.runtime.world.growth).toEqual(reference.growth);
+  expect(f.runtime.world.score).toBe(reference.score);expect(f.runtime.world.phase).toBe(reference.phase);
+  const ds=draws();expect(ds).toHaveLength(2);expect(ds[0].args.slice(1)).toEqual(ds[1].args.slice(1));
+  expect(ds[0].args.slice(2,5)).toEqual([0,256,256]);frames.add(ds[0].args[1]);
+  expect(ds[0].args[1]).toBe(body.warning>0?256:0);expect(ds[0].args[1]).toBeLessThan(512);
+  expect(ds[1].composite).toBe('lighter');expect(ds[1].alpha).toBeLessThanOrEqual(weak?.18:.48);
+  expect(f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('重装首领'))).toBeGreaterThan(f.calls.indexOf(ds[1]));
+  if(body.warning>0)expect(f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ff775620')).toBeGreaterThan(f.calls.indexOf(ds[1]));
+  if(body.burst&&!paused){
+   const frozen={...body},bullets=JSON.stringify(f.runtime.world.bullets),pose=ds.map(c=>c.args.slice(1));
+   f.runtime.pause();for(let j=0;j<30;j++)f.tick();expect(body).toEqual(frozen);
+   expect(JSON.stringify(f.runtime.world.bullets)).toBe(bullets);expect(draws().map(c=>c.args.slice(1))).toEqual(pose);
+   f.runtime.touchStart(1,360,603);f.runtime.touchEnd(1,360,603);expect(f.runtime.mode).toBe('playing');
+   f.runtime.touchStart(1,360,1100);f.runtime.touchMove(1,68,1100);paused=true;
+  }
+  if(body.attackCycle===2){expect(body.warning).toBe(0);finishedB=true;}
+ }
+ expect(frames).toEqual(new Set([0,256]));expect(paused).toBe(true);expect(finishedB).toBe(true);
+ f.runtime.start();f.tick();expect(draws()).toHaveLength(0);
+});
 
 it.each([false,true])('draws elite travel/preparation with matching hit, upper warning and frozen pause (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const reference=new World(1337);
@@ -358,8 +389,14 @@ it.each([false, true])('a real boss kill presents distinct beats without changin
     expect(f.runtime.world.score).toBe(reference.score);
     peak = Math.max(peak, blasts(f).length);
     for (const b of blasts(f)) locations.add(`${Math.round(b.args[5] + b.args[7] / 2)},${Math.round(b.args[6] + b.args[8] / 2)}`);
-    const fragments = f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('units.png') && c.args[2] === 256 && c.args[3] < 190);
+    const fragments = f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('boss-v1.png') && c.args[1] >= 512 && c.args[2] === 0 && c.args[3] < 100);
     expect(fragments.length).toBe(i < 80 ? 3 : 0);
+    if(i===0){
+      expect(fragments.map(c=>c.args[1])).toEqual([512,593.92,686.08]);
+      expect(fragments.every(c=>c.args[4]===256)).toBe(true);
+      expect(fragments.reduce((sum,c)=>sum+c.args[3],0)).toBeCloseTo(256);
+      expect(fragments.reduce((sum,c)=>sum+c.args[7],0)).toBeCloseTo(360);
+    }
     if (i === 8) expect(blasts(f).length).toBe(1);
     if (i === 12) expect(blasts(f).length).toBe(2);
     if (i === 24) expect(blasts(f).length).toBe(3);

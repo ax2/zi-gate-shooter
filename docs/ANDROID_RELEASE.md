@@ -79,3 +79,7 @@ Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD�
 ## Stage-23当前候选
 
 默认build/releases/Stage-23/android，开发签名APK7279161字节，签名/22网页SHA/16原生RGBA/50+50许可/最终权限通过，app lint0错误5警告。136项回归与正常网页不替代原生安装、Instrumentation、触控音频/热/内存/后台恢复。用户暂无Android手机；正式音画/签名/渠道仍待验。
+
+## Stage-24当前候选
+
+默认build/releases/Stage-24/android，开发签名APK7585619字节，签名/23网页SHA/16原生RGBA/50+50许可/最终权限通过，app lint0错误5警告。138项共享回归与浏览器正常首领不替代原生安装/Instrumentation/触控音频/后台恢复/内存/热/性能；用户暂无Android手机，正式音画/签名/渠道仍待验。

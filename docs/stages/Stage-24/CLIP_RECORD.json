@@ -1,0 +1,14 @@
+{
+  "source": "wreck-frames/metadata.jsonl",
+  "frames": 47,
+  "size": [
+    488,
+    1055
+  ],
+  "observedSeconds": 2.5461008548736572,
+  "encodedDurationMs": 2594,
+  "quality": 90,
+  "interpolation": false,
+  "cropped": false,
+  "scope": "mobile weak-effects render fixture, not normal play or performance measurement"
+}

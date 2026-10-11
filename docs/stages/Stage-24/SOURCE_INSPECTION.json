@@ -1,0 +1,116 @@
+[
+  {
+    "version": "v1",
+    "source": "art/source/boss-strip-v1.png",
+    "bytes": 2280441,
+    "sha256": "e2eea96ea558df7ecc045f4ddcbbe4f733c5c28f3c19d671c0a3bd9ab7a38f46",
+    "size": [
+      2172,
+      724
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "bounds": [
+          41,
+          18,
+          723,
+          645
+        ],
+        "edge": 261,
+        "colorSamplePixels": 2077,
+        "colorSampleCenter": [
+          370.0654790563343,
+          321.8050072219536
+        ]
+      },
+      {
+        "frame": 1,
+        "bounds": [
+          0,
+          18,
+          723,
+          691
+        ],
+        "edge": 92,
+        "colorSamplePixels": 2381,
+        "colorSampleCenter": [
+          360.4598908021848,
+          324.74254514910007
+        ]
+      },
+      {
+        "frame": 2,
+        "bounds": [
+          0,
+          18,
+          685,
+          659
+        ],
+        "edge": 295,
+        "colorSamplePixels": 261,
+        "colorSampleCenter": [
+          299.13409961685835,
+          338.9616858237548
+        ]
+      }
+    ]
+  },
+  {
+    "version": "v2",
+    "source": "art/source/boss-strip-v2.png",
+    "bytes": 1328693,
+    "sha256": "b94a3f5f635ec705fa837e3ae9ad2ccb6243a86bbeda3693e5c5914a6e403fe3",
+    "size": [
+      2172,
+      724
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "bounds": [
+          139,
+          115,
+          671,
+          597
+        ],
+        "edge": 0,
+        "colorSamplePixels": 1519,
+        "colorSampleCenter": [
+          367.0019749835422,
+          344.23173140223895
+        ]
+      },
+      {
+        "frame": 1,
+        "bounds": [
+          95,
+          115,
+          627,
+          627
+        ],
+        "edge": 0,
+        "colorSamplePixels": 1664,
+        "colorSampleCenter": [
+          362.82812500000006,
+          341.34615384615466
+        ]
+      },
+      {
+        "frame": 2,
+        "bounds": [
+          50,
+          115,
+          586,
+          605
+        ],
+        "edge": 0,
+        "colorSamplePixels": 310,
+        "colorSampleCenter": [
+          347.2258064516133,
+          335.90967741935503
+        ]
+      }
+    ]
+  }
+]
