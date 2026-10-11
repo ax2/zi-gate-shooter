@@ -20,7 +20,7 @@ export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
 }
-export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number }
+export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number; enemyKind?: EnemyKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -284,7 +284,7 @@ export class World {
       this.emit('crate-break', b.x, b.y, '靠近领取', 110);
     } else {
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
-      this.emit(b.kind === 'boss' ? 'boss-kill' : 'kill', b.x, b.y, undefined, b.width * 1.4);
+      this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind });
       if (b.kind === 'boss') this.bossVictory = true;
     }
   }

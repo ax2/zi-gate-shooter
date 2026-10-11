@@ -1,0 +1,23 @@
+{
+  "source": "art/source/drone-wreck-v1.png",
+  "sourceSha256": "a6b80fa79f3df16e58a4d6693899bf8823be7c5768dcc0aaa9958eab1a3a8ae6",
+  "sourceSize": [
+    1254,
+    1254
+  ],
+  "alphaBounds": [
+    93,
+    237,
+    1166,
+    1093
+  ],
+  "visiblePixels": 386600,
+  "edgePixels": 0,
+  "outputSize": [
+    256,
+    256
+  ],
+  "bytes": 60608,
+  "rgbaDecodedBytes": 262144,
+  "outputSha256": "af0786899c2551713e26c22d77c551d3b82b3741ef289b526c4c21d0d4400834"
+}

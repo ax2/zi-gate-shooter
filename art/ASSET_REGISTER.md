@@ -59,3 +59,7 @@ source/elite-strip-v1.png、v2.png为本会话内置imagegen、原units参考及
 ## Stage-24首领候选
 
 source/boss-strip-v1.png、v2.png来自本会话内置imagegen与原创units参考；首版触边拒用，第二版1328693字节为运行来源。运行boss-v1.png为768×256 RGBA306317字节/解码786432字节；提示词/源哈希/拒用数据/共同裁框/限制见BOSS_V1.md及阶段ASSET_EXPORT.json。MIT开放，非批准正式美术/品牌。
+
+## Stage-28无人机残骸候选
+
+source/drone-wreck-v1.png由本会话内置imagegen参考原创无人机生成；1254方RGBA，运行256方60608字节/解码262144字节。源/完整提示词/导出/哈希/候选限制见DRONE_WRECK_V1.md及阶段ASSET_EXPORT.json；MIT开放，非批准美术/品牌。
