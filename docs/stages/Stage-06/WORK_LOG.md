@@ -28,4 +28,13 @@
 
 ## 遗留与发布
 
+## 兼容修订与最终验证补记
+
+- 软件实例长时间保持CPU0.45秒/ADB offline，无Android内核启动输出；本次明确终止会话，随后确认QEMU进程和ADB设备均消失。环境排查保留，原生测试仍未执行；不再留下待轮询的运行句柄。
+- Android网页构建从ES2020改Chrome60语法目标。画布探测CSS env/dvh后选择安全区fallback/100vh，无ResizeObserver时保留window resize监听；许可页增加基础宽高、四边定位和padding，再增强现代CSS。未更改战斗、数值、素材或微信入口。
+- 旧Stage-05网页bundle SHA256 7C643151D46A49F662269C81E39E120DE94E21E440A4B99C7B90503D0BB50B24，复制为隔离基线；在无ResizeObserver、CSS env/dvh探测false的QA页实际报TypeError: ResizeObserver is not a constructor并无游戏画面。新bundle同条件可显示菜单、正常开局，暂停于10.333333秒/10分/3HP；设置→许可→返回设置后同一时间/分数/生命/坐标/对象数保持。该夹具是当前浏览器API缺失模拟，不是旧Chrome或真机。
+- 实际Android网页产物在IAB验证URL/title、1280×720与移动请求390×844（截图390×843）、画面非空/无错误遮罩、设置→许可→返回及控制台健康；最终许可39939字符，关闭后停留settings，最终控制台error/warn为空。原旧包异常属于隔离基线且日志按来源区分；未混入新产物无错误结论。视口已复原，QA页关闭。
+- npm test完整10文件45项通过104.66秒；npm run build类型检查与Vite通过，保留早期Phaser大chunk警告。微信候选536981字节。最终Android构建49秒成功，APK4993210字节，SHA256 1B8392D4D39F175F3BC0ED19447FCAC216DE23C210F069A91B92215FCCD4EC4D；签名、15网页文件、16原生图像、50/50许可与权限白名单通过，App lint0错误/5警告。
+- 构建/核验脚本默认Stage-06，历史候选目录保留。生产代码后仅调整默认输出阶段与文档，未重复全套测试。公开源码和持续档案分别提交；候选包、截图、QA夹具和记录同步用户outputs/Stage-06。
+
 手机真机、低端长局、音画与品牌签收、微信工具/AppID和正式签名/渠道验收仍未完成。安装环境本身不证明游戏达标。

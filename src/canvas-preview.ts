@@ -4,8 +4,11 @@ import { createLicenseViewer } from './game/license-viewer';
 import licenseText from '../legal/ANDROID_NOTICES.txt?raw';
 
 const canvas = document.createElement('canvas');
-const inset = (side: string) => `var(--safe-area-inset-${side},env(safe-area-inset-${side},0px))`;
-canvas.style.cssText = `display:block;position:fixed;left:${inset('left')};top:${inset('top')};width:calc(100vw - ${inset('left')} - ${inset('right')});height:calc(100dvh - ${inset('top')} - ${inset('bottom')});touch-action:none`;
+const supports = (property: string, value: string) => typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports(property, value);
+const hasEnv = supports('padding-top', 'env(safe-area-inset-top)');
+const inset = (side: string) => `var(--safe-area-inset-${side},${hasEnv ? `env(safe-area-inset-${side},0px)` : '0px'})`;
+const viewportHeight = supports('height', '100dvh') ? '100dvh' : '100vh';
+canvas.style.cssText = `display:block;position:fixed;left:${inset('left')};top:${inset('top')};width:calc(100vw - ${inset('left')} - ${inset('right')});height:calc(${viewportHeight} - ${inset('top')} - ${inset('bottom')});touch-action:none`;
 document.body.style.cssText = 'margin:0;background:#0a1119;overflow:hidden'; document.body.append(canvas);
 const audio = new GameAudio();
 const viewport = () => canvas.getBoundingClientRect();
@@ -29,7 +32,7 @@ document.addEventListener('visibilitychange', () => document.hidden ? runtime.hi
 window.addEventListener('blur', () => runtime.hide());
 const resize = () => { const r = viewport(); runtime.resize(r.width, r.height, devicePixelRatio); };
 window.addEventListener('resize', resize);
-new ResizeObserver(resize).observe(canvas);
+if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(canvas);
 window.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); if (!licenses.close()) runtime.back(); } });
 // Only read-only diagnostics are exposed; no debug rewards or automatic victories.
 Object.defineProperty(window, '__gateDiagnostics', { value: () => runtime.diagnostics() });

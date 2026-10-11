@@ -8,7 +8,7 @@
 
 本机JDK21、Android SDK36、Build Tools36，Gradle8.14.3。运行 `npm ci`、`npm run build:android`。SDK路径写入忽略的local.properties，不提交机器路径；代理只在构建子进程临时配置，不记录凭据。资源全部打入APK，不使用开发服务器。正式渠道和最低验收设备仍待确定。
 
-构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-05/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-05；历史Stage-02/03/04目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
+构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-06/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-06；历史Stage-02/03/04/05目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
 
 ## 交互与权限
 
@@ -20,7 +20,7 @@
 
 Stage-06新增原生NativeFlowTest：系统返回、许可保局和Activity后台恢复；测试APK已编译，尚未执行。可用设备连接后运行`android/gradlew.bat :app:connectedDebugAndroidTest`，报告见stages/Stage-06/TEST_REPORT.md。不可用测试编译代替原生功能验收。
 
-Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD已建，但尚未成功启动，原生测试未执行。网页目标ES2020，ResizeObserver/100dvh等能力也需最低WebView实测；minSdk24不能用于宣称Android7普遍可运行。
+Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD已建，但尚未成功启动，原生测试未执行，停滞实例已终止。网页改Chrome60语法目标并补ResizeObserver/env/dvh回退，旧包缺失API负对照已复现，新包当前浏览器回退通过；minSdk24不能用于宣称Android7普遍可运行。最新候选build/releases/Stage-06/android为4993210字节，默认构建/核验输出已移至Stage-06，历史目录保留。
 
 - 可重复构建、lint无错误、签名验证、最终权限与离线资源清单核验。
 - 真机安装/启动/离线、返回/暂停/恢复、电话或系统打断、进程重启、存档损坏与音频恢复。

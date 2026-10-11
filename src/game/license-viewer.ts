@@ -2,13 +2,13 @@
 export function createLicenseViewer(text: string, beforeOpen: () => void) {
   const style = document.createElement('style');
   style.textContent = `
-    .game-licenses { box-sizing:border-box; width:min(100vw,960px); max-width:100vw;
-      height:min(100dvh,900px); max-height:100dvh; margin:auto; padding:0; border:1px solid #47667a;
+    .game-licenses { box-sizing:border-box; width:100vw; max-width:960px;
+      height:100vh; max-height:900px; margin:auto; padding:0; border:1px solid #47667a;
       color:#d8eaf5; background:#122331; font-family:system-ui,sans-serif; overflow:hidden; }
     .game-licenses:not([open]) { display:none; }
-    .game-licenses[open] { position:fixed; inset:0; display:flex; flex-direction:column; }
+    .game-licenses[open] { position:fixed; top:0; right:0; bottom:0; left:0; display:flex; flex-direction:column; }
     .game-licenses::backdrop { background:#050e18e8; }
-    .game-licenses header { padding:max(20px,var(--safe-area-inset-top,env(safe-area-inset-top,0px))) max(20px,var(--safe-area-inset-right,env(safe-area-inset-right,0px))) 12px max(20px,var(--safe-area-inset-left,env(safe-area-inset-left,0px))); flex:none; }
+    .game-licenses header { padding:20px 20px 12px; padding:max(20px,var(--safe-area-inset-top,env(safe-area-inset-top,0px))) max(20px,var(--safe-area-inset-right,env(safe-area-inset-right,0px))) 12px max(20px,var(--safe-area-inset-left,env(safe-area-inset-left,0px))); flex:none; }
     .game-licenses h1 { font-size:24px; margin:0 0 8px; }
     .game-licenses p { margin:0; font-size:14px; line-height:1.6; color:#a9bfce; }
     .game-licenses pre { margin:0; padding:16px 20px; overflow:auto; overscroll-behavior:contain;
@@ -18,11 +18,11 @@ export function createLicenseViewer(text: string, beforeOpen: () => void) {
     .game-licenses pre::-webkit-scrollbar { width:8px; }
     .game-licenses pre::-webkit-scrollbar-track { background:#0a1823; }
     .game-licenses pre::-webkit-scrollbar-thumb { background:#47667a; border-radius:4px; }
-    .game-licenses footer { flex:none; padding:12px 20px max(12px,var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px))); }
+    .game-licenses footer { flex:none; padding:12px 20px; padding:12px 20px max(12px,var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px))); }
     .game-licenses button { width:100%; min-height:48px; font:600 16px system-ui,sans-serif;
       border:1px solid #a1e7ff; border-radius:4px; background:#77d6f6; color:#0a1823; touch-action:manipulation; cursor:pointer; }
     .game-licenses :focus-visible { outline:3px solid #f5cc7a; outline-offset:-3px; }
-    @supports not (height:100dvh) { .game-licenses { height:100vh; max-height:100vh; } }
+    @supports (height:100dvh) { .game-licenses { height:min(100dvh,900px); max-height:100dvh; } }
   `;
   document.head.append(style);
   const dialog = document.createElement('dialog'); dialog.className = 'game-licenses';
