@@ -1,4 +1,4 @@
-param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-10')
+param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-11')
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))

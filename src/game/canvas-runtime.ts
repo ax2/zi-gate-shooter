@@ -5,6 +5,7 @@ import { gateValue, previewReward } from '../core/rewards';
 import { bossWarningLanes } from '../core/behavior';
 import { defaults } from '../ui/storage';
 import { FrameWindow } from './frame-window';
+import { BossDestruction, BOSS_VISUAL } from './boss-destruction';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -36,6 +37,7 @@ export class CanvasRuntime {
   private buttons: Button[] = [];
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
+  private destruction?: BossDestruction;
   private accumulator = 0;
   private lastTime = 0;
   private visualTime = 0;
@@ -44,6 +46,7 @@ export class CanvasRuntime {
   private pointerX = 0;
   private downAction = '';
   private notice = '';
+  private noticeY = 277;
   private noticeUntil = 0;
   private shakeUntil = 0;
   private muzzleUntil = 0;
@@ -113,7 +116,7 @@ export class CanvasRuntime {
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
-    this.particles = []; this.blasts = []; this.lastTutorial = ''; this.notice = ''; this.shakeUntil = 0; this.muzzleUntil = 0; this.upgradeUntil = 0;
+    this.particles = []; this.blasts = []; this.destruction = undefined; this.lastTutorial = ''; this.notice = ''; this.shakeUntil = 0; this.muzzleUntil = 0; this.upgradeUntil = 0;
     this.platform.silence();
   }
   pause(message = '暂停') {
@@ -158,7 +161,7 @@ export class CanvasRuntime {
     else if (action === 'start') this.start();
     else if (action === 'pause') this.pause();
     else if (action === 'resume') { this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; }
+    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.destruction = undefined; }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -167,14 +170,15 @@ export class CanvasRuntime {
     else if (action === 'sound') { this.save.settings.sound = !this.save.settings.sound; this.platform.silence(); }
     this.platform.write(this.save);
   }
-  private notify(text: string) { this.notice = text; this.noticeUntil = this.platform.now() + 2200; }
+  private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage);
     if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 48; return; }
     if (e.type === 'upgrade' || e.type === 'overload') this.upgradeUntil = this.platform.now() + 450;
-    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level') this.notify(e.text);
+    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
-    if (explosion && this.blasts.length < 4) this.blasts.push({ x: e.x, y: e.y, size: e.size ?? 80, life: e.type === 'boss-kill' ? 1 : 0.45, total: e.type === 'boss-kill' ? 1 : 0.45 });
+    if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y);
+    else if (explosion && this.blasts.length < 4) this.blasts.push({ x: e.x, y: e.y, size: e.size ?? 80, life: 0.45, total: 0.45 });
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
     const cap = this.save.settings.effects === 'weak' ? 50 : 160;
     const amount = explosion ? 14 : e.type.startsWith('impact') ? 2 : 7;
@@ -227,7 +231,7 @@ export class CanvasRuntime {
       this.drawHud();
       if (this.mode === 'playing') this.text('‹　左右拖动 · 自动开火　›', 360, 1230, 24, '#b8d4e3');
       if (this.notice && this.platform.now() < this.noticeUntil && this.mode === 'playing') {
-        this.rect(58, 246, 604, 62, '#0a1c2af0'); this.text(this.notice, 360, 277, 28, '#d2f2ff');
+        this.rect(58, this.noticeY - 31, 604, 62, '#0a1c2af0'); this.text(this.notice, 360, this.noticeY, 28, '#d2f2ff');
       }
     }
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
@@ -235,6 +239,7 @@ export class CanvasRuntime {
   }
   private drawWorld(dt: number) {
     const c = this.ctx, w = this.world;
+    this.drawDestruction(dt);
     for (const b of w.bodies) {
       c.fillStyle = '#0005'; c.beginPath(); c.ellipse(b.x + 5, b.y + b.height * 0.3, b.width * 0.45, b.height * 0.2, 0, 0, Math.PI * 2); c.fill();
       if (b.kind === 'gate') {
@@ -242,7 +247,7 @@ export class CanvasRuntime {
         this.rect(b.x - b.width / 2 + 5, b.y - 54, b.width - 10, 108, '#071927f5');
       } else if (b.kind === 'crate') this.frameSprite('props.png', b.hp < b.maxHp * 0.55 ? 1 : 0, 3, b.x, b.y, 124, 134);
       else if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
-      else this.frameSprite('units.png', unitFrames[b.kind], 4, b.x, b.y, b.kind === 'boss' ? 420 : b.width * 1.4, b.kind === 'boss' ? 370 : b.height * 1.55);
+      else this.frameSprite('units.png', unitFrames[b.kind], 4, b.x, b.y + (b.kind === 'boss' ? BOSS_VISUAL.offsetY : 0), b.kind === 'boss' ? BOSS_VISUAL.width : b.width * 1.4, b.kind === 'boss' ? BOSS_VISUAL.height : b.height * 1.55);
     }
     for (const b of w.bullets.filter(b => !b.hostile)) {
       c.strokeStyle = '#62dcff44'; c.lineWidth = 10; c.beginPath(); c.moveTo(b.x, b.y + 22); c.lineTo(b.x, b.y - 10); c.stroke();
@@ -321,6 +326,25 @@ export class CanvasRuntime {
       } else if (b.kind === 'armor' || b.kind === 'elite') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
     }
   }
+  private drawDestruction(dt: number) {
+    const wreck = this.destruction;
+    if (!wreck) return;
+    for (const burst of wreck.advance(dt)) {
+      // Prefer the boss's authored beats over the oldest decorative blast.
+      if (this.blasts.length >= 4) this.blasts.shift();
+      this.blasts.push({ ...burst, life: 0.6, total: 0.6 });
+    }
+    if (wreck.finished) { this.destruction = undefined; return; }
+    const img = this.images.get('units.png'); if (!img) return;
+    const c = this.ctx, sw = img.width / 4, sh = img.height / 2;
+    for (const piece of wreck.pieces) {
+      c.save(); c.globalAlpha = piece.alpha;
+      c.translate(wreck.x + (piece.from + piece.width / 2 - 0.5) * BOSS_VISUAL.width + piece.dx, wreck.y + BOSS_VISUAL.offsetY + piece.dy);
+      c.rotate(piece.angle);
+      c.drawImage(img, (3 + piece.from) * sw, sh, piece.width * sw, sh, -piece.width * BOSS_VISUAL.width / 2, -BOSS_VISUAL.height / 2, piece.width * BOSS_VISUAL.width, BOSS_VISUAL.height);
+      c.restore();
+    }
+  }
   private drawHud() {
     const y = this.hudTop, w = this.world;
     this.rect(0, 0, 720, y + 118, '#08131be8');
@@ -371,6 +395,7 @@ export class CanvasRuntime {
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth },
       playerX: this.world.player.x,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
+      bossDestructionAge: this.destruction?.age ?? null,
       ...this.frameTimes.snapshot() };
   }
 }

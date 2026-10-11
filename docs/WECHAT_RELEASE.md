@@ -1,6 +1,8 @@
 # 微信小游戏发布准备与验收
 
-Stage-10最新候选：build/wechat，manifest以外687174字节，包含原创九帧爆炸图集。完整67项测试含实际bundle入口回归；未使用微信工具/AppID真机验证，未提交审核。截图中的移动网页和刻意渲染夹具不能作为微信真机验收，详见stages/Stage-10/TEST_REPORT.md。
+Stage-11最新候选：build/wechat，manifest除外688849字节。首领局部连续爆炸/分片消散共用Canvas入口；最终类型/构建与相关回归通过，微信工具/AppID/真机/提交审核未完成。范围见stages/Stage-11/TEST_REPORT.md。
+
+Stage-10历史候选：manifest以外687174字节，包含原创九帧爆炸图集。完整67项测试含实际bundle入口回归；未使用微信工具/AppID真机验证，未提交审核。截图中的移动网页和刻意渲染夹具不能作为微信真机验收，详见stages/Stage-10/TEST_REPORT.md。
 
 2026-10-11，用户已明确最终平台为微信小游戏，并追加独立Android APK。浏览器入口用于开发验证，Android与微信独立构建、分别验收。
 
