@@ -20,6 +20,8 @@
 
 Stage-06新增原生NativeFlowTest：系统返回、许可保局和Activity后台恢复；测试APK已编译，尚未执行。可用设备连接后运行`android/gradlew.bat :app:connectedDebugAndroidTest`，报告见stages/Stage-06/TEST_REPORT.md。不可用测试编译代替原生功能验收。
 
+Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD已建，但尚未成功启动，原生测试未执行。网页目标ES2020，ResizeObserver/100dvh等能力也需最低WebView实测；minSdk24不能用于宣称Android7普遍可运行。
+
 - 可重复构建、lint无错误、签名验证、最终权限与离线资源清单核验。
 - 真机安装/启动/离线、返回/暂停/恢复、电话或系统打断、进程重启、存档损坏与音频恢复。
 - 低端和主流Android设备的帧时、内存、温度、触控延迟、30分钟正常长局；不能用桌面或免伤压力模拟代替。

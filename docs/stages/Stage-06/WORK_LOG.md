@@ -16,6 +16,10 @@
 - `:app:assembleDebugAndroidTest`成功，104任务（28执行、76复用），1分46秒；生成测试APK。这里只证明原生测试可编译，不是两项运行通过。原生运行、截图和离线设备验证均未执行。
 - 后续检查：emulator/source.properties已记录37.2.12，`emulator -accel-check`返回0并确认既有WHPX可用，未修改系统设置。安装已推进至API35 AOSP系统镜像（官方HEAD 782404023字节），镜像仍在下载；avdmanager list avd为空。不能把模拟器程序安装成功写成系统镜像或AVD已就绪。
 - 增加tools/test-android-native.ps1，只允许显式指定已启动模拟器；重建/安装两个APK，记录哈希、系统/屏幕/WebView与instrumentation原始结果，要求2 tests通过且无失败标记。PowerShell Parser语法检查通过，运行待验；不改系统网络设置，不写成离线验收。
+- SDK安装进程最终exit0，API35默认x86_64 revision2镜像安装成功。创建独立zi_gate_stage06_api35 AVD，数据位于build/emulator/stage06-api35；未输入新许可接受，未修改系统虚拟化配置。
+- 启动诊断：后台WHPX与软件实例都停留ADB offline、CPU时间不再增长；明确停止这些本次创建的实例。为排除后台输出管道假设，改前台exec会话运行WHPX，同样未进入系统，最终exit1、ADB设备消失，无明确QEMU错误。Windows Application事件发现同目录crashpad_handler.exe异常0x80000003；只记录相关事实，不认定因果。未保存其他应用事件。
+- 当前再试前台软件CPU/软件GPU并关闭Vulkan，进程仍存活、ADB offline，未进入Android。原生测试仍未执行；该进程下轮应先继续检查，不因观察超时重复启动。过滤后的启动日志和environment.json保存在阶段环境证据，不包含ADB公钥行等无关标识。
+- 兼容性核查：Android网页目标ES2020，使用ResizeObserver/100dvh等浏览器能力；minSdk24只是安装配置，不证明旧WebView可运行。尚未取得旧设备实测，不提高/扩大已验证兼容范围；后续需要最低WebView策略与实际运行证据。
 
 ## 依据
 
