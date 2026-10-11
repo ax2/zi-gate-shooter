@@ -17,7 +17,7 @@ import { chargerFrame } from './charger-motion';
 import { armorFrame } from './armor-motion';
 import { eliteFrame } from './elite-motion';
 import { bossFrame } from './boss-motion';
-import { DroneWreck } from './drone-wreck';
+import { EnemyWreck, isWreckKind } from './enemy-wreck';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -52,7 +52,7 @@ export class CanvasRuntime {
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
-  private droneWreck = new DroneWreck();
+  private enemyWreck = new EnemyWreck();
   private gateFeedback = new GateFeedback();
   private accumulator = 0;
   private lastTime = 0;
@@ -105,7 +105,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -149,7 +149,7 @@ export class CanvasRuntime {
     this.keys.clear(); this.inputMode = 'touch';
     this.gateFeedback.clear();
     this.crateDebris.clear();
-    this.droneWreck.clear();
+    this.enemyWreck.clear();
     this.playerMotion.reset();
     this.recoilUntil = 0;
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
@@ -215,7 +215,7 @@ export class CanvasRuntime {
     else if (action === 'start') this.start();
     else if (action === 'pause') this.pause();
     else if (action === 'resume') { this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.destruction = undefined; this.crateDebris.clear(); this.droneWreck.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -234,8 +234,8 @@ export class CanvasRuntime {
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
-    if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.droneWreck.trim(9 - this.crateDebris.pieces.length); }
-    if (e.type === 'kill' && e.enemyKind === 'drone') this.droneWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length));
+    if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
+    if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y);
     else if (explosion && this.blasts.length < 4) this.blasts.push({ x: e.x, y: e.y, size: e.size ?? 80, life: 0.45, total: 0.45 });
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
@@ -323,14 +323,15 @@ export class CanvasRuntime {
     this.gateFeedback.advance(dt);
     this.drawGuide();
     this.drawDestruction(dt);
-    this.droneWreck.trim(Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length));
-    this.droneWreck.advance(dt);
-    const wreckImage = this.images.get('drone-wreck-v1.png');
-    if (wreckImage) for (const piece of this.droneWreck.pieces) {
+    this.enemyWreck.trim(Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length));
+    this.enemyWreck.advance(dt);
+    for (const piece of this.enemyWreck.pieces) {
+      const wreckImage = this.images.get(`${piece.kind}-wreck-v1.png`);
+      if (!wreckImage) continue;
       c.save(); c.translate(piece.x, piece.y); c.rotate(piece.angle);
-      c.globalAlpha = Math.min(1, (.55 - piece.age) / .22) * (this.save.settings.effects === 'weak' ? .5 : .85);
+      c.globalAlpha = Math.min(1, (piece.life - piece.age) / .22) * (this.save.settings.effects === 'weak' ? .5 : .85);
       c.drawImage(wreckImage, piece.from * wreckImage.width, 0, piece.width * wreckImage.width, wreckImage.height,
-        -piece.width * 92.4 / 2, -92.4 / 2, piece.width * 92.4, 92.4); c.restore();
+        -piece.width * piece.w / 2, -piece.h / 2, piece.width * piece.w, piece.h); c.restore();
     }
     this.crateDebris.advance(dt);
     for (const piece of this.crateDebris.pieces) {
@@ -568,7 +569,8 @@ export class CanvasRuntime {
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
-      droneFragments: this.droneWreck.pieces.length,
+      droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
+      enemyFragments: this.enemyWreck.pieces.length,
       gateReceipts: this.gateFeedback.receipts.length,
       ...this.frameTimes.snapshot() };
   }

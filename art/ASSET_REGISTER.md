@@ -63,3 +63,7 @@ source/boss-strip-v1.png、v2.png来自本会话内置imagegen与原创units参�
 ## Stage-28无人机残骸候选
 
 source/drone-wreck-v1.png由本会话内置imagegen参考原创无人机生成；1254方RGBA，运行256方60608字节/解码262144字节。源/完整提示词/导出/哈希/候选限制见DRONE_WRECK_V1.md及阶段ASSET_EXPORT.json；MIT开放，非批准美术/品牌。
+
+## Stage-29剩余敌种死亡候选
+
+charger/armor/elite-wreck-v1.png分别由本会话内置imagegen参考原创机体生成，源1254方RGBA，运行各256方71421/81924/81684字节；新增解码0.75MiB。MIT开放，完整实际提示词/来源/哈希/限制见ENEMY_WRECKS_V1.md与enemy-wrecks-v1-prompts.md；非正式音画/品牌签收。

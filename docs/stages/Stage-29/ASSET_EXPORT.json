@@ -1,0 +1,74 @@
+[
+  {
+    "kind": "charger",
+    "source": "art/source/charger-wreck-v1.png",
+    "sourceSha256": "b0eab2e58f9e95c9a87443fab0147eca3b3d9bc9af0806e6cbce1ec2355698db",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaBounds": [
+      141,
+      116,
+      1114,
+      1146
+    ],
+    "visiblePixels": 441912,
+    "edgePixels": 0,
+    "outputSize": [
+      256,
+      256
+    ],
+    "bytes": 71421,
+    "rgbaDecodedBytes": 262144,
+    "outputSha256": "f61bee91f2ad58c467663454db89ed0ba4809d97ac50980edb3bd647df6b6088"
+  },
+  {
+    "kind": "armor",
+    "source": "art/source/armor-wreck-v1.png",
+    "sourceSha256": "7e6d08404832a0e6fddf31e199203faecade2077d7c12c42c40287e36d06d76f",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaBounds": [
+      205,
+      166,
+      1075,
+      1090
+    ],
+    "visiblePixels": 586039,
+    "edgePixels": 0,
+    "outputSize": [
+      256,
+      256
+    ],
+    "bytes": 81924,
+    "rgbaDecodedBytes": 262144,
+    "outputSha256": "5f8505fa827f0e00e1b827eb20d061f4bc36bbec67ba1b540801f8ebb279583e"
+  },
+  {
+    "kind": "elite",
+    "source": "art/source/elite-wreck-v1.png",
+    "sourceSha256": "d1dc609d8a13d8d3c2b91e6a18593be6a8c4658d729a5d93cbf5665f6920a765",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaBounds": [
+      117,
+      153,
+      1164,
+      1128
+    ],
+    "visiblePixels": 529566,
+    "edgePixels": 0,
+    "outputSize": [
+      256,
+      256
+    ],
+    "bytes": 81684,
+    "rgbaDecodedBytes": 262144,
+    "outputSha256": "b4e4e49425014a6c4f4fbb77cbec8f503704474eb45f6aae3caa91eaec68d182"
+  }
+]
