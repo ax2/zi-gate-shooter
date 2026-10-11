@@ -1,6 +1,8 @@
 # 微信小游戏发布准备与验收
 
-Stage-26最新候选：manifest外3061599字节，141项完整通过。构建先清理固定输出，仅保留已有AppID；旧版夹带已删除素材的问题已通过负对照/回归修复。运行内容沿用Stage-24，未微信工具/双方真机/提交，详见stages/Stage-26/TEST_REPORT.md。
+Stage-27最新候选：manifest外3062246字节，145项完整通过。共享Canvas首次加载画面、15秒前台超时与重试隔离；手机/桌面网页故障夹具限定通过。微信工具/AppID/双方设备/提交未验，见stages/Stage-27/TEST_REPORT.md。
+
+Stage-26历史候选：manifest外3061599字节，141项完整通过。构建先清理固定输出，仅保留已有AppID；旧版夹带已删除素材的问题已通过负对照/回归修复。运行内容沿用Stage-24，未微信工具/双方真机/提交，详见stages/Stage-26/TEST_REPORT.md。
 
 Stage-18历史候选：build/wechat，manifest以外1937189字节。共享输入清理，微信不绑定浏览器按键；120项通过，未微信工具/AppID/真机/提交，见stages/Stage-18/TEST_REPORT.md。
 

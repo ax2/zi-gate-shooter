@@ -70,6 +70,8 @@ export class CanvasRuntime {
   private upgradeUntil = 0;
   private error = '';
   private started = false;
+  private hidden = false;
+  private loadAttempt?: { since: number; fail: () => void };
   private frameTimes = new FrameWindow();
   private scale = 1;
   private offsetX = 0;
@@ -92,17 +94,31 @@ export class CanvasRuntime {
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   async load() {
-    try {
-      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
-      this.mode = 'menu';
-    } catch { this.error = '资源加载失败，请重新进入游戏'; this.mode = 'error'; }
+    this.loadAttempt?.fail();
+    let fail = () => {};
+    const interrupted = new Promise<never>((_resolve, reject) => { fail = () => reject(new Error('Asset load interrupted')); });
+    const attempt = { since: this.platform.now(), fail };
+    this.loadAttempt = attempt;
+    this.mode = 'loading'; this.error = ''; this.images.clear(); this.buttons = [];
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
+    try {
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      if (this.loadAttempt !== attempt) return;
+      this.images = new Map(images);
+      this.mode = 'menu';
+    } catch {
+      if (this.loadAttempt !== attempt) return;
+      this.error = '资源加载未完成，请点击重试'; this.mode = 'error';
+    } finally {
+      if (this.loadAttempt === attempt) { this.loadAttempt = undefined; this.lastTime = this.platform.now(); }
+    }
   }
   private frame(_timestamp: number) {
     const time = this.platform.now();
     const elapsed = Math.max(0, (time - this.lastTime) / 1000); this.lastTime = time;
     const dt = Math.min(elapsed, 0.1);
+    if (!this.hidden && this.loadAttempt && time - this.loadAttempt.since >= 15000) this.loadAttempt.fail();
     if (this.mode === 'playing') {
       this.frameTimes.add(elapsed * 1000);
       if (elapsed > 0.25) this.pause('运行中断，已暂停');
@@ -145,8 +161,8 @@ export class CanvasRuntime {
     this.mode = 'paused'; this.cancelTouch(); this.accumulator = 0; this.notify(message); this.platform.silence();
     this.updateMusic();
   }
-  hide() { this.pause('切换至后台，已暂停'); this.cancelTouch(); this.platform.silence(); }
-  show() { this.lastTime = this.platform.now(); this.accumulator = 0; this.cancelTouch(); }
+  hide() { this.hidden = true; this.pause('切换至后台，已暂停'); this.cancelTouch(); this.platform.silence(); }
+  show() { this.hidden = false; this.lastTime = this.platform.now(); if (this.loadAttempt) this.loadAttempt.since = this.lastTime; this.accumulator = 0; this.cancelTouch(); }
   private updateMusic() {
     try { this.platform.music?.(this.mode === 'playing' && this.save.settings.music); }
     catch { /* An optional platform audio feature must not stop the game. */ }
