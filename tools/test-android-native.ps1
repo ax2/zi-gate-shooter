@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$true)][ValidatePattern('^emulator-[0-9]+$')][string]$Serial,
-    [ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-14'
+    [ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-15'
 )
 $ErrorActionPreference = 'Stop'
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))

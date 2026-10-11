@@ -1,5 +1,9 @@
 # 原创素材登记
 
+## Stage-15 装备箱三态与六片甲板候选
+
+2026-10-11，内置imagegen参照既有原创props，三轮源/提示词/技术导出均保留，返修2明确拒用。当前source/crate-atlas-v3.png→public/assets/crate-v1.png（768方形RGBA，534538字节、解码2.25MiB），详细来源/尺寸/alpha局限见CRATE_V1.md。未获人工美术/版权正式签收。
+
 ## Stage-12 原创循环配乐候选
 
 2026-10-11，tools/generate-music.mjs原创确定性编曲与合成，未用外部音乐/采样/模型或商业游戏音频。public/assets/audio/mechanical-pulse-v1.wav为120BPM、8小节16秒、22050Hz单声道PCM16，705644字节；代码/素材随本项目MIT开放。鼓、低音、合成器分层后统一输出一条轨；原7音效不变。完整来源/测量见art/MUSIC_V1.md。候选未听审，不声称风格/混音/扬声器效果达标。

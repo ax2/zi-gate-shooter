@@ -1,6 +1,8 @@
 # 微信小游戏发布准备与验收
 
-Stage-14最新候选：build/wechat，manifest除外1397609字节。三阶玩家分层动作，89项完整测试含实际bundle触控观察通过；未微信工具/AppID/真机/提交，见stages/Stage-14/TEST_REPORT.md。
+Stage-15最新候选：build/wechat，manifest以外1933300字节。三态箱体/六甲板/掉落上层；93项完整与最终相关28项通过，新纹理解码2.25MiB；未微信工具/AppID/真机/提交，见stages/Stage-15/TEST_REPORT.md。
+
+Stage-14历史候选：build/wechat，manifest除外1397609字节。三阶玩家分层动作，89项完整测试含实际bundle触控观察通过；未微信工具/AppID/真机/提交，见stages/Stage-14/TEST_REPORT.md。
 
 Stage-13历史候选：build/wechat，manifest以外1396551字节。实体受击反馈共享入口，84项回归通过；微信合成支持/工具/AppID/真机待验，见stages/Stage-13/TEST_REPORT.md。
 

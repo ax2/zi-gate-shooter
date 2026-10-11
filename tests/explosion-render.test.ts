@@ -18,12 +18,44 @@ function fixture(weak = false) {
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: 768, height: src.includes('explosion') ? 768 : 512 }) as HTMLImageElement,
+    image: async src => ({ src, width: 768, height: src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick() { calls.length = 0; clock += 1000 / 60; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([false, true])('a real crate break reveals equipment above smoke without granting it early (weak=%s)', async weak => {
+  const f = fixture(weak); await f.runtime.load(); f.runtime.start();
+  const reference = new World();
+  const setup = (w: World) => {
+    const b = w.spawn('crate', 360, 650, 2); b.hp = 4;
+    w.bullets.push({ id: 9999, x: 360, y: 650, px: 360, py: 650, vx: 0, vy: 0, damage: 4, age: 0, active: true, hostile: false });
+  };
+  setup(reference); setup(f.runtime.world);
+  f.tick(); reference.step(C.step, 360); reference.drainEffects();
+  expect(f.runtime.world.growth.stage).toBe(1); expect(f.runtime.world.pickups).toBe(0);
+  expect(f.runtime.world.bodies.some(b => b.kind === 'pickup')).toBe(true);
+  expect(f.runtime.diagnostics().crateFragments).toBe(6);
+  const pickup = f.calls.findIndex(c => c.kind === 'drawImage' && c.args[0].src.endsWith('props.png') && c.args[7] === 65);
+  expect(pickup).toBeGreaterThan(f.calls.lastIndexOf(blasts(f).at(-1)!));
+  f.runtime.pause(); f.tick(); const fragments = f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('crate-v1.png')).map(c => ({ ...c }));
+  for (let i = 0; i < 20; i++) f.tick();
+  expect(f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('crate-v1.png'))).toEqual(fragments);
+  f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
+  for (let i = 0; i < 160; i++) {
+    f.tick(); reference.step(C.step, 360); reference.drainEffects();
+    expect(f.runtime.world.growth).toEqual(reference.growth); expect(f.runtime.world.bodies).toEqual(reference.bodies);
+    expect(f.runtime.world.pickups).toBe(reference.pickups);
+  }
+  expect(f.runtime.world.pickups).toBe(1); expect(f.runtime.world.growth.stage).toBe(2);
+  expect(f.runtime.diagnostics().crateFragments).toBe(0);
+  for (let i = 0; i < 10; i++) f.runtime.world.emit('crate-break', 360, 600);
+  f.tick(); expect(f.runtime.diagnostics().crateFragments).toBeLessThanOrEqual(9);
+  f.runtime.pause(); f.tick(); f.runtime.touchStart(1, 360, 823); f.runtime.touchEnd(1, 360, 823);
+  f.tick(); expect(f.runtime.mode).toBe('menu'); expect(f.runtime.diagnostics().crateFragments).toBe(0);
+  f.runtime.start(); f.tick(); expect(f.runtime.diagnostics().crateFragments).toBe(0);
+});
 
 it('plays every atlas cell, freezes on pause, and retires completed effects', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();

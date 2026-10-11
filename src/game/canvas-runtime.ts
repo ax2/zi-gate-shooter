@@ -8,6 +8,7 @@ import { FrameWindow } from './frame-window';
 import { BossDestruction, BOSS_VISUAL } from './boss-destruction';
 import { PlayerMotion } from './player-motion';
 import type { PlayerPose } from './player-motion';
+import { CrateDebris, crateFrame } from './crate-debris';
 import type { Save } from '../ui/storage';
 
 export interface Platform {
@@ -42,6 +43,7 @@ export class CanvasRuntime {
   private blasts: Blast[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
+  private crateDebris = new CrateDebris();
   private accumulator = 0;
   private lastTime = 0;
   private visualTime = 0;
@@ -82,7 +84,7 @@ export class CanvasRuntime {
   }
   async load() {
     try {
-      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
+      await Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png'].map(async key => this.images.set(key, await this.platform.image(`assets/${key}`))));
       this.mode = 'menu';
     } catch { this.error = '资源加载失败，请重新进入游戏'; this.mode = 'error'; }
     this.lastTime = this.platform.now();
@@ -119,6 +121,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.crateDebris.clear();
     this.playerMotion.reset();
     this.recoilUntil = 0;
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
@@ -175,7 +178,7 @@ export class CanvasRuntime {
     else if (action === 'start') this.start();
     else if (action === 'pause') this.pause();
     else if (action === 'resume') { this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.destruction = undefined; }
+    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.destruction = undefined; this.crateDebris.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -193,6 +196,7 @@ export class CanvasRuntime {
     if (e.type === 'upgrade' || e.type === 'overload') this.upgradeUntil = this.platform.now() + 450;
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
+    if (e.type === 'crate-break') this.crateDebris.burst(e.x, e.y);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y);
     else if (explosion && this.blasts.length < 4) this.blasts.push({ x: e.x, y: e.y, size: e.size ?? 80, life: 0.45, total: 0.45 });
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
@@ -213,13 +217,13 @@ export class CanvasRuntime {
     this.ctx.drawImage(img, (frame % columns) * sw, Math.floor(frame / columns) * sh, sw, sh, x - width / 2, y - height / 2, width, height);
   }
   /** Reuse the actual sprite alpha: no rectangular flash or extra atlas. */
-  private hitSprite(key: string, frame: number, columns: number, x: number, y: number, width: number, height: number, remaining: number, duration = 0.07) {
+  private hitSprite(key: string, frame: number, columns: number, x: number, y: number, width: number, height: number, remaining: number, duration = 0.07, rows = 2) {
     if (remaining <= 0) return;
     const c = this.ctx;
     c.save();
     c.globalCompositeOperation = 'lighter';
     c.globalAlpha *= Math.min(1, remaining / duration) * (this.save.settings.effects === 'weak' ? 0.18 : 0.48);
-    this.frameSprite(key, frame, columns, x, y, width, height);
+    this.frameSprite(key, frame, columns, x, y, width, height, rows);
     c.restore();
   }
   private playerSprite(frame: number, x: number, y: number, pose: PlayerPose, recoil: number) {
@@ -278,6 +282,12 @@ export class CanvasRuntime {
   private drawWorld(dt: number) {
     const c = this.ctx, w = this.world;
     this.drawDestruction(dt);
+    this.crateDebris.advance(dt);
+    for (const piece of this.crateDebris.pieces) {
+      c.save(); c.translate(piece.x, piece.y); c.rotate(piece.angle);
+      c.globalAlpha = Math.min(1, (piece.life - piece.age) / 0.3) * (this.save.settings.effects === 'weak' ? 0.55 : 0.9);
+      this.frameSprite('crate-v1.png', piece.frame, 3, 0, 0, piece.size, piece.size, 3); c.restore();
+    }
     for (const b of w.bodies) {
       c.fillStyle = '#0005'; c.beginPath(); c.ellipse(b.x + 5, b.y + b.height * 0.3, b.width * 0.45, b.height * 0.2, 0, 0, Math.PI * 2); c.fill();
       if (b.kind === 'gate') {
@@ -285,11 +295,11 @@ export class CanvasRuntime {
         this.hitSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225, b.hit);
         this.rect(b.x - b.width / 2 + 5, b.y - 54, b.width - 10, 108, '#071927f5');
       } else if (b.kind === 'crate') {
-        const frame = b.hp < b.maxHp * 0.55 ? 1 : 0;
-        this.frameSprite('props.png', frame, 3, b.x, b.y, 124, 134);
-        this.hitSprite('props.png', frame, 3, b.x, b.y, 124, 134, b.hit);
+        const frame = crateFrame(b.hp, b.maxHp);
+        this.frameSprite('crate-v1.png', frame, 3, b.x, b.y, 148, 154, 3);
+        this.hitSprite('crate-v1.png', frame, 3, b.x, b.y, 148, 154, b.hit, 0.07, 3);
       }
-      else if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
+      else if (b.kind === 'pickup') continue;
       else {
         const y = b.y + (b.kind === 'boss' ? BOSS_VISUAL.offsetY : 0);
         const width = b.kind === 'boss' ? BOSS_VISUAL.width : b.width * 1.4;
@@ -346,6 +356,8 @@ export class CanvasRuntime {
       c.beginPath(); c.moveTo(s.x, s.y); c.lineTo(s.x - s.vx * 0.03, s.y - s.vy * 0.03); c.stroke(); c.restore();
     }
     this.particles = this.particles.filter(s => s.life > 0);
+    // Breaking is not collecting: keep the physical module visible above smoke.
+    for (const b of w.bodies) if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
     // Dangerous projectiles and native labels are always above visual explosions.
     for (const b of w.bullets.filter(b => b.hostile)) {
       c.fillStyle = '#ff7756'; c.strokeStyle = '#1a171d'; c.lineWidth = 3; c.beginPath(); c.moveTo(b.x - 8, b.y - 7); c.lineTo(b.x + 8, b.y - 7); c.lineTo(b.x, b.y + 12); c.closePath(); c.fill(); c.stroke();
@@ -458,6 +470,7 @@ export class CanvasRuntime {
       playerX: this.world.player.x,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
       bossDestructionAge: this.destruction?.age ?? null,
+      crateFragments: this.crateDebris.pieces.length,
       ...this.frameTimes.snapshot() };
   }
 }
