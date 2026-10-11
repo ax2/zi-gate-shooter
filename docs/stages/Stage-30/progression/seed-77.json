@@ -1,0 +1,218 @@
+{
+  "seed": 77,
+  "openingX": 652,
+  "requestedSeconds": 1200,
+  "time": 1200,
+  "phase": "boss",
+  "round": 14,
+  "stage": 3,
+  "hp": 3,
+  "bonus": 100,
+  "score": 21450,
+  "pickups": 28,
+  "gates": 56,
+  "overloads": 19,
+  "bossKills": 13,
+  "hurt": 0,
+  "hostileProjectilesObserved": 131,
+  "crateLanes": [
+    240,
+    480
+  ],
+  "victories": [
+    80.65,
+    165.983,
+    251.817,
+    338.317,
+    425.15,
+    511.983,
+    598.817,
+    685.65,
+    772.483,
+    859.317,
+    946.15,
+    1032.983,
+    1119.817
+  ],
+  "firstEquipmentEvents": [
+    {
+      "event": "crate-break",
+      "time": 10.2,
+      "stage": 1,
+      "pickups": 0
+    },
+    {
+      "event": "upgrade",
+      "time": 13.283,
+      "stage": 2,
+      "pickups": 1
+    },
+    {
+      "event": "crate-break",
+      "time": 50.05,
+      "stage": 2,
+      "pickups": 1
+    },
+    {
+      "event": "upgrade",
+      "time": 53.283,
+      "stage": 3,
+      "pickups": 2
+    }
+  ],
+  "peakBodies": 8,
+  "peakBullets": 25,
+  "milestones": [
+    {
+      "time": 13.283,
+      "stage": 2,
+      "round": 1,
+      "hp": 3,
+      "bonus": 0,
+      "pickups": 1,
+      "gates": 0,
+      "cratesBroken": 1
+    },
+    {
+      "time": 53.283,
+      "stage": 3,
+      "round": 1,
+      "hp": 3,
+      "bonus": 60,
+      "pickups": 2,
+      "gates": 2,
+      "cratesBroken": 2
+    },
+    {
+      "time": 84.667,
+      "stage": 3,
+      "round": 2,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 2,
+      "gates": 4,
+      "cratesBroken": 2
+    },
+    {
+      "time": 170,
+      "stage": 3,
+      "round": 3,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 4,
+      "gates": 8,
+      "cratesBroken": 4
+    },
+    {
+      "time": 255.833,
+      "stage": 3,
+      "round": 4,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 6,
+      "gates": 12,
+      "cratesBroken": 6
+    },
+    {
+      "time": 342.333,
+      "stage": 3,
+      "round": 5,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 8,
+      "gates": 16,
+      "cratesBroken": 8
+    },
+    {
+      "time": 429.167,
+      "stage": 3,
+      "round": 6,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 10,
+      "gates": 20,
+      "cratesBroken": 10
+    },
+    {
+      "time": 516,
+      "stage": 3,
+      "round": 7,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 12,
+      "gates": 24,
+      "cratesBroken": 12
+    },
+    {
+      "time": 602.833,
+      "stage": 3,
+      "round": 8,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 14,
+      "gates": 28,
+      "cratesBroken": 14
+    },
+    {
+      "time": 689.667,
+      "stage": 3,
+      "round": 9,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 16,
+      "gates": 32,
+      "cratesBroken": 16
+    },
+    {
+      "time": 776.5,
+      "stage": 3,
+      "round": 10,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 18,
+      "gates": 36,
+      "cratesBroken": 18
+    },
+    {
+      "time": 863.333,
+      "stage": 3,
+      "round": 11,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 20,
+      "gates": 40,
+      "cratesBroken": 20
+    },
+    {
+      "time": 950.167,
+      "stage": 3,
+      "round": 12,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 22,
+      "gates": 44,
+      "cratesBroken": 22
+    },
+    {
+      "time": 1037,
+      "stage": 3,
+      "round": 13,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 24,
+      "gates": 48,
+      "cratesBroken": 24
+    },
+    {
+      "time": 1123.833,
+      "stage": 3,
+      "round": 14,
+      "hp": 3,
+      "bonus": 100,
+      "pickups": 26,
+      "gates": 52,
+      "cratesBroken": 26
+    }
+  ],
+  "scope": "fixed-step simulation; omniscient test operator; no rendered, human or device acceptance"
+}

@@ -1,0 +1,13 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 test
+npm notice run node tools/build-wechat.mjs && vitest run
+WeChat candidate bundle: E:\games\zi-gate-shooter\build\wechat, 3359725 bytes. AppID and device validation still required.
+
+ RUN  v5.0.3 E:/games/zi-gate-shooter
+
+
+ Test Files  27 passed (27)
+      Tests  159 passed (159)
+   Start at  21:09:19
+   Duration  57.28s (tests 91%, transform 6%, import 2%)
+
