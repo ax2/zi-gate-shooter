@@ -59,3 +59,7 @@ Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD�
 系统栏固定SystemBars DARK（浅色文字/图标）与深色窗口底，保留css安全区和cover初始提示。启动Activity在super.onCreate之前安装AndroidX SplashScreen，统一深色背景、静态机甲标记和结束主题，无额外Activity、人工延时或启动网络请求。Android12+显式排除cloud与device-transfer全部本地数据域，旧系统禁用fullBackupContent；真实系统行为待设备检查。
 
 依据：[Android启动迁移](https://developer.android.com/develop/ui/views/launch/splash-screen/migrate)、[自适应图标](https://developer.android.com/develop/ui/compose/system/icon_design_adaptive)、[系统备份规则](https://developer.android.com/identity/data/autobackup)。
+
+## 当前设备条件（2026-10-11用户确认）
+
+暂时没有可用Android手机。保留独立APK目标，继续可独立完成的工作；原生安装/Instrumentation/触控手感/帧时/温度/内存/后台恢复均不能签收。此前模拟器未成功启动，也没有模拟器运行通过证据。待可用设备后再执行原生验收，现有网页检查与构建不替代这些条件。

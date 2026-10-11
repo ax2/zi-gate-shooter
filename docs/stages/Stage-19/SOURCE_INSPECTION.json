@@ -1,0 +1,771 @@
+{
+  "method": "alpha > threshold; 2px cell edge; requested 18% gutter; bounds local to cell",
+  "reports": [
+    {
+      "source": "art/source/enemies-atlas-v1.png",
+      "bytes": 1730476,
+      "sha256": "623631abe9bc819e1b3c57a77d447da4b94fc6b599d4c2314633fb200e982765",
+      "width": 1254,
+      "height": 1254,
+      "cell": [
+        418,
+        418
+      ],
+      "cells": [
+        {
+          "frame": 0,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 49848,
+              "edge": 56,
+              "outsideRequestedGutter": 7798,
+              "bounds": [
+                41,
+                44,
+                407,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 48342,
+              "edge": 49,
+              "outsideRequestedGutter": 7328,
+              "bounds": [
+                42,
+                45,
+                406,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 46461,
+              "edge": 39,
+              "outsideRequestedGutter": 6707,
+              "bounds": [
+                43,
+                46,
+                405,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 50085,
+              "edge": 0,
+              "outsideRequestedGutter": 7583,
+              "bounds": [
+                27,
+                41,
+                390,
+                355
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 48660,
+              "edge": 0,
+              "outsideRequestedGutter": 7138,
+              "bounds": [
+                28,
+                41,
+                390,
+                354
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 46748,
+              "edge": 0,
+              "outsideRequestedGutter": 6561,
+              "bounds": [
+                29,
+                43,
+                389,
+                353
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 2,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 47610,
+              "edge": 60,
+              "outsideRequestedGutter": 7122,
+              "bounds": [
+                20,
+                41,
+                392,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 46032,
+              "edge": 51,
+              "outsideRequestedGutter": 6609,
+              "bounds": [
+                22,
+                42,
+                392,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 43849,
+              "edge": 33,
+              "outsideRequestedGutter": 5721,
+              "bounds": [
+                23,
+                43,
+                391,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 3,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 62363,
+              "edge": 241,
+              "outsideRequestedGutter": 15555,
+              "bounds": [
+                67,
+                0,
+                383,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 59857,
+              "edge": 230,
+              "outsideRequestedGutter": 14467,
+              "bounds": [
+                67,
+                0,
+                383,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 56552,
+              "edge": 215,
+              "outsideRequestedGutter": 12952,
+              "bounds": [
+                68,
+                0,
+                382,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 4,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 51371,
+              "edge": 180,
+              "outsideRequestedGutter": 4955,
+              "bounds": [
+                81,
+                6,
+                337,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 49355,
+              "edge": 176,
+              "outsideRequestedGutter": 4446,
+              "bounds": [
+                82,
+                6,
+                337,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 46503,
+              "edge": 171,
+              "outsideRequestedGutter": 3590,
+              "bounds": [
+                82,
+                7,
+                336,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 5,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 57409,
+              "edge": 246,
+              "outsideRequestedGutter": 12302,
+              "bounds": [
+                42,
+                0,
+                370,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 55012,
+              "edge": 234,
+              "outsideRequestedGutter": 11307,
+              "bounds": [
+                43,
+                0,
+                369,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 51933,
+              "edge": 209,
+              "outsideRequestedGutter": 9989,
+              "bounds": [
+                44,
+                0,
+                368,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 6,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 98334,
+              "edge": 186,
+              "outsideRequestedGutter": 32117,
+              "bounds": [
+                55,
+                0,
+                388,
+                339
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 97195,
+              "edge": 182,
+              "outsideRequestedGutter": 31367,
+              "bounds": [
+                56,
+                0,
+                388,
+                339
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 95673,
+              "edge": 179,
+              "outsideRequestedGutter": 30372,
+              "bounds": [
+                57,
+                0,
+                387,
+                338
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 7,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 96350,
+              "edge": 184,
+              "outsideRequestedGutter": 29457,
+              "bounds": [
+                47,
+                0,
+                372,
+                361
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 95106,
+              "edge": 180,
+              "outsideRequestedGutter": 28588,
+              "bounds": [
+                48,
+                0,
+                371,
+                360
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 93542,
+              "edge": 175,
+              "outsideRequestedGutter": 27474,
+              "bounds": [
+                49,
+                0,
+                370,
+                359
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 8,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 100051,
+              "edge": 190,
+              "outsideRequestedGutter": 33545,
+              "bounds": [
+                31,
+                0,
+                371,
+                342
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 98783,
+              "edge": 186,
+              "outsideRequestedGutter": 32716,
+              "bounds": [
+                32,
+                0,
+                370,
+                341
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 97156,
+              "edge": 177,
+              "outsideRequestedGutter": 31626,
+              "bounds": [
+                33,
+                0,
+                369,
+                340
+              ]
+            }
+          ]
+        }
+      ],
+      "safeExactGrid": false
+    },
+    {
+      "source": "art/source/enemies-atlas-v2.png",
+      "bytes": 1840695,
+      "sha256": "688fa02f16597416533bbc4802342386583c235d4b647c30e22a831a8e4cf854",
+      "width": 1254,
+      "height": 1254,
+      "cell": [
+        418,
+        418
+      ],
+      "cells": [
+        {
+          "frame": 0,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 51164,
+              "edge": 114,
+              "outsideRequestedGutter": 8562,
+              "bounds": [
+                49,
+                52,
+                417,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 49890,
+              "edge": 102,
+              "outsideRequestedGutter": 8192,
+              "bounds": [
+                50,
+                53,
+                417,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 48378,
+              "edge": 78,
+              "outsideRequestedGutter": 7715,
+              "bounds": [
+                51,
+                54,
+                417,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 51351,
+              "edge": 47,
+              "outsideRequestedGutter": 6589,
+              "bounds": [
+                0,
+                49,
+                389,
+                365
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 50032,
+              "edge": 40,
+              "outsideRequestedGutter": 6171,
+              "bounds": [
+                0,
+                49,
+                389,
+                364
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 48464,
+              "edge": 33,
+              "outsideRequestedGutter": 5666,
+              "bounds": [
+                0,
+                50,
+                388,
+                363
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 2,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 47551,
+              "edge": 40,
+              "outsideRequestedGutter": 6266,
+              "bounds": [
+                9,
+                70,
+                376,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 46344,
+              "edge": 32,
+              "outsideRequestedGutter": 5919,
+              "bounds": [
+                10,
+                71,
+                376,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 44892,
+              "edge": 24,
+              "outsideRequestedGutter": 5517,
+              "bounds": [
+                11,
+                72,
+                374,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 3,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 72692,
+              "edge": 224,
+              "outsideRequestedGutter": 21068,
+              "bounds": [
+                56,
+                0,
+                414,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 70355,
+              "edge": 212,
+              "outsideRequestedGutter": 19905,
+              "bounds": [
+                57,
+                0,
+                413,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 67606,
+              "edge": 192,
+              "outsideRequestedGutter": 18524,
+              "bounds": [
+                58,
+                0,
+                412,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 4,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 58089,
+              "edge": 163,
+              "outsideRequestedGutter": 4750,
+              "bounds": [
+                70,
+                27,
+                354,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 56298,
+              "edge": 157,
+              "outsideRequestedGutter": 4210,
+              "bounds": [
+                70,
+                27,
+                353,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 54077,
+              "edge": 146,
+              "outsideRequestedGutter": 3510,
+              "bounds": [
+                71,
+                28,
+                352,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 5,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 65291,
+              "edge": 219,
+              "outsideRequestedGutter": 14909,
+              "bounds": [
+                16,
+                0,
+                367,
+                417
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 63188,
+              "edge": 208,
+              "outsideRequestedGutter": 13856,
+              "bounds": [
+                16,
+                0,
+                367,
+                417
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 60688,
+              "edge": 190,
+              "outsideRequestedGutter": 12627,
+              "bounds": [
+                17,
+                0,
+                366,
+                417
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 6,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 104496,
+              "edge": 175,
+              "outsideRequestedGutter": 38216,
+              "bounds": [
+                42,
+                0,
+                407,
+                341
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 103361,
+              "edge": 171,
+              "outsideRequestedGutter": 37424,
+              "bounds": [
+                43,
+                0,
+                406,
+                340
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 101966,
+              "edge": 165,
+              "outsideRequestedGutter": 36434,
+              "bounds": [
+                44,
+                0,
+                405,
+                339
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 7,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 100118,
+              "edge": 168,
+              "outsideRequestedGutter": 32983,
+              "bounds": [
+                37,
+                0,
+                382,
+                361
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 98999,
+              "edge": 164,
+              "outsideRequestedGutter": 32191,
+              "bounds": [
+                37,
+                0,
+                382,
+                360
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 97537,
+              "edge": 160,
+              "outsideRequestedGutter": 31143,
+              "bounds": [
+                39,
+                0,
+                381,
+                359
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 8,
+          "thresholds": [
+            {
+              "threshold": 16,
+              "visible": 104679,
+              "edge": 176,
+              "outsideRequestedGutter": 38245,
+              "bounds": [
+                11,
+                0,
+                375,
+                341
+              ]
+            },
+            {
+              "threshold": 128,
+              "visible": 103580,
+              "edge": 172,
+              "outsideRequestedGutter": 37475,
+              "bounds": [
+                12,
+                0,
+                374,
+                341
+              ]
+            },
+            {
+              "threshold": 240,
+              "visible": 102179,
+              "edge": 169,
+              "outsideRequestedGutter": 36479,
+              "bounds": [
+                13,
+                0,
+                373,
+                340
+              ]
+            }
+          ]
+        }
+      ],
+      "safeExactGrid": false
+    }
+  ]
+}

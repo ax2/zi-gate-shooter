@@ -35,3 +35,7 @@
 tools/export-launcher.mjs保留源图，完成技术裁空、等比缩放和Android密度/遮罩导出；五档adaptive前景108–432px、legacy48–192px、启动标记576px和512px无圆角候选图。显著alpha(>32)范围均在33dp半径内，具体记录art/exports/launcher-export.json。单色图标由系统使用同一前景alpha着色，不额外绘制虚假轮廓。
 
 art/exports/launcher-preview.html仅为资产适配说明，非原生截图。原始模板启动PNG和未引用模板XML从当前资源中移除，可从d6002e7历史恢复；本机运行和系统启动过渡尚待真机。素材随项目MIT开放，品牌与名称仍为候选。
+
+## Stage-19普通敌人动作源（拒用）
+
+source/enemies-atlas-v1.png、v2.png均为本会话内置imagegen生成，以本项目原创units为来源链；完整提示词与来源见ENEMY_CANDIDATES.md。两版均1254×1254 RGBA，哈希见阶段SOURCE_INSPECTION.json；跨格/尺度/边缘不合格，未导出或接入运行资产。随项目MIT开放，非批准角色/动作素材。
