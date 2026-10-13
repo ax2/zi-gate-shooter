@@ -1,60 +1,27 @@
 # 微信小游戏发布准备与验收
 
-Stage-33当前候选：manifest外3393797字节，共享光电粒子表现。开发者工具/真机/提交仍未完成，见stages/Stage-33/TEST_REPORT.md。
+更新时间：2026-10-13。用户确认微信小游戏与独立Android APK并行，Android暂不指定商店。微信运行与发布必须单独验收。
 
-Stage-32最新候选：manifest外3391697字节/31文件，169项完整通过。三种武器、成对箱选择、三章波次与新行为/预警已接入；原生Canvas与网页默认入口一致，旧Phaser入口移至tools/legacy-phaser.html保留。未微信开发者工具/AppID/双方设备/提交，详见stages/Stage-32。
+## 当前候选
 
-Stage-29最新候选：manifest外3359725字节，156项完整通过。四类普通/精英共享死亡残骸预算，三种新增原创死亡候选；手机双档/桌面夹具限定通过，未三种自然局/工具/AppID/双方设备/提交，见stages/Stage-29/TEST_REPORT.md。
+Stage-35完整目录：`build/releases/Stage-35/wechat`，manifest外3393891字节。`build/wechat`是可被后续构建覆盖的工作目录，不用作历史版本证据。构建命令`npm run build:wechat`，保留完整目录，不生成ZIP。
 
-Stage-28历史候选：manifest外3124240字节，149项完整通过。新增原创无人机击毁三段残骸，共享片数预算、弱档/暂停/清理；正常网页自然击杀原帧限定通过。未工具/AppID/双方设备/提交，见stages/Stage-28/TEST_REPORT.md。
+共享src/core规则与Canvas表现；微信入口使用wx.createCanvas、wx.createImage、触控、前后台、本地存储及本地音频。没有登录/支付/广告/后台。默认网页入口便于预览，但网页截图和VM入口测试不等于微信工具/真机运行。
 
-Stage-27历史候选：manifest外3062246字节，145项完整通过。共享Canvas首次加载画面、15秒前台超时与重试隔离；手机/桌面网页故障夹具限定通过。微信工具/AppID/双方设备/提交未验，见stages/Stage-27/TEST_REPORT.md。
+当前170项回归和打包通过，详见[Stage-35报告](stages/Stage-35/TEST_REPORT.md)。AppID、开发者工具导入、真机和账号后台要求尚未验证；不能把可构建目录称为可发布小游戏。
 
-Stage-26历史候选：manifest外3061599字节，141项完整通过。构建先清理固定输出，仅保留已有AppID；旧版夹带已删除素材的问题已通过负对照/回归修复。运行内容沿用Stage-24，未微信工具/双方真机/提交，详见stages/Stage-26/TEST_REPORT.md。
+## 尚未通过的退出条件
 
-Stage-18历史候选：build/wechat，manifest以外1937189字节。共享输入清理，微信不绑定浏览器按键；120项通过，未微信工具/AppID/真机/提交，见stages/Stage-18/TEST_REPORT.md。
+1. 正确AppID，在开发者工具导入实际目录并检查启动、按钮、触控、暂停、音频与重开。
+2. 目标Android与iPhone真机，记录系统/微信版本、尺寸、画质、帧时、发热、20分钟长局及20次重开。
+3. 首载、加载失败、纯本地资源、前后台、低内存恢复、系统音频打断和胶囊/刘海安全区。
+4. 三阶火力、三武器与两类成长目标的正式视觉/声音；强火力下数字与危险可读；至少3名新玩家试玩记录。
+5. 包体与资源/许可核验，生成素材来源、字体及源码嵌套声明审查；当期包体限制由实际开发者工具校验，不沿用未经核实的固定数字。
+6. 正式名称、图标、介绍、截图、主体/类目/隐私披露及账号后台要求核实。
+7. 用户确认具体发布材料后再提交审核；审核和线上状态必须有实际结果。
 
-Stage-17历史候选：build/wechat，manifest以外1936302字节。实际目标同步新手说明、危险上层，107项通过；未微信工具/AppID/真机/提交，见stages/Stage-17/TEST_REPORT.md。
+用户暂无Android手机，不能凭其他测试勾选设备项。不索取私钥、密码或完整账号凭据。
 
-Stage-16历史候选：build/wechat，manifest以外1935201字节。数字门升档/完整领取回执，100项通过；未微信工具/AppID/真机/提交，见stages/Stage-16/TEST_REPORT.md。
+## 历史证据
 
-Stage-15历史候选：build/wechat，manifest以外1933300字节。三态箱体/六甲板/掉落上层；93项完整与最终相关28项通过，新纹理解码2.25MiB；未微信工具/AppID/真机/提交，见stages/Stage-15/TEST_REPORT.md。
-
-Stage-14历史候选：build/wechat，manifest除外1397609字节。三阶玩家分层动作，89项完整测试含实际bundle触控观察通过；未微信工具/AppID/真机/提交，见stages/Stage-14/TEST_REPORT.md。
-
-Stage-13历史候选：build/wechat，manifest以外1396551字节。实体受击反馈共享入口，84项回归通过；微信合成支持/工具/AppID/真机待验，见stages/Stage-13/TEST_REPORT.md。
-
-Stage-12历史候选：build/wechat，manifest除外1395921字节。原创循环配乐、独立开关与节点失败清理，完整82项含实际bundle测试通过；未微信工具/AppID/真机/提交，见stages/Stage-12/TEST_REPORT.md。
-
-Stage-11历史候选：build/wechat，manifest除外688849字节。首领局部连续爆炸/分片消散共用Canvas入口；最终类型/构建与相关回归通过，微信工具/AppID/真机/提交审核未完成。范围见stages/Stage-11/TEST_REPORT.md。
-
-Stage-10历史候选：manifest以外687174字节，包含原创九帧爆炸图集。完整67项测试含实际bundle入口回归；未使用微信工具/AppID真机验证，未提交审核。截图中的移动网页和刻意渲染夹具不能作为微信真机验收，详见stages/Stage-10/TEST_REPORT.md。
-
-2026-10-11，用户已明确最终平台为微信小游戏，并追加独立Android APK。浏览器入口用于开发验证，Android与微信独立构建、分别验收。
-
-## 平台策略
-
-共享src/core纯规则；微信入口使用wx.createCanvas、wx.createImage、触控、前后台生命周期、本地存储和本地音频，不依赖DOM HUD、浏览器AudioContext、登录或后台。构建产物保留为完整目录，不生成ZIP。
-
-浏览器默认页面和canvas.html与微信共用原生Canvas渲染器；早期Phaser验证入口保留在tools/legacy-phaser.html。微信入口仍必须在开发者工具和真机单独核验，不能把浏览器截图称为微信截图。
-
-## 官方依据
-
-- [微信官方小游戏示例](https://github.com/wechat-miniprogram/minigame-demo)：示例入口game.js/game.json及官方API使用。
-- [wx.createCanvas官方文档](https://developers.weixin.qq.com/minigame/dev/api/render/canvas/wx.createCanvas.html)。文档可访问性与实际工具验证分开记录。
-
-## 上架质量退出条件
-
-1. 开发者工具导入实际构建目录，正确AppID，模拟器无运行异常，按钮/触控/暂停/音频/重开均通过。
-2. 至少一台目标Android与一台iPhone真机验证，记录系统、微信版本、分辨率、画质、帧时间、发热、20分钟长局与20次重开。没有设备不勾选。
-3. 首次启动、加载失败、断网（纯本地资源）、前后台切换、低内存恢复、系统音频打断、刘海/胶囊安全区检查通过。
-4. 三阶火力和两类成长目标具有正式视觉/声音；数字与危险在强火力场景仍可读；至少3名新玩家试玩记录。
-5. 包体与资源清单检查，源码许可、生成素材来源、字体许可、无商业游戏资产；具体平台大小限制以开发者工具当期校验为准。
-6. 正式名称、图标、介绍、截图、主体/类目/平台要求、隐私披露等按账号后台实际要求准备并核实。公开源码不代表平台审核通过。
-7. 用户确认发布材料后再提交审核；审核状态和线上验证需真实结果。
-
-当前上述微信运行/真机/审核条件均未完成。AppID、目标设备与账号后台要求尚未取得；先完成可导入的本地包和其他可独立验证工作，再集中处理实际缺口，不索取私钥或账号密码。
-
-Stage-07：onTouchCancel按changedTouches中的identifier转发，副指不会清空主指拖动；空/缺失事件仍清理。实际bundle负对照与修复后5项入口回归、6项共享输入回归通过；构建537112字节。此为VM事件模拟，未验证真实系统三指/截图/电话手势。文档入口本轮访问失败，不据此宣称已在微信工具执行。
-
-Stage-08：音频API异常在平台适配器中隔离，失效池清理并候选5秒退避；stop/destroy异常不打断暂停，旧节点迟到错误不清新池。创建/配置/播放/停止的旧包负对照均失败，修复后16项相关回归通过，微信候选537403字节。只证明VM故障注入，不证明声音质量、真实音频焦点、电话/系统打断或资源在设备上已释放。
+Stage-07副指取消、Stage-08音频异常隔离、Stage-12配乐、Stage-26构建目录清理、Stage-32武器与章节、Stage-33光效、Stage-34正常浏览器成长和Stage-35诊断优化，各自记录保留在docs/stages。旧候选仍保留，历史报告的“当前”只代表当时。

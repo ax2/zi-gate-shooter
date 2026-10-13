@@ -1,89 +1,32 @@
-# Android发布准备
+# Android独立APK交付与验收
 
-Stage-33当前候选：7821741字节，光电粒子表现；构建及包核验通过，尚未原生/设备/渠道验收。见stages/Stage-33/TEST_REPORT.md。
+更新时间：2026-10-13。用户最新确认：先提供独立APK，商店稍后确定；微信小游戏目标不变。商店/AAB/渠道材料不作为当前APK交付的先决条件，但不因此降低原生运行、性能、原创素材与体验验收要求。
 
-Stage-32当前候选：build/releases/Stage-32/android/zi-gate-shooter-debug.apk，7821741字节。三武器与三章波次，169项测试通过，构建及包核验通过；未原生安装/真机/正式签名/渠道验收。详见stages/Stage-32/TEST_REPORT.md。
+## 当前可用候选
 
-Stage-18历史候选：build/releases/Stage-18/android/zi-gate-shooter-debug.apk，6607376字节。共享输入清理与浏览器键盘，120项通过；31秒构建、lint0错误/5警告、资源/许可/权限/签名核验。未原生运行/硬件键盘/正式签名/提交，见stages/Stage-18/TEST_REPORT.md。
+Stage-35：`build/releases/Stage-35/android/zi-gate-shooter-debug.apk`，7821741字节，SHA256 `A548EE58CF1EB3A55AC6979824CF6D9363F73271DB230B02A833A903F56322B5`。这是开发签名的内部测试APK，尚未在Android设备上完成安装运行；不是正式发行签收。
 
-Stage-17历史候选：build/releases/Stage-17/android/zi-gate-shooter-debug.apk，6607376字节。实际目标同步新手提示，107项通过；37秒构建、lint0错误/5警告、资源/许可/权限/签名核验。未原生运行/正式签名/提交，见stages/Stage-17/TEST_REPORT.md。
+已验证：170项共享/微信模拟回归、Android编译及lint、开发签名、33网页文件哈希、16原生素材像素、debug/release各50运行依赖坐标与最终权限。只包含本地资源，无开发服务器配置。具体证据见[Stage-35](stages/Stage-35/TEST_REPORT.md)。
 
-Stage-16历史候选：build/releases/Stage-16/android/zi-gate-shooter-debug.apk，6607376字节。数字门反馈/混合奖励文案，100项通过；41秒构建、lint0错误/5警告、资源/许可/权限/签名核验。未原生运行/正式签名/提交，见stages/Stage-16/TEST_REPORT.md。
+## 复现
 
-Stage-15历史候选：build/releases/Stage-15/android/zi-gate-shooter-debug.apk，6607376字节。三态箱体/甲板、装备露出；完整93项与最终相关28项通过，最终构建31秒、lint0错误/5警告、18网页文件/资源/许可/权限/签名核验；未原生运行/正式签名/提交，见stages/Stage-15/TEST_REPORT.md。
+依赖版本以package-lock.json为准，Android配置以android工程为准。当前JDK21、SDK36、Build Tools36、Gradle8.14.3。本地运行`npm ci`、`npm run build:android`，默认阶段由tools/build-android.ps1定义；可显式传入-Stage。构建执行许可检查、assembleDebug/lintDebug、签名与实际APK内容核验并输出完整APK和校验记录。不要把源码manifest或构建成功当作设备测试。
 
-Stage-14历史候选：build/releases/Stage-14/android/zi-gate-shooter-debug.apk，5850948字节。玩家分层动作/暂停冻结，89项通过，最终构建33秒、lint0错误/5警告，资源/许可/权限/签名核验通过；未原生运行/正式签名/提交，见stages/Stage-14/TEST_REPORT.md。
+现有两项NativeFlowTest需要已启动的隔离模拟器：`powershell -File tools/test-android-native.ps1 -Serial emulator-5580 -Stage Stage-36`。脚本会安装测试APK并执行系统返回、许可保局、Activity恢复测试。此前只编译过测试，未运行通过；设备必须先确认boot_completed=1。
 
-Stage-13历史候选：build/releases/Stage-13/android/zi-gate-shooter-debug.apk，5850513字节。实体受击反馈；84项通过、lint0错误/5警告、资源/许可/权限/签名核验通过。未设备运行/正式签名/上架，见stages/Stage-13/TEST_REPORT.md。
+候选applicationId为com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36。这些是编译设置，不证明Android7起设备均可运行。正式包名、名称、发行签名及升级策略仍需确认；不向用户索取私钥、密码或完整凭据。
 
-Stage-12历史候选：build/releases/Stage-12/android/zi-gate-shooter-debug.apk，5850339字节。原创循环配乐与独立开关；完整82项通过，lint0错误/5警告，17网页文件/16原生图/许可/权限/签名核验通过。原生测试仅编译，用户暂无Android手机；未设备运行/正式签名/提交，见stages/Stage-12/TEST_REPORT.md。
+## 必须补齐的质量证据
 
-Stage-11历史候选：build/releases/Stage-11/android/zi-gate-shooter-debug.apk，5144007字节。首领连续局部爆炸/分片消散，默认HUD取景与胜利通知调整；构建/签名/资源/许可/权限通过。未原生运行/正式签名/提交审核，详见stages/Stage-11/TEST_REPORT.md。
+- 真正Android安装/冷启动/纯本地资源运行，返回、暂停、恢复、系统打断、进程重启、损坏存档和音频恢复。
+- 低端及主流设备帧时、内存、发热、触控延迟与30分钟正常长局；网页/全知操作者/模拟器不能代替真机表现。
+- 刘海、挖孔、手势区域、大屏及系统窗口行为下的画面与输入。
+- 真人趣味、三阶/三武器视觉与声音、正式名称/原创图标签收；现有机械资产与光效均为候选。
+- 可持续升级的用户控制发行签名及备份。当前开发签名只用于测试，尚未签发正式版本。
+- 许可原文与NOTICE已随包，源码嵌套第三方声明人工审查仍未完成；不宣称法律或商店审核通过。
 
-Stage-10历史候选：build/releases/Stage-10/android/zi-gate-shooter-debug.apk，5143282字节。原创九帧爆炸已入包，16网页文件/16原生图像/许可/权限/签名核验通过，详见stages/Stage-10/TEST_REPORT.md。用户暂时没有Android手机，原生运行与性能验收仍未完成；debug包不能用于正式上架。
+用户已说明暂无Android手机，不重复索要。Stage-36复核专用模拟器，结果以[该阶段日志](stages/Stage-36/WORK_LOG.md)为准。没有实际安装/运行记录之前，安装验收保持未完成。
 
-2026-10-11。用户已确认独立Android APK与微信小游戏并行。当前为内部验证候选，不是上架包。
+## 历史证据
 
-## 实现与复现
-
-共享纯TypeScript规则、Canvas画面、原创候选素材。Capacitor core/android 8.5.3，App 8.1.2，CLI 8.4.3锁定。CLI最初8.5.3引入xcode/uuid开发依赖审计问题，使用同主版本8.4.3后npm安装审计为0漏洞；这不代表Android依赖或应用已经完成安全审查。
-
-本机JDK21、Android SDK36、Build Tools36，Gradle8.14.3。运行 `npm ci`、`npm run build:android`。SDK路径写入忽略的local.properties，不提交机器路径；代理只在构建子进程临时配置，不记录凭据。资源全部打入APK，不使用开发服务器。正式渠道和最低验收设备仍待确定。
-
-构建脚本执行实际运行图许可核验、assembleDebug、lintDebug、apksigner校验，再保存完整APK与SHA256记录至build/releases/Stage-18/android。脚本支持-Stage参数（格式Stage-数字两位），当前默认Stage-18；历史目录保留。当前applicationId为候选com.ax2.zigateshooter，versionName0.1.0/versionCode1，minSdk24/targetSdk36只是编译配置，不等于Android7起所有设备均已验证。
-
-## 交互与权限
-
-竖屏战斗区域保持9:16，宽屏居中留边。画布尺寸与触控都按实际安全区域计算。Android返回键在战斗时暂停，在结果页返回菜单，在菜单退出；暂停中再次返回不自动丢弃当前局。后台/失焦暂停、停止声音，回前台仍需手动继续。上述有共享层单测，原生插件、系统栏与触控必须真机复核。
-
-源manifest未声明网络或敏感权限，未接入登录、广告、支付、后台、云存档。必须继续检查合并后的APKmanifest，不能只凭源码认定最终权限。最高分和设置只保存在本地；不保存未结束局。
-
-## 发布退出条件（均需实际证据）
-
-Stage-09补Web Audio异常隔离、节点主动断开和上下文恢复；完整64项测试及浏览器实际产物故障对照通过，新APK4993396字节。网页结果不证明Android系统音频打断、音量、手机资源释放或性能；原生验证仍缺。
-
-Stage-06新增原生NativeFlowTest：系统返回、许可保局和Activity后台恢复；测试APK已编译，尚未执行。可用设备连接后运行`android/gradlew.bat :app:connectedDebugAndroidTest`，报告见stages/Stage-06/TEST_REPORT.md。不可用测试编译代替原生功能验收。
-
-Stage-06环境：官方emulator37.2.12与API35 AOSP镜像已安装、独立AVD已建，但尚未成功启动，原生测试未执行，停滞实例已终止。网页改Chrome60语法目标并补ResizeObserver/env/dvh回退，旧包缺失API负对照已复现，新包当前浏览器回退通过；minSdk24不能用于宣称Android7普遍可运行。最新候选build/releases/Stage-06/android为4993210字节，默认构建/核验输出已移至Stage-06，历史目录保留。
-
-- 可重复构建、lint无错误、签名验证、最终权限与离线资源清单核验。
-- 真机安装/启动/离线、返回/暂停/恢复、电话或系统打断、进程重启、存档损坏与音频恢复。
-- 低端和主流Android设备的帧时、内存、温度、触控延迟、30分钟正常长局；不能用桌面或免伤压力模拟代替。
-- 刘海/挖孔/手势区域、大屏/分屏/Android16旋转行为的实际画面与输入检查。
-- 原创启动图标、启动页、名称与完整视觉/音频签收。当前已替换为原创机甲候选与系统SplashScreen，五档密度和APK像素一致性已检查；真机过渡与品牌签收未完成。
-- Android传递运行依赖工程清单已完成：debug/release各50坐标、51份上游POM、二进制与原文哈希，APK中包含完整许可/NOTICE。设置已增加离线许可查看，浏览器实际Android网页产物验证通过；详见Stage-05报告。源码嵌套第三方声明人工审查、旧WebView/原生许可界面验证仍待完成，不能据此宣称法律/商店审核通过。
-- 用户持有的正式签名及备份、正式包名确认、选定渠道的资料/隐私说明与审核规则核查，必要时补AAB；尚未签名发布或提交商店。
-
-参考：[Capacitor](https://capacitorjs.com/docs)、[App API](https://capacitorjs.com/docs/apis/app)。
-
-## 最新启动资产修订
-
-启动候选与检查见stages/Stage-02/LAUNCHER_VALIDATION.md。旧包保留build/releases/Stage-02-d6002e7/android、build/releases/Stage-02/android、build/releases/Stage-03/android、build/releases/Stage-04/android与原用户输出；最新许可查看构建位于build/releases/Stage-05/android，见Stage-05/TEST_REPORT.md。npm run assets:launcher可重复导出既有原创源图，不会重新调用生成服务。
-
-系统栏固定SystemBars DARK（浅色文字/图标）与深色窗口底，保留css安全区和cover初始提示。启动Activity在super.onCreate之前安装AndroidX SplashScreen，统一深色背景、静态机甲标记和结束主题，无额外Activity、人工延时或启动网络请求。Android12+显式排除cloud与device-transfer全部本地数据域，旧系统禁用fullBackupContent；真实系统行为待设备检查。
-
-依据：[Android启动迁移](https://developer.android.com/develop/ui/views/launch/splash-screen/migrate)、[自适应图标](https://developer.android.com/develop/ui/compose/system/icon_design_adaptive)、[系统备份规则](https://developer.android.com/identity/data/autobackup)。
-
-## 当前设备条件（2026-10-11用户确认）
-
-暂时没有可用Android手机。保留独立APK目标，继续可独立完成的工作；原生安装/Instrumentation/触控手感/帧时/温度/内存/后台恢复均不能签收。此前模拟器未成功启动，也没有模拟器运行通过证据。待可用设备后再执行原生验收，现有网页检查与构建不替代这些条件。
-
-## Stage-20当前候选
-
-新增无人机三姿态，当前默认构建输出build/releases/Stage-20/android；APK6607455字节，签名/19网页文件/16原生RGBA/50+50许可坐标核验通过，app lint0错误5警告。共享层124项通过与正常网页开局、暂停证据不能替代Android安装运行/Instrumentation/触控/性能/热/后台恢复；用户暂无手机，原生验收仍缺。
-
-## Stage-21当前候选
-
-新增冲锋机三状态。默认构建输出build/releases/Stage-21/android，开发签名APK6765911字节，签名/20网页SHA/16原生RGBA/50+50许可/权限核验通过，app lint0错误5警告；128项共享/微信bundle回归通过。正常浏览器多轮和第三方原生声明清单不能替代设备安装/Instrumentation/触控/热/后台与源码嵌套许可人工审查；用户暂无Android手机，正式音画/签名/渠道仍待验。
-
-## Stage-22当前候选
-
-默认build/releases/Stage-22/android，开发签名APK7024469字节，签名/21网页SHA/16原生RGBA/50+50许可/权限通过。132项回归与浏览器不替代设备安装运行/Instrumentation/性能/热/后台恢复。用户暂无Android手机；品牌/正式签名/渠道仍未验收。
-
-## Stage-23当前候选
-
-默认build/releases/Stage-23/android，开发签名APK7279161字节，签名/22网页SHA/16原生RGBA/50+50许可/最终权限通过，app lint0错误5警告。136项回归与正常网页不替代原生安装、Instrumentation、触控音频/热/内存/后台恢复。用户暂无Android手机；正式音画/签名/渠道仍待验。
-
-## Stage-24当前候选
-
-默认build/releases/Stage-24/android，开发签名APK7585619字节，签名/23网页SHA/16原生RGBA/50+50许可/最终权限通过，app lint0错误5警告。138项共享回归与浏览器正常首领不替代原生安装/Instrumentation/触控音频/后台恢复/内存/热/性能；用户暂无Android手机，正式音画/签名/渠道仍待验。
+Stage-02启动资产、Stage-04运行依赖清单、Stage-05离线许可页面、Stage-06原生测试编译、Stage-25模拟器启动失败、Stage-33光效、Stage-34真实浏览器199.8秒、Stage-35诊断优化分别保留于docs/stages。历史候选与失败不覆盖，不再将旧阶段路径写成当前默认产物。
