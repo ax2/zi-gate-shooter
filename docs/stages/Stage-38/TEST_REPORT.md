@@ -17,3 +17,10 @@ node --check通过；真实UI开始→9.05秒手动停止，确认runtimeNotice=
 
 ## 结论
 已验证两次首领循环及暂停清理，完整20分钟仍未通过。微信工具/双方真机、Android原生运行与发行签名、真人体验和正式音画/发布验收仍缺，整体目标未完成。
+
+## 带诊断的后续运行
+2026-10-13：新标签页14、固定1280×720/DPR1.25、标准特效，正常T1/3HP开始。229.800000秒触发unexpected-paused，54501回调，2首领/第3轮，HP3/得分3100/装备9/门10。
+首次取得明确暂停提示“运行中断，已暂停”；runtimeHidden=false、documentHidden=false、documentFocused=true，最大回调间隔484ms，符合生产代码elapsed>0.25秒的保护条件。不能将此称为失焦，也不能据此认定底层调度/GC/系统负载根因。最近36000次帧内工作统计p95 0.5ms/p99 0.7ms、超过33ms为0；该测量不覆盖afterFrame采样工作，不能排除测量开销。未改变保护或自动恢复以凑满20分钟。
+峰值粒子121、爆炸4、音效4、配乐元素1；暂停后音效0/配乐paused，无资源越过已有预算的证据。完整diagnosed-interruption.json保留。20分钟仍未完成。
+
+用户反馈没有看到安装确认窗口。因此0x800704c7只记录为系统返回“操作被用户取消”，不能推断用户主动取消。无残留winget/安装进程；原始196841032字节安装器仍在，Authenticode签名Valid、签名主体Tencent Technology (Shenzhen) Company Limited，SHA-256再次与winget匹配。未重复静默安装，需要可见窗口完成安装。
