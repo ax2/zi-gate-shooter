@@ -114,7 +114,7 @@ it('100 seeds x 3 threat fixtures replay predicted escape paths without kills or
   expect(moved).toBeGreaterThan(100);
 }, 20000);
 
-it.each([1, 2, 5])('100 seeds of round %i retain a no-kill escape through boss entry', round => {
+it.each([1, 2, 3, 5])('100 seeds of round %i retain a no-kill escape through boss entry', round => {
   for (let seed = 1; seed <= 100; seed++) {
     // Later rounds are explicit isolated replay fixtures at T1/zero bonus, not
     // a claim that a no-kill player legitimately beat the previous boss.

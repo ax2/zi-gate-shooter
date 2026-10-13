@@ -3,10 +3,12 @@ import type { EnemyKind } from './config';
 import { sweep } from './collision';
 import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate } from './rewards';
 import type { Growth } from './rewards';
-import { timeline } from './director';
+import { timeline, sectorIndex, sectorNames } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
 import { advanceBody } from './behavior';
+import { weaponProfile, weaponNames } from './weapons';
+import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
@@ -15,18 +17,21 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number;
+  weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
+  weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[];
 }
-export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number; enemyKind?: EnemyKind }
+export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number; enemyKind?: EnemyKind; equipmentStage?: number }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
+  weaponKind: WeaponKind = 'pulse';
   player = { x: 360, px: 360, hp: 3, invulnerable: 0 };
   bodies: Body[] = [];
   bullets: Bullet[] = [];
@@ -67,7 +72,7 @@ export class World {
       height: enemy?.height ?? (kind === 'gate' ? 138 : kind === 'pickup' ? 54 : 110),
       hp, maxHp: hp, speed: enemy ? enemy.speed * Math.min(1.15, 1 + (this.round - 1) * 0.05) : this.scrollSpeed,
       active: true, age: 0, timer: kind === 'boss' ? 2.8 : 2.4, warning: 0, hit: 0,
-      energy: 0, row: 0, stage, rewardKind: this.growth.bonus >= 100 ? 'energy' : 'power', attack: 0, lane: 360, attackCycle: 0, burst: 0,
+      energy: 0, row: 0, stage, rewardKind: this.growth.bonus >= 100 ? 'energy' : 'power', attack: 0, lane: kind === 'boss' ? 360 : x, attackCycle: 0, burst: 0,
     };
     this.bodies.push(body); return body;
   }
@@ -97,7 +102,13 @@ export class World {
       }
       while (this.scheduleIndex < this.scheduled.length && this.scheduled[this.scheduleIndex].at <= this.roundTime && this.roundTime >= this.nextSpawnRetry) {
         const s = this.scheduled[this.scheduleIndex++];
-        if (s.kind === 'gates') {
+        if (s.kind === 'armory') {
+          if (!this.rewardSlots(2)) { this.scheduleIndex--; break; }
+          const row = this.nextRow++;
+          const choices: WeaponKind[][] = [['scatter', 'pierce'], ['pulse', 'pierce'], ['pulse', 'scatter']];
+          const crates = [222, 498].map((x, i) => { const b = this.spawn('crate', x, 180, Math.max(2, this.growth.stage)); b.row = row; b.weaponKind = choices[sectorIndex(this.round)][i]; return b; });
+          if (!this.admit(crates[0])) { for (const b of crates) b.active = false; this.scheduleIndex--; break; }
+        } else if (s.kind === 'gates') {
           if (this.growth.overload > 0 && this.growth.energy >= 100) {
             if (!this.admit(this.spawn('drone', 360))) { this.scheduleIndex--; break; }
           }
@@ -113,6 +124,7 @@ export class World {
           const enemyCount = this.bodies.filter(b => b.active && b.kind in C.enemies).length;
           if (enemyCount >= C.limits.enemies) { this.scheduleIndex--; break; }
           const candidate = this.spawn(s.kind, s.x);
+          candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
@@ -121,7 +133,8 @@ export class World {
       if (this.roundTime >= 72 && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {
         this.phase = 'boss-entry'; this.phaseTime = 0;
         const boss = this.spawn('boss', 360, -150); boss.speed = 0;
-        this.emit('alert', 360, 360, '重装首领 · 警戒');
+        boss.bossVariant = sectorIndex(this.round); boss.attackCycle = boss.bossVariant;
+        this.emit('alert', 360, 360, `${sectorNames[sectorIndex(this.round)]} · 首领警戒`);
       }
     } else if (this.phase === 'boss-entry') {
       this.phaseTime += dt;
@@ -135,7 +148,7 @@ export class World {
         this.round++; this.roundTime = 0; this.phaseTime = 0; this.phase = 'running';
         this.scheduleIndex = 0; this.secondChance = this.growth.stage > 1; this.nextSpawnRetry = 0;
         this.scheduled = timeline(this.round, this.seed + this.round * 719);
-        this.emit('round', 360, 400, `第 ${this.round} 轮 · 继续突围`);
+        this.emit('round', 360, 400, `第 ${this.round} 轮 · ${sectorNames[sectorIndex(this.round)]}`);
       }
     }
   }
@@ -143,14 +156,14 @@ export class World {
   private shoot(dt: number) {
     this.fireTimer -= dt;
     if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimer = 0; return; }
-    const w = C.weapon[this.growth.stage - 1];
+    const w = weaponProfile(this.weaponKind, this.growth.stage);
     while (this.fireTimer <= 1e-9) {
       if (this.bullets.filter(b => b.active && !b.hostile).length + w.offsets.length > C.limits.bullets) throw new Error('Player bullet budget exceeded');
       for (let i = 0; i < w.offsets.length; i++) {
         const x = this.player.x + w.offsets[i], y = C.playerY - 72;
-        this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx: 0, vy: -C.bulletSpeed,
+        this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx: w.vx[i], vy: -C.bulletSpeed,
           damage: w.damage[i] * (1 + this.growth.bonus / 100) * (this.growth.overload > 0 ? 1.35 : 1),
-          age: 0, active: true, hostile: false });
+          age: 0, active: true, hostile: false, weaponKind: this.weaponKind, remainingTargets: w.targets, hitBodies: [] });
         this.shots++;
       }
       this.emit('fire', this.player.x, C.playerY - 70, undefined, this.growth.stage);
@@ -206,8 +219,11 @@ export class World {
           body.px + (body.x - body.px) * fraction, body.py + (body.y - body.py) * fraction,
           body.width / 2 + 3, body.height / 2 + 8);
         add(contact === null ? null : contact * fraction, 0, bullet.id, () => {
-          if (!bullet.active || !body.active) return;
-          bullet.active = false; this.hit(body, bullet.damage);
+          if (!bullet.active || !body.active || bullet.hitBodies?.includes(body.id)) return;
+          bullet.hitBodies?.push(body.id);
+          bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
+          if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate') bullet.active = false;
+          this.hit(body, bullet.damage);
         });
       }
     }
@@ -226,9 +242,13 @@ export class World {
         if (t >= 0 && t <= 1) add(t, 2, b.id, () => {
           if (!b.active || this.player.hp <= 0) return;
           b.active = false; this.pickups++;
+          const previousWeapon = this.weaponKind;
+          if (b.weaponKind) this.weaponKind = b.weaponKind;
+          if (b.row) for (const alternative of this.bodies) if (alternative.row === b.row) alternative.active = false;
           const result = grantEquipment(this.growth, b.stage);
           this.maxStage = Math.max(this.maxStage, this.growth.stage);
           this.emit(result.upgraded ? 'upgrade' : 'pickup', this.player.x, C.playerY, result.upgraded ? `T${b.stage} 火力进化` : '超载充能 +30', b.stage);
+          if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY, `${weaponNames[this.weaponKind]} · T${this.growth.stage}`);
           if (result.activated) this.emit('overload', this.player.x, C.playerY, '超载启动');
         });
       } else {
@@ -289,8 +309,9 @@ export class World {
     if (b.hp > 0) return;
     b.active = false;
     if (b.kind === 'crate') {
-      this.cratesBroken++; this.spawn('pickup', b.x, b.y, b.stage);
-      this.emit('crate-break', b.x, b.y, '靠近领取', 110);
+      this.cratesBroken++;
+      const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;
+      this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
       this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind });

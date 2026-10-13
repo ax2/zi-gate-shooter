@@ -1,14 +1,15 @@
 import { C, clamp } from '../../src/core/config';
 import { dangerTimeline, safeRoute } from '../../src/core/reachability';
 import type { World } from '../../src/core/world';
+import type { WeaponKind } from '../../src/core/weapons';
 
 /** Test-only omniscient operator. Never writes World state or suppresses effects.
  * Forecasting is a control aid, not the acceptance oracle: actual World contacts,
  * rewards and phase transitions supply all measured outcomes. */
-export function progressionTarget(world: World) {
+export function progressionTarget(world: World, preferred?: WeaponKind) {
   const x = world.player.x;
   const bodies = world.bodies.filter(b => b.active);
-  const equipment = bodies.filter(b => b.kind === 'pickup' || b.kind === 'crate')
+  const equipment = bodies.filter(b => (b.kind === 'pickup' || b.kind === 'crate') && (!preferred || !b.weaponKind || b.weaponKind === preferred))
     .sort((a, b) => Number(b.stage > world.growth.stage) - Number(a.stage > world.growth.stage) || b.y - a.y)[0];
   const gate = bodies.filter(b => b.kind === 'gate').sort((a, b) => b.y - a.y || Math.abs(a.x - x) - Math.abs(b.x - x))[0];
   const enemy = bodies.filter(b => b.kind in C.enemies).sort((a, b) => b.y - a.y)[0];

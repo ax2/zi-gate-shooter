@@ -1,5 +1,7 @@
 # 微信小游戏发布准备与验收
 
+Stage-32最新候选：manifest外3391697字节/31文件，169项完整通过。三种武器、成对箱选择、三章波次与新行为/预警已接入；原生Canvas与网页默认入口一致，旧Phaser入口移至tools/legacy-phaser.html保留。未微信开发者工具/AppID/双方设备/提交，详见stages/Stage-32。
+
 Stage-29最新候选：manifest外3359725字节，156项完整通过。四类普通/精英共享死亡残骸预算，三种新增原创死亡候选；手机双档/桌面夹具限定通过，未三种自然局/工具/AppID/双方设备/提交，见stages/Stage-29/TEST_REPORT.md。
 
 Stage-28历史候选：manifest外3124240字节，149项完整通过。新增原创无人机击毁三段残骸，共享片数预算、弱档/暂停/清理；正常网页自然击杀原帧限定通过。未工具/AppID/双方设备/提交，见stages/Stage-28/TEST_REPORT.md。
@@ -32,7 +34,7 @@ Stage-10历史候选：manifest以外687174字节，包含原创九帧爆炸图�
 
 共享src/core纯规则；微信入口使用wx.createCanvas、wx.createImage、触控、前后台生命周期、本地存储和本地音频，不依赖DOM HUD、浏览器AudioContext、登录或后台。构建产物保留为完整目录，不生成ZIP。
 
-浏览器canvas.html与微信共用原生Canvas渲染器，用于快速交互与视觉验证；根页面保留早期Phaser验证入口。微信入口仍必须在开发者工具和真机单独核验，不能把浏览器截图称为微信截图。
+浏览器默认页面和canvas.html与微信共用原生Canvas渲染器；早期Phaser验证入口保留在tools/legacy-phaser.html。微信入口仍必须在开发者工具和真机单独核验，不能把浏览器截图称为微信截图。
 
 ## 官方依据
 

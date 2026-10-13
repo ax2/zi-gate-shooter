@@ -49,9 +49,9 @@ const silence = () => {
   busy.clear();
   if (failed) failAudio();
 };
-const sound = (type: string, stage: number) => {
+const sound = (type: string, stage: number, weapon = 'pulse') => {
   if (Date.now() < retryAudioAt) return;
-  const key = type === 'fire' ? `shot${stage}` : type === 'upgrade' || type === 'overload' ? 'upgrade'
+  const key = type === 'fire' ? weapon === 'pulse' ? `shot${stage}` : `shot-${weapon}${stage}` : type === 'upgrade' || type === 'overload' || type === 'weapon' ? 'upgrade'
     : type === 'kill' || type === 'crate-break' || type === 'boss-kill' ? 'blast'
       : type === 'hurt' || type === 'death' ? 'hurt' : type === 'gate-level' || type === 'gate-taken' || type === 'pickup' ? 'reward' : '';
   if (!key) return;

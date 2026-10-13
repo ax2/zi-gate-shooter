@@ -18,7 +18,7 @@
 | source/runway.png | 地表原图；exec-84347687-1d7d-4fab-9d12-09cb0fba3570.png |
 | ../public/assets/units.png / props.png | 768×512、256色运行PNG，保留alpha |
 | ../public/assets/runway.jpg | 720宽JPEG运行导出，高清源保留 |
-| ../public/assets/audio/*.wav | tools/generate-audio.mjs合成7个原创音效 |
+| ../public/assets/audio/*.wav | tools/generate-audio.mjs合成13个原创音效，Stage-32新增三阶霰射/穿甲共6个短音；音乐另行登记 |
 
 角色与道具原图角落透明度检查为0。等分格读取，文字、耐久、危险与奖励由程序绘制。使用设备系统字体，无外部字体文件。循环纹理接缝仍需动态专项验收。
 

@@ -180,7 +180,10 @@ it('guides an actual first crate, pickup, single gate and paired row without cha
     for (const call of f.calls) if (call.kind === 'fillText') seen.add(call.args[0]);
     if (f.runtime.world.pickups > 0) expect(f.calls.some(c => c.args[0] === '装备已掉落，移到它下方')).toBe(false);
   }
-  expect(reference.pickups).toBe(1); expect(reference.gatesTaken).toBe(2);
+  expect(reference.pickups).toBe(2); expect(reference.gatesTaken).toBe(2);
+  expect(reference.weaponKind).toBe('scatter');
+  expect(seen).toContain('选择武器：对准其中一箱');
+  expect(seen).toContain('靠近领取所选武器');
   expect(seen).toContain('对准装备箱持续射击');
   expect(seen).toContain('装备已掉落，移到它下方');
   expect(seen).toContain('持续射击，把门的奖励打高');

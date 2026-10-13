@@ -19,13 +19,16 @@ import { eliteFrame } from './elite-motion';
 import { bossFrame } from './boss-motion';
 import { EnemyWreck, isWreckKind } from './enemy-wreck';
 import type { Save } from '../ui/storage';
+import { weaponProfile, weaponNames, weaponColors } from '../core/weapons';
+import type { WeaponKind } from '../core/weapons';
+import { sectorIndex, sectorNames } from '../core/director';
 
 export interface Platform {
   canvas: HTMLCanvasElement;
   image: (src: string) => Promise<HTMLImageElement>;
   read: () => Save;
   write: (save: Save) => void;
-  sound: (type: string, stage: number) => void;
+  sound: (type: string, stage: number, weapon?: WeaponKind) => void;
   silence: () => void;
   music?: (playing: boolean) => void;
   now: () => number;
@@ -228,9 +231,9 @@ export class CanvasRuntime {
   }
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
-    if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage);
+    if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, this.world.weaponKind);
     if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 48; this.recoilUntil = this.world.time + 0.048; return; }
-    if (e.type === 'upgrade' || e.type === 'overload') this.upgradeUntil = this.platform.now() + 450;
+    if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
@@ -379,8 +382,10 @@ export class CanvasRuntime {
       }
     }
     for (const b of w.bullets.filter(b => !b.hostile)) {
-      c.strokeStyle = '#62dcff44'; c.lineWidth = 10; c.beginPath(); c.moveTo(b.x, b.y + 22); c.lineTo(b.x, b.y - 10); c.stroke();
-      c.strokeStyle = w.growth.overload > 0 ? '#ffcd76' : '#73e3ff'; c.lineWidth = 4; c.stroke();
+      const kind = b.weaponKind ?? 'pulse', tail = kind === 'pierce' ? 36 : kind === 'scatter' ? 12 : 22;
+      c.strokeStyle = `${weaponColors[kind]}44`; c.lineWidth = kind === 'pierce' ? 13 : 9;
+      c.beginPath(); c.moveTo(b.x - b.vx / C.bulletSpeed * tail, b.y + tail); c.lineTo(b.x + b.vx / C.bulletSpeed * 10, b.y - 10); c.stroke();
+      c.strokeStyle = w.growth.overload > 0 ? '#ffcd76' : weaponColors[kind]; c.lineWidth = kind === 'pierce' ? 6 : kind === 'scatter' ? 3 : 4; c.stroke();
       c.strokeStyle = '#e6fcff'; c.lineWidth = 1.5; c.stroke();
     }
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
@@ -403,9 +408,9 @@ export class CanvasRuntime {
     }
     c.restore();
     if (this.mode === 'playing' && w.player.hp > 0 && this.platform.now() < this.muzzleUntil) {
-      for (const offset of C.weapon[w.growth.stage - 1].offsets) {
+      for (const offset of weaponProfile(w.weaponKind, w.growth.stage).offsets) {
         const x = w.player.x + offset, y = C.playerY - 78;
-        c.fillStyle = '#62dcff77'; c.beginPath(); c.ellipse(x, y, 10, 20, 0, 0, Math.PI * 2); c.fill();
+        c.fillStyle = `${weaponColors[w.weaponKind]}77`; c.beginPath(); c.ellipse(x, y, 10, 20, 0, 0, Math.PI * 2); c.fill();
         c.fillStyle = '#eaffff'; c.beginPath(); c.ellipse(x, y - 3, 3, 10, 0, 0, Math.PI * 2); c.fill();
       }
     }
@@ -448,21 +453,41 @@ export class CanvasRuntime {
     for (const b of w.bodies) {
       if (b.warning > 0) {
         const lanes = b.kind === 'boss' ? bossWarningLanes(b) : [b.x];
-        if (b.kind === 'boss' || b.kind === 'charger') for (const x of lanes) {
+        if (b.kind === 'charger' && b.pattern === 'flank') {
+          const startY = b.y + Math.max(0, C.chargerBehavior.dashAge - b.age) * b.speed;
+          const timeToLane = Math.abs(b.lane - b.x) / 240;
+          const kneeY = startY + timeToLane * C.chargerBehavior.dashSpeed;
+          const endY = Math.min(C.playerY + 50, kneeY);
+          const endX = b.x + (b.lane - b.x) * Math.min(1, Math.max(0, (endY - startY) / Math.max(1, kneeY - startY)));
+          c.save(); c.strokeStyle = '#ff775633'; c.lineWidth = 62; c.beginPath(); c.moveTo(b.x, b.y + 30); c.lineTo(b.x, startY); c.lineTo(endX, endY); if (kneeY < C.playerY) c.lineTo(b.lane, C.playerY + 50); c.stroke();
+          c.strokeStyle = '#ffb18c'; c.lineWidth = 2; c.stroke(); c.restore();
+        } else if (b.pattern === 'fan') {
+          const originY = b.y + b.speed * Math.max(0, b.timer) + b.height / 2;
+          c.save(); c.strokeStyle = '#ffb18caa'; c.lineWidth = 2;
+          for (const vx of [-100, 0, 100]) { c.beginPath(); c.moveTo(b.x, originY); c.lineTo(b.x + vx * (C.playerY - originY) / 280, C.playerY); c.stroke(); }
+          c.restore();
+        } else if (b.kind === 'boss' || b.kind === 'charger') for (const x of lanes) {
           this.rect(x - 36, b.y + 60, 72, 1110 - b.y, '#ff775620');
           c.strokeStyle = '#ff986eaa'; c.lineWidth = 2; c.strokeRect(x - 36, b.y + 60, 72, 1110 - b.y);
           if (b.kind === 'boss') {
-            const label = b.attack ? x === 360 ? '第2拍' : '第1拍' : '锁定';
+            const label = b.attack === 2 ? '齐射' : b.attack ? x === 360 ? '第2拍' : '第1拍' : '锁定';
             this.rect(x - 35, b.y + 132, 70, 38, '#241c1eef');
             this.text(label, x, b.y + 151, 24, '#ffe1c8', 'center', true);
           }
         } else this.rect(b.x - 5, b.y + b.height / 2, 10, 14, '#ffe1a2');
       }
       if (b.kind === 'crate') {
-        this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
-        this.text(`T${b.stage} ${w.growth.stage >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
-        this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
-      } else if (b.kind === 'pickup') this.text(`拾取 T${b.stage}`, b.x, b.y - 50, 28, '#ffe7b1', 'center', true);
+        if (b.weaponKind) {
+          this.rect(b.x - 118, b.y - 132, 236, 74, '#0b1723ef');
+          this.text(`${weaponNames[b.weaponKind]} T${b.stage}`, b.x, b.y - 109, 28, weaponColors[b.weaponKind], 'center', true);
+          this.text(`同排择一 · 耐久${Math.ceil(b.hp)}`, b.x, b.y - 80, 24, '#fff0c8');
+          this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
+        } else {
+          this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
+          this.text(`T${b.stage} ${w.growth.stage >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
+          this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
+        }
+      } else if (b.kind === 'pickup') this.text(b.weaponKind ? `领取${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, 28, '#ffe7b1', 'center', true);
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
@@ -510,9 +535,9 @@ export class CanvasRuntime {
     this.text('◈ '.repeat(w.player.hp) + '◇ '.repeat(3 - w.player.hp), 430, y + 35, 34, '#82deff');
     this.rect(624, y + 2, 64, 64, '#1a2e3e'); this.text('Ⅱ', 656, y + 34, 36);
     this.buttons.push({ x: 624, y: y + 2, w: 64, h: 64, label: '暂停', action: 'pause' });
-    this.text(`T${w.growth.stage} ${['单管', '双管', '重炮'][w.growth.stage - 1]}`, 30, y + 88, 26, '#74dcff', 'left', true);
+    this.text(`T${w.growth.stage} ${weaponNames[w.weaponKind]}`, 30, y + 88, 26, weaponColors[w.weaponKind], 'left', true);
     this.text(w.growth.overload > 0 ? `超载 ${w.growth.overload.toFixed(1)}s` : `火力 +${w.growth.bonus}%`, 280, y + 88, 26, '#74dcff', 'left', true);
-    this.text(`第${w.round}轮`, 686, y + 88, 23, '#b0c4d1', 'right');
+    this.text(`${w.round}轮·${sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
   }
   private drawGuide() {
@@ -563,7 +588,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase,
-      score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth },
+      score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,

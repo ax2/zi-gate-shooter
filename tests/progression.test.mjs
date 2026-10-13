@@ -4,8 +4,8 @@ import { C } from '../src/core/config';
 import { World } from '../src/core/world';
 import { progressionTarget } from './helpers/progression-driver';
 
-it.each([{ seed: 1337, openingX: 360 }, { seed: 1, openingX: C.minX }, { seed: 77, openingX: C.maxX }])(
-  '20-minute normal growth and boss cycles: seed $seed / opening $openingX', ({ seed, openingX }) => {
+it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, openingX: C.minX, preferred: 'pierce' }, { seed: 77, openingX: C.maxX, preferred: 'pulse' }])(
+  '20-minute normal growth and boss cycles: seed $seed / opening $openingX / $preferred', ({ seed, openingX, preferred }) => {
     const seconds = 1200;
     const world = new World(seed);
     const milestones = [];
@@ -16,7 +16,7 @@ it.each([{ seed: 1337, openingX: 360 }, { seed: 1, openingX: C.minX }, { seed: 7
     expect(world.growth).toEqual({ stage: 1, bonus: 0, energy: 0, overload: 0 });
     expect(world.player).toMatchObject({ x: 360, hp: 3, invulnerable: 0 });
     for (let frame = 0; frame < seconds * 60; frame++) {
-      if (frame % 6 === 0) target = frame < 60 ? openingX : progressionTarget(world);
+      if (frame % 6 === 0) target = frame < 60 ? openingX : progressionTarget(world, preferred);
       const beforeStage = world.growth.stage, beforeRound = world.round, beforePickups = world.pickups;
       world.step(C.step, target);
       for (const event of world.drainEffects()) {
@@ -25,7 +25,7 @@ it.each([{ seed: 1337, openingX: 360 }, { seed: 1, openingX: C.minX }, { seed: 7
         if (event.type === 'overload') overloads++;
         if (event.type === 'boss-kill') { bossKills++; victories.push(+world.time.toFixed(3)); }
         if (event.type === 'hurt') hurt++;
-        if (['crate-break', 'upgrade'].includes(event.type) && firstEquipmentEvents.length < 4)
+        if ((event.type === 'upgrade' || event.type === 'crate-break' && event.equipmentStage > world.growth.stage) && firstEquipmentEvents.length < 4)
           firstEquipmentEvents.push({ event: event.type, time: +world.time.toFixed(3), stage: world.growth.stage, pickups: world.pickups });
       }
       for (const body of world.bodies) if (body.kind === 'crate') crateLanes.add(body.x);
@@ -43,7 +43,7 @@ it.each([{ seed: 1337, openingX: 360 }, { seed: 1, openingX: C.minX }, { seed: 7
         || world.bullets.some(b => ![b.x, b.y, b.damage].every(Number.isFinite));
       if (world.phase === 'dead') break;
     }
-    const result = { seed, openingX, requestedSeconds: seconds, time: +world.time.toFixed(3), phase: world.phase, round: world.round,
+    const result = { seed, openingX, preferred, weaponKind: world.weaponKind, requestedSeconds: seconds, time: +world.time.toFixed(3), phase: world.phase, round: world.round,
       stage: world.growth.stage, hp: world.player.hp, bonus: world.growth.bonus, score: world.score,
       pickups: world.pickups, gates: world.gatesTaken, overloads, bossKills, hurt, hostileProjectilesObserved: hostileIds.size,
       crateLanes: [...crateLanes].sort(), victories, firstEquipmentEvents,
@@ -55,22 +55,25 @@ it.each([{ seed: 1337, openingX: 360 }, { seed: 1, openingX: C.minX }, { seed: 7
     expect(invalidState).toBe(false);
     expect(world.time).toBeCloseTo(seconds, 3);
     expect(world.growth.stage).toBe(3);
+    expect(world.weaponKind).toBe(preferred);
     expect(world.pickups).toBeGreaterThanOrEqual(2);
     expect(world.gatesTaken).toBeGreaterThanOrEqual(4);
     expect(world.growth.bonus).toBe(100);
     expect(overloads).toBeGreaterThan(0);
     expect(stages).toHaveLength(2);
-    expect(firstEquipmentEvents.map(({ event, stage, pickups }) => ({ event, stage, pickups }))).toEqual([
-      { event: 'crate-break', stage: 1, pickups: 0 }, { event: 'upgrade', stage: 2, pickups: 1 },
-      { event: 'crate-break', stage: 2, pickups: 1 }, { event: 'upgrade', stage: 3, pickups: 2 },
+    expect(firstEquipmentEvents.map(({ event, stage }) => ({ event, stage }))).toEqual([
+      { event: 'crate-break', stage: 1 }, { event: 'upgrade', stage: 2 },
+      { event: 'crate-break', stage: 2 }, { event: 'upgrade', stage: 3 },
     ]);
+    expect(firstEquipmentEvents[1].pickups).toBe(firstEquipmentEvents[0].pickups + 1);
+    expect(firstEquipmentEvents[3].pickups).toBe(firstEquipmentEvents[2].pickups + 1);
     expect(firstEquipmentEvents[0].time).toBeLessThan(firstEquipmentEvents[1].time);
     expect(firstEquipmentEvents[2].time).toBeLessThan(firstEquipmentEvents[3].time);
     expect(stages[0]).toBeLessThan(20);
     expect(stages[1]).toBeLessThan(65);
     expect(victories[0]).toBeLessThan(95);
     expect(hostileIds.size).toBeGreaterThan(0);
-    expect(crateLanes).toEqual(new Set([240, 480]));
+    expect(crateLanes).toEqual(new Set([222, 240, 480, 498]));
     expect(bossKills).toBeGreaterThanOrEqual(10);
     expect(world.round).toBe(bossKills + 1);
     expect(world.peakBodies).toBeLessThanOrEqual(C.limits.enemies + C.limits.rewards);

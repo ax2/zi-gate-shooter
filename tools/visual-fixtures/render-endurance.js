@@ -13,8 +13,8 @@ let samples = [], transitions = [], stopReason = 'not-started', selectedEffects 
 let peaks = {}, frames = 0, lastPhase = '', workTimes = new FrameWindow();
 const point = (x, y) => { const s = Math.min(innerWidth / 720, innerHeight / 1280); return [(innerWidth - 720 * s) / 2 + x * s, (innerHeight - 1280 * s) / 2 + y * s]; };
 function control() {
-  if (!held || runtime.pointer !== 731) { runtime.touchStart(731, ...point(runtime.world.player.x, 1180)); held = true; }
-  runtime.touchMove(731, ...point(progressionTarget(runtime.world), 1180));
+  if (!held || runtime.pointer !== 731) { runtime.touchStart(731, ...point(runtime.world.player.x, 900)); held = true; }
+  runtime.touchMove(731, ...point(progressionTarget(runtime.world), 900));
 }
 function metrics() {
   const state = runtime.diagnostics();
@@ -65,7 +65,7 @@ function afterFrame(workStarted) {
 }
 const runtime = new CanvasRuntime({ canvas, width: innerWidth, height: innerHeight, dpr: devicePixelRatio, menuBottom: 0,
   image: src => new Promise((resolve, reject) => { const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = `/${src}`; }),
-  read: defaults, write: () => {}, sound: (type, stage) => audio.event(type, stage), silence: () => audio.stop(),
+  read: defaults, write: () => {}, sound: (type, stage, weapon) => audio.event(type, stage, weapon), silence: () => audio.stop(),
   music: playing => music.setPlaying(playing), now: () => performance.now(),
   requestFrame: fn => requestAnimationFrame(time => {
     const workStarted = performance.now();

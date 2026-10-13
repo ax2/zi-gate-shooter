@@ -9,8 +9,8 @@ const baseline = '7ab72f93fd386c2547d8c4d634c5b7fb99b7b93b';
 for (const version of ['baseline', 'fixed']) {
 const outfile = path.resolve(`build/qa/Stage-31/inspect-${version}.mjs`);
 const plugins = version === 'baseline' ? [{ name: 'committed-baseline', setup(bundle) {
-  for (const file of ['world', 'config']) bundle.onLoad({ filter: new RegExp(`src[\\\\/]core[\\\\/]${file}\\.ts$`) }, () => ({
-    contents: execFileSync('git', ['show', `${baseline}:src/core/${file}.ts`], { encoding: 'utf8' }), loader: 'ts',
+  bundle.onLoad({ filter: /[\\/]src[\\/]core[\\/].*\.ts$/ }, ({ path: filename }) => ({
+    contents: execFileSync('git', ['show', `${baseline}:src/core/${path.basename(filename)}`], { encoding: 'utf8' }), loader: 'ts',
   }));
 } }] : [];
 await build({ stdin: { resolveDir: process.cwd(), contents: `

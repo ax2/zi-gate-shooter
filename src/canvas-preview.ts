@@ -22,7 +22,7 @@ export const runtime = new CanvasRuntime({
   image: src => new Promise((resolve, reject) => { const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = src; }),
   read: () => { try { return parseSave(JSON.parse(localStorage.getItem('zi-gate-shooter-v1') ?? 'null')); } catch { return parseSave(null); } },
   write: value => { try { localStorage.setItem('zi-gate-shooter-v1', JSON.stringify(value)); } catch { /* In-memory fallback. */ } },
-  sound: (type, stage) => audio.event(type, stage), silence: () => audio.stop(),
+  sound: (type, stage, weapon) => audio.event(type, stage, weapon), silence: () => audio.stop(),
   music: playing => music.setPlaying(playing),
   now: () => performance.now(), requestFrame: callback => requestAnimationFrame(callback),
   openLicenses: () => licenses.open(),

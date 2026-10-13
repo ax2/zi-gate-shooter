@@ -1,3 +1,4 @@
+import type { WeaponKind } from '../core/weapons';
 /** Original procedural sound palette. No downloaded commercial audio. */
 export class GameAudio {
   private context?: AudioContext;
@@ -45,12 +46,14 @@ export class GameAudio {
       this.stop(); this.retryAt = this.now() + 5000;
     }
   }
-  event(type: string, stage: number) {
+  event(type: string, stage: number, weapon: WeaponKind = 'pulse') {
     if (type === 'fire') {
       const now = this.context?.currentTime ?? 0;
       if (now - this.lastShot < 0.10) return;
-      this.lastShot = now; this.tone(210 + stage * 65, 70, 0.055, 0.025 + stage * 0.006, 'sawtooth');
-    } else if (type === 'upgrade' || type === 'overload') {
+      this.lastShot = now;
+      this.tone((210 + stage * 65) * (weapon === 'pierce' ? .65 : weapon === 'scatter' ? .85 : 1), weapon === 'pierce' ? 35 : 70,
+        weapon === 'pierce' ? .12 : weapon === 'scatter' ? .08 : .055, 0.025 + stage * 0.006, weapon === 'pierce' ? 'triangle' : 'sawtooth');
+    } else if (type === 'upgrade' || type === 'overload' || type === 'weapon') {
       this.tone(360, 1100, 0.35, 0.09, 'sine'); this.tone(540, 1650, 0.4, 0.04, 'triangle');
     } else if (type === 'gate-level') this.tone(600, 900, 0.08, 0.035, 'sine');
     else if (type === 'gate-taken' || type === 'pickup') this.tone(520, 1040, 0.2, 0.055, 'sine');

@@ -1,8 +1,9 @@
 import type { Body, Phase } from './world';
-import { C } from './config';
+import { C, clamp } from './config';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 
 export function bossWarningLanes(b: Body) {
+  if (b.attack === 2) return [200, 520];
   return b.attack ? b.burst ? [360] : [b.lane, 360] : [b.lane];
 }
 
@@ -25,11 +26,14 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         b.warning = 1.35; b.timer = 1.35;
         // Advance only after an attack finishes, so delayed warnings cannot
         // accidentally repeat/skip a pattern. B alternates left/right sweep.
-        b.attack = b.attackCycle % 2;
+        b.attack = b.attackCycle % (b.bossVariant ? 3 : 2);
         b.lane = b.attack ? Math.floor(b.attackCycle / 2) % 2 ? 520 : 200
           : [200, 360, 520][Math.floor(b.attackCycle / 2) % 3];
       } else {
-        if (!b.attack) {
+        if (b.attack === 2) {
+          for (const x of [200, 520]) for (let i = 0; i < 4; i++) shot(x, b.y + 90 - i * 50, 0, 300);
+          finish();
+        } else if (!b.attack) {
           for (let i = 0; i < 5; i++) shot(b.lane, b.y + 90 - i * 45, 0, 320);
           finish();
         } else {
@@ -42,14 +46,22 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     }
   } else if (b.kind === 'charger') {
     if (b.age > C.chargerBehavior.warningAge && b.age < C.chargerBehavior.dashAge) b.warning = C.chargerBehavior.dashAge - b.age;
-    if (b.age >= C.chargerBehavior.dashAge) { b.warning = 0; b.speed = C.chargerBehavior.dashSpeed; }
+    if (b.age >= C.chargerBehavior.dashAge) {
+      b.warning = 0; b.speed = C.chargerBehavior.dashSpeed;
+      if (b.pattern === 'flank') b.x += clamp(b.lane - b.x, -240 * dt, 240 * dt);
+    }
     b.y += b.speed * dt;
   } else {
+    if (b.kind === 'drone' && b.pattern === 'weave') b.x = clamp(b.lane + Math.sin(b.age * 2) * 70, C.minX, C.maxX);
     b.y += b.speed * dt;
     if ((b.kind === 'armor' || b.kind === 'elite') && b.y > 0 && b.y < 600) {
       if (b.timer <= 1e-9) {
         if (b.warning <= 0) { b.warning = 0.6; b.timer = 0.6; }
-        else { shot(b.x, b.y + b.height / 2); b.warning = 0; b.timer = 2.4; }
+        else {
+          if (b.pattern === 'fan') for (const vx of [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);
+          else shot(b.x, b.y + b.height / 2);
+          b.warning = 0; b.timer = b.pattern === 'fan' ? 3.2 : 2.4;
+        }
       }
     } else if (b.y >= 600) b.warning = 0;
   }
