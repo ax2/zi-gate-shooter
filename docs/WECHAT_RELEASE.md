@@ -4,6 +4,8 @@
 
 ## 当前候选
 
+Stage-37已接入用户AppID，31文件/manifest外3393909字节，普通重建保留配置；见stages/Stage-37/TEST_REPORT.md。下面Stage-35为游戏代码基线，当前完整配置候选在build/releases/Stage-37/wechat。AppID已取得，账号类型与工具/设备验证仍待完成。
+
 Stage-35完整目录：`build/releases/Stage-35/wechat`，manifest外3393891字节。`build/wechat`是可被后续构建覆盖的工作目录，不用作历史版本证据。构建命令`npm run build:wechat`，保留完整目录，不生成ZIP。
 
 共享src/core规则与Canvas表现；微信入口使用wx.createCanvas、wx.createImage、触控、前后台、本地存储及本地音频。没有登录/支付/广告/后台。默认网页入口便于预览，但网页截图和VM入口测试不等于微信工具/真机运行。
