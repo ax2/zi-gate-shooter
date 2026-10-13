@@ -11,6 +11,7 @@ const audio = new GameAudio(), music = new LoopMusic(browserMusicHandle, () => p
 let active = false, held = false, began = 0, nextControl = 0, nextSample = 0, nextHeap = 0;
 let samples = [], transitions = [], stopReason = 'not-started', selectedEffects = 'standard';
 let peaks = {}, frames = 0, lastPhase = '', workTimes = new FrameWindow();
+let lastCallback = 0, largestCallbackGapMs = 0;
 const point = (x, y) => { const s = Math.min(innerWidth / 720, innerHeight / 1280); return [(innerWidth - 720 * s) / 2 + x * s, (innerHeight - 1280 * s) / 2 + y * s]; };
 function control() {
   if (!held || runtime.pointer !== 731) { runtime.touchStart(731, ...point(runtime.world.player.x, 900)); held = true; }
@@ -20,6 +21,8 @@ function metrics() {
   const state = runtime.diagnostics();
   const track = document.querySelector('audio[data-game-music]');
   return { ...state, wallSeconds: (performance.now() - began) / 1000, frames,
+    runtimeNotice: runtime.notice, runtimeHidden: runtime.hidden,
+    documentHidden: document.hidden, documentFocused: document.hasFocus(), largestCallbackGapMs,
     activeAudioVoices: audio.activeNodes, musicElements: document.querySelectorAll('audio[data-game-music]').length,
     music: track ? { paused: track.paused, ended: track.ended, readyState: track.readyState, currentTime: track.currentTime, error: track.error?.code ?? null } : null,
     pickups: runtime.world.pickups, gates: runtime.world.gatesTaken, kills: runtime.world.kills,
@@ -69,6 +72,8 @@ const runtime = new CanvasRuntime({ canvas, width: innerWidth, height: innerHeig
   music: playing => music.setPlaying(playing), now: () => performance.now(),
   requestFrame: fn => requestAnimationFrame(time => {
     const workStarted = performance.now();
+    if (active) largestCallbackGapMs = Math.max(largestCallbackGapMs, workStarted - lastCallback);
+    lastCallback = workStarted;
     if (active && runtime.mode === 'playing' && runtime.world.time >= nextControl) {
       nextControl = runtime.world.time + .1; control();
     }
@@ -80,6 +85,7 @@ startButton.onclick = () => {
   runtime.save.settings.effects = selectedEffects = effects.value; runtime.save.settings.music = true;
   samples = []; transitions = []; peaks = {}; frames = 0; workTimes = new FrameWindow();
   nextControl = nextSample = nextHeap = 0; held = false; began = performance.now(); stopReason = 'running';
+  lastCallback = began; largestCallbackGapMs = 0;
   runtime.start(); active = true; startButton.disabled = true; effects.disabled = true;
 };
 document.querySelector('#stop').onclick = () => finish('manual-stop');
