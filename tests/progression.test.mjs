@@ -20,6 +20,8 @@ it.each([{ seed: 1337, openingX: 360 }, { seed: 1, openingX: C.minX }, { seed: 7
       const beforeStage = world.growth.stage, beforeRound = world.round, beforePickups = world.pickups;
       world.step(C.step, target);
       for (const event of world.drainEffects()) {
+        // Ordinary kills must occur inside the visible combat area.
+        if (event.type === 'kill' && event.y < 160) invalidState = true;
         if (event.type === 'overload') overloads++;
         if (event.type === 'boss-kill') { bossKills++; victories.push(+world.time.toFixed(3)); }
         if (event.type === 'hurt') hurt++;

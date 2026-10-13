@@ -196,7 +196,16 @@ export class World {
         });
       } else for (const body of this.bodies) {
         if (!body.active || body.kind === 'pickup' || (body.kind === 'boss' && this.phase !== 'boss')) continue;
-        add(sweep(bullet.px, bullet.py, bullet.x, bullet.y, body.px, body.py, body.x, body.y, body.width / 2 + 3, body.height / 2 + 8), 0, bullet.id, () => {
+        // Player shots end in the visible combat strip, below the HUD. Clip both
+        // moving segments to the same instant, and retain the original step's
+        // contact time so a range crossing cannot reorder simultaneous rewards.
+        if (bullet.py <= C.playerShotTop) continue;
+        const fraction = bullet.y < C.playerShotTop ? (bullet.py - C.playerShotTop) / (bullet.py - bullet.y) : 1;
+        const contact = sweep(bullet.px, bullet.py, bullet.px + (bullet.x - bullet.px) * fraction,
+          bullet.py + (bullet.y - bullet.py) * fraction, body.px, body.py,
+          body.px + (body.x - body.px) * fraction, body.py + (body.y - body.py) * fraction,
+          body.width / 2 + 3, body.height / 2 + 8);
+        add(contact === null ? null : contact * fraction, 0, bullet.id, () => {
           if (!bullet.active || !body.active) return;
           bullet.active = false; this.hit(body, bullet.damage);
         });
@@ -259,7 +268,7 @@ export class World {
       this.emit('victory', 360, 430, '首领击破 · 装甲恢复 +1');
     }
     this.bodies = this.bodies.filter(b => b.active && b.y < 1344);
-    this.bullets = this.bullets.filter(b => b.active && b.y > -90 && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
+    this.bullets = this.bullets.filter(b => b.active && b.y > (b.hostile ? -90 : C.playerShotTop) && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
     this.peakBodies = Math.max(this.peakBodies, this.bodies.length);
     this.peakBullets = Math.max(this.peakBullets, this.bullets.length);
   }
