@@ -1,3 +1,4 @@
+import { energyShot, muzzleLight, detonationLight, sparkLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
@@ -232,7 +233,7 @@ export class CanvasRuntime {
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, this.world.weaponKind);
-    if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 48; this.recoilUntil = this.world.time + 0.048; return; }
+    if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 80; this.recoilUntil = this.world.time + 0.048; return; }
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
@@ -243,10 +244,10 @@ export class CanvasRuntime {
     else if (explosion && this.blasts.length < 4) this.blasts.push({ x: e.x, y: e.y, size: e.size ?? 80, life: 0.45, total: 0.45 });
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
     const cap = this.save.settings.effects === 'weak' ? 50 : 160;
-    const amount = explosion ? 14 : e.type.startsWith('impact') ? 2 : 7;
+    const amount = explosion ? (this.save.settings.effects === 'weak' ? 14 : 32) : e.type.startsWith('impact') ? 4 : 7;
     for (let i = 0; i < amount && this.particles.length < cap; i++) {
-      const angle = Math.random() * Math.PI * 2, speed = 60 + Math.random() * 160, life = 0.2 + Math.random() * 0.4;
-      this.particles.push({ x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: explosion ? '#ffb260' : '#7ae2ff' });
+      const angle = Math.random() * Math.PI * 2, speed = (explosion ? 130 : 75) + Math.random() * (explosion ? 330 : 180), life = 0.18 + Math.random() * 0.4;
+      this.particles.push({ x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: explosion ? (i % 4 === 0 ? '#99ddff' : i % 3 === 0 ? '#ffe2a0' : '#ffad42') : weaponColors[this.world.weaponKind] });
     }
   }
   private text(text: string, x: number, y: number, size: number, color = '#ecf7ff', align: CanvasTextAlign = 'center', bold = false) {
@@ -382,11 +383,7 @@ export class CanvasRuntime {
       }
     }
     for (const b of w.bullets.filter(b => !b.hostile)) {
-      const kind = b.weaponKind ?? 'pulse', tail = kind === 'pierce' ? 36 : kind === 'scatter' ? 12 : 22;
-      c.strokeStyle = `${weaponColors[kind]}44`; c.lineWidth = kind === 'pierce' ? 13 : 9;
-      c.beginPath(); c.moveTo(b.x - b.vx / C.bulletSpeed * tail, b.y + tail); c.lineTo(b.x + b.vx / C.bulletSpeed * 10, b.y - 10); c.stroke();
-      c.strokeStyle = w.growth.overload > 0 ? '#ffcd76' : weaponColors[kind]; c.lineWidth = kind === 'pierce' ? 6 : kind === 'scatter' ? 3 : 4; c.stroke();
-      c.strokeStyle = '#e6fcff'; c.lineWidth = 1.5; c.stroke();
+      energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(w.player.x + 5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
@@ -410,8 +407,7 @@ export class CanvasRuntime {
     if (this.mode === 'playing' && w.player.hp > 0 && this.platform.now() < this.muzzleUntil) {
       for (const offset of weaponProfile(w.weaponKind, w.growth.stage).offsets) {
         const x = w.player.x + offset, y = C.playerY - 78;
-        c.fillStyle = `${weaponColors[w.weaponKind]}77`; c.beginPath(); c.ellipse(x, y, 10, 20, 0, 0, Math.PI * 2); c.fill();
-        c.fillStyle = '#eaffff'; c.beginPath(); c.ellipse(x, y - 3, 3, 10, 0, 0, Math.PI * 2); c.fill();
+        muzzleLight(c, x, y, w.weaponKind, Math.max(0, (this.muzzleUntil - this.platform.now()) / 80), this.save.settings.effects === 'weak');
       }
     }
     if (this.mode === 'playing' && this.platform.now() < this.upgradeUntil) {
@@ -423,12 +419,12 @@ export class CanvasRuntime {
       e.life -= dt; const age = 1 - e.life / e.total;
       c.save(); c.globalAlpha = Math.pow(Math.max(0, 1 - age), 0.65) * (this.save.settings.effects === 'weak' ? 0.5 : 0.9);
       this.frameSprite('explosion-v1.png', Math.min(8, Math.floor(age * 9)), 3, e.x, e.y, e.size * 2, e.size * 2, 3); c.restore();
+      detonationLight(c, e.x, e.y, e.size, age, this.save.settings.effects === 'weak');
     }
     this.blasts = this.blasts.filter(e => e.life > 0);
     for (const s of this.particles) {
       s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 70 * dt;
-      c.save(); c.globalAlpha = Math.max(0, s.life / s.total); c.strokeStyle = s.color; c.lineWidth = 2;
-      c.beginPath(); c.moveTo(s.x, s.y); c.lineTo(s.x - s.vx * 0.03, s.y - s.vy * 0.03); c.stroke(); c.restore();
+      sparkLight(c, s.x, s.y, s.vx, s.vy, s.color, s.life / s.total, this.save.settings.effects === 'weak');
     }
     this.particles = this.particles.filter(s => s.life > 0);
     for (const receipt of this.gateFeedback.receipts) {

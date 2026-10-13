@@ -1,5 +1,7 @@
 # Android发布准备
 
+Stage-33当前候选：7821741字节，光电粒子表现；构建及包核验通过，尚未原生/设备/渠道验收。见stages/Stage-33/TEST_REPORT.md。
+
 Stage-32当前候选：build/releases/Stage-32/android/zi-gate-shooter-debug.apk，7821741字节。三武器与三章波次，169项测试通过，构建及包核验通过；未原生安装/真机/正式签名/渠道验收。详见stages/Stage-32/TEST_REPORT.md。
 
 Stage-18历史候选：build/releases/Stage-18/android/zi-gate-shooter-debug.apk，6607376字节。共享输入清理与浏览器键盘，120项通过；31秒构建、lint0错误/5警告、资源/许可/权限/签名核验。未原生运行/硬件键盘/正式签名/提交，见stages/Stage-18/TEST_REPORT.md。

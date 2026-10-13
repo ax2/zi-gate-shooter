@@ -1,5 +1,7 @@
 # 微信小游戏发布准备与验收
 
+Stage-33当前候选：manifest外3393797字节，共享光电粒子表现。开发者工具/真机/提交仍未完成，见stages/Stage-33/TEST_REPORT.md。
+
 Stage-32最新候选：manifest外3391697字节/31文件，169项完整通过。三种武器、成对箱选择、三章波次与新行为/预警已接入；原生Canvas与网页默认入口一致，旧Phaser入口移至tools/legacy-phaser.html保留。未微信开发者工具/AppID/双方设备/提交，详见stages/Stage-32。
 
 Stage-29最新候选：manifest外3359725字节，156项完整通过。四类普通/精英共享死亡残骸预算，三种新增原创死亡候选；手机双档/桌面夹具限定通过，未三种自然局/工具/AppID/双方设备/提交，见stages/Stage-29/TEST_REPORT.md。

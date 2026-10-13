@@ -369,6 +369,14 @@ it.each([false, true])('keeps hostile cores and gate numbers above capped explos
   expect(hostileCore).toBeGreaterThan(finalBlast); expect(gateNumber).toBeGreaterThan(finalBlast);
   expect(blasts(f)[0].alpha).toBeLessThanOrEqual(weak ? 0.5 : 0.9);
   expect(f.runtime.world.player.hp).toBe(3);
+  const lastLight = f.calls.reduce((last, c, i) => c.composite === 'lighter' ? i : last, -1);
+  expect(hostileCore).toBeGreaterThan(lastLight); expect(gateNumber).toBeGreaterThan(lastLight);
+  expect(f.runtime.diagnostics().particles).toBeLessThanOrEqual(weak ? 50 : 160);
+  const visual = f.runtime as unknown as { particles: unknown[]; blasts: unknown[] };
+  f.runtime.pause(); const frozen = JSON.stringify([visual.particles, visual.blasts]);
+  for (let i = 0; i < 20; i++) f.tick();
+  expect(JSON.stringify([visual.particles, visual.blasts])).toBe(frozen);
+  f.runtime.start(); expect(visual.particles).toHaveLength(0); expect(visual.blasts).toHaveLength(0);
 });
 
 function bossKillFixture(world: World) {
