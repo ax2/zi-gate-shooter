@@ -13,6 +13,7 @@ import type { PlayerPose } from './player-motion';
 import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
 import { contextGuide, weaponGuide } from './context-guide';
+import { dossierWeapons, weaponDossier } from './weapon-dossier';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
 import { chargerFrame } from './charger-motion';
@@ -46,7 +47,8 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'armory' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  private dossierWeapon: WeaponKind = 'pulse';
   save: Save;
   private previousMode: 'menu' | 'paused' = 'menu';
   private ctx: CanvasRenderingContext2D;
@@ -239,6 +241,7 @@ export class CanvasRuntime {
   /** Native back never resumes a paused run or silently abandons a live one. */
   back(): 'stay' | 'exit' {
     this.cancelTouch();
+    if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
     if (this.mode === 'settings') { this.action('back'); return 'stay'; }
     if (this.mode === 'paused') { this.pausePreview = false; this.notify('请继续战斗，或选择返回主界面'); return 'stay'; }
@@ -248,6 +251,12 @@ export class CanvasRuntime {
   private action(action: string) {
     if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
+    else if (action === 'armory') { this.dossierWeapon = 'pulse'; this.mode = 'armory'; }
+    else if (action.startsWith('dossier:')) {
+      const weapon = action.slice(8) as WeaponKind;
+      if (dossierWeapons.includes(weapon)) this.dossierWeapon = weapon;
+    }
+    else if (action === 'armory-back') this.mode = 'menu';
     else if (action === 'pause') this.pause();
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
@@ -340,6 +349,7 @@ export class CanvasRuntime {
       if (this.mode === 'error') this.button('重新加载', 700, 'reload', true);
       c.restore(); return;
     }
+    if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     const sector = this.mode === 'menu' ? 0 : sectorIndex(w.round);
     const ground = this.images.get(['runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg'][sector])!;
     const h = ground.height / ground.width * 720;
@@ -557,7 +567,7 @@ export class CanvasRuntime {
       if (b.kind === 'crate') {
         if (b.weaponKind) {
           const choice = b.weaponKind === w.weaponKind ? '保留' : '换装';
-          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '邻敌连锁 · 盾卫截断' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
+          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '邻敌连锁 · 盾卫截断' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
           const panelY = b.y - 158 >= this.hudTop + 128 ? b.y - 158 : Math.max(this.hudTop + 128, b.y + 70);
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
@@ -651,9 +661,38 @@ export class CanvasRuntime {
     this.text('火力突围', 360, 290, 82, '#e5f3fa', 'center', true);
     this.text('G A T E  S H O O T E R', 360, 370, 27, '#72cde9');
     this.rect(280, 420, 160, 2, '#5bddff'); this.text('把奖励打高。把火力打满。', 360, 475, 29, '#c2dbe8');
-    this.text(`最高分　${this.save.best}`, 360, 955, 26, '#e8c98d');
-    this.button('开始突围　›', 998, 'start', true); this.button('设置', 1102, 'settings');
+    this.text(`最高分　${this.save.best}`, 360, 890, 26, '#e8c98d');
+    this.button('开始突围　›', 932, 'start', true);
+    this.button('武器档案', 1030, 'armory'); this.button('设置', 1128, 'settings');
     this.text('射击装备，再走位领取强化', 360, 1230, 23, '#99b6c9');
+  }
+  private drawArmory() {
+    const kind = this.dossierWeapon, entry = weaponDossier[kind], color = weaponColors[kind];
+    this.rect(40, 90, 640, 1130, '#102330');
+    this.text('武器档案', 360, 156, 46, '#e7f5ff', 'center', true);
+    this.text('认清火力，再选择你的突破方式', 360, 205, 24, '#a5c4d6');
+    for (const [i, weapon] of dossierWeapons.entries()) {
+      const x = 56 + i * 122;
+      this.rect(x, 246, 120, 70, weapon === kind ? '#2d5368' : '#172f40');
+      this.text(weaponNames[weapon], x + 60, 281, 26, weaponColors[weapon], 'center', true);
+      if (weapon === kind) this.rect(x + 12, 311, 96, 3, color);
+      this.buttons.push({x, y:246, w:120, h:70, action:`dossier:${weapon}`, label:weaponNames[weapon]});
+    }
+    for (let tier = 0; tier < 3; tier++) {
+      const x = 170 + tier * 190;
+      this.rect(x - 84, 350, 168, 276, '#091723');
+      this.frameSprite(entry.asset, tier, kind === 'pulse' ? 4 : 3, x, 480, 160, 213, kind === 'pulse' ? 2 : 1);
+      this.text(`T${tier + 1}`, x, 603, 25, color, 'center', true);
+    }
+    this.text(entry.role, 360, 684, 32, color, 'center', true);
+    this.text('适合这样打', 92, 756, 25, '#f0d19a', 'left', true);
+    this.text(entry.strength, 92, 803, 25, '#d6e7f0', 'left');
+    this.text('留意取舍', 92, 868, 25, '#f0d19a', 'left', true);
+    this.text(entry.tradeoff, 92, 915, 25, '#d6e7f0', 'left');
+    this.rect(86, 963, 548, 1, '#355064');
+    this.text('局内击碎武器箱，再靠近拾取换装', 360, 1004, 25, '#b8d4e3');
+    this.text('同排只领一种 · 换装不会降低阶数', 360, 1045, 25, '#b8d4e3');
+    this.button('返回主界面', 1100, 'armory-back', true);
   }
   private drawDialog() {
     const w = this.world;

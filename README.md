@@ -1,5 +1,7 @@
 # 火力突围
 
+当前固定试玩版Stage-103：主界面新增武器档案，可比较五种武器三阶机体与战术取舍。build/playable/Stage-103内运行node serve.mjs，端口5193；[验证记录](docs/stages/Stage-103/TEST_REPORT.md)。
+
 Stage-102：二、三阶霰射近距收益修订，251项共享回归通过；独立候选build/playable/Stage-102（node serve.mjs，端口5192）。正常HP前后对照及平衡边界见[报告](docs/stages/Stage-102/TEST_REPORT.md)。
 
 Stage-100固定试玩版已准备，见[试玩说明](docs/stages/Stage-100/PLAY.md)。249项共享/网页测试通过，Stage-99静态20分钟验证完成；主观体验和设备性能边界见[验收清单](docs/CONTENT_ACCEPTANCE.md)。
@@ -185,6 +187,7 @@ Stage-63：霰射三阶机体候选已接入网页，单/双/四宽口炮组；4
 Stage-65：穿甲三阶导轨机体候选接入，对齐弹丸/枪口，58项与12项专项分批通过；微信候选4060416字节，APK仍Stage-61。
 Stage-68（2026-10-14）：网页枪口光与后坐同步，暂停冻结/换枪清除，52项专项通过。APK仍Stage-66。
 Stage-73（2026-10-14）：一场真实浏览器正常成长20分钟完成，13首领/第14轮。前台回调中断另有失败记录，未认定根因已修复；详情见docs/stages/Stage-73。
+
 
 
 
