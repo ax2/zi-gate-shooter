@@ -11,6 +11,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "assets:export": "node tools/export-assets.mjs && node tools/generate-audio.mjs && node tools/export-fx.mjs && node tools/generate-music.mjs && node tools/export-crate.mjs && node tools/export-drone.mjs && node tools/export-charger.mjs && node tools/export-armor.mjs && node tools/export-elite.mjs && node tools/export-boss.mjs && node tools/export-drone-wreck.mjs && node tools/export-enemy-wrecks.mjs",
     "assets:music": "node tools/generate-music.mjs",
+    "assets:sector": "node tools/export-sector.mjs",
     "assets:launcher": "node tools/export-launcher.mjs",
     "assets:fx": "node tools/export-fx.mjs",
     "licenses:check": "node tools/android-licenses.mjs",

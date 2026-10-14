@@ -25,6 +25,19 @@ function fixture(weak = false) {
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('uses the cooling environment only in its chapter and keeps paused world state intact', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  f.runtime.world.round = 2; f.runtime.world.time = 17; f.runtime.pause();
+  const before = JSON.stringify(f.runtime.world);
+  f.tick();
+  const ground = () => f.calls.filter(c => c.kind === 'drawImage' && /runway|cooling-corridor/.test(c.args[0].src));
+  expect(ground().length).toBeGreaterThan(0);
+  expect(ground().every(c => c.args[0].src.endsWith('cooling-corridor-v1.jpg'))).toBe(true);
+  expect(JSON.stringify(f.runtime.world)).toBe(before);
+  f.runtime.start(); f.tick();
+  expect(ground().every(c => c.args[0].src.endsWith('runway.jpg'))).toBe(true);
+});
+
 it.each([false,true])('ties boss preparation to real A/B warnings, freezes the second beat and preserves World (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const reference=new World(1337);
  const setup=(w:World)=>{w.time=w.roundTime=80;w.phase='boss';w.player.x=68;return w.spawn('boss',360,260);};

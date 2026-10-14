@@ -67,3 +67,6 @@ source/drone-wreck-v1.png由本会话内置imagegen参考原创无人机生成�
 ## Stage-29剩余敌种死亡候选
 
 charger/armor/elite-wreck-v1.png分别由本会话内置imagegen参考原创机体生成，源1254方RGBA，运行各256方71421/81924/81684字节；新增解码0.75MiB。MIT开放，完整实际提示词/来源/哈希/限制见ENEMY_WRECKS_V1.md与enemy-wrecks-v1-prompts.md；非正式音画/品牌签收。
+
+## Stage-41 冷却通道候选
+内置imagegen生成，已有原创跑道作风格参考；完整提示词见cooling-corridor-v1-prompt.md。源图source/cooling-corridor-v1.png，运行图public/assets/cooling-corridor-v1.jpg，720×1279/184125字节。交替反射滚动，中央保持低对比；候选未最终签收。

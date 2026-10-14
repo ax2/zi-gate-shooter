@@ -109,7 +109,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'props.png', 'runway.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -302,10 +302,26 @@ export class CanvasRuntime {
       if (this.mode === 'error') this.button('重新加载', 700, 'reload', true);
       c.restore(); return;
     }
-    const ground = this.images.get('runway.jpg')!;
+    const cooling = this.mode !== 'menu' && sectorIndex(w.round) === 1;
+    const ground = this.images.get(cooling ? 'cooling-corridor-v1.jpg' : 'runway.jpg')!;
     const h = ground.height / ground.width * 720;
-    const scroll = ((this.mode === 'menu' ? this.visualTime * 12 : w.time * w.scrollSpeed) % h);
-    c.drawImage(ground, 0, scroll - h, 720, h); c.drawImage(ground, 0, scroll, 720, h);
+    const distance = this.mode === 'menu' ? this.visualTime * 12 : w.time * w.scrollSpeed;
+    if (cooling) {
+      // Alternate reflection makes adjacent boundaries share the exact same edge.
+      // Keep parity across the two-tile period, including modulo wraparound.
+      const scroll = distance % (h * 2);
+      for (let tile = -2; tile <= Math.ceil(1280 / h); tile++) {
+        const y = scroll + tile * h;
+        if (y >= 1280 || y + h <= 0) continue;
+        c.save();
+        if (tile % 2 !== 0) { c.translate(0, y + h); c.scale(1, -1); }
+        else c.translate(0, y);
+        c.drawImage(ground, 0, 0, 720, h); c.restore();
+      }
+    } else {
+      const scroll = distance % h;
+      c.drawImage(ground, 0, scroll - h, 720, h); c.drawImage(ground, 0, scroll, 720, h);
+    }
     this.rect(0, 0, 720, 1280, '#07111b25');
     c.save();
     if (this.platform.now() < this.shakeUntil) c.translate(Math.sin(this.platform.now()) * 3, Math.cos(this.platform.now()) * 3);
