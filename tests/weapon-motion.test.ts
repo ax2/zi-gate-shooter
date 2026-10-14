@@ -44,3 +44,19 @@ it('separates fast recovery, spring return and heavy hold without accumulating r
     expect(motion.sample(kind, 3, 60)).toBe(0);
   }
 });
+
+it('keeps arc discharge finite, frozen on pause and isolated from other weapons and tiers', () => {
+  const motion = new WeaponMotion();
+  expect(motion.discharge('arc', 3, 0)).toBe(0);
+  motion.fire('arc', 3, 10);
+  expect(motion.discharge('arc', 3, 10.1)).toBeGreaterThan(0);
+  expect(motion.discharge('arc', 3, 10.1)).toBe(motion.discharge('arc', 3, 10.1));
+  expect(motion.discharge('pulse', 3, 10.1)).toBe(0);
+  expect(motion.discharge('arc', 2, 10.1)).toBe(0);
+  expect(motion.discharge('arc', 3, 9)).toBe(0);
+  expect(motion.discharge('arc', 3, 10.3)).toBe(0);
+  expect(motion.sample('arc', 3, 10.03)).toBeGreaterThan(0);
+  expect(motion.sample('arc', 3, 10.1)).toBeLessThan(0);
+  expect(motion.sample('arc', 3, 10.17)).toBeGreaterThan(0);
+  motion.reset(); expect(motion.discharge('arc', 3, 10.1)).toBe(0);
+});

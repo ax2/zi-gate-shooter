@@ -1,4 +1,4 @@
-import { chainArc, energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
+import { coilDischarge, chainArc, energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
@@ -450,6 +450,11 @@ export class CanvasRuntime {
     }
     c.restore();
     const flash = this.weaponMotion.flash(w.weaponKind, w.growth.stage, w.time);
+    if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0) {
+      const discharge = this.weaponMotion.discharge(w.weaponKind, w.growth.stage, w.time);
+      if (discharge > 0) coilDischarge(c, w.player.x, C.playerY - (weaponProfile(w.weaponKind, w.growth.stage).muzzleY ?? 78) + pose.bob + recoil,
+        discharge, w.growth.stage, this.save.settings.effects === 'weak');
+    }
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0 && flash > 0) {
       const weapon = weaponProfile(w.weaponKind, w.growth.stage);
       for (const offset of weapon.offsets) {

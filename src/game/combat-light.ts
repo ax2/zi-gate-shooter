@@ -1,6 +1,24 @@
 import type { WeaponKind } from '../core/weapons';
 import { weaponColors } from '../core/weapons';
 
+/** Finite shot-driven coil discharge, localized to the mechanical muzzle. */
+export function coilDischarge(c: CanvasRenderingContext2D, x: number, y: number, life: number, stage: number, weak: boolean) {
+  if (life <= 0) return;
+  const age = 1 - Math.min(1, life);
+  c.save(); c.translate(x, y); c.globalCompositeOperation = 'lighter';
+  c.globalAlpha = life * (weak ? 0.55 : 0.8);
+  const count = weak ? 1 : Math.max(1, Math.min(3, stage));
+  for (let i = 0; i < count; i++) {
+    const radius = 9 + age * 23 + i * 5;
+    c.strokeStyle = i % 2 ? '#e9ffe6' : '#9fffad'; c.lineWidth = weak ? 1.5 : 2;
+    c.beginPath(); c.ellipse(0, -i * 10 - age * 18, radius, radius * 0.32, 0, age * 3 + i, age * 3 + i + Math.PI * 1.65); c.stroke();
+  }
+  if (!weak) for (const side of [-1, 1]) {
+    line(c, '#dbffd7', 1.5, [side * 17, 12, side * (23 + age * 8), 3, side * 15, -6, side * 21, -17]);
+  }
+  c.restore();
+}
+
 export function chainArc(c: CanvasRenderingContext2D, x:number,y:number,tx:number,ty:number,life:number,weak:boolean) {
   const dx=tx-x,dy=ty-y,length=Math.max(1,Math.hypot(dx,dy)),points=[x,y];
   for(let i=1;i<8;i++){const bend=(i%2?1:-1)*7;points.push(x+dx*i/8-dy/length*bend,y+dy*i/8+dx/length*bend);}

@@ -6,6 +6,11 @@ export class WeaponMotion {
   private kind: WeaponKind = 'pulse';
   private stage = 1;
   reset() { this.firedAt = -Infinity; }
+  discharge(kind: WeaponKind, stage: number, time: number): number {
+    if (kind !== 'arc' || kind !== this.kind || stage !== this.stage) return 0;
+    const age = time - this.firedAt;
+    return age < 0 ? 0 : Math.max(0, 1 - age / 0.28);
+  }
   fire(kind: WeaponKind, stage: number, time: number) {
     this.kind = kind; this.stage = stage; this.firedAt = time;
   }
@@ -18,6 +23,11 @@ export class WeaponMotion {
   sample(kind: WeaponKind, stage: number, time: number): number {
     if (kind !== this.kind || stage !== this.stage) return 0;
     const age = time - this.firedAt;
+    if (kind === 'arc') {
+      if (age < 0 || age >= 0.28) return 0;
+      const t = age / 0.28;
+      return (3 + Math.max(1, Math.min(3, stage))) * Math.sin(t * Math.PI * 4) * (1 - t) ** 2;
+    }
     const duration = kind === 'blast' ? 0.28 : kind === 'pulse' ? 0.085 : kind === 'scatter' ? 0.18 : 0.195;
     if (age < 0 || age >= duration) return 0;
     const t = age / duration;
