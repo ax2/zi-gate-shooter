@@ -12,6 +12,7 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
     const seconds = 1200;
     const world = new World(seed);
     const milestones = [];
+    const breakthroughs=[];
     const victories = [], stages = [], crateLanes = new Set(), firstEquipmentEvents = [];
     const hostileIds = new Set();
     let target = world.player.x, overloads = 0, bossKills = 0, hurt = 0;
@@ -21,7 +22,9 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
     for (let frame = 0; frame < seconds * 60; frame++) {
       if (frame % 6 === 0) target = frame < 60 ? openingX : progressionTarget(world, preferred);
       const beforeStage = world.growth.stage, beforeRound = world.round, beforePickups = world.pickups;
+      const beforeMastery=world.growth.mastery ?? 0;
       world.step(C.step, target);
+      if((world.growth.mastery ?? 0)>beforeMastery)breakthroughs.push({time:+world.time.toFixed(3),level:world.growth.mastery});
       for (const event of world.drainEffects()) {
         // Ordinary kills must occur inside the visible combat area.
         if (event.type === 'kill' && event.y < 160) invalidState = true;
@@ -47,7 +50,7 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
       if (world.phase === 'dead') break;
     }
     const result = { seed, openingX, preferred, weaponKind: world.weaponKind, requestedSeconds: seconds, time: +world.time.toFixed(3), phase: world.phase, round: world.round,
-      stage: world.growth.stage, hp: world.player.hp, bonus: world.growth.bonus, score: world.score,
+      stage: world.growth.stage, hp: world.player.hp, bonus: world.growth.bonus, mastery:world.growth.mastery??0, activeWeapons:world.activeWeapons, breakthroughs, score: world.score,
       pickups: world.pickups, gates: world.gatesTaken, overloads, bossKills, hurt, hostileProjectilesObserved: hostileIds.size,
       crateLanes: [...crateLanes].sort(), victories, firstEquipmentEvents,
       peakBodies: world.peakBodies, peakBullets: world.peakBullets, milestones,
@@ -74,7 +77,8 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
     expect(hostileIds.size).toBeGreaterThan(0);
     expect(crateLanes).toEqual(new Set([222, 240, 480, 498]));
     expect(bossKills).toBeGreaterThanOrEqual(10);
-    expect(world.round).toBe(bossKills + 1);
+    // The round counter advances after the four-second victory recovery.
+    expect(world.round).toBe(bossKills + (world.phase === 'recovery' ? 0 : 1));
     expect(world.peakBodies).toBeLessThanOrEqual(C.limits.enemies + C.limits.rewards);
     expect(world.peakBullets).toBeLessThanOrEqual(C.limits.bullets + C.limits.hostile);
   }, 120000);

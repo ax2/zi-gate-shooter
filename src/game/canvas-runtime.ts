@@ -2,7 +2,7 @@ import { overloadWake, coilDischarge, chainArc, energyShot, muzzleLight, detonat
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
-import { gateValue, previewReward } from '../core/rewards';
+import { gateValue, previewReward, permanentPower } from '../core/rewards';
 import { bossWarningLanes, fanWarningVelocities } from '../core/behavior';
 import { defaults } from '../ui/storage';
 import { FrameWindow } from './frame-window';
@@ -14,6 +14,7 @@ import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
 import { contextGuide, weaponGuide } from './context-guide';
 import { dossierWeapons, weaponDossier } from './weapon-dossier';
+import { supportLight } from './support-light';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
 import { chargerFrame } from './charger-motion';
@@ -47,7 +48,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'armory' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'armory' | 'loadout' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private dossierWeapon: WeaponKind = 'pulse';
   save: Save;
   private previousMode: 'menu' | 'paused' = 'menu';
@@ -58,6 +59,7 @@ export class CanvasRuntime {
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number}[] = [];
+  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
@@ -176,6 +178,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.supportBeams=[];
     this.pausePreview = false;
     this.groundDistance = 0;
     this.keys.clear(); this.inputMode = 'touch';
@@ -242,6 +245,7 @@ export class CanvasRuntime {
   back(): 'stay' | 'exit' {
     this.cancelTouch();
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
     if (this.mode === 'settings') { this.action('back'); return 'stay'; }
     if (this.mode === 'paused') { this.pausePreview = false; this.notify('请继续战斗，或选择返回主界面'); return 'stay'; }
@@ -257,6 +261,8 @@ export class CanvasRuntime {
       if (dossierWeapons.includes(weapon)) this.dossierWeapon = weapon;
     }
     else if (action === 'armory-back') this.mode = 'menu';
+    else if (action === 'loadout') this.mode = 'loadout';
+    else if (action === 'loadout-back') this.mode = 'paused';
     else if (action === 'pause') this.pause();
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
@@ -274,9 +280,14 @@ export class CanvasRuntime {
   }
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
-    if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, this.world.weaponKind);
+    if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
+      if(e.type==='laser' && this.save.settings.sound)this.platform.sound('fire',this.world.growth.stage,'pierce');
+      if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser'});
+      return;
+    }
+    if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, e.weaponKind ?? this.world.weaponKind);
     if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
-    if (e.type === 'fire') { this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
+    if (e.type === 'fire') { if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
     if (e.type === 'weapon' || e.type === 'upgrade') this.weaponGuideUntil = this.world.time + 5;
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
@@ -350,6 +361,7 @@ export class CanvasRuntime {
       c.restore(); return;
     }
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
+    if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
     const sector = this.mode === 'menu' ? 0 : sectorIndex(w.round);
     const ground = this.images.get(['runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg'][sector])!;
     const h = ground.height / ground.width * 720;
@@ -387,6 +399,8 @@ export class CanvasRuntime {
   }
   private drawWorld(dt: number) {
     const c = this.ctx, w = this.world;
+    for(const beam of this.supportBeams)beam.life-=dt;
+    this.supportBeams=this.supportBeams.filter(beam=>beam.life>0);
     this.gateFeedback.sync(w.bodies, w.time);
     this.gateFeedback.advance(dt);
     this.drawGuide();
@@ -457,6 +471,7 @@ export class CanvasRuntime {
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
+    for(const beam of this.supportBeams) if(this.mode!=='menu')supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak');
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0)
       overloadWake(c, w.player.x, playerY, w.time, w.growth.overload, this.save.settings.effects === 'weak');
@@ -566,10 +581,10 @@ export class CanvasRuntime {
       }
       if (b.kind === 'crate') {
         if (b.weaponKind) {
-          const choice = b.weaponKind === w.weaponKind ? '保留' : '换装';
+          const choice = w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加';
           const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '邻敌连锁 · 盾卫截断' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
-          const panelY = b.y - 158 >= this.hudTop + 128 ? b.y - 158 : Math.max(this.hudTop + 128, b.y + 70);
+          const panelY = b.y - 158 >= this.hudTop + 172 ? b.y - 158 : Math.max(this.hudTop + 172, b.y + 70);
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
           this.text(`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x, panelY + 23, 25, weaponColors[b.weaponKind], 'center', true);
           this.text(role, b.x, panelY + 51, 24, '#cfdee9');
@@ -580,7 +595,7 @@ export class CanvasRuntime {
           this.text(`T${b.stage} ${w.growth.stage >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
           this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
         }
-      } else if (b.kind === 'pickup') this.text(b.weaponKind ? `拾取${b.weaponKind === w.weaponKind ? '保留' : '换装'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
+      } else if (b.kind === 'pickup') this.text(b.weaponKind ? `拾取${w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy, b.rewardKind), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
@@ -630,16 +645,18 @@ export class CanvasRuntime {
   }
   private drawHud() {
     const y = this.hudTop, w = this.world;
-    this.rect(0, 0, 720, y + 118, '#08131be8');
+    this.rect(0, 0, 720, y + 162, '#08131be8');
     this.text('分数', 30, y + 6, 20, '#91adbf', 'left');
     this.text(w.score.toString().padStart(6, '0'), 28, y + 43, 42, '#e9f6ff', 'left', true);
     this.text('◈ '.repeat(w.player.hp) + '◇ '.repeat(3 - w.player.hp), 430, y + 35, 34, '#82deff');
     this.rect(624, y + 2, 64, 64, '#1a2e3e'); this.text('Ⅱ', 656, y + 34, 36);
     this.buttons.push({ x: 624, y: y + 2, w: 64, h: 64, label: '暂停', action: 'pause' });
-    this.text(`T${w.growth.stage} ${weaponNames[w.weaponKind]}`, 30, y + 88, 26, weaponColors[w.weaponKind], 'left', true);
-    this.text(w.growth.overload > 0 ? `超载 ${w.growth.overload.toFixed(1)}s` : `火力 +${w.growth.bonus}%`, 280, y + 88, 26, '#74dcff', 'left', true);
+    this.text(`T${w.growth.stage} · ${w.activeWeapons.length}种武器叠加`, 30, y + 88, 25, weaponColors[w.weaponKind], 'left', true);
+    this.text(`火力 +${permanentPower(w.growth)}%`, 300, y + 88, 24, '#74dcff', 'left', true);
     this.text(`${w.round}轮·${sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
+    this.text(w.growth.overload > 0 ? `超载×1.35 · ${w.growth.overload.toFixed(1)}秒  |  再充能 ${Math.floor(w.growth.energy)}/100`
+      : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：本局火力+10% / 超载6秒`, 360, y + 144, 22, '#d4e8ee');
   }
   private drawGuide() {
     if (this.mode !== 'playing') return;
@@ -690,9 +707,31 @@ export class CanvasRuntime {
     this.text('留意取舍', 92, 868, 25, '#f0d19a', 'left', true);
     this.text(entry.tradeoff, 92, 915, 25, '#d6e7f0', 'left');
     this.rect(86, 963, 548, 1, '#355064');
-    this.text('局内击碎武器箱，再靠近拾取换装', 360, 1004, 25, '#b8d4e3');
-    this.text('同排只领一种 · 换装不会降低阶数', 360, 1045, 25, '#b8d4e3');
+    this.text('击碎后拾取 · 新武器与已有武器共同开火', 360, 1004, 25, '#b8d4e3');
+    this.text('同排选一种奖励 · 旧能力保留到本局结束', 360, 1045, 25, '#b8d4e3');
     this.button('返回主界面', 1100, 'armory-back', true);
+  }
+  private drawLoadout() {
+    const w = this.world, power = permanentPower(w.growth);
+    this.rect(40, 100, 640, 1100, '#102330');
+    this.text('当前火力', 360, 165, 46, '#e7f5ff', 'center', true);
+    this.text(`T${w.growth.stage} · 已叠加 ${w.activeWeapons.length} 种武器`, 360, 228, 28, '#a5d9ed');
+    this.text(`本局火力 +${power}% · 充能突破 ${w.growth.mastery ?? 0} 次`, 360, 278, 27, '#f0d19a');
+    for (const [index, kind] of w.activeWeapons.entries()) {
+      const profile = weaponProfile(kind, w.growth.stage), y = 342 + index * 102;
+      const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
+      this.rect(72, y, 576, 94, '#091723');
+      this.text(weaponNames[kind], 92, y + 28, 28, weaponColors[kind], 'left', true);
+      this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳65%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
+        : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? '近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
+      const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
+      this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
+    }
+    this.text((w.growth.mastery??0)>=3?`激光：每3秒${+(30*(1+power/100)).toFixed(1)}伤害 · 贯穿4敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
+    this.text((w.growth.mastery??0)>=5?'折射：速射弹命中后，向邻敌追加60%伤害':'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
+    this.text('数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
+    this.text('每充满100：本局永久+10%，并触发6秒超载', 360, 1004, 23, '#c7deeb');
+    this.button('返回暂停菜单', 1080, 'loadout-back', true);
   }
   private drawDialog() {
     const w = this.world;
@@ -704,12 +743,13 @@ export class CanvasRuntime {
       this.button('返回暂停菜单', 1170, 'pause-menu');
       return;
     }
-    this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, this.mode === 'settings' ? this.platform.openLicenses ? 800 : 710 : 640, '#122331f5');
+    this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, this.mode === 'settings' ? this.platform.openLicenses ? 800 : 710 : this.mode === 'paused' ? 790 : 640, '#122331f5');
     this.buttons = [];
     if (this.mode === 'paused') {
       this.text('暂停', 360, 420, 48, '#eff8ff', 'center', true); this.text(this.pauseReason || '准备好了，再继续突围。', 360, 490, 26, '#a9bfce');
       this.button('继续战斗', 560, 'resume', true); this.button('设置', 670, 'settings'); this.button('返回主界面', 780, 'home');
       this.button('查看战场', 890, 'preview');
+      this.button('当前火力与参数', 1000, 'loadout');
     } else if (this.mode === 'settings') {
       const s = this.save.settings;
       this.text('设置', 360, 415, 48, '#eff8ff', 'center', true);
@@ -730,7 +770,8 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
-      mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase,
+      mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase, activeWeapons:this.world.activeWeapons,
+      supportBeams:this.supportBeams.length,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
@@ -754,3 +795,4 @@ export function parseSave(value: unknown): Save {
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];
   return result;
 }
+

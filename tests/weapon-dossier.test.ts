@@ -34,4 +34,12 @@ it('browses all weapon dossiers without advancing or equipping, then returns and
   expect(runtime.back()).toBe('stay'); frame(); expect(runtime.mode).toBe('menu');
   click(360,1073); click(360,1143); expect(runtime.mode).toBe('menu');
   click(360,975); expect(runtime.mode).toBe('playing'); expect(runtime.world.time).toBeGreaterThan(0);
+  runtime.pause(); frame();
+  const pausedWorld = runtime.world, pausedTime = pausedWorld.time;
+  labels.length=0; click(360,1043);
+  expect(runtime.mode).toBe('loadout');
+  expect(labels.some(text=>text.includes('8轮/秒') && text.includes('单发伤害4'))).toBe(true);
+  for(let i=0;i<60;i++) frame();
+  expect(runtime.world).toBe(pausedWorld); expect(pausedWorld.time).toBe(pausedTime);
+  expect(runtime.back()).toBe('stay'); expect(runtime.mode).toBe('paused');
 });

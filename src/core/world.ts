@@ -1,7 +1,7 @@
 import { C, clamp } from './config';
 import type { EnemyKind } from './config';
 import { sweep } from './collision';
-import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate } from './rewards';
+import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate, permanentPower } from './rewards';
 import type { Growth } from './rewards';
 import { timeline, sectorIndex, sectorNames } from './director';
 import type { Spawn } from './director';
@@ -43,7 +43,10 @@ export class World {
   maxStage = 1; peakBodies = 0; peakBullets = 0; fallbackCount = 0; attackDeferrals = 0;
   private nextId = 1;
   private nextRow = 1;
-  private fireTimer = 0;
+  private fireTimers = new Map<WeaponKind, number>();
+  private laserTimer = 0;
+  private acquiredWeapons = new Set<WeaponKind>();
+  get activeWeapons(): WeaponKind[] { return this.acquiredWeapons.size ? [...this.acquiredWeapons] : [this.weaponKind]; }
   private scheduled: Spawn[];
   private scheduleIndex = 0;
   private bossVictory = false;
@@ -61,6 +64,10 @@ export class World {
     this.effects.push({ type, x, y, text, size });
   }
   drainEffects() { const out = this.effects; this.effects = []; return out; }
+  private overloadNotice() {
+    const level=this.growth.mastery ?? 0;
+    return level===3?'激光解锁 · 旧火力保留 · 永久+10%':level===5?'折射解锁 · 旧火力保留 · 永久+10%':'充能突破 · 永久火力+10% · 超载6秒';
+  }
 
   spawn(kind: BodyKind, x: number, y = -80, stage = 2): Body {
     const enemy = kind in C.enemies ? C.enemies[kind as EnemyKind] : null;
@@ -160,20 +167,39 @@ export class World {
   }
 
   private shoot(dt: number) {
-    this.fireTimer -= dt;
-    if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimer = 0; return; }
-    const w = weaponProfile(this.weaponKind, this.growth.stage);
-    while (this.fireTimer <= 1e-9) {
+    if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0; return; }
+    for (const kind of this.activeWeapons) {
+    let timer = (this.fireTimers.get(kind) ?? 0) - dt;
+    const w = weaponProfile(kind, this.growth.stage);
+    while (timer <= 1e-9) {
       if (this.bullets.filter(b => b.active && !b.hostile).length + w.offsets.length > C.limits.bullets) throw new Error('Player bullet budget exceeded');
       for (let i = 0; i < w.offsets.length; i++) {
         const x = this.player.x + w.offsets[i], y = C.playerY - (w.muzzleY ?? 72);
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx: w.vx[i], vy: -C.bulletSpeed,
-          damage: w.damage[i] * (1 + this.growth.bonus / 100) * (this.growth.overload > 0 ? 1.35 : 1),
-          age: 0, active: true, hostile: false, weaponKind: this.weaponKind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops });
+          damage: w.damage[i] * (1 + permanentPower(this.growth) / 100) * (this.growth.overload > 0 ? 1.35 : 1),
+          age: 0, active: true, hostile: false, weaponKind: kind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops });
         this.shots++;
       }
-      this.emit('fire', this.player.x, C.playerY - 70, undefined, this.growth.stage);
-      this.fireTimer += 1 / w.rate;
+      this.effects.push({type:'fire',x:this.player.x,y:C.playerY-70,size:this.growth.stage,weaponKind:kind});
+      timer += 1 / w.rate;
+    }
+    this.fireTimers.set(kind, timer);
+    }
+    if ((this.growth.mastery ?? 0) >= 3) {
+      this.laserTimer -= dt;
+      if (this.laserTimer <= 0) {
+        this.laserTimer += 3;
+        const x=this.player.x, start=C.playerY-100;
+        const targets=this.bodies.filter(b=>b.active && b.kind!=='pickup' && b.y>=C.playerShotTop && b.y<start
+          && Math.abs(b.x-x)<=b.width/2+8).sort((a,b)=>b.y-a.y || a.id-b.id);
+        let end=C.playerShotTop, count=0;
+        for(const body of targets){
+          const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body);
+          this.hit(body,30*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1),'pulse');
+          if(blocked || ++count>=4){end=body.y+body.height/2;break;}
+        }
+        this.effects.push({type:'laser',x,y:start,targetX:x,targetY:end});
+      }
     }
   }
   private hostile(x: number, y: number, vx = 0, vy = 280) {
@@ -189,7 +215,7 @@ export class World {
     this.player.x += clamp(distance, -C.moveSpeed * dt, C.moveSpeed * dt);
     if (this.phase !== 'boss-entry' && this.phase !== 'recovery') {
       this.growth.overload = Math.max(0, this.growth.overload - dt);
-      if (activateOverload(this.growth)) this.emit('overload', this.player.x, C.playerY, '超载启动');
+      if (activateOverload(this.growth)) this.emit('overload', this.player.x, C.playerY, this.overloadNotice());
     }
     this.director(dt);
     this.shoot(dt);
@@ -230,6 +256,15 @@ export class World {
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
+          if ((this.growth.mastery ?? 0) >= 5 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
+            const next=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies
+              && other.y>=C.playerShotTop && other.y<=C.playerY && Math.hypot(other.x-body.x,other.y-body.y)<=180)
+              .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id)[0];
+            if(next){
+              this.effects.push({type:'refract',x:body.x,y:body.y,targetX:next.x,targetY:next.y});
+              this.hit(next,bullet.damage*.6,'pulse');
+            }
+          }
           if (bullet.chainHops && body.kind in C.enemies) {
             const visited = new Set([body.id]); let origin = body, damage = bullet.damage;
             for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin); hop++) {
@@ -270,13 +305,17 @@ export class World {
           if (!b.active || this.player.hp <= 0) return;
           b.active = false; this.pickups++;
           const previousWeapon = this.weaponKind;
-          if (b.weaponKind) this.weaponKind = b.weaponKind;
+          if (b.weaponKind) {
+            this.acquiredWeapons.add(this.weaponKind);
+            this.acquiredWeapons.add(b.weaponKind);
+            this.weaponKind = b.weaponKind;
+          }
           if (b.row) for (const alternative of this.bodies) if (alternative.row === b.row) alternative.active = false;
           const result = grantEquipment(this.growth, b.stage);
           this.maxStage = Math.max(this.maxStage, this.growth.stage);
           this.emit(result.upgraded ? 'upgrade' : 'pickup', this.player.x, C.playerY, result.upgraded ? `T${b.stage} 火力进化` : '超载充能 +30', b.stage);
           if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY, `${weaponNames[this.weaponKind]} · T${this.growth.stage}`);
-          if (result.activated) this.emit('overload', this.player.x, C.playerY, '超载启动');
+          if (result.activated) this.emit('overload', this.player.x, C.playerY, this.overloadNotice());
         });
       } else {
         add(sweep(this.player.px, C.playerY, this.player.x, C.playerY, b.px, b.py, b.x, b.y,
@@ -298,7 +337,7 @@ export class World {
             const result = grantGate(this.growth, gateValue(chosen.energy, chosen.rewardKind), chosen.rewardKind);
             this.gatesTaken++;
             this.emit('gate-taken', chosen.x, C.playerY, gateRewardLabel(result), chosen.width);
-            if (result.activated) this.emit('overload', this.player.x, C.playerY, '超载启动');
+            if (result.activated) this.emit('overload', this.player.x, C.playerY, this.overloadNotice());
           }
           for (const gate of gates) gate.active = false;
         });
@@ -347,3 +386,5 @@ export class World {
     }
   }
 }
+
+

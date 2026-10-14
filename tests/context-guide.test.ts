@@ -42,11 +42,11 @@ it('keeps weapon choice guidance in later chapters without repeating basic tutor
   const w = new World(); w.round = 5; w.pickups = 12; w.gatesTaken = 12;
   const box = w.spawn('crate', 240, 500); box.weaponKind = 'pierce';
   const before = structuredClone(w);
-  expect(contextGuide(w).title).toBe('选择武器：对准其中一箱');
+  expect(contextGuide(w).title).toBe('对准一箱，增加火力能力');
   expect(w).toMatchObject(before);
   box.active = false;
   const drop = w.spawn('pickup', 240, 500); drop.weaponKind = 'pierce';
-  expect(contextGuide(w).detail).toContain('换装不会降阶');
+  expect(contextGuide(w).detail).toContain('已有武器继续开火');
   drop.y = 140; expect(contextGuide(w).kind).toBe('move');
   drop.y = 500; w.phase = 'boss'; expect(contextGuide(w).kind).toBe('move');
   w.phase = 'running'; drop.active = false;
@@ -77,3 +77,4 @@ it('prioritizes charging threats over rewards and clears stale enemy guidance', 
   guard.y = 700; expect(contextGuide(w).kind).toBe('move');
   guard.y = 320; guard.active = false; expect(contextGuide(w).kind).toBe('move');
 });
+

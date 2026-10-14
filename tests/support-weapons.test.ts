@@ -1,0 +1,34 @@
+import { expect, it } from 'vitest';
+import { World } from '../src/core/world';
+import { C } from '../src/core/config';
+
+it.each(['crate','gate'] as const)('laser unlocks at the third breakthrough and is absorbed by the first %s', kind => {
+  const w=new World();w.growth.mastery=3;
+  const box=w.spawn(kind,360,700,3);box.speed=0;
+  const behind=w.spawn('armor',360,400);behind.speed=0;
+  w.step(C.step);
+  if(kind==='crate')expect(box.hp).toBe(112-39);else expect(box.energy).toBe(39);
+  expect(behind.hp).toBe(80);
+  expect(w.drainEffects().filter(e=>e.type==='laser')).toHaveLength(1);
+  for(let i=0;i<10;i++){w.step(C.step);expect(w.drainEffects().filter(e=>e.type==='laser')).toHaveLength(0);}
+});
+
+it('laser has a four-target ceiling and closed guards block enemies behind them', () => {
+  const w=new World();w.growth.mastery=3;
+  const targets=[800,690,580,470,360].map(y=>w.spawn('armor',360,y));
+  w.step(C.step);
+  expect(targets.map(t=>t.hp)).toEqual([41,41,41,41,80]);
+  const s=new World();s.growth.mastery=3;
+  const shield=s.spawn('guard',360,500),behind=s.spawn('armor',360,300);
+  s.step(C.step);expect(shield.hp).toBe(64-19.5);expect(behind.hp).toBe(80);
+});
+
+it('refraction adds one nearby hit without farming crates or recursively reflecting', () => {
+  const w=new World();w.growth.mastery=5;w.phase='boss-entry';
+  const first=w.spawn('armor',360,500),next=w.spawn('armor',460,500),third=w.spawn('armor',550,500);
+  const crate=w.spawn('crate',380,520);
+  w.bullets.push({id:999,x:360,y:500,px:360,py:500,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'pulse'});
+  w.step(C.step);
+  expect(first.hp).toBe(70);expect(next.hp).toBe(74);expect(third.hp).toBe(80);expect(crate.hp).toBe(crate.maxHp);
+  expect(w.drainEffects().filter(e=>e.type==='refract')).toHaveLength(1);
+});

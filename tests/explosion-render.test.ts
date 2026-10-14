@@ -4,6 +4,18 @@ import { defaults } from '../src/ui/storage';
 import { World } from '../src/core/world';
 import { C } from '../src/core/config';
 
+it.each([false,true])('support beam expires, freezes on pause, and clears on restart (weak=%s)', async weak => {
+  const f=fixture(weak); await f.runtime.load(); f.runtime.start();
+  f.runtime.world.growth.mastery=3; f.tick();
+  expect(f.runtime.diagnostics().supportBeams).toBe(1);
+  f.runtime.pause(); for(let i=0;i<30;i++)f.tick();
+  expect(f.runtime.diagnostics().supportBeams).toBe(1);
+  f.runtime.start(); expect(f.runtime.diagnostics().supportBeams).toBe(0);
+  f.runtime.world.growth.mastery=3;f.tick();
+  for(let i=0;i<30;i++)f.tick();
+  expect(f.runtime.diagnostics().supportBeams).toBe(0);
+});
+
 function fixture(weak = false) {
   let clock = 0, next: FrameRequestCallback = () => {};
   const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; composite: string; font?: string }> = [];
@@ -69,10 +81,10 @@ it.each([180, 280, 400])('keeps the complete entering weapon choice label below 
   const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
   const b=f.runtime.world.spawn('crate',222,y,2);b.weaponKind='scatter';b.speed=0;
   f.tick();
-  const title=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('换装 霰射炮'));
+  const title=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('叠加 霰射炮'));
   expect(title).toBeDefined();
-  expect(Number(title!.args[2])-13).toBeGreaterThan(28+118);
-  expect(y<314?Number(title!.args[2])>y+55:Number(title!.args[2])<y-55).toBe(true);
+  expect(Number(title!.args[2])-13).toBeGreaterThan(28+162);
+  expect(y<358?Number(title!.args[2])>y+55:Number(title!.args[2])<y-55).toBe(true);
 });
 
 it.each([false,true])('bounds localized impacts and freezes and clears their lifetime (weak=%s)', async weak => {
@@ -290,8 +302,8 @@ it('guides an actual first crate, pickup, single gate and paired row without cha
   }
   expect(reference.pickups).toBe(2); expect(reference.gatesTaken).toBe(2);
   expect(reference.weaponKind).toBe('scatter');
-  expect(seen).toContain('选择武器：对准其中一箱');
-  expect(seen).toContain('靠近领取所选武器');
+  expect(seen).toContain('对准一箱，增加火力能力');
+  expect(seen).toContain('靠近领取，叠加新火力');
   expect(seen).toContain('对准装备箱持续射击');
   expect(seen).toContain('装备已掉落，移到它下方');
   expect(seen).toContain('持续射击，把门的奖励打高');
@@ -669,3 +681,5 @@ it('repaints resized pause previews immediately and maps buttons to the new view
   expect(JSON.stringify(f.runtime.world)).toBe(frozen);
   f.tick();expect(f.runtime.world.time).toBeGreaterThan(JSON.parse(frozen).time);
 });
+
+

@@ -17,11 +17,12 @@ describe('reward invariants', () => {
     g.bonus = 95; const result = grantGate(g, 30, 'power');
     expect([g.bonus, g.energy, result.power, result.energy]).toEqual([100, 25, 5, 25]);
   });
-  it('does not skip equipment tiers or refresh active overload', () => {
+  it('keeps equipment tier while repeated charge grants permanent breakthroughs without losing remainder', () => {
     const g = { stage: 2, bonus: 100, energy: 70, overload: 0 };
     grantEquipment(g, 2); expect(g.stage).toBe(2); expect(g.overload).toBe(6); expect(g.energy).toBe(0);
     grantGate(g, 100, 'energy'); grantEquipment(g, 1);
-    expect(g.overload).toBe(6); expect(g.energy).toBe(100); expect(g.stage).toBe(2);
+    expect(g.overload).toBe(6); expect(g.energy).toBe(30); expect(g.stage).toBe(2);
+    expect(g).toMatchObject({mastery:2});
   });
 });
 

@@ -29,9 +29,9 @@ export function contextGuide(world: Context): Guide {
   if (visible.some(b => b.kind === 'guard' && b.warning > 0))
     return { kind: 'enemy', title: '盾卫开盾：避开扇形弹道', detail: '弱点已暴露 · 趁开盾集中火力' };
   if (visible.some(b => b.weaponKind && b.kind === 'pickup'))
-    return { kind: 'pickup', title: '靠近领取所选武器', detail: '同排只领一种 · 换装不会降阶' };
+    return { kind: 'pickup', title: '靠近领取，叠加新火力', detail: '同排选一种奖励 · 已有武器继续开火' };
   if (visible.some(b => b.weaponKind && b.kind === 'crate'))
-    return { kind: 'crate', title: '选择武器：对准其中一箱', detail: '打碎再领取 · 同排只选一种' };
+    return { kind: 'crate', title: '对准一箱，增加火力能力', detail: '打碎再领取 · 旧能力保留到本局结束' };
   if (visible.some(b => b.kind === 'guard' && guardClosed(b) && b.y < 650))
     return { kind: 'enemy', title: '盾卫闭盾：正面伤害减半', detail: '闭盾挡住穿甲与跳电 · 留意开盾时机' };
   if (world.round !== 1) return movement;
