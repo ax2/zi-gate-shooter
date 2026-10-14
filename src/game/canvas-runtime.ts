@@ -1,4 +1,4 @@
-import { supportProfile, nextSupportReward } from '../core/support-profile';
+import { tree, routes, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -48,7 +48,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'armory' | 'loadout' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'armory' | 'loadout' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private dossierWeapon: WeaponKind = 'pulse';
   save: Save;
   private previousMode: 'menu' | 'paused' = 'menu';
@@ -155,8 +155,12 @@ export class CanvasRuntime {
           while (this.accumulator + 1e-9 >= C.step && steps++ < 5 && this.mode === 'playing') {
             if (this.keys.active) this.target = clamp(this.world.player.x + this.keys.direction * C.moveSpeed * C.step, C.minX, C.maxX);
             this.groundDistance += C.step * this.world.scrollSpeed;
+            const previousMastery=this.world.growth.mastery??0;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
+            if (this.world.player.hp>0 && (this.world.growth.mastery??0)>previousMastery && this.world.build.available(this.world.growth.mastery??0).length) {
+              this.mode='choice';this.cancelTouch();this.accumulator=0;this.platform.silence();
+            }
             if (this.world.player.hp <= 0) {
               this.mode = 'result'; this.cancelTouch(); this.save.best = Math.max(this.save.best, this.world.score); this.platform.write(this.save); this.platform.silence();
             }
@@ -171,7 +175,7 @@ export class CanvasRuntime {
     this.renderElapsed += dt;
     if (this.renderBudget + 1e-9 >= C.step || this.renderedMode !== this.mode) {
       if (this.mode === 'playing') this.drawCount++;
-      this.render(this.mode === 'paused' || this.mode === 'settings' ? 0 : Math.min(this.renderElapsed, 0.1));
+      this.render(this.mode === 'paused' || this.mode === 'settings' || this.mode === 'choice' ? 0 : Math.min(this.renderElapsed, 0.1));
       this.renderBudget = Math.max(0, this.renderBudget - Math.floor((this.renderBudget + 1e-9) / C.step) * C.step);
       this.renderElapsed = 0;
       this.renderedMode = this.mode;
@@ -245,6 +249,7 @@ export class CanvasRuntime {
   /** Native back never resumes a paused run or silently abandons a live one. */
   back(): 'stay' | 'exit' {
     this.cancelTouch();
+    if (this.mode === 'choice') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
@@ -254,7 +259,13 @@ export class CanvasRuntime {
     return 'exit';
   }
   private action(action: string) {
-    if (action === 'reload') { this.mode = 'loading'; void this.load(); }
+    if(action.startsWith('build:') && this.mode==='choice') {
+      const route=action.slice(6) as Route;
+      if(routes.includes(route)&&this.world.chooseBuild(route)){
+        if(!this.world.build.available(this.world.growth.mastery??0).length)this.action('resume');
+      }
+    }
+    else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
     else if (action === 'armory') { this.dossierWeapon = 'pulse'; this.mode = 'armory'; }
     else if (action.startsWith('dossier:')) {
@@ -396,6 +407,7 @@ export class CanvasRuntime {
         if(this.noticeDetail)this.text(this.noticeDetail,360,this.noticeY+43,24,'#f2d598');
       }
     }
+    if(this.mode==='choice')this.drawBuildChoices();
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
     c.restore();
   }
@@ -693,21 +705,38 @@ export class CanvasRuntime {
     this.text(`T${w.weaponStage(w.weaponKind)} · 已叠加 ${w.activeWeapons.length} 种武器`, 360, 228, 28, '#a5d9ed');
     this.text(`本局火力 +${power}% · 充能突破 ${w.growth.mastery ?? 0} 次`, 360, 278, 27, '#f0d19a');
     for (const [index, kind] of w.activeWeapons.entries()) {
-      const profile = weaponProfile(kind, w.weaponStage(kind)), y = 342 + index * 102;
+      const profile = w.profileFor(kind), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
-      this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳65%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
+      this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? '近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
     }
-    const support=supportProfile(w.growth.mastery);
+    const support=w.supportProfile();
     this.text(support.laserUnlocked?`激光：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text('数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
-    this.text(nextSupportReward(w.growth.mastery), 360, 1004, 23, '#f0d19a');
+    this.text(`路线节点 ${w.build.spent}/9 · 充能突破继续选择`, 360, 1004, 23, '#f0d19a');
     this.button('返回暂停菜单', 1080, 'loadout-back', true);
+  }
+  private drawBuildChoices() {
+    this.rect(35,150,650,1000,'#102330');
+    this.text('充能突破 · 选择升级路线',360,220,34,'#effaff','center',true);
+    this.text('能力保留 · 可专精，也可跨路线组合',360,270,24,'#b8d4e3');
+    const available=this.world.build.available(this.world.growth.mastery??0);
+    for(const [i,route] of routes.entries()){
+      const rank=this.world.build.ranks[route],y=330+i*235,node=tree[route][rank];
+      const enabled=available.includes(route);
+      this.rect(65,y,590,205,enabled?'#203e50':'#15232e');
+      this.text(`${['弹道','雷电','光学'][i]}路线 · ${rank}/3`,90,y+35,26,'#f0d19a','left');
+      this.text(node?.name??'路线已完成',90,y+83,30,enabled?'#effaff':'#8396a2','left',true);
+      this.text(node?.detail??'所有已选能力继续生效',90,y+128,23,'#bdd8e7','left');
+      this.text(enabled?'选择此节点　›':rank===3?'已完成':'需先选择导电线圈',610,y+174,23,enabled?'#80e4ff':'#8396a2','right');
+      if(enabled)this.buttons.push({x:65,y,w:590,h:205,action:`build:${route}`,label:node!.name});
+    }
+    this.text('选择后继续战斗，时间已暂停',360,1090,24,'#b8d4e3');
   }
   private drawDialog() {
     const w = this.world;
@@ -746,7 +775,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
-      mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase, activeWeapons:this.world.activeWeapons,
+      mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, activeWeapons:this.world.activeWeapons,
       supportBeams:this.supportBeams.length,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
@@ -771,5 +800,6 @@ export function parseSave(value: unknown): Save {
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];
   return result;
 }
+
 
 

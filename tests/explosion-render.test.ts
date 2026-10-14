@@ -683,3 +683,14 @@ it('repaints resized pause previews immediately and maps buttons to the new view
 });
 
 
+
+it('breakthrough freezes combat for a route choice and resumes only after choosing',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ f.runtime.world.growth.energy=100;f.tick();
+ expect(f.runtime.mode).toBe('choice');
+ const time=f.runtime.world.time;for(let i=0;i<30;i++)f.tick();expect(f.runtime.world.time).toBe(time);
+ expect(f.runtime.back()).toBe('stay');expect(f.runtime.mode).toBe('choice');
+ f.runtime.touchStart(1,360,410);f.runtime.touchEnd(1,360,410);
+ expect(f.runtime.world.build.ranks.ballistic).toBe(1);expect(f.runtime.world.activeWeapons).toContain('scatter');
+ expect(f.runtime.mode).toBe('playing');f.tick();expect(f.runtime.world.time).toBeGreaterThan(time);
+});

@@ -1,3 +1,4 @@
+import { BuildTree, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
 import { supportProfile, supportMilestone } from './support-profile';
 import { C, clamp } from './config';
@@ -32,6 +33,26 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
+  readonly build = new BuildTree();
+  chooseBuild(route: Route) {
+    if(!this.build.choose(route,this.growth.mastery??0))return false;
+    const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
+    if(kind && !this.activeWeapons.includes(kind)) {
+      for(const owned of this.activeWeapons){this.weaponStages.set(owned,this.weaponStage(owned));this.acquiredWeapons.add(owned);}
+      this.weaponStages.set(kind,1);this.acquiredWeapons.add(kind);
+    }
+    return true;
+  }
+  profileFor(kind:WeaponKind) {
+    const p=weaponProfile(kind,this.weaponStage(kind)),rank=this.build.ranks;
+    return {...p,damage:p.damage.map(n=>n*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
+      chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
+  }
+  supportProfile() {
+    const p=supportProfile(this.growth.mastery),rank=this.build.ranks.optical;
+    return {...p,laserUnlocked:p.laserUnlocked||rank>0,laserDamage:p.laserDamage*(rank>0?1.15:1),
+      laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0)};
+  }
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
   weaponKind: WeaponKind = 'pulse';
   player = { x: 360, px: 360, hp: 3, invulnerable: 0 };
@@ -175,7 +196,7 @@ export class World {
     if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0; return; }
     for (const kind of this.activeWeapons) {
     let timer = (this.fireTimers.get(kind) ?? 0) - dt;
-    const w = weaponProfile(kind, this.weaponStage(kind));
+    const w = this.profileFor(kind);
     while (timer <= 1e-9) {
       if (this.bullets.filter(b => b.active && !b.hostile).length + w.offsets.length > C.limits.bullets) throw new Error('Player bullet budget exceeded');
       for (let i = 0; i < w.offsets.length; i++) {
@@ -190,7 +211,7 @@ export class World {
     }
     this.fireTimers.set(kind, timer);
     }
-    const support=supportProfile(this.growth.mastery);
+    const support=this.supportProfile();
     if (support.laserUnlocked) {
       this.laserTimer -= dt;
       if (this.laserTimer <= 0) {
@@ -262,7 +283,7 @@ export class World {
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
-          const support=supportProfile(this.growth.mastery);
+          const support=this.supportProfile();
           if (support.refractionTargets > 0 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
             const reflected=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies
               && other.y>=C.playerShotTop && other.y<=C.playerY && Math.hypot(other.x-body.x,other.y-body.y)<=support.refractionRange)
@@ -277,10 +298,10 @@ export class World {
             for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin); hop++) {
               const candidates = this.bodies.filter(other => other.active && !visited.has(other.id) && other.kind in C.enemies
                 && other.y >= C.playerShotTop && other.y <= C.playerY
-                && Math.hypot(other.x-origin.x,other.y-origin.y) <= 160);
+                && Math.hypot(other.x-origin.x,other.y-origin.y) <= (this.build.ranks.electric>=2?220:160));
               candidates.sort((a,b) => Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y) || a.id-b.id);
               const next = candidates[0]; if (!next) break;
-              visited.add(next.id); damage *= 0.65;
+              visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
               this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y});
               this.hit(next,damage,bullet.weaponKind); origin = next;
             }
