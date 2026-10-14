@@ -1,0 +1,7 @@
+# 穿甲机体候选
+
+2026-10-14，内置imagegen，以现有原创units.png为身份与材质参考，未接入运行。
+
+## 完整提示词
+
+Create one original production-candidate sprite atlas for a vertical sci-fi mechanical shooter. Attached units.png is STYLE/IDENTITY REFERENCE ONLY: use white player mechs in its top row, no enemies. EXACTLY THREE full-body player mech upgrade sprites, in one horizontal row of equal-width cells; consistent near-top-down orthographic camera, facing top of image, identical torso/leg size and foot baseline, centered per cell, generous clear padding. Preserve ivory chipped armor, dark mechanical joints, two compact legs and cyan chest reactor. Change ONLY weapons into electromagnetic armor-piercing rail cannons. Tier 1 one narrow central rail cannon with two visible parallel rails and a small violet energized slot. Tier 2 two narrow symmetrical rail cannons. Tier 3 two heavier long rail cannons with layered mechanical accelerator collars and exposed violet inset capacitors, not four barrels. Long straight silhouettes, no circular scatter/multihole muzzles, no miniguns. Intricate metal bevels, cooling ribs and polished game-render craftsmanship, legible at 160x213 gameplay size. White armor remains dominant, violet is localized emission not a floodlight. No firing, no bullets, no smoke. Genuine transparent alpha background, no ground, no cast shadow, no painted backdrop, no labels, no numbers, no UI. Keep all sprites fully within their cells and same perspective as reference. Original design, no commercial franchise assets.

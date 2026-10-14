@@ -74,3 +74,4 @@ charger/armor/elite-wreck-v1.png分别由本会话内置imagegen参考原创机�
 ## Stage-50 装甲通道
 内置imagegen、自有跑道参考，完整提示词armored-corridor-v1-prompt.md。源图source/armored-corridor-v1.png，运行图public/assets/armored-corridor-v1.jpg，149057字节；第三章交替反射滚动，候选未签收。
 Stage-63：霰射机体source/scatter-player-v1.png由内置imagegen参考自有units生成，完整提示词scatter-player-v1-prompt.md。export-scatter-player.mjs透明技术导出到public/assets/scatter-player-v1.png，576×256/169813字节；候选非最终美术签收。
+Stage-64：穿甲三阶原创候选由内置imagegen参考自有units生成。v1炮口裁切拒用保留，v2源图source/pierce-player-v2.png完整；提示词pierce-player-v1-prompt.md和pierce-player-v2-prompt.md。未接入，非最终美术。
