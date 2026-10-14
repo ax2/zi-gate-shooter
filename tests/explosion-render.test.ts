@@ -18,12 +18,22 @@ function fixture(weak = false) {
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: 768, height: src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
+    image: async src => ({ src, width: src.includes('scatter-player') ? 576 : 768, height: src.includes('scatter-player') || src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick(ms = 1000 / 60) { calls.length = 0; clock += ms; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([1,2,3])('selects scatter tier %s artwork and switches back without changing growth', async stage => {
+ const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.growth.stage=stage;f.runtime.world.weaponKind='scatter';f.tick();
+ const art=f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('scatter-player-v1.png'));
+ expect(art).toHaveLength(3);
+ for(const call of art){expect(call.args[1]).toBeGreaterThanOrEqual((stage-1)*192);expect(call.args[1]+call.args[3]).toBeLessThanOrEqual(stage*192);}
+ f.runtime.world.weaponKind='pierce';f.tick();
+ expect(f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('scatter-player-v1.png'))).toHaveLength(0);
+ expect(f.runtime.world.growth.stage).toBe(stage);
+});
 
 it.each([180, 280, 400])('keeps the complete entering weapon choice label below HUD at y=%s', async y => {
   const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';

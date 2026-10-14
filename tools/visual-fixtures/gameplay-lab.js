@@ -21,7 +21,7 @@ function start(){
    return;
  }
  if(document.querySelector('#scenario').value==='opening') return;
- runtime.world.growth.stage=3;runtime.world.weaponKind=document.querySelector('#weapon').value;
+ runtime.world.growth.stage=Number(document.querySelector('#tier').value);runtime.world.weaponKind=document.querySelector('#weapon').value;
  if(document.querySelector('#scenario').value.startsWith('choices')) {
    const weapons=[runtime.world.weaponKind,runtime.world.weaponKind==='pierce'?'scatter':'pierce'];
    for(let i=0;i<2;i++){const box=runtime.world.spawn('crate',[222,498][i],document.querySelector('#scenario').value==='choices-entry'?180:580,3);box.weaponKind=weapons[i];box.row=100;box.speed=0;}
@@ -36,8 +36,9 @@ function start(){
 document.querySelector('#start').onclick=start;
 document.querySelector('#pause').onclick=()=>runtime.pause('机制对比已暂停');
 document.querySelector('#weapon').onchange=start;
+ document.querySelector('#tier').onchange=start;
 document.querySelector('#sector').onchange=start;
 document.querySelector('#scenario').onchange=start;
 window.addEventListener('resize',()=>runtime.resize(innerWidth,innerHeight-68,devicePixelRatio));
-Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:['gates','gate-danger'].includes(document.querySelector('#scenario').value)?'stationary pair from production gate factory, layout only':document.querySelector('#scenario').value==='blockade'?'T1 + seeded boss blockade, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value.startsWith('choices')?'T3 + two stationary choice crates, no damage immunity':'T3 + five seeded bodies, no damage immunity'})});
+Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:['gates','gate-danger'].includes(document.querySelector('#scenario').value)?'stationary pair from production gate factory, layout only':document.querySelector('#scenario').value==='blockade'?'T1 + seeded boss blockade, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value.startsWith('choices')?'selected tier + two stationary T3 choice crates, no damage immunity':'selected tier + five seeded bodies, no damage immunity'})});
 await runtime.load();
