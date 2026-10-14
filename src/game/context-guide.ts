@@ -21,11 +21,11 @@ export function weaponGuide(kind: WeaponKind, stage: number): Guide {
 /** Read-only, in-world guidance: no timed grants, progression or persisted tutorial state. */
 export function contextGuide(world: Context): Guide {
   const blockade = world.phase === 'boss' && world.bodies.some(b => b.active && b.kind === 'boss' && b.attack === 3 && b.warning > 0);
-  if (blockade) return { kind: 'boss', title: '先避开前波，再移向下一缺口', detail: '预警显示下一波 · 留意仍在飞行的子弹' };
+  if (blockade) return { kind: 'boss', title: '首领封锁：观察实际弹幕', detail: '留意仍在飞行的子弹 · 随弹幕移动' };
   if (world.phase !== 'running') return movement;
   const visible = world.bodies.filter(b => b.active && b.y >= 160 && b.y <= C.playerY + (b.kind === 'pickup' ? 52 : 0));
   if (visible.some(b => b.kind === 'sniper' && b.warning > 0))
-    return { kind: 'enemy', title: '狙击蓄能：离开预警通道', detail: '也可抢先击毁 · 命中不会打断蓄能' };
+    return { kind: 'enemy', title: '狙击蓄能：保持横向移动', detail: '也可抢先击毁 · 命中不会打断蓄能' };
   if (visible.some(b => b.kind === 'guard' && b.warning > 0))
     return { kind: 'enemy', title: '盾卫开盾：避开扇形弹道', detail: '弱点已暴露 · 趁开盾集中火力' };
   const equipment = visible.filter(b => b.weaponKind && (b.kind === 'pickup' || b.kind === 'crate'));

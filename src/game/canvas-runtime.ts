@@ -4,7 +4,6 @@ import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
 import { gateValue, previewReward, permanentPower } from '../core/rewards';
-import { bossWarningLanes, fanWarningVelocities } from '../core/behavior';
 import { defaults } from '../ui/storage';
 import { FrameWindow } from './frame-window';
 import { BossDestruction, BOSS_VISUAL } from './boss-destruction';
@@ -547,41 +546,13 @@ export class CanvasRuntime {
     for (const b of w.bodies) if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
     for (const b of w.bodies) {
       if (b.warning > 0) {
-        const lanes = b.kind === 'boss' ? bossWarningLanes(b) : [b.x];
-        if (b.kind === 'charger' && b.pattern === 'flank') {
-          const startY = b.y + Math.max(0, C.chargerBehavior.dashAge - b.age) * b.speed;
-          const timeToLane = Math.abs(b.lane - b.x) / 240;
-          const kneeY = startY + timeToLane * C.chargerBehavior.dashSpeed;
-          const endY = Math.min(C.playerY + 50, kneeY);
-          const endX = b.x + (b.lane - b.x) * Math.min(1, Math.max(0, (endY - startY) / Math.max(1, kneeY - startY)));
-          c.save(); c.strokeStyle = '#ff775633'; c.lineWidth = 62; c.beginPath(); c.moveTo(b.x, b.y + 30); c.lineTo(b.x, startY); c.lineTo(endX, endY); if (kneeY < C.playerY) c.lineTo(b.lane, C.playerY + 50); c.stroke();
-          c.strokeStyle = '#ffb18c'; c.lineWidth = 2; c.stroke(); c.restore();
-        } else if (b.pattern === 'fan' || b.kind === 'guard') {
-          const originY = b.y + b.speed * Math.max(0, b.timer) + b.height / 2;
-          c.save(); c.strokeStyle = '#ffb18caa'; c.lineWidth = 2;
-          for (const vx of fanWarningVelocities(b)) { const shotY = originY + (b.kind === 'elite' && !b.burst && Math.abs(vx) === 50 ? b.speed * 0.6 : 0); c.beginPath(); c.moveTo(b.x, shotY); c.lineTo(b.x + vx * (C.playerY - shotY) / 280, C.playerY); c.stroke(); }
-          c.restore();
-        } else if (b.kind === 'boss' || b.kind === 'charger' || b.kind === 'sniper') for (const x of lanes) {
-          this.rect(x - 36, b.y + 60, 72, 1110 - b.y, '#ff775620');
-          c.strokeStyle = '#ff986eaa'; c.lineWidth = 2; c.strokeRect(x - 36, b.y + 60, 72, 1110 - b.y);
-          if (b.kind === 'sniper') {
-            this.rect(x - 44, b.y + 100, 88, 36, '#241c1eef');
-            this.text('狙击', x, b.y + 118, 24, '#ffe1c8', 'center', true);
-          }
-          if (b.kind === 'boss') {
-            if (b.attack === 3) {
-              if (x === lanes[0]) {
-                this.rect(b.lane - 54, b.y + 132, 108, 38, '#0b1723ef');
-                this.text(b.burst ? '下一缺口' : '缺口', b.lane, b.y + 151, b.burst ? 22 : 24, '#d9f4ff', 'center', true);
-                this.text('封锁', x, b.y + 151, 24, '#ffe1c8', 'center', true);
-              }
-              continue;
-            }
-            const label = b.attack === 3 ? '封锁' : b.attack === 2 ? '齐射' : b.attack ? x === 360 ? '第2拍' : '第1拍' : '锁定';
-            this.rect(x - 35, b.y + 132, 70, 38, '#241c1eef');
-            this.text(label, x, b.y + 151, 24, '#ffe1c8', 'center', true);
-          }
-        } else this.rect(b.x - 5, b.y + b.height / 2, 10, 14, '#ffe1a2');
+        // The enemy telegraphs its action locally; never preview future bullet paths.
+        const charge = .65 + Math.sin(w.time * 22) * .2;
+        const muzzleY = b.y + b.height * .32;
+        c.save(); c.globalAlpha = charge; c.strokeStyle = '#ffbc76'; c.lineWidth = 2;
+        c.beginPath(); c.arc(b.x, muzzleY, b.kind === 'boss' ? 22 : 10, 0, Math.PI * 2); c.stroke();
+        c.fillStyle = '#ffe4aa'; c.beginPath(); c.arc(b.x, muzzleY, 3, 0, Math.PI * 2); c.fill();
+        c.restore();
       }
       if (b.kind === 'crate') {
         if (b.weaponKind) {

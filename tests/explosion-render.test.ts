@@ -162,7 +162,7 @@ it.each([false,true])('ties boss preparation to real A/B warnings, freezes the s
   expect(ds[0].args[1]).toBe(body.warning>0?256:0);expect(ds[0].args[1]).toBeLessThan(512);
   expect(ds[1].composite).toBe('lighter');expect(ds[1].alpha).toBeLessThanOrEqual(weak?.18:.48);
   expect(f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('重装首领'))).toBeGreaterThan(f.calls.indexOf(ds[1]));
-  if(body.warning>0)expect(f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ff775620')).toBeGreaterThan(f.calls.indexOf(ds[1]));
+  if(body.warning>0)expect(f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ffe4aa')).toBeGreaterThan(f.calls.indexOf(ds[1]));
   if(body.burst&&!paused){
    const frozen={...body},bullets=JSON.stringify(f.runtime.world.bullets),pose=ds.map(c=>c.args.slice(1));
    f.runtime.pause();for(let j=0;j<30;j++)f.tick();expect(body).toEqual(frozen);
@@ -192,7 +192,7 @@ it.each([false,true])('draws elite travel/preparation with matching hit, upper w
   expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('units.png')&&c.args[1]===384&&c.args[2]===256)).toBe(false);
   if(body.warning>0){
    expect(ds[0].args[1]).toBe(256);
-   expect(f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ffe1a2')).toBeGreaterThan(f.calls.indexOf(ds[1]));
+   expect(f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ffe4aa')).toBeGreaterThan(f.calls.indexOf(ds[1]));
    if(!paused){
     const frozen={...body},pose=ds.map(c=>c.args.slice(1));f.runtime.pause();for(let j=0;j<30;j++)f.tick();
     expect(body).toEqual(frozen);expect(draws().map(c=>c.args.slice(1))).toEqual(pose);
@@ -220,7 +220,7 @@ it.each([false,true])('draws armor travel/preparation with matching hit, upper w
   expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('units.png')&&c.args[1]===192&&c.args[2]===256)).toBe(false);
   if(body.warning>0){
    expect(ds[0].args[1]).toBe(256);
-   expect(f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ffe1a2')).toBeGreaterThan(f.calls.indexOf(ds[1]));
+   expect(f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ffe4aa')).toBeGreaterThan(f.calls.indexOf(ds[1]));
    if(!paused){
     const frozen={...body},pose=ds.map(c=>c.args.slice(1));f.runtime.pause();for(let j=0;j<30;j++)f.tick();
     expect(body).toEqual(frozen);expect(draws().map(c=>c.args.slice(1))).toEqual(pose);
@@ -247,7 +247,7 @@ it.each([false,true])('uses real charger states for poses, preserves danger abov
   if(body.warning>0){
    expect(ds[0].args[1]).toBe(256);
    const lastArt=f.calls.indexOf(ds[1]);
-   expect(f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ff775620')).toBeGreaterThan(lastArt);
+   expect(f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ffe4aa')).toBeGreaterThan(lastArt);
    if(!pausedWindup){
     const frozen={...body},pose=ds.map(c=>c.args.slice(1));f.runtime.pause();for(let i=0;i<30;i++)f.tick();
     expect(body).toEqual(frozen);expect(draws().map(c=>c.args.slice(1))).toEqual(pose);
@@ -605,7 +605,7 @@ it('shows the sentry charge pose and readable warning before its fast shot',asyn
  const f=fixture();await f.runtime.load();f.runtime.start();const b=f.runtime.world.spawn('sniper',220,320);b.timer=0;
  f.tick();f.tick();
  expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('sniper-v1.png')&&c.args[1]===256)).toBe(true);
- expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='狙击')).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fill'&&c.color==='#ffe4aa')).toBe(true);
  expect(f.runtime.world.bullets.some(b=>b.hostile)).toBe(false);
 });
 
