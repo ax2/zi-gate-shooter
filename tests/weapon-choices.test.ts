@@ -96,11 +96,11 @@ it('normal progression reaches the late T3 weapon choice and upgrades only after
     }
     if (before < 3 && w.growth.stage === 3) upgradedAt = w.time;
   }
-  expect(offered).toEqual(new Set(['scatter', 'pierce']));
+  expect(offered).toEqual(new Set(['pierce', 'blast']));
   expect(firstOffer).toBeGreaterThanOrEqual(48);
   expect(upgradedAt).toBeGreaterThan(firstOffer);
   expect(upgradedAt).toBeLessThan(65);
-  expect(w.weaponKind).toBe('scatter'); expect(w.player.hp).toBeGreaterThan(0);
+  expect(w.activeWeapons).toContain('scatter'); expect(w.player.hp).toBeGreaterThan(0);
 });
 
 it('offers both new weapon families in chapter two without waiting for a fourth round',()=>{

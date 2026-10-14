@@ -61,7 +61,7 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
     expect(invalidState).toBe(false);
     expect(world.time).toBeCloseTo(seconds, 3);
     expect(world.growth.stage).toBe(3);
-    expect(world.weaponKind).toBe(preferred);
+    expect(world.activeWeapons).toContain(preferred);
     expect(world.pickups).toBeGreaterThanOrEqual(2);
     expect(world.gatesTaken).toBeGreaterThanOrEqual(4);
     expect(world.growth.bonus).toBe(100);
