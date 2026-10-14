@@ -37,3 +37,19 @@ it('ignores offscreen targets, later rounds and boss/recovery phases and resets 
   for (const phase of ['boss-entry', 'boss', 'recovery', 'dead'] as const) { w.phase = phase; expect(contextGuide(w).kind).toBe('move'); }
   const fresh = new World(); fresh.spawn('crate', 240, 180); expect(contextGuide(fresh).kind).toBe('crate');
 });
+
+it('keeps weapon choice guidance in later chapters without repeating basic tutorials', () => {
+  const w = new World(); w.round = 5; w.pickups = 12; w.gatesTaken = 12;
+  const box = w.spawn('crate', 240, 500); box.weaponKind = 'pierce';
+  const before = structuredClone(w);
+  expect(contextGuide(w).title).toBe('选择武器：对准其中一箱');
+  expect(w).toMatchObject(before);
+  box.active = false;
+  const drop = w.spawn('pickup', 240, 500); drop.weaponKind = 'pierce';
+  expect(contextGuide(w).detail).toContain('换装不会降阶');
+  drop.y = 140; expect(contextGuide(w).kind).toBe('move');
+  drop.y = 500; w.phase = 'boss'; expect(contextGuide(w).kind).toBe('move');
+  w.phase = 'running'; drop.active = false;
+  w.spawn('crate', 240, 500); w.spawn('gate', 480, 500);
+  expect(contextGuide(w).kind).toBe('move');
+});

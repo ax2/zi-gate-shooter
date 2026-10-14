@@ -245,3 +245,5 @@ D88（Stage-40）：武器箱显示保留/换装及短战术描述，让玩家�
 Stage-41（2026-10-14）：第二章接入原创冷却通道环境候选，38项渲染/加载和12项兼容专项通过，网页与Android开发包已更新。18秒滚动及双视口截图已检查，首次658ms暂停保留；无真机/长局性能达标结论。详见docs/stages/Stage-41/TEST_REPORT.md。
 
 Stage-42（2026-10-14）：修复换轮加速造成背景位移跳变；35项渲染专项和网页构建通过。APK仍Stage-41；见docs/stages/Stage-42/TEST_REPORT.md。
+
+Stage-43（2026-10-14）：后续轮次保留武器箱/掉落的选择与互斥领取说明，基础教学仍限首轮。39项专项和网页构建通过；APK仍Stage-41。见docs/stages/Stage-43/TEST_REPORT.md。
