@@ -107,7 +107,7 @@ export class World {
         if (s.kind === 'armory') {
           if (!this.rewardSlots(2)) { this.scheduleIndex--; break; }
           const row = this.nextRow++;
-          const choices: WeaponKind[][] = this.round > 3 ? [['arc', 'scatter'], ['blast', 'pierce'], ['pulse', 'arc']] : [['scatter', 'pierce'], ['blast', 'pierce'], ['pulse', 'blast']];
+          const choices: WeaponKind[][] = this.round > 3 ? [['arc', 'scatter'], ['blast', 'pierce'], ['pulse', 'arc']] : [['scatter', 'pierce'], ['blast', 'arc'], ['pulse', 'blast']];
           const chapterChoices = choices[sectorIndex(this.round)];
           const offered = s.stage === 3 ? [this.weaponKind, chapterChoices.find(kind => kind !== this.weaponKind)!] : chapterChoices;
           const crates = [222, 498].map((x, i) => { const b = this.spawn('crate', x, 180, Math.max(2, s.stage ?? 2, this.growth.stage)); b.row = row; b.weaponKind = offered[i]; return b; });
