@@ -1,20 +1,32 @@
 param(
     [Parameter(Mandatory=$true)][ValidatePattern('^emulator-[0-9]+$')][string]$Serial,
-    [ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-15'
+    [ValidatePattern('^Stage-[0-9]{2,}$')][string]$Stage
 )
 $ErrorActionPreference = 'Stop'
+if (!$Stage) { throw 'Specify the stage being tested with -Stage Stage-NN.' }
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $taskSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } else { Join-Path $env:LOCALAPPDATA 'Android\Sdk' }
 $taskAdb = Join-Path $taskSdk 'platform-tools\adb.exe'
-$taskQemu = (& $taskAdb -s $Serial shell getprop ro.kernel.qemu).Trim()
+$taskQemu = ((& $taskAdb -s $Serial shell getprop ro.kernel.qemu) -join '').Trim()
 if ($LASTEXITCODE -ne 0 -or $taskQemu -ne '1') { throw 'This runner requires an already booted, isolated Android emulator.' }
-$taskBoot = (& $taskAdb -s $Serial shell getprop sys.boot_completed).Trim()
-if ($taskBoot -ne '1') { throw 'Emulator has not completed booting.' }
-$taskRun = Get-Date -Format 'yyyyMMdd-HHmmss'
+$taskBoot = ((& $taskAdb -s $Serial shell getprop sys.boot_completed) -join '').Trim()
+if ($LASTEXITCODE -ne 0 -or $taskBoot -ne '1') { throw 'Emulator has not completed booting.' }
+$taskRun = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0,8)
 $taskOutput = Join-Path $taskRoot "build\evidence\$Stage\native\$taskRun"
 New-Item -ItemType Directory -Force -Path $taskOutput | Out-Null
 $taskOldOptions = $env:JAVA_TOOL_OPTIONS
 try {
+    Push-Location $taskRoot
+    try {
+        $taskCommit = ((& git rev-parse HEAD) -join '').Trim()
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot identify source revision.' }
+        $taskDirty = @(& git status --porcelain).Count -gt 0
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot identify working tree state.' }
+        & npm.cmd run android:sync *> (Join-Path $taskOutput 'sync.txt')
+        if ($LASTEXITCODE -ne 0) { throw "Android web synchronization failed. See $taskOutput" }
+        @{ sourceCommit = $taskCommit; workingTreeDirty = $taskDirty; stage = $Stage } | ConvertTo-Json |
+            Set-Content -LiteralPath (Join-Path $taskOutput 'source.json') -Encoding utf8
+    } finally { Pop-Location }
     if ($env:HTTPS_PROXY) {
         $taskProxy = [Uri]$env:HTTPS_PROXY
         if ($taskProxy.UserInfo) { throw 'Authenticated proxy must be configured locally without credentials in command arguments.' }
