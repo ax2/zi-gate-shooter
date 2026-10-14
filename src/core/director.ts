@@ -2,6 +2,7 @@ import type { EnemyKind } from './config';
 export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan'; lane?: number }
 export const sectorNames = ['突围走廊', '侧翼夹击', '重装封锁'];
 export const sectorIndex = (round: number) => (Math.max(1, round) - 1) % 3;
+export const encounterIndex = (round: number) => Math.floor((Math.max(1, round) - 1) / 3) % 3;
 export class Random {
   constructor(public seed: number) {}
   next() { let x = this.seed | 0; x ^= x << 13; x ^= x >>> 17; x ^= x << 5; this.seed = x >>> 0; return this.seed / 4294967296; }
@@ -12,6 +13,7 @@ export function timeline(round: number, seed: number): Spawn[] {
   const mirror = round > 1 && rng.next() > 0.5;
   const out: Spawn[] = [];
   const sector = sectorIndex(round);
+  const encounter = encounterIndex(round);
   const add = (at: number, kind: Spawn['kind'], x: number, stage?: number, pair?: boolean, pattern?: Spawn['pattern'], lane?: number) =>
     out.push({ at, kind, x: mirror ? 720 - x : x, stage, pair, pattern, lane: lane === undefined ? undefined : mirror ? 720 - lane : lane });
   // Eight authored motifs: introduction, crate, single gate, paired gate,
@@ -31,19 +33,56 @@ export function timeline(round: number, seed: number): Spawn[] {
   add(17, 'drone', 360, undefined, undefined, sector === 1 ? 'weave' : undefined);
   add(20, 'gates', 360);
   add(27, 'gates', 360, undefined, true);
-  if (sector === 0) for (let t = 34; t < 42; t += 1.4) {
-    add(t, 'drone', [200, 360, 520][Math.floor(rng.next() * 3)]);
-    add(t + 0.35, 'drone', [240, 480][Math.floor(rng.next() * 2)]);
-  }
-  if (sector === 0) { add(38, 'armor', 190); add(42, 'elite', 500); }
-  else if (sector === 1) {
-    for (const [time, x, lane] of [[31, 140, 480], [37, 580, 240], [43, 140, 480]]) add(time, 'charger', x, undefined, undefined, 'flank', lane);
-    for (let t = 33; t < 42; t += 2) { add(t, 'drone', 230, undefined, undefined, 'weave'); add(t + .5, 'drone', 490, undefined, undefined, 'weave'); }
-    add(32, 'sniper', 500); add(38, 'armor', 500); add(45, 'elite', 360, undefined, undefined, 'fan');
+  if (encounter === 0) {
+    if (sector === 0) for (let t = 34; t < 42; t += 1.4) {
+      add(t, 'drone', [200, 360, 520][Math.floor(rng.next() * 3)]);
+      add(t + 0.35, 'drone', [240, 480][Math.floor(rng.next() * 2)]);
+    }
+    if (sector === 0) { add(38, 'armor', 190); add(42, 'elite', 500); }
+    else if (sector === 1) {
+      for (const [time, x, lane] of [[31, 140, 480], [37, 580, 240], [43, 140, 480]]) add(time, 'charger', x, undefined, undefined, 'flank', lane);
+      for (let t = 33; t < 42; t += 2) { add(t, 'drone', 230, undefined, undefined, 'weave'); add(t + .5, 'drone', 490, undefined, undefined, 'weave'); }
+      add(32, 'sniper', 500); add(38, 'armor', 500); add(45, 'elite', 360, undefined, undefined, 'fan');
+    } else {
+      add(31, 'sniper', 180); add(35, 'armor', 540, undefined, undefined, 'fan');
+      add(40, 'elite', 360, undefined, undefined, 'fan');
+      for (let t = 33; t < 43; t += 2.5) for (const x of [180, 540]) add(t, 'drone', x, undefined, undefined, 'weave');
+    }
+  } else if (sector === 0) {
+    if (encounter === 1) {
+      // Sentry escort: break the static gun before its mobile screen arrives.
+      add(31, 'sniper', 220); add(32, 'drone', 220); add(33.5, 'drone', 220);
+      add(36, 'charger', 520); add(39, 'armor', 520); add(42, 'drone', 360);
+    } else {
+      // Two separated pincers; the center remains available between charges.
+      add(31, 'charger', 140, undefined, undefined, 'flank', 240);
+      add(33, 'charger', 580, undefined, undefined, 'flank', 480);
+      add(36, 'drone', 360); add(37, 'drone', 360);
+      add(40, 'elite', 220); add(43, 'drone', 520);
+    }
+  } else if (sector === 1) {
+    if (encounter === 1) {
+      // Staggered stationary lanes with a moving central screen.
+      add(31, 'sniper', 180); add(35, 'sniper', 540);
+      for (const t of [32, 35, 38, 41]) add(t, 'drone', 360, undefined, undefined, 'weave');
+      add(43, 'charger', 140, undefined, undefined, 'flank', 480);
+    } else {
+      add(31, 'elite', 500, undefined, undefined, 'fan');
+      add(33, 'charger', 140, undefined, undefined, 'flank', 320);
+      add(37, 'charger', 580, undefined, undefined, 'flank', 400);
+      add(40, 'sniper', 180); add(43, 'drone', 500);
+    }
   } else {
-    add(31, 'sniper', 180); add(35, 'armor', 540, undefined, undefined, 'fan');
-    add(40, 'elite', 360, undefined, undefined, 'fan');
-    for (let t = 33; t < 43; t += 2.5) for (const x of [180, 540]) add(t, 'drone', x, undefined, undefined, 'weave');
+    if (encounter === 1) {
+      // Central armor column rewards concentrated or piercing fire.
+      add(31, 'armor', 360); add(33, 'armor', 360);
+      add(36, 'sniper', 180); add(39, 'drone', 540); add(41, 'elite', 540);
+    } else {
+      // Alternating heavy lanes, with a lighter release after each anchor.
+      add(31, 'elite', 180, undefined, undefined, 'fan'); add(34, 'drone', 540);
+      add(37, 'armor', 540, undefined, undefined, 'fan'); add(40, 'drone', 180);
+      add(42, 'sniper', 360);
+    }
   }
   add(48, 'armory', 360, 3); add(49.2, 'gates', 500);
   add(58, 'gates', 360, undefined, true);
