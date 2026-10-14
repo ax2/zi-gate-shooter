@@ -14,6 +14,8 @@ let peaks = {}, frames = 0, lastPhase = '', workTimes = new FrameWindow();
 let lastCallback = 0, largestCallbackGapMs = 0;
 let driverTimes = new FrameWindow(), runtimeTimes = new FrameWindow();
 let previousFrameWorkMs = 0, longGaps = [];
+const recentFrames = new Array(1200);
+let recentCursor = 0, recentCount = 0;
 const point = (x, y) => { const s = Math.min(innerWidth / 720, innerHeight / 1280); return [(innerWidth - 720 * s) / 2 + x * s, (innerHeight - 1280 * s) / 2 + y * s]; };
 function control() {
   if (!held || runtime.pointer !== 731) { runtime.touchStart(731, ...point(runtime.world.player.x, 900)); held = true; }
@@ -25,7 +27,7 @@ function metrics() {
   return { ...state, wallSeconds: (performance.now() - began) / 1000, frames,
     runtimeNotice: runtime.notice, runtimeHidden: runtime.hidden,
     documentHidden: document.hidden, documentFocused: document.hasFocus(), largestCallbackGapMs,
-    driverTiming: driverTimes.snapshot(), runtimeTiming: runtimeTimes.snapshot(), longGaps,
+    driverTiming: driverTimes.snapshot(), runtimeTiming: runtimeTimes.snapshot(), longGaps: [...longGaps],
     activeAudioVoices: audio.activeNodes, musicElements: document.querySelectorAll('audio[data-game-music]').length,
     music: track ? { paused: track.paused, ended: track.ended, readyState: track.readyState, currentTime: track.currentTime, error: track.error?.code ?? null } : null,
     pickups: runtime.world.pickups, gates: runtime.world.gatesTaken, kills: runtime.world.kills,
@@ -75,6 +77,9 @@ const runtime = new CanvasRuntime({ canvas, width: innerWidth, height: innerHeig
   music: playing => music.setPlaying(playing), now: () => performance.now(),
   requestFrame: fn => requestAnimationFrame(time => {
     const workStarted = performance.now();
+    const recording = active, callbackGap = workStarted - lastCallback;
+    const backlogBefore = runtime.accumulator, simulationBefore = runtime.world.time;
+    let driverMs = 0;
     if (active) {
       const gap = workStarted - lastCallback;
       largestCallbackGapMs = Math.max(largestCallbackGapMs, gap);
@@ -84,10 +89,18 @@ const runtime = new CanvasRuntime({ canvas, width: innerWidth, height: innerHeig
     lastCallback = workStarted;
     if (active && runtime.mode === 'playing' && runtime.world.time >= nextControl) {
       nextControl = runtime.world.time + .1;
-      const driverStarted = performance.now(); control(); driverTimes.add(performance.now() - driverStarted);
+      const driverStarted = performance.now(); control(); driverMs = performance.now() - driverStarted; driverTimes.add(driverMs);
     }
     const runtimeStarted = performance.now(); fn(time);
-    if (active) runtimeTimes.add(performance.now() - runtimeStarted);
+    const runtimeMs = performance.now() - runtimeStarted;
+    if (active) runtimeTimes.add(runtimeMs);
+    if (recording) {
+      recentFrames[recentCursor] = { time: simulationBefore, callbackGap, driverMs, runtimeMs,
+        backlogBefore, backlogAfter: runtime.accumulator, simulated: runtime.world.time - simulationBefore,
+        mode: runtime.mode, hidden: document.hidden, focused: document.hasFocus() };
+      recentCursor = (recentCursor + 1) % recentFrames.length;
+      recentCount = Math.min(recentCount + 1, recentFrames.length);
+    }
     afterFrame(workStarted);
     previousFrameWorkMs = performance.now() - workStarted;
   }),
@@ -99,6 +112,7 @@ startButton.onclick = () => {
   nextControl = nextSample = nextHeap = 0; held = false; began = performance.now(); stopReason = 'running';
   lastCallback = began; largestCallbackGapMs = 0;
   driverTimes = new FrameWindow(); runtimeTimes = new FrameWindow(); previousFrameWorkMs = 0; longGaps = [];
+  recentCursor = recentCount = 0;
   runtime.start(); active = true; startButton.disabled = true; effects.disabled = true;
 };
 document.querySelector('#stop').onclick = () => finish('manual-stop');
@@ -109,5 +123,6 @@ Object.defineProperty(window, '__gateDiagnostics', { value: () => metrics() });
 Object.defineProperty(window, '__gateEnduranceEvidence', { value: () => ({ fixture: 'Stage-31 real-clock production CanvasRuntime + GameAudio + LoopMusic',
   scope: 'omniscient pointer driver; desktop browser at mobile viewport; not human/device/performance acceptance',
   active, stopReason, selectedEffects, peaks: { ...peaks }, workTimes: workTimes.snapshot(),
-  final: metrics(), samples: [...samples], transitions: [...transitions] }) });
+  final: metrics(), samples: [...samples], transitions: [...transitions],
+  recentFrames: Array.from({ length: recentCount }, (_, i) => recentFrames[(recentCursor - recentCount + i + recentFrames.length) % recentFrames.length]) }) });
 await runtime.load(); startButton.disabled = runtime.mode !== 'menu'; status.textContent = runtime.mode;
