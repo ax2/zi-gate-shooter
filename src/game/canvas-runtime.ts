@@ -48,7 +48,8 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'armory' | 'loadout' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'armory' | 'loadout' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  private treeReturn: 'loadout' | 'choice' = 'loadout';
   private dossierWeapon: WeaponKind = 'pulse';
   save: Save;
   private previousMode: 'menu' | 'paused' = 'menu';
@@ -251,6 +252,7 @@ export class CanvasRuntime {
     this.cancelTouch();
     if (this.mode === 'choice') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
     if (this.mode === 'settings') { this.action('back'); return 'stay'; }
@@ -273,6 +275,8 @@ export class CanvasRuntime {
       if (dossierWeapons.includes(weapon)) this.dossierWeapon = weapon;
     }
     else if (action === 'armory-back') this.mode = 'menu';
+    else if (action === 'tree' && (this.mode === 'choice' || this.mode === 'loadout')) { this.treeReturn = this.mode; this.mode = 'tree'; }
+    else if (action === 'tree-back') this.mode = this.treeReturn;
     else if (action === 'loadout') this.mode = 'loadout';
     else if (action === 'loadout-back') this.mode = 'paused';
     else if (action === 'pause') this.pause();
@@ -374,6 +378,7 @@ export class CanvasRuntime {
     }
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
+    if (this.mode === 'tree') { this.drawBuildTree(); c.restore(); return; }
     const sector = this.mode === 'menu' ? 0 : sectorIndex(w.round);
     const ground = this.images.get(['runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg'][sector])!;
     const h = ground.height / ground.width * 720;
@@ -719,7 +724,30 @@ export class CanvasRuntime {
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text('数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
     this.text(`路线节点 ${w.build.spent}/9 · 充能突破继续选择`, 360, 1004, 23, '#f0d19a');
-    this.button('返回暂停菜单', 1080, 'loadout-back', true);
+    this.button('查看技能树', 1030, 'tree', true);
+    this.button('返回暂停菜单', 1130, 'loadout-back');
+  }
+  private drawBuildTree() {
+    this.rect(35,90,650,1120,'#102330');
+    this.text('本局技能树',360,145,40,'#effaff','center',true);
+    this.text(`已投入 ${this.world.build.spent}/9 · 每次充能突破选择一项`,360,192,24,'#bdd8e7');
+    for(const [i,route] of routes.entries()) {
+      const rank=this.world.build.ranks[route], top=235+i*265;
+      const color=['#ffd28a','#c6a1ff','#7fe4ff'][i];
+      this.text(`${['弹道','雷电','光学'][i]}路线`,72,top,27,color,'left',true);
+      this.rect(85,top+28,2,155,'#456478');
+      for(const [j,node] of tree[route].entries()) {
+        const y=top+42+j*68, owned=j<rank;
+        const locked=route==='ballistic' && j===2 && this.world.build.ranks.electric===0;
+        const status=owned?'已生效':locked?'需导电线圈':j===rank?'下一节点':'前置未完成';
+        this.rect(77,y-8,18,18,owned?color:'#456478');
+        this.text(node.name,110,y,26,owned?color:'#e1edf5','left',true);
+        this.text(status,645,y,22,owned?color:'#a5bac8','right');
+        this.text(node.detail,110,y+29,21,'#bdd8e7','left');
+      }
+    }
+    this.text('可跨路线投入 · 已获得能力保留到本局结束',360,1055,23,'#bdd8e7');
+    this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
   private drawBuildChoices() {
     this.rect(35,150,650,1000,'#102330');
@@ -736,7 +764,7 @@ export class CanvasRuntime {
       this.text(enabled?'选择此节点　›':rank===3?'已完成':'需先选择导电线圈',610,y+174,23,enabled?'#80e4ff':'#8396a2','right');
       if(enabled)this.buttons.push({x:65,y,w:590,h:205,action:`build:${route}`,label:node!.name});
     }
-    this.text('选择后继续战斗，时间已暂停',360,1090,24,'#b8d4e3');
+    this.button('查看完整技能树',1050,'tree');
   }
   private drawDialog() {
     const w = this.world;

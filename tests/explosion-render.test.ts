@@ -694,3 +694,25 @@ it('breakthrough freezes combat for a route choice and resumes only after choosi
  expect(f.runtime.world.build.ranks.ballistic).toBe(1);expect(f.runtime.world.activeWeapons).toContain('scatter');
  expect(f.runtime.mode).toBe('playing');f.tick();expect(f.runtime.world.time).toBeGreaterThan(time);
 });
+it('tree overview preserves pending choices and never spends points or resumes combat',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ f.runtime.world.growth.energy=100;f.tick();
+ f.runtime.touchStart(1,360,1093);f.runtime.touchEnd(1,360,1093);f.tick();
+ expect(f.runtime.mode).toBe('tree');
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='雷暴霰射')).toBe(true);
+ const before=JSON.stringify(f.runtime.world);
+ for(let i=0;i<30;i++)f.tick();
+ expect(JSON.stringify(f.runtime.world)).toBe(before);
+ f.runtime.hide();f.runtime.show();expect(f.runtime.mode).toBe('tree');
+ f.runtime.back();f.tick();expect(f.runtime.mode).toBe('choice');
+ expect(f.runtime.world.build.spent).toBe(0);
+ f.runtime.touchStart(1,360,410);f.runtime.touchEnd(1,360,410);f.tick();
+ expect(f.runtime.world.build.spent).toBe(1);expect(f.runtime.mode).toBe('playing');
+ f.runtime.pause();f.tick();
+ f.runtime.touchStart(1,360,1043);f.runtime.touchEnd(1,360,1043);f.tick();
+ expect(f.runtime.mode).toBe('loadout');
+ f.runtime.touchStart(1,360,1073);f.runtime.touchEnd(1,360,1073);f.tick();
+ expect(f.runtime.mode).toBe('tree');
+ f.runtime.touchStart(1,360,1143);f.runtime.touchEnd(1,360,1143);f.tick();
+ expect(f.runtime.mode).toBe('loadout');expect(f.runtime.world.build.spent).toBe(1);
+});
