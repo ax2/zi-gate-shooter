@@ -12,6 +12,8 @@ let active = false, held = false, began = 0, nextControl = 0, nextSample = 0, ne
 let samples = [], transitions = [], stopReason = 'not-started', selectedEffects = 'standard';
 let peaks = {}, frames = 0, lastPhase = '', workTimes = new FrameWindow();
 let lastCallback = 0, largestCallbackGapMs = 0;
+let driverTimes = new FrameWindow(), runtimeTimes = new FrameWindow();
+let previousFrameWorkMs = 0, longGaps = [];
 const point = (x, y) => { const s = Math.min(innerWidth / 720, innerHeight / 1280); return [(innerWidth - 720 * s) / 2 + x * s, (innerHeight - 1280 * s) / 2 + y * s]; };
 function control() {
   if (!held || runtime.pointer !== 731) { runtime.touchStart(731, ...point(runtime.world.player.x, 900)); held = true; }
@@ -23,6 +25,7 @@ function metrics() {
   return { ...state, wallSeconds: (performance.now() - began) / 1000, frames,
     runtimeNotice: runtime.notice, runtimeHidden: runtime.hidden,
     documentHidden: document.hidden, documentFocused: document.hasFocus(), largestCallbackGapMs,
+    driverTiming: driverTimes.snapshot(), runtimeTiming: runtimeTimes.snapshot(), longGaps,
     activeAudioVoices: audio.activeNodes, musicElements: document.querySelectorAll('audio[data-game-music]').length,
     music: track ? { paused: track.paused, ended: track.ended, readyState: track.readyState, currentTime: track.currentTime, error: track.error?.code ?? null } : null,
     pickups: runtime.world.pickups, gates: runtime.world.gatesTaken, kills: runtime.world.kills,
@@ -72,12 +75,21 @@ const runtime = new CanvasRuntime({ canvas, width: innerWidth, height: innerHeig
   music: playing => music.setPlaying(playing), now: () => performance.now(),
   requestFrame: fn => requestAnimationFrame(time => {
     const workStarted = performance.now();
-    if (active) largestCallbackGapMs = Math.max(largestCallbackGapMs, workStarted - lastCallback);
+    if (active) {
+      const gap = workStarted - lastCallback;
+      largestCallbackGapMs = Math.max(largestCallbackGapMs, gap);
+      if (gap > 100 && longGaps.length < 100) longGaps.push({ time: runtime.world.time,
+        gapMs: gap, precedingWorkMs: previousFrameWorkMs, hidden: document.hidden, focused: document.hasFocus() });
+    }
     lastCallback = workStarted;
     if (active && runtime.mode === 'playing' && runtime.world.time >= nextControl) {
-      nextControl = runtime.world.time + .1; control();
+      nextControl = runtime.world.time + .1;
+      const driverStarted = performance.now(); control(); driverTimes.add(performance.now() - driverStarted);
     }
-    fn(time); afterFrame(workStarted);
+    const runtimeStarted = performance.now(); fn(time);
+    if (active) runtimeTimes.add(performance.now() - runtimeStarted);
+    afterFrame(workStarted);
+    previousFrameWorkMs = performance.now() - workStarted;
   }),
 });
 startButton.onclick = () => {
@@ -86,6 +98,7 @@ startButton.onclick = () => {
   samples = []; transitions = []; peaks = {}; frames = 0; workTimes = new FrameWindow();
   nextControl = nextSample = nextHeap = 0; held = false; began = performance.now(); stopReason = 'running';
   lastCallback = began; largestCallbackGapMs = 0;
+  driverTimes = new FrameWindow(); runtimeTimes = new FrameWindow(); previousFrameWorkMs = 0; longGaps = [];
   runtime.start(); active = true; startButton.disabled = true; effects.disabled = true;
 };
 document.querySelector('#stop').onclick = () => finish('manual-stop');
