@@ -28,7 +28,7 @@ async function inputFixture(createAudio = () => ({ play() {}, stop() {}, onEnded
   for (let i = 0; i < 12; i++) await Promise.resolve();
   const frames = count => { for (let i = 0; i < count; i++) { labels = []; clock += 1000 / 60; nextFrame(clock); } };
   const touch = (callback, identifier, x, y = 1000) => callback({ changedTouches: [{ identifier, clientX: x, clientY: y }] });
-  frames(1); touch(callbacks.start, 9, 360, 1041); touch(callbacks.end, 9, 360, 1041); frames(1);
+  frames(1); touch(callbacks.start, 9, 360, 975); touch(callbacks.end, 9, 360, 975); frames(1);
   if (move) {
     expect(playerX).toBe(360);
     touch(callbacks.start, 1, 360); touch(callbacks.move, 1, 650); frames(1);
@@ -57,7 +57,7 @@ it('WeChat music configuration failure releases the partial handle and retries o
     play() { plays++; }, pause() {}, stop() {}, destroy() { destroyed++; }, onError() {}, onEnded() {},
   }; }, false, { version: 1, best: 0, settings: { music: true, sound: false } });
   f.frames(30); expect(created).toBe(1); expect(destroyed).toBe(1);
-  expect(f.labels()).toContain('T1 速射炮'); expect(f.labels()).not.toContain('运行异常，请重新开始');
+  expect(f.labels()).toContain('T1 · 1种武器叠加'); expect(f.labels()).not.toContain('运行异常，请重新开始');
   healthy = true; f.frames(310); expect(created).toBe(2); expect(plays).toBe(1);
 });
 
@@ -72,13 +72,13 @@ it.each(['create', 'configure', 'play'])('WeChat %s audio failure does not stop 
   };
   const f = await inputFixture(factory, false);
   f.frames(30);
-  expect(f.labels()).toContain('T1 速射炮');
+  expect(f.labels()).toContain('T1 · 1种武器叠加');
   expect(f.labels()).not.toContain('运行异常，请重新开始');
   expect(attempts).toBe(1);
   expect(destroyed).toBe(fault === 'create' ? 0 : 1);
   healthy = true; f.frames(310);
   expect(plays).toBeGreaterThan(0);
-  expect(f.labels()).toContain('T1 速射炮');
+  expect(f.labels()).toContain('T1 · 1种武器叠加');
 });
 
 it('WeChat stop errors cannot abort hide, and asynchronous errors retire failed nodes', async () => {
@@ -94,7 +94,7 @@ it('WeChat stop errors cannot abort hide, and asynchronous errors retire failed 
   const retiredError = errorCallback;
   expect(() => retiredError()).not.toThrow(); f.frames(12);
   expect(destroyed).toBeGreaterThan(before);
-  expect(f.labels()).toContain('T1 速射炮');
+  expect(f.labels()).toContain('T1 · 1种武器叠加');
   f.frames(310);
   expect(errorCallback).not.toBe(retiredError);
   const afterRecovery = destroyed;
@@ -106,7 +106,7 @@ it('WeChat audio cleanup exceptions remain isolated from the game', async () => 
   const fail = () => { throw new Error('fixture cleanup unavailable'); };
   const f = await inputFixture(() => ({ play: fail, stop: fail, destroy: fail, onEnded() {}, onError() {} }), false);
   f.frames(30);
-  expect(f.labels()).toContain('T1 速射炮');
+  expect(f.labels()).toContain('T1 · 1种武器叠加');
   expect(() => f.callbacks.hide()).not.toThrow(); f.frames(1);
   expect(f.labels()).toContain('继续战斗');
 });
@@ -165,8 +165,8 @@ it('the actual WeChat bundle boots and handles start/hide/resume without browser
   const frame = () => { clock += 17; nextFrame(clock); };
   frame(); expect(calls.some(([name, args]) => name === 'fillText' && args[0] === '火力突围')).toBe(true);
   const touch = (fn, x, y) => fn({ changedTouches: [{ identifier: 1, clientX: x, clientY: y }] });
-  touch(callbacks.start, 195, 638); touch(callbacks.end, 195, 638); frame();
-  expect(calls.some(([name, args]) => name === 'fillText' && args[0] === 'T1 速射炮')).toBe(true);
+  touch(callbacks.start, 195, 603); touch(callbacks.end, 195, 603); frame();
+  expect(calls.some(([name, args]) => name === 'fillText' && args[0] === 'T1 · 1种武器叠加')).toBe(true);
   callbacks.hide(); frame();
   expect(calls.some(([name, args]) => name === 'fillText' && args[0] === '继续战斗')).toBe(true);
   callbacks.show(); callbacks.cancel();
