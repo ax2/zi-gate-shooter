@@ -77,7 +77,6 @@ export class CanvasRuntime {
   private noticeY = 277;
   private noticeUntil = 0;
   private shakeUntil = 0;
-  private muzzleUntil = 0;
   private weaponMotion = new WeaponMotion();
   private upgradeUntil = 0;
   private error = '';
@@ -174,7 +173,7 @@ export class CanvasRuntime {
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
-    this.particles = []; this.blasts = []; this.impacts = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0; this.muzzleUntil = 0; this.upgradeUntil = 0;
+    this.particles = []; this.blasts = []; this.impacts = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0; this.upgradeUntil = 0;
     this.platform.silence();
     this.updateMusic();
   }
@@ -248,7 +247,7 @@ export class CanvasRuntime {
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, this.world.weaponKind);
-    if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 80; this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
+    if (e.type === 'fire') { this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
@@ -438,11 +437,12 @@ export class CanvasRuntime {
       }
     }
     c.restore();
-    if (this.mode === 'playing' && w.player.hp > 0 && this.platform.now() < this.muzzleUntil) {
+    const flash = this.weaponMotion.flash(w.weaponKind, w.growth.stage, w.time);
+    if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0 && flash > 0) {
       const weapon = weaponProfile(w.weaponKind, w.growth.stage);
       for (const offset of weapon.offsets) {
-        const x = w.player.x + offset, y = C.playerY - (weapon.muzzleY ?? 78);
-        muzzleLight(c, x, y, w.weaponKind, Math.max(0, (this.muzzleUntil - this.platform.now()) / 80), this.save.settings.effects === 'weak');
+        const x = w.player.x + offset, y = C.playerY - (weapon.muzzleY ?? 78) + pose.bob + recoil;
+        muzzleLight(c, x, y, w.weaponKind, flash, this.save.settings.effects === 'weak');
       }
     }
     if (this.mode === 'playing' && this.platform.now() < this.upgradeUntil) {

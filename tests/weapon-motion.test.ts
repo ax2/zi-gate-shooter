@@ -1,6 +1,22 @@
 import { expect, it } from 'vitest';
 import { WeaponMotion } from '../src/game/weapon-motion';
 
+it('keeps muzzle light on the same simulation clock and isolates weapon changes', () => {
+  const motion = new WeaponMotion();
+  expect(motion.flash('pulse', 1, 0)).toBe(0);
+  for (const kind of ['pulse', 'scatter', 'pierce'] as const) {
+    motion.fire(kind, 2, 10);
+    expect(motion.flash(kind, 2, 10)).toBe(1);
+    const brightness = motion.flash(kind, 2, 10.03);
+    expect(brightness).toBeGreaterThan(0);
+    for (let i = 0; i < 100; i++) expect(motion.flash(kind, 2, 10.03)).toBe(brightness);
+    expect(motion.flash(kind, 1, 10.03)).toBe(0);
+    expect(motion.flash(kind === 'pulse' ? 'scatter' : 'pulse', 2, 10.03)).toBe(0);
+    expect(motion.flash(kind, 2, 10.1)).toBe(0);
+    motion.reset(); expect(motion.flash(kind, 2, 10.03)).toBe(0);
+  }
+});
+
 it('freezes with simulation time and discards impulses on reset or weapon change', () => {
   const motion = new WeaponMotion();
   motion.fire('scatter', 3, 1);

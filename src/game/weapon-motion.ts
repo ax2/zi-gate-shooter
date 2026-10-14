@@ -9,6 +9,12 @@ export class WeaponMotion {
   fire(kind: WeaponKind, stage: number, time: number) {
     this.kind = kind; this.stage = stage; this.firedAt = time;
   }
+  flash(kind: WeaponKind, stage: number, time: number): number {
+    if (kind !== this.kind || stage !== this.stage) return 0;
+    const age = time - this.firedAt;
+    const duration = kind === 'pulse' ? 0.05 : kind === 'scatter' ? 0.075 : 0.095;
+    return age < 0 ? 0 : Math.max(0, 1 - age / duration);
+  }
   sample(kind: WeaponKind, stage: number, time: number): number {
     if (kind !== this.kind || stage !== this.stage) return 0;
     const age = time - this.firedAt;

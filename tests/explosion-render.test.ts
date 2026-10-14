@@ -25,6 +25,18 @@ function fixture(weak = false) {
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('freezes actual muzzle origins with recoil during pause and clears them on a weapon change', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  f.runtime.world.weaponKind = 'pierce'; f.runtime.world.growth.stage = 3;
+  f.tick(); f.tick();
+  const origins = () => f.calls.filter(c => c.kind === 'translate' && [338, 382].includes(c.args[0]) && c.args[1] > 900).map(c => c.args);
+  const before = origins(); expect(before).toHaveLength(2);
+  expect(before[0][1]).toBeGreaterThan(C.playerY - 99);
+  f.runtime.pause();
+  for (let i = 0; i < 30; i++) { f.tick(); expect(origins()).toEqual(before); }
+  f.runtime.world.weaponKind = 'scatter'; f.tick(); expect(origins()).toHaveLength(0);
+});
+
 it.each([1,2,3])('selects scatter tier %s artwork and switches back without changing growth', async stage => {
  const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.growth.stage=stage;f.runtime.world.weaponKind='scatter';f.tick();
  const art=f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('scatter-player-v1.png'));
