@@ -198,7 +198,7 @@ export class World {
       const previousWarning = b.warning;
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => this.hostile(x, y, vx, vy));
       if (b.kind === 'boss' && previousWarning <= 0 && b.warning > 0
-        && !safeRoute(this.player.x, this.bodies, this.bullets, 4, { phase: this.phase, phaseTime: this.phaseTime })) {
+        && !safeRoute(this.player.x, this.bodies, this.bullets, b.attack === 3 ? 8 : 4, { phase: this.phase, phaseTime: this.phaseTime })) {
         // The warning has not been rendered yet. Delay the unannounced attack;
         // once displayed its geometry and duration are never changed.
         b.warning = 0; b.timer = 0.3; this.attackDeferrals++;

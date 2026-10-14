@@ -12,6 +12,13 @@ export function bossWarningLanes(b: Body) {
   return b.attack ? b.burst ? [360] : [b.lane, 360] : [b.lane];
 }
 
+/** Chapters have different pressure/recovery phrases, not one shared playlist. */
+export function bossAttackForCycle(variant: number | undefined, cycle: number) {
+  if (variant === 1) return [2, 1, 2, 0][((cycle - 2) % 4 + 4) % 4];
+  if (variant === 2) return [3, 0, 3, 1][((cycle - 3) % 4 + 4) % 4];
+  return cycle % 2;
+}
+
 /** Shared by the live simulation and conservative no-kill route forecast. */
 export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, shot: EnemyShot) {
   b.age += dt; b.hit = Math.max(0, b.hit - dt);
@@ -25,20 +32,25 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         b.timer = phaseTime > 35 ? 3.5 : 2.8;
       };
       if (b.burst) {
-        for (let i = 0; i < 3; i++) shot(360, b.y + 90 - i * 60, 0, 300);
+        if (b.attack === 3) {
+          for (const x of bossWarningLanes(b)) for (let i = 0; i < 2; i++) shot(x, b.y + 90 - i * 75, 0, 280);
+        } else for (let i = 0; i < 3; i++) shot(360, b.y + 90 - i * 60, 0, 300);
         finish();
       } else if (b.warning <= 0) {
         b.warning = 1.35; b.timer = 1.35;
         // Advance only after an attack finishes, so delayed warnings cannot
         // accidentally repeat/skip a pattern. B alternates left/right sweep.
-        b.attack = b.attackCycle % (b.bossVariant ? 4 : 2);
+        b.attack = bossAttackForCycle(b.bossVariant, b.attackCycle);
         b.lane = b.attack === 3 ? [140, 360, 580][Math.floor(b.attackCycle / 4) % 3]
           : b.attack ? Math.floor(b.attackCycle / 2) % 2 ? 520 : 200
           : [200, 360, 520][Math.floor(b.attackCycle / 2) % 3];
       } else {
         if (b.attack === 3) {
           for (const x of bossWarningLanes(b)) for (let i = 0; i < 2; i++) shot(x, b.y + 90 - i * 75, 0, 280);
-          finish();
+          // Only the third chapter locks twice. Advertise the adjacent new gap
+          // before the second volley; never move an already-fired projectile.
+          b.lane = b.lane === 360 ? 580 : 360;
+          b.burst = 1; b.warning = 1.8; b.timer = 1.8;
         } else if (b.attack === 2) {
           for (const x of [200, 520]) for (let i = 0; i < 4; i++) shot(x, b.y + 90 - i * 50, 0, 300);
           finish();

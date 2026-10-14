@@ -2,11 +2,13 @@ import { C } from '../core/config';
 import type { World } from '../core/world';
 
 type Context = Pick<World, 'round' | 'phase' | 'bodies' | 'pickups' | 'gatesTaken'>;
-export interface Guide { kind: 'move' | 'crate' | 'pickup' | 'gate' | 'pair'; title: string; detail: string }
+export interface Guide { kind: 'move' | 'crate' | 'pickup' | 'gate' | 'pair' | 'boss'; title: string; detail: string }
 const movement: Guide = { kind: 'move', title: '左右拖动 · 自动开火', detail: '' };
 
 /** Read-only, in-world guidance: no timed grants, progression or persisted tutorial state. */
 export function contextGuide(world: Context): Guide {
+  const blockade = world.phase === 'boss' && world.bodies.some(b => b.active && b.kind === 'boss' && b.attack === 3 && b.warning > 0);
+  if (blockade) return { kind: 'boss', title: '先避开前波，再移向下一缺口', detail: '预警显示下一波 · 留意仍在飞行的子弹' };
   if (world.phase !== 'running') return movement;
   const visible = world.bodies.filter(b => b.active && b.y >= 160 && b.y <= C.playerY + (b.kind === 'pickup' ? 52 : 0));
   if (visible.some(b => b.weaponKind && b.kind === 'pickup'))

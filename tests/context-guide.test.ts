@@ -53,3 +53,10 @@ it('keeps weapon choice guidance in later chapters without repeating basic tutor
   w.spawn('crate', 240, 500); w.spawn('gate', 480, 500);
   expect(contextGuide(w).kind).toBe('move');
 });
+
+it('explains in-flight bullets during the second blockade and removes help after the attack',()=>{
+ const w=new World();w.phase='boss';const b=w.spawn('boss',360,260);b.attack=3;b.warning=1.8;b.burst=1;
+ expect(contextGuide(w).detail).toContain('仍在飞行');
+ b.warning=0;expect(contextGuide(w).kind).toBe('move');
+ b.warning=1.8;b.active=false;expect(contextGuide(w).kind).toBe('move');
+});

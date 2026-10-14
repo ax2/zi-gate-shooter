@@ -502,8 +502,8 @@ export class CanvasRuntime {
           if (b.kind === 'boss') {
             if (b.attack === 3) {
               if (x === lanes[0]) {
-                this.rect(b.lane - 42, b.y + 132, 84, 38, '#0b1723ef');
-                this.text('缺口', b.lane, b.y + 151, 24, '#d9f4ff', 'center', true);
+                this.rect(b.lane - 54, b.y + 132, 108, 38, '#0b1723ef');
+                this.text(b.burst ? '下一缺口' : '缺口', b.lane, b.y + 151, b.burst ? 22 : 24, '#d9f4ff', 'center', true);
                 this.text('封锁', x, b.y + 151, 24, '#ffe1c8', 'center', true);
               }
               continue;

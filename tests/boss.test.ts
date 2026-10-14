@@ -35,7 +35,30 @@ it.each([3, 7, 11])('later boss blockade cycle %s advertises its rotating gap an
     expect(safeRoute(start, [boss], [], 5, { phase: 'boss', phaseTime: 1 })).not.toBeNull();
   for (let frame = 0; frame < 81; frame++) advanceBody(boss, C.step, 'boss', 1 + frame * C.step, x => emitted.push(x));
   expect(emitted).toEqual(advertised.flatMap(x => [x, x]));
+  expect(boss.attackCycle).toBe(cycle);
+  expect(boss.burst).toBe(1); expect(boss.warning).toBe(1.8);
+  const second = bossWarningLanes(boss);
+  expect(second).not.toEqual(advertised);
+  for (let frame = 0; frame < 107; frame++) advanceBody(boss, C.step, 'boss', 3, x => emitted.push(x));
+  expect(emitted).toEqual(advertised.flatMap(x => [x, x]));
+  advanceBody(boss, C.step, 'boss', 3, x => emitted.push(x));
+  expect(emitted).toEqual([...advertised, ...second].flatMap(x => [x, x]));
   expect(boss.attackCycle).toBe(cycle + 1);
+});
+
+it.each([1,2])('chapter %s sustains its own four-attack phrase and full double-lock route', variant => {
+  const world = new World(); const boss = world.spawn('boss',360,260);
+  boss.bossVariant=variant;boss.attackCycle=variant===1?2:3;boss.timer=0;
+  const phrase:number[]=[];let cycle=-1;
+  for(let frame=0;frame<40*60 && phrase.length<8;frame++){
+    advanceBody(boss,C.step,'boss',frame*C.step,()=>{});
+    if(boss.warning>0 && boss.attackCycle!==cycle){
+      cycle=boss.attackCycle;phrase.push(boss.attack);
+      for(const start of [C.minX,360,C.maxX])
+        expect(safeRoute(start,[boss],[],8,{phase:'boss',phaseTime:frame*C.step}),`variant ${variant}, cycle ${cycle}, x ${start}`).not.toBeNull();
+    }
+  }
+  expect(phrase).toEqual(variant===1?[2,1,2,0,2,1,2,0]:[3,0,3,1,3,0,3,1]);
 });
 
 it('boss alternates A/B, sweeps in two timed beats, mirrors sides and keeps warnings locked', () => {
@@ -76,12 +99,12 @@ it('boss alternates A/B, sweeps in two timed beats, mirrors sides and keeps warn
   expect(world.player.hp).toBe(3); expect(world.attackDeferrals).toBe(0);
 });
 
-it('entry freezes boss cooldown and victory cancels an unfinished second beat', () => {
+it.each([1,3])('entry freezes boss cooldown and victory cancels unfinished attack %s second beat', attack => {
   const world = new World(); world.phase = 'boss-entry';
   const boss = world.spawn('boss', 360, -150); boss.timer = 2.8;
   for (let i = 0; i < 60; i++) { world.step(C.step); world.drainEffects(); }
   expect(boss.timer).toBe(2.8); expect(world.bullets).toHaveLength(0);
-  world.phase = 'boss'; boss.y = 260; boss.burst = 1; boss.warning = 0.35; boss.timer = 0.35; boss.hp = 1;
+  world.phase = 'boss'; boss.y = 260; boss.attack = attack; boss.burst = 1; boss.warning = 0.35; boss.timer = 0.35; boss.hp = 1;
   world.bullets.push({ id: 9999, x: boss.x, y: 380, px: boss.x, py: 380, vx: 0, vy: -1200, damage: 4, age: 0, active: true, hostile: false });
   world.step(C.step); world.drainEffects();
   expect(world.phase).toBe('recovery'); expect(world.bodies).toHaveLength(0);
