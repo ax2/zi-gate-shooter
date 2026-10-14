@@ -16,6 +16,13 @@ let driverTimes = new FrameWindow(), runtimeTimes = new FrameWindow();
 let previousFrameWorkMs = 0, longGaps = [];
 const recentFrames = new Array(1200);
 let recentCursor = 0, recentCount = 0;
+let lifecycle = [];
+function recordLifecycle(event) {
+  if (stopReason === 'not-started') return;
+  if (lifecycle.length >= 100) lifecycle.shift();
+  lifecycle.push({event, wallSeconds:(performance.now()-began)/1000, time:runtime.world.time,
+    hidden:document.hidden, focused:document.hasFocus(), mode:runtime.mode});
+}
 const point = (x, y) => { const s = Math.min(innerWidth / 720, innerHeight / 1280); return [(innerWidth - 720 * s) / 2 + x * s, (innerHeight - 1280 * s) / 2 + y * s]; };
 function control() {
   if (!held || runtime.pointer !== 731) { runtime.touchStart(731, ...point(runtime.world.player.x, 900)); held = true; }
@@ -113,16 +120,18 @@ startButton.onclick = () => {
   lastCallback = began; largestCallbackGapMs = 0;
   driverTimes = new FrameWindow(); runtimeTimes = new FrameWindow(); previousFrameWorkMs = 0; longGaps = [];
   recentCursor = recentCount = 0;
+  lifecycle = [];
   runtime.start(); active = true; startButton.disabled = true; effects.disabled = true;
 };
 document.querySelector('#stop').onclick = () => finish('manual-stop');
 window.addEventListener('resize', () => { runtime.resize(innerWidth, innerHeight, devicePixelRatio); held = false; });
-document.addEventListener('visibilitychange', () => { if (document.hidden) runtime.hide(); else runtime.show(); });
-window.addEventListener('blur', () => runtime.hide());
+document.addEventListener('visibilitychange', () => { recordLifecycle('visibilitychange'); if (document.hidden) runtime.hide(); else runtime.show(); });
+window.addEventListener('blur', () => { recordLifecycle('blur'); runtime.hide(); });
+window.addEventListener('focus', () => recordLifecycle('focus'));
 Object.defineProperty(window, '__gateDiagnostics', { value: () => metrics() });
 Object.defineProperty(window, '__gateEnduranceEvidence', { value: () => ({ fixture: 'Stage-31 real-clock production CanvasRuntime + GameAudio + LoopMusic',
-  scope: 'omniscient pointer driver; desktop browser at mobile viewport; not human/device/performance acceptance',
+  scope: 'omniscient pointer driver; desktop browser, actual viewport in final; not human/device/performance acceptance',
   active, stopReason, selectedEffects, peaks: { ...peaks }, workTimes: workTimes.snapshot(),
-  final: metrics(), samples: [...samples], transitions: [...transitions],
+  final: metrics(), samples: [...samples], transitions: [...transitions], lifecycle: lifecycle.map(event=>({...event})),
   recentFrames: Array.from({ length: recentCount }, (_, i) => recentFrames[(recentCursor - recentCount + i + recentFrames.length) % recentFrames.length]) }) });
 await runtime.load(); startButton.disabled = runtime.mode !== 'menu'; status.textContent = runtime.mode;
