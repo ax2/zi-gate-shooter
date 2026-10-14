@@ -11,6 +11,11 @@ function start(){
  runtime.save.settings.effects=document.querySelector('#effects').value;
  if(document.querySelector('#scenario').value==='opening') return;
  runtime.world.growth.stage=3;runtime.world.weaponKind=document.querySelector('#weapon').value;
+ if(document.querySelector('#scenario').value==='choices') {
+   const weapons=[runtime.world.weaponKind,runtime.world.weaponKind==='pierce'?'scatter':'pierce'];
+   for(let i=0;i<2;i++){const box=runtime.world.spawn('crate',[222,498][i],580,3);box.weaponKind=weapons[i];box.row=100;box.speed=0;}
+   return;
+ }
  const first=runtime.world.spawn('armor',360,600);first.speed=0;
  const second=runtime.world.spawn('armor',360,430);second.speed=0;
  const left=runtime.world.spawn('drone',180,320);left.pattern='weave';
@@ -23,5 +28,5 @@ document.querySelector('#weapon').onchange=start;
 document.querySelector('#sector').onchange=start;
 document.querySelector('#scenario').onchange=start;
 window.addEventListener('resize',()=>runtime.resize(innerWidth,innerHeight-68,devicePixelRatio));
-Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':'T3 + five seeded bodies, no damage immunity'})});
+Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value==='choices'?'T3 + two stationary choice crates, no damage immunity':'T3 + five seeded bodies, no damage immunity'})});
 await runtime.load();

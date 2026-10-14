@@ -474,16 +474,19 @@ export class CanvasRuntime {
       }
       if (b.kind === 'crate') {
         if (b.weaponKind) {
-          this.rect(b.x - 118, b.y - 132, 236, 74, '#0b1723ef');
-          this.text(`${weaponNames[b.weaponKind]} T${b.stage}`, b.x, b.y - 109, 28, weaponColors[b.weaponKind], 'center', true);
-          this.text(`同排择一 · 耐久${Math.ceil(b.hp)}`, b.x, b.y - 80, 24, '#fff0c8');
+          const choice = b.weaponKind === w.weaponKind ? '保留' : '换装';
+          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '扇面覆盖' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
+          this.rect(b.x - 118, b.y - 158, 236, 100, '#0b1723ef');
+          this.text(`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x, b.y - 135, 25, weaponColors[b.weaponKind], 'center', true);
+          this.text(role, b.x, b.y - 107, 24, '#cfdee9');
+          this.text(`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, b.y - 80, 23, '#fff0c8');
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
         } else {
           this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
           this.text(`T${b.stage} ${w.growth.stage >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
           this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
         }
-      } else if (b.kind === 'pickup') this.text(b.weaponKind ? `领取${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, 28, '#ffe7b1', 'center', true);
+      } else if (b.kind === 'pickup') this.text(b.weaponKind ? `拾取${b.weaponKind === w.weaponKind ? '保留' : '换装'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;

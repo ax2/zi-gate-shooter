@@ -10,7 +10,7 @@ export function contextGuide(world: Context): Guide {
   if (world.round !== 1 || world.phase !== 'running') return movement;
   const visible = world.bodies.filter(b => b.active && b.y >= 160 && b.y <= C.playerY + (b.kind === 'pickup' ? 52 : 0));
   if (visible.some(b => b.weaponKind && b.kind === 'pickup'))
-    return { kind: 'pickup', title: '靠近领取所选武器', detail: '同排只领一种 · 当前阶数保留' };
+    return { kind: 'pickup', title: '靠近领取所选武器', detail: '同排只领一种 · 换装不会降阶' };
   if (visible.some(b => b.weaponKind && b.kind === 'crate'))
     return { kind: 'crate', title: '选择武器：对准其中一箱', detail: '打碎再领取 · 同排只选一种' };
   if (world.pickups === 0) {
