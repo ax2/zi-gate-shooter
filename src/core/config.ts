@@ -13,6 +13,7 @@ export const C = {
   enemies: {
     drone: { hp: 12, score: 10, width: 56, height: 60, speed: 170 },
     sniper: { hp: 44, score: 35, width: 80, height: 88, speed: 170 },
+    guard: { hp: 64, score: 60, width: 100, height: 108, speed: 100 },
     charger: { hp: 24, score: 20, width: 62, height: 78, speed: 170 },
     armor: { hp: 80, score: 50, width: 86, height: 102, speed: 110 },
     elite: { hp: 200, score: 150, width: 118, height: 136, speed: 90 },

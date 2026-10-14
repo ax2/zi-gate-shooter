@@ -30,9 +30,10 @@ function fixture(weak: boolean, kind: WreckKind = 'drone') {
   return {runtime,calls,tick(){calls.length=0;time+=1000/60;next(time);},wrecks:()=>calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith(`${kind}-wreck-v1.png`))};
 }
 
-it.each((['drone','charger','armor','elite','sniper'] as const).flatMap(kind=>[false,true].map(weak=>({kind,weak}))))('real $kind kill preserves World and upper-layer dangers/rewards (weak=$weak)', async ({kind,weak}) => {
+it.each((['drone','charger','armor','elite','sniper','guard'] as const).flatMap(kind=>[false,true].map(weak=>({kind,weak}))))('real $kind kill preserves World and upper-layer dangers/rewards (weak=$weak)', async ({kind,weak}) => {
   const f=fixture(weak,kind); await f.runtime.load(); f.runtime.start(); const reference=new World(1337);
-  const setup=(w:World)=>{ const b=w.spawn(kind,360,500); b.hp=4;
+  // The closed guard takes half damage, so its lethal-hit fixture needs 2 HP.
+  const setup=(w:World)=>{ const b=w.spawn(kind,360,500); b.hp=kind==='guard'?2:4;
     w.spawn('gate',240,700);
     w.bullets.push({id:900,x:360,y:500,px:360,py:500,vx:0,vy:0,damage:4,age:0,active:true,hostile:false});
     w.bullets.push({id:901,x:500,y:700,px:500,py:700,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}); };

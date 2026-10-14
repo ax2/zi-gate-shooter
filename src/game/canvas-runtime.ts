@@ -114,7 +114,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -406,6 +406,10 @@ export class CanvasRuntime {
           const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38;
           this.frameSprite('armor-v1.png', frame, 3, b.x, y, width, height, 1);
           this.hitSprite('armor-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+        } else if (b.kind === 'guard') {
+          const frame = b.burst > 0 ? 1 : 0;
+          this.frameSprite('guard-v1.png', frame, 3, b.x, y, 160, 160, 1);
+          this.hitSprite('guard-v1.png', frame, 3, b.x, y, 160, 160, b.hit, 0.07, 1);
         } else if (b.kind === 'sniper') {
           const frame = b.warning > 0 ? 1 : 0;
           this.frameSprite('sniper-v1.png', frame, 3, b.x, y, 140, 140, 1);
@@ -495,7 +499,7 @@ export class CanvasRuntime {
           const endX = b.x + (b.lane - b.x) * Math.min(1, Math.max(0, (endY - startY) / Math.max(1, kneeY - startY)));
           c.save(); c.strokeStyle = '#ff775633'; c.lineWidth = 62; c.beginPath(); c.moveTo(b.x, b.y + 30); c.lineTo(b.x, startY); c.lineTo(endX, endY); if (kneeY < C.playerY) c.lineTo(b.lane, C.playerY + 50); c.stroke();
           c.strokeStyle = '#ffb18c'; c.lineWidth = 2; c.stroke(); c.restore();
-        } else if (b.pattern === 'fan') {
+        } else if (b.pattern === 'fan' || b.kind === 'guard') {
           const originY = b.y + b.speed * Math.max(0, b.timer) + b.height / 2;
           c.save(); c.strokeStyle = '#ffb18caa'; c.lineWidth = 2;
           for (const vx of fanWarningVelocities(b)) { const shotY = originY + (b.kind === 'elite' && !b.burst && Math.abs(vx) === 50 ? b.speed * 0.6 : 0); c.beginPath(); c.moveTo(b.x, shotY); c.lineTo(b.x + vx * (C.playerY - shotY) / 280, C.playerY); c.stroke(); }
@@ -556,6 +560,9 @@ export class CanvasRuntime {
       } else if (b.kind === 'boss') {
         this.text(`${b.bossVariant === 2 ? '封锁堡垒' : b.bossVariant === 1 ? '双翼压制者' : '重装首领'}　${Math.ceil(b.hp)} / ${Math.ceil(b.maxHp)}`, 360, this.hudTop + 145, 25, '#ffd59e');
         this.bar(360, this.hudTop + 166, 430, b.hp / b.maxHp, '#ff925d');
+      } else if (b.kind === 'guard') {
+        this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
+        this.text(b.burst ? '弱点暴露' : '装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.

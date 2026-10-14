@@ -1,8 +1,10 @@
 import type { Body, Phase } from './world';
 import { C, clamp } from './config';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
+export const guardClosed = (b: Pick<Body, 'kind' | 'burst'>) => b.kind === 'guard' && b.burst === 0;
 
 export function fanWarningVelocities(b: Body) {
+  if (b.kind === 'guard') return [-70, 0, 70];
   return b.kind === 'elite' ? b.burst ? [-50, 0, 50] : [-100, -50, 0, 50, 100] : [-100, 0, 100];
 }
 
@@ -64,6 +66,16 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
           b.burst = 1; b.warning = 0.35; b.timer = 0.35;
         }
       }
+    }
+  } else if (b.kind === 'guard') {
+    b.y += b.speed * dt;
+    if (b.y >= 650) { b.warning = 0; b.burst = 0; }
+    else if (b.y > 0 && b.timer <= 1e-9) {
+      if (!b.burst) { b.burst = 1; b.warning = 0.8; b.timer = 0.8; }
+      else if (b.burst === 1) {
+        for (const vx of fanWarningVelocities(b)) shot(b.x, b.y + b.height / 2, vx, 280);
+        b.warning = 0; b.burst = 2; b.timer = 0.8;
+      } else { b.burst = 0; b.timer = 2.4; }
     }
   } else if (b.kind === 'sniper') {
     // A short-lived firing position: kill during charge or leave its fixed lane.

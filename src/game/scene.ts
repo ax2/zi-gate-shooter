@@ -133,7 +133,7 @@ export class BattleScene extends Phaser.Scene {
     if (key && key !== this.lastTutorial) { this.lastTutorial = key; this.ui.notify(key); }
   }
   private makeView(b: Body): View {
-    const frames: Record<string, number> = { drone: 3, sniper: 3, charger: 4, armor: 5, elite: 6, boss: 7 };
+    const frames: Record<string, number> = { drone: 3, sniper: 3, guard: 5, charger: 4, armor: 5, elite: 6, boss: 7 };
     const prop = b.kind === 'gate' || b.kind === 'crate' || b.kind === 'pickup';
     const frame = b.kind === 'gate' ? b.rewardKind === 'energy' ? 4 : 3 : b.kind === 'crate' ? 0 : b.kind === 'pickup' ? 2 : frames[b.kind];
     const sprite = this.add.image(b.x, b.y, prop ? 'props' : 'units', frame).setDepth(20);

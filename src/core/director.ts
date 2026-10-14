@@ -42,9 +42,9 @@ export function timeline(round: number, seed: number): Spawn[] {
     else if (sector === 1) {
       for (const [time, x, lane] of [[31, 140, 480], [37, 580, 240], [43, 140, 480]]) add(time, 'charger', x, undefined, undefined, 'flank', lane);
       for (let t = 33; t < 42; t += 2) { add(t, 'drone', 230, undefined, undefined, 'weave'); add(t + .5, 'drone', 490, undefined, undefined, 'weave'); }
-      add(32, 'sniper', 500); add(38, 'armor', 500); add(45, 'elite', 360, undefined, undefined, 'fan');
+      add(32, 'sniper', 500); add(38, 'guard', 500); add(45, 'elite', 360, undefined, undefined, 'fan');
     } else {
-      add(31, 'sniper', 180); add(35, 'armor', 540, undefined, undefined, 'fan');
+      add(31, 'sniper', 180); add(35, 'guard', 540);
       add(40, 'elite', 360, undefined, undefined, 'fan');
       for (let t = 33; t < 43; t += 2.5) for (const x of [180, 540]) add(t, 'drone', x, undefined, undefined, 'weave');
     }
@@ -75,7 +75,7 @@ export function timeline(round: number, seed: number): Spawn[] {
   } else {
     if (encounter === 1) {
       // Central armor column rewards concentrated or piercing fire.
-      add(31, 'armor', 360); add(33, 'armor', 360);
+      add(31, 'guard', 360); add(33, 'armor', 360);
       add(36, 'sniper', 180); add(39, 'drone', 540); add(41, 'elite', 540);
     } else {
       // Alternating heavy lanes, with a lighter release after each anchor.

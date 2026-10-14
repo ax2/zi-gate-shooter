@@ -6,7 +6,7 @@ import type { Growth } from './rewards';
 import { timeline, sectorIndex, sectorNames } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
-import { advanceBody } from './behavior';
+import { advanceBody, guardClosed } from './behavior';
 import { weaponProfile, weaponNames } from './weapons';
 import type { WeaponKind } from './weapons';
 
@@ -228,7 +228,7 @@ export class World {
           if (!bullet.active || !body.active || bullet.hitBodies?.includes(body.id)) return;
           bullet.hitBodies?.push(body.id);
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
-          if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate') bullet.active = false;
+          if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
         });
       }
@@ -311,7 +311,7 @@ export class World {
       if (gateValue(b.energy, b.rewardKind) > before) this.emit('gate-level', b.x, b.y, `+${gateValue(b.energy, b.rewardKind)}${b.rewardKind === 'power' ? '%' : ''}`);
       this.emit('impact-gate', b.x, b.y); return;
     }
-    b.hp = Math.max(0, b.hp - damage);
+    b.hp = Math.max(0, b.hp - damage * (guardClosed(b) ? 0.5 : 1));
     this.effects.push({ type: 'impact', x: b.x, y: b.y, size: b.width, weaponKind });
     if (b.hp > 0) return;
     b.active = false;
