@@ -616,3 +616,14 @@ it('shows a brief weapon briefing after real pickup, yields to danger and resets
   expect(briefing()).toBe(false);
   f.runtime.start(); f.tick(); expect(briefing()).toBe(false);
 });
+
+it.each([false, true])('shows overload wake only during active overload and freezes it on pause (weak=%s)', async weak => {
+  const f = fixture(weak); await f.runtime.load(); f.runtime.start();
+  const wake = () => f.calls.filter(c => c.kind === 'lineTo' && Math.abs(c.args[0]) === 78 && c.args[1] === 24);
+  f.tick(); expect(wake()).toHaveLength(0);
+  f.runtime.world.growth.overload = 6; f.tick(); expect(wake()).toHaveLength(weak ? 2 : 4);
+  f.runtime.pause(); const before = f.calls.filter(c => c.kind === 'lineTo').map(c => c.args);
+  f.tick(); expect(f.calls.filter(c => c.kind === 'lineTo').map(c => c.args)).toEqual(before);
+  f.runtime.world.growth.overload = 0; f.tick(); expect(wake()).toHaveLength(0);
+  f.runtime.start(); f.tick(); expect(wake()).toHaveLength(0);
+});

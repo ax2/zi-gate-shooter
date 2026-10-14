@@ -46,4 +46,3 @@ export function contextGuide(world: Context): Guide {
     return { kind: 'gate', title: '持续射击，把门的奖励打高', detail: '移到门内，穿过时才领取' };
   return movement;
 }
-

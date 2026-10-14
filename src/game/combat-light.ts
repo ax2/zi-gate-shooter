@@ -1,6 +1,28 @@
 import type { WeaponKind } from '../core/weapons';
 import { weaponColors } from '../core/weapons';
 
+/** Draw behind the player: finite overload energy, never a hitbox or projectile. */
+export function overloadWake(c: CanvasRenderingContext2D, x: number, y: number, time: number, remaining: number, weak: boolean) {
+  if (remaining <= 0) return;
+  const fade = Math.min(1, remaining / 0.6);
+  c.save(); c.translate(x, y); c.globalCompositeOperation = 'lighter';
+  c.globalAlpha = fade * (weak ? 0.45 : 0.7);
+  for (const side of [-1, 1]) {
+    const length = 38 + Math.sin(time * 18 + side) * 8;
+    const points = [side * 72, -12, side * 78, 24, side * 66, 24 + length];
+    if (!weak) line(c, '#ffbd4e28', 16, points);
+    line(c, '#ffcc76', weak ? 2 : 4, points);
+    if (!weak) {
+      line(c, '#fff7d6', 1.5, [side * 72, -10, side * 77, 20, side * 70, 41]);
+      const flow = (time * 2.8 + (side + 1) * 0.25) % 1;
+      c.globalAlpha = fade * (1 - flow) * 0.6;
+      line(c, '#ffd58c', 2, [side * (87 + flow * 5), 10 + flow * 45, side * (87 + flow * 5), 22 + flow * 45]);
+      c.globalAlpha = fade * 0.7;
+    }
+  }
+  c.restore();
+}
+
 /** Finite shot-driven coil discharge, localized to the mechanical muzzle. */
 export function coilDischarge(c: CanvasRenderingContext2D, x: number, y: number, life: number, stage: number, weak: boolean) {
   if (life <= 0) return;

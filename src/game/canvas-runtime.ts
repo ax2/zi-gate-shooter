@@ -1,4 +1,4 @@
-import { coilDischarge, chainArc, energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
+import { overloadWake, coilDischarge, chainArc, energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
@@ -434,6 +434,8 @@ export class CanvasRuntime {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
+    if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0)
+      overloadWake(c, w.player.x, playerY, w.time, w.growth.overload, this.save.settings.effects === 'weak');
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(w.player.x + 5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
     c.save();
     if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.65;
