@@ -25,6 +25,16 @@ function fixture(weak = false) {
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it.each([180, 280, 400])('keeps the complete entering weapon choice label below HUD at y=%s', async y => {
+  const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
+  const b=f.runtime.world.spawn('crate',222,y,2);b.weaponKind='scatter';b.speed=0;
+  f.tick();
+  const title=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('换装 霰射炮'));
+  expect(title).toBeDefined();
+  expect(Number(title!.args[2])-13).toBeGreaterThan(28+118);
+  expect(y<314?Number(title!.args[2])>y+55:Number(title!.args[2])<y-55).toBe(true);
+});
+
 it.each([false,true])('bounds localized impacts and freezes and clears their lifetime (weak=%s)', async weak => {
  const f=fixture(weak);await f.runtime.load();f.runtime.start();
  for(let i=0;i<20;i++)f.runtime.world.effects.push({type:'impact',x:i*35,y:400,weaponKind:'pierce'});

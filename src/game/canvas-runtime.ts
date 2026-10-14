@@ -517,10 +517,12 @@ export class CanvasRuntime {
         if (b.weaponKind) {
           const choice = b.weaponKind === w.weaponKind ? '保留' : '换装';
           const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '扇面覆盖' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
-          this.rect(b.x - 118, b.y - 158, 236, 100, '#0b1723ef');
-          this.text(`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x, b.y - 135, 25, weaponColors[b.weaponKind], 'center', true);
-          this.text(role, b.x, b.y - 107, 24, '#cfdee9');
-          this.text(`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, b.y - 80, 23, '#fff0c8');
+          // Enter below the crate until the full panel fits beneath the HUD.
+          const panelY = b.y - 158 >= this.hudTop + 128 ? b.y - 158 : Math.max(this.hudTop + 128, b.y + 70);
+          this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
+          this.text(`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x, panelY + 23, 25, weaponColors[b.weaponKind], 'center', true);
+          this.text(role, b.x, panelY + 51, 24, '#cfdee9');
+          this.text(`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, 23, '#fff0c8');
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
         } else {
           this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
