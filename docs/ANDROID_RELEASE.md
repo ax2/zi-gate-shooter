@@ -10,7 +10,7 @@ Stage-35：`build/releases/Stage-35/android/zi-gate-shooter-debug.apk`，7821741
 
 ## 复现
 
-依赖版本以package-lock.json为准，Android配置以android工程为准。当前JDK21、SDK36、Build Tools36、Gradle8.14.3。本地运行`npm ci`、`npm run build:android`，默认阶段由tools/build-android.ps1定义；可显式传入-Stage。构建执行许可检查、assembleDebug/lintDebug、签名与实际APK内容核验并输出完整APK和校验记录。不要把源码manifest或构建成功当作设备测试。
+依赖版本以package-lock.json为准，Android配置以android工程为准。当前JDK21、SDK36、Build Tools36、Gradle8.14.3。本地运行`npm ci`，随后使用`npm run build:android -- -Stage Stage-NN`并选择尚不存在的新阶段号。Stage-61起必须显式指定阶段，已有输出会拒绝覆盖。构建执行许可检查、assembleDebug/lintDebug、签名与实际APK内容核验并输出完整APK和校验记录。不要把源码manifest或构建成功当作设备测试。
 
 现有两项NativeFlowTest需要已启动的隔离模拟器：`powershell -File tools/test-android-native.ps1 -Serial emulator-5580 -Stage Stage-36`。脚本会安装测试APK并执行系统返回、许可保局、Activity恢复测试。此前只编译过测试，未运行通过；设备必须先确认boot_completed=1。
 
@@ -30,3 +30,6 @@ Stage-35：`build/releases/Stage-35/android/zi-gate-shooter-debug.apk`，7821741
 ## 历史证据
 
 Stage-02启动资产、Stage-04运行依赖清单、Stage-05离线许可页面、Stage-06原生测试编译、Stage-25模拟器启动失败、Stage-33光效、Stage-34真实浏览器199.8秒、Stage-35诊断优化分别保留于docs/stages。历史候选与失败不覆盖，不再将旧阶段路径写成当前默认产物。
+
+
+Stage-69（2026-10-14）：最新候选为build/releases/Stage-69/android/zi-gate-shooter-debug.apk，包含Stage-67/68动作，203项完整回归及37文件/16原生图校验通过；上文Stage-35为历史证据。见stages/Stage-69/TEST_REPORT.md。
