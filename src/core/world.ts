@@ -24,7 +24,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[];
 }
-export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number; enemyKind?: EnemyKind; equipmentStage?: number }
+export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number; enemyKind?: EnemyKind; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -225,7 +225,7 @@ export class World {
           bullet.hitBodies?.push(body.id);
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate') bullet.active = false;
-          this.hit(body, bullet.damage);
+          this.hit(body, bullet.damage, bullet.weaponKind);
         });
       }
     }
@@ -299,7 +299,7 @@ export class World {
     this.player.hp--; this.player.invulnerable = C.invulnerability;
     this.emit('hurt', this.player.x, C.playerY);
   }
-  private hit(b: Body, damage: number) {
+  private hit(b: Body, damage: number, weaponKind?: WeaponKind) {
     this.hits++; b.hit = 0.07;
     if (b.kind === 'gate') {
       const before = gateValue(b.energy); b.energy = Math.min(144, b.energy + damage);
@@ -307,7 +307,7 @@ export class World {
       this.emit('impact-gate', b.x, b.y); return;
     }
     b.hp = Math.max(0, b.hp - damage);
-    this.emit('impact', b.x, b.y, undefined, b.width);
+    this.effects.push({ type: 'impact', x: b.x, y: b.y, size: b.width, weaponKind });
     if (b.hp > 0) return;
     b.active = false;
     if (b.kind === 'crate') {

@@ -72,3 +72,20 @@ export function sparkLight(c: CanvasRenderingContext2D, x: number, y: number, vx
   line(c, color, 2.5, pts); line(c, '#fff3d6', 1, [x, y, x - vx * .016, y - vy * .016]);
   c.restore();
 }
+
+/** Brief localized impact: scatter spreads sideways, piercing exits along its axis. */
+export function impactLight(c: CanvasRenderingContext2D, x: number, y: number, kind: WeaponKind, age: number, weak: boolean) {
+  const p = Math.max(0, Math.min(1, age)), fade = (1 - p) ** 2;
+  c.save(); c.translate(x, y); c.globalCompositeOperation = 'lighter'; c.globalAlpha = fade * (weak ? .45 : .85);
+  const color = weaponColors[kind], reach = 12 + p * (kind === 'scatter' ? 44 : 28);
+  if (kind === 'pierce') {
+    line(c, color, 4, [0, 22 * (1-p), 0, -reach * 1.6]);
+    line(c, '#fff2ff', 1.5, [-12, -5, 0, 1, 12, -5]);
+  } else {
+    for (const side of [-1, 1]) {
+      line(c, color, 2.5, [side * 6, 0, side * reach, -reach * .4]);
+      if (!weak) line(c, '#fff4d4', 1.2, [side * 7, 3, side * reach * .75, reach * .45]);
+    }
+  }
+  c.restore();
+}

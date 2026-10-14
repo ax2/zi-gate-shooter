@@ -25,6 +25,18 @@ function fixture(weak = false) {
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it.each([false,true])('bounds localized impacts and freezes and clears their lifetime (weak=%s)', async weak => {
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();
+ for(let i=0;i<20;i++)f.runtime.world.effects.push({type:'impact',x:i*35,y:400,weaponKind:'pierce'});
+ f.runtime.world.effects.push({type:'impact',x:0,y:400,weaponKind:'scatter'});
+ f.tick();
+ const visual=f.runtime as unknown as {impacts:{kind:string;life:number}[]};
+ expect(visual.impacts.length).toBe(weak?4:12);expect(visual.impacts.every(h=>h.kind==='pierce')).toBe(true);
+ f.runtime.pause();const frozen=JSON.stringify(visual.impacts);for(let i=0;i<20;i++)f.tick();
+ expect(JSON.stringify(visual.impacts)).toBe(frozen);
+ f.runtime.start();expect(visual.impacts).toHaveLength(0);
+});
+
 it('limits redundant high-refresh draws without slowing fixed-step gameplay', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
   let renders = 0;
