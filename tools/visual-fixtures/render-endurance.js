@@ -1,3 +1,4 @@
+import { browserImage } from '../../src/game/browser-image.ts';
 import { CanvasRuntime } from '../../src/game/canvas-runtime.ts';
 import { GameAudio } from '../../src/game/audio.ts';
 import { LoopMusic, browserMusicHandle } from '../../src/game/music.ts';
@@ -111,7 +112,7 @@ function afterFrame(workStarted) {
   else if (runtime.world.time >= 1200) finish('completed');
 }
 const runtime = new CanvasRuntime({ canvas, width: innerWidth, height: innerHeight, dpr: devicePixelRatio, menuBottom: 0,
-  image: src => new Promise((resolve, reject) => { const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = `/${src}`; }),
+  image: src => browserImage(`/${src}`),
   read: defaults, write: () => {}, sound: (type, stage, weapon) => audio.event(type, stage, weapon), silence: () => audio.stop(),
   music: playing => music.setPlaying(playing), now: () => performance.now(),
   requestFrame: fn => requestAnimationFrame(time => {

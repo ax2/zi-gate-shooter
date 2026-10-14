@@ -3,6 +3,7 @@ import { GameAudio } from './game/audio';
 import { LoopMusic, browserMusicHandle } from './game/music';
 import { createLicenseViewer } from './game/license-viewer';
 import { bindBrowserKeyboard } from './game/browser-keyboard';
+import { browserImage } from './game/browser-image';
 import licenseText from '../legal/ANDROID_NOTICES.txt?raw';
 
 const canvas = document.createElement('canvas');
@@ -19,7 +20,7 @@ const bounds = viewport();
 export const licenses = createLicenseViewer(licenseText, () => runtime.hide());
 export const runtime = new CanvasRuntime({
   canvas, width: bounds.width, height: bounds.height, dpr: devicePixelRatio, menuBottom: 0,
-  image: src => new Promise((resolve, reject) => { const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = src; }),
+  image: browserImage,
   read: () => { try { return parseSave(JSON.parse(localStorage.getItem('zi-gate-shooter-v1') ?? 'null')); } catch { return parseSave(null); } },
   write: value => { try { localStorage.setItem('zi-gate-shooter-v1', JSON.stringify(value)); } catch { /* In-memory fallback. */ } },
   sound: (type, stage, weapon) => audio.event(type, stage, weapon), silence: () => audio.stop(),

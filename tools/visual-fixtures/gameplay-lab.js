@@ -1,3 +1,4 @@
+import { browserImage } from '../../src/game/browser-image.ts';
 import { CanvasRuntime } from '../../src/game/canvas-runtime.ts';
 import { defaults } from '../../src/ui/storage.ts';
 import { World } from '../../src/core/world.ts';
@@ -12,7 +13,7 @@ function measuredFrame(fn){return requestAnimationFrame(time=>{
  previousWork=work;
 });}
 const runtime = new CanvasRuntime({canvas,width:innerWidth,height:innerHeight-68,dpr:devicePixelRatio,menuBottom:0,
- image:src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=`/${src}`;}),
+ image:src=>browserImage(`/${src}`),
  read:defaults,write:()=>{},sound:(type,tier,weapon)=>audio.event(type,tier,weapon),silence:()=>audio.stop(),now:()=>performance.now(),requestFrame:measuredFrame});
 function start(){
  frameEvidence=[];previousCallback=0;previousWork=0;void audio.unlock();runtime.start();runtime.world=new World(1337,Number(document.querySelector('#sector').value));
