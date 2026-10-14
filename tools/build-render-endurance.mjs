@@ -1,0 +1,14 @@
+import { build } from 'esbuild';
+import { mkdir, readFile, writeFile, cp } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+const out = `build/qa/bundled-endurance/${stamp}`;
+await mkdir(out, { recursive: true });
+await build({ entryPoints: ['tools/visual-fixtures/render-endurance.js'], outfile: `${out}/endurance.js`, bundle: true, minify: true, format: 'esm', platform: 'browser', target: 'es2022' });
+const html = (await readFile('tools/visual-fixtures/render-endurance.html','utf8')).replace('/tools/visual-fixtures/render-endurance.js','/endurance.js').replace('自动操作者夹具 ·','静态打包对照 · 自动操作者夹具 ·');
+await writeFile(`${out}/index.html`,html);
+await cp('public/assets',`${out}/assets`,{recursive:true});
+const bytes = await readFile(`${out}/endurance.js`);
+await writeFile(`${out}/manifest.json`,JSON.stringify({sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),created:stamp,bundleBytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),scope:'Minified static bundle of production runtime and omniscient test driver; no Vite HMR; not human or device acceptance'},null,2));
+console.log(out);
