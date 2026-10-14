@@ -271,7 +271,7 @@ export class World {
           const x = this.player.px + (this.player.x - this.player.px) * t;
           const chosen = gates.find(g => x >= g.x - g.width / 2 && x < g.x + g.width / 2);
           if (chosen && this.player.hp > 0) {
-            const result = grantGate(this.growth, gateValue(chosen.energy), chosen.rewardKind);
+            const result = grantGate(this.growth, gateValue(chosen.energy, chosen.rewardKind), chosen.rewardKind);
             this.gatesTaken++;
             this.emit('gate-taken', chosen.x, C.playerY, gateRewardLabel(result), chosen.width);
             if (result.activated) this.emit('overload', this.player.x, C.playerY, '超载启动');
@@ -303,8 +303,8 @@ export class World {
   private hit(b: Body, damage: number, weaponKind?: WeaponKind) {
     this.hits++; b.hit = 0.07;
     if (b.kind === 'gate') {
-      const before = gateValue(b.energy); b.energy = Math.min(144, b.energy + damage);
-      if (gateValue(b.energy) > before) this.emit('gate-level', b.x, b.y, `+${gateValue(b.energy)}${b.rewardKind === 'power' ? '%' : ''}`);
+      const before = gateValue(b.energy, b.rewardKind); b.energy = Math.min(144, b.energy + damage);
+      if (gateValue(b.energy, b.rewardKind) > before) this.emit('gate-level', b.x, b.y, `+${gateValue(b.energy, b.rewardKind)}${b.rewardKind === 'power' ? '%' : ''}`);
       this.emit('impact-gate', b.x, b.y); return;
     }
     b.hp = Math.max(0, b.hp - damage);

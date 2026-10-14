@@ -9,7 +9,7 @@ const run = (w: World, seconds: number, x = 360) => { for (let t = 0; t < Math.r
 
 describe('reward invariants', () => {
   it('handles threshold boundaries and multi-tier charging', () => {
-    expect([0, 23.99, 24, 56, 96, 144, 999].map(gateValue)).toEqual([10, 10, 15, 20, 25, 30, 30]);
+    expect([0, 23.99, 24, 56, 96, 144, 999].map(value => gateValue(value))).toEqual([10, 10, 15, 20, 25, 30, 30]);
   });
   it('adds percentages and converts cap overflow', () => {
     const g = { stage: 1, bonus: 0, energy: 0, overload: 0 };

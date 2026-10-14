@@ -1,6 +1,28 @@
 import { expect, it } from 'vitest';
 import { C } from '../src/core/config';
 import { World } from '../src/core/world';
+import { gateValue, previewReward } from '../src/core/rewards';
+
+it('dedicated charge gates trade permanent growth for faster overload without doubling power overflow', () => {
+ expect([0,24,56,96,144].map(n=>gateValue(n,'energy'))).toEqual([20,30,40,50,60]);
+ const growth={stage:1,bonus:95,energy:0,overload:0};
+ expect(previewReward(growth,gateValue(144,'power'),'power')).toEqual({power:5,energy:25,wasted:0});
+});
+
+it('crossing a charged energy gate grants its displayed reward once and activates overload at 100', () => {
+ const w=new World();w.phase='boss';w.growth.energy=40;
+ const g=w.spawn('gate',360,C.playerY-1);g.rewardKind='energy';g.energy=144;g.row=1;
+ const rejected=w.spawn('gate',498,C.playerY-1);rejected.rewardKind='power';rejected.row=1;
+ expect(previewReward(w.growth,gateValue(g.energy,g.rewardKind),g.rewardKind).energy).toBe(60);
+ w.step(C.step);
+ expect(w.gatesTaken).toBe(1);expect(w.growth.bonus).toBe(0);
+ expect(w.growth.energy).toBe(0);expect(w.growth.overload).toBe(6);
+ const events=w.drainEffects();
+ expect(events.filter(e=>e.type==='gate-taken').map(e=>e.text)).toEqual(['充能 +60']);
+ expect(events.filter(e=>e.type==='overload')).toHaveLength(1);
+ w.step(C.step);expect(w.gatesTaken).toBe(1);
+ expect(w.drainEffects().filter(e=>e.type==='overload')).toHaveLength(0);
+});
 
 it.each([false,true])('paired gates offer power versus charge until power is capped (capped=%s)', capped => {
  const w=new World();w.growth.bonus=capped?100:20;

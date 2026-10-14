@@ -1,9 +1,9 @@
 import { C, clamp } from './config';
 export interface Growth { stage: number; bonus: number; energy: number; overload: number }
-export function gateValue(energy: number): number {
+export function gateValue(energy: number, kind: 'power' | 'energy' = 'power'): number {
   let rank = 0;
   for (let i = 0; i < C.thresholds.length; i++) if (energy >= C.thresholds[i]) rank = i;
-  return C.rewards[rank];
+  return C.rewards[rank] * (kind === 'energy' ? C.energyGateMultiplier : 1);
 }
 export function previewReward(g: Growth, nominal: number, kind: 'power' | 'energy') {
   const power = kind === 'power' ? Math.min(nominal, 100 - g.bonus) : 0;

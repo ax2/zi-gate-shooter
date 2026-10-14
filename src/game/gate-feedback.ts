@@ -8,7 +8,7 @@ export class GateFeedback {
   sync(bodies: readonly Body[], time: number) {
     const next = new Map<number, { x: number; width: number; tier: number; until: number }>();
     for (const b of bodies) if (b.kind === 'gate' && b.active) {
-      const previous = this.live.get(b.id), tier = gateValue(b.energy);
+      const previous = this.live.get(b.id), tier = gateValue(b.energy, b.rewardKind);
       next.set(b.id, { x: b.x, width: b.width, tier, until: previous && tier > previous.tier ? time + 0.12 : previous?.until ?? 0 });
     }
     this.live = next;

@@ -529,7 +529,7 @@ export class CanvasRuntime {
         }
       } else if (b.kind === 'pickup') this.text(b.weaponKind ? `拾取${b.weaponKind === w.weaponKind ? '保留' : '换装'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
       else if (b.kind === 'gate') {
-        const value = previewReward(w.growth, gateValue(b.energy), b.rewardKind);
+        const value = previewReward(w.growth, gateValue(b.energy, b.rewardKind), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
         const pulse = this.gateFeedback.pulse(b.id, w.time);
         const numberScale = 1 + Math.sin(pulse * Math.PI) * (this.save.settings.effects === 'weak' ? 0.03 : 0.08);

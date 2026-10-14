@@ -182,7 +182,7 @@ export class BattleScene extends Phaser.Scene {
         v.sprite.setAngle(Math.sin(w.time * 5) * 8); v.label!.setPosition(b.x, b.y - 50).setText(`拾取 T${b.stage}`);
         v.bar?.clear();
       } else if (b.kind === 'gate') {
-        const value = gateValue(b.energy), preview = previewReward(w.growth, value, b.rewardKind);
+        const value = gateValue(b.energy, b.rewardKind), preview = previewReward(w.growth, value, b.rewardKind);
         let main = preview.power ? `+${preview.power}%` : preview.energy ? `+${preview.energy}` : '+0';
         let caption = preview.power ? '穿过领取 · 火力' : preview.energy ? '穿过领取 · 超载' : '储能已满';
         if (preview.power && preview.energy) { main = `+${preview.power}% / ${preview.energy}`; caption = '火力 / 超载'; }
