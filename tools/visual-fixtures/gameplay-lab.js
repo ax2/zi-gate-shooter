@@ -14,6 +14,11 @@ function start(){
    const boss=runtime.world.spawn('boss',360,260);boss.bossVariant=2;boss.attackCycle=3;boss.timer=0;
    return;
  }
+ if(document.querySelector('#scenario').value==='gates') {
+   runtime.world.spawnGates(360,true);
+   for(const gate of runtime.world.bodies){gate.y=500;gate.speed=0;}
+   return;
+ }
  if(document.querySelector('#scenario').value==='opening') return;
  runtime.world.growth.stage=3;runtime.world.weaponKind=document.querySelector('#weapon').value;
  if(document.querySelector('#scenario').value==='choices') {
@@ -33,6 +38,5 @@ document.querySelector('#weapon').onchange=start;
 document.querySelector('#sector').onchange=start;
 document.querySelector('#scenario').onchange=start;
 window.addEventListener('resize',()=>runtime.resize(innerWidth,innerHeight-68,devicePixelRatio));
-Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:document.querySelector('#scenario').value==='blockade'?'T1 + seeded boss blockade, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value==='choices'?'T3 + two stationary choice crates, no damage immunity':'T3 + five seeded bodies, no damage immunity'})});
+Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:document.querySelector('#scenario').value==='gates'?'stationary pair from production gate factory, layout only':document.querySelector('#scenario').value==='blockade'?'T1 + seeded boss blockade, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value==='choices'?'T3 + two stationary choice crates, no damage immunity':'T3 + five seeded bodies, no damage immunity'})});
 await runtime.load();
-
