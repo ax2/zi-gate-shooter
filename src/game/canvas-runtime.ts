@@ -8,6 +8,7 @@ import { defaults } from '../ui/storage';
 import { FrameWindow } from './frame-window';
 import { BossDestruction, BOSS_VISUAL } from './boss-destruction';
 import { PlayerMotion } from './player-motion';
+import { WeaponMotion } from './weapon-motion';
 import type { PlayerPose } from './player-motion';
 import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
@@ -77,7 +78,7 @@ export class CanvasRuntime {
   private noticeUntil = 0;
   private shakeUntil = 0;
   private muzzleUntil = 0;
-  private recoilUntil = 0;
+  private weaponMotion = new WeaponMotion();
   private upgradeUntil = 0;
   private error = '';
   private started = false;
@@ -169,7 +170,7 @@ export class CanvasRuntime {
     this.crateDebris.clear();
     this.enemyWreck.clear();
     this.playerMotion.reset();
-    this.recoilUntil = 0;
+    this.weaponMotion.reset();
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
@@ -247,7 +248,7 @@ export class CanvasRuntime {
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, this.world.weaponKind);
-    if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 80; this.recoilUntil = this.world.time + 0.048; return; }
+    if (e.type === 'fire') { this.muzzleUntil = this.platform.now() + 80; this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
@@ -422,7 +423,7 @@ export class CanvasRuntime {
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(w.player.x + 5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
     c.save();
     if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.65;
-    const recoil = w.time < this.recoilUntil ? 2.5 : 0;
+    const recoil = this.weaponMotion.sample(w.weaponKind, w.growth.stage, w.time);
     const pose = this.playerMotion.sample(w.player.x, w.time);
     if (w.player.hp > 0) {
       if (this.mode === 'menu') this.frameSprite('units.png', 2, 4, w.player.x, playerY, 200, 267);
