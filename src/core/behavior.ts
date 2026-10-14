@@ -3,6 +3,7 @@ import { C, clamp } from './config';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 
 export function bossWarningLanes(b: Body) {
+  if (b.attack === 3) return [80, 150, 220, 290, 360, 430, 500, 570, 640].filter(x => Math.abs(x - b.lane) >= 110);
   if (b.attack === 2) return [200, 520];
   return b.attack ? b.burst ? [360] : [b.lane, 360] : [b.lane];
 }
@@ -26,11 +27,15 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         b.warning = 1.35; b.timer = 1.35;
         // Advance only after an attack finishes, so delayed warnings cannot
         // accidentally repeat/skip a pattern. B alternates left/right sweep.
-        b.attack = b.attackCycle % (b.bossVariant ? 3 : 2);
-        b.lane = b.attack ? Math.floor(b.attackCycle / 2) % 2 ? 520 : 200
+        b.attack = b.attackCycle % (b.bossVariant ? 4 : 2);
+        b.lane = b.attack === 3 ? [140, 360, 580][Math.floor(b.attackCycle / 4) % 3]
+          : b.attack ? Math.floor(b.attackCycle / 2) % 2 ? 520 : 200
           : [200, 360, 520][Math.floor(b.attackCycle / 2) % 3];
       } else {
-        if (b.attack === 2) {
+        if (b.attack === 3) {
+          for (const x of bossWarningLanes(b)) for (let i = 0; i < 2; i++) shot(x, b.y + 90 - i * 75, 0, 280);
+          finish();
+        } else if (b.attack === 2) {
           for (const x of [200, 520]) for (let i = 0; i < 4; i++) shot(x, b.y + 90 - i * 50, 0, 300);
           finish();
         } else if (!b.attack) {

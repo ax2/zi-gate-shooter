@@ -207,3 +207,5 @@ Stage-46：规则/测试操作员独立Node采样完成，不能复现浏览器�
 Stage-50：第三章接入原创装甲通道候选；41项专项/网页构建与双视口截图检查完成。APK仍Stage-44。详见docs/stages/Stage-50/TEST_REPORT.md。
 
 Stage-51：Android试玩候选已包含三章背景及约60Hz绘制预算；构建/lint/签名/35资源与16原生图像核验通过，真机和长局待验。详见docs/stages/Stage-51/TEST_REPORT.md。
+
+Stage-52：按用户优先级先做敌人/首领战术，后续章节首领新增轮换缺口封锁；机制成长15项、路线渲染48项分批通过，预警截图已查。APK仍Stage-51，详见docs/stages/Stage-52。

@@ -495,7 +495,15 @@ export class CanvasRuntime {
           this.rect(x - 36, b.y + 60, 72, 1110 - b.y, '#ff775620');
           c.strokeStyle = '#ff986eaa'; c.lineWidth = 2; c.strokeRect(x - 36, b.y + 60, 72, 1110 - b.y);
           if (b.kind === 'boss') {
-            const label = b.attack === 2 ? '齐射' : b.attack ? x === 360 ? '第2拍' : '第1拍' : '锁定';
+            if (b.attack === 3) {
+              if (x === lanes[0]) {
+                this.rect(b.lane - 42, b.y + 132, 84, 38, '#0b1723ef');
+                this.text('缺口', b.lane, b.y + 151, 24, '#d9f4ff', 'center', true);
+                this.text('封锁', x, b.y + 151, 24, '#ffe1c8', 'center', true);
+              }
+              continue;
+            }
+            const label = b.attack === 3 ? '封锁' : b.attack === 2 ? '齐射' : b.attack ? x === 360 ? '第2拍' : '第1拍' : '锁定';
             this.rect(x - 35, b.y + 132, 70, 38, '#241c1eef');
             this.text(label, x, b.y + 151, 24, '#ffe1c8', 'center', true);
           }
@@ -639,3 +647,4 @@ export function parseSave(value: unknown): Save {
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];
   return result;
 }
+

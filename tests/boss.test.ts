@@ -1,7 +1,24 @@
 import { expect, it } from 'vitest';
 import { C } from '../src/core/config';
 import { World } from '../src/core/world';
-import { bossWarningLanes } from '../src/core/behavior';
+import { advanceBody, bossWarningLanes } from '../src/core/behavior';
+import { safeRoute } from '../src/core/reachability';
+
+it.each([3, 7, 11])('later boss blockade cycle %s advertises its rotating gap and leaves a reachable route', cycle => {
+  const world = new World(); const boss = world.spawn('boss', 360, 260);
+  boss.bossVariant = 2; boss.attackCycle = cycle; boss.timer = 0;
+  const emitted: number[] = [];
+  advanceBody(boss, C.step, 'boss', 1, x => emitted.push(x));
+  expect(boss.attack).toBe(3); expect(emitted).toHaveLength(0);
+  expect(boss.lane).toBe([140, 360, 580][Math.floor(cycle / 4)]);
+  const advertised = bossWarningLanes(boss);
+  expect(advertised.every(x => Math.abs(x - boss.lane) >= 110)).toBe(true);
+  for (const start of [C.minX, 360, C.maxX])
+    expect(safeRoute(start, [boss], [], 5, { phase: 'boss', phaseTime: 1 })).not.toBeNull();
+  for (let frame = 0; frame < 81; frame++) advanceBody(boss, C.step, 'boss', 1 + frame * C.step, x => emitted.push(x));
+  expect(emitted).toEqual(advertised.flatMap(x => [x, x]));
+  expect(boss.attackCycle).toBe(cycle + 1);
+});
 
 it('boss alternates A/B, sweeps in two timed beats, mirrors sides and keeps warnings locked', () => {
   const world = new World(); world.phase = 'boss'; world.player.x = 68;
