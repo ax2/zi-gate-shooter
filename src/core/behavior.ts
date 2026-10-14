@@ -76,6 +76,6 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
           }
         }
       }
-    } else if (b.y >= 600) b.warning = 0;
+    } else if (b.y >= 600) { b.warning = 0; b.burst = 0; }
   }
 }

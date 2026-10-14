@@ -18,6 +18,22 @@ it('fan elite advertises both beats and retains the narrow warning until the del
  expect(b.burst).toBe(0);expect(b.warning).toBe(0);
 });
 
+it('cancels the queued second volley after passing the firing boundary', () => {
+ const b=new World().spawn('elite',360,590);b.pattern='fan';b.burst=1;b.warning=.6;b.timer=.6;
+ let shots=0;
+ for(let i=0;i<60;i++)advanceBody(b,C.step,'running',0,()=>shots++);
+ expect(shots).toBe(0);expect(b.warning).toBe(0);expect(b.burst).toBe(0);
+});
+
+it('killing the elite between beats prevents the pending second volley', () => {
+ const w=new World();w.player.x=200;
+ const b=w.spawn('elite',200,400);b.pattern='fan';b.burst=1;b.warning=.6;b.timer=.6;b.hp=1;
+ w.bullets.push({id:999,x:200,y:440,px:200,py:440,vx:0,vy:-1200,damage:4,age:0,active:true,hostile:false});
+ for(let i=0;i<60;i++){w.step(C.step,200);w.drainEffects();}
+ expect(w.bodies.some(body=>body.id===b.id)).toBe(false);
+ expect(w.kills).toBe(1);expect(w.bullets.some(bullet=>bullet.hostile)).toBe(false);
+});
+
 it('tracks travel distance, gives actual warning priority and never advances an unchanged body',()=>{
  expect(eliteFrame({age:0,speed:90,warning:0})).toBe(0);
  expect(eliteFrame({age:49/90,speed:90,warning:0})).toBe(2);
