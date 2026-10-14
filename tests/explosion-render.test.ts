@@ -716,3 +716,14 @@ it('tree overview preserves pending choices and never spends points or resumes c
  f.runtime.touchStart(1,360,1143);f.runtime.touchEnd(1,360,1143);f.tick();
  expect(f.runtime.mode).toBe('loadout');expect(f.runtime.world.build.spent).toBe(1);
 });
+it('route achievements unlock through real choice actions and survive a new run',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ for(let i=0;i<3;i++){
+  f.runtime.world.growth.energy=100;f.tick();
+  expect(f.runtime.mode).toBe('choice');
+  f.runtime.touchStart(1,360,640);f.runtime.touchEnd(1,360,640);f.tick();
+ }
+ expect(f.runtime.save.achievements.unlocked).toContain('specialist');
+ f.runtime.start();expect(f.runtime.world.build.spent).toBe(0);
+ expect(f.runtime.save.achievements.unlocked).toContain('specialist');
+});

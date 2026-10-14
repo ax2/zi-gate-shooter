@@ -1,3 +1,4 @@
+import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
 import { tree, routes, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
@@ -48,7 +49,9 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'armory' | 'loadout' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  private achievementToast = '';
+  private achievementUntil = 0;
   private treeReturn: 'loadout' | 'choice' = 'loadout';
   private dossierWeapon: WeaponKind = 'pulse';
   save: Save;
@@ -184,6 +187,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.achievementUntil=0;
     this.supportBeams=[];
     this.pausePreview = false;
     this.groundDistance = 0;
@@ -210,7 +214,7 @@ export class CanvasRuntime {
     this.mode = 'paused'; this.cancelTouch(); this.accumulator = 0; this.notify(message); this.platform.silence();
     this.updateMusic();
   }
-  hide() { this.hidden = true; this.pause('切换至后台，已暂停'); this.cancelTouch(); this.platform.silence(); }
+  hide() { this.platform.write(this.save); this.hidden = true; this.pause('切换至后台，已暂停'); this.cancelTouch(); this.platform.silence(); }
   show() { this.hidden = false; this.lastTime = this.platform.now(); if (this.loadAttempt) this.loadAttempt.since = this.lastTime; this.accumulator = 0; this.cancelTouch(); }
   private updateMusic() {
     try { this.platform.music?.(this.mode === 'playing' && this.save.settings.music); }
@@ -252,6 +256,7 @@ export class CanvasRuntime {
     this.cancelTouch();
     if (this.mode === 'choice') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'achievements') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
@@ -264,11 +269,13 @@ export class CanvasRuntime {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
       if(routes.includes(route)&&this.world.chooseBuild(route)){
+        this.checkAchievements();
         if(!this.world.build.available(this.world.growth.mastery??0).length)this.action('resume');
       }
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
+    else if (action === 'achievements') this.mode = 'achievements';
     else if (action === 'armory') { this.dossierWeapon = 'pulse'; this.mode = 'armory'; }
     else if (action.startsWith('dossier:')) {
       const weapon = action.slice(8) as WeaponKind;
@@ -295,7 +302,14 @@ export class CanvasRuntime {
     this.updateMusic();
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
+  private checkAchievements() {
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length);
+    if(fresh.length){this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
+  }
   private effect(e: EffectEvent) {
+    if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
+    if(e.type==='boss-kill')this.save.achievements.bosses++;
+    if(['kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser'});
@@ -376,6 +390,7 @@ export class CanvasRuntime {
       if (this.mode === 'error') this.button('重新加载', 700, 'reload', true);
       c.restore(); return;
     }
+    if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
     if (this.mode === 'tree') { this.drawBuildTree(); c.restore(); return; }
@@ -413,6 +428,7 @@ export class CanvasRuntime {
       }
     }
     if(this.mode==='choice')this.drawBuildChoices();
+    if(this.mode==='playing' && w.time<this.achievementUntil){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
     c.restore();
   }
@@ -672,8 +688,23 @@ export class CanvasRuntime {
     this.rect(280, 420, 160, 2, '#5bddff'); this.text('把奖励打高。把火力打满。', 360, 475, 29, '#c2dbe8');
     this.text(`最高分　${this.save.best}`, 360, 890, 26, '#e8c98d');
     this.button('开始突围　›', 932, 'start', true);
-    this.button('武器档案', 1030, 'armory'); this.button('设置', 1128, 'settings');
+    this.button('武器档案', 1030, 'armory');
+    for(const [i,label] of ['成就','设置'].entries()){const x=112+i*258;this.rect(x,1128,238,86,'#1a2d3c');this.text(label, x+119,1171,30,'#d8eaf5');this.buttons.push({x,y:1128,w:238,h:86,label,action:i?'settings':'achievements'});}
     this.text('射击装备，再走位领取强化', 360, 1230, 23, '#99b6c9');
+  }
+  private drawAchievements() {
+    this.rect(40,90,640,1120,'#102330');
+    this.text('突围成就',360,155,42,'#effaff','center',true);
+    const state=this.save.achievements;
+    this.text(`已达成 ${state.unlocked.length}/${achievements.length} · 选择留下战绩`,360,210,25,'#bdd8e7');
+    for(const [i,a] of achievements.entries()){const y=255+i*125,done=state.unlocked.includes(a.id);
+      this.rect(65,y,590,110,done?'#263d43':'#142b39');
+      this.text(a.name,85,y+35,29,done?'#ffdc8a':'#effaff','left',true);
+      this.text(done?'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+35,23,done?'#ffdc8a':'#a5bac8','right');
+      this.text(a.detail,85,y+78,23,'#bdd8e7','left');
+    }
+    this.text('成就保存在本机 · 不增加局外伤害',360,1040,23,'#bdd8e7');
+    this.button('返回主界面',1100,'armory-back',true);
   }
   private drawArmory() {
     const kind = this.dossierWeapon, entry = weaponDossier[kind], color = weaponColors[kind];
@@ -823,6 +854,7 @@ export function parseSave(value: unknown): Save {
   if (typeof value !== 'object' || value === null) return result;
   const data = value as Partial<Save>;
   if (data.version !== 1) return result;
+  result.achievements = parseAchievements(data.achievements);
   if (Number.isFinite(data.best) && data.best! >= 0) result.best = Math.floor(data.best!);
   if (data.settings?.effects === 'weak') result.settings.effects = 'weak';
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];
