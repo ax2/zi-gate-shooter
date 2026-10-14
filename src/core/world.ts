@@ -81,6 +81,7 @@ export class World {
     const row = this.nextRow++;
     for (const cx of pair ? [222, 498] : [x]) {
       const g = this.spawn('gate', cx, 180); g.row = row;
+      if (pair && this.growth.bonus < 100) g.rewardKind = cx < 360 ? 'power' : 'energy';
       if (!pair && x === 360) g.width = 264;
     }
   }

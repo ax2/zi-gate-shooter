@@ -2,6 +2,18 @@ import { expect, it } from 'vitest';
 import { C } from '../src/core/config';
 import { World } from '../src/core/world';
 
+it.each([false,true])('paired gates offer power versus charge until power is capped (capped=%s)', capped => {
+ const w=new World();w.growth.bonus=capped?100:20;
+ w.player.x=C.minX;w.player.invulnerable=100;
+ for(let i=0;i<28*60;i++){w.step(C.step,C.minX);w.drainEffects();}
+ const gates=w.bodies.filter(b=>b.kind==='gate');
+ const pair=gates.filter(b=>gates.some(other=>other!==b&&other.row===b.row)).sort((a,b)=>a.x-b.x);
+ expect(pair).toHaveLength(2);
+ expect(pair.map(g=>g.rewardKind)).toEqual(capped?['energy','energy']:['power','energy']);
+ expect(pair[0].row).toBe(pair[1].row);
+ expect(w.gatesTaken).toBe(0);expect(w.growth.energy).toBe(0);
+});
+
 it('minimum intended stages can break and collect each crate after reaction and lateral travel', () => {
   for (const [stage, reward] of [[1, 2], [2, 3]]) {
     const world = new World(); world.phase = 'boss'; world.player.x = 500;
@@ -58,3 +70,4 @@ it('authored first loop supports actual T1 to T3 growth, gate choices and boss v
     expect(world.round).toBe(2); expect(world.gatesTaken).toBeGreaterThanOrEqual(3);
   }
 });
+
