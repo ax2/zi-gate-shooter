@@ -1,3 +1,4 @@
+import { supportProfile } from '../core/support-profile';
 import { overloadWake, coilDischarge, chainArc, energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -729,8 +730,9 @@ export class CanvasRuntime {
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
     }
-    this.text((w.growth.mastery??0)>=3?`激光：每3秒${+(30*(1+power/100)).toFixed(1)}伤害 · 贯穿4敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
-    this.text((w.growth.mastery??0)>=5?'折射：速射弹命中后，向邻敌追加60%伤害':'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
+    const support=supportProfile(w.growth.mastery);
+    this.text(support.laserUnlocked?`激光：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
+    this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text('数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
     this.text('每充满100：本局永久+10%，并触发6秒超载', 360, 1004, 23, '#c7deeb');
     this.button('返回暂停菜单', 1080, 'loadout-back', true);

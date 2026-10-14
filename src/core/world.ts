@@ -1,3 +1,4 @@
+import { supportProfile, supportMilestone } from './support-profile';
 import { C, clamp } from './config';
 import type { EnemyKind } from './config';
 import { sweep } from './collision';
@@ -66,7 +67,8 @@ export class World {
   drainEffects() { const out = this.effects; this.effects = []; return out; }
   private overloadNotice() {
     const level=this.growth.mastery ?? 0;
-    return level===3?'激光解锁 · 旧火力保留 · 永久+10%':level===5?'折射解锁 · 旧火力保留 · 永久+10%':'充能突破 · 永久火力+10% · 超载6秒';
+    const milestone=supportMilestone(level);
+    return milestone ? `${milestone} · 永久火力+10%` : '充能突破 · 永久火力+10% · 超载6秒';
   }
 
   spawn(kind: BodyKind, x: number, y = -80, stage = 2): Body {
@@ -185,18 +187,19 @@ export class World {
     }
     this.fireTimers.set(kind, timer);
     }
-    if ((this.growth.mastery ?? 0) >= 3) {
+    const support=supportProfile(this.growth.mastery);
+    if (support.laserUnlocked) {
       this.laserTimer -= dt;
       if (this.laserTimer <= 0) {
-        this.laserTimer += 3;
+        this.laserTimer += support.laserInterval;
         const x=this.player.x, start=C.playerY-100;
         const targets=this.bodies.filter(b=>b.active && b.kind!=='pickup' && b.y>=C.playerShotTop && b.y<start
           && Math.abs(b.x-x)<=b.width/2+8).sort((a,b)=>b.y-a.y || a.id-b.id);
         let end=C.playerShotTop, count=0;
         for(const body of targets){
           const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body);
-          this.hit(body,30*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1),'pulse');
-          if(blocked || ++count>=4){end=body.y+body.height/2;break;}
+          this.hit(body,support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1),'pulse');
+          if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
         }
         this.effects.push({type:'laser',x,y:start,targetX:x,targetY:end});
       }
@@ -256,13 +259,14 @@ export class World {
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
-          if ((this.growth.mastery ?? 0) >= 5 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
-            const next=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies
-              && other.y>=C.playerShotTop && other.y<=C.playerY && Math.hypot(other.x-body.x,other.y-body.y)<=180)
-              .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id)[0];
-            if(next){
+          const support=supportProfile(this.growth.mastery);
+          if (support.refractionTargets > 0 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
+            const reflected=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies
+              && other.y>=C.playerShotTop && other.y<=C.playerY && Math.hypot(other.x-body.x,other.y-body.y)<=support.refractionRange)
+              .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id).slice(0,support.refractionTargets);
+            for(const next of reflected){
               this.effects.push({type:'refract',x:body.x,y:body.y,targetX:next.x,targetY:next.y});
-              this.hit(next,bullet.damage*.6,'pulse');
+              this.hit(next,bullet.damage*support.refractionDamage,'pulse');
             }
           }
           if (bullet.chainHops && body.kind in C.enemies) {
@@ -371,7 +375,8 @@ export class World {
   private chargeReceipt(activated:boolean) {
     if(!activated)return `充能 ${this.growth.energy}/100`;
     const mastery=this.growth.mastery??0;
-    return mastery===3?'激光解锁 · 火力+10%':mastery===5?'折射解锁 · 火力+10%':'火力+10% · 超载6秒';
+    const milestone=supportMilestone(mastery);
+    return milestone ? `${milestone} · 火力+10%` : '火力+10% · 超载6秒';
   }
   private hit(b: Body, damage: number, weaponKind?: WeaponKind) {
     this.hits++; b.hit = 0.07;
