@@ -474,11 +474,6 @@ export class CanvasRuntime {
     }
     // Breaking is not collecting: keep the physical module visible above smoke.
     for (const b of w.bodies) if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
-    // Dangerous projectiles and native labels are always above visual explosions.
-    for (const b of w.bullets.filter(b => b.hostile)) {
-      c.fillStyle = '#ff7756'; c.strokeStyle = '#1a171d'; c.lineWidth = 3; c.beginPath(); c.moveTo(b.x - 8, b.y - 7); c.lineTo(b.x + 8, b.y - 7); c.lineTo(b.x, b.y + 12); c.closePath(); c.fill(); c.stroke();
-      c.fillStyle = '#ffead7'; c.fillRect(b.x - 2, b.y - 5, 4, 8);
-    }
     for (const b of w.bodies) {
       if (b.warning > 0) {
         const lanes = b.kind === 'boss' ? bossWarningLanes(b) : [b.x];
@@ -548,6 +543,11 @@ export class CanvasRuntime {
         this.text(`重装首领　${Math.ceil(b.hp)} / ${Math.ceil(b.maxHp)}`, 360, this.hudTop + 145, 25, '#ffd59e');
         this.bar(360, this.hudTop + 166, 430, b.hp / b.maxHp, '#ff925d');
       } else if (b.kind === 'armor' || b.kind === 'elite') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
+    }
+    // Hostile projectiles must remain visible over reward panels as well as explosions.
+    for (const b of w.bullets.filter(b => b.hostile)) {
+      c.fillStyle = '#ff7756'; c.strokeStyle = '#1a171d'; c.lineWidth = 3; c.beginPath(); c.moveTo(b.x - 8, b.y - 7); c.lineTo(b.x + 8, b.y - 7); c.lineTo(b.x, b.y + 12); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = '#ffead7'; c.fillRect(b.x - 2, b.y - 5, 4, 8);
     }
   }
   private drawDestruction(dt: number) {

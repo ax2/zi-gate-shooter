@@ -429,6 +429,7 @@ it.each([false, true])('keeps hostile cores and gate numbers above capped explos
   const hostileCore = f.calls.findIndex(c => c.kind === 'fillRect' && c.color === '#ffead7');
   const gateNumber = f.calls.findIndex(c => c.kind === 'fillText' && /^\+\d+%$/.test(c.args[0]));
   expect(hostileCore).toBeGreaterThan(finalBlast); expect(gateNumber).toBeGreaterThan(finalBlast);
+  expect(hostileCore).toBeGreaterThan(gateNumber);
   expect(blasts(f)[0].alpha).toBeLessThanOrEqual(weak ? 0.5 : 0.9);
   expect(f.runtime.world.player.hp).toBe(3);
   const lastLight = f.calls.reduce((last, c, i) => c.composite === 'lighter' ? i : last, -1);
