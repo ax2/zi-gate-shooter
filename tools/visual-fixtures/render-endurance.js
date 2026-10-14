@@ -39,6 +39,24 @@ const recentFrames = new Array(1200);
 let recentCursor = 0, recentCount = 0;
 let lifecycle = [];
 let mainThreadTasks = [];
+let longAnimationFrames = [];
+const longAnimationSupported = typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('long-animation-frame');
+if (longAnimationSupported) {
+  new PerformanceObserver(list => {
+    for (const entry of list.getEntries()) {
+      if (stopReason === 'not-started' || entry.startTime < began) continue;
+      longAnimationFrames.push({ startSeconds: (entry.startTime - began) / 1000,
+        durationMs: entry.duration, blockingDurationMs: entry.blockingDuration,
+        renderStartMs: entry.renderStart, styleAndLayoutStartMs: entry.styleAndLayoutStart,
+        scripts: (entry.scripts ?? []).map(script => ({ durationMs: script.duration,
+          invoker: script.invoker, invokerType: script.invokerType,
+          functionName: script.sourceFunctionName, sourceURL: script.sourceURL,
+          sourceCharPosition: script.sourceCharPosition,
+          forcedStyleAndLayoutDurationMs: script.forcedStyleAndLayoutDuration })) });
+      if (longAnimationFrames.length > 100) longAnimationFrames.shift();
+    }
+  }).observe({ type: 'long-animation-frame', buffered: false });
+}
 const longTaskSupported = typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('longtask');
 if (longTaskSupported) {
   new PerformanceObserver(list => {
@@ -155,6 +173,7 @@ startButton.onclick = () => {
   recentCursor = recentCount = 0;
   lifecycle = [];
   mainThreadTasks = [];
+  longAnimationFrames = [];
   runtime.start(); active = true; startButton.disabled = true; effects.disabled = true;
 };
 document.querySelector('#stop').onclick = () => finish('manual-stop');
@@ -166,7 +185,7 @@ window.addEventListener('pagehide', () => { if (active) finish('pagehide'); else
 Object.defineProperty(window, '__gateDiagnostics', { value: () => metrics() });
 Object.defineProperty(window, '__gateEnduranceEvidence', { value: () => ({ fixture: 'Stage-31 real-clock production CanvasRuntime + GameAudio + LoopMusic',
   scope: 'omniscient pointer driver; desktop browser, actual viewport in final; not human/device/performance acceptance',
-  active, stopReason, selectedEffects, longTaskSupported, mainThreadTasks: mainThreadTasks.map(task => ({ ...task })), peaks: { ...peaks }, workTimes: workTimes.snapshot(),
+  active, stopReason, selectedEffects, longTaskSupported, longAnimationSupported, longAnimationFrames: structuredClone(longAnimationFrames), mainThreadTasks: mainThreadTasks.map(task => ({ ...task })), peaks: { ...peaks }, workTimes: workTimes.snapshot(),
   final: metrics(), samples: [...samples], transitions: [...transitions], lifecycle: lifecycle.map(event=>({...event})),
   recentFrames: Array.from({ length: recentCount }, (_, i) => recentFrames[(recentCursor - recentCount + i + recentFrames.length) % recentFrames.length]) }) });
 await runtime.load(); startButton.disabled = runtime.mode !== 'menu'; status.textContent = runtime.mode;

@@ -80,6 +80,8 @@ export class CanvasRuntime {
   private shakeUntil = 0;
   private weaponMotion = new WeaponMotion();
   private weaponGuideUntil = 0;
+  private drawCount = 0;
+  private callbackCount = 0;
   private upgradeUntil = 0;
   private error = '';
   private started = false;
@@ -133,6 +135,7 @@ export class CanvasRuntime {
     const dt = Math.min(elapsed, 0.1);
     if (!this.hidden && this.loadAttempt && time - this.loadAttempt.since >= 15000) this.loadAttempt.fail();
     if (this.mode === 'playing') {
+      this.callbackCount++;
       this.frameTimes.add(elapsed * 1000);
       if (elapsed > 0.25) this.pause('运行中断，已暂停');
       else {
@@ -157,6 +160,7 @@ export class CanvasRuntime {
     this.renderBudget += dt;
     this.renderElapsed += dt;
     if (this.renderBudget + 1e-9 >= C.step || this.renderedMode !== this.mode) {
+      if (this.mode === 'playing') this.drawCount++;
       this.render(this.mode === 'paused' || this.mode === 'settings' ? 0 : Math.min(this.renderElapsed, 0.1));
       this.renderBudget = Math.max(0, this.renderBudget - Math.floor((this.renderBudget + 1e-9) / C.step) * C.step);
       this.renderElapsed = 0;
@@ -173,6 +177,7 @@ export class CanvasRuntime {
     this.playerMotion.reset();
     this.weaponMotion.reset();
     this.weaponGuideUntil = 0;
+    this.drawCount = 0; this.callbackCount = 0;
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
@@ -667,7 +672,8 @@ export class CanvasRuntime {
     }
   }
   diagnostics() {
-    return { mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase,
+    return { drawCount: this.drawCount, callbackCount: this.callbackCount,
+      mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,

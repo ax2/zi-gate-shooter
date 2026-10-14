@@ -95,9 +95,15 @@ it('limits redundant high-refresh draws without slowing fixed-step gameplay', as
     if (f.calls.some(c => c.kind === 'drawImage')) renders++;
   }
   expect(renders).toBeGreaterThanOrEqual(59); expect(renders).toBeLessThanOrEqual(62);
+  expect(f.runtime.diagnostics().drawCount).toBe(renders);
+  expect(f.runtime.diagnostics().callbackCount).toBe(240);
   expect(f.runtime.world.time).toBeCloseTo(1, 6);
   f.runtime.pause(); f.tick(1);
   expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '暂停')).toBe(true);
+  expect(f.runtime.diagnostics().callbackCount).toBe(240);
+  f.runtime.start();
+  expect(f.runtime.diagnostics().drawCount).toBe(0);
+  expect(f.runtime.diagnostics().callbackCount).toBe(0);
 });
 
 it('keeps ground travel continuous across speed changes, freezes on pause and resets on restart', async () => {
