@@ -711,7 +711,7 @@ it('tree overview preserves pending choices and never spends points or resumes c
  f.runtime.pause();f.tick();
  f.runtime.touchStart(1,360,1043);f.runtime.touchEnd(1,360,1043);f.tick();
  expect(f.runtime.mode).toBe('loadout');
- f.runtime.touchStart(1,360,1073);f.runtime.touchEnd(1,360,1073);f.tick();
+ f.runtime.touchStart(1,200,1073);f.runtime.touchEnd(1,200,1073);f.tick();
  expect(f.runtime.mode).toBe('tree');
  f.runtime.touchStart(1,360,1143);f.runtime.touchEnd(1,360,1143);f.tick();
  expect(f.runtime.mode).toBe('loadout');expect(f.runtime.world.build.spent).toBe(1);

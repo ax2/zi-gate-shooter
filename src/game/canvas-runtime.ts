@@ -1,3 +1,4 @@
+import { contracts, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
 import { tree, routes, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
@@ -49,7 +50,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'contracts' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private achievementToast = '';
   private achievementUntil = 0;
   private treeReturn: 'loadout' | 'choice' = 'loadout';
@@ -257,6 +258,7 @@ export class CanvasRuntime {
     if (this.mode === 'choice') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'contracts') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
@@ -282,6 +284,9 @@ export class CanvasRuntime {
       if (dossierWeapons.includes(weapon)) this.dossierWeapon = weapon;
     }
     else if (action === 'armory-back') this.mode = 'menu';
+    else if(action==='contracts')this.mode='contracts';
+    else if(action==='contracts-back')this.mode='loadout';
+    else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts)this.world.acceptContract(kind);}
     else if (action === 'tree' && (this.mode === 'choice' || this.mode === 'loadout')) { this.treeReturn = this.mode; this.mode = 'tree'; }
     else if (action === 'tree-back') this.mode = this.treeReturn;
     else if (action === 'loadout') this.mode = 'loadout';
@@ -392,6 +397,7 @@ export class CanvasRuntime {
     }
     if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
+    if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
     if (this.mode === 'tree') { this.drawBuildTree(); c.restore(); return; }
     const sector = this.mode === 'menu' ? 0 : sectorIndex(w.round);
@@ -428,6 +434,8 @@ export class CanvasRuntime {
       }
     }
     if(this.mode==='choice')this.drawBuildChoices();
+    const contract=w.contract;
+    if(this.mode==='playing'&&contract?.status==='active'){this.rect(40,1130,640,50,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${Math.min(15,w.kills-contract.startKills)}/15敌`,360,1155,24,'#ffdc8a');}
     if(this.mode==='playing' && w.time<this.achievementUntil){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
     c.restore();
@@ -755,8 +763,27 @@ export class CanvasRuntime {
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text('数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
     this.text(`路线节点 ${w.build.spent}/9 · 充能突破继续选择`, 360, 1004, 23, '#f0d19a');
-    this.button('查看技能树', 1030, 'tree', true);
+    for(const [i,label] of ['技能树','挑战契约'].entries()){const x=72+i*298;this.rect(x,1030,278,86,'#1a2d3c');this.text(label,x+139,1073,28,'#d8eaf5');this.buttons.push({x,y:1030,w:278,h:86,label,action:i?'contracts':'tree'});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
+  }
+  private drawContracts() {
+    this.rect(35,120,650,1080,'#102330');
+    this.text('挑战契约',360,190,42,'#effaff','center',true);
+    this.text('自选限制换取额外成长 · 每轮一次',360,245,25,'#bdd8e7');
+    const current=this.world.contract;
+    const can=this.world.phase==='running'&&current?.status!=='active'&&current?.round!==this.world.round;
+    for(const [i,kind] of (Object.keys(contracts) as ContractKind[]).entries()){
+      const entry=contracts[kind],y=310+i*255;
+      this.rect(65,y,590,225,'#203e50');
+      this.text(entry.name,90,y+45,32,'#ffdc8a','left',true);
+      this.text(entry.detail,90,y+95,24,'#effaff','left');
+      this.text(`成功：充能+${entry.charge} · 失败不扣已有能力`,90,y+142,23,'#bdd8e7','left');
+      this.text(can?'接取契约　›':'本轮已接取或当前不可接取',625,y+190,23,'#80e4ff','right');
+      if(can)this.buttons.push({x:65,y,w:590,h:225,label:entry.name,action:`contract:${kind}`});
+    }
+    this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中':current.status==='won'?'已完成':'失败：'+current.reason}`:'在普通战斗阶段接取，首领战仍计时',360,895,25,'#ffdc8a');
+    this.text('计时只在战斗推进，暂停与首领过场不计时',360,945,23,'#bdd8e7');
+    this.button('返回当前火力',1080,'contracts-back',true);
   }
   private drawBuildTree() {
     this.rect(35,90,650,1120,'#102330');

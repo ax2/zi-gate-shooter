@@ -1,3 +1,4 @@
+import { Contract, contracts, type ContractKind } from './contracts';
 import { BuildTree, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
 import { supportProfile, supportMilestone } from './support-profile';
@@ -52,6 +53,12 @@ export class World {
     const p=supportProfile(this.growth.mastery),rank=this.build.ranks.optical;
     return {...p,laserUnlocked:p.laserUnlocked||rank>0,laserDamage:p.laserDamage*(rank>0?1.15:1),
       laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0)};
+  }
+  contract?: Contract;
+  damageTaken=0;
+  acceptContract(kind:ContractKind){
+    if(this.phase!=='running'||this.player.hp<=0||this.contract?.status==='active'||this.contract?.round===this.round)return false;
+    this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken);return true;
   }
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
   weaponKind: WeaponKind = 'pulse';
@@ -397,12 +404,21 @@ export class World {
     }
     this.bodies = this.bodies.filter(b => b.active && b.y < 1344);
     this.bullets = this.bullets.filter(b => b.active && b.y > (b.hostile ? -90 : C.playerShotTop) && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
+    const contract=this.contract;
+    if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0)){
+      if(contract.status==='won'){
+        const reward=grantGate(this.growth,contracts[contract.kind].charge,'energy');
+        if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+      }
+      this.effects.push({type:'contract',x:this.player.x,y:C.playerY,text:contract.status==='won'?`契约完成 · 充能+${contracts[contract.kind].charge}`:`契约失败 · ${contract.reason}`,detail:'每轮可接取一次 · 失败仅失去额外奖励'});
+    }
     this.peakBodies = Math.max(this.peakBodies, this.bodies.length);
     this.peakBullets = Math.max(this.peakBullets, this.bullets.length);
   }
   private hurt(cause: 'bullet' | 'enemy' | 'crate') {
     if (this.player.invulnerable > 0 || this.player.hp <= 0) return;
     this.lastDamageCause = cause;
+    this.damageTaken++;
     this.player.hp--; this.player.invulnerable = C.invulnerability;
     this.emit('hurt', this.player.x, C.playerY);
   }
