@@ -66,11 +66,26 @@ function glow(c: CanvasRenderingContext2D, x: number, y: number, rx: number, ry:
 export function energyShot(c: CanvasRenderingContext2D, x: number, y: number, vx: number, vy: number, kind: WeaponKind, time: number, weak: boolean) {
   const color = weaponColors[kind], tail = kind === 'blast' ? 28 : kind === 'pierce' ? 86 : kind === 'scatter' ? 48 : 60;
   const width = kind === 'blast' ? 9 : kind === 'pierce' ? 5 : kind === 'scatter' ? 4 : 3;
-  c.save(); c.translate(x, y); c.rotate(Math.atan2(vx, -vy)); c.globalCompositeOperation = 'lighter'; c.lineCap = 'round';
+  c.save(); c.translate(x, y); c.rotate(Math.atan2(vx, -vy)); c.globalCompositeOperation = 'screen'; c.lineCap = 'round';
   if (!weak) glow(c, 0, 9, width * 2.2, 18, color, false);
   line(c, `${color}18`, width * 5, [0, tail, 0, -9]);
   line(c, `${color}66`, width * 2.2, [0, tail * .65, 0, -10]);
-  line(c, color, width, [0, tail * .38, 0, -12]);
+  line(c, `${color}99`, width, [0, tail * .38, 0, -12]);
+  c.globalCompositeOperation = 'screen';
+  if (!weak) {
+    const phase = time * 15 + x * .13;
+    for (let i = 0; i < 3; i++) {
+      const side = i % 2 ? -1 : 1, yy = 17 + i * 15 + Math.sin(phase + i) * 5;
+      line(c, `${color}aa`, 1.3, [side * (5 + i * 2), yy, side * (7 + i * 2), yy + 6]);
+    }
+    if (kind === 'pierce' || kind === 'arc') line(c, `${color}aa`, 1.4, [-6, 4, 6, 17, -5, 29, 4, 40, -3, 52]);
+  }
+  c.restore();
+}
+/** Foreground pass after all additive projectile wakes and support beams. */
+export function projectileBody(c: CanvasRenderingContext2D, x:number,y:number,vx:number,vy:number,kind:WeaponKind){
+  const color=weaponColors[kind],width=kind==='blast'?9:kind==='pierce'?5:kind==='scatter'?4:3;
+  c.save();c.translate(x,y);c.rotate(Math.atan2(vx,-vy));c.lineCap='round';
   // Opaque colored silhouettes retain weapon identity when additive wakes overlap.
   c.globalCompositeOperation = 'source-over';
   if (kind === 'blast') {
@@ -84,15 +99,6 @@ export function energyShot(c: CanvasRenderingContext2D, x: number, y: number, vx
   } else {
     line(c,color,width+1,[0,10,0,-12]);
     line(c,kind==='pierce'?'#e7d7ff':kind==='scatter'?'#ffd69a':'#bceeff',1,[0,3,0,-12]);
-  }
-  c.globalCompositeOperation = 'lighter';
-  if (!weak) {
-    const phase = time * 15 + x * .13;
-    for (let i = 0; i < 3; i++) {
-      const side = i % 2 ? -1 : 1, yy = 17 + i * 15 + Math.sin(phase + i) * 5;
-      line(c, `${color}aa`, 1.3, [side * (5 + i * 2), yy, side * (7 + i * 2), yy + 6]);
-    }
-    if (kind === 'pierce' || kind === 'arc') line(c, `${color}aa`, 1.4, [-6, 4, 6, 17, -5, 29, 4, 40, -3, 52]);
   }
   c.restore();
 }
