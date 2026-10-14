@@ -133,4 +133,3 @@ npm run build
 Android当前为内部debug签名候选，构建命令会运行Gradle编译、lint、签名与包内资源核验。参见[Android发布准备](docs/ANDROID_RELEASE.md)、[启动资产验证](docs/stages/Stage-02/LAUNCHER_VALIDATION.md)与[Stage-02日志](docs/stages/Stage-02/WORK_LOG.md)。原创候选图标/系统启动主题已接入；品牌/音画签收、真机、正式签名和商店验收尚未完成。
 
 本仓库自有内容采用 [MIT License](LICENSE)。当前不包含商业游戏素材或第三方美术音频。未来引入外部素材时，逐项记录来源与独立许可，仓库许可证不替代素材许可。
-
