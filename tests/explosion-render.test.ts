@@ -21,9 +21,22 @@ function fixture(weak = false) {
     image: async src => ({ src, width: 768, height: src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
-  return { runtime, calls, tick() { calls.length = 0; clock += 1000 / 60; next(clock); } };
+  return { runtime, calls, tick(ms = 1000 / 60) { calls.length = 0; clock += ms; next(clock); } };
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it('limits redundant high-refresh draws without slowing fixed-step gameplay', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  let renders = 0;
+  for (let i = 0; i < 240; i++) {
+    f.tick(1000 / 240);
+    if (f.calls.some(c => c.kind === 'drawImage')) renders++;
+  }
+  expect(renders).toBeGreaterThanOrEqual(59); expect(renders).toBeLessThanOrEqual(62);
+  expect(f.runtime.world.time).toBeCloseTo(1, 6);
+  f.runtime.pause(); f.tick(1);
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '暂停')).toBe(true);
+});
 
 it('keeps ground travel continuous across speed changes, freezes on pause and resets on restart', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();

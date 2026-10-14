@@ -62,6 +62,9 @@ export class CanvasRuntime {
   private lastTime = 0;
   private visualTime = 0;
   private groundDistance = 0;
+  private renderBudget = C.step;
+  private renderElapsed = 0;
+  private renderedMode: string = '';
   private target = 360;
   private pointer: number | null = null;
   private keys = new HorizontalKeys();
@@ -148,7 +151,14 @@ export class CanvasRuntime {
     }
     if (this.mode === 'playing' || this.mode === 'menu' || this.mode === 'result') this.visualTime += dt;
     this.updateMusic();
-    this.render(this.mode === 'paused' || this.mode === 'settings' ? 0 : dt);
+    this.renderBudget += dt;
+    this.renderElapsed += dt;
+    if (this.renderBudget + 1e-9 >= C.step || this.renderedMode !== this.mode) {
+      this.render(this.mode === 'paused' || this.mode === 'settings' ? 0 : Math.min(this.renderElapsed, 0.1));
+      this.renderBudget = Math.max(0, this.renderBudget - Math.floor((this.renderBudget + 1e-9) / C.step) * C.step);
+      this.renderElapsed = 0;
+      this.renderedMode = this.mode;
+    }
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
