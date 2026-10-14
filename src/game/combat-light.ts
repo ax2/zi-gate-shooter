@@ -71,7 +71,21 @@ export function energyShot(c: CanvasRenderingContext2D, x: number, y: number, vx
   line(c, `${color}18`, width * 5, [0, tail, 0, -9]);
   line(c, `${color}66`, width * 2.2, [0, tail * .65, 0, -10]);
   line(c, color, width, [0, tail * .38, 0, -12]);
-  line(c, '#fff9e8', Math.max(1.5, width * .5), [0, 11, 0, -13]);
+  // Opaque colored silhouettes retain weapon identity when additive wakes overlap.
+  c.globalCompositeOperation = 'source-over';
+  if (kind === 'blast') {
+    c.fillStyle='#74431a';c.strokeStyle=color;c.lineWidth=2;
+    c.beginPath();c.moveTo(0,-15);c.lineTo(7,-5);c.lineTo(5,13);c.lineTo(-5,13);c.lineTo(-7,-5);c.closePath();c.fill();c.stroke();
+    line(c,'#ffe1a0',2,[0,-9,0,4]);
+  } else if (kind === 'arc') {
+    c.fillStyle='#163e28';c.strokeStyle=color;c.lineWidth=2;
+    c.beginPath();c.ellipse(0,0,7,12,0,0,Math.PI*2);c.fill();c.stroke();
+    line(c,'#d7ffba',1.5,[2,-8,-3,0,3,1,-2,8]);
+  } else {
+    line(c,color,width+1,[0,10,0,-12]);
+    line(c,kind==='pierce'?'#e7d7ff':kind==='scatter'?'#ffd69a':'#bceeff',1,[0,3,0,-12]);
+  }
+  c.globalCompositeOperation = 'lighter';
   if (!weak) {
     const phase = time * 15 + x * .13;
     for (let i = 0; i < 3; i++) {

@@ -16,6 +16,7 @@ const runtime = new CanvasRuntime({canvas,width:innerWidth,height:innerHeight-68
  image:src=>browserImage(`/${src}`),
  read:defaults,write:()=>{},sound:(type,tier,weapon)=>audio.event(type,tier,weapon),silence:()=>audio.stop(),now:()=>performance.now(),requestFrame:measuredFrame});
 function start(){
+  if(runtime.mode==='loading'||runtime.mode==='error')return;
  frameEvidence=[];previousCallback=0;previousWork=0;void audio.unlock();runtime.start();runtime.world=new World(1337,Number(document.querySelector('#sector').value));
  runtime.save.settings.effects=document.querySelector('#effects').value;
  if(document.querySelector('#scenario').value==='boss-reward') {
@@ -100,6 +101,7 @@ document.querySelector('#scenario').onchange=start;
 window.addEventListener('resize',()=>runtime.resize(innerWidth,innerHeight-68,devicePixelRatio));
 Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),frameEvidence,fixture:document.querySelector('#scenario').value==='evolved'?'seeded energy1200 and four pickups; durable targets, not natural progression':document.querySelector('#scenario').value==='boss-reward'?'seeded 1HP boss and projectile, HP2/charge50/mastery2; real victory settlement, not natural play':document.querySelector('#scenario').value==='support'?'seeded energy500 and four pickups, stationary 10000HP targets, no enemy firing; not natural play':document.querySelector('#scenario').value==='stacked'?'seeded four pickups settled by production rules, stationary durable targets; not natural play':document.querySelector('#scenario').value==='overload'?'T3 energy70 + pickup, production overload activation; not natural progression':document.querySelector('#scenario').value==='weapon-pickup'?'seeded pickup at player; production settlement and briefing, not natural progression':document.querySelector('#scenario').value==='blast-pack'?'selected weapon/tier + three stationary armor enemies':document.querySelector('#scenario').value==='guard'?'T1 + seeded guard, no immunity':document.querySelector('#scenario').value==='sniper'?'T1 + seeded sniper and drone, no immunity':document.querySelector('#scenario').value==='defeat'?'1HP + seeded crate collision, result layout only':['gates','gate-danger'].includes(document.querySelector('#scenario').value)?'stationary pair from production gate factory, layout only':['blockade','flanker'].includes(document.querySelector('#scenario').value)?'T1 + seeded chapter boss, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value.startsWith('choices')?'selected tier + two stationary T3 choice crates, no damage immunity':'selected tier + five seeded bodies, no damage immunity'})});
 await runtime.load();
+
 
 
 
