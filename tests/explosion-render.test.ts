@@ -652,3 +652,20 @@ it('lets players inspect a frozen battlefield without resuming or moving, then e
   expect(f.runtime.mode).toBe('playing');
   expect(JSON.stringify(f.runtime.world)).not.toBe(frozen);
 });
+
+it('repaints resized pause previews immediately and maps buttons to the new viewport without advancing time', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start(); f.tick();
+  f.runtime.pause(); f.tick();
+  f.runtime.touchStart(1,360,933);f.runtime.touchEnd(1,360,933);f.tick();
+  const frozen=JSON.stringify(f.runtime.world);
+  f.calls.length=0;
+  f.runtime.resize(1280,720,1);
+  expect(f.calls.some(c=>c.kind==='drawImage')).toBe(true);
+  expect(f.calls.some(c=>c.kind==='fillText' && c.args[0]==='战场已冻结 · 看清危险再继续')).toBe(true);
+  expect(JSON.stringify(f.runtime.world)).toBe(frozen);
+  // 720/1280 scale with horizontal centering: center button is x=640.
+  f.runtime.touchStart(1,640,1113*720/1280);f.runtime.touchEnd(1,640,1113*720/1280);
+  expect(f.runtime.mode).toBe('playing');
+  expect(JSON.stringify(f.runtime.world)).toBe(frozen);
+  f.tick();expect(f.runtime.world.time).toBeGreaterThan(JSON.parse(frozen).time);
+});

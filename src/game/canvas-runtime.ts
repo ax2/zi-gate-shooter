@@ -108,6 +108,10 @@ export class CanvasRuntime {
     this.offsetX = (width - 720 * this.scale) / 2; this.offsetY = (height - 1280 * this.scale) / 2;
     this.hudTop = Math.max(28, (menuBottom - this.offsetY) / this.scale + 12);
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Changing canvas dimensions clears its pixels. Restore the current scene
+    // immediately, even when a paused/background tab delays the next rAF.
+    this.render(0);
+    if (this.mode === 'playing') this.drawCount++;
   }
   async load() {
     this.loadAttempt?.fail();
