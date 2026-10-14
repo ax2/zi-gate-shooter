@@ -163,7 +163,7 @@ export class World {
     while (this.fireTimer <= 1e-9) {
       if (this.bullets.filter(b => b.active && !b.hostile).length + w.offsets.length > C.limits.bullets) throw new Error('Player bullet budget exceeded');
       for (let i = 0; i < w.offsets.length; i++) {
-        const x = this.player.x + w.offsets[i], y = C.playerY - 72;
+        const x = this.player.x + w.offsets[i], y = C.playerY - (w.muzzleY ?? 72);
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx: w.vx[i], vy: -C.bulletSpeed,
           damage: w.damage[i] * (1 + this.growth.bonus / 100) * (this.growth.overload > 0 ? 1.35 : 1),
           age: 0, active: true, hostile: false, weaponKind: this.weaponKind, remainingTargets: w.targets, hitBodies: [] });

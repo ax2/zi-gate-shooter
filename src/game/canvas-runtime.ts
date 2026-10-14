@@ -114,7 +114,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -285,9 +285,10 @@ export class CanvasRuntime {
     c.restore();
   }
   private playerSprite(frame: number, x: number, y: number, pose: PlayerPose, recoil: number) {
-    const scatter = this.world.weaponKind === 'scatter';
-    const img = this.images.get(scatter ? 'scatter-player-v1.png' : 'units.png'); if (!img) return;
-    const c = this.ctx, sw = img.width / (scatter ? 3 : 4), sh = img.height / (scatter ? 1 : 2);
+    const dedicated = this.world.weaponKind !== 'pulse';
+    const key = this.world.weaponKind === 'scatter' ? 'scatter-player-v1.png' : this.world.weaponKind === 'pierce' ? 'pierce-player-v2.png' : 'units.png';
+    const img = this.images.get(key); if (!img) return;
+    const c = this.ctx, sw = img.width / (dedicated ? 3 : 4), sh = img.height / (dedicated ? 1 : 2);
     const width = 160, height = 213, left = x - width / 2, top = y - height / 2;
     // Original legs overlap the torso by 16 source pixels; torso is drawn last
     // to cover the seam while preserving the original perspective and alpha.
@@ -437,8 +438,9 @@ export class CanvasRuntime {
     }
     c.restore();
     if (this.mode === 'playing' && w.player.hp > 0 && this.platform.now() < this.muzzleUntil) {
-      for (const offset of weaponProfile(w.weaponKind, w.growth.stage).offsets) {
-        const x = w.player.x + offset, y = C.playerY - 78;
+      const weapon = weaponProfile(w.weaponKind, w.growth.stage);
+      for (const offset of weapon.offsets) {
+        const x = w.player.x + offset, y = C.playerY - (weapon.muzzleY ?? 78);
         muzzleLight(c, x, y, w.weaponKind, Math.max(0, (this.muzzleUntil - this.platform.now()) / 80), this.save.settings.effects === 'weak');
       }
     }

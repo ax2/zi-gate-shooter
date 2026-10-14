@@ -10,8 +10,8 @@ export function weaponProfile(kind: WeaponKind, stage: number) {
       vx: offsets.map((_, i) => (i - Math.floor(offsets.length / 2)) * (tier === 2 ? 75 : 110)), targets: 1 };
   }
   if (kind === 'pierce') {
-    const offsets = tier === 0 ? [0] : [-12, 12];
-    return { rate: tier === 2 ? 4 : 5, offsets, damage: offsets.map(() => [6, 5, 8][tier]), vx: offsets.map(() => 0), targets: tier === 2 ? 3 : 2 };
+    const offsets = tier === 0 ? [0] : [-22, 22];
+    return { rate: tier === 2 ? 4 : 5, offsets, muzzleY: [76, 82, 99][tier], damage: offsets.map(() => [6, 5, 8][tier]), vx: offsets.map(() => 0), targets: tier === 2 ? 3 : 2 };
   }
   const normal = C.weapon[tier];
   return { ...normal, vx: normal.offsets.map(() => 0), targets: 1 };
