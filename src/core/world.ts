@@ -22,7 +22,7 @@ export interface Body {
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
-  weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[];
+  weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number;
 }
 export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
@@ -107,7 +107,7 @@ export class World {
         if (s.kind === 'armory') {
           if (!this.rewardSlots(2)) { this.scheduleIndex--; break; }
           const row = this.nextRow++;
-          const choices: WeaponKind[][] = [['scatter', 'pierce'], ['pulse', 'pierce'], ['pulse', 'scatter']];
+          const choices: WeaponKind[][] = [['scatter', 'pierce'], ['blast', 'pierce'], ['pulse', 'blast']];
           const chapterChoices = choices[sectorIndex(this.round)];
           const offered = s.stage === 3 ? [this.weaponKind, chapterChoices.find(kind => kind !== this.weaponKind)!] : chapterChoices;
           const crates = [222, 498].map((x, i) => { const b = this.spawn('crate', x, 180, Math.max(2, s.stage ?? 2, this.growth.stage)); b.row = row; b.weaponKind = offered[i]; return b; });
@@ -169,7 +169,7 @@ export class World {
         const x = this.player.x + w.offsets[i], y = C.playerY - (w.muzzleY ?? 72);
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx: w.vx[i], vy: -C.bulletSpeed,
           damage: w.damage[i] * (1 + this.growth.bonus / 100) * (this.growth.overload > 0 ? 1.35 : 1),
-          age: 0, active: true, hostile: false, weaponKind: this.weaponKind, remainingTargets: w.targets, hitBodies: [] });
+          age: 0, active: true, hostile: false, weaponKind: this.weaponKind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius });
         this.shots++;
       }
       this.emit('fire', this.player.x, C.playerY - 70, undefined, this.growth.stage);
@@ -230,6 +230,14 @@ export class World {
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
+          if (bullet.splashRadius && body.kind in C.enemies) {
+            // No secondary explosions, reward charging or off-screen farming.
+            this.effects.push({type:'blast',x:body.x,y:body.y,size:bullet.splashRadius,weaponKind:bullet.weaponKind});
+            for (const other of this.bodies) if (other !== body && other.active && other.kind in C.enemies
+              && other.y >= C.playerShotTop && other.y <= C.playerY
+              && Math.hypot(other.x-body.x,other.y-body.y) <= bullet.splashRadius)
+              this.hit(other,bullet.damage*0.5,bullet.weaponKind);
+          }
         });
       }
     }

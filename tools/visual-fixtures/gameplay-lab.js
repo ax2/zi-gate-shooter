@@ -41,6 +41,9 @@ function start(){
  }
  if(document.querySelector('#scenario').value==='opening') return;
  runtime.world.growth.stage=Number(document.querySelector('#tier').value);runtime.world.weaponKind=document.querySelector('#weapon').value;
+ if(document.querySelector('#scenario').value==='blast-pack') {
+   for(const x of [270,360,450]){const enemy=runtime.world.spawn('armor',x,500);enemy.speed=0;}return;
+ }
  if(document.querySelector('#scenario').value.startsWith('choices')) {
    const weapons=[runtime.world.weaponKind,runtime.world.weaponKind==='pierce'?'scatter':'pierce'];
    for(let i=0;i<2;i++){const box=runtime.world.spawn('crate',[222,498][i],document.querySelector('#scenario').value==='choices-entry'?180:580,3);box.weaponKind=weapons[i];box.row=100;box.speed=0;}
@@ -59,6 +62,6 @@ document.querySelector('#weapon').onchange=start;
 document.querySelector('#sector').onchange=start;
 document.querySelector('#scenario').onchange=start;
 window.addEventListener('resize',()=>runtime.resize(innerWidth,innerHeight-68,devicePixelRatio));
-Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),frameEvidence,fixture:document.querySelector('#scenario').value==='guard'?'T1 + seeded guard, no immunity':document.querySelector('#scenario').value==='sniper'?'T1 + seeded sniper and drone, no immunity':document.querySelector('#scenario').value==='defeat'?'1HP + seeded crate collision, result layout only':['gates','gate-danger'].includes(document.querySelector('#scenario').value)?'stationary pair from production gate factory, layout only':['blockade','flanker'].includes(document.querySelector('#scenario').value)?'T1 + seeded chapter boss, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value.startsWith('choices')?'selected tier + two stationary T3 choice crates, no damage immunity':'selected tier + five seeded bodies, no damage immunity'})});
+Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),frameEvidence,fixture:document.querySelector('#scenario').value==='blast-pack'?'selected weapon/tier + three stationary armor enemies':document.querySelector('#scenario').value==='guard'?'T1 + seeded guard, no immunity':document.querySelector('#scenario').value==='sniper'?'T1 + seeded sniper and drone, no immunity':document.querySelector('#scenario').value==='defeat'?'1HP + seeded crate collision, result layout only':['gates','gate-danger'].includes(document.querySelector('#scenario').value)?'stationary pair from production gate factory, layout only':['blockade','flanker'].includes(document.querySelector('#scenario').value)?'T1 + seeded chapter boss, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value.startsWith('choices')?'selected tier + two stationary T3 choice crates, no damage immunity':'selected tier + five seeded bodies, no damage immunity'})});
 await runtime.load();
 

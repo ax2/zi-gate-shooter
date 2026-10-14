@@ -114,7 +114,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -254,7 +254,7 @@ export class CanvasRuntime {
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
     if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
-    const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
+    const explosion = ['blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);
@@ -288,7 +288,7 @@ export class CanvasRuntime {
   }
   private playerSprite(frame: number, x: number, y: number, pose: PlayerPose, recoil: number) {
     const dedicated = this.world.weaponKind !== 'pulse';
-    const key = this.world.weaponKind === 'scatter' ? 'scatter-player-v1.png' : this.world.weaponKind === 'pierce' ? 'pierce-player-v2.png' : 'units.png';
+    const key = this.world.weaponKind === 'blast' ? 'blast-player-v1.png' : this.world.weaponKind === 'scatter' ? 'scatter-player-v1.png' : this.world.weaponKind === 'pierce' ? 'pierce-player-v2.png' : 'units.png';
     const img = this.images.get(key); if (!img) return;
     const c = this.ctx, sw = img.width / (dedicated ? 3 : 4), sh = img.height / (dedicated ? 1 : 2);
     const width = 160, height = 213, left = x - width / 2, top = y - height / 2;
@@ -529,7 +529,7 @@ export class CanvasRuntime {
       if (b.kind === 'crate') {
         if (b.weaponKind) {
           const choice = b.weaponKind === w.weaponKind ? '保留' : '换装';
-          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '扇面覆盖' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
+          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
           const panelY = b.y - 158 >= this.hudTop + 128 ? b.y - 158 : Math.max(this.hudTop + 128, b.y + 70);
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');

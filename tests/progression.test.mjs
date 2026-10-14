@@ -7,7 +7,7 @@ import { progressionTarget } from './helpers/progression-driver';
 // A rerun must not overwrite evidence attributed to a historical stage.
 const evidenceDirectory = `build/qa/runs/${new Date().toISOString().replace(/[:.]/g, '-')}-${process.pid}/progression`;
 
-it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, openingX: C.minX, preferred: 'pierce' }, { seed: 77, openingX: C.maxX, preferred: 'pulse' }])(
+it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, openingX: C.minX, preferred: 'pierce' }, { seed: 77, openingX: C.maxX, preferred: 'pulse' }, { seed: 13, openingX: 360, preferred: 'blast' }])(
   '20-minute normal growth and boss cycles: seed $seed / opening $openingX / $preferred', ({ seed, openingX, preferred }) => {
     const seconds = 1200;
     const world = new World(seed);
@@ -82,3 +82,4 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
     expect(world.peakBodies).toBeLessThanOrEqual(C.limits.enemies + C.limits.rewards);
     expect(world.peakBullets).toBeLessThanOrEqual(C.limits.bullets + C.limits.hostile);
   }, 120000);
+

@@ -15,8 +15,8 @@ function glow(c: CanvasRenderingContext2D, x: number, y: number, rx: number, ry:
   c.globalAlpha = 1;
 }
 export function energyShot(c: CanvasRenderingContext2D, x: number, y: number, vx: number, vy: number, kind: WeaponKind, time: number, weak: boolean) {
-  const color = weaponColors[kind], tail = kind === 'pierce' ? 86 : kind === 'scatter' ? 48 : 60;
-  const width = kind === 'pierce' ? 5 : kind === 'scatter' ? 4 : 3;
+  const color = weaponColors[kind], tail = kind === 'blast' ? 28 : kind === 'pierce' ? 86 : kind === 'scatter' ? 48 : 60;
+  const width = kind === 'blast' ? 9 : kind === 'pierce' ? 5 : kind === 'scatter' ? 4 : 3;
   c.save(); c.translate(x, y); c.rotate(Math.atan2(vx, -vy)); c.globalCompositeOperation = 'lighter'; c.lineCap = 'round';
   if (!weak) glow(c, 0, 9, width * 2.2, 18, color, false);
   line(c, `${color}18`, width * 5, [0, tail, 0, -9]);
