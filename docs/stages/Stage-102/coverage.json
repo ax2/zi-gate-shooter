@@ -1,0 +1,1360 @@
+{
+  "scope": "synthetic stationary armor coverage, not normal gameplay",
+  "seconds": 10,
+  "seed": 1337,
+  "bonus": 0,
+  "overload": false,
+  "layouts": {
+    "singleFar": [
+      [
+        360,
+        400
+      ]
+    ],
+    "singleNear": [
+      [
+        360,
+        820
+      ]
+    ],
+    "singlePointBlank": [
+      [
+        360,
+        900
+      ]
+    ],
+    "column": [
+      [
+        360,
+        400
+      ],
+      [
+        360,
+        560
+      ],
+      [
+        360,
+        720
+      ]
+    ],
+    "tightRow": [
+      [
+        260,
+        600
+      ],
+      [
+        360,
+        600
+      ],
+      [
+        460,
+        600
+      ]
+    ],
+    "wideRow": [
+      [
+        180,
+        600
+      ],
+      [
+        360,
+        600
+      ],
+      [
+        540,
+        600
+      ]
+    ],
+    "chainStagger": [
+      [
+        360,
+        720
+      ],
+      [
+        490,
+        650
+      ],
+      [
+        600,
+        550
+      ]
+    ]
+  },
+  "rows": [
+    {
+      "layout": "singleFar",
+      "stage": 1,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        308
+      ],
+      "totalDamage": 308,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 1,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        196
+      ],
+      "totalDamage": 196,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 1,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        294
+      ],
+      "totalDamage": 294,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 1,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        320
+      ],
+      "totalDamage": 320,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 1,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        400
+      ],
+      "totalDamage": 400,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 2,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        464
+      ],
+      "totalDamage": 464,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 2,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        245
+      ],
+      "totalDamage": 245,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 2,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        490
+      ],
+      "totalDamage": 490,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 2,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        600
+      ],
+      "totalDamage": 600,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 2,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        550
+      ],
+      "totalDamage": 550,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 3,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        696
+      ],
+      "totalDamage": 696,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 3,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        663
+      ],
+      "totalDamage": 663,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 3,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        624
+      ],
+      "totalDamage": 624,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 3,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        928
+      ],
+      "totalDamage": 928,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleFar",
+      "stage": 3,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        700
+      ],
+      "totalDamage": 700,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 1,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        320
+      ],
+      "totalDamage": 320,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 1,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        500
+      ],
+      "totalDamage": 500,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 1,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        300
+      ],
+      "totalDamage": 300,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 1,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        320
+      ],
+      "totalDamage": 320,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 1,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        400
+      ],
+      "totalDamage": 400,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 2,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        480
+      ],
+      "totalDamage": 480,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 2,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        950
+      ],
+      "totalDamage": 950,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 2,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        500
+      ],
+      "totalDamage": 500,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 2,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        600
+      ],
+      "totalDamage": 600,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 2,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        550
+      ],
+      "totalDamage": 550,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 3,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        720
+      ],
+      "totalDamage": 720,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 3,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        920
+      ],
+      "totalDamage": 920,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 3,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        640
+      ],
+      "totalDamage": 640,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 3,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        960
+      ],
+      "totalDamage": 960,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singleNear",
+      "stage": 3,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        700
+      ],
+      "totalDamage": 700,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 1,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        324
+      ],
+      "totalDamage": 324,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 1,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        510
+      ],
+      "totalDamage": 510,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 1,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        306
+      ],
+      "totalDamage": 306,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 1,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        336
+      ],
+      "totalDamage": 336,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 1,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        416
+      ],
+      "totalDamage": 416,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 2,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        488
+      ],
+      "totalDamage": 488,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 2,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        969
+      ],
+      "totalDamage": 969,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 2,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        510
+      ],
+      "totalDamage": 510,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 2,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        624
+      ],
+      "totalDamage": 624,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 2,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        572
+      ],
+      "totalDamage": 572,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 3,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        732
+      ],
+      "totalDamage": 732,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 3,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        1189
+      ],
+      "totalDamage": 1189,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 3,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        656
+      ],
+      "totalDamage": 656,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 3,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        992
+      ],
+      "totalDamage": 992,
+      "hitTargets": 1
+    },
+    {
+      "layout": "singlePointBlank",
+      "stage": 3,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        728
+      ],
+      "totalDamage": 728,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 1,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        0,
+        316
+      ],
+      "totalDamage": 316,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 1,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        0,
+        0,
+        500
+      ],
+      "totalDamage": 500,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 1,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        294,
+        300
+      ],
+      "totalDamage": 594,
+      "hitTargets": 2
+    },
+    {
+      "layout": "column",
+      "stage": 1,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        0,
+        0,
+        320
+      ],
+      "totalDamage": 320,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 1,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        0,
+        260,
+        400
+      ],
+      "totalDamage": 660,
+      "hitTargets": 2
+    },
+    {
+      "layout": "column",
+      "stage": 2,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        0,
+        480
+      ],
+      "totalDamage": 480,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 2,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        0,
+        0,
+        650
+      ],
+      "totalDamage": 650,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 2,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        490,
+        500
+      ],
+      "totalDamage": 990,
+      "hitTargets": 2
+    },
+    {
+      "layout": "column",
+      "stage": 2,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        0,
+        0,
+        600
+      ],
+      "totalDamage": 600,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 2,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        232.37,
+        357.5,
+        550
+      ],
+      "totalDamage": 1139.87,
+      "hitTargets": 3
+    },
+    {
+      "layout": "column",
+      "stage": 3,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        0,
+        720
+      ],
+      "totalDamage": 720,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 3,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        0,
+        0,
+        920
+      ],
+      "totalDamage": 920,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 3,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        624,
+        640,
+        640
+      ],
+      "totalDamage": 1904,
+      "hitTargets": 3
+    },
+    {
+      "layout": "column",
+      "stage": 3,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        0,
+        0,
+        960
+      ],
+      "totalDamage": 960,
+      "hitTargets": 1
+    },
+    {
+      "layout": "column",
+      "stage": 3,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        295.75,
+        455,
+        700
+      ],
+      "totalDamage": 1450.75,
+      "hitTargets": 3
+    },
+    {
+      "layout": "tightRow",
+      "stage": 1,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        316,
+        0
+      ],
+      "totalDamage": 316,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 1,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        0,
+        490,
+        0
+      ],
+      "totalDamage": 490,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 1,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        294,
+        0
+      ],
+      "totalDamage": 294,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 1,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        0,
+        320,
+        0
+      ],
+      "totalDamage": 320,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 1,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        260,
+        400,
+        0
+      ],
+      "totalDamage": 660,
+      "hitTargets": 2
+    },
+    {
+      "layout": "tightRow",
+      "stage": 2,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        472,
+        0
+      ],
+      "totalDamage": 472,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 2,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        147,
+        637,
+        147
+      ],
+      "totalDamage": 931,
+      "hitTargets": 3
+    },
+    {
+      "layout": "tightRow",
+      "stage": 2,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        490,
+        0
+      ],
+      "totalDamage": 490,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 2,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        300,
+        600,
+        300
+      ],
+      "totalDamage": 1200,
+      "hitTargets": 3
+    },
+    {
+      "layout": "tightRow",
+      "stage": 2,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        357.5,
+        550,
+        0
+      ],
+      "totalDamage": 907.5,
+      "hitTargets": 2
+    },
+    {
+      "layout": "tightRow",
+      "stage": 3,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        708,
+        0
+      ],
+      "totalDamage": 708,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 3,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        240,
+        680,
+        240
+      ],
+      "totalDamage": 1160,
+      "hitTargets": 3
+    },
+    {
+      "layout": "tightRow",
+      "stage": 3,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        640,
+        0
+      ],
+      "totalDamage": 640,
+      "hitTargets": 1
+    },
+    {
+      "layout": "tightRow",
+      "stage": 3,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        480,
+        960,
+        480
+      ],
+      "totalDamage": 1920,
+      "hitTargets": 3
+    },
+    {
+      "layout": "tightRow",
+      "stage": 3,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        455,
+        700,
+        0
+      ],
+      "totalDamage": 1155,
+      "hitTargets": 2
+    },
+    {
+      "layout": "wideRow",
+      "stage": 1,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        316,
+        0
+      ],
+      "totalDamage": 316,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 1,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        0,
+        490,
+        0
+      ],
+      "totalDamage": 490,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 1,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        294,
+        0
+      ],
+      "totalDamage": 294,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 1,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        0,
+        320,
+        0
+      ],
+      "totalDamage": 320,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 1,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        0,
+        400,
+        0
+      ],
+      "totalDamage": 400,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 2,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        472,
+        0
+      ],
+      "totalDamage": 472,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 2,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        0,
+        637,
+        0
+      ],
+      "totalDamage": 637,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 2,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        490,
+        0
+      ],
+      "totalDamage": 490,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 2,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        0,
+        600,
+        0
+      ],
+      "totalDamage": 600,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 2,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        0,
+        550,
+        0
+      ],
+      "totalDamage": 550,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 3,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        0,
+        708,
+        0
+      ],
+      "totalDamage": 708,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 3,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        0,
+        680,
+        0
+      ],
+      "totalDamage": 680,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 3,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        0,
+        640,
+        0
+      ],
+      "totalDamage": 640,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 3,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        0,
+        960,
+        0
+      ],
+      "totalDamage": 960,
+      "hitTargets": 1
+    },
+    {
+      "layout": "wideRow",
+      "stage": 3,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        0,
+        700,
+        0
+      ],
+      "totalDamage": 700,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 1,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        316,
+        0,
+        0
+      ],
+      "totalDamage": 316,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 1,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        500,
+        0,
+        0
+      ],
+      "totalDamage": 500,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 1,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        300,
+        0,
+        0
+      ],
+      "totalDamage": 300,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 1,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        320,
+        0,
+        0
+      ],
+      "totalDamage": 320,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 1,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        400,
+        260,
+        0
+      ],
+      "totalDamage": 660,
+      "hitTargets": 2
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 2,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        480,
+        0,
+        0
+      ],
+      "totalDamage": 480,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 2,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        650,
+        147,
+        0
+      ],
+      "totalDamage": 797,
+      "hitTargets": 2
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 2,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        500,
+        0,
+        0
+      ],
+      "totalDamage": 500,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 2,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        600,
+        0,
+        0
+      ],
+      "totalDamage": 600,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 2,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        550,
+        357.5,
+        232.37
+      ],
+      "totalDamage": 1139.87,
+      "hitTargets": 3
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 3,
+      "weapon": "pulse",
+      "name": "速射炮",
+      "damage": [
+        720,
+        0,
+        0
+      ],
+      "totalDamage": 720,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 3,
+      "weapon": "scatter",
+      "name": "霰射炮",
+      "damage": [
+        920,
+        120,
+        0
+      ],
+      "totalDamage": 1040,
+      "hitTargets": 2
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 3,
+      "weapon": "pierce",
+      "name": "穿甲炮",
+      "damage": [
+        640,
+        0,
+        0
+      ],
+      "totalDamage": 640,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 3,
+      "weapon": "blast",
+      "name": "爆裂炮",
+      "damage": [
+        960,
+        0,
+        0
+      ],
+      "totalDamage": 960,
+      "hitTargets": 1
+    },
+    {
+      "layout": "chainStagger",
+      "stage": 3,
+      "weapon": "arc",
+      "name": "电弧炮",
+      "damage": [
+        700,
+        455,
+        295.75
+      ],
+      "totalDamage": 1450.75,
+      "hitTargets": 3
+    }
+  ]
+}

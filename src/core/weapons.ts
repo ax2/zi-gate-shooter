@@ -8,7 +8,10 @@ export function weaponProfile(kind: WeaponKind, stage: number) {
   if (kind === 'blast') return {rate:[2,2.5,3][tier],offsets:[0],damage:[[16],[24],[32]][tier],vx:[0],targets:1,muzzleY:[92,94,100][tier],splashRadius:[90,110,130][tier]};
   if (kind === 'scatter') {
     const offsets = tier === 0 ? [-12, 0, 12] : tier === 1 ? [-24, -12, 0, 12, 24] : [-36, -24, -12, 0, 12, 24, 36];
-    return { rate: tier === 2 ? 4 : 5, offsets, damage: offsets.map((_, i) => i === Math.floor(offsets.length / 2) ? 4 : Math.abs(i - Math.floor(offsets.length / 2)) === 1 ? 3 : 2),
+    // Concentrated pellets reward closing the distance; the wider outer fan
+    // still trades long-range single-target damage for coverage.
+    const [center, inner, outer] = [[4, 3, 2], [5, 4, 3], [7, 5, 3]][tier];
+    return { rate: tier === 2 ? 4 : 5, offsets, damage: offsets.map((_, i) => i === Math.floor(offsets.length / 2) ? center : Math.abs(i - Math.floor(offsets.length / 2)) === 1 ? inner : outer),
       vx: offsets.map((_, i) => (i - Math.floor(offsets.length / 2)) * (tier === 2 ? 75 : 110)), targets: 1 };
   }
   if (kind === 'pierce') {
