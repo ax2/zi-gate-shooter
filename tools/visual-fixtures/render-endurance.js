@@ -87,6 +87,7 @@ function metrics() {
     driverTiming: driverTimes.snapshot(), runtimeTiming: runtimeTimes.snapshot(), longGaps: [...longGaps],
     activeAudioVoices: audio.activeNodes, musicElements: document.querySelectorAll('audio[data-game-music]').length,
     music: track ? { paused: track.paused, ended: track.ended, readyState: track.readyState, currentTime: track.currentTime, error: track.error?.code ?? null } : null,
+    mastery: runtime.world.growth.mastery ?? 0, activeWeapons: [...runtime.world.activeWeapons],
     pickups: runtime.world.pickups, gates: runtime.world.gatesTaken, kills: runtime.world.kills,
     effects: runtime.save.settings.effects, width: innerWidth, height: innerHeight, dpr: devicePixelRatio,
     fixtureInput: { held, pointer: runtime.pointer, target: runtime.target, nextControl } };
@@ -116,7 +117,7 @@ function afterFrame(workStarted) {
   // Fixture-only read access avoids sorting the 36000-sample diagnostics window
   // on every frame; full public diagnostics are sampled only once per second.
   const counts = { bodies: runtime.world.bodies.length, bullets: runtime.world.bullets.length,
-    particles: runtime.particles.length, blasts: runtime.blasts.length,
+    supportBeams: runtime.supportBeams.length, particles: runtime.particles.length, blasts: runtime.blasts.length,
     crateFragments: runtime.crateDebris.pieces.length, enemyFragments: runtime.enemyWreck.pieces.length };
   for (const key of Object.keys(counts)) peaks[key] = Math.max(peaks[key] ?? 0, counts[key]);
   peaks.activeAudioVoices = Math.max(peaks.activeAudioVoices ?? 0, audio.activeNodes);
