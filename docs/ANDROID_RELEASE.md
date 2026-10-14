@@ -34,3 +34,4 @@ Stage-02启动资产、Stage-04运行依赖清单、Stage-05离线许可页面�
 
 Stage-69（2026-10-14）：最新候选为build/releases/Stage-69/android/zi-gate-shooter-debug.apk，包含Stage-67/68动作，203项完整回归及37文件/16原生图校验通过；上文Stage-35为历史证据。见stages/Stage-69/TEST_REPORT.md。
 Stage-76：原生验收脚本必须显式指定-Stage；确认模拟器已启动后先android:sync再编译，输出source.json记录提交与工作区状态。缺阶段/无设备拒绝已验证；完整原生流程尚未通过。
+Stage-77最新候选：build/releases/Stage-77/android/zi-gate-shooter-debug.apk，207项完整回归及构建/lint/包内一致性通过。仍为开发签名、未设备运行；详见stages/Stage-77。
