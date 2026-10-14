@@ -149,3 +149,5 @@ Stage-45：完整素材导出包含第二章背景；成长测试证据写入bui
 Stage-46：新增node tools/profile-world.mjs用于独立规则耗时采样，输出build/qa/runs。结果不代替浏览器或设备性能验收。
 
 Stage-50：第三章接入原创装甲通道候选；41项专项/网页构建与双视口截图检查完成。APK仍Stage-44。详见docs/stages/Stage-50/TEST_REPORT.md。
+
+Stage-51：Android试玩候选已包含三章背景及约60Hz绘制预算；构建/lint/签名/35资源与16原生图像核验通过，真机和长局待验。详见docs/stages/Stage-51/TEST_REPORT.md。

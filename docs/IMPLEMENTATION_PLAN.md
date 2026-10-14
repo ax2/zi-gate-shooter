@@ -205,3 +205,5 @@ Stage-44（2026-10-14）：整合Stage-41至43；全量175项/29文件单次通�
 Stage-46：规则/测试操作员独立Node采样完成，不能复现浏览器长间隔。详见阶段报告；仍需浏览器分段测量。
 
 Stage-50：第三章接入原创装甲通道候选；41项专项/网页构建与双视口截图检查完成。APK仍Stage-44。详见docs/stages/Stage-50/TEST_REPORT.md。
+
+Stage-51：Android试玩候选已包含三章背景及约60Hz绘制预算；构建/lint/签名/35资源与16原生图像核验通过，真机和长局待验。详见docs/stages/Stage-51/TEST_REPORT.md。
