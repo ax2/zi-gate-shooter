@@ -7,6 +7,26 @@ import { progressionTarget } from '../../tests/helpers/progression-driver.ts';
 
 const canvas = document.querySelector('canvas'), status = document.querySelector('#status');
 const startButton = document.querySelector('#start'), effects = document.querySelector('#effects');
+const exportButton = document.querySelector('#export'), savedStatus = document.querySelector('#saved');
+const evidenceKey = 'gate-endurance-last-ended-v1';
+let lastEnded = null;
+try { lastEnded = JSON.parse(sessionStorage.getItem(evidenceKey) || 'null'); } catch {}
+function showSaved() {
+  exportButton.disabled = !lastEnded;
+  savedStatus.textContent = lastEnded ? `上次：${lastEnded.stopReason} / ${Number(lastEnded.final?.time ?? 0).toFixed(1)}秒 ` : '';
+}
+function preserveEnded() {
+  lastEnded = { ...window.__gateEnduranceEvidence(), savedAt: new Date().toISOString() };
+  try { sessionStorage.setItem(evidenceKey, JSON.stringify(lastEnded)); showSaved(); }
+  catch { showSaved(); savedStatus.textContent += '存储失败，请立即导出 '; }
+}
+showSaved();
+exportButton.onclick = () => {
+  if (!lastEnded) return;
+  const url = URL.createObjectURL(new Blob([JSON.stringify(lastEnded, null, 2)], { type: 'application/json' }));
+  const link = document.createElement('a'); link.href = url; link.download = 'gate-endurance-ended.json'; link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
 const audio = new GameAudio(), music = new LoopMusic(browserMusicHandle, () => performance.now());
 let active = false, held = false, began = 0, nextControl = 0, nextSample = 0, nextHeap = 0;
 let samples = [], transitions = [], stopReason = 'not-started', selectedEffects = 'standard';
@@ -57,7 +77,8 @@ function finish(reason) {
   active = false; held = false; stopReason = reason;
   runtime.cancelTouch(731); runtime.pause(reason === 'completed' ? '自动夹具已完成20分钟' : '夹具停止');
   sample(true); startButton.disabled = false; effects.disabled = false;
-  setTimeout(() => sample(true), 1000); // Observe actual voice/music cleanup after pause.
+  preserveEnded();
+  setTimeout(() => { if (!active) { sample(true); preserveEnded(); } }, 1000); // Observe cleanup without overwriting a new run.
 }
 function afterFrame(workStarted) {
   if (!active) return;
@@ -128,6 +149,7 @@ window.addEventListener('resize', () => { runtime.resize(innerWidth, innerHeight
 document.addEventListener('visibilitychange', () => { recordLifecycle('visibilitychange'); if (document.hidden) runtime.hide(); else runtime.show(); });
 window.addEventListener('blur', () => { recordLifecycle('blur'); runtime.hide(); });
 window.addEventListener('focus', () => recordLifecycle('focus'));
+window.addEventListener('pagehide', () => { if (active) finish('pagehide'); else if (stopReason !== 'not-started') preserveEnded(); });
 Object.defineProperty(window, '__gateDiagnostics', { value: () => metrics() });
 Object.defineProperty(window, '__gateEnduranceEvidence', { value: () => ({ fixture: 'Stage-31 real-clock production CanvasRuntime + GameAudio + LoopMusic',
   scope: 'omniscient pointer driver; desktop browser, actual viewport in final; not human/device/performance acceptance',
