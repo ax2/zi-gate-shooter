@@ -3,6 +3,14 @@ import { World } from '../src/core/world';
 import { C } from '../src/core/config';
 import { weaponProfile } from '../src/core/weapons';
 import { advanceBody, bossWarningLanes } from '../src/core/behavior';
+
+it('impact feedback keeps the airborne projectile weapon after a weapon switch', () => {
+ const w=new World();w.weaponKind='scatter';
+ w.spawn('armor',200,400);
+ w.bullets.push({id:999,x:200,y:440,px:200,py:440,vx:0,vy:-1200,damage:4,age:0,active:true,hostile:false,weaponKind:'pierce'});
+ w.step(C.step,360);
+ expect(w.drainEffects().filter(e=>e.type==='impact').map(e=>e.weaponKind)).toEqual(['pierce']);
+});
 import { timeline, sectorIndex } from '../src/core/director';
 import { progressionTarget } from './helpers/progression-driver';
 
