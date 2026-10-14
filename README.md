@@ -1,4 +1,6 @@
-# zi-gate-shooter
+# 火力突围
+
+项目标识：zi-gate-shooter。正式中文名称于2026-10-14由用户确认。
 
 Stage-77：最新Android测试包含武器动作、暂停原因和失败反馈；207项完整回归、构建/lint与包内一致性通过。最新包build/releases/Stage-77/android，仍为开发签名，未真机验收。详见docs/stages/Stage-77/TEST_REPORT.md。
 
