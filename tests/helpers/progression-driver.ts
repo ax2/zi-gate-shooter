@@ -9,8 +9,10 @@ import type { WeaponKind } from '../../src/core/weapons';
 export function progressionTarget(world: World, preferred?: WeaponKind) {
   const x = world.player.x;
   const bodies = world.bodies.filter(b => b.active);
-  const equipment = bodies.filter(b => (b.kind === 'pickup' || b.kind === 'crate') && (!preferred || !b.weaponKind || b.weaponKind === preferred))
-    .sort((a, b) => Number(b.stage > world.growth.stage) - Number(a.stage > world.growth.stage) || b.y - a.y)[0];
+  const equipment = bodies.filter(b => (b.kind === 'pickup' || b.kind === 'crate') && (!preferred || !b.weaponKind || b.weaponKind === preferred || b.stage > world.growth.stage))
+    .sort((a, b) => Number(b.stage > world.growth.stage) - Number(a.stage > world.growth.stage)
+      || Number(b.kind === 'pickup') - Number(a.kind === 'pickup')
+      || Number(b.weaponKind === preferred) - Number(a.weaponKind === preferred) || b.y - a.y)[0];
   const gate = bodies.filter(b => b.kind === 'gate').sort((a, b) => b.y - a.y || Math.abs(a.x - x) - Math.abs(b.x - x))[0];
   const enemy = bodies.filter(b => b.kind in C.enemies).sort((a, b) => b.y - a.y)[0];
   const boss = bodies.find(b => b.kind === 'boss');

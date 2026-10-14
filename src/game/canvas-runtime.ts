@@ -1,4 +1,4 @@
-import { energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
+import { chainArc, energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
@@ -55,6 +55,7 @@ export class CanvasRuntime {
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
+  private arcs: {x:number;y:number;tx:number;ty:number;life:number}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
@@ -114,7 +115,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -173,7 +174,7 @@ export class CanvasRuntime {
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
-    this.particles = []; this.blasts = []; this.impacts = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0; this.upgradeUntil = 0;
+    this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0; this.upgradeUntil = 0;
     this.platform.silence();
     this.updateMusic();
   }
@@ -235,7 +236,7 @@ export class CanvasRuntime {
     else if (action === 'start') this.start();
     else if (action === 'pause') this.pause();
     else if (action === 'resume') { this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.impacts = []; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -249,6 +250,7 @@ export class CanvasRuntime {
   private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, this.world.weaponKind);
+    if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
     if (e.type === 'fire') { this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
@@ -288,7 +290,7 @@ export class CanvasRuntime {
   }
   private playerSprite(frame: number, x: number, y: number, pose: PlayerPose, recoil: number) {
     const dedicated = this.world.weaponKind !== 'pulse';
-    const key = this.world.weaponKind === 'blast' ? 'blast-player-v1.png' : this.world.weaponKind === 'scatter' ? 'scatter-player-v1.png' : this.world.weaponKind === 'pierce' ? 'pierce-player-v2.png' : 'units.png';
+    const key = this.world.weaponKind === 'arc' ? 'arc-player-v1.png' : this.world.weaponKind === 'blast' ? 'blast-player-v1.png' : this.world.weaponKind === 'scatter' ? 'scatter-player-v1.png' : this.world.weaponKind === 'pierce' ? 'pierce-player-v2.png' : 'units.png';
     const img = this.images.get(key); if (!img) return;
     const c = this.ctx, sw = img.width / (dedicated ? 3 : 4), sh = img.height / (dedicated ? 1 : 2);
     const width = 160, height = 213, left = x - width / 2, top = y - height / 2;
@@ -467,6 +469,8 @@ export class CanvasRuntime {
       detonationLight(c, e.x, e.y, e.size, age, this.save.settings.effects === 'weak');
     }
     this.blasts = this.blasts.filter(e => e.life > 0);
+    for (const arc of this.arcs) { arc.life -= dt; chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak'); }
+    this.arcs = this.arcs.filter(arc=>arc.life>0);
     for (const hit of this.impacts) { hit.life -= dt; impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
     this.impacts = this.impacts.filter(hit => hit.life > 0);
     for (const s of this.particles) {
@@ -529,7 +533,7 @@ export class CanvasRuntime {
       if (b.kind === 'crate') {
         if (b.weaponKind) {
           const choice = b.weaponKind === w.weaponKind ? '保留' : '换装';
-          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
+          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '邻敌连锁 · 盾卫截断' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
           const panelY = b.y - 158 >= this.hudTop + 128 ? b.y - 158 : Math.max(this.hudTop + 128, b.y + 70);
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');

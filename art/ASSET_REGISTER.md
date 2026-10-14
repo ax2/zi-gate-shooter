@@ -87,3 +87,5 @@ Stage-84：sniper-v1原创三态，内置imagegen，source/sniper-v1.png与snipe
 Stage-86：guard-v1原创盾卫三态，内置imagegen，source/guard-v1.png和guard-v1-prompt.md保留；export-guard.mjs导出768×256/327836字节及独立残骸，候选未最终签收。
 
 Stage-87：blast-player-v1内置imagegen原创三阶机体，prompt与source保留；导出768×256/231713字节，格边4px空白技术裁切去除生成细线后边界通过。候选未最终签收。
+
+Stage-88：arc-player-v1内置imagegen原创三阶，完整source/prompt保留；export-arc-player.mjs以58/0/-58横向窗口对齐，导出768×256/220808字节，候选未最终签收。

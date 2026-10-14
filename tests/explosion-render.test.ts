@@ -590,3 +590,12 @@ it('shows the sentry charge pose and readable warning before its fast shot',asyn
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='狙击')).toBe(true);
  expect(f.runtime.world.bullets.some(b=>b.hostile)).toBe(false);
 });
+
+it('bounds arc links, freezes them during pause and clears them on restart',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ for(let i=0;i<20;i++)f.runtime.world.effects.push({type:'arc',x:200,y:400,targetX:320,targetY:500});
+ f.tick();const links=()=> (f.runtime as any).arcs;
+ expect(links()).toHaveLength(12);const frozen=structuredClone(links());
+ f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(links()).toEqual(frozen);
+ f.runtime.start();expect(links()).toHaveLength(0);
+});

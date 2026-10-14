@@ -47,11 +47,13 @@ export class GameAudio {
     }
   }
   event(type: string, stage: number, weapon: WeaponKind = 'pulse') {
+    if (type === 'arc') { this.tone(850,180,.09,.025,'sawtooth'); return; }
     if (type === 'blast') { this.tone(130,30,.2,.07,'triangle'); return; }
     if (type === 'fire') {
       const now = this.context?.currentTime ?? 0;
       if (now - this.lastShot < 0.10) return;
       this.lastShot = now;
+      if (weapon === 'arc') { this.tone(600,120,.11,.035,'sawtooth'); return; }
       if (weapon === 'blast') { this.tone(170,32,.18,.045,'triangle'); return; }
       this.tone((210 + stage * 65) * (weapon === 'pierce' ? .65 : weapon === 'scatter' ? .85 : 1), weapon === 'pierce' ? 35 : 70,
         weapon === 'pierce' ? .12 : weapon === 'scatter' ? .08 : .055, 0.025 + stage * 0.006, weapon === 'pierce' ? 'triangle' : 'sawtooth');

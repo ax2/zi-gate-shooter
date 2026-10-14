@@ -1,9 +1,10 @@
 import { C } from './config';
-export type WeaponKind = 'pulse' | 'scatter' | 'pierce' | 'blast';
-export const weaponNames: Record<WeaponKind, string> = { pulse: '速射炮', scatter: '霰射炮', pierce: '穿甲炮', blast: '爆裂炮' };
-export const weaponColors: Record<WeaponKind, string> = { pulse: '#83e5ff', scatter: '#ffd28b', pierce: '#d5b4ff', blast: '#ffb46d' };
+export type WeaponKind = 'pulse' | 'scatter' | 'pierce' | 'blast' | 'arc';
+export const weaponNames: Record<WeaponKind, string> = { pulse: '速射炮', scatter: '霰射炮', pierce: '穿甲炮', blast: '爆裂炮', arc: '电弧炮' };
+export const weaponColors: Record<WeaponKind, string> = { pulse: '#83e5ff', scatter: '#ffd28b', pierce: '#d5b4ff', blast: '#ffb46d', arc: '#a2ff9c' };
 export function weaponProfile(kind: WeaponKind, stage: number) {
   const tier = Math.max(0, Math.min(2, stage - 1));
+  if (kind === 'arc') return {rate:2.5,offsets:[0],damage:[[16],[22],[28]][tier],vx:[0],targets:1,muzzleY:[80,96,99][tier],chainHops:tier+1};
   if (kind === 'blast') return {rate:[2,2.5,3][tier],offsets:[0],damage:[[16],[24],[32]][tier],vx:[0],targets:1,muzzleY:[92,94,100][tier],splashRadius:[90,110,130][tier]};
   if (kind === 'scatter') {
     const offsets = tier === 0 ? [-12, 0, 12] : tier === 1 ? [-24, -12, 0, 12, 24] : [-36, -24, -12, 0, 12, 24, 36];

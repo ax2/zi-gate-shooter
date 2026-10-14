@@ -22,9 +22,9 @@ export interface Body {
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
-  weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number;
+  weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { type: string; x: number; y: number; text?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { type: string; x: number; y: number; targetX?: number; targetY?: number; text?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -107,7 +107,7 @@ export class World {
         if (s.kind === 'armory') {
           if (!this.rewardSlots(2)) { this.scheduleIndex--; break; }
           const row = this.nextRow++;
-          const choices: WeaponKind[][] = [['scatter', 'pierce'], ['blast', 'pierce'], ['pulse', 'blast']];
+          const choices: WeaponKind[][] = this.round > 3 ? [['arc', 'scatter'], ['blast', 'pierce'], ['pulse', 'arc']] : [['scatter', 'pierce'], ['blast', 'pierce'], ['pulse', 'blast']];
           const chapterChoices = choices[sectorIndex(this.round)];
           const offered = s.stage === 3 ? [this.weaponKind, chapterChoices.find(kind => kind !== this.weaponKind)!] : chapterChoices;
           const crates = [222, 498].map((x, i) => { const b = this.spawn('crate', x, 180, Math.max(2, s.stage ?? 2, this.growth.stage)); b.row = row; b.weaponKind = offered[i]; return b; });
@@ -169,7 +169,7 @@ export class World {
         const x = this.player.x + w.offsets[i], y = C.playerY - (w.muzzleY ?? 72);
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx: w.vx[i], vy: -C.bulletSpeed,
           damage: w.damage[i] * (1 + this.growth.bonus / 100) * (this.growth.overload > 0 ? 1.35 : 1),
-          age: 0, active: true, hostile: false, weaponKind: this.weaponKind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius });
+          age: 0, active: true, hostile: false, weaponKind: this.weaponKind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops });
         this.shots++;
       }
       this.emit('fire', this.player.x, C.playerY - 70, undefined, this.growth.stage);
@@ -230,6 +230,19 @@ export class World {
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
+          if (bullet.chainHops && body.kind in C.enemies) {
+            const visited = new Set([body.id]); let origin = body, damage = bullet.damage;
+            for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin); hop++) {
+              const candidates = this.bodies.filter(other => other.active && !visited.has(other.id) && other.kind in C.enemies
+                && other.y >= C.playerShotTop && other.y <= C.playerY
+                && Math.hypot(other.x-origin.x,other.y-origin.y) <= 160);
+              candidates.sort((a,b) => Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y) || a.id-b.id);
+              const next = candidates[0]; if (!next) break;
+              visited.add(next.id); damage *= 0.65;
+              this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y});
+              this.hit(next,damage,bullet.weaponKind); origin = next;
+            }
+          }
           if (bullet.splashRadius && body.kind in C.enemies) {
             // No secondary explosions, reward charging or off-screen farming.
             this.effects.push({type:'blast',x:body.x,y:body.y,size:bullet.splashRadius,weaponKind:bullet.weaponKind});

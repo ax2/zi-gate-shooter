@@ -1,6 +1,15 @@
 import type { WeaponKind } from '../core/weapons';
 import { weaponColors } from '../core/weapons';
 
+export function chainArc(c: CanvasRenderingContext2D, x:number,y:number,tx:number,ty:number,life:number,weak:boolean) {
+  const dx=tx-x,dy=ty-y,length=Math.max(1,Math.hypot(dx,dy)),points=[x,y];
+  for(let i=1;i<8;i++){const bend=(i%2?1:-1)*7;points.push(x+dx*i/8-dy/length*bend,y+dy*i/8+dx/length*bend);}
+  points.push(tx,ty);c.save();c.globalCompositeOperation='lighter';
+  c.globalAlpha=Math.max(0,life/.16)*(weak?.65:1);
+  if(!weak)line(c,'#80ff8028',10,points);
+  line(c,'#9fffad',weak?2:3,points);line(c,'#f5ffed',1,points);c.restore();
+}
+
 // Local additive light only: no fullscreen flash, shadowBlur, filters or extra textures.
 function line(c: CanvasRenderingContext2D, color: string, width: number, points: number[]) {
   c.strokeStyle = color; c.lineWidth = width; c.beginPath();
@@ -29,7 +38,7 @@ export function energyShot(c: CanvasRenderingContext2D, x: number, y: number, vx
       const side = i % 2 ? -1 : 1, yy = 17 + i * 15 + Math.sin(phase + i) * 5;
       line(c, `${color}aa`, 1.3, [side * (5 + i * 2), yy, side * (7 + i * 2), yy + 6]);
     }
-    if (kind === 'pierce') line(c, '#dfbaffaa', 1.4, [-6, 4, 6, 17, -5, 29, 4, 40, -3, 52]);
+    if (kind === 'pierce' || kind === 'arc') line(c, `${color}aa`, 1.4, [-6, 4, 6, 17, -5, 29, 4, 40, -3, 52]);
   }
   c.restore();
 }
