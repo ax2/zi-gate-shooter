@@ -79,3 +79,5 @@ Stage-65：pierce-player-v2源图经export-pierce-player.mjs裁格与保持比�
 
 Stage-81：boss-flanker-v1，内置imagegen参考自有boss-strip-v2生成。source/boss-flanker-v1.png为2172×724透明源图，export-boss-flanker.mjs导出public/assets/boss-flanker-v1.png（768×256/249823字节），原图和提示词保留。第二章巡航/准备/残骸共用，不代表最终美术签收。
 
+
+Stage-83：boss-bastion-v1由内置imagegen原创生成，prompt见boss-bastion-v1-prompt.md，source/boss-bastion-v1.png源图2172×724透明；export-boss-bastion.mjs导出768×256/245556字节。第三章巡航/准备/破损候选，未最终美术签收。
