@@ -1,4 +1,4 @@
-import { supportProfile } from '../core/support-profile';
+import { supportProfile, nextSupportReward } from '../core/support-profile';
 import { overloadWake, coilDischarge, chainArc, energyShot, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -734,7 +734,7 @@ export class CanvasRuntime {
     this.text(support.laserUnlocked?`激光：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text('数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
-    this.text('每充满100：本局永久+10%，并触发6秒超载', 360, 1004, 23, '#c7deeb');
+    this.text(nextSupportReward(w.growth.mastery), 360, 1004, 23, '#f0d19a');
     this.button('返回暂停菜单', 1080, 'loadout-back', true);
   }
   private drawDialog() {
@@ -799,4 +799,5 @@ export function parseSave(value: unknown): Save {
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];
   return result;
 }
+
 
