@@ -25,6 +25,15 @@ function fixture(weak = false) {
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('retains the interruption reason after the transient notice expires and replaces it for a manual pause', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  f.runtime.hide(); for (let i = 0; i < 180; i++) f.tick();
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '切换至后台，已暂停' && c.args[2] === 490)).toBe(true);
+  f.runtime.show(); f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
+  f.runtime.pause(); f.tick();
+  expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '准备好了，再继续突围。' && c.args[2] === 490)).toBe(true);
+});
+
 it('freezes actual muzzle origins with recoil during pause and clears them on a weapon change', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
   f.runtime.world.weaponKind = 'pierce'; f.runtime.world.growth.stage = 3;

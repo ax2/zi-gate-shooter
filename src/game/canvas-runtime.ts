@@ -177,8 +177,10 @@ export class CanvasRuntime {
     this.platform.silence();
     this.updateMusic();
   }
+  private pauseReason = '';
   pause(message = '暂停') {
     if (this.mode !== 'playing') return;
+    this.pauseReason = message === '暂停' ? '准备好了，再继续突围。' : message;
     this.mode = 'paused'; this.cancelTouch(); this.accumulator = 0; this.notify(message); this.platform.silence();
     this.updateMusic();
   }
@@ -613,7 +615,7 @@ export class CanvasRuntime {
     this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, this.mode === 'settings' ? this.platform.openLicenses ? 800 : 710 : 640, '#122331f5');
     this.buttons = [];
     if (this.mode === 'paused') {
-      this.text('暂停', 360, 420, 48, '#eff8ff', 'center', true); this.text('准备好了，再继续突围。', 360, 490, 26, '#a9bfce');
+      this.text('暂停', 360, 420, 48, '#eff8ff', 'center', true); this.text(this.pauseReason || '准备好了，再继续突围。', 360, 490, 26, '#a9bfce');
       this.button('继续战斗', 560, 'resume', true); this.button('设置', 670, 'settings'); this.button('返回主界面', 780, 'home');
     } else if (this.mode === 'settings') {
       const s = this.save.settings;
