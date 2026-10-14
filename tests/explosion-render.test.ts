@@ -25,6 +25,20 @@ function fixture(weak = false) {
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('keeps ground travel continuous across speed changes, freezes on pause and resets on restart', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  const offset = () => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('runway.jpg')).at(-1)!.args[2] as number;
+  f.runtime.world.time = 85;
+  f.tick(); const first = offset();
+  // Round three uses the same runway but a faster scroll speed.
+  f.runtime.world.round = 3;
+  const speed = f.runtime.world.scrollSpeed;
+  f.tick(); expect(offset() - first).toBeCloseTo(C.step * speed);
+  const frozen = offset(); f.runtime.pause();
+  for (let i = 0; i < 10; i++) { f.tick(); expect(offset()).toBe(frozen); }
+  f.runtime.start(); f.tick(); expect(offset()).toBeCloseTo(C.step * f.runtime.world.scrollSpeed);
+});
+
 it('uses the cooling environment only in its chapter and keeps paused world state intact', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
   f.runtime.world.round = 2; f.runtime.world.time = 17; f.runtime.pause();

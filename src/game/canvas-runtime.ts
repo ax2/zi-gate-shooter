@@ -61,6 +61,7 @@ export class CanvasRuntime {
   private accumulator = 0;
   private lastTime = 0;
   private visualTime = 0;
+  private groundDistance = 0;
   private target = 360;
   private pointer: number | null = null;
   private keys = new HorizontalKeys();
@@ -134,6 +135,7 @@ export class CanvasRuntime {
         try {
           while (this.accumulator + 1e-9 >= C.step && steps++ < 5 && this.mode === 'playing') {
             if (this.keys.active) this.target = clamp(this.world.player.x + this.keys.direction * C.moveSpeed * C.step, C.minX, C.maxX);
+            this.groundDistance += C.step * this.world.scrollSpeed;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
             if (this.world.player.hp <= 0) {
@@ -150,6 +152,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.groundDistance = 0;
     this.keys.clear(); this.inputMode = 'touch';
     this.gateFeedback.clear();
     this.crateDebris.clear();
@@ -305,7 +308,7 @@ export class CanvasRuntime {
     const cooling = this.mode !== 'menu' && sectorIndex(w.round) === 1;
     const ground = this.images.get(cooling ? 'cooling-corridor-v1.jpg' : 'runway.jpg')!;
     const h = ground.height / ground.width * 720;
-    const distance = this.mode === 'menu' ? this.visualTime * 12 : w.time * w.scrollSpeed;
+    const distance = this.mode === 'menu' ? this.visualTime * 12 : this.groundDistance;
     if (cooling) {
       // Alternate reflection makes adjacent boundaries share the exact same edge.
       // Keep parity across the two-tile period, including modulo wraparound.
