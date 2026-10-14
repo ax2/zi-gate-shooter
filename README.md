@@ -1,5 +1,7 @@
 # 火力突围
 
+Stage-100固定试玩版已准备，见[试玩说明](docs/stages/Stage-100/PLAY.md)。249项共享/网页测试通过，Stage-99静态20分钟验证完成；主观体验和设备性能边界见[验收清单](docs/CONTENT_ACCEPTANCE.md)。
+
 当前版本：5种武器×3阶、6类敌人、3章首领、9套战斗组合；新增换装战术提示、电弧放电及超载持续反馈。内容仍在体验收敛阶段，见[验收清单](docs/CONTENT_ACCEPTANCE.md)及[Stage-93](docs/stages/Stage-93/WORK_LOG.md)。下方历史记录保留对应阶段证据，不代表当前版本验收。
 
 项目标识：zi-gate-shooter。正式中文名称于2026-10-14由用户确认。
