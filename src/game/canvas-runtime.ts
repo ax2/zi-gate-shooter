@@ -283,7 +283,7 @@ export class CanvasRuntime {
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
-      if(e.type==='laser' && this.save.settings.sound)this.platform.sound('fire',this.world.growth.stage,'pierce');
+      if(this.save.settings.sound)this.platform.sound(e.type,this.world.growth.stage);
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser'});
       return;
     }

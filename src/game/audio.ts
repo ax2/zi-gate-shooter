@@ -3,6 +3,8 @@ import type { WeaponKind } from '../core/weapons';
 export class GameAudio {
   private context?: AudioContext;
   private lastShot = -Infinity;
+  private lastRefraction = -Infinity;
+  private lastLaser = -Infinity;
   private nodes = new Map<OscillatorNode, GainNode>();
   private retryAt = 0;
   enabled = true;
@@ -47,6 +49,19 @@ export class GameAudio {
     }
   }
   event(type: string, stage: number, weapon: WeaponKind = 'pulse') {
+    if (type === 'laser') {
+      if (this.now() - this.lastLaser < 500) return;
+      this.lastLaser = this.now();
+      this.tone(1250, 260, .26, .035, 'sine');
+      this.tone(210, 75, .18, .025, 'triangle');
+      return;
+    }
+    if (type === 'refract') {
+      if (this.now() - this.lastRefraction < 180) return;
+      this.lastRefraction = this.now();
+      this.tone(1550, 2300, .075, .018, 'sine');
+      return;
+    }
     if (type === 'arc') { this.tone(850,180,.09,.025,'sawtooth'); return; }
     if (type === 'blast') { this.tone(130,30,.2,.07,'triangle'); return; }
     if (type === 'fire') {
