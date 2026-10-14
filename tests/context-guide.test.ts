@@ -60,3 +60,20 @@ it('explains in-flight bullets during the second blockade and removes help after
  b.warning=0;expect(contextGuide(w).kind).toBe('move');
  b.warning=1.8;b.active=false;expect(contextGuide(w).kind).toBe('move');
 });
+
+it('prioritizes charging threats over rewards and clears stale enemy guidance', () => {
+  const w = new World(); w.round = 2;
+  const pickup = w.spawn('pickup', 360, 500); pickup.weaponKind = 'arc';
+  const guard = w.spawn('guard', 220, 320); guard.burst = 0;
+  expect(contextGuide(w).kind).toBe('pickup');
+  guard.warning = 0.8; guard.burst = 1;
+  expect(contextGuide(w).title).toContain('盾卫开盾');
+  const sniper = w.spawn('sniper', 500, 320); sniper.warning = 1.2;
+  expect(contextGuide(w).detail).toContain('命中不会打断');
+  sniper.active = false; guard.warning = 0;
+  expect(contextGuide(w).kind).toBe('pickup');
+  pickup.active = false; guard.burst = 0;
+  expect(contextGuide(w).detail).toContain('挡住穿甲与跳电');
+  guard.y = 700; expect(contextGuide(w).kind).toBe('move');
+  guard.y = 320; guard.active = false; expect(contextGuide(w).kind).toBe('move');
+});

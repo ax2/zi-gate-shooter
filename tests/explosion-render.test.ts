@@ -599,3 +599,20 @@ it('bounds arc links, freezes them during pause and clears them on restart',asyn
  f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(links()).toEqual(frozen);
  f.runtime.start();expect(links()).toHaveLength(0);
 });
+
+it('shows a brief weapon briefing after real pickup, yields to danger and resets on restart', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  const pickup = f.runtime.world.spawn('pickup', 360, 1024, 2); pickup.weaponKind = 'arc';
+  f.tick();
+  const briefing = () => f.calls.some(c => c.kind === 'fillText' && String(c.args[0]).includes('最多追加2次跳电'));
+  expect(f.runtime.world.weaponKind).toBe('arc'); expect(briefing()).toBe(true);
+  const sniper = f.runtime.world.spawn('sniper', 200, 320); sniper.warning = 1; sniper.timer = 1;
+  f.tick(); expect(briefing()).toBe(false);
+  sniper.active = false; f.tick(); expect(briefing()).toBe(true);
+  f.runtime.pause(); for (let i = 0; i < 360; i++) f.tick();
+  f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603); f.tick();
+  expect(briefing()).toBe(true);
+  for (let i = 0; i < 310; i++) f.tick();
+  expect(briefing()).toBe(false);
+  f.runtime.start(); f.tick(); expect(briefing()).toBe(false);
+});

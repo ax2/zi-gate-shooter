@@ -12,7 +12,7 @@ import { WeaponMotion } from './weapon-motion';
 import type { PlayerPose } from './player-motion';
 import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
-import { contextGuide } from './context-guide';
+import { contextGuide, weaponGuide } from './context-guide';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
 import { chargerFrame } from './charger-motion';
@@ -79,6 +79,7 @@ export class CanvasRuntime {
   private noticeUntil = 0;
   private shakeUntil = 0;
   private weaponMotion = new WeaponMotion();
+  private weaponGuideUntil = 0;
   private upgradeUntil = 0;
   private error = '';
   private started = false;
@@ -171,6 +172,7 @@ export class CanvasRuntime {
     this.enemyWreck.clear();
     this.playerMotion.reset();
     this.weaponMotion.reset();
+    this.weaponGuideUntil = 0;
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear(); this.downAction = '';
@@ -252,6 +254,7 @@ export class CanvasRuntime {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, this.world.weaponKind);
     if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
     if (e.type === 'fire') { this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
+    if (e.type === 'weapon' || e.type === 'upgrade') this.weaponGuideUntil = this.world.time + 5;
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
@@ -618,7 +621,9 @@ export class CanvasRuntime {
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.
     if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
-    const guide = contextGuide(this.world);
+    let guide = contextGuide(this.world);
+    if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
+      guide = weaponGuide(this.world.weaponKind, this.world.growth.stage);
     if (guide.detail) {
       this.rect(44, 1150, 632, 106, '#081a25df');
       this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
