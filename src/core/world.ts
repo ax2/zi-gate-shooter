@@ -33,6 +33,7 @@ export class World {
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
   weaponKind: WeaponKind = 'pulse';
   player = { x: 360, px: 360, hp: 3, invulnerable: 0 };
+  lastDamageCause: 'bullet' | 'enemy' | 'crate' | null = null;
   bodies: Body[] = [];
   bullets: Bullet[] = [];
   effects: EffectEvent[] = [];
@@ -208,7 +209,7 @@ export class World {
       if (bullet.hostile) {
         add(sweep(bullet.px, bullet.py, bullet.x, bullet.y, this.player.px, C.playerY, this.player.x, C.playerY, 27, 31), 1, bullet.id, () => {
           if (!bullet.active || this.player.hp <= 0) return;
-          bullet.active = false; this.hurt();
+          bullet.active = false; this.hurt('bullet');
         });
       } else for (const body of this.bodies) {
         if (!body.active || body.kind === 'pickup' || (body.kind === 'boss' && this.phase !== 'boss')) continue;
@@ -258,7 +259,7 @@ export class World {
         add(sweep(this.player.px, C.playerY, this.player.x, C.playerY, b.px, b.py, b.x, b.y,
           b.width / 2 + C.playerRadius, b.height / 2 + C.playerRadius), 1, b.id, () => {
           if (!b.active || this.player.hp <= 0) return;
-          b.active = false; this.hurt(); this.emit('crash', b.x, b.y, undefined, b.width);
+          b.active = false; this.hurt(b.kind === 'crate' ? 'crate' : 'enemy'); this.emit('crash', b.x, b.y, undefined, b.width);
         });
       }
     }
@@ -295,8 +296,9 @@ export class World {
     this.peakBodies = Math.max(this.peakBodies, this.bodies.length);
     this.peakBullets = Math.max(this.peakBullets, this.bullets.length);
   }
-  private hurt() {
+  private hurt(cause: 'bullet' | 'enemy' | 'crate') {
     if (this.player.invulnerable > 0 || this.player.hp <= 0) return;
+    this.lastDamageCause = cause;
     this.player.hp--; this.player.invulnerable = C.invulnerability;
     this.emit('hurt', this.player.x, C.playerY);
   }

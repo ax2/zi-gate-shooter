@@ -631,6 +631,7 @@ export class CanvasRuntime {
       this.text('本次突围结束', 360, 415, 30, '#b6d2e2'); this.text(w.score.toString(), 360, 510, 94, '#eff8ff', 'center', true);
       this.text(`最高分 ${this.save.best}`, 360, 585, 26, '#e8c88b');
       this.text(`存活 ${Math.floor(w.time / 60)}:${Math.floor(w.time % 60).toString().padStart(2, '0')}　/　T${w.maxStage}　/　第${w.round}轮`, 360, 660, 26, '#bcd5e4');
+      if (w.lastDamageCause) this.text({ bullet: '被敌弹击中 · 留意弹道空隙', enemy: '与敌机相撞 · 提前横移避让', crate: '撞上未破坏箱体 · 先击碎再拾取' }[w.lastDamageCause], 360, 704, 22, '#e8c88b');
       this.button('再次突围　›', 740, 'start', true); this.button('返回主界面', 850, 'home');
     }
   }
