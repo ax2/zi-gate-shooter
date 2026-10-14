@@ -4,6 +4,7 @@ export const C = {
   step: 1 / 60, bulletSpeed: 1200, bulletLife: 1.2, playerShotTop: 240, invulnerability: 1,
   thresholds: [0, 24, 56, 96, 144], rewards: [10, 15, 20, 25, 30],
   energyGateMultiplier: 2,
+  killCharge: { elite: 15, boss: 50 },
   chargerBehavior: { warningAge: 1.8, dashAge: 2.6, dashSpeed: 380 },
   weapon: [
     { rate: 8, offsets: [0], damage: [4] },

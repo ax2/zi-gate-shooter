@@ -79,6 +79,7 @@ export class CanvasRuntime {
   private pointerX = 0;
   private downAction = '';
   private notice = '';
+  private noticeDetail = '';
   private noticeY = 277;
   private noticeUntil = 0;
   private shakeUntil = 0;
@@ -278,7 +279,7 @@ export class CanvasRuntime {
     this.platform.write(this.save);
     this.updateMusic();
   }
-  private notify(text: string, y = 277) { this.notice = text; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
+  private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(e.type==='laser' && this.save.settings.sound)this.platform.sound('fire',this.world.growth.stage,'pierce');
@@ -291,7 +292,7 @@ export class CanvasRuntime {
     if (e.type === 'weapon' || e.type === 'upgrade') this.weaponGuideUntil = this.world.time + 5;
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
-    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277);
+    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277, e.detail);
     if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
     const explosion = ['blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
@@ -391,7 +392,8 @@ export class CanvasRuntime {
     else {
       this.drawHud();
       if (this.notice && this.platform.now() < this.noticeUntil && this.mode === 'playing') {
-        this.rect(58, this.noticeY - 31, 604, 62, '#0a1c2af0'); this.text(this.notice, 360, this.noticeY, 28, '#d2f2ff');
+        this.rect(58, this.noticeY - 31, 604, this.noticeDetail?104:62, '#0a1c2af0'); this.text(this.notice, 360, this.noticeY, 28, '#d2f2ff');
+        if(this.noticeDetail)this.text(this.noticeDetail,360,this.noticeY+43,24,'#f2d598');
       }
     }
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();

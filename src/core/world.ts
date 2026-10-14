@@ -24,7 +24,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { type: string; x: number; y: number; targetX?: number; targetY?: number; text?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { type: string; x: number; y: number; targetX?: number; targetY?: number; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -349,9 +349,13 @@ export class World {
       this.phase = 'dead'; this.emit('death', this.player.x, C.playerY, '本次突围结束', 150);
     } else if (this.bossVictory) {
       this.bossVictory = false; this.bullets = []; this.bodies = [];
+      const restored=this.player.hp<3;
       this.player.hp = Math.min(3, this.player.hp + 1); this.player.invulnerable = 1;
       this.phase = 'recovery'; this.phaseTime = 0;
-      this.emit('victory', 360, 430, '首领击破 · 装甲恢复 +1');
+      const reward=grantGate(this.growth,C.killCharge.boss,'energy');
+      if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+      this.effects.push({type:'victory',x:360,y:430,text:`首领击破 · 充能+${C.killCharge.boss}`,
+        detail:[restored?'装甲恢复+1':'装甲完好',this.chargeReceipt(reward.activated)].join(' · ')});
     }
     this.bodies = this.bodies.filter(b => b.active && b.y < 1344);
     this.bullets = this.bullets.filter(b => b.active && b.y > (b.hostile ? -90 : C.playerShotTop) && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
@@ -363,6 +367,11 @@ export class World {
     this.lastDamageCause = cause;
     this.player.hp--; this.player.invulnerable = C.invulnerability;
     this.emit('hurt', this.player.x, C.playerY);
+  }
+  private chargeReceipt(activated:boolean) {
+    if(!activated)return `充能 ${this.growth.energy}/100`;
+    const mastery=this.growth.mastery??0;
+    return mastery===3?'激光解锁 · 火力+10%':mastery===5?'折射解锁 · 火力+10%':'火力+10% · 超载6秒';
   }
   private hit(b: Body, damage: number, weaponKind?: WeaponKind) {
     this.hits++; b.hit = 0.07;
@@ -383,6 +392,11 @@ export class World {
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
       this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind, bossVariant: b.bossVariant });
       if (b.kind === 'boss') this.bossVictory = true;
+      else if(b.kind==='elite'){
+        const reward=grantGate(this.growth,C.killCharge.elite,'energy');
+        if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+        this.effects.push({type:'reward',x:b.x,y:b.y,text:`精英击破 · 充能+${C.killCharge.elite}`,detail:this.chargeReceipt(reward.activated)});
+      }
     }
   }
 }
