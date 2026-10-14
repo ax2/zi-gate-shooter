@@ -4,6 +4,24 @@ import { World } from '../src/core/world';
 import { advanceBody, bossWarningLanes } from '../src/core/behavior';
 import { safeRoute } from '../src/core/reachability';
 
+it.each([[1, 0], [2, 2], [3, 3], [4, 0], [5, 2], [6, 3]])('round %s opens with chapter signature %s through the real director', (round, signature) => {
+  const world = new World(1337, round);
+  // Remove pre-boss enemies/rewards only to isolate the director entry;
+  // the boss itself must be created by the production round transition.
+  for (let frame = 0; frame < 90 * 60 && world.phase === 'running'; frame++) {
+    world.bodies = []; world.bullets = [];
+    world.step(C.step); world.drainEffects();
+  }
+  expect(world.phase).toBe('boss-entry');
+  const boss = world.bodies.find(body => body.kind === 'boss')!;
+  expect(boss).toBeDefined(); expect(boss.attackCycle).toBe(signature);
+  boss.y = 260; boss.timer = 0;
+  advanceBody(boss, C.step, 'boss', 0, () => { throw new Error('shot before warning'); });
+  expect(boss.attack).toBe(signature); expect(boss.warning).toBe(1.35);
+  for (const start of [C.minX, 360, C.maxX])
+    expect(safeRoute(start, [boss], [], 5, { phase: 'boss', phaseTime: 0 })).not.toBeNull();
+});
+
 it.each([3, 7, 11])('later boss blockade cycle %s advertises its rotating gap and leaves a reachable route', cycle => {
   const world = new World(); const boss = world.spawn('boss', 360, 260);
   boss.bossVariant = 2; boss.attackCycle = cycle; boss.timer = 0;

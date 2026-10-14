@@ -137,7 +137,9 @@ export class World {
       if (this.roundTime >= 72 && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {
         this.phase = 'boss-entry'; this.phaseTime = 0;
         const boss = this.spawn('boss', 360, -150); boss.speed = 0;
-        boss.bossVariant = sectorIndex(this.round); boss.attackCycle = boss.bossVariant;
+        boss.bossVariant = sectorIndex(this.round);
+        // Show each chapter's signature before high firepower can skip it.
+        boss.attackCycle = [0, 2, 3][boss.bossVariant];
         this.emit('alert', 360, 360, `${sectorNames[sectorIndex(this.round)]} · 首领警戒`);
       }
     } else if (this.phase === 'boss-entry') {
