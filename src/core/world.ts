@@ -57,7 +57,7 @@ export class World {
   contract?: Contract;
   damageTaken=0;
   acceptContract(kind:ContractKind){
-    if(this.phase!=='running'||this.player.hp<=0||this.contract?.status==='active'||this.contract?.round===this.round)return false;
+    if(this.phase!=='running'||this.roundTime>40||this.player.hp<=0||this.contract?.status==='active'||this.contract?.round===this.round)return false;
     this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken);return true;
   }
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
@@ -252,6 +252,16 @@ export class World {
       if (activateOverload(this.growth)) this.emit('overload', this.player.x, C.playerY, this.overloadNotice());
     }
     this.director(dt);
+    // Opt-in combat supplies its own targets; it must not depend on a sparse chapter tail.
+    const challenge=this.contract;
+    if(challenge?.status==='active'&&this.phase==='running'&&challenge.reinforcements<22&&challenge.elapsed>=challenge.nextReinforcement){
+      const count=this.bodies.filter(b=>b.active&&b.kind in C.enemies).length;
+      if(count<C.limits.enemies){
+        const x=[200,360,520,360][challenge.reinforcements%4];
+        const candidate=this.spawn('drone',x,180);
+        if(this.admit(candidate)){challenge.reinforcements++;challenge.nextReinforcement=challenge.elapsed+.8;}
+      }
+    }
     this.shoot(dt);
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;

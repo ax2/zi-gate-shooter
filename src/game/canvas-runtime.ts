@@ -769,9 +769,9 @@ export class CanvasRuntime {
   private drawContracts() {
     this.rect(35,120,650,1080,'#102330');
     this.text('挑战契约',360,190,42,'#effaff','center',true);
-    this.text('自选限制换取额外成长 · 每轮一次',360,245,25,'#bdd8e7');
+    this.text('自选限制与增援挑战 · 每轮一次',360,245,25,'#bdd8e7');
     const current=this.world.contract;
-    const can=this.world.phase==='running'&&current?.status!=='active'&&current?.round!==this.world.round;
+    const can=this.world.phase==='running'&&this.world.roundTime<=40&&current?.status!=='active'&&current?.round!==this.world.round;
     for(const [i,kind] of (Object.keys(contracts) as ContractKind[]).entries()){
       const entry=contracts[kind],y=310+i*255;
       this.rect(65,y,590,225,'#203e50');
@@ -781,8 +781,8 @@ export class CanvasRuntime {
       this.text(can?'接取契约　›':'本轮已接取或当前不可接取',625,y+190,23,'#80e4ff','right');
       if(can)this.buttons.push({x:65,y,w:590,h:225,label:entry.name,action:`contract:${kind}`});
     }
-    this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中':current.status==='won'?'已完成':'失败：'+current.reason}`:'在普通战斗阶段接取，首领战仍计时',360,895,25,'#ffdc8a');
-    this.text('计时只在战斗推进，暂停与首领过场不计时',360,945,23,'#bdd8e7');
+    this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中':current.status==='won'?'已完成':'失败：'+current.reason}`:'每轮前40秒可接取 · 追加22架敌机',360,895,25,'#ffdc8a');
+    this.text('增援按安全路线入场 · 暂停与过场不计时',360,945,23,'#bdd8e7');
     this.button('返回当前火力',1080,'contracts-back',true);
   }
   private drawBuildTree() {

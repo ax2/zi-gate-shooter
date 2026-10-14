@@ -92,5 +92,14 @@ export function timeline(round: number, seed: number): Spawn[] {
   else if (sector === 1) for (let t = 61; t < 68; t += 1.5) { add(t, 'drone', 200, undefined, undefined, 'weave'); add(t + .4, 'drone', 520, undefined, undefined, 'weave'); }
   else { add(60, 'armor', 360, undefined, undefined, 'fan'); for (const t of [62, 64, 66]) for (const x of [200, 520]) add(t, 'drone', x, undefined, undefined, 'weave'); }
   if (round > 1 && sector === 0) { add(13, 'charger', 500); add(32, 'charger', 200); add(55, 'armor', 500); }
+  // Coordinated pressure around supply windows. No damage-scaled health inflation.
+  if(round===1){add(23,'charger',520);add(51,'sniper',180);add(54,'drone',180);}
+  else {
+    for(const [time,x] of [[10,180],[23,540],[50,180],[56,540]]){
+      add(time,sector===2?'guard':'sniper',x);
+      add(time+1.2,'drone',x,undefined,undefined,'weave');
+      add(time+2.4,'charger',720-x,undefined,undefined,'flank',360);
+    }
+  }
   return out.sort((a, b) => a.at - b.at);
 }

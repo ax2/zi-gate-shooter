@@ -4,6 +4,7 @@ export const contracts={
 } as const;
 export type ContractKind=keyof typeof contracts;
 export class Contract {
+ reinforcements=0; nextReinforcement=0;
  elapsed=0; status:'active'|'won'|'failed'='active';reason='';
  constructor(readonly kind:ContractKind,readonly round:number,readonly startKills:number,readonly weapons:number,readonly damage:number){}
  update(dt:number,kills:number,weapons:number,damage:number,alive:boolean){

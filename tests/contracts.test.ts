@@ -23,3 +23,9 @@ it('death at the completion boundary awards nothing and recovery does not advanc
  w.phase='running';w.contract!.elapsed=29.99;w.kills=15;w.player.hp=0;w.step(1/60);
  expect(w.contract!.status).toBe('failed');expect(w.growth.mastery??0).toBe(0);
 });
+it('supplies real reinforcement enemies within caps and closes late acceptance',()=>{
+ const w=new World();w.roundTime=41;expect(w.acceptContract('precision')).toBe(false);
+ w.roundTime=0;expect(w.acceptContract('precision')).toBe(true);
+ w.step(1/60);expect(w.contract!.reinforcements).toBe(1);
+ expect(w.bodies.some(b=>b.kind==='drone'&&b.y>=180)).toBe(true);
+});
