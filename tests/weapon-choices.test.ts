@@ -4,6 +4,7 @@ import { C } from '../src/core/config';
 import { weaponProfile } from '../src/core/weapons';
 import { advanceBody, bossWarningLanes } from '../src/core/behavior';
 import { timeline, sectorIndex } from '../src/core/director';
+import { progressionTarget } from './helpers/progression-driver';
 
 it('three weapon families change trajectory and target count, rather than just color', () => {
   expect(weaponProfile('pulse', 3).vx.every(x => x === 0)).toBe(true);
@@ -63,4 +64,31 @@ it('weaving, diagonal charge and fan fire execute different real movements and e
   advanceBody(boss, C.step, 'boss', 1, () => {}); expect(bossWarningLanes(boss)).toEqual([200, 520]);
   const lanes: number[] = []; advanceBody(boss, 1.35, 'boss', 2.35, x => lanes.push(x));
   expect(lanes).toEqual([200, 200, 200, 200, 520, 520, 520, 520]);
+});
+
+it('later chapters introduce their distinct threat before the first upgrade crate', () => {
+  const openings = [1, 2, 3].map(round => timeline(round, 77).filter(s => s.at < 8));
+  expect(openings[0].every(s => s.kind === 'drone' && !s.pattern)).toBe(true);
+  expect(openings[1].some(s => s.kind === 'charger' && s.pattern === 'flank' && s.lane !== s.x)).toBe(true);
+  expect(openings[2].some(s => s.kind === 'armor' && s.pattern === 'fan')).toBe(true);
+  expect(new Set(openings[2].map(s => s.x)).size).toBe(1);
+});
+
+it('normal progression reaches the late T3 weapon choice and upgrades only after collection', () => {
+  const w = new World(1337), offered = new Set<string>();
+  let target = w.player.x, firstOffer = 0, upgradedAt = 0;
+  for (let frame = 0; frame < 70 * 60; frame++) {
+    if (frame % 6 === 0) target = progressionTarget(w, 'scatter');
+    const before = w.growth.stage;
+    w.step(C.step, target); w.drainEffects();
+    for (const b of w.bodies) if (b.kind === 'crate' && b.stage === 3 && b.weaponKind) {
+      offered.add(b.weaponKind); firstOffer ||= w.time;
+    }
+    if (before < 3 && w.growth.stage === 3) upgradedAt = w.time;
+  }
+  expect(offered).toEqual(new Set(['scatter', 'pierce']));
+  expect(firstOffer).toBeGreaterThanOrEqual(48);
+  expect(upgradedAt).toBeGreaterThan(firstOffer);
+  expect(upgradedAt).toBeLessThan(65);
+  expect(w.weaponKind).toBe('scatter'); expect(w.player.hp).toBeGreaterThan(0);
 });

@@ -1,5 +1,7 @@
 # zi-gate-shooter
 
+Stage-39（2026-10-14）：用户要求先推进游戏，微信接入后置。章节开场差异、首领前T3双武器选择已实现；保留当前武器选项，打碎后拾取兑现。网页和Android试玩候选已更新，详见docs/stages/Stage-39。
+
 Stage-35：诊断排序工作区复用，170项通过，候选已重建；玩法/美术沿用Stage-33。Stage-34实际199.8秒完成两次首领循环，Stage-35完整耐久受浏览器取帧故障阻断，未宣称20分钟通过。见docs/stages/Stage-35。
 
 Stage-33：主要射击元素增加白热弹芯、金色尾焰、紫色电弧、闪燃冲击环及冷暖火星，弱档保留关键反馈。169项与最终2项安全断言通过，移动尺寸/桌面运行画面已留证。见docs/stages/Stage-33，真机/真人评价待验。
@@ -131,3 +133,4 @@ npm run build
 Android当前为内部debug签名候选，构建命令会运行Gradle编译、lint、签名与包内资源核验。参见[Android发布准备](docs/ANDROID_RELEASE.md)、[启动资产验证](docs/stages/Stage-02/LAUNCHER_VALIDATION.md)与[Stage-02日志](docs/stages/Stage-02/WORK_LOG.md)。原创候选图标/系统启动主题已接入；品牌/音画签收、真机、正式签名和商店验收尚未完成。
 
 本仓库自有内容采用 [MIT License](LICENSE)。当前不包含商业游戏素材或第三方美术音频。未来引入外部素材时，逐项记录来源与独立许可，仓库许可证不替代素材许可。
+

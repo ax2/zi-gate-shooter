@@ -106,7 +106,9 @@ export class World {
           if (!this.rewardSlots(2)) { this.scheduleIndex--; break; }
           const row = this.nextRow++;
           const choices: WeaponKind[][] = [['scatter', 'pierce'], ['pulse', 'pierce'], ['pulse', 'scatter']];
-          const crates = [222, 498].map((x, i) => { const b = this.spawn('crate', x, 180, Math.max(2, this.growth.stage)); b.row = row; b.weaponKind = choices[sectorIndex(this.round)][i]; return b; });
+          const chapterChoices = choices[sectorIndex(this.round)];
+          const offered = s.stage === 3 ? [this.weaponKind, chapterChoices.find(kind => kind !== this.weaponKind)!] : chapterChoices;
+          const crates = [222, 498].map((x, i) => { const b = this.spawn('crate', x, 180, Math.max(2, s.stage ?? 2, this.growth.stage)); b.row = row; b.weaponKind = offered[i]; return b; });
           if (!this.admit(crates[0])) { for (const b of crates) b.active = false; this.scheduleIndex--; break; }
         } else if (s.kind === 'gates') {
           if (this.growth.overload > 0 && this.growth.energy >= 100) {

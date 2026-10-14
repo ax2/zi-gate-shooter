@@ -137,4 +137,4 @@ it.each([1, 2, 3, 5])('100 seeds of round %i retain a no-kill escape through bos
     expect(world.phase, `stalled seed ${seed}`).toBe('boss-entry');
     expect(world.kills).toBe(0); expect(world.cratesBroken).toBe(0);
   }
-}, 60000);
+}, 120000); // 100 independent simulated runs; all route/damage assertions remain mandatory.

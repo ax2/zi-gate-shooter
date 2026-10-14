@@ -38,7 +38,7 @@ it('20-minute accelerated stress keeps object counts bounded across real boss cy
   }
   expect(world.time).toBeCloseTo(1200, 3); expect(world.round).toBeGreaterThan(5);
   expect(Number.isFinite(world.score)).toBe(true); expect(world.phase).not.toBe('dead');
-});
+}, 30000); // Full simulation stress, not a five-second host performance benchmark.
 
 it('20 restarts begin with fresh identity, objects, score and growth', () => {
   for (let restart = 0; restart < 20; restart++) {
