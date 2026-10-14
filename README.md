@@ -143,3 +143,5 @@ Stage-42（2026-10-14）：修复换轮加速造成背景位移跳变；35项渲
 Stage-43（2026-10-14）：后续轮次保留武器箱/掉落的选择与互斥领取说明，基础教学仍限首轮。39项专项和网页构建通过；APK仍Stage-41。见docs/stages/Stage-43/TEST_REPORT.md。
 
 Stage-44（2026-10-14）：整合Stage-41至43；全量175项/29文件单次通过，Android新开发包8006032字节，SHA256见阶段报告。设备/真人/长局渲染验收未完成。
+
+Stage-45：完整素材导出包含第二章背景；成长测试证据写入build/qa/runs独立目录，不再覆盖旧Stage。见docs/stages/Stage-45/TEST_REPORT.md。

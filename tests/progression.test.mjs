@@ -4,6 +4,9 @@ import { C } from '../src/core/config';
 import { World } from '../src/core/world';
 import { progressionTarget } from './helpers/progression-driver';
 
+// A rerun must not overwrite evidence attributed to a historical stage.
+const evidenceDirectory = `build/qa/runs/${new Date().toISOString().replace(/[:.]/g, '-')}-${process.pid}/progression`;
+
 it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, openingX: C.minX, preferred: 'pierce' }, { seed: 77, openingX: C.maxX, preferred: 'pulse' }])(
   '20-minute normal growth and boss cycles: seed $seed / opening $openingX / $preferred', ({ seed, openingX, preferred }) => {
     const seconds = 1200;
@@ -49,8 +52,8 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
       crateLanes: [...crateLanes].sort(), victories, firstEquipmentEvents,
       peakBodies: world.peakBodies, peakBullets: world.peakBullets, milestones,
       scope: 'fixed-step simulation; omniscient test operator; no rendered, human or device acceptance' };
-    mkdirSync('build/qa/Stage-30/progression', { recursive: true });
-    writeFileSync(`build/qa/Stage-30/progression/seed-${seed}.json`, JSON.stringify(result, null, 2) + '\n');
+    mkdirSync(evidenceDirectory, { recursive: true });
+    writeFileSync(`${evidenceDirectory}/seed-${seed}.json`, JSON.stringify(result, null, 2) + '\n');
     expect(world.phase, JSON.stringify(result)).not.toBe('dead');
     expect(invalidState).toBe(false);
     expect(world.time).toBeCloseTo(seconds, 3);
