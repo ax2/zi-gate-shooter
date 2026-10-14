@@ -13,9 +13,9 @@ function start(){
    runtime.world.player.hp=1; runtime.world.spawn('crate',360,1024);
    return;
  }
- if(document.querySelector('#scenario').value==='blockade') {
+ if(['blockade','flanker'].includes(document.querySelector('#scenario').value)) {
    runtime.world.phase='boss';
-   const boss=runtime.world.spawn('boss',360,260);boss.bossVariant=2;boss.attackCycle=3;boss.timer=0;
+   const boss=runtime.world.spawn('boss',360,260);boss.bossVariant=document.querySelector('#scenario').value==='flanker'?1:2;boss.attackCycle=boss.bossVariant===1?2:3;boss.timer=0;
    return;
  }
  if(['gates','gate-danger'].includes(document.querySelector('#scenario').value)) {
@@ -44,6 +44,6 @@ document.querySelector('#weapon').onchange=start;
 document.querySelector('#sector').onchange=start;
 document.querySelector('#scenario').onchange=start;
 window.addEventListener('resize',()=>runtime.resize(innerWidth,innerHeight-68,devicePixelRatio));
-Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:document.querySelector('#scenario').value==='defeat'?'1HP + seeded crate collision, result layout only':['gates','gate-danger'].includes(document.querySelector('#scenario').value)?'stationary pair from production gate factory, layout only':document.querySelector('#scenario').value==='blockade'?'T1 + seeded boss blockade, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value.startsWith('choices')?'selected tier + two stationary T3 choice crates, no damage immunity':'selected tier + five seeded bodies, no damage immunity'})});
+Object.defineProperty(window,'__gateDiagnostics',{value:()=>({...runtime.diagnostics(),fixture:document.querySelector('#scenario').value==='defeat'?'1HP + seeded crate collision, result layout only':['gates','gate-danger'].includes(document.querySelector('#scenario').value)?'stationary pair from production gate factory, layout only':['blockade','flanker'].includes(document.querySelector('#scenario').value)?'T1 + seeded chapter boss, no immunity':document.querySelector('#scenario').value==='opening'?'selected chapter, default T1, no seeded bodies or immunity':document.querySelector('#scenario').value.startsWith('choices')?'selected tier + two stationary T3 choice crates, no damage immunity':'selected tier + five seeded bodies, no damage immunity'})});
 await runtime.load();
 

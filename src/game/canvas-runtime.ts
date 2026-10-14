@@ -114,7 +114,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -257,7 +257,7 @@ export class CanvasRuntime {
     const explosion = ['kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
-    if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y);
+    if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);
     else if (explosion && this.blasts.length < 4) this.blasts.push({ x: e.x, y: e.y, size: e.size ?? 80, life: 0.45, total: 0.45 });
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
     const cap = this.save.settings.effects === 'weak' ? 50 : 160;
@@ -411,9 +411,9 @@ export class CanvasRuntime {
           this.frameSprite('elite-v1.png', frame, 3, b.x, y, width, height, 1);
           this.hitSprite('elite-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
         } else {
-          const frame = bossFrame(b);
-          this.frameSprite('boss-v1.png', frame, 3, b.x, y, width, height, 1);
-          this.hitSprite('boss-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+          const frame = bossFrame(b), bossArt = b.bossVariant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png';
+          this.frameSprite(bossArt, frame, 3, b.x, y, width, height, 1);
+          this.hitSprite(bossArt, frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
         }
       }
     }
@@ -546,7 +546,7 @@ export class CanvasRuntime {
         const progress = tier < 0 ? 1 : (b.energy - C.thresholds[tier - 1]) / (C.thresholds[tier] - C.thresholds[tier - 1]);
         this.bar(b.x, b.y + (mixed ? 72 : 46), b.width - 32, progress, b.rewardKind === 'power' ? '#5bddff' : '#e5b96a');
       } else if (b.kind === 'boss') {
-        this.text(`重装首领　${Math.ceil(b.hp)} / ${Math.ceil(b.maxHp)}`, 360, this.hudTop + 145, 25, '#ffd59e');
+        this.text(`${b.bossVariant === 1 ? '双翼压制者' : '重装首领'}　${Math.ceil(b.hp)} / ${Math.ceil(b.maxHp)}`, 360, this.hudTop + 145, 25, '#ffd59e');
         this.bar(360, this.hudTop + 166, 430, b.hp / b.maxHp, '#ff925d');
       } else if (b.kind === 'armor' || b.kind === 'elite') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
     }
@@ -565,7 +565,7 @@ export class CanvasRuntime {
       this.blasts.push({ ...burst, life: 0.6, total: 0.6 });
     }
     if (wreck.finished) { this.destruction = undefined; return; }
-    const img = this.images.get('boss-v1.png'); if (!img) return;
+    const img = this.images.get(wreck.variant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png'); if (!img) return;
     const c = this.ctx, sw = img.width / 3, sh = img.height;
     for (const piece of wreck.pieces) {
       c.save(); c.globalAlpha = piece.alpha;

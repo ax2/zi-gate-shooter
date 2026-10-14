@@ -76,3 +76,6 @@ charger/armor/elite-wreck-v1.png分别由本会话内置imagegen参考原创机�
 Stage-63：霰射机体source/scatter-player-v1.png由内置imagegen参考自有units生成，完整提示词scatter-player-v1-prompt.md。export-scatter-player.mjs透明技术导出到public/assets/scatter-player-v1.png，576×256/169813字节；候选非最终美术签收。
 Stage-64：穿甲三阶原创候选由内置imagegen参考自有units生成。v1炮口裁切拒用保留，v2源图source/pierce-player-v2.png完整；提示词pierce-player-v1-prompt.md和pierce-player-v2-prompt.md。未接入，非最终美术。
 Stage-65：pierce-player-v2源图经export-pierce-player.mjs裁格与保持比例导出public/assets/pierce-player-v2.png，576×256/159696字节，候选已接入，最终美术待验。
+
+Stage-81：boss-flanker-v1，内置imagegen参考自有boss-strip-v2生成。source/boss-flanker-v1.png为2172×724透明源图，export-boss-flanker.mjs导出public/assets/boss-flanker-v1.png（768×256/249823字节），原图和提示词保留。第二章巡航/准备/残骸共用，不代表最终美术签收。
+

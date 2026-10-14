@@ -18,7 +18,7 @@ function fixture(weak = false) {
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: (src.includes('scatter-player') || src.includes('pierce-player')) ? 576 : 768, height: (src.includes('scatter-player') || src.includes('pierce-player')) || src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
+    image: async src => ({ src, width: (src.includes('scatter-player') || src.includes('pierce-player')) ? 576 : 768, height: (src.includes('scatter-player') || src.includes('pierce-player')) || src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') || src.includes('boss-flanker-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
     read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick(ms = 1000 / 60) { calls.length = 0; clock += ms; next(clock); } };
@@ -567,4 +567,18 @@ it('makes room within the four-blast budget and clears pending boss beats on ret
   for (let i = 0; i < 90; i++) f.tick();
   expect(f.runtime.mode).toBe('menu'); expect(f.runtime.diagnostics().bossDestructionAge).toBeNull();
   expect(blasts(f)).toHaveLength(0);
+});
+
+it.each([false,true])('keeps chapter-two artwork through preparation and actual death (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
+ const b=f.runtime.world.spawn('boss',360,260);b.bossVariant=1;b.attackCycle=2;b.timer=0;
+ f.tick();f.tick();
+ const art=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('boss-flanker-v1.png'));
+ expect(art().some(c=>c.args[1]===256)).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('双翼压制者'))).toBe(true);
+ b.hp=4;f.runtime.world.bullets.push({id:9999,x:b.x,y:b.y,px:b.x,py:b.y,vx:0,vy:0,damage:4,age:0,active:true,hostile:false});
+ f.tick();expect(f.runtime.world.phase).toBe('recovery');
+ expect(art().filter(c=>c.args[1]>=512)).toHaveLength(3);
+ expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('boss-v1.png'))).toBe(false);
+ f.runtime.pause();const frozen=art().map(c=>c.args.slice(1));f.tick();expect(art().map(c=>c.args.slice(1))).toEqual(frozen);
 });

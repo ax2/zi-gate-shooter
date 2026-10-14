@@ -10,7 +10,7 @@ export class BossDestruction {
     { at: 0.34, x: 0, y: -25, size: 92 },
     { at: 0.56, x: 0, y: 25, size: 140 },
   ];
-  constructor(readonly x: number, readonly y: number) {}
+  constructor(readonly x: number, readonly y: number, readonly variant = 0) {}
   advance(dt: number) {
     this.age += Math.max(0, dt);
     const due = [];
