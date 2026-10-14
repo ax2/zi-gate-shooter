@@ -3,7 +3,7 @@ import type { World } from '../core/world';
 import { guardClosed } from '../core/behavior';
 import { weaponNames, weaponProfile, type WeaponKind } from '../core/weapons';
 
-type Context = Pick<World, 'round' | 'phase' | 'bodies' | 'pickups' | 'gatesTaken'>;
+type Context = Pick<World, 'round' | 'phase' | 'bodies' | 'pickups' | 'gatesTaken' | 'activeWeapons'>;
 export interface Guide { kind: 'move' | 'crate' | 'pickup' | 'gate' | 'pair' | 'boss' | 'enemy' | 'weapon'; title: string; detail: string }
 const movement: Guide = { kind: 'move', title: '左右拖动 · 自动开火', detail: '' };
 
@@ -28,6 +28,9 @@ export function contextGuide(world: Context): Guide {
     return { kind: 'enemy', title: '狙击蓄能：离开预警通道', detail: '也可抢先击毁 · 命中不会打断蓄能' };
   if (visible.some(b => b.kind === 'guard' && b.warning > 0))
     return { kind: 'enemy', title: '盾卫开盾：避开扇形弹道', detail: '弱点已暴露 · 趁开盾集中火力' };
+  const equipment = visible.filter(b => b.weaponKind && (b.kind === 'pickup' || b.kind === 'crate'));
+  if (equipment.length && equipment.every(b => world.activeWeapons.includes(b.weaponKind!)))
+    return { kind: equipment.some(b => b.kind === 'pickup') ? 'pickup' : 'crate', title: '已有武器：领取升阶或充能', detail: '同阶装备充能+30 · 满100突破强化' };
   if (visible.some(b => b.weaponKind && b.kind === 'pickup'))
     return { kind: 'pickup', title: '靠近领取，叠加新火力', detail: '同排选一种奖励 · 已有武器继续开火' };
   if (visible.some(b => b.weaponKind && b.kind === 'crate'))
