@@ -123,7 +123,8 @@ Stage-06兼容修订：修复缺少ResizeObserver时的启动异常，增加画�
 npm ci
 npm run dev -- --port 5178
 npm run build:wechat
-npm run build:android
+# Stage-61仅为示例：必须替换为尚未存在的新阶段号，已有交付目录会拒绝覆盖。
+npm run build:android -- -Stage Stage-61
 npm test
 npm run build
 ```
@@ -165,3 +166,4 @@ Stage-57（2026-10-14）：网页专用充能门20至60候选；25项专项通�
 Stage-58（2026-10-14）：修复武器箱入场说明被HUD裁切，42项渲染回归和双视口排版检查通过；APK仍Stage-56。
 Stage-59：实际渲染159.333秒因失焦暂停，未通过20分钟；开发耐久入口补事件时序，见docs/stages/Stage-59/TEST_REPORT.md。
 Stage-60：敌弹绘制移至奖励面板后，修复被门数字背景遮挡；42项渲染回归通过，APK仍Stage-56。
+Stage-61：最新Android测试包已包含Stage-57/58/60修订，193项完整回归通过；构建必须显式阶段号，已有交付目录禁止覆盖。

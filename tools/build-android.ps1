@@ -1,6 +1,14 @@
-param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-35')
+param([ValidatePattern('^Stage-[0-9]{2,}$')][string]$Stage)
 $ErrorActionPreference = 'Stop'
+if (!$Stage) { throw 'Specify a new stage: npm run build:android -- -Stage Stage-61' }
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
+$taskOutput = Join-Path $taskRoot "build\releases\$Stage\android"
+if (Test-Path -LiteralPath $taskOutput) { throw "Stage output already exists; preserve it and choose a new stage: $Stage" }
+Push-Location $taskRoot
+try {
+    & npm.cmd run android:sync
+    if ($LASTEXITCODE -ne 0) { throw 'Android web synchronization failed.' }
+} finally { Pop-Location }
 $taskSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } elseif ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { Join-Path $env:LOCALAPPDATA 'Android\Sdk' }
 if (!(Test-Path -LiteralPath (Join-Path $taskSdk 'platforms\android-36\android.jar'))) { throw 'Android SDK 36 is required; configure ANDROID_HOME locally.' }
 $taskAndroid = Join-Path $taskRoot 'android'
@@ -21,7 +29,6 @@ try {
     $taskSigner = Join-Path $taskSdk 'build-tools\36.0.0\apksigner.bat'
     & $taskSigner verify $taskApk
     if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
-    $taskOutput = Join-Path $taskRoot "build\releases\$Stage\android"
     New-Item -ItemType Directory -Path $taskOutput -Force | Out-Null
     Copy-Item -LiteralPath $taskApk -Destination (Join-Path $taskOutput 'zi-gate-shooter-debug.apk') -Force
     $taskHashAlgorithm = [Security.Cryptography.SHA256]::Create()

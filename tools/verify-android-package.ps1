@@ -1,5 +1,6 @@
-param([ValidatePattern('^Stage-[0-9]{2}$')][string]$Stage = 'Stage-15')
+param([ValidatePattern('^Stage-[0-9]{2,}$')][string]$Stage)
 $ErrorActionPreference = 'Stop'
+if (!$Stage) { throw 'Specify the stage to verify with -Stage Stage-NN.' }
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $taskApk = Join-Path $taskRoot "build\releases\$Stage\android\zi-gate-shooter-debug.apk"

@@ -18,7 +18,7 @@
     "licenses:refresh": "node tools/android-licenses.mjs --refresh",
     "build:wechat": "npm run typecheck && node tools/build-wechat.mjs",
     "android:sync": "npm run typecheck && node tools/build-android-web.mjs && cap sync android",
-    "build:android": "npm run android:sync && powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-android.ps1"
+    "build:android": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-android.ps1"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",
