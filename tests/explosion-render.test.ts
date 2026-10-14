@@ -582,3 +582,11 @@ it.each([[false,1],[true,1],[false,2],[true,2]] as const)('keeps chapter artwork
  expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('boss-v1.png'))).toBe(false);
  f.runtime.pause();const frozen=art().map(c=>c.args.slice(1));f.tick();expect(art().map(c=>c.args.slice(1))).toEqual(frozen);
 });
+
+it('shows the sentry charge pose and readable warning before its fast shot',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const b=f.runtime.world.spawn('sniper',220,320);b.timer=0;
+ f.tick();f.tick();
+ expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('sniper-v1.png')&&c.args[1]===256)).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='狙击')).toBe(true);
+ expect(f.runtime.world.bullets.some(b=>b.hostile)).toBe(false);
+});

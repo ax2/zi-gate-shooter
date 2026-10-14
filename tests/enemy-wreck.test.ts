@@ -30,7 +30,7 @@ function fixture(weak: boolean, kind: WreckKind = 'drone') {
   return {runtime,calls,tick(){calls.length=0;time+=1000/60;next(time);},wrecks:()=>calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith(`${kind}-wreck-v1.png`))};
 }
 
-it.each((['drone','charger','armor','elite'] as const).flatMap(kind=>[false,true].map(weak=>({kind,weak}))))('real $kind kill preserves World and upper-layer dangers/rewards (weak=$weak)', async ({kind,weak}) => {
+it.each((['drone','charger','armor','elite','sniper'] as const).flatMap(kind=>[false,true].map(weak=>({kind,weak}))))('real $kind kill preserves World and upper-layer dangers/rewards (weak=$weak)', async ({kind,weak}) => {
   const f=fixture(weak,kind); await f.runtime.load(); f.runtime.start(); const reference=new World(1337);
   const setup=(w:World)=>{ const b=w.spawn(kind,360,500); b.hp=4;
     w.spawn('gate',240,700);

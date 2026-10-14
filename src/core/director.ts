@@ -39,9 +39,9 @@ export function timeline(round: number, seed: number): Spawn[] {
   else if (sector === 1) {
     for (const [time, x, lane] of [[31, 140, 480], [37, 580, 240], [43, 140, 480]]) add(time, 'charger', x, undefined, undefined, 'flank', lane);
     for (let t = 33; t < 42; t += 2) { add(t, 'drone', 230, undefined, undefined, 'weave'); add(t + .5, 'drone', 490, undefined, undefined, 'weave'); }
-    add(38, 'armor', 500); add(45, 'elite', 360, undefined, undefined, 'fan');
+    add(32, 'sniper', 500); add(38, 'armor', 500); add(45, 'elite', 360, undefined, undefined, 'fan');
   } else {
-    add(31, 'armor', 180, undefined, undefined, 'fan'); add(35, 'armor', 540, undefined, undefined, 'fan');
+    add(31, 'sniper', 180); add(35, 'armor', 540, undefined, undefined, 'fan');
     add(40, 'elite', 360, undefined, undefined, 'fan');
     for (let t = 33; t < 43; t += 2.5) for (const x of [180, 540]) add(t, 'drone', x, undefined, undefined, 'weave');
   }

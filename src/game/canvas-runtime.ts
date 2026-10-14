@@ -114,7 +114,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -406,6 +406,10 @@ export class CanvasRuntime {
           const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38;
           this.frameSprite('armor-v1.png', frame, 3, b.x, y, width, height, 1);
           this.hitSprite('armor-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+        } else if (b.kind === 'sniper') {
+          const frame = b.warning > 0 ? 1 : 0;
+          this.frameSprite('sniper-v1.png', frame, 3, b.x, y, 140, 140, 1);
+          this.hitSprite('sniper-v1.png', frame, 3, b.x, y, 140, 140, b.hit, 0.07, 1);
         } else if (b.kind === 'elite') {
           const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36;
           this.frameSprite('elite-v1.png', frame, 3, b.x, y, width, height, 1);
@@ -496,9 +500,13 @@ export class CanvasRuntime {
           c.save(); c.strokeStyle = '#ffb18caa'; c.lineWidth = 2;
           for (const vx of fanWarningVelocities(b)) { const shotY = originY + (b.kind === 'elite' && !b.burst && Math.abs(vx) === 50 ? b.speed * 0.6 : 0); c.beginPath(); c.moveTo(b.x, shotY); c.lineTo(b.x + vx * (C.playerY - shotY) / 280, C.playerY); c.stroke(); }
           c.restore();
-        } else if (b.kind === 'boss' || b.kind === 'charger') for (const x of lanes) {
+        } else if (b.kind === 'boss' || b.kind === 'charger' || b.kind === 'sniper') for (const x of lanes) {
           this.rect(x - 36, b.y + 60, 72, 1110 - b.y, '#ff775620');
           c.strokeStyle = '#ff986eaa'; c.lineWidth = 2; c.strokeRect(x - 36, b.y + 60, 72, 1110 - b.y);
+          if (b.kind === 'sniper') {
+            this.rect(x - 44, b.y + 100, 88, 36, '#241c1eef');
+            this.text('狙击', x, b.y + 118, 24, '#ffe1c8', 'center', true);
+          }
           if (b.kind === 'boss') {
             if (b.attack === 3) {
               if (x === lanes[0]) {
@@ -548,7 +556,7 @@ export class CanvasRuntime {
       } else if (b.kind === 'boss') {
         this.text(`${b.bossVariant === 2 ? '封锁堡垒' : b.bossVariant === 1 ? '双翼压制者' : '重装首领'}　${Math.ceil(b.hp)} / ${Math.ceil(b.maxHp)}`, 360, this.hudTop + 145, 25, '#ffd59e');
         this.bar(360, this.hudTop + 166, 430, b.hp / b.maxHp, '#ff925d');
-      } else if (b.kind === 'armor' || b.kind === 'elite') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
+      } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
     for (const b of w.bullets.filter(b => b.hostile)) {

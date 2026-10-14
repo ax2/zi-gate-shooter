@@ -81,3 +81,5 @@ Stage-81：boss-flanker-v1，内置imagegen参考自有boss-strip-v2生成。sou
 
 
 Stage-83：boss-bastion-v1由内置imagegen原创生成，prompt见boss-bastion-v1-prompt.md，source/boss-bastion-v1.png源图2172×724透明；export-boss-bastion.mjs导出768×256/245556字节。第三章巡航/准备/破损候选，未最终美术签收。
+
+Stage-84：sniper-v1原创三态，内置imagegen，source/sniper-v1.png与sniper-v1-prompt.md保留；export-sniper.mjs导出768×256/195933字节及256×256残骸。狙击哨机候选未最终签收。

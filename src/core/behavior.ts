@@ -65,6 +65,18 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         }
       }
     }
+  } else if (b.kind === 'sniper') {
+    // A short-lived firing position: kill during charge or leave its fixed lane.
+    // Leaving after ten seconds prevents an unkillable off-axis stall at boss entry.
+    if (b.age >= 10) { b.warning = 0; b.y += 220 * dt; }
+    else if (b.y < 320) { b.y = Math.min(320, b.y + b.speed * dt); b.timer = 0.6; }
+    else if (b.timer <= 1e-9) {
+      if (b.warning <= 0) { b.warning = 1.2; b.timer = 1.2; }
+      else {
+        for (let i = 0; i < 3; i++) shot(b.x, b.y + 58 - i * 45, 0, 620);
+        b.warning = 0; b.timer = 2.4;
+      }
+    }
   } else if (b.kind === 'charger') {
     if (b.age > C.chargerBehavior.warningAge && b.age < C.chargerBehavior.dashAge) b.warning = C.chargerBehavior.dashAge - b.age;
     if (b.age >= C.chargerBehavior.dashAge) {

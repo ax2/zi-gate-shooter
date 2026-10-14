@@ -1,6 +1,7 @@
-export type WreckKind = 'drone' | 'charger' | 'armor' | 'elite';
+export type WreckKind = 'drone' | 'charger' | 'armor' | 'elite' | 'sniper';
 export const wreckLayout = {
   drone: { w: 92.4, h: 92.4, life: .55 }, charger: { w: 105.3, h: 105.3, life: .55 },
+  sniper: { w: 140, h: 140, life: .55 },
   armor: { w: 124.7, h: 140.76, life: .55 }, elite: { w: 198.24, h: 184.96, life: .65 },
 } as const;
 export const isWreckKind = (kind: unknown): kind is WreckKind => typeof kind === 'string' && Object.prototype.hasOwnProperty.call(wreckLayout, kind);
