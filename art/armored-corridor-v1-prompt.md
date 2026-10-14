@@ -1,0 +1,9 @@
+# 第三章装甲通道候选
+
+2026-10-14，内置imagegen生成。参考已有原创runway.jpg的材质与布局；未用商业游戏资产。源图art/source/armored-corridor-v1.png，运行图public/assets/armored-corridor-v1.jpg。原始工具输出保留在Codex generated_images目录。
+
+候选未获最终美术批准。运行时交替反射以衔接边界，不宣称原图天然无缝。技术导出使用sharp，宽720px，JPEG质量84。
+
+## 完整提示词
+
+Create an original production game texture for a portrait 9:16 top-down mechanical shooter. Use the reference only for material fidelity and orthographic game layout, not as something to copy exactly. Third chapter: heavy armored blast-door facility, distinct from a pipe corridor. Strict overhead orthographic view, perfectly parallel vertical sides, no perspective vanishing point. Center 76% of width is EMPTY traversable low-contrast dark charcoal floor composed of wide overlapping rectangular armored steel plates, shallow recessed seams and tiny bolts, sparse fine wear, subtle warm graphite brown tones. No obstacles or drawings on the central floor. Outer 12% strips on each side contain massive detailed interlocking steel blast-wall teeth, chunky mechanical locking clamps, dark recessed hydraulic piston sockets and thick bevelled armor plates; tiny dim amber pin indicators only. Side machinery stays outside central floor. Dense premium hand-crafted industrial hard-surface detail with restrained physically plausible highlights and soft shallow shadows. Visually heavy and fortified, no yellow hazard stripes, no prominent coolant pipes, no cyan neon. Even lighting, center dark and calm so bright bullets and red enemies are easy to see. Fill entire frame, no margins. Top and bottom are uncapped continuous corridor edges, suitable for vertically reflected repeat. No characters, weapons, enemies, crates, actual doors crossing the lane, text, symbols, numbers, logos, UI, fog, bloom, flare, lasers. This is a polished texture asset, not a gameplay screenshot or poster.

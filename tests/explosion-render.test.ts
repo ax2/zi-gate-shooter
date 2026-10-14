@@ -43,8 +43,8 @@ it('keeps ground travel continuous across speed changes, freezes on pause and re
   const offset = () => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('runway.jpg')).at(-1)!.args[2] as number;
   f.runtime.world.time = 85;
   f.tick(); const first = offset();
-  // Round three uses the same runway but a faster scroll speed.
-  f.runtime.world.round = 3;
+  // Round four uses the same runway but a faster scroll speed.
+  f.runtime.world.round = 4;
   const speed = f.runtime.world.scrollSpeed;
   f.tick(); expect(offset() - first).toBeCloseTo(C.step * speed);
   const frozen = offset(); f.runtime.pause();
@@ -52,14 +52,14 @@ it('keeps ground travel continuous across speed changes, freezes on pause and re
   f.runtime.start(); f.tick(); expect(offset()).toBeCloseTo(C.step * f.runtime.world.scrollSpeed);
 });
 
-it('uses the cooling environment only in its chapter and keeps paused world state intact', async () => {
+it.each([[2, 'cooling-corridor-v1.jpg'], [3, 'armored-corridor-v1.jpg']] as const)('uses chapter %s environment and keeps paused world state intact', async (round, asset) => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
-  f.runtime.world.round = 2; f.runtime.world.time = 17; f.runtime.pause();
+  f.runtime.world.round = round; f.runtime.world.time = 17; f.runtime.pause();
   const before = JSON.stringify(f.runtime.world);
   f.tick();
-  const ground = () => f.calls.filter(c => c.kind === 'drawImage' && /runway|cooling-corridor/.test(c.args[0].src));
+  const ground = () => f.calls.filter(c => c.kind === 'drawImage' && /runway|cooling-corridor|armored-corridor/.test(c.args[0].src));
   expect(ground().length).toBeGreaterThan(0);
-  expect(ground().every(c => c.args[0].src.endsWith('cooling-corridor-v1.jpg'))).toBe(true);
+  expect(ground().every(c => c.args[0].src.endsWith(asset))).toBe(true);
   expect(JSON.stringify(f.runtime.world)).toBe(before);
   f.runtime.start(); f.tick();
   expect(ground().every(c => c.args[0].src.endsWith('runway.jpg'))).toBe(true);

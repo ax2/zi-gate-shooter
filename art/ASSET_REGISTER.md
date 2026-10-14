@@ -70,3 +70,6 @@ charger/armor/elite-wreck-v1.png分别由本会话内置imagegen参考原创机�
 
 ## Stage-41 冷却通道候选
 内置imagegen生成，已有原创跑道作风格参考；完整提示词见cooling-corridor-v1-prompt.md。源图source/cooling-corridor-v1.png，运行图public/assets/cooling-corridor-v1.jpg，720×1279/184125字节。交替反射滚动，中央保持低对比；候选未最终签收。
+
+## Stage-50 装甲通道
+内置imagegen、自有跑道参考，完整提示词armored-corridor-v1-prompt.md。源图source/armored-corridor-v1.png，运行图public/assets/armored-corridor-v1.jpg，149057字节；第三章交替反射滚动，候选未签收。

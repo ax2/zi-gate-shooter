@@ -113,7 +113,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'boss-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -315,11 +315,11 @@ export class CanvasRuntime {
       if (this.mode === 'error') this.button('重新加载', 700, 'reload', true);
       c.restore(); return;
     }
-    const cooling = this.mode !== 'menu' && sectorIndex(w.round) === 1;
-    const ground = this.images.get(cooling ? 'cooling-corridor-v1.jpg' : 'runway.jpg')!;
+    const sector = this.mode === 'menu' ? 0 : sectorIndex(w.round);
+    const ground = this.images.get(['runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg'][sector])!;
     const h = ground.height / ground.width * 720;
     const distance = this.mode === 'menu' ? this.visualTime * 12 : this.groundDistance;
-    if (cooling) {
+    if (sector !== 0) {
       // Alternate reflection makes adjacent boundaries share the exact same edge.
       // Keep parity across the two-tile period, including modulo wraparound.
       const scroll = distance % (h * 2);
