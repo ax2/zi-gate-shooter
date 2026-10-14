@@ -310,6 +310,7 @@ export class World {
           if (!b.active || this.player.hp <= 0) return;
           b.active = false; this.pickups++;
           const previousWeapon = this.weaponKind;
+          const addedWeapon = b.weaponKind && !this.activeWeapons.includes(b.weaponKind);
           if (b.weaponKind) {
             this.acquiredWeapons.add(this.weaponKind);
             this.acquiredWeapons.add(b.weaponKind);
@@ -318,9 +319,13 @@ export class World {
           if (b.row) for (const alternative of this.bodies) if (alternative.row === b.row) alternative.active = false;
           const result = grantEquipment(this.growth, b.stage);
           this.maxStage = Math.max(this.maxStage, this.growth.stage);
-          this.emit(result.upgraded ? 'upgrade' : 'pickup', this.player.x, C.playerY, result.upgraded ? `T${b.stage} 火力进化` : '超载充能 +30', b.stage);
-          if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY, `${weaponNames[this.weaponKind]} · T${this.growth.stage}`);
-          if (result.activated) this.emit('overload', this.player.x, C.playerY, this.overloadNotice());
+          const title = addedWeapon ? `新增${weaponNames[this.weaponKind]} · ${this.activeWeapons.length}种火力叠加`
+            : result.upgraded ? `T${this.growth.stage} · 全部武器升阶` : '重复装备 · 充能+30';
+          const detail = [result.upgraded ? `全部武器升至T${this.growth.stage}` : addedWeapon ? '充能+30' : '',
+            result.activated ? this.chargeReceipt(true) : !result.upgraded ? `当前充能 ${this.growth.energy}/100` : ''].filter(Boolean).join(' · ');
+          this.effects.push({type:result.upgraded?'upgrade':'pickup',x:this.player.x,y:C.playerY,text:title,detail,size:b.stage});
+          if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY);
+          if (result.activated) this.emit('overload', this.player.x, C.playerY);
         });
       } else {
         add(sweep(this.player.px, C.playerY, this.player.x, C.playerY, b.px, b.py, b.x, b.y,
