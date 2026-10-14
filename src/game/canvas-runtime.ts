@@ -3,7 +3,7 @@ import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
 import { gateValue, previewReward } from '../core/rewards';
-import { bossWarningLanes } from '../core/behavior';
+import { bossWarningLanes, fanWarningVelocities } from '../core/behavior';
 import { defaults } from '../ui/storage';
 import { FrameWindow } from './frame-window';
 import { BossDestruction, BOSS_VISUAL } from './boss-destruction';
@@ -489,7 +489,7 @@ export class CanvasRuntime {
         } else if (b.pattern === 'fan') {
           const originY = b.y + b.speed * Math.max(0, b.timer) + b.height / 2;
           c.save(); c.strokeStyle = '#ffb18caa'; c.lineWidth = 2;
-          for (const vx of [-100, 0, 100]) { c.beginPath(); c.moveTo(b.x, originY); c.lineTo(b.x + vx * (C.playerY - originY) / 280, C.playerY); c.stroke(); }
+          for (const vx of fanWarningVelocities(b)) { const shotY = originY + (b.kind === 'elite' && !b.burst && Math.abs(vx) === 50 ? b.speed * 0.6 : 0); c.beginPath(); c.moveTo(b.x, shotY); c.lineTo(b.x + vx * (C.playerY - shotY) / 280, C.playerY); c.stroke(); }
           c.restore();
         } else if (b.kind === 'boss' || b.kind === 'charger') for (const x of lanes) {
           this.rect(x - 36, b.y + 60, 72, 1110 - b.y, '#ff775620');
@@ -647,4 +647,3 @@ export function parseSave(value: unknown): Save {
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];
   return result;
 }
-

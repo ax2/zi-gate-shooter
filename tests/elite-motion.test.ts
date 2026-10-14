@@ -1,8 +1,22 @@
 import {it,expect} from 'vitest';
 import {World} from '../src/core/world';
-import {advanceBody} from '../src/core/behavior';
+import {advanceBody, fanWarningVelocities} from '../src/core/behavior';
 import {C} from '../src/core/config';
 import {eliteFrame} from '../src/game/elite-motion';
+
+it('fan elite advertises both beats and retains the narrow warning until the delayed volley', () => {
+ const b=new World().spawn('elite',360,100);b.pattern='fan';b.timer=0;
+ const shots:{time:number;vx:number}[]=[];
+ const step=()=>advanceBody(b,C.step,'running',0,(_x,_y,vx=0)=>shots.push({time:b.age,vx}));
+ step();expect(fanWarningVelocities(b)).toEqual([-100,-50,0,50,100]);
+ for(let i=0;i<36;i++)step();
+ expect(shots.map(s=>s.vx)).toEqual([-100,0,100]);expect(b.burst).toBe(1);
+ expect(fanWarningVelocities(b)).toEqual([-50,0,50]);expect(b.warning).toBeGreaterThan(0);
+ for(let i=0;i<36;i++)step();
+ expect(shots.map(s=>s.vx)).toEqual([-100,0,100,-50,0,50]);
+ expect(shots[3].time-shots[0].time).toBeCloseTo(.6);
+ expect(b.burst).toBe(0);expect(b.warning).toBe(0);
+});
 
 it('tracks travel distance, gives actual warning priority and never advances an unchanged body',()=>{
  expect(eliteFrame({age:0,speed:90,warning:0})).toBe(0);

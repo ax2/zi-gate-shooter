@@ -2,6 +2,10 @@ import type { Body, Phase } from './world';
 import { C, clamp } from './config';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 
+export function fanWarningVelocities(b: Body) {
+  return b.kind === 'elite' ? b.burst ? [-50, 0, 50] : [-100, -50, 0, 50, 100] : [-100, 0, 100];
+}
+
 export function bossWarningLanes(b: Body) {
   if (b.attack === 3) return [80, 150, 220, 290, 360, 430, 500, 570, 640].filter(x => Math.abs(x - b.lane) >= 110);
   if (b.attack === 2) return [200, 520];
@@ -63,9 +67,13 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       if (b.timer <= 1e-9) {
         if (b.warning <= 0) { b.warning = 0.6; b.timer = 0.6; }
         else {
-          if (b.pattern === 'fan') for (const vx of [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);
+          if (b.pattern === 'fan') for (const vx of b.kind === 'elite' && b.burst ? [-50, 0, 50] : [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);
           else shot(b.x, b.y + b.height / 2);
-          b.warning = 0; b.timer = b.pattern === 'fan' ? 3.2 : 2.4;
+          if (b.kind === 'elite' && b.pattern === 'fan' && !b.burst) {
+            b.burst = 1; b.warning = 0.6; b.timer = 0.6;
+          } else {
+            b.burst = 0; b.warning = 0; b.timer = b.pattern === 'fan' ? 3.2 : 2.4;
+          }
         }
       }
     } else if (b.y >= 600) b.warning = 0;
