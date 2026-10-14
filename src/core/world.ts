@@ -48,6 +48,8 @@ export class World {
   private fireTimers = new Map<WeaponKind, number>();
   private laserTimer = 0;
   private acquiredWeapons = new Set<WeaponKind>();
+  private weaponStages = new Map<WeaponKind, number>();
+  weaponStage(kind: WeaponKind) { return this.weaponStages.get(kind) ?? this.growth.stage; }
   get activeWeapons(): WeaponKind[] { return this.acquiredWeapons.size ? [...this.acquiredWeapons] : [this.weaponKind]; }
   private scheduled: Spawn[];
   private scheduleIndex = 0;
@@ -173,7 +175,7 @@ export class World {
     if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0; return; }
     for (const kind of this.activeWeapons) {
     let timer = (this.fireTimers.get(kind) ?? 0) - dt;
-    const w = weaponProfile(kind, this.growth.stage);
+    const w = weaponProfile(kind, this.weaponStage(kind));
     while (timer <= 1e-9) {
       if (this.bullets.filter(b => b.active && !b.hostile).length + w.offsets.length > C.limits.bullets) throw new Error('Player bullet budget exceeded');
       for (let i = 0; i < w.offsets.length; i++) {
@@ -183,7 +185,7 @@ export class World {
           age: 0, active: true, hostile: false, weaponKind: kind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops });
         this.shots++;
       }
-      this.effects.push({type:'fire',x:this.player.x,y:C.playerY-70,size:this.growth.stage,weaponKind:kind});
+      this.effects.push({type:'fire',x:this.player.x,y:C.playerY-70,size:this.weaponStage(kind),weaponKind:kind});
       timer += 1 / w.rate;
     }
     this.fireTimers.set(kind, timer);
@@ -310,6 +312,7 @@ export class World {
           if (!b.active || this.player.hp <= 0) return;
           b.active = false; this.pickups++;
           const previousWeapon = this.weaponKind;
+          for (const kind of this.activeWeapons) if (!this.weaponStages.has(kind)) this.weaponStages.set(kind, this.weaponStage(kind));
           const addedWeapon = b.weaponKind && !this.activeWeapons.includes(b.weaponKind);
           if (b.weaponKind) {
             this.acquiredWeapons.add(this.weaponKind);
@@ -317,11 +320,15 @@ export class World {
             this.weaponKind = b.weaponKind;
           }
           if (b.row) for (const alternative of this.bodies) if (alternative.row === b.row) alternative.active = false;
-          const result = grantEquipment(this.growth, b.stage);
+          const kind = b.weaponKind ?? this.weaponKind;
+          const localGrowth = {...this.growth, stage: this.weaponStages.get(kind) ?? 1};
+          const result = grantEquipment(localGrowth, b.stage);
+          this.weaponStages.set(kind, localGrowth.stage);
+          Object.assign(this.growth, localGrowth, {stage: Math.max(this.growth.stage, localGrowth.stage)});
           this.maxStage = Math.max(this.maxStage, this.growth.stage);
           const title = addedWeapon ? `新增${weaponNames[this.weaponKind]} · ${this.activeWeapons.length}种火力叠加`
-            : result.upgraded ? `T${this.growth.stage} · 全部武器升阶` : '重复装备 · 充能+30';
-          const detail = [result.upgraded ? `全部武器升至T${this.growth.stage}` : addedWeapon ? '充能+30' : '',
+            : result.upgraded ? `${weaponNames[kind]} · 升至T${localGrowth.stage}` : '重复装备 · 充能+30';
+          const detail = [result.upgraded ? `${weaponNames[kind]} T${localGrowth.stage} · 其他配件保留` : addedWeapon ? '充能+30' : '',
             result.activated ? this.chargeReceipt(true) : !result.upgraded ? `当前充能 ${this.growth.energy}/100` : ''].filter(Boolean).join(' · ');
           this.effects.push({type:result.upgraded?'upgrade':'pickup',x:this.player.x,y:C.playerY,text:title,detail,size:b.stage});
           if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY);

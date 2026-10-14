@@ -282,13 +282,13 @@ export class CanvasRuntime {
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private effect(e: EffectEvent) {
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
-      if(this.save.settings.sound)this.platform.sound(e.type,this.world.growth.stage);
+      if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser'});
       return;
     }
-    if (this.save.settings.sound) this.platform.sound(e.type, this.world.growth.stage, e.weaponKind ?? this.world.weaponKind);
+    if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
     if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
-    if (e.type === 'fire') { if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.growth.stage, this.world.time); return; }
+    if (e.type === 'fire') { if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
     if (e.type === 'weapon' || e.type === 'upgrade') this.weaponGuideUntil = this.world.time + 5;
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
@@ -481,29 +481,29 @@ export class CanvasRuntime {
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(w.player.x + 5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
     c.save();
     if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.65;
-    const recoil = this.weaponMotion.sample(w.weaponKind, w.growth.stage, w.time);
+    const recoil = this.weaponMotion.sample(w.weaponKind, w.weaponStage(w.weaponKind), w.time);
     const pose = this.playerMotion.sample(w.player.x, w.time);
     if (w.player.hp > 0) {
       if (this.mode === 'menu') this.frameSprite('units.png', 2, 4, w.player.x, playerY, 200, 267);
       else {
-        this.playerSprite(w.growth.stage - 1, w.player.x, playerY, pose, recoil);
+        this.playerSprite(w.weaponStage(w.weaponKind) - 1, w.player.x, playerY, pose, recoil);
         const remaining = w.player.invulnerable - (C.invulnerability - 0.12);
         if (remaining > 0) {
           c.save(); c.globalCompositeOperation = 'lighter';
           c.globalAlpha *= Math.min(1, remaining / 0.12) * (this.save.settings.effects === 'weak' ? 0.18 : 0.48);
-          this.playerSprite(w.growth.stage - 1, w.player.x, playerY, pose, recoil); c.restore();
+          this.playerSprite(w.weaponStage(w.weaponKind) - 1, w.player.x, playerY, pose, recoil); c.restore();
         }
       }
     }
     c.restore();
-    const flash = this.weaponMotion.flash(w.weaponKind, w.growth.stage, w.time);
+    const flash = this.weaponMotion.flash(w.weaponKind, w.weaponStage(w.weaponKind), w.time);
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0) {
-      const discharge = this.weaponMotion.discharge(w.weaponKind, w.growth.stage, w.time);
-      if (discharge > 0) coilDischarge(c, w.player.x, C.playerY - (weaponProfile(w.weaponKind, w.growth.stage).muzzleY ?? 78) + pose.bob + recoil,
-        discharge, w.growth.stage, this.save.settings.effects === 'weak');
+      const discharge = this.weaponMotion.discharge(w.weaponKind, w.weaponStage(w.weaponKind), w.time);
+      if (discharge > 0) coilDischarge(c, w.player.x, C.playerY - (weaponProfile(w.weaponKind, w.weaponStage(w.weaponKind)).muzzleY ?? 78) + pose.bob + recoil,
+        discharge, w.weaponStage(w.weaponKind), this.save.settings.effects === 'weak');
     }
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0 && flash > 0) {
-      const weapon = weaponProfile(w.weaponKind, w.growth.stage);
+      const weapon = weaponProfile(w.weaponKind, w.weaponStage(w.weaponKind));
       for (const offset of weapon.offsets) {
         const x = w.player.x + offset, y = C.playerY - (weapon.muzzleY ?? 78) + pose.bob + recoil;
         muzzleLight(c, x, y, w.weaponKind, flash, this.save.settings.effects === 'weak');
@@ -567,7 +567,7 @@ export class CanvasRuntime {
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
         } else {
           this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
-          this.text(`T${b.stage} ${w.growth.stage >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
+          this.text(`T${b.stage} ${w.weaponStage(w.weaponKind) >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
           this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
         }
       } else if (b.kind === 'pickup') this.text(b.weaponKind ? `拾取${w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
@@ -626,7 +626,7 @@ export class CanvasRuntime {
     this.text('◈ '.repeat(w.player.hp) + '◇ '.repeat(3 - w.player.hp), 430, y + 35, 34, '#82deff');
     this.rect(624, y + 2, 64, 64, '#1a2e3e'); this.text('Ⅱ', 656, y + 34, 36);
     this.buttons.push({ x: 624, y: y + 2, w: 64, h: 64, label: '暂停', action: 'pause' });
-    this.text(`T${w.growth.stage} · ${w.activeWeapons.length}种武器叠加`, 30, y + 88, 25, weaponColors[w.weaponKind], 'left', true);
+    this.text(`T${w.weaponStage(w.weaponKind)} · ${w.activeWeapons.length}种武器叠加`, 30, y + 88, 25, weaponColors[w.weaponKind], 'left', true);
     this.text(`火力 +${permanentPower(w.growth)}%`, 300, y + 88, 24, '#74dcff', 'left', true);
     this.text(`${w.round}轮·${sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
@@ -641,7 +641,7 @@ export class CanvasRuntime {
     if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
     let guide = contextGuide(this.world);
     if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
-      guide = weaponGuide(this.world.weaponKind, this.world.growth.stage);
+      guide = weaponGuide(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind));
     if (guide.detail) {
       this.rect(44, 1150, 632, 106, '#081a25df');
       this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
@@ -690,13 +690,13 @@ export class CanvasRuntime {
     const w = this.world, power = permanentPower(w.growth);
     this.rect(40, 100, 640, 1100, '#102330');
     this.text('当前火力', 360, 165, 46, '#e7f5ff', 'center', true);
-    this.text(`T${w.growth.stage} · 已叠加 ${w.activeWeapons.length} 种武器`, 360, 228, 28, '#a5d9ed');
+    this.text(`T${w.weaponStage(w.weaponKind)} · 已叠加 ${w.activeWeapons.length} 种武器`, 360, 228, 28, '#a5d9ed');
     this.text(`本局火力 +${power}% · 充能突破 ${w.growth.mastery ?? 0} 次`, 360, 278, 27, '#f0d19a');
     for (const [index, kind] of w.activeWeapons.entries()) {
-      const profile = weaponProfile(kind, w.growth.stage), y = 342 + index * 102;
+      const profile = weaponProfile(kind, w.weaponStage(kind)), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
-      this.text(weaponNames[kind], 92, y + 28, 28, weaponColors[kind], 'left', true);
+      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
       this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳65%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? '近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;

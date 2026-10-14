@@ -68,7 +68,7 @@ it.each([{ seed: 1337, openingX: 360, preferred: 'scatter' }, { seed: 1, opening
     expect(overloads).toBeGreaterThan(0);
     expect(stages).toHaveLength(2);
     const upgrades=firstEquipmentEvents.filter(e=>e.event==='upgrade');
-    expect(upgrades.map(e=>e.stage)).toEqual([2,3]);
+    expect([...new Set(upgrades.map(e=>e.stage))]).toEqual([2,3]); // Different modules can independently reach the same tier.
     // Multiple mutually exclusive crates may legally break before one pickup.
     for(const upgrade of upgrades) expect(firstEquipmentEvents.some(e=>e.event==='crate-break' && e.stage===upgrade.stage-1 && e.time<upgrade.time)).toBe(true);
     expect(stages[0]).toBeLessThan(20);
