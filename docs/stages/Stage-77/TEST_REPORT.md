@@ -4,3 +4,4 @@
 APK8485081字节，SHA256 351B4DBD971E09DE9F662352D8DC906E9B4163C37D079EF034637AF2751D4C96。build/releases/Stage-77/android/zi-gate-shooter-debug.apk，复制outputs/Stage-77且哈希复核一致。非正式发行签名，没有设备安装运行记录。
 没有本阶段新截图或再次20分钟运行；Stage-73完整浏览器20分钟证据对应其生产基线，Stage-74随后只增加致命来源记录和结算文字。不能将历史长局标成本包复测。
 剩余质量门槛：Android实际启动/原生生命周期（当前模拟器启动阻碍）、微信工具与目标设备（用户后置）、双方真机长局/热/触控/音频、真人难度与最终素材/名称/听感确认、可持续发行签名。既有前台340.7ms回调中断原因仍不确定。本包是测试交付，不是可上架完成。
+2026-10-14名称确认后核验：Stage-77实际APK经aapt dump badging读取application-label和launchable-activity label均为火力突围；Android strings.xml及capacitor.config.json同名。无需为名称重建APK。此为包内元数据核验，不是设备安装运行。
