@@ -64,6 +64,18 @@ function start(){
  const charge=runtime.world.spawn('charger',140,100);charge.pattern='flank';charge.lane=480;charge.age=1.75;
 }
 document.querySelector('#start').onclick=start;
+canvas.addEventListener('pointerdown', event => {
+  const rect=canvas.getBoundingClientRect(); canvas.setPointerCapture(event.pointerId);
+  runtime.touchStart(event.pointerId,event.clientX-rect.left,event.clientY-rect.top);
+});
+canvas.addEventListener('pointermove', event => {
+  const rect=canvas.getBoundingClientRect(); runtime.touchMove(event.pointerId,event.clientX-rect.left,event.clientY-rect.top);
+});
+canvas.addEventListener('pointerup', event => {
+  const rect=canvas.getBoundingClientRect(); runtime.touchEnd(event.pointerId,event.clientX-rect.left,event.clientY-rect.top);
+});
+canvas.addEventListener('pointercancel', event => runtime.cancelTouch(event.pointerId));
+canvas.addEventListener('lostpointercapture', event => runtime.cancelTouch(event.pointerId));
 document.querySelector('#pause').onclick=()=>runtime.pause('机制对比已暂停');
 document.querySelector('#weapon').onchange=start;
  document.querySelector('#tier').onchange=start;

@@ -633,3 +633,22 @@ it.each([false, true])('shows overload wake only during active overload and free
   f.runtime.world.growth.overload = 0; f.tick(); expect(wake()).toHaveLength(0);
   f.runtime.start(); f.tick(); expect(wake()).toHaveLength(0);
 });
+
+it('lets players inspect a frozen battlefield without resuming or moving, then explicitly continue', async () => {
+  const f = fixture(); await f.runtime.load(); f.runtime.start();
+  f.runtime.world.spawn('sniper', 200, 320).timer = 0;
+  f.tick(); f.runtime.pause(); f.tick();
+  f.runtime.touchStart(1,360,933); f.runtime.touchEnd(1,360,933); f.tick();
+  expect(f.calls.some(c=>c.kind==='fillText' && c.args[0]==='战场已冻结 · 看清危险再继续')).toBe(true);
+  const frozen = JSON.stringify(f.runtime.world);
+  f.runtime.touchStart(2, 150, 500); f.runtime.touchMove(2,600,500); f.runtime.touchEnd(2,600,500);
+  for(let i=0;i<120;i++) f.tick();
+  expect(JSON.stringify(f.runtime.world)).toBe(frozen);
+  expect(f.runtime.mode).toBe('paused');
+  f.runtime.back(); f.tick();
+  expect(f.calls.some(c=>c.kind==='fillText' && c.args[0]==='暂停')).toBe(true);
+  f.runtime.touchStart(1,360,933);f.runtime.touchEnd(1,360,933);f.tick();
+  f.runtime.touchStart(1,360,1113);f.runtime.touchEnd(1,360,1113);f.tick();
+  expect(f.runtime.mode).toBe('playing');
+  expect(JSON.stringify(f.runtime.world)).not.toBe(frozen);
+});

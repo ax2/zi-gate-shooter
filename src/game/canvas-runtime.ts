@@ -82,6 +82,7 @@ export class CanvasRuntime {
   private weaponGuideUntil = 0;
   private drawCount = 0;
   private callbackCount = 0;
+  private pausePreview = false;
   private upgradeUntil = 0;
   private error = '';
   private started = false;
@@ -169,6 +170,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.pausePreview = false;
     this.groundDistance = 0;
     this.keys.clear(); this.inputMode = 'touch';
     this.gateFeedback.clear();
@@ -188,6 +190,7 @@ export class CanvasRuntime {
   private pauseReason = '';
   pause(message = '暂停') {
     if (this.mode !== 'playing') return;
+    this.pausePreview = false;
     this.pauseReason = message === '暂停' ? '准备好了，再继续突围。' : message;
     this.mode = 'paused'; this.cancelTouch(); this.accumulator = 0; this.notify(message); this.platform.silence();
     this.updateMusic();
@@ -234,7 +237,7 @@ export class CanvasRuntime {
     this.cancelTouch();
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
     if (this.mode === 'settings') { this.action('back'); return 'stay'; }
-    if (this.mode === 'paused') { this.notify('请继续战斗，或选择返回主界面'); return 'stay'; }
+    if (this.mode === 'paused') { this.pausePreview = false; this.notify('请继续战斗，或选择返回主界面'); return 'stay'; }
     if (this.mode === 'result') { this.action('home'); return 'stay'; }
     return 'exit';
   }
@@ -242,7 +245,9 @@ export class CanvasRuntime {
     if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
     else if (action === 'pause') this.pause();
-    else if (action === 'resume') { this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
+    else if (action === 'preview') this.pausePreview = true;
+    else if (action === 'pause-menu') this.pausePreview = false;
+    else if (action === 'resume') { this.pausePreview = false; this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
     else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
@@ -648,11 +653,20 @@ export class CanvasRuntime {
   }
   private drawDialog() {
     const w = this.world;
+    if (this.mode === 'paused' && this.pausePreview) {
+      this.buttons = [];
+      this.rect(80, 170, 560, 82, '#081a25ee');
+      this.text('战场已冻结 · 看清危险再继续', 360, 211, 27, '#e3f4ff', 'center', true);
+      this.button('继续战斗', 1070, 'resume', true);
+      this.button('返回暂停菜单', 1170, 'pause-menu');
+      return;
+    }
     this.rect(0, 0, 720, 1280, '#050e18cc'); this.rect(70, 340, 580, this.mode === 'settings' ? this.platform.openLicenses ? 800 : 710 : 640, '#122331f5');
     this.buttons = [];
     if (this.mode === 'paused') {
       this.text('暂停', 360, 420, 48, '#eff8ff', 'center', true); this.text(this.pauseReason || '准备好了，再继续突围。', 360, 490, 26, '#a9bfce');
       this.button('继续战斗', 560, 'resume', true); this.button('设置', 670, 'settings'); this.button('返回主界面', 780, 'home');
+      this.button('查看战场', 890, 'preview');
     } else if (this.mode === 'settings') {
       const s = this.save.settings;
       this.text('设置', 360, 415, 48, '#eff8ff', 'center', true);
