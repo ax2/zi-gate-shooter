@@ -37,6 +37,17 @@ let previousFrameWorkMs = 0, longGaps = [];
 const recentFrames = new Array(1200);
 let recentCursor = 0, recentCount = 0;
 let lifecycle = [];
+let mainThreadTasks = [];
+const longTaskSupported = typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('longtask');
+if (longTaskSupported) {
+  new PerformanceObserver(list => {
+    for (const entry of list.getEntries()) {
+      if (stopReason === 'not-started' || entry.startTime < began) continue;
+      mainThreadTasks.push({ startSeconds: (entry.startTime - began) / 1000, durationMs: entry.duration });
+      if (mainThreadTasks.length > 100) mainThreadTasks.shift();
+    }
+  }).observe({ type: 'longtask', buffered: false });
+}
 function recordLifecycle(event) {
   if (stopReason === 'not-started') return;
   if (lifecycle.length >= 100) lifecycle.shift();
@@ -142,6 +153,7 @@ startButton.onclick = () => {
   driverTimes = new FrameWindow(); runtimeTimes = new FrameWindow(); previousFrameWorkMs = 0; longGaps = [];
   recentCursor = recentCount = 0;
   lifecycle = [];
+  mainThreadTasks = [];
   runtime.start(); active = true; startButton.disabled = true; effects.disabled = true;
 };
 document.querySelector('#stop').onclick = () => finish('manual-stop');
@@ -153,7 +165,7 @@ window.addEventListener('pagehide', () => { if (active) finish('pagehide'); else
 Object.defineProperty(window, '__gateDiagnostics', { value: () => metrics() });
 Object.defineProperty(window, '__gateEnduranceEvidence', { value: () => ({ fixture: 'Stage-31 real-clock production CanvasRuntime + GameAudio + LoopMusic',
   scope: 'omniscient pointer driver; desktop browser, actual viewport in final; not human/device/performance acceptance',
-  active, stopReason, selectedEffects, peaks: { ...peaks }, workTimes: workTimes.snapshot(),
+  active, stopReason, selectedEffects, longTaskSupported, mainThreadTasks: mainThreadTasks.map(task => ({ ...task })), peaks: { ...peaks }, workTimes: workTimes.snapshot(),
   final: metrics(), samples: [...samples], transitions: [...transitions], lifecycle: lifecycle.map(event=>({...event})),
   recentFrames: Array.from({ length: recentCount }, (_, i) => recentFrames[(recentCursor - recentCount + i + recentFrames.length) % recentFrames.length]) }) });
 await runtime.load(); startButton.disabled = runtime.mode !== 'menu'; status.textContent = runtime.mode;
