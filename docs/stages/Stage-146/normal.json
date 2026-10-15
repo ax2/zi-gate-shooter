@@ -1,0 +1,98 @@
+[
+  {
+    "primary": "ballistic",
+    "time": 300.0000000000558,
+    "hp": 3,
+    "round": 4,
+    "bursts": [
+      {
+        "time": 128.59999999999448,
+        "round": 2,
+        "targets": 2,
+        "text": "中继击破 · 2台停火"
+      },
+      {
+        "time": 211.25000000006025,
+        "round": 3,
+        "targets": 0,
+        "text": "中继击破 · 0台停火"
+      },
+      {
+        "time": 296.51666666672565,
+        "round": 4,
+        "targets": 1,
+        "text": "中继击破 · 1台停火"
+      }
+    ],
+    "conduitBursts": 3,
+    "empTargets": 3,
+    "timingWins": 0,
+    "kills": 191,
+    "peakBodies": 10,
+    "peakBullets": 58
+  },
+  {
+    "primary": "electric",
+    "time": 300.0000000000558,
+    "hp": 3,
+    "round": 4,
+    "bursts": [
+      {
+        "time": 128.2499999999942,
+        "round": 2,
+        "targets": 1,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 210.31666666672618,
+        "round": 3,
+        "targets": 0,
+        "text": "中继击破 · 0台停火"
+      },
+      {
+        "time": 294.76666666672725,
+        "round": 4,
+        "targets": 1,
+        "text": "中继击破 · 1台停火"
+      }
+    ],
+    "conduitBursts": 3,
+    "empTargets": 2,
+    "timingWins": 0,
+    "kills": 194,
+    "peakBodies": 9,
+    "peakBullets": 64
+  },
+  {
+    "primary": "optical",
+    "time": 300.0000000000558,
+    "hp": 3,
+    "round": 4,
+    "bursts": [
+      {
+        "time": 128.21666666666084,
+        "round": 2,
+        "targets": 2,
+        "text": "中继击破 · 2台停火"
+      },
+      {
+        "time": 210.23333333339278,
+        "round": 3,
+        "targets": 0,
+        "text": "中继击破 · 0台停火"
+      },
+      {
+        "time": 294.70000000006064,
+        "round": 4,
+        "targets": 1,
+        "text": "中继击破 · 1台停火"
+      }
+    ],
+    "conduitBursts": 3,
+    "empTargets": 3,
+    "timingWins": 0,
+    "kills": 192,
+    "peakBodies": 9,
+    "peakBullets": 64
+  }
+]

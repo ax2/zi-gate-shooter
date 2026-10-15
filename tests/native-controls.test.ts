@@ -38,3 +38,17 @@ it('external pause invalidates old controls before a frame and publication error
   expect(r.mode).toBe('playing');expect(r.world.time).toBeGreaterThan(0);
 });
 
+it('publishes the loaded menu before the first deferred animation callback',async()=>{
+  let callbacks=0, controls:readonly CanvasControl[]=[];
+  const context=new Proxy({}, {get:()=>()=>{}}) as CanvasRenderingContext2D;
+  const runtime=new CanvasRuntime({canvas:{getContext:()=>context} as unknown as HTMLCanvasElement,
+    width:720,height:1280,dpr:1,menuBottom:0,image:async()=>({width:768,height:512}) as HTMLImageElement,
+    read:defaults,write:()=>{},sound:()=>{},silence:()=>{},now:()=>1000,
+    requestFrame:()=>{callbacks++;},controls:buttons=>{controls=buttons;}});
+  await runtime.load();
+  expect(callbacks).toBe(1);
+  expect(controls.some(button=>button.action==='start')).toBe(true);
+  expect(runtime.activateControl('start')).toBe(true);
+  expect(runtime.world.time).toBe(0);
+});
+

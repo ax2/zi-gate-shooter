@@ -2,8 +2,9 @@ import { HUNTER } from './contracts';
 import { ESCORT } from './boss-formations';
 import type { Body, Phase } from './world';
 import { C, clamp } from './config';
+import {CONDUIT} from './conduit';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
-export const guardClosed = (b: Pick<Body, 'kind' | 'burst'>) => b.kind === 'guard' && b.burst === 0;
+export const guardClosed = (b: Pick<Body, 'kind' | 'burst' | 'empRemaining'>) => b.kind === 'guard' && b.burst === 0 && !(b.empRemaining??0);
 
 export function fanWarningVelocities(b: Body) {
   if (b.kind === 'guard') return [-70, 0, 70];
@@ -26,9 +27,11 @@ export function bossAttackForCycle(variant: number | undefined, cycle: number) {
 /** Shared by the live simulation and conservative no-kill route forecast. */
 export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, shot: EnemyShot) {
   if(b.dropGrace!==undefined)b.dropGrace=Math.max(0,b.dropGrace-dt);
+  const offline=(b.empRemaining??0)>0;
+  if(offline)b.empRemaining=Math.max(0,b.empRemaining!-dt);
   b.age += dt; b.hit = Math.max(0, b.hit - dt);
   if (b.kind === 'boss' && phase !== 'boss') return;
-  b.timer -= dt;
+  if(!offline)b.timer -= dt;
   if (b.kind === 'boss') {
     b.x = 360 + Math.sin(phaseTime * 0.4) * 65;
     if (b.timer <= 1e-9) {
@@ -74,7 +77,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(b.escort&&b.age<ESCORT.holdSeconds){if(b.y<ESCORT.hoverY)b.y=Math.min(ESCORT.hoverY,b.y+b.speed*dt);}
     else b.y += b.speed * dt;
     if (b.y >= 650) { b.warning = 0; b.burst = 0; }
-    else if (b.y > 0 && b.timer <= 1e-9) {
+    else if (b.y > 0 && b.timer <= 1e-9 && !offline) {
       if (!b.burst) { b.burst = 1; b.warning = 0.8; b.timer = 0.8; }
       else if (b.burst === 1) {
         for (const vx of fanWarningVelocities(b)) shot(b.x, b.y + b.height / 2, vx, 280);
@@ -86,13 +89,16 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     // Leaving after ten seconds prevents an unkillable off-axis stall at boss entry.
     if (b.age >= 10) { b.warning = 0; b.y += 220 * dt; }
     else if (b.y < 320) { b.y = Math.min(320, b.y + b.speed * dt); b.timer = 0.6; }
-    else if (b.timer <= 1e-9) {
+    else if (b.timer <= 1e-9 && !offline) {
       if (b.warning <= 0) { b.warning = 1.2; b.timer = 1.2; }
       else {
         for (let i = 0; i < 3; i++) shot(b.x, b.y + 58 - i * 45, 0, 620);
         b.warning = 0; b.timer = 2.4;
       }
     }
+  } else if(b.kind==='conduit'){
+    if(b.age<CONDUIT.holdSeconds){if(b.y<CONDUIT.hoverY)b.y=Math.min(CONDUIT.hoverY,b.y+b.speed*dt);}
+    else b.y+=b.speed*dt;
   } else if (b.kind === 'charger') {
     if (b.age > C.chargerBehavior.warningAge && b.age < C.chargerBehavior.dashAge) b.warning = C.chargerBehavior.dashAge - b.age;
     if (b.age >= C.chargerBehavior.dashAge) {
@@ -105,7 +111,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(b.kind==='elite'&&b.bountyRound!==undefined&&b.age<HUNTER.holdSeconds){if(b.y<HUNTER.hoverY)b.y=Math.min(HUNTER.hoverY,b.y+b.speed*dt);}
     else b.y += b.speed * dt;
     if ((b.kind === 'armor' || b.kind === 'elite') && b.y > 0 && b.y < 600) {
-      if (b.timer <= 1e-9) {
+      if (b.timer <= 1e-9 && !offline) {
         if (b.warning <= 0) { b.warning = 0.6; b.timer = 0.6; }
         else {
           if (b.pattern === 'fan') for (const vx of b.kind === 'elite' && b.burst ? [-50, 0, 50] : [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);

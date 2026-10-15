@@ -53,6 +53,7 @@ it.each((['drone','charger','armor','elite','sniper','guard'] as const).flatMap(
 
 it('prioritizes crate fragments and reserves three boss slots across repeated mixed events',async()=>{
   const f=fixture(false); await f.runtime.load();f.runtime.start();
+  Object.assign(f.runtime.world,{scheduled:[]}); // Isolate the injected cosmetic bursts from real newly authored kills.
   for(let i=0;i<30;i++) {
     f.runtime.world.effects.push({type:'kill',enemyKind:(['drone','charger','armor','elite'] as const)[i%4],x:360,y:500});
     if(i%3===0)f.runtime.world.emit('crate-break',240,700);

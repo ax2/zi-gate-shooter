@@ -1,0 +1,20 @@
+{
+  "source": "art/source/conduit-v1.png",
+  "width": 1212,
+  "height": 1298,
+  "alpha": true,
+  "sourceSha256": "14cd4ad8d510b011030aa6cc2d5483c0c3821568dda37142a1afe498445945e2",
+  "outputSha256": "e4a3b8970ff7f7d7b68e8f7655a86f8d4388856857876dd11b95a84137c07fbf",
+  "visible": 30280,
+  "edge": 0,
+  "exported": {
+    "format": "raw",
+    "width": 256,
+    "height": 256,
+    "channels": 4,
+    "depth": "uchar",
+    "premultiplied": false,
+    "hasAlpha": true,
+    "size": 262144
+  }
+}

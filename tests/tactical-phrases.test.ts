@@ -1,10 +1,10 @@
 import {it,expect} from 'vitest';import {World} from '../src/core/world';import {C} from '../src/core/config';import {timeline,SWARM} from '../src/core/director';
 it('authors two finite, differently shaped chapter phrases while preserving the first chapter and original rewards',()=>{
  expect(timeline(1,1337).some(s=>[44.5,55.5].includes(s.at))).toBe(false);
- for(const [round,count,first] of [[2,7,'sniper'],[3,6,'armor'],[4,7,'guard']] as const){
+ for(const [round,count,first] of [[2,8,'sniper'],[3,7,'armor'],[4,8,'guard']] as const){
   for(const seed of [1,77,1337]){const list=timeline(round,seed),phrases=list.filter(s=>s.drop&&[44.5,55.5].includes(s.at));
    expect(phrases).toHaveLength(count);expect(phrases[0].kind).toBe(first);expect(phrases.filter(s=>s.dropLabel)).toHaveLength(2);
-   expect(phrases.every(s=>s.drop&&s.x>=180&&s.x<=540&&s.dropY!>=320&&s.dropY!<=440&&[44.5,55.5].includes(s.at))).toBe(true);
+   expect(phrases.every(s=>s.drop&&s.x>=180&&s.x<=540&&s.dropY!>=320&&s.dropY!<=560&&[44.5,55.5].includes(s.at))).toBe(true);
    expect(list.filter(s=>s.kind==='armory')).toHaveLength(2);expect(list.filter(s=>s.kind==='gates')).toHaveLength(4);
   }
  }
@@ -19,7 +19,7 @@ it('uses real chapter health, local protection and a single announcement after a
  for(const round of [2,3,4]){
   const w=new World(1337,round);Object.assign(w,{scheduled:timeline(round,1337).filter(s=>s.dropY!==undefined&&s.at===44.5)});w.roundTime=44.49;
   w.step(C.step,68);const bodies=w.bodies.filter(b=>b.active&&b.kind in C.enemies),first=bodies[0];
-  expect(bodies.length).toBeGreaterThan(0);expect(bodies.every(b=>b.y>=320&&b.y<445&&b.dropGrace!>0&&b.dropGrace!<=SWARM.grace)).toBe(true);
+  expect(bodies.length).toBeGreaterThan(0);expect(bodies.every(b=>b.y>=320&&(b.kind==='conduit'?b.y<=560:b.y<445)&&b.dropGrace!>0&&b.dropGrace!<=SWARM.grace)).toBe(true);
   const control=new World(1337,round).spawn(first.kind,first.x,first.y);expect(first.maxHp).toBe(control.maxHp);
   const events=w.drainEffects();expect(events.filter(e=>e.type==='drop-wave')).toHaveLength(1);
   for(let i=0;i<5;i++)w.step(C.step,68);expect(w.drainEffects().some(e=>e.type==='drop-wave')).toBe(false);expect(w.kills).toBe(0);expect(w.growth.energy).toBe(0);

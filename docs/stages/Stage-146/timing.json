@@ -1,0 +1,60 @@
+{
+  "attempts": [
+    {
+      "delay": 2.1,
+      "time": 131.61666666666355,
+      "roundTime": 47.41666666666526,
+      "hp": 3,
+      "round": 2,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "mastery": 0,
+      "ranks": {
+        "ballistic": 2,
+        "electric": 0,
+        "optical": 0
+      },
+      "bossLoot": {
+        "claimed": 1,
+        "research": 0,
+        "equipment": 1
+      },
+      "bursts": 1,
+      "affected": 2,
+      "timingWins": 1,
+      "receipt": "中断2台蓄能 · 已发敌弹仍危险"
+    }
+  ],
+  "success": {
+    "delay": 2.1,
+    "time": 131.61666666666355,
+    "roundTime": 47.41666666666526,
+    "hp": 3,
+    "round": 2,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "mastery": 0,
+    "ranks": {
+      "ballistic": 2,
+      "electric": 0,
+      "optical": 0
+    },
+    "bossLoot": {
+      "claimed": 1,
+      "research": 0,
+      "equipment": 1
+    },
+    "bursts": 1,
+    "affected": 2,
+    "timingWins": 1,
+    "receipt": "中断2台蓄能 · 已发敌弹仍危险"
+  }
+}

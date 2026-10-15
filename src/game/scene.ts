@@ -45,6 +45,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.spritesheet('units', 'assets/units.png', { frameWidth: 192, frameHeight: 256 });
     this.load.spritesheet('props', 'assets/props.png', { frameWidth: 256, frameHeight: 256 });
     this.load.image('runway', 'assets/runway.jpg');
+    this.load.image('conduit','assets/conduit-v1.png');
     this.load.on('loaderror', () => document.dispatchEvent(new CustomEvent('game-failure', { detail: '资源加载失败，请检查连接后刷新。' })));
   }
   create() {
@@ -136,7 +137,7 @@ export class BattleScene extends Phaser.Scene {
     const frames: Record<string, number> = { drone: 3, sniper: 3, guard: 5, charger: 4, armor: 5, elite: 6, boss: 7 };
     const prop = b.kind === 'gate' || b.kind === 'crate' || b.kind === 'pickup';
     const frame = b.kind === 'gate' ? b.rewardKind === 'energy' ? 4 : 3 : b.kind === 'crate' ? 0 : b.kind === 'pickup' ? 2 : frames[b.kind];
-    const sprite = this.add.image(b.x, b.y, prop ? 'props' : 'units', frame).setDepth(20);
+    const sprite = this.add.image(b.x, b.y, b.kind==='conduit'?'conduit':prop ? 'props' : 'units', b.kind==='conduit'?undefined:frame).setDepth(20);
     let width = b.width * 1.4, height = b.height * 1.55;
     if (b.kind === 'gate') { width = b.width + 72; height = 225; }
     else if (b.kind === 'crate') { width = 124; height = 134; }

@@ -1,5 +1,7 @@
 # 火力突围
 
+最新战术候选 **Stage-146**：http://127.0.0.1:5225/ 。第二章起新增导电中继，击破可短暂停火并打开盾卫；新增双蓄能中断的时机成就。[试玩](docs/stages/Stage-146/PLAY.md) · [验证边界](docs/stages/Stage-146/TEST_REPORT.md)。
+
 最新首局候选 **Stage-145**：http://127.0.0.1:5223/ 。第一局完整敌机与早期分支火力检验，修正装甲入场叠形。[试玩](docs/stages/Stage-145/PLAY.md) · [验证边界](docs/stages/Stage-145/TEST_REPORT.md)。
 
 最新奖励候选 **Stage-144**：http://127.0.0.1:5221/ 。首领爆炸后选择研发蓝图或指定配件强化，旧能力与原胜利奖励保留。[试玩](docs/stages/Stage-144/PLAY.md) · [验证边界](docs/stages/Stage-144/TEST_REPORT.md)。

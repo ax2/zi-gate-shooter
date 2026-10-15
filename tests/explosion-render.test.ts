@@ -969,3 +969,22 @@ it.each([false,true])('draws a visible local arrival shield beneath enemy bullet
  const ring=f.calls.findIndex(c=>c.kind==='stroke'&&(c.stroke==='#b6d2ff'||c.stroke==='#8bffe3')),enemy=f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ff7756');expect(ring).toBeGreaterThanOrEqual(0);expect(enemy).toBeGreaterThan(ring);
  for(let i=0;i<40;i++)(f.runtime as any).effect({type:'drop-impact',x:360,y:360});expect((f.runtime as any).particles.length).toBeLessThanOrEqual(weak?50:160);
 });
+
+it.each([false,true])('renders earned EMP and open shields below hostile bullets and gate numbers, freezes and resets bounded effects (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;Object.assign(w,{scheduled:[]});
+ const node=w.spawn('conduit',360,560),guard=w.spawn('guard',220,440),sniper=w.spawn('sniper',480,360),gate=w.spawn('gate',360,850);
+ guard.warning=.5;guard.timer=.5;guard.burst=1;sniper.warning=.5;sniper.timer=.5;f.tick();
+ expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('conduit-v1.png'))).toBe(true);
+ w.bullets.push({id:99999,x:node.x,y:node.y,px:node.x,py:node.y,vx:0,vy:0,damage:100,age:0,active:true,hostile:false},{id:99998,x:600,y:600,px:600,py:600,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});
+ f.tick();for(let i=0;i<10;i++)f.tick();expect(w.conduitBursts).toBe(1);expect(w.conduitTacticalWins).toBe(1);expect(f.runtime.diagnostics().runAchievements).toContain('disruptor');expect(f.runtime.diagnostics().offlineEnemies).toBe(2);
+ expect(f.calls.some(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('guard-v1.png')&&c.args[1]>0)).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='停火')).toBe(true);
+ const light=f.calls.reduce((last,c,i)=>c.composite==='lighter'?i:last,-1),hostile=f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ff7756'),number=f.calls.findIndex(c=>c.kind==='fillText'&&c.args[2]===gate.y+8);
+ expect(light).toBeGreaterThanOrEqual(0);expect(hostile).toBeGreaterThan(light);expect(number).toBeGreaterThan(light);
+ for(let i=0;i<30;i++)(f.runtime as any).effect({type:'emp',x:360,y:560,size:300});expect(f.runtime.diagnostics().empWaves).toBe(2);expect(f.runtime.diagnostics().particles).toBeLessThanOrEqual(weak?50:160);
+ f.runtime.pause();const frozen=JSON.stringify((f.runtime as any).empWaves),time=w.time;for(let i=0;i<30;i++)f.tick();expect(JSON.stringify((f.runtime as any).empWaves)).toBe(frozen);expect(w.time).toBe(time);f.runtime.start();expect(f.runtime.diagnostics().empWaves).toBe(0);
+});
+
+it('keeps all nine achievement descriptions above the footer and return control',async()=>{
+ const f=fixture();await f.runtime.load();f.tick();f.calls.length=0;expect(f.runtime.activateControl('achievements')).toBe(true);
+ const row=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='一次中继爆破中断两台正在蓄能的敌机');expect(row).toBeDefined();expect(row!.args[2]).toBeLessThan(1040);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='断电时机')).toBe(true);
+});

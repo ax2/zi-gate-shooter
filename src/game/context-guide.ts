@@ -35,6 +35,7 @@ export function contextGuide(world: Context): Guide {
     return { kind: 'pickup', title: '靠近领取，叠加新火力', detail: '同排选一种奖励 · 已有武器继续开火' };
   if (visible.some(b => b.weaponKind && b.kind === 'crate'))
     return { kind: 'crate', title: '对准一箱，增加火力能力', detail: '打碎再领取 · 旧能力保留到本局结束' };
+  if(visible.some(b=>b.kind==='conduit'))return {kind:'enemy',title:'导电中继：击破打断邻敌',detail:'停火1.5秒 · 已发敌弹仍危险'};
   if (visible.some(b => b.kind === 'guard' && guardClosed(b) && b.y < 650))
     return { kind: 'enemy', title: '盾卫闭盾：正面伤害减半', detail: '闭盾挡住穿甲与跳电 · 留意开盾时机' };
   if (world.round !== 1) return movement;

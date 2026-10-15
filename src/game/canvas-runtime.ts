@@ -1,4 +1,5 @@
 import {dropLight} from './drop-light';
+import {empWave,offlineLight} from './emp-light';
 import {runReport} from './run-report';
 import { capacitorLight, capacitorMarks } from './capacitor-light';
 import { formationShield } from './formation-shield';
@@ -79,6 +80,7 @@ export class CanvasRuntime {
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number}[] = [];
+  private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
   private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
@@ -113,6 +115,7 @@ export class CanvasRuntime {
   private weaponGuideKind:WeaponKind='pulse';
   private drawCount = 0;
   private callbackCount = 0;
+  private framePulses=0;
   private pausePreview = false;
   private upgradeUntil = 0;
   private error = '';
@@ -158,7 +161,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -166,10 +169,11 @@ export class CanvasRuntime {
       if (this.loadAttempt !== attempt) return;
       this.error = '资源加载未完成，请点击重试'; this.mode = 'error';
     } finally {
-      if (this.loadAttempt === attempt) { this.loadAttempt = undefined; this.lastTime = this.platform.now(); }
+      if (this.loadAttempt === attempt) { this.loadAttempt = undefined; this.lastTime = this.platform.now();this.render(0); }
     }
   }
   private frame(_timestamp: number) {
+    this.framePulses++;
     const time = this.platform.now(), measuredPlaying=this.mode==='playing';
     const elapsed = Math.max(0, (time - this.lastTime) / 1000); this.lastTime = time;
     const dt = Math.min(elapsed, 0.1);
@@ -224,6 +228,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.buttons=[];
     for(const motion of this.mountedMotion.values())motion.reset();
     this.opticalFiredAt=-Infinity;
     this.buildFeedback=undefined;
@@ -243,7 +248,7 @@ export class CanvasRuntime {
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear();this.callbackWork.clear();this.maxCallbackWorkMs=0;this.previousCallbackWorkMs=0;this.interruptedFrames=[]; this.downAction = '';
-    this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0;this.shieldBreak=undefined; this.upgradeUntil = 0;
+    this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0;this.shieldBreak=undefined; this.upgradeUntil = 0;
     this.platform.silence();
     this.updateMusic();
   }
@@ -380,7 +385,7 @@ export class CanvasRuntime {
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
     else if (action === 'resume') { this.pausePreview = false; this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.shieldBreak=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.shieldBreak=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -393,10 +398,14 @@ export class CanvasRuntime {
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private checkAchievements() {
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins);
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins);
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
+    if(e.type==='emp'){
+      if(this.empWaves.length>=2)this.empWaves.shift();this.empWaves.push({x:e.x,y:e.y,radius:e.size??300,life:.5});
+      this.notify(e.text??'中继击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;
+    }
     if(e.type==='drop-wave'){this.notify(e.text??'突降机群',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
     if(e.type==='bounty-progress'){this.notify(e.text??'悬赏推进',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.escortReward){this.notify(e.text??'编队击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
@@ -618,7 +627,7 @@ export class CanvasRuntime {
     this.enemyWreck.trim(Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length));
     this.enemyWreck.advance(dt);
     for (const piece of this.enemyWreck.pieces) {
-      const wreckImage = this.images.get(`${piece.kind}-wreck-v1.png`);
+      const wreckImage = this.images.get(piece.kind==='conduit'?'conduit-v1.png':`${piece.kind}-wreck-v1.png`);
       if (!wreckImage) continue;
       c.save(); c.translate(piece.x, piece.y); c.rotate(piece.angle);
       c.globalAlpha = Math.min(1, (piece.life - piece.age) / .22) * (this.save.settings.effects === 'weak' ? .5 : .85);
@@ -659,8 +668,12 @@ export class CanvasRuntime {
           const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38;
           this.frameSprite('armor-v1.png', frame, 3, b.x, y, width, height, 1);
           this.hitSprite('armor-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+        } else if(b.kind==='conduit'){
+          const bob=Math.sin(b.age*3)*2;
+          this.frameSprite('conduit-v1.png',0,1,b.x,y+bob,150,165,1);this.hitSprite('conduit-v1.png',0,1,b.x,y+bob,150,165,b.hit,.07,1);
+          c.save();c.globalAlpha=.35+.3*Math.sin(b.age*6)**2;c.fillStyle='#ffd889';for(const side of [-1,1])c.fillRect(b.x+side*24-2,y-35+bob,4,6);c.restore();
         } else if (b.kind === 'guard') {
-          const frame = b.burst > 0 ? 1 : 0;
+          const frame = b.burst > 0 || (b.empRemaining??0)>0 ? 1 : 0;
           this.frameSprite('guard-v1.png', frame, 3, b.x, y, 160, 160, 1);
           this.hitSprite('guard-v1.png', frame, 3, b.x, y, 160, 160, b.hit, 0.07, 1);
         } else if (b.kind === 'sniper') {
@@ -679,6 +692,7 @@ export class CanvasRuntime {
       }
     }
     for(const b of w.bodies)if(b.active&&(b.dropGrace??0)>0)dropLight(c,b.x,b.y,(b.dropGrace??0)/SWARM.grace,this.save.settings.effects==='weak');
+    for(const b of w.bodies)if(b.active&&(b.empRemaining??0)>0)offlineLight(c,b.x,b.y,b.width,b.empRemaining??0);
     const protectedBoss=w.bodies.find(b=>b.active&&b.kind==='boss');
     if(protectedBoss&&w.bossShieldActive())formationShield(c,protectedBoss.x,protectedBoss.y+BOSS_VISUAL.offsetY,w.time,0,this.save.settings.effects==='weak');
     if(this.shieldBreak&&w.time<this.shieldBreak.until)formationShield(c,this.shieldBreak.x,this.shieldBreak.y,w.time,1-(this.shieldBreak.until-w.time)/.45,this.save.settings.effects==='weak');
@@ -744,6 +758,8 @@ export class CanvasRuntime {
       if(e.fracture)fractureLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');
     }
     this.blasts = this.blasts.filter(e => e.life > 0);
+    for(const e of this.empWaves){e.life-=dt;empWave(c,e.x,e.y,e.radius,1-e.life/.5,this.save.settings.effects==='weak');}
+    this.empWaves=this.empWaves.filter(e=>e.life>0);
     for (const arc of this.arcs) { arc.life -= dt; chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak'); }
     this.arcs = this.arcs.filter(arc=>arc.life>0);
     for (const hit of this.impacts) { hit.life -= dt; impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
@@ -810,9 +826,13 @@ export class CanvasRuntime {
         this.bar(b.x, b.y + (mixed ? 72 : 46), b.width - 32, progress, b.rewardKind === 'power' ? '#5bddff' : '#e5b96a');
       } else if (b.kind === 'boss') {
         // Boss status is drawn after the HUD background in drawHud.
+      } else if((b.empRemaining??0)>0){
+        this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#8bdce9');this.text('停火',b.x,b.y-b.height/2-34,22,'#b5f4ff','center',true);
       } else if (b.kind === 'guard') {
         this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
         this.text(b.burst ? '弱点暴露' : b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
+      } else if(b.kind==='conduit'){
+        this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text('中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
         if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text('悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
@@ -903,8 +923,9 @@ export class CanvasRuntime {
     this.text('突围成就',360,155,42,'#effaff','center',true);
     const state=this.save.achievements;
     this.text(`已达成 ${state.unlocked.length}/${achievements.length} · 选择留下战绩`,360,210,25,'#bdd8e7');
-    for(const [i,a] of achievements.entries()){const y=255+i*94,done=state.unlocked.includes(a.id);
-      this.rect(65,y,590,86,done?'#263d43':'#142b39');
+    const rowStep=achievements.length>8?82:94;
+    for(const [i,a] of achievements.entries()){const y=255+i*rowStep,done=state.unlocked.includes(a.id);
+      this.rect(65,y,590,rowStep-8,done?'#263d43':'#142b39');
       this.text(a.name,85,y+30,27,done?'#ffdc8a':'#effaff','left',true);
       this.text(done?this.achievementReturn==='result'&&this.runAchievements.includes(a.id)?'本局新达成':'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+30,23,done?'#ffdc8a':'#a5bac8','right');
       this.text(a.detail,85,y+65,22,'#bdd8e7','left');
@@ -1218,6 +1239,8 @@ export class CanvasRuntime {
       contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
+      conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
+      framePulses:this.framePulses,renderedMode:this.renderedMode,imageCount:this.images.size,
       runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticBranch:this.world.build.ballisticBranch??null,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,

@@ -1,5 +1,6 @@
-export type WreckKind = 'drone' | 'charger' | 'armor' | 'elite' | 'sniper' | 'guard';
+export type WreckKind = 'drone' | 'charger' | 'armor' | 'elite' | 'sniper' | 'guard' | 'conduit';
 export const wreckLayout = {
+  conduit:{w:150,h:165,life:.65},
   drone: { w: 92.4, h: 92.4, life: .55 }, charger: { w: 105.3, h: 105.3, life: .55 },
   sniper: { w: 140, h: 140, life: .55 },
   guard: { w: 160, h: 160, life: .65 },

@@ -1,0 +1,28 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/fairness.test.ts tests/boss-formation-routes.test.ts tests/hunter-routes.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/fairness.test.ts (11 tests | 1 failed) 154362ms
+   × 100 seeds of round 2 retain a no-kill escape through boss entry 535ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fairness.test.ts > 100 seeds of round 2 retain a no-kill escape through boss entry
+AssertionError: no route seed 1 round 2 at 51.99999999999833: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 13 passed (14)
+   Start at  14:16:51
+   Duration  154.91s (tests 100%)

@@ -136,6 +136,7 @@ export function timeline(round: number, seed: number): Spawn[] {
       reinforcement(44.5,'armor',300,440,'装甲突击');reinforcement(44.5,'armor',300,320);reinforcement(44.5,'charger',480,360);
       reinforcement(55.5,'armor',420,440,'穿甲纵列');reinforcement(55.5,'armor',420,320);reinforcement(55.5,'drone',300,360);
     }
+    reinforcement(44.5,'conduit',sector===0?500:sector===1?360:540,sector===1?560:360);
     // Preserve the authored opening/tail roster, but let upgraded weapons meet
     // those enemies inside the visible battlefield before they can be erased.
     for(const spawn of out)if(spawn.kind in {drone:1,sniper:1,guard:1,charger:1,armor:1,elite:1}

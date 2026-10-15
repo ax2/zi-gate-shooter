@@ -6,6 +6,7 @@ import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranc
 import { armoryOffers } from './armory-offers';
 import { supportProfile, supportMilestone } from './support-profile';
 import { C, clamp } from './config';
+import {CONDUIT,canDisrupt} from './conduit';
 import type { EnemyKind } from './config';
 import { sweep } from './collision';
 import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate, permanentPower } from './rewards';
@@ -24,7 +25,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
   weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
@@ -60,6 +61,18 @@ export class World {
     return true;
   }
   dropSpawns=0;dropKills=0;arcLinks=0;
+  conduitBursts=0;empTargets=0;conduitTacticalWins=0;
+  private dischargeConduit(source:Body){
+    this.conduitBursts++;let affected=0,interrupted=0;
+    for(const b of this.bodies)if(b.active&&canDisrupt(b.kind)&&!(b.dropGrace??0)&&b.y>=C.playerShotTop&&b.y<=C.playerY
+      &&Math.hypot(b.x-source.x,b.y-source.y)<=CONDUIT.radius){
+      if(b.warning>0)interrupted++;
+      if((b.empRemaining??0)<CONDUIT.duration){affected++;this.empTargets++;}
+      b.empRemaining=Math.max(b.empRemaining??0,CONDUIT.duration);b.warning=0;b.burst=0;b.timer=Math.max(b.timer,.6);
+    }
+    if(interrupted>=2)this.conduitTacticalWins++;
+    this.effects.push({type:'emp',x:source.x,y:source.y,size:CONDUIT.radius,text:`中继击破 · ${affected}台停火`,detail:interrupted?`中断${interrupted}台蓄能 · 已发敌弹仍危险`:'停火1.5秒 · 已发敌弹仍危险'});
+  }
   scatterPierces=0;scatterBursts=0;scatterSplashHits=0;
   capacitorBursts=0;
   private capacitor(body:Body,damage:number){
@@ -279,7 +292,9 @@ export class World {
     }
   }
   private admit(candidate: Body) {
-    const horizon = Math.max(3, (C.playerY - candidate.y) / Math.max(1, candidate.speed) + 1);
+    const arrival=candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
+      :(C.playerY-candidate.y)/Math.max(1,candidate.speed);
+    const horizon = Math.max(3,arrival+1);
     if (safeRoute(this.player.x, this.bodies, this.bullets, horizon)) return true;
     candidate.active = false; this.fallbackCount++;
     this.nextSpawnRetry = this.roundTime + 0.5;
@@ -660,6 +675,7 @@ export class World {
       this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
       if(b.dropGrace!==undefined)this.dropKills++;
+      if(b.kind==='conduit')this.dischargeConduit(b);
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
       this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind, bossVariant: b.bossVariant });
       if (b.kind === 'boss') this.bossVictory = true;

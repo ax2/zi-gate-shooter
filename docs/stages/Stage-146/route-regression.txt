@@ -1,0 +1,23 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/conduit-safety.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/conduit-safety.test.mjs (1 test | 1 failed) 480ms
+   × keeps the previously failing relay/supply overlap escapable without kills in round two seed one 479ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/conduit-safety.test.mjs > keeps the previously failing relay/supply overlap escapable without kills in round two seed one
+AssertionError: t51.99999999999833: expected null not to be null
+ ❯ tests/conduit-safety.test.mjs:7:35
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  14:28:21
+   Duration  1.11s (tests 63%, transform 28%, import 8%, worker 1%)

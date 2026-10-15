@@ -1,0 +1,73 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/native-controls.test.ts tests/asset-load.test.ts tests/native-flow.test.ts tests/explosion-render.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (96 tests | 4 failed) 3517ms
+   × guides real crate and gate progression with matching earned research choices 16ms
+   × animates the three player pieces from real drag input without changing World (T1) 2ms
+   × animates the three player pieces from real drag input without changing World (T2) 2ms
+   × animates the three player pieces from real drag input without changing World (T3) 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > guides real crate and gate progression with matching earned research choices
+AssertionError: expected { x: 360, px: 360, hp: 3, …(1) } to deeply equal { x: 348.6666666666667, px: 360, …(2) }
+
+- Expected
++ Received
+
+  {
+    "hp": 3,
+    "invulnerable": 0,
+    "px": 360,
+-   "x": 348.6666666666667,
++   "x": 360,
+  }
+
+ ❯ tests/explosion-render.test.ts:306:36
+    304|     f.tick(); reference.step(C.step, 240); reference.drainEffects();re…
+    305|     expect(f.runtime.world.growth).toEqual(reference.growth);
+    306|     expect(f.runtime.world.player).toEqual(reference.player);
+       |                                    ^
+    307|     expect(f.runtime.world.pickups).toBe(reference.pickups);
+    308|     expect(f.runtime.world.gatesTaken).toBe(reference.gatesTaken);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/explosion-render.test.ts > animates the three player pieces from real drag input without changing World (T1)
+ FAIL  tests/explosion-render.test.ts > animates the three player pieces from real drag input without changing World (T2)
+ FAIL  tests/explosion-render.test.ts > animates the three player pieces from real drag input without changing World (T3)
+AssertionError: expected { x: 360, px: 360, hp: 3, …(1) } to deeply equal { x: 371.3333333333333, px: 360, …(2) }
+
+- Expected
++ Received
+
+  {
+    "hp": 3,
+    "invulnerable": 0,
+    "px": 360,
+-   "x": 371.3333333333333,
++   "x": 360,
+  }
+
+ ❯ tests/explosion-render.test.ts:563:36
+    561|   for (let i = 0; i < 120; i++) {
+    562|     f.tick(); reference.step(C.step, 600); reference.drainEffects();
+    563|     expect(f.runtime.world.player).toEqual(reference.player);
+       |                                    ^
+    564|     expect(f.runtime.world.bullets).toEqual(reference.bullets);
+    565|     expect(f.runtime.world.growth).toEqual(reference.growth);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  4 failed | 101 passed (105)
+   Start at  14:47:45
+   Duration  6.00s (tests 40%, transform 40%, import 18%, worker 2%)
+
+  Transform  transforming modules took 3.62s · 40% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
