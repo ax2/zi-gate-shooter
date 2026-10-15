@@ -2,7 +2,7 @@ import { bossFormationFor, ESCORT } from './boss-formations';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, type ContractKind } from './contracts';
-import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from './build-tree';
+import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
 import { supportProfile, supportMilestone } from './support-profile';
 import { C, clamp } from './config';
@@ -48,6 +48,7 @@ export class World {
     }
     return true;
   }
+  scatterPierces=0;scatterBursts=0;scatterSplashHits=0;
   capacitorBursts=0;
   private capacitor(body:Body,damage:number){
     if(this.build.electricBranch!=='capacitor'||!body.active||!(body.kind in C.enemies)||guardClosed(body)
@@ -122,7 +123,9 @@ export class World {
   profileFor(kind:WeaponKind) {
     const p=weaponProfile(kind,this.weaponStage(kind)),rank=this.build.ranks;
     const refinement=1+.1*this.build.refinements[kind==='arc'?'electric':'ballistic'];
-    return {...p,damage:p.damage.map(n=>n*(1+.5*this.weaponCalibration(kind))*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
+    return {...p,targets:kind==='scatter'&&this.build.ballisticBranch==='penetrator'?BALLISTIC_FORK.targets:p.targets,
+      splashRadius:kind==='scatter'&&this.build.ballisticBranch==='fragment'?BALLISTIC_FORK.radius:p.splashRadius,
+      damage:p.damage.map(n=>n*(1+.5*this.weaponCalibration(kind))*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
       chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0)+(this.build.electricBranch==='spread'?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
   }
   supportProfile() {
@@ -429,13 +432,16 @@ export class World {
           bullet.hitBodies?.push(body.id);
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
+          if(bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='penetrator'&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
+            this.scatterPierces++;this.effects.push({type:'scatter-pierce',x:body.x,y:body.y,weaponKind:'scatter'});
+          }
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);
           if(bullet.weaponKind==='arc')this.capacitor(body,bullet.damage);
           const support=this.supportProfile();
           if (support.refractionTargets > 0 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
             const reflected=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies
-              && other.y>=C.playerShotTop && other.y<=C.playerY && Math.hypot(other.x-body.x,other.y-body.y)<=support.refractionRange)
+              && other.y>=C.playerShotTop && other.y<=C.playerY && !(other.kind==='boss'&&this.phase!=='boss') && Math.hypot(other.x-body.x,other.y-body.y)<=support.refractionRange)
               .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id).slice(0,support.refractionTargets);
             for(const next of reflected){
               this.effects.push({type:'refract',x:body.x,y:body.y,targetX:next.x,targetY:next.y});
@@ -446,7 +452,7 @@ export class World {
             const visited = new Set([body.id]); let origin = body, damage = bullet.damage;
             for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin); hop++) {
               const candidates = this.bodies.filter(other => other.active && !visited.has(other.id) && other.kind in C.enemies
-                && other.y >= C.playerShotTop && other.y <= C.playerY
+                && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss')
                 && Math.hypot(other.x-origin.x,other.y-origin.y) <= (this.build.ranks.electric>=2?220:160));
               candidates.sort((a,b) => Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y) || a.id-b.id);
               const next = candidates[0]; if (!next) break;
@@ -455,13 +461,14 @@ export class World {
               this.hit(next,damage,bullet.weaponKind); origin = next;
             }
           }
-          if (bullet.splashRadius && body.kind in C.enemies) {
+          if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {
             // No secondary explosions, reward charging or off-screen farming.
-            this.effects.push({type:'blast',x:body.x,y:body.y,size:bullet.splashRadius,weaponKind:bullet.weaponKind});
+            if(bullet.weaponKind==='scatter')this.scatterBursts++;
+            this.effects.push({type:bullet.weaponKind==='scatter'?'scatter-burst':'blast',x:body.x,y:body.y,size:bullet.splashRadius,weaponKind:bullet.weaponKind});
             for (const other of this.bodies) if (other !== body && other.active && other.kind in C.enemies
-              && other.y >= C.playerShotTop && other.y <= C.playerY
+              && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss')
               && Math.hypot(other.x-body.x,other.y-body.y) <= bullet.splashRadius)
-              this.hit(other,bullet.damage*0.5,bullet.weaponKind);
+              {if(bullet.weaponKind==='scatter')this.scatterSplashHits++;this.hit(other,bullet.damage*BALLISTIC_FORK.splash,bullet.weaponKind);}
           }
         });
       }

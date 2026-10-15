@@ -1,5 +1,7 @@
 # 火力突围
 
+最新构筑候选 **Stage-137**：http://127.0.0.1:5214/ 。弹道贯穿/爆破二选一、第二章起装甲队形，以及派生伤害首领阶段保护。[试玩](docs/stages/Stage-137/PLAY.md) · [验证与边界](docs/stages/Stage-137/TEST_REPORT.md)。
+
 最新构筑候选 **Stage-136**：http://127.0.0.1:5213/ 。雷电第二点增加连锁扩散/电容蓄爆二选一，旧火力保留。[试玩](docs/stages/Stage-136/PLAY.md) · [验证与边界](docs/stages/Stage-136/TEST_REPORT.md)。
 
 最新挑战候选 **Stage-135**：http://127.0.0.1:5212/ 。新增危险猎手：两名标记精英、主动转火、全破立即选强化。[试玩](docs/stages/Stage-135/PLAY.md) · [验证与边界](docs/stages/Stage-135/TEST_REPORT.md)。

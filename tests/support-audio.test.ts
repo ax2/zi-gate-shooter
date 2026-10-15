@@ -20,3 +20,7 @@ it('electrical detonation has its own bounded sound rather than suppressing frac
  for(let i=0;i<30;i++)audio.event('capacitor',2);expect(tone).toHaveBeenCalledTimes(2);expect(tone).toHaveBeenCalledWith(1700,180,.12,.035,'sawtooth');
  audio.event('fracture',2);expect(tone).toHaveBeenCalledTimes(4);now=150;audio.event('capacitor',2);expect(tone).toHaveBeenCalledTimes(6);
 });
+
+it('scatter detonation has a light bounded report independent of large blast',()=>{
+ let now=0;const audio=new GameAudio(()=>now),tone=vi.spyOn(audio,'tone').mockImplementation(()=>{});for(let i=0;i<20;i++)audio.event('scatter-burst',3);expect(tone).toHaveBeenCalledTimes(1);expect(tone).toHaveBeenCalledWith(250,65,.12,.035,'triangle');now=150;audio.event('scatter-burst',3);expect(tone).toHaveBeenCalledTimes(2);
+});

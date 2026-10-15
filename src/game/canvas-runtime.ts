@@ -6,7 +6,7 @@ import { FRACTURE } from '../core/combos';
 import { mountedRig } from './mounted-rig';
 import { contracts, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
-import { tree, routes, opticalBranches, electricBranches, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
+import { tree, routes, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -102,7 +102,7 @@ export class CanvasRuntime {
   private shieldBreak?:{x:number;y:number;until:number};
   private weaponMotion = new WeaponMotion();
   private mountedMotion=new Map(dossierWeapons.map(kind=>[kind,new WeaponMotion()]));
-  private branchRoute:'optical'|'electric'='optical';
+  private branchRoute:Route='optical';
   private opticalFiredAt=-Infinity;
   private weaponGuideUntil = 0;
   private weaponGuideKind:WeaponKind='pulse';
@@ -324,13 +324,13 @@ export class CanvasRuntime {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
       if(!routes.includes(route))return;
-      if((route==='optical'||route==='electric')&&this.world.build.ranks[route]===1&&this.world.build.available(this.world.growth.mastery??0).includes(route)){this.branchRoute=route;this.mode='branch';}
+      if(this.world.build.ranks[route]===1&&this.world.build.available(this.world.growth.mastery??0).includes(route)){this.branchRoute=route;this.mode='branch';}
       else this.selectBuild(route);
     }
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
       const branch=action.slice(7) as BuildBranch,route=this.branchRoute;
-      if(this.world.build.ranks[route]===1&&((route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'))))this.selectBuild(route,branch);
+      if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'))))this.selectBuild(route,branch);
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -399,6 +399,7 @@ export class CanvasRuntime {
     if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
     if(e.type==='boss-kill')this.save.achievements.bosses++;
     if(['formation-clear','fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
+    if(e.type==='scatter-pierce'&&this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y+25,tx:e.x,ty:e.y-35,life:.12,laser:false});
     if(e.type==='laser')this.opticalFiredAt=this.world.time;
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
@@ -413,13 +414,13 @@ export class CanvasRuntime {
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277, e.detail);
     if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
-    const explosion = ['capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
+    const explosion = ['scatter-burst', 'capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);
     else if(explosion){
       // A combination gets a readable burst even when ordinary explosions fill the budget.
-      if((e.type==='fracture'||e.type==='capacitor')&&this.blasts.length>=4){const ordinary=this.blasts.findIndex(b=>!b.fracture&&!b.electric);this.blasts.splice(ordinary<0?0:ordinary,1);}
+      if((e.type==='fracture'||e.type==='capacitor'||e.type==='scatter-burst')&&this.blasts.length>=4){const ordinary=this.blasts.findIndex(b=>!b.fracture&&!b.electric);this.blasts.splice(ordinary<0?0:ordinary,1);}
       if(this.blasts.length<4)this.blasts.push({electric:e.type==='capacitor',fracture:e.type==='fracture',x:e.x,y:e.y,size:e.size??80,life:.45,total:.45});
     }
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
@@ -919,7 +920,7 @@ export class CanvasRuntime {
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
       this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
-        : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? '近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
+        : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
     }
@@ -1038,6 +1039,7 @@ export class CanvasRuntime {
   }
   private drawBuildBranch(){
     if(this.branchRoute==='electric'){this.drawElectricBranch();return;}
+    if(this.branchRoute==='ballistic'){this.drawBallisticBranch();return;}
     this.rect(35,120,650,1080,'#102330');
     this.text('光学改造 · 二选一',360,190,40,'#effaff','center',true);
     this.text('都保留原激光 · 发射间隔缩短25%',360,250,25,'#bdd8e7');
@@ -1051,6 +1053,22 @@ export class CanvasRuntime {
       this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
     }
     this.text('本局选定不可切换 · 三阶棱镜与旧武器保留',360,965,23,'#f0d19a');
+    this.button('返回升级选择',1050,'branch-back');
+  }
+  private drawBallisticBranch(){
+    this.rect(35,120,650,1080,'#102330');
+    this.text('弹道改造 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('都保留霰射总伤害+30% · 弹数与扇角不变',360,250,24,'#bdd8e7');
+    for(const [i,branch] of (['penetrator','fragment'] as const).entries()){
+      const node=ballisticBranches[branch],y=315+i*290,color=branch==='penetrator'?'#aee6ff':'#ffd092';
+      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
+      this.text(node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,25,'#effaff','left');
+      this.text(branch==='penetrator'?'每颗霰弹最多命中两敌，直伤保留':`命中敌人后追加${BALLISTIC_FORK.radius}范围邻敌爆破`,90,y+133,24,'#d9e8f1','left');
+      this.text(branch==='penetrator'?'箱子、数字门与闭合护盾会截断':`${BALLISTIC_FORK.splash*100}%伤害 · 不充门 · 闭盾不扩散`,90,y+175,23,'#bdd8e7','left');
+      this.text('选择此改造　›',625,y+219,25,color,'right');
+      this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
+    }
+    this.text('本局选定不可切换 · 雷暴组合与旧武器保留',360,965,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
   }
   private drawElectricBranch(){
@@ -1135,6 +1153,7 @@ export class CanvasRuntime {
       inputMode: this.inputMode,
       contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
+      ballisticBranch:this.world.build.ballisticBranch??null,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       electricBranch:this.world.build.electricBranch??null,capacitorBursts:this.world.capacitorBursts,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,

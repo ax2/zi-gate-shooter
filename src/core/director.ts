@@ -101,5 +101,11 @@ export function timeline(round: number, seed: number): Spawn[] {
       add(time+2.4,'charger',720-x,undefined,undefined,'flank',360);
     }
   }
+  // From chapter two, armoured formations test the chosen ammunition geometry.
+  // These ordinary authored spawns still use each admission's no-kill safety check.
+  if(round>1){
+    if(sector===2){add(35,'armor',220);add(36.5,'armor',220);}
+    else {add(35,'armor',300);add(35,'armor',420);}
+  }
   return out.sort((a, b) => a.at - b.at);
 }

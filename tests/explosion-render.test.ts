@@ -900,3 +900,16 @@ it.each([false,true])('electrical discharge stays bounded and distinct from oran
  f.tick();expect(blasts(f)).toHaveLength(0);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#a99aff')).toBe(true);
  for(let i=0;i<30;i++)f.tick();expect(runtime.blasts).toHaveLength(0);
 });
+
+it('ballistic branch browsing is frozen and preserves points until an explicit choice',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=1;w.chooseBuild('ballistic');w.growth.energy=100;f.tick();const owned=[...w.activeWeapons];
+ expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.mode).toBe('branch');const time=w.time;for(let i=0;i<30;i++)f.tick();expect(w.time).toBe(time);expect(w.build.spent).toBe(1);
+ expect(f.runtime.activateControl('branch:spread')).toBe(false);expect(f.runtime.activateControl('branch-back')).toBe(true);expect(w.build.ballisticBranch).toBeUndefined();
+ expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.activateControl('branch:fragment')).toBe(true);expect(f.runtime.mode).toBe('playing');expect(w.activeWeapons).toEqual(owned);expect(w.build.spent).toBe(2);expect(f.runtime.diagnostics().ballisticBranch).toBe('fragment');expect(f.runtime.activateControl('branch:penetrator')).toBe(false);
+});
+
+it.each([false,true])('fragment bursts share the existing bounded atlas budget without extra bullets (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const runtime=f.runtime as any;const bullets=f.runtime.world.bullets.length;
+ for(let i=0;i<40;i++)runtime.effect({type:'scatter-burst',x:360,y:600,size:140,weaponKind:'scatter'});expect(runtime.blasts).toHaveLength(4);expect(runtime.particles.length).toBeLessThanOrEqual(weak?50:160);expect(f.runtime.world.bullets.length).toBe(bullets);
+ f.tick();expect(blasts(f)).toHaveLength(4);for(let i=0;i<30;i++)f.tick();expect(runtime.blasts).toHaveLength(0);
+});

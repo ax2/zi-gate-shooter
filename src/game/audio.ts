@@ -7,6 +7,7 @@ export class GameAudio {
   private lastLaser = -Infinity;
   private lastFracture = -Infinity;
   private lastCapacitor = -Infinity;
+  private lastScatterBurst = -Infinity;
   private nodes = new Map<OscillatorNode, GainNode>();
   private retryAt = 0;
   enabled = true;
@@ -74,6 +75,10 @@ export class GameAudio {
     if(type==='fracture'){
       if(this.now()-this.lastFracture<150)return;this.lastFracture=this.now();
       this.tone(900,120,.09,.035,'sawtooth');this.tone(100,25,.25,.07,'triangle');return;
+    }
+    if(type==='scatter-burst'){
+      if(this.now()-this.lastScatterBurst<150)return;this.lastScatterBurst=this.now();
+      this.tone(250,65,.12,.035,'triangle');return;
     }
     if (type === 'blast') { this.tone(130,30,.2,.07,'triangle'); return; }
     if (type === 'fire') {
