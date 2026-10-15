@@ -5,6 +5,7 @@ let state={status:'not-started'},raf=0,interval=0,deadline=0;
 try{state=JSON.parse(sessionStorage.getItem(evidenceKey)??'null')??state;}catch{}
 function summary(values){const sorted=[...values].sort((a,b)=>a-b);return {samples:values.length,p95:sorted[Math.max(0,Math.ceil(sorted.length*.95)-1)]??0,max:sorted.at(-1)??0};}
 function render(){report.textContent=JSON.stringify(state,null,2);}
+if(['dom','canvas','idle'].includes(state.mode))modeSelect.value=state.mode;
 render();if(state.status!=='not-started')status.textContent=`上次：${state.status}`;
 button.onclick=()=>{
  if(state.status==='running')return;
