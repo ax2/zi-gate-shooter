@@ -186,11 +186,11 @@ export class CanvasRuntime {
           while (this.accumulator + 1e-9 >= C.step && steps++ < 5 && this.mode === 'playing') {
             if (this.keys.active) this.target = clamp(this.world.player.x + this.keys.direction * C.moveSpeed * C.step, C.minX, C.maxX);
             this.groundDistance += C.step * this.world.scrollSpeed;
-            const previousMastery=this.world.growth.mastery??0;
+            const previousBuildPoints=this.world.buildPoints;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
             if(this.world.player.hp>0&&this.world.contractReward){this.mode='contract-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
-            else if (this.world.player.hp>0 && (this.world.growth.mastery??0)>previousMastery && this.world.build.available(this.world.growth.mastery??0).length) {
+            else if (this.world.player.hp>0 && this.world.buildPoints>previousBuildPoints && this.world.build.available(this.world.buildPoints).length) {
               this.mode='choice';this.cancelTouch();this.accumulator=0;this.platform.silence();
             }
             if (this.world.player.hp <= 0) {
@@ -318,13 +318,13 @@ export class CanvasRuntime {
     this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${chosenNode.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':chosenNode.detail,until:this.world.time+4,combo:!!combo};
     if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
     this.mode='choice';
-    if(!this.world.build.available(this.world.growth.mastery??0).length)this.action('resume');
+    if(!this.world.build.available(this.world.buildPoints).length)this.action('resume');
   }
   private action(action: string) {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
       if(!routes.includes(route))return;
-      if(this.world.build.ranks[route]===1&&this.world.build.available(this.world.growth.mastery??0).includes(route)){this.branchRoute=route;this.mode='branch';}
+      if(this.world.build.ranks[route]===1&&this.world.build.available(this.world.buildPoints).includes(route)){this.branchRoute=route;this.mode='branch';}
       else this.selectBuild(route);
     }
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
@@ -349,7 +349,7 @@ export class CanvasRuntime {
     else if(action==='contracts'){this.contractReturn='loadout';this.mode='contracts';}
     else if(action.startsWith('contract-claim:')&&this.mode==='contract-reward'){
       const kind=action.slice(15) as WeaponKind|'energy';
-      if(this.world.claimContractReward(kind)){for(const e of this.world.drainEffects())this.effect(e);if(this.world.build.available(this.world.growth.mastery??0).length)this.mode='choice';else this.action('resume');}
+      if(this.world.claimContractReward(kind)){for(const e of this.world.drainEffects())this.effect(e);if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';else this.action('resume');}
     }
     else if(action==='contracts-back')this.mode=this.contractReturn;
     else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts)this.world.acceptContract(kind);}
@@ -914,6 +914,7 @@ export class CanvasRuntime {
     this.buttons.push({x:490,y:135,w:160,h:60,action:'rig-view',label:'查看机甲'});
     this.text(`T${w.weaponStage(w.weaponKind)} · 已叠加 ${w.activeWeapons.length} 种武器`, 360, 228, 28, '#a5d9ed');
     this.text(`本局火力 +${power}% · 充能突破 ${w.growth.mastery ?? 0} 次`, 360, 278, 27, '#f0d19a');
+    this.text(`技能点：可用${w.buildPoints-w.build.spent} · 研发${w.researchPoints} ＋ 充能突破${w.growth.mastery??0}`,360,310,21,'#bdd8e7');
     for (const [index, kind] of w.activeWeapons.entries()) {
       const profile = w.profileFor(kind), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
@@ -1017,7 +1018,7 @@ export class CanvasRuntime {
   private drawBuildTree() {
     this.rect(35,90,650,1120,'#102330');
     this.text('本局技能树',360,145,40,'#effaff','center',true);
-    this.text(`技能 ${this.world.build.baseSpent}/9 · 已精调 ${this.world.build.spent-this.world.build.baseSpent}次`,360,192,24,'#bdd8e7');
+    this.text(`技能 ${this.world.build.baseSpent}/9 · 可用${this.world.buildPoints-this.world.build.spent}点 · 精调${this.world.build.spent-this.world.build.baseSpent}次`,360,192,24,'#bdd8e7');
     for(const [i,route] of routes.entries()) {
       const rank=this.world.build.ranks[route], top=235+i*265;
       const color=['#ffd28a','#c6a1ff','#7fe4ff'][i];
@@ -1090,9 +1091,10 @@ export class CanvasRuntime {
   private drawBuildChoices() {
     this.buttons=[];
     this.rect(35,150,650,1000,'#102330');
-    this.text('充能突破 · 选择升级路线',360,220,34,'#effaff','center',true);
-    this.text('能力保留 · 可专精，也可跨路线组合',360,270,24,'#b8d4e3');
-    const available=this.world.build.available(this.world.growth.mastery??0);
+    this.text((this.world.growth.mastery??0)===0&&this.world.researchPoints>0?'装备研发 · 选择升级路线':'战地改造 · 选择升级路线',360,220,34,'#effaff','center',true);
+    this.text(`可用${this.world.buildPoints-this.world.build.spent}点 · 研发${this.world.researchPoints} + 充能突破${this.world.growth.mastery??0}`,360,270,24,'#b8d4e3');
+    this.text('首件装备/首排补给各1点 · 其后充能突破',360,305,20,'#bdd8e7');
+    const available=this.world.build.available(this.world.buildPoints);
     for(const [i,route] of routes.entries()){
       const rank=this.world.build.ranks[route],y=330+i*235,node=this.world.build.next(route);
       const enabled=available.includes(route);
@@ -1153,6 +1155,7 @@ export class CanvasRuntime {
       inputMode: this.inputMode,
       contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
+      researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticBranch:this.world.build.ballisticBranch??null,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       electricBranch:this.world.build.electricBranch??null,capacitorBursts:this.world.capacitorBursts,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,

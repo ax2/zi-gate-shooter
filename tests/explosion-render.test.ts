@@ -35,6 +35,15 @@ function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boole
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick(ms = 1000 / 60) { calls.length = 0; clock += ms; next(clock); } };
 }
+// Existing visual checks continue via real earned choices, never by suppressing the popup.
+function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
+ while(f.runtime.mode==='choice'){
+  const fork=f.runtime.world.build.ranks.optical===1;
+  expect(f.runtime.activateControl('build:optical')).toBe(true);
+  if(fork)expect(f.runtime.activateControl('branch:burn')).toBe(true);
+  if(reference)expect(reference.chooseBuild('optical',fork?'burn':undefined)).toBe(true);
+ }
+}
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
 it('retains the interruption reason after the transient notice expires and replaces it for a manual pause', async () => {
@@ -287,12 +296,12 @@ it.each([false, true])('animates a real drone without changing simulation; hit o
   f.runtime.start(); f.tick(); expect(draws()).toHaveLength(0);
 });
 
-it('guides an actual first crate, pickup, single gate and paired row without changing the run', async () => {
+it('guides real crate and gate progression with matching earned research choices', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
   const reference = new World(); const seen = new Set<string>();
   f.runtime.touchStart(1, 360, 1100); f.runtime.touchMove(1, 240, 1100);
   for (let i = 0; i < 2050; i++) {
-    f.tick(); reference.step(C.step, 240); reference.drainEffects();
+    f.tick(); reference.step(C.step, 240); reference.drainEffects();resolveResearch(f,reference);
     expect(f.runtime.world.growth).toEqual(reference.growth);
     expect(f.runtime.world.player).toEqual(reference.player);
     expect(f.runtime.world.pickups).toBe(reference.pickups);
@@ -413,7 +422,7 @@ it.each([false, true])('a real crate break reveals equipment above smoke without
   expect(f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('crate-v1.png'))).toEqual(fragments);
   f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
   for (let i = 0; i < 160; i++) {
-    f.tick(); reference.step(C.step, 360); reference.drainEffects();
+    f.tick(); reference.step(C.step, 360); reference.drainEffects();resolveResearch(f,reference);
     expect(f.runtime.world.growth).toEqual(reference.growth); expect(f.runtime.world.bodies).toEqual(reference.bodies);
     expect(f.runtime.world.pickups).toBe(reference.pickups);
   }
@@ -467,7 +476,7 @@ it.each([false, true])('uses real hit timers for local flashes, freezes on pause
   expect(flashes().map(c => c.alpha)).toEqual(before);
   f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
   for (let i = 0; i < 60; i++) {
-    f.tick(); reference.step(C.step, 360); reference.drainEffects();
+    f.tick(); reference.step(C.step, 360); reference.drainEffects();resolveResearch(f,reference);
     expect(f.runtime.world.bodies).toEqual(reference.bodies);
     expect(f.runtime.world.player).toEqual(reference.player);
     expect(f.runtime.world.score).toBe(reference.score);
@@ -621,7 +630,7 @@ it('bounds arc links, freezes them during pause and clears them on restart',asyn
 it('shows a brief weapon briefing after real pickup, yields to danger and resets on restart', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
   const pickup = f.runtime.world.spawn('pickup', 360, 1024, 2); pickup.weaponKind = 'arc';
-  f.tick();
+  f.tick();resolveResearch(f);
   const briefing = () => f.calls.some(c => c.kind === 'fillText' && String(c.args[0]).includes('最多追加2次跳电'));
   expect(f.runtime.world.weaponKind).toBe('arc'); expect(briefing()).toBe(true);
   const sniper = f.runtime.world.spawn('sniper', 200, 320); sniper.warning = 1; sniper.timer = 1;
@@ -759,7 +768,7 @@ it('keeps boss status above the HUD background and separate from the charge line
 it('shows retained weapon mounts, freezes independent recoil and inspects the same World without granting power',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
  for(const kind of ['scatter','pierce'] as const){const p=f.runtime.world.spawn('pickup',360,1024,2);p.weaponKind=kind;p.speed=0;}
- f.tick();f.tick();
+ f.tick();expect(f.runtime.activateControl('build:ballistic')).toBe(true);f.tick();
  const modules=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('mounted-modules-v1.png'));
  expect(modules()).toHaveLength(2);
  expect(modules().map(c=>c.args[1])).toEqual([0,256]);
@@ -840,7 +849,7 @@ it('combination bursts keep a reserved readable explosion within the existing ca
 });
 it('earns fracture engineering from repeated actual projectile bursts and announces the pickup combination',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
- for(const kind of ['blast','pierce'] as const){const p=w.spawn('pickup',360,C.playerY,2);p.weaponKind=kind;f.tick();}
+ for(const kind of ['blast','pierce'] as const){const p=w.spawn('pickup',360,C.playerY,2);p.weaponKind=kind;f.tick();resolveResearch(f);}
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='组合完成 · 裂甲爆破')).toBe(true);
  const target=w.spawn('armor',360,600);target.hp=target.maxHp=10000;target.speed=0;target.timer=999;
  for(let i=0;i<600;i++)f.tick();
@@ -875,7 +884,7 @@ it('locks the hunter before tier2 and enters a real immediate reward after both 
  const f=fixture();await f.runtime.load();f.runtime.start();f.tick();
  expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.runtime.activateControl('contract:hunter')).toBe(false);
  expect(f.runtime.activateControl('contracts-back')).toBe(true);expect(f.runtime.activateControl('resume')).toBe(true);
- const w=f.runtime.world,p=w.spawn('pickup',360,C.playerY,2);p.weaponKind='pulse';f.tick();
+ const w=f.runtime.world,p=w.spawn('pickup',360,C.playerY,2);p.weaponKind='pulse';f.tick();resolveResearch(f);
  expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.runtime.activateControl('contract:hunter')).toBe(true);
  expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<430;i++)f.tick();
  expect(w.contract!.reinforcements).toBe(2);expect(w.contract!.targetKills).toBe(0);
@@ -912,4 +921,13 @@ it.each([false,true])('fragment bursts share the existing bounded atlas budget w
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const runtime=f.runtime as any;const bullets=f.runtime.world.bullets.length;
  for(let i=0;i<40;i++)runtime.effect({type:'scatter-burst',x:360,y:600,size:140,weaponKind:'scatter'});expect(runtime.blasts).toHaveLength(4);expect(runtime.particles.length).toBeLessThanOrEqual(weak?50:160);expect(f.runtime.world.bullets.length).toBe(bullets);
  f.tick();expect(blasts(f)).toHaveLength(4);for(let i=0;i<30;i++)f.tick();expect(runtime.blasts).toHaveLength(0);
+});
+
+it('a real equipment research point pauses for a real choice without granting global charge power',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.spawn('pickup',360,C.playerY,2);f.tick();
+ expect(f.runtime.mode).toBe('choice');expect(w.researchPoints).toBe(1);expect(w.growth.mastery??0).toBe(0);expect(w.growth.energy).toBe(0);expect(w.growth.overload).toBe(0);const time=w.time;
+ for(let i=0;i<60;i++)f.tick();expect(w.time).toBe(time);expect(f.runtime.back()).toBe('stay');expect(f.runtime.activateControl('tree')).toBe(true);expect(f.runtime.activateControl('tree-back')).toBe(true);expect(w.build.spent).toBe(0);
+ expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.mode).toBe('playing');expect(w.build.spent).toBe(1);expect(w.activeWeapons).toContain('scatter');expect(w.weaponStage('pulse')).toBe(2);expect(w.growth.mastery??0).toBe(0);
+ const a=w.spawn('pickup',360,C.playerY,2);a.row=99;a.weaponKind='pierce';f.tick();expect(f.runtime.mode).toBe('choice');expect(w.researchPoints).toBe(2);expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.mode).toBe('branch');expect(f.runtime.activateControl('branch:fragment')).toBe(true);expect(f.runtime.mode).toBe('playing');expect(w.build.ballisticBranch).toBe('fragment');
+ expect(f.runtime.diagnostics().unspentBuildPoints).toBe(0);expect(f.runtime.diagnostics().researchPoints).toBe(2);f.runtime.start();expect(f.runtime.world.researchPoints).toBe(0);
 });

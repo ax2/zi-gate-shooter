@@ -39,8 +39,18 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
   readonly build = new BuildTree();
+  private firstEquipmentResearch=false;
+  private firstArmoryResearch=false;
+  get researchPoints(){return Number(this.firstEquipmentResearch)+Number(this.firstArmoryResearch);}
+  get buildPoints(){return (this.growth.mastery??0)+this.researchPoints;}
+  private equipmentResearch(exclusive:boolean){
+    const before=this.researchPoints;
+    this.firstEquipmentResearch=true;
+    if(exclusive)this.firstArmoryResearch=true;
+    return this.researchPoints-before;
+  }
   chooseBuild(route: Route,branch?:BuildBranch) {
-    if(!this.build.choose(route,this.growth.mastery??0,branch))return false;
+    if(!this.build.choose(route,this.buildPoints,branch))return false;
     const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
     if(kind && !this.activeWeapons.includes(kind)) {
       for(const owned of this.activeWeapons){this.weaponStages.set(owned,this.weaponStage(owned));this.acquiredWeapons.add(owned);}
@@ -503,11 +513,13 @@ export class World {
           this.weaponStages.set(kind, localGrowth.stage);
           Object.assign(this.growth, localGrowth, {stage: Math.max(this.growth.stage, localGrowth.stage)});
           this.maxStage = Math.max(this.maxStage, this.growth.stage);
+          const research=this.equipmentResearch(b.row>0);
           const title = addedWeapon ? `新增${weaponNames[this.weaponKind]} · ${this.activeWeapons.length}种火力叠加`
             : result.upgraded ? `${weaponNames[kind]} · 升至T${localGrowth.stage}` : '重复装备 · 充能+30';
           const detail = [result.upgraded ? `${weaponNames[kind]} T${localGrowth.stage} · 其他配件保留` : addedWeapon ? '充能+30' : '',
             result.activated ? this.chargeReceipt(true) : !result.upgraded ? `当前充能 ${this.growth.energy}/100` : ''].filter(Boolean).join(' · ');
           this.effects.push({type:result.upgraded?'upgrade':'pickup',x:this.player.x,y:C.playerY,text:title,detail,size:b.stage});
+          if(research)this.effects.push({type:'research',x:this.player.x,y:C.playerY,text:`装备研发 +${research}点`,detail:'可选择技能路线 · 已有火力保留'});
           this.announceFracture();
           if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY);
           if (result.activated) this.emit('overload', this.player.x, C.playerY);
