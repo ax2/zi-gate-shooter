@@ -3,7 +3,7 @@
 变更：为浏览器 Canvas 菜单发布原生透明按钮，按同一缩放/偏移定位，保留原画面。DOM 节点复用，Tab 可聚焦并显示轮廓，Enter/空格激活。公开操作只接受当前已绘制且模式匹配的按钮；执行后同步重绘。许可模态期间背景按钮 inert。可选适配器异常不终止游戏循环；其他平台无需提供此接口。
 
 ## 实际验证
-- npm run build：类型检查和 Vite 构建通过，生产脚本 canvas-preview-DbzqjB9u.js。
+- npm run build：类型检查和 Vite 构建通过，生产脚本 canvas-preview-CHqBYap_.js。
 - npx vitest run tests/native-controls.test.ts tests/native-flow.test.ts tests/explosion-render.test.ts：3文件80项通过。覆盖隐藏动作拒绝、接取后不能再接另一个契约、暂停 World 对象/时间保持、外部暂停使旧按钮失效、适配器异常隔离，以及现有渲染/原生返回行为。
 - 实际 IAB，固定候选5208，390×844：Enter开始→暂停→当前火力→技能树→返回→契约→空格接取无伤猎杀，确认只剩继续挑战；未注入游戏状态。
 - 1280×900：同一局继续挑战→暂停→设置→开源许可→返回设置→返回暂停；模态期间无背景按钮出现在可操作树，关闭后恢复。
@@ -16,3 +16,5 @@
 
 ## 交付
 build/playable/Stage-131保留完整网页可运行目录，node serve.mjs 在5208提供本机服务，无ZIP。44个dist文件与该目录SHA-256逐一核对一致（不含额外serve.mjs）。证据位于build/qa/Stage-131，并同步技术博客对应assessment/screenshots。
+
+末次复查发现菜单复用的设置按钮会保留在DOM前端，已使DOM顺序随当前视觉按钮列表同步，避免Tab顺序错位；重新构建通过，并实际验证设置→返回后按钮顺序为开始、档案、成就、设置。游戏规则未再改动。

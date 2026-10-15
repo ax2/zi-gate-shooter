@@ -15,7 +15,7 @@ export function createBrowserControls(canvas: HTMLCanvasElement, activate: (acti
       const active = new Set(controls.map(control => control.action));
       for (const [action, button] of buttons) if (!active.has(action)) { button.remove(); buttons.delete(action); }
       const rect = canvas.getBoundingClientRect();
-      for (const control of controls) {
+      for (const [index, control] of controls.entries()) {
         let button = buttons.get(control.action);
         if (!button) {
           button = document.createElement('button'); button.type = 'button'; button.className = 'gate-control';
@@ -23,6 +23,7 @@ export function createBrowserControls(canvas: HTMLCanvasElement, activate: (acti
           button.addEventListener('click', () => activate(control.action));
           layer.append(button); buttons.set(control.action, button);
         }
+        if (layer.children[index] !== button) layer.insertBefore(button, layer.children[index] ?? null);
         if (button.textContent !== control.label) button.textContent = control.label;
         const values = {
           left: `${rect.left + placement.offsetX + control.x * placement.scale}px`,
