@@ -517,7 +517,7 @@ function bossKillFixture(world: World) {
     damage: 4, age: 0, active: true, hostile: false });
 }
 
-it.each([false, true])('a real boss kill presents distinct beats without changing recovery or rewards (weak=%s)', async weak => {
+it.each([false, true])('a real boss kill presents distinct beats and matches rule recovery after explicit loot selection (weak=%s)', async weak => {
   const f = fixture(weak); await f.runtime.load(); f.runtime.start();
   const reference = new World(); bossKillFixture(reference); bossKillFixture(f.runtime.world);
   const locations = new Set<string>(); let peak = 0;
@@ -542,6 +542,10 @@ it.each([false, true])('a real boss kill presents distinct beats without changin
     if (i === 12) expect(blasts(f).length).toBe(2);
     if (i === 24) expect(blasts(f).length).toBe(3);
     if (i > 72) expect(blasts(f)).toHaveLength(0);
+    if(f.runtime.mode==='boss-reward'){
+      expect(f.runtime.world.phaseTime).toBeGreaterThanOrEqual(C.bossLootReveal);
+      expect(f.runtime.activateControl('boss-claim:pulse')).toBe(true);expect(reference.claimBossReward('pulse')).toBe(true);
+    }
   }
   expect(locations.size).toBe(4); expect(peak).toBeLessThanOrEqual(4);
   expect(f.runtime.world.score).toBe(C.enemies.boss.score);

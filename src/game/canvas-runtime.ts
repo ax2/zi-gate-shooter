@@ -60,7 +60,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
@@ -194,8 +194,10 @@ export class CanvasRuntime {
             const previousBuildPoints=this.world.buildPoints;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
-            if(this.world.player.hp>0&&this.world.contractReward){this.mode='contract-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
-            else if (this.world.player.hp>0 && this.world.buildPoints>previousBuildPoints && this.world.build.available(this.world.buildPoints).length) {
+            const reveal=this.world.bossRewardRound!==null&&this.world.phase==='recovery'&&this.world.phaseTime<C.bossLootReveal;
+            if(this.world.player.hp>0&&!reveal&&this.world.bossRewardRound!==null){this.mode='boss-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
+            else if(this.world.player.hp>0&&!reveal&&this.world.contractReward){this.mode='contract-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
+            else if (this.world.player.hp>0 && !reveal && this.world.buildPoints>previousBuildPoints && this.world.build.available(this.world.buildPoints).length) {
               this.mode='choice';this.cancelTouch();this.accumulator=0;this.platform.silence();
             }
             if (this.world.player.hp <= 0) {
@@ -294,7 +296,7 @@ export class CanvasRuntime {
   back(): 'stay' | 'exit' {
     this.cancelTouch();
     if(this.mode==='branch'){this.mode='choice';return 'stay';}
-    if (this.mode === 'choice'||this.mode==='contract-reward') return 'stay';
+    if (this.mode === 'choice'||this.mode==='contract-reward'||this.mode==='boss-reward') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = this.achievementReturn; return 'stay'; }
     if (this.mode === 'rig'||this.mode==='combos') { this.mode='loadout';return 'stay'; }
@@ -357,6 +359,16 @@ export class CanvasRuntime {
     else if(action.startsWith('contract-claim:')&&this.mode==='contract-reward'){
       const kind=action.slice(15) as WeaponKind|'energy';
       if(this.world.claimContractReward(kind)){for(const e of this.world.drainEffects())this.effect(e);if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';else this.action('resume');}
+    }
+    else if(action.startsWith('boss-claim:')&&this.mode==='boss-reward'){
+      const kind=action.slice(11) as WeaponKind|'research';
+      if(this.world.claimBossReward(kind)){
+        for(const e of this.world.drainEffects())this.effect(e);
+        if(this.world.bossRewardRound!==null)this.mode='boss-reward';
+        else if(this.world.contractReward)this.mode='contract-reward';
+        else if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';
+        else this.action('resume');
+      }
     }
     else if(action==='contracts-back')this.mode=this.contractReturn;
     else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts)this.world.acceptContract(kind);}
@@ -532,6 +544,7 @@ export class CanvasRuntime {
     if (this.mode === 'combos') {this.drawCombos();c.restore();return;}
     if(this.mode==='branch'){this.drawBuildBranch();c.restore();return;}
     if(this.mode==='contract-reward'){this.drawContractReward();c.restore();return;}
+    if(this.mode==='boss-reward'){this.drawBossReward();c.restore();return;}
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
     if (this.mode === 'tree') { this.drawBuildTree(); c.restore(); return; }
@@ -1000,6 +1013,25 @@ export class CanvasRuntime {
     this.text('检查挂载与等级 · 战斗时间已暂停',360,1054,22,'#a6c5d7');
     this.button('返回当前火力',1100,'rig-back',true);
   }
+  private weaponUpgradeOptions(){
+    const w=this.world;
+    return w.activeWeapons.map(kind=>{const stage=w.weaponStage(kind),n=w.weaponCalibration(kind);return {kind,title:stage<3?`${weaponNames[kind]} T${stage} → T${stage+1}`:`${weaponNames[kind]} · 专属精校${n+1}`,detail:stage<3?'升一阶，其他配件等级保留':`该武器伤害系数 ${100+n*50}% → ${150+n*50}%`,color:weaponColors[kind]};});
+  }
+  private drawBossReward(){
+    const w=this.world;if(w.bossRewardRound===null)return;
+    this.rect(35,120,650,1080,'#102330');
+    this.text(`第${w.bossRewardRound}轮首领战利品`,360,184,38,'#ffdc8a','center',true);
+    this.text('任选一项 · 蓝图进技能树，配件强现有武器',360,237,23,'#bdd8e7');
+    this.text(`首领充能+50已结算 · 当前装甲 ${w.player.hp}/3`,360,271,21,'#9db8c8');
+    const points=w.buildPoints-w.build.spent;
+    const options=[{kind:'research',title:'研发蓝图 · 技能点+1',detail:`可用技能点 ${points} → ${points+1} · 不改变充能`,color:'#9fe7ff'},...this.weaponUpgradeOptions()];
+    for(const [i,o] of options.entries()){
+      const y=306+i*125;this.rect(65,y,590,110,'#203e50');this.text(o.title,90,y+34,28,o.color,'left',true);
+      this.text(o.detail,90,y+78,23,'#d6e7f0','left');this.text('›',625,y+50,32,o.color,'right');
+      this.buttons.push({x:65,y,w:590,h:110,action:`boss-claim:${o.kind}`,label:o.title});
+    }
+    this.text('战斗已暂停 · 本轮仅领取一次',360,1135,24,'#bdd8e7');
+  }
   private drawContractReward() {
     const w=this.world,reward=w.contractReward;if(!reward)return;
     this.rect(35,120,650,1080,'#102330');
@@ -1007,7 +1039,7 @@ export class CanvasRuntime {
     this.text('任选一项 · 其他武器与能力全部保留',360,245,24,'#bdd8e7');
     const total=w.growth.energy+reward.charge;
     const options=[{kind:'energy',title:`充能 +${reward.charge}`,detail:`充能 ${Math.floor(w.growth.energy)} → ${Math.floor(total%100)} · 额外突破 ${Math.floor(total/100)}次`,color:'#7fe4ff'},
-      ...w.activeWeapons.map(kind=>{const stage=w.weaponStage(kind),n=w.weaponCalibration(kind);return {kind,title:stage<3?`${weaponNames[kind]} T${stage} → T${stage+1}`:`${weaponNames[kind]} · 专属精校${n+1}`,detail:stage<3?'升一阶，其他配件等级保留':`该武器伤害系数 ${100+n*50}% → ${150+n*50}%`,color:weaponColors[kind]};})];
+      ...this.weaponUpgradeOptions()];
     for(const [i,option] of options.entries()){
       const y=290+i*125;this.rect(65,y,590,110,'#203e50');
       this.text(option.title,90,y+33,28,option.color,'left',true);
@@ -1179,7 +1211,7 @@ export class CanvasRuntime {
       supportBeams:this.supportBeams.length,
       weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
       weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
-      contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,
+      contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,bossRewardRound:this.world.bossRewardRound,bossLootStats:{...this.world.bossLootStats},
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,

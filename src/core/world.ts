@@ -41,7 +41,8 @@ export class World {
   readonly build = new BuildTree();
   private firstEquipmentResearch=false;
   private firstArmoryResearch=false;
-  get researchPoints(){return Number(this.firstEquipmentResearch)+Number(this.firstArmoryResearch);}
+  private bossResearchPoints=0;
+  get researchPoints(){return Number(this.firstEquipmentResearch)+Number(this.firstArmoryResearch)+this.bossResearchPoints;}
   get buildPoints(){return (this.growth.mastery??0)+this.researchPoints;}
   private equipmentResearch(exclusive:boolean){
     const before=this.researchPoints;
@@ -145,6 +146,26 @@ export class World {
       laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0),prism:rank>=3&&this.build.ranks.ballistic>=1};
   }
   bossWins=0;
+  private bossLootRounds:number[]=[];
+  get bossRewardRound(){return this.bossLootRounds[0]??null;}
+  readonly bossLootStats={claimed:0,research:0,equipment:0};
+  claimBossReward(kind:WeaponKind|'research'){
+    if(this.bossRewardRound===null||this.player.hp<=0||this.phase==='dead')return false;
+    if(kind!=='research'&&!this.activeWeapons.includes(kind))return false;
+    this.bossLootRounds.shift();this.bossLootStats.claimed++;
+    if(kind==='research'){
+      this.bossResearchPoints++;this.bossLootStats.research++;
+      this.effects.push({type:'research',x:this.player.x,y:C.playerY,text:'首领蓝图 · 研发+1点',detail:'可推进技能路线 · 已有火力保留'});
+    }else{this.bossLootStats.equipment++;this.upgradeOwnedWeapon(kind);}
+    this.announceFracture();return true;
+  }
+  private upgradeOwnedWeapon(kind:WeaponKind){
+    for(const owned of this.activeWeapons)if(!this.weaponStages.has(owned))this.weaponStages.set(owned,this.weaponStage(owned));
+    const stage=this.weaponStage(kind);
+    if(stage<3){this.weaponStages.set(kind,stage+1);this.growth.stage=Math.max(this.growth.stage,stage+1);this.maxStage=Math.max(this.maxStage,stage+1);}
+    else this.calibrations.set(kind,this.weaponCalibration(kind)+1);
+    this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
+  }
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   contract?: Contract;
   contractReward?: {charge:number;round:number};
@@ -157,11 +178,7 @@ export class World {
       if(result.activated)this.emit('overload',this.player.x,C.playerY);
       this.effects.push({type:'reward',x:this.player.x,y:C.playerY,text:`契约奖励 · 充能+${reward.charge}`,detail:this.chargeReceipt(result.activated)});
     }else{
-      for(const owned of this.activeWeapons)if(!this.weaponStages.has(owned))this.weaponStages.set(owned,this.weaponStage(owned));
-      const stage=this.weaponStage(kind);
-      if(stage<3){this.weaponStages.set(kind,stage+1);this.growth.stage=Math.max(this.growth.stage,stage+1);this.maxStage=Math.max(this.maxStage,stage+1);}
-      else this.calibrations.set(kind,this.weaponCalibration(kind)+1);
-      this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
+      this.upgradeOwnedWeapon(kind);
     }
     this.announceFracture();
     return true;
@@ -582,6 +599,7 @@ export class World {
       this.phase = 'dead'; this.emit('death', this.player.x, C.playerY, '本次突围结束', 150);
     } else if (this.bossVictory) {
       this.bossWins++;
+      this.bossLootRounds.push(this.round);
       const planned=this.bossFormation?.groups.reduce((n,g)=>n+g.troops.length,0)??0;
       if(planned>0&&this.bossEscortSpawns===planned&&this.bossEscortKills===planned&&this.damageTaken===this.bossStartDamage){
         this.tacticalWins++;this.emit('formation-clear',360,400,'战术拆解 · 编队全破且无伤获胜');
