@@ -25,6 +25,6 @@ it('retains growth windows and pre-boss breathing room across all nine combinati
   const sector=(round-1)%3+1;
   const roster=(items:ReturnType<typeof timeline>)=>items.filter(s=>s.at>=60).map(({drop,dropY,...s})=>s);
   expect(roster(wave)).toEqual(roster(timeline(sector,1)));
-  expect(wave.filter(s=>s.at>=60).every(s=>!!s.drop===(round>1))).toBe(true);
+  expect(wave.filter(s=>s.at>=60).every(s=>!!s.drop)).toBe(true);
  }
 });

@@ -1,5 +1,7 @@
 # 火力突围
 
+最新首局候选 **Stage-145**：http://127.0.0.1:5223/ 。第一局完整敌机与早期分支火力检验，修正装甲入场叠形。[试玩](docs/stages/Stage-145/PLAY.md) · [验证边界](docs/stages/Stage-145/TEST_REPORT.md)。
+
 最新奖励候选 **Stage-144**：http://127.0.0.1:5221/ 。首领爆炸后选择研发蓝图或指定配件强化，旧能力与原胜利奖励保留。[试玩](docs/stages/Stage-144/PLAY.md) · [验证边界](docs/stages/Stage-144/TEST_REPORT.md)。
 
 最新内容候选 **Stage-143**：http://127.0.0.1:5220/ 。新增护航/交叉哨/装甲纵列，改善后续章节开场和尾段衔接。[试玩](docs/stages/Stage-143/PLAY.md) · [验证边界](docs/stages/Stage-143/TEST_REPORT.md)。

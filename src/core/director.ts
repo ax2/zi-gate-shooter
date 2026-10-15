@@ -1,5 +1,5 @@
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan'; lane?: number; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan'; lane?: number; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 export const sectorNames = ['突围走廊', '侧翼夹击', '重装封锁'];
 export const sectorIndex = (round: number) => (Math.max(1, round) - 1) % 3;
@@ -140,6 +140,18 @@ export function timeline(round: number, seed: number): Spawn[] {
     // those enemies inside the visible battlefield before they can be erased.
     for(const spawn of out)if(spawn.kind in {drone:1,sniper:1,guard:1,charger:1,armor:1,elite:1}
       &&(spawn.at<=13||spawn.at>=60)){spawn.drop=true;spawn.dropY=SWARM.arrivalY;}
+  }
+  if(round===1){
+    // The first equipment branch needs a real, compact group to demonstrate
+    // its effect. The player still shoots the nearer gate before these units.
+    for(const [i,x] of [240,300,360].entries()){
+      add(24.5,'drone',x);Object.assign(out[out.length-1],{drop:true,dropY:SWARM.arrivalY,
+        dropLabel:i===0?'火力检验':undefined,dropDetail:'密集敌群 · 让新火力发挥作用'});
+    }
+    // Keep the original tutorial roster/timing and make its machinery visible.
+    // The first three simple targets appear higher than the later combat wave.
+    for(const s of out)if(s.kind in {drone:1,sniper:1,guard:1,charger:1,armor:1,elite:1}
+      &&(s.at<=17||s.at>=31)){s.drop=true;s.dropY=s.at<=17?320:s.kind==='armor'?500:SWARM.arrivalY;}
   }
   return out.sort((a, b) => a.at - b.at);
 }

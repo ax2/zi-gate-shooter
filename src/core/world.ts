@@ -327,7 +327,7 @@ export class World {
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
           if(s.drop)this.dropSpawns++;
           if(s.dropNotice)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'突降机群',detail:'短暂投送屏障 · 群攻可快速清场'});
-          if(s.dropLabel)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:s.dropLabel,detail:s.kind==='guard'?'前盾后援 · 留意转火角度':s.kind==='sniper'?'两侧哨机 · 优先压制一翼':'装甲纵列 · 集中火力突破'});
+          if(s.dropLabel)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:s.dropLabel,detail:s.dropDetail??(s.kind==='guard'?'前盾后援 · 留意转火角度':s.kind==='sniper'?'两侧哨机 · 优先压制一翼':'装甲纵列 · 集中火力突破')});
         }
       }
       if (this.roundTime >= 72 && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {

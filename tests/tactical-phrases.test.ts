@@ -1,6 +1,6 @@
 import {it,expect} from 'vitest';import {World} from '../src/core/world';import {C} from '../src/core/config';import {timeline,SWARM} from '../src/core/director';
 it('authors two finite, differently shaped chapter phrases while preserving the first chapter and original rewards',()=>{
- expect(timeline(1,1337).some(s=>s.dropY!==undefined)).toBe(false);
+ expect(timeline(1,1337).some(s=>[44.5,55.5].includes(s.at))).toBe(false);
  for(const [round,count,first] of [[2,7,'sniper'],[3,6,'armor'],[4,7,'guard']] as const){
   for(const seed of [1,77,1337]){const list=timeline(round,seed),phrases=list.filter(s=>s.drop&&[44.5,55.5].includes(s.at));
    expect(phrases).toHaveLength(count);expect(phrases[0].kind).toBe(first);expect(phrases.filter(s=>s.dropLabel)).toHaveLength(2);
