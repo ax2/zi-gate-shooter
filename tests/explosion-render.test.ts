@@ -846,3 +846,16 @@ it('earns fracture engineering from repeated actual projectile bursts and announ
  expect(w.fractureBursts).toBeGreaterThanOrEqual(10);
  expect(f.runtime.save.achievements.unlocked).toContain('fracture');
 });
+it('optical branch browsing spends no point, remains frozen, and commits one explicit choice',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ w.growth.mastery=1;w.chooseBuild('optical');w.growth.energy=100;f.tick();
+ expect(f.runtime.mode).toBe('choice');expect(f.runtime.activateControl('build:optical')).toBe(true);
+ expect(f.runtime.mode).toBe('branch');const time=w.time;expect(w.build.spent).toBe(1);
+ for(let i=0;i<30;i++)f.tick();expect(w.time).toBe(time);expect(w.build.opticalBranch).toBeUndefined();
+ expect(f.runtime.activateControl('branch-back')).toBe(true);expect(w.build.spent).toBe(1);
+ expect(f.runtime.activateControl('build:optical')).toBe(true);
+ expect(f.runtime.activateControl('branch:relay')).toBe(true);expect(f.runtime.mode).toBe('playing');
+ expect(w.build.spent).toBe(2);expect(w.build.opticalBranch).toBe('relay');
+ expect(f.runtime.activateControl('branch:burn')).toBe(false);expect(w.build.spent).toBe(2);
+ expect(f.runtime.diagnostics().opticalBranch).toBe('relay');
+});

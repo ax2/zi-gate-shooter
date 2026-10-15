@@ -1,7 +1,7 @@
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, type ContractKind } from './contracts';
-import { BuildTree, type Route } from './build-tree';
+import { BuildTree, OPTICAL_FORK, type OpticalBranch, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
 import { supportProfile, supportMilestone } from './support-profile';
 import { C, clamp } from './config';
@@ -22,7 +22,7 @@ export interface Body {
   width: number; height: number; hp: number; maxHp: number; speed: number;
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
-  attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number;
+  attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
@@ -37,14 +37,53 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
   readonly build = new BuildTree();
-  chooseBuild(route: Route) {
-    if(!this.build.choose(route,this.growth.mastery??0))return false;
+  chooseBuild(route: Route,branch?:OpticalBranch) {
+    if(!this.build.choose(route,this.growth.mastery??0,branch))return false;
     const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
     if(kind && !this.activeWeapons.includes(kind)) {
       for(const owned of this.activeWeapons){this.weaponStages.set(owned,this.weaponStage(owned));this.acquiredWeapons.add(owned);}
       this.weaponStages.set(kind,1);this.acquiredWeapons.add(kind);
     }
     return true;
+  }
+  burnHits=0;relayHits=0;
+  private opticalSecondary(body:Body,damage:number){
+    if(!(body.kind in C.enemies)||guardClosed(body))return;
+    if(this.build.opticalBranch==='burn'){
+      if(!body.active)return;
+      body.burnDamage=Math.max(body.burnDamage??0,damage*OPTICAL_FORK.burnDamage);
+      body.burnTicks=OPTICAL_FORK.burnTicks;
+      // Refresh the duration without postponing a pending tick.
+      body.burnTimer=Math.min(body.burnTimer??OPTICAL_FORK.burnInterval,OPTICAL_FORK.burnInterval);
+    }
+  }
+  private splitLaser(damage:number){
+    const x=this.player.x,start=C.playerY-100;
+    const candidates=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&b.y>=C.playerShotTop&&b.y<start
+      &&!(b.kind==='boss'&&this.phase!=='boss')&&Math.abs(b.x-x)>b.width/2+8&&Math.abs(b.x-x)<=OPTICAL_FORK.relayRange)
+      .sort((a,b)=>Math.hypot(a.x-x,a.y-start)-Math.hypot(b.x-x,b.y-start)||a.id-b.id);
+    const target=candidates[0];if(!target)return;
+    // Resolve the first collider along the finite split ray, including rewards and shields.
+    const contacts=this.bodies.filter(b=>b.active&&b.kind!=='pickup'&&b.y>=C.playerShotTop&&b.y<start
+      &&!(b.kind==='boss'&&this.phase!=='boss'))
+      .map(body=>({body,t:sweep(x,start,target.x,target.y,body.x,body.y,body.x,body.y,body.width/2+5,body.height/2+5)}))
+      .filter((hit):hit is {body:Body;t:number}=>hit.t!==null).sort((a,b)=>a.t-b.t||a.body.id-b.body.id);
+    const hit=contacts[0];if(!hit)return;
+    const endX=x+(target.x-x)*hit.t,endY=start+(target.y-start)*hit.t;
+    this.relayHits++;this.effects.push({type:'refract',x,y:start,targetX:endX,targetY:endY});
+    this.hit(hit.body,damage*OPTICAL_FORK.relayDamage,'pulse');
+  }
+  private advanceBurn(dt:number){
+    if(this.phase!=='running'&&this.phase!=='boss')return;
+    for(const body of this.bodies){
+      if(!body.active||!body.burnTicks||body.y<C.playerShotTop||body.y>C.playerY||(body.kind==='boss'&&this.phase!=='boss'))continue;
+      body.burnTimer=(body.burnTimer??OPTICAL_FORK.burnInterval)-dt;
+      while(body.active&&body.burnTicks>0&&body.burnTimer<=1e-9){
+        body.burnTimer+=OPTICAL_FORK.burnInterval;body.burnTicks--;this.burnHits++;
+        this.effects.push({type:'burn-tick',x:body.x,y:body.y,weaponKind:'blast'});this.hit(body,body.burnDamage??0,'blast');
+      }
+      if(!body.burnTicks)body.burnDamage=undefined;
+    }
   }
   fractureBursts=0;
   private announcedFracture=false;
@@ -275,11 +314,14 @@ export class World {
           let end=C.playerShotTop, count=0;
           for(const body of targets){
             const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body);
-            this.hit(body,support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1),'pulse');
+            const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
+            this.hit(body,damage,'pulse');
+            if(side===0&&count===0&&!blocked)this.opticalSecondary(body,damage);
             if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
           }
           this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0});
         }
+        if(this.build.opticalBranch==='relay')this.splitLaser(support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1));
       }
     }
   }
@@ -309,6 +351,7 @@ export class World {
         if(this.admit(candidate)){challenge.reinforcements++;challenge.nextReinforcement=challenge.elapsed+.8;}
       }
     }
+    this.advanceBurn(dt);
     this.shoot(dt);
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;

@@ -1,9 +1,10 @@
+import { burnLight } from './burn-light';
 import { fractureLight, fractureMarks } from './fracture-light';
 import { FRACTURE } from '../core/combos';
 import { mountedRig } from './mounted-rig';
 import { contracts, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
-import { tree, routes, type Route } from '../core/build-tree';
+import { tree, routes, opticalBranches, OPTICAL_FORK, type OpticalBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -55,7 +56,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
@@ -282,6 +283,7 @@ export class CanvasRuntime {
   /** Native back never resumes a paused run or silently abandons a live one. */
   back(): 'stay' | 'exit' {
     this.cancelTouch();
+    if(this.mode==='branch'){this.mode='choice';return 'stay';}
     if (this.mode === 'choice'||this.mode==='contract-reward') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = 'menu'; return 'stay'; }
@@ -303,19 +305,28 @@ export class CanvasRuntime {
     this.render(0);
     return true;
   }
+  private selectBuild(route:Route,branch?:OpticalBranch){
+    const chosenNode=this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
+    const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
+    if(!this.world.chooseBuild(route,branch))return;
+    this.checkAchievements();
+    const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
+    this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${chosenNode.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':chosenNode.detail,until:this.world.time+4,combo:!!combo};
+    if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
+    this.mode='choice';
+    if(!this.world.build.available(this.world.growth.mastery??0).length)this.action('resume');
+  }
   private action(action: string) {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
-      const chosenNode=routes.includes(route)?this.world.build.next(route):undefined;
-      const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
-      if(routes.includes(route)&&this.world.chooseBuild(route)){
-        this.checkAchievements();
-        const node=chosenNode!;
-        const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
-        this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${node.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':node.detail,until:this.world.time+4,combo:!!combo};
-        if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
-        if(!this.world.build.available(this.world.growth.mastery??0).length)this.action('resume');
-      }
+      if(!routes.includes(route))return;
+      if(route==='optical'&&this.world.build.ranks.optical===1&&this.world.build.available(this.world.growth.mastery??0).includes(route))this.mode='branch';
+      else this.selectBuild(route);
+    }
+    else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
+    else if(action.startsWith('branch:')&&this.mode==='branch'){
+      const branch=action.slice(7) as OpticalBranch;
+      if((branch==='burn'||branch==='relay')&&this.world.build.ranks.optical===1)this.selectBuild('optical',branch);
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -493,6 +504,7 @@ export class CanvasRuntime {
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
     if (this.mode === 'combos') {this.drawCombos();c.restore();return;}
+    if(this.mode==='branch'){this.drawOpticalBranch();c.restore();return;}
     if(this.mode==='contract-reward'){this.drawContractReward();c.restore();return;}
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
@@ -614,6 +626,7 @@ export class CanvasRuntime {
         }
       }
     }
+    for(const b of w.bodies)if(b.active&&b.burnTicks)burnLight(c,b.x,b.y,b.width,b.height,w.time,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&b.fractureHits)fractureMarks(c,b.x,b.y+(b.kind==='boss'?BOSS_VISUAL.offsetY:0),b.width,b.fractureHits);
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
@@ -876,7 +889,7 @@ export class CanvasRuntime {
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
     }
     const support=w.supportProfile();
-    this.text(support.laserUnlocked?`激光：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
+    this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text(support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
     this.text(`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
@@ -974,7 +987,8 @@ export class CanvasRuntime {
       const color=['#ffd28a','#c6a1ff','#7fe4ff'][i];
       this.text(`${['弹道','雷电','光学'][i]}路线 · 精调${this.world.build.refinements[route]}次`,72,top,27,color,'left',true);
       this.rect(85,top+28,2,155,'#456478');
-      for(const [j,node] of tree[route].entries()) {
+      for(const j of tree[route].keys()) {
+        const node=this.world.build.node(route,j);
         const y=top+42+j*68, owned=j<rank;
         const locked=route==='ballistic' && j===2 && this.world.build.ranks.electric===0;
         const status=owned?'已生效':locked?'需导电线圈':j===rank?'下一节点':'前置未完成';
@@ -987,7 +1001,24 @@ export class CanvasRuntime {
     this.text('路线点满后可持续精调 · 能力保留',360,1055,23,'#bdd8e7');
     this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
+  private drawOpticalBranch(){
+    this.rect(35,120,650,1080,'#102330');
+    this.text('光学改造 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('都保留原激光 · 发射间隔缩短25%',360,250,25,'#bdd8e7');
+    for(const [i,branch] of (['burn','relay'] as const).entries()){
+      const node=opticalBranches[branch],y=315+i*290,color=branch==='burn'?'#ffc187':'#a3efff';
+      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
+      this.text(node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,25,'#effaff','left');
+      this.text(branch==='burn'?'主束首敌追加3次灼烧':'主束保留 · 额外瞄准一名侧翼敌人',90,y+133,24,'#d9e8f1','left');
+      this.text(branch==='burn'?`每${OPTICAL_FORK.burnInterval}秒${OPTICAL_FORK.burnDamage*100}%伤害 · 不叠层`:`横距${OPTICAL_FORK.relayRange} · ${OPTICAL_FORK.relayDamage*100}%伤害 · 不递归`,90,y+175,23,'#bdd8e7','left');
+      this.text('选择此改造　›',625,y+219,25,color,'right');
+      this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
+    }
+    this.text('本局选定不可切换 · 三阶棱镜与旧武器保留',360,965,23,'#f0d19a');
+    this.button('返回升级选择',1050,'branch-back');
+  }
   private drawBuildChoices() {
+    this.buttons=[];
     this.rect(35,150,650,1000,'#102330');
     this.text('充能突破 · 选择升级路线',360,220,34,'#effaff','center',true);
     this.text('能力保留 · 可专精，也可跨路线组合',360,270,24,'#b8d4e3');
@@ -1049,6 +1080,7 @@ export class CanvasRuntime {
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
+      opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
       bossDestructionAge: this.destruction?.age ?? null,
