@@ -20,3 +20,11 @@ it('awards persistent combat and combination achievements exactly once',()=>{
  const loaded=parseSave({version:1,achievements:JSON.parse(JSON.stringify(s))});
  expect(loaded.achievements).toEqual(s);
 });
+
+it('records fracture engineering only after ten real burst counts and retains it through loading',()=>{
+ const s=emptyAchievements(),ranks={ballistic:0,electric:0,optical:0};
+ expect(awardAchievements(s,ranks,3,9)).toEqual([]);
+ expect(awardAchievements(s,ranks,3,10).map(a=>a.id)).toEqual(['fracture']);
+ expect(awardAchievements(s,ranks,3,20)).toEqual([]);
+ expect(parseAchievements(s).unlocked).toEqual(['fracture']);
+});

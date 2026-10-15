@@ -1,3 +1,4 @@
+import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, type ContractKind } from './contracts';
 import { BuildTree, type Route } from './build-tree';
@@ -21,7 +22,7 @@ export interface Body {
   width: number; height: number; hp: number; maxHp: number; speed: number;
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
-  attackCycle: number; burst: number;
+  attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number;
   weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
@@ -44,6 +45,26 @@ export class World {
       this.weaponStages.set(kind,1);this.acquiredWeapons.add(kind);
     }
     return true;
+  }
+  fractureBursts=0;
+  private announcedFracture=false;
+  fractureUnlocked(){return this.activeWeapons.includes('pierce')&&this.activeWeapons.includes('blast')&&this.weaponStage('pierce')>=2&&this.weaponStage('blast')>=2;}
+  private announceFracture(){
+    if(!this.announcedFracture&&this.fractureUnlocked()){
+      this.announcedFracture=true;
+      this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'组合完成 · 裂甲爆破',detail:'穿甲连续命中3次引爆 · 原有火力保留'});
+    }
+  }
+  private fracture(body:Body,damage:number){
+    if(!this.fractureUnlocked()||!body.active||!(body.kind in C.enemies)||guardClosed(body)||this.time<(body.fractureReadyAt??0))return;
+    body.fractureHits=(body.fractureHits??0)+1;
+    if(body.fractureHits<FRACTURE.hits)return;
+    body.fractureHits=0;body.fractureReadyAt=this.time+FRACTURE.cooldown;this.fractureBursts++;
+    this.effects.push({type:'fracture',x:body.x,y:body.y,size:FRACTURE.radius,weaponKind:'blast'});
+    this.hit(body,damage*FRACTURE.direct,'blast');
+    for(const other of this.bodies)if(other!==body&&other.active&&other.kind in C.enemies
+      &&other.y>=C.playerShotTop&&other.y<=C.playerY&&!(other.kind==='boss'&&this.phase!=='boss')
+      &&Math.hypot(other.x-body.x,other.y-body.y)<=FRACTURE.radius)this.hit(other,damage*FRACTURE.splash,'blast');
   }
   private calibrations=new Map<WeaponKind,number>();
   weaponCalibration(kind:WeaponKind){return this.calibrations.get(kind)??0;}
@@ -75,6 +96,7 @@ export class World {
       else this.calibrations.set(kind,this.weaponCalibration(kind)+1);
       this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
     }
+    this.announceFracture();
     return true;
   }
   damageTaken=0;
@@ -325,6 +347,7 @@ export class World {
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
+          if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);
           const support=this.supportProfile();
           if (support.refractionTargets > 0 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
             const reflected=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies
@@ -394,6 +417,7 @@ export class World {
           const detail = [result.upgraded ? `${weaponNames[kind]} T${localGrowth.stage} · 其他配件保留` : addedWeapon ? '充能+30' : '',
             result.activated ? this.chargeReceipt(true) : !result.upgraded ? `当前充能 ${this.growth.energy}/100` : ''].filter(Boolean).join(' · ');
           this.effects.push({type:result.upgraded?'upgrade':'pickup',x:this.player.x,y:C.playerY,text:title,detail,size:b.stage});
+          this.announceFracture();
           if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY);
           if (result.activated) this.emit('overload', this.player.x, C.playerY);
         });

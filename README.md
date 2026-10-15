@@ -1,5 +1,7 @@
 # 火力突围
 
+当前内容候选 **Stage-132**：http://127.0.0.1:5209/ 。新增裂甲爆破、三组合配方与实触发成就。[试玩](docs/stages/Stage-132/PLAY.md) · [证据与边界](docs/stages/Stage-132/TEST_REPORT.md)。
+
 当前操作候选 **Stage-131**：http://127.0.0.1:5208/ 。菜单支持标准按钮与Tab/Enter/空格，保留技能树、契约和叠加配装。[验证与边界](docs/stages/Stage-131/TEST_REPORT.md)。长帧根因仍待定位。
 
 当前诊断候选 **Stage-130**：http://127.0.0.1:5207/ 。已区分回调工作耗时与更新间隔，长帧根因仍待定位。[验证记录](docs/stages/Stage-130/TEST_REPORT.md)。正常开发入口仍5181。

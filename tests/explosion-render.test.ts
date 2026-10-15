@@ -18,14 +18,14 @@ it.each([false,true])('support beam expires, freezes on pause, and clears on res
 
 function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boolean}) {
   let clock = 0, next: FrameRequestCallback = () => {};
-  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; composite: string; font?: string }> = [];
+  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; stroke?: unknown; composite: string; font?: string }> = [];
   const state: Record<string, any> = { globalAlpha: 1, globalCompositeOperation: 'source-over' };
   const stack: Record<string, any>[] = [];
   const context = new Proxy(state, { get(target, key: string) {
     if (key in target) return target[key];
     if (key === 'save') return () => stack.push({ ...state });
     if (key === 'restore') return () => Object.assign(state, stack.pop());
-    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, composite: state.globalCompositeOperation, font: state.font });
+    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, stroke:state.strokeStyle, composite: state.globalCompositeOperation, font: state.font });
   } });
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
@@ -824,4 +824,25 @@ it('a failed browser context probe cannot turn a safe interruption into a game e
  const f=fixture(false,()=>{throw Error('probe unavailable');});await f.runtime.load();f.runtime.start();f.tick(1000);
  expect(f.runtime.mode).toBe('paused');expect(f.runtime.world.time).toBe(0);
  expect(f.runtime.diagnostics().interruptedFrames).toHaveLength(1);
+});
+it('combination bursts keep a reserved readable explosion within the existing cap and recipe browsing freezes World',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ for(let i=0;i<7;i++)f.runtime.world.emit(i<4?'blast':'fracture',360+i*5,600,undefined,120);
+ f.tick();expect(f.runtime.diagnostics().blasts).toBe(4);
+ expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#a2d7e8')).toBe(true);
+ expect(f.runtime.activateControl('pause')).toBe(true);expect(f.runtime.activateControl('loadout')).toBe(true);
+ const w=f.runtime.world,time=w.time;
+ expect(f.runtime.activateControl('combos')).toBe(true);expect(f.runtime.mode).toBe('combos');
+ for(let i=0;i<60;i++)f.tick();expect(w.time).toBe(time);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='裂甲爆破')).toBe(true);
+ expect(f.runtime.back()).toBe('stay');expect(f.runtime.mode).toBe('loadout');
+});
+it('earns fracture engineering from repeated actual projectile bursts and announces the pickup combination',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ for(const kind of ['blast','pierce'] as const){const p=w.spawn('pickup',360,C.playerY,2);p.weaponKind=kind;f.tick();}
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='组合完成 · 裂甲爆破')).toBe(true);
+ const target=w.spawn('armor',360,600);target.hp=target.maxHp=10000;target.speed=0;target.timer=999;
+ for(let i=0;i<600;i++)f.tick();
+ expect(w.fractureBursts).toBeGreaterThanOrEqual(10);
+ expect(f.runtime.save.achievements.unlocked).toContain('fracture');
 });

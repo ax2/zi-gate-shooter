@@ -1,3 +1,5 @@
+import { fractureLight, fractureMarks } from './fracture-light';
+import { FRACTURE } from '../core/combos';
 import { mountedRig } from './mounted-rig';
 import { contracts, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
@@ -47,13 +49,13 @@ export interface Platform {
 }
 export interface CanvasControl { x: number; y: number; w: number; h: number; label: string; action: string }
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; total: number; color: string }
-interface Blast { x: number; y: number; size: number; life: number; total: number }
+interface Blast { fracture?: boolean; x: number; y: number; size: number; life: number; total: number }
 const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'contracts' | 'contract-reward' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
@@ -283,7 +285,7 @@ export class CanvasRuntime {
     if (this.mode === 'choice'||this.mode==='contract-reward') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = 'menu'; return 'stay'; }
-    if (this.mode === 'rig') { this.mode='loadout';return 'stay'; }
+    if (this.mode === 'rig'||this.mode==='combos') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'contracts') { this.mode=this.contractReturn;return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
@@ -324,6 +326,8 @@ export class CanvasRuntime {
       if (dossierWeapons.includes(weapon)) this.dossierWeapon = weapon;
     }
     else if (action === 'armory-back') this.mode = 'menu';
+    else if(action==='combos'&&this.mode==='loadout')this.mode='combos';
+    else if(action==='combos-back')this.mode='loadout';
     else if(action==='rig-view'&&this.mode==='loadout')this.mode='rig';
     else if(action==='rig-back')this.mode='loadout';
     else if(action==='contracts-live'&&this.mode==='playing'){this.pause();this.contractReturn='paused';this.mode='contracts';}
@@ -355,13 +359,18 @@ export class CanvasRuntime {
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private checkAchievements() {
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length);
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts);
     if(fresh.length){this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
+    if(e.type==='combination'){
+      this.buildFeedback={title:e.text??'组合完成',detail:e.detail??'',until:this.world.time+4,combo:true};
+      if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
+      return;
+    }
     if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
     if(e.type==='boss-kill')this.save.achievements.bosses++;
-    if(['kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
+    if(['fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
     if(e.type==='laser')this.opticalFiredAt=this.world.time;
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
@@ -376,11 +385,15 @@ export class CanvasRuntime {
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277, e.detail);
     if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
-    const explosion = ['blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
+    const explosion = ['fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);
-    else if (explosion && this.blasts.length < 4) this.blasts.push({ x: e.x, y: e.y, size: e.size ?? 80, life: 0.45, total: 0.45 });
+    else if(explosion){
+      // A combination gets a readable burst even when ordinary explosions fill the budget.
+      if(e.type==='fracture'&&this.blasts.length>=4){const ordinary=this.blasts.findIndex(b=>!b.fracture);this.blasts.splice(ordinary<0?0:ordinary,1);}
+      if(this.blasts.length<4)this.blasts.push({fracture:e.type==='fracture',x:e.x,y:e.y,size:e.size??80,life:.45,total:.45});
+    }
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
     const cap = this.save.settings.effects === 'weak' ? 50 : 160;
     const amount = explosion ? (this.save.settings.effects === 'weak' ? 14 : 32) : e.type.startsWith('impact') ? 4 : 7;
@@ -479,6 +492,7 @@ export class CanvasRuntime {
     if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
+    if (this.mode === 'combos') {this.drawCombos();c.restore();return;}
     if(this.mode==='contract-reward'){this.drawContractReward();c.restore();return;}
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
@@ -600,6 +614,7 @@ export class CanvasRuntime {
         }
       }
     }
+    for(const b of w.bodies)if(b.active&&b.fractureHits)fractureMarks(c,b.x,b.y+(b.kind==='boss'?BOSS_VISUAL.offsetY:0),b.width,b.fractureHits);
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
@@ -651,6 +666,7 @@ export class CanvasRuntime {
       c.save(); c.globalAlpha = Math.pow(Math.max(0, 1 - age), 0.65) * (this.save.settings.effects === 'weak' ? 0.5 : 0.9);
       this.frameSprite('explosion-v1.png', Math.min(8, Math.floor(age * 9)), 3, e.x, e.y, e.size * 2, e.size * 2, 3); c.restore();
       detonationLight(c, e.x, e.y, e.size, age, this.save.settings.effects === 'weak');
+      if(e.fracture)fractureLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');
     }
     this.blasts = this.blasts.filter(e => e.life > 0);
     for (const arc of this.arcs) { arc.life -= dt; chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak'); }
@@ -804,11 +820,11 @@ export class CanvasRuntime {
     this.text('突围成就',360,155,42,'#effaff','center',true);
     const state=this.save.achievements;
     this.text(`已达成 ${state.unlocked.length}/${achievements.length} · 选择留下战绩`,360,210,25,'#bdd8e7');
-    for(const [i,a] of achievements.entries()){const y=255+i*125,done=state.unlocked.includes(a.id);
-      this.rect(65,y,590,110,done?'#263d43':'#142b39');
+    for(const [i,a] of achievements.entries()){const y=255+i*108,done=state.unlocked.includes(a.id);
+      this.rect(65,y,590,96,done?'#263d43':'#142b39');
       this.text(a.name,85,y+35,29,done?'#ffdc8a':'#effaff','left',true);
       this.text(done?'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+35,23,done?'#ffdc8a':'#a5bac8','right');
-      this.text(a.detail,85,y+78,23,'#bdd8e7','left');
+      this.text(a.detail,85,y+73,22,'#bdd8e7','left');
     }
     this.text('成就保存在本机 · 不增加局外伤害',360,1040,23,'#bdd8e7');
     this.button('返回主界面',1100,'armory-back',true);
@@ -864,8 +880,35 @@ export class CanvasRuntime {
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text(support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
     this.text(`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
-    for(const [i,label] of ['技能树','挑战契约'].entries()){const x=72+i*298;this.rect(x,1030,278,86,'#1a2d3c');this.text(label,x+139,1073,28,'#d8eaf5');this.buttons.push({x,y:1030,w:278,h:86,label,action:i?'contracts':'tree'});}
+    for(const [i,label] of ['技能树','组合配方','挑战契约'].entries()){const x=72+i*198;this.rect(x,1030,180,86,'#1a2d3c');this.text(label,x+90,1073,25,'#d8eaf5');this.buttons.push({x,y:1030,w:180,h:86,label,action:['tree','combos','contracts'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
+  }
+  private drawCombos(){
+    const w=this.world;
+    this.rect(35,90,650,1120,'#102330');
+    this.text('配件组合',360,150,42,'#effaff','center',true);
+    this.text('满足配方自动生效 · 旧武器与伤害保留',360,207,24,'#bdd8e7');
+    const rows=[
+      {name:'雷暴霰射',on:w.build.ranks.ballistic>=3&&w.build.ranks.electric>=1,
+        need:`弹道路线 ${w.build.ranks.ballistic}/3 ＋ 雷电路线 ${Math.min(1,w.build.ranks.electric)}/1`,
+        effect:'霰弹命中后追加一次跳电',hint:'适合近距聚弹与密集敌群',color:'#b4ffb5'},
+      {name:'棱镜激光',on:w.supportProfile().prism,
+        need:`光学路线 ${w.build.ranks.optical}/3 ＋ 弹道路线 ${Math.min(1,w.build.ranks.ballistic)}/1`,
+        effect:'主束保留 · 两侧各追加45%伤害',hint:'横移对齐侧束，扩大清场覆盖',color:'#d7b1ff'},
+      {name:'裂甲爆破',on:w.fractureUnlocked(),
+        need:`穿甲炮 ${w.activeWeapons.includes('pierce')?'T'+w.weaponStage('pierce'):'未持有'}/T2 ＋ 爆裂炮 ${w.activeWeapons.includes('blast')?'T'+w.weaponStage('blast'):'未持有'}/T2`,
+        effect:`同敌${FRACTURE.hits}次穿甲命中：额外${FRACTURE.direct*100}%爆破`,hint:`邻敌${FRACTURE.splash*100}%伤害 · 范围${FRACTURE.radius} · 冷却${FRACTURE.cooldown}秒`,color:'#ffca8b'},
+    ];
+    for(const [i,row] of rows.entries()){
+      const y=260+i*250;this.rect(65,y,590,225,'#203e50');this.rect(65,y,5,225,row.color);
+      this.text(row.name,90,y+40,32,row.color,'left',true);
+      this.text(row.on?'已生效':'待组合',625,y+40,24,row.on?'#a2ffbb':'#b9cad6','right');
+      this.text(row.need,90,y+87,23,'#effaff','left');
+      this.text(row.effect,90,y+132,24,'#dbeaf3','left');
+      this.text(row.hint,90,y+178,22,'#bdd8e7','left');
+    }
+    this.text(`裂甲爆破已触发 ${w.fractureBursts} 次 · 闭合盾不积裂口`,360,1055,23,'#ffca8b');
+    this.button('返回当前火力',1100,'combos-back',true);
   }
   private drawRigView() {
     const w=this.world,c=this.ctx;
@@ -881,7 +924,7 @@ export class CanvasRuntime {
     this.playerSprite(w.weaponStage(w.weaponKind)-1,w.player.x,C.playerY,pose,this.weaponMotion.sample(w.weaponKind,w.weaponStage(w.weaponKind),w.time));
     this.drawOpticalRig(C.playerY,pose);c.restore();
     this.text(w.activeWeapons.map(kind=>`${weaponNames[kind]}T${w.weaponStage(kind)}`).join(' · '),360,965,22,'#d6e7f0');
-    const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':''].filter(Boolean);
+    const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':''].filter(Boolean);
     this.text(combinations.length?`组合：${combinations.join(' · ')}`:'已有配件随真实射击独立回弹',360,1010,25,'#d6b5ff');
     this.text('检查挂载与等级 · 战斗时间已暂停',360,1054,22,'#a6c5d7');
     this.button('返回当前火力',1100,'rig-back',true);
@@ -1006,6 +1049,7 @@ export class CanvasRuntime {
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
+      fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
