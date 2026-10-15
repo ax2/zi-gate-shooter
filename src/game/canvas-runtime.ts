@@ -51,6 +51,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 export class CanvasRuntime {
   world = new World();
   mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'contracts' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
   private treeReturn: 'loadout' | 'choice' = 'loadout';
@@ -188,6 +189,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.buildFeedback=undefined;
     this.achievementUntil=0;
     this.supportBeams=[];
     this.pausePreview = false;
@@ -270,8 +272,13 @@ export class CanvasRuntime {
   private action(action: string) {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
+      const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
       if(routes.includes(route)&&this.world.chooseBuild(route)){
         this.checkAchievements();
+        const node=tree[route][this.world.build.ranks[route]-1];
+        const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
+        this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${node.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':node.detail,until:this.world.time+4,combo:!!combo};
+        if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
         if(!this.world.build.available(this.world.growth.mastery??0).length)this.action('resume');
       }
     }
@@ -428,10 +435,16 @@ export class CanvasRuntime {
     if (this.mode === 'menu') this.drawMenu();
     else {
       this.drawHud();
-      if (this.notice && this.platform.now() < this.noticeUntil && this.mode === 'playing') {
+      if (this.notice && this.platform.now() < this.noticeUntil && this.mode === 'playing' && !(this.buildFeedback && w.time<this.buildFeedback.until)) {
         this.rect(58, this.noticeY - 31, 604, this.noticeDetail?104:62, '#0a1c2af0'); this.text(this.notice, 360, this.noticeY, 28, '#d2f2ff');
         if(this.noticeDetail)this.text(this.noticeDetail,360,this.noticeY+43,24,'#f2d598');
       }
+    }
+    if(this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until){
+      const f=this.buildFeedback;this.rect(58,240,604,104,'#0a1c2af0');
+      this.rect(58,240,5,104,f.combo?'#d3a3ff':'#7fe4ff');
+      this.text(f.title,360,272,30,f.combo?'#e1bfff':'#d2f2ff','center',true);
+      this.text(f.detail,360,316,23,'#f2d598');
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;

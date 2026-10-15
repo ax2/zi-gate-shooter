@@ -65,3 +65,9 @@ it('prism combination retains main beam and adds two weaker independent lanes',(
  expect(w.drainEffects().filter(e=>e.type==='laser')).toHaveLength(3);
  expect(new World().supportProfile().prism).toBe(false);
 });
+it('laser and prism cannot damage bosses before the boss combat phase',()=>{
+ const w=new World();w.growth.mastery=4;
+ for(const route of ['optical','optical','optical','ballistic'] as const)w.chooseBuild(route);
+ w.phase='boss-entry';const boss=w.spawn('boss',360,400);const before=boss.hp;
+ w.step(C.step);expect(boss.hp).toBe(before);
+});

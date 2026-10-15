@@ -727,3 +727,22 @@ it('route achievements unlock through real choice actions and survive a new run'
  f.runtime.start();expect(f.runtime.world.build.spent).toBe(0);
  expect(f.runtime.save.achievements.unlocked).toContain('specialist');
 });
+it('choice receipt names new power, remains through pause and clears on restart',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ f.runtime.world.growth.energy=100;f.tick();
+ f.runtime.touchStart(1,360,410);f.runtime.touchEnd(1,360,410);f.tick();
+ const receipt=()=>f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='配件强化 · 霰射机构');
+ expect(receipt()).toBe(true);
+ f.runtime.pause();for(let i=0;i<300;i++)f.tick();
+ f.runtime.touchStart(1,360,603);f.runtime.touchEnd(1,360,603);f.tick();expect(receipt()).toBe(true);
+ f.runtime.start();f.tick();expect(receipt()).toBe(false);
+});
+it('explicitly names a newly completed prism combination after the final choice',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ f.runtime.world.growth.mastery=3;
+ for(let i=0;i<3;i++)f.runtime.world.chooseBuild('optical');
+ f.runtime.world.growth.energy=100;f.tick();
+ f.runtime.touchStart(1,360,410);f.runtime.touchEnd(1,360,410);f.tick();
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='组合完成 · 棱镜激光')).toBe(true);
+ expect(f.runtime.world.supportProfile().prism).toBe(true);
+});

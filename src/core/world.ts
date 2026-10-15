@@ -227,7 +227,7 @@ export class World {
         for(const side of support.prism?[0,-1,1]:[0]) {
           const x=this.player.x+side*42, topX=this.player.x+side*180;
           const beamX=(y:number)=>x+(topX-x)*(start-y)/(start-C.playerShotTop);
-          const targets=this.bodies.filter(b=>b.active && b.kind!=='pickup' && b.y>=C.playerShotTop && b.y<start
+          const targets=this.bodies.filter(b=>b.active && b.kind!=='pickup' && (b.kind!=='boss'||this.phase==='boss') && b.y>=C.playerShotTop && b.y<start
             && Math.abs(b.x-beamX(b.y))<=b.width/2+8).sort((a,b)=>b.y-a.y || a.id-b.id);
           let end=C.playerShotTop, count=0;
           for(const body of targets){
