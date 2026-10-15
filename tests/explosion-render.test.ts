@@ -774,3 +774,34 @@ it('shows retained weapon mounts, freezes independent recoil and inspects the sa
  expect(f.runtime.back()).toBe('stay');expect(f.runtime.mode).toBe('loadout');
  f.runtime.start();f.tick();expect(modules()).toHaveLength(0);
 });
+it('offers a contract directly from combat and freezes until explicitly continuing',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();f.tick();
+ f.runtime.touchStart(1,585,228);f.runtime.touchEnd(1,585,228);f.tick();expect(f.runtime.mode).toBe('contracts');
+ const time=f.runtime.world.time;for(let i=0;i<30;i++)f.tick();expect(f.runtime.world.time).toBe(time);
+ f.runtime.touchStart(1,360,400);f.runtime.touchEnd(1,360,400);f.tick();expect(f.runtime.world.contract?.status).toBe('active');
+ f.runtime.touchStart(1,360,1123);f.runtime.touchEnd(1,360,1123);expect(f.runtime.mode).toBe('playing');
+ expect(f.runtime.world.time).toBe(time);
+});
+it('contract reward selection pauses, grants one targeted upgrade and only resumes after claiming',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.acceptContract('precision');
+ f.runtime.world.contract!.elapsed=29.99;f.runtime.world.kills=15;f.tick();
+ expect(f.runtime.mode).toBe('contract-reward');const frozen=JSON.stringify(f.runtime.world);
+ for(let i=0;i<30;i++)f.tick();expect(JSON.stringify(f.runtime.world)).toBe(frozen);
+ expect(f.runtime.back()).toBe('stay');expect(f.runtime.mode).toBe('contract-reward');
+ f.runtime.touchStart(1,360,465);f.runtime.touchEnd(1,360,465);
+ expect(f.runtime.world.weaponStage('pulse')).toBe(2);expect(f.runtime.world.contractReward).toBeUndefined();
+ expect(f.runtime.mode).toBe('playing');
+});
+it('a contract charge reward enters the real skill choice before combat resumes',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.acceptContract('precision');
+ f.runtime.world.contract!.elapsed=29.99;f.runtime.world.kills=15;f.tick();
+ f.runtime.touchStart(1,360,345);f.runtime.touchEnd(1,360,345);
+ expect(f.runtime.world.growth.mastery).toBe(1);expect(f.runtime.mode).toBe('choice');
+});
+it('guides the selected reward weapon rather than the unchanged main gun',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.growth.mastery=1;f.runtime.world.chooseBuild('ballistic');
+ f.runtime.world.acceptContract('precision');f.runtime.world.contract!.elapsed=29.99;f.runtime.world.kills=15;f.tick();
+ f.runtime.touchStart(1,360,590);f.runtime.touchEnd(1,360,590);f.tick();
+ expect(f.runtime.world.weaponKind).toBe('pulse');expect(f.runtime.world.weaponStage('scatter')).toBe(2);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='霰射炮 · T2')).toBe(true);
+});

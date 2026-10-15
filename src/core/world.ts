@@ -45,10 +45,12 @@ export class World {
     }
     return true;
   }
+  private calibrations=new Map<WeaponKind,number>();
+  weaponCalibration(kind:WeaponKind){return this.calibrations.get(kind)??0;}
   profileFor(kind:WeaponKind) {
     const p=weaponProfile(kind,this.weaponStage(kind)),rank=this.build.ranks;
     const refinement=1+.1*this.build.refinements[kind==='arc'?'electric':'ballistic'];
-    return {...p,damage:p.damage.map(n=>n*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
+    return {...p,damage:p.damage.map(n=>n*(1+.5*this.weaponCalibration(kind))*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
       chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
   }
   supportProfile() {
@@ -57,9 +59,27 @@ export class World {
       laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0),prism:rank>=3&&this.build.ranks.ballistic>=1};
   }
   contract?: Contract;
+  contractReward?: {charge:number;round:number};
+  claimContractReward(kind:WeaponKind|'energy'){
+    if(!this.contractReward||this.player.hp<=0)return false;
+    if(kind!=='energy'&&!this.activeWeapons.includes(kind))return false;
+    const reward=this.contractReward;this.contractReward=undefined;
+    if(kind==='energy'){
+      const result=grantGate(this.growth,reward.charge,'energy');
+      if(result.activated)this.emit('overload',this.player.x,C.playerY);
+      this.effects.push({type:'reward',x:this.player.x,y:C.playerY,text:`契约奖励 · 充能+${reward.charge}`,detail:this.chargeReceipt(result.activated)});
+    }else{
+      for(const owned of this.activeWeapons)if(!this.weaponStages.has(owned))this.weaponStages.set(owned,this.weaponStage(owned));
+      const stage=this.weaponStage(kind);
+      if(stage<3){this.weaponStages.set(kind,stage+1);this.growth.stage=Math.max(this.growth.stage,stage+1);this.maxStage=Math.max(this.maxStage,stage+1);}
+      else this.calibrations.set(kind,this.weaponCalibration(kind)+1);
+      this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
+    }
+    return true;
+  }
   damageTaken=0;
   acceptContract(kind:ContractKind){
-    if(this.phase!=='running'||this.roundTime>40||this.player.hp<=0||this.contract?.status==='active'||this.contract?.round===this.round)return false;
+    if(this.contractReward||this.phase!=='running'||this.roundTime>40||this.player.hp<=0||this.contract?.status==='active'||this.contract?.round===this.round)return false;
     this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken);return true;
   }
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
@@ -422,10 +442,9 @@ export class World {
     const contract=this.contract;
     if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0)){
       if(contract.status==='won'){
-        const reward=grantGate(this.growth,contracts[contract.kind].charge,'energy');
-        if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+        this.contractReward={charge:contracts[contract.kind].charge,round:this.round};
       }
-      this.effects.push({type:'contract',x:this.player.x,y:C.playerY,text:contract.status==='won'?`契约完成 · 充能+${contracts[contract.kind].charge}`:`契约失败 · ${contract.reason}`,detail:'每轮可接取一次 · 失败仅失去额外奖励'});
+      this.effects.push({type:'contract',x:this.player.x,y:C.playerY,text:contract.status==='won'?'契约完成 · 选择强化奖励':`契约失败 · ${contract.reason}`,detail:'每轮可接取一次 · 失败仅失去额外奖励'});
     }
     this.peakBodies = Math.max(this.peakBodies, this.bodies.length);
     this.peakBullets = Math.max(this.peakBullets, this.bullets.length);

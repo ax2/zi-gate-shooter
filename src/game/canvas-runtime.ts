@@ -51,10 +51,11 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'contracts' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'contracts' | 'contract-reward' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
+  private contractReturn:'loadout'|'paused'='loadout';
   private treeReturn: 'loadout' | 'choice' = 'loadout';
   private dossierWeapon: WeaponKind = 'pulse';
   save: Save;
@@ -94,6 +95,7 @@ export class CanvasRuntime {
   private mountedMotion=new Map(dossierWeapons.map(kind=>[kind,new WeaponMotion()]));
   private opticalFiredAt=-Infinity;
   private weaponGuideUntil = 0;
+  private weaponGuideKind:WeaponKind='pulse';
   private drawCount = 0;
   private callbackCount = 0;
   private pausePreview = false;
@@ -167,7 +169,8 @@ export class CanvasRuntime {
             const previousMastery=this.world.growth.mastery??0;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
-            if (this.world.player.hp>0 && (this.world.growth.mastery??0)>previousMastery && this.world.build.available(this.world.growth.mastery??0).length) {
+            if(this.world.player.hp>0&&this.world.contractReward){this.mode='contract-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
+            else if (this.world.player.hp>0 && (this.world.growth.mastery??0)>previousMastery && this.world.build.available(this.world.growth.mastery??0).length) {
               this.mode='choice';this.cancelTouch();this.accumulator=0;this.platform.silence();
             }
             if (this.world.player.hp <= 0) {
@@ -262,11 +265,11 @@ export class CanvasRuntime {
   /** Native back never resumes a paused run or silently abandons a live one. */
   back(): 'stay' | 'exit' {
     this.cancelTouch();
-    if (this.mode === 'choice') return 'stay';
+    if (this.mode === 'choice'||this.mode==='contract-reward') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'rig') { this.mode='loadout';return 'stay'; }
-    if (this.mode === 'contracts') { this.mode='loadout';return 'stay'; }
+    if (this.mode === 'contracts') { this.mode=this.contractReturn;return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
@@ -300,8 +303,13 @@ export class CanvasRuntime {
     else if (action === 'armory-back') this.mode = 'menu';
     else if(action==='rig-view'&&this.mode==='loadout')this.mode='rig';
     else if(action==='rig-back')this.mode='loadout';
-    else if(action==='contracts')this.mode='contracts';
-    else if(action==='contracts-back')this.mode='loadout';
+    else if(action==='contracts-live'&&this.mode==='playing'){this.pause();this.contractReturn='paused';this.mode='contracts';}
+    else if(action==='contracts'){this.contractReturn='loadout';this.mode='contracts';}
+    else if(action.startsWith('contract-claim:')&&this.mode==='contract-reward'){
+      const kind=action.slice(15) as WeaponKind|'energy';
+      if(this.world.claimContractReward(kind)){for(const e of this.world.drainEffects())this.effect(e);if(this.world.build.available(this.world.growth.mastery??0).length)this.mode='choice';else this.action('resume');}
+    }
+    else if(action==='contracts-back')this.mode=this.contractReturn;
     else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts)this.world.acceptContract(kind);}
     else if (action === 'tree' && (this.mode === 'choice' || this.mode === 'loadout')) { this.treeReturn = this.mode; this.mode = 'tree'; }
     else if (action === 'tree-back') this.mode = this.treeReturn;
@@ -340,7 +348,7 @@ export class CanvasRuntime {
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
     if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
     if (e.type === 'fire') { const kind=e.weaponKind??this.world.weaponKind;this.mountedMotion.get(kind)?.fire(kind,this.world.weaponStage(kind),this.world.time);if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
-    if (e.type === 'weapon' || e.type === 'upgrade') this.weaponGuideUntil = this.world.time + 5;
+    if (e.type === 'weapon' || e.type === 'upgrade') {this.weaponGuideUntil = this.world.time + 5;this.weaponGuideKind=e.weaponKind??this.world.weaponKind;}
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277, e.detail);
@@ -441,6 +449,7 @@ export class CanvasRuntime {
     if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
+    if(this.mode==='contract-reward'){this.drawContractReward();c.restore();return;}
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
     if (this.mode === 'tree') { this.drawBuildTree(); c.restore(); return; }
@@ -725,6 +734,10 @@ export class CanvasRuntime {
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
     this.text(w.growth.overload > 0 ? `超载×1.35 · ${w.growth.overload.toFixed(1)}秒  |  再充能 ${Math.floor(w.growth.energy)}/100`
       : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：本局火力+10% / 超载6秒`, 360, y + 144, 22, '#d4e8ee');
+    if(this.mode==='playing'&&w.phase==='running'&&w.roundTime<=40&&!w.contractReward&&w.contract?.status!=='active'&&w.contract?.round!==w.round&&!w.bodies.some(b=>b.active&&Math.abs(b.x-585)<b.width/2+125&&Math.abs(b.y-(y+200))<b.height/2+48)){
+      this.rect(480,y+170,210,44,'#213d4d');this.text('挑战契约　›',585,y+192,24,'#ffd598');
+      this.buttons.push({x:480,y:y+170,w:210,h:44,action:'contracts-live',label:'挑战契约'});
+    }
     if(boss){
       this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
       this.bar(360,y+196,620,boss.hp/boss.maxHp,'#ff925d');
@@ -738,7 +751,7 @@ export class CanvasRuntime {
     if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
     let guide = contextGuide(this.world);
     if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
-      guide = weaponGuide(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind));
+      guide = weaponGuide(this.weaponGuideKind, this.world.weaponStage(this.weaponGuideKind));
     if (guide.detail) {
       this.rect(44, 1150, 632, 106, '#081a25df');
       this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
@@ -810,7 +823,7 @@ export class CanvasRuntime {
       const profile = w.profileFor(kind), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
-      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
+      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
       this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? '近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
@@ -843,24 +856,41 @@ export class CanvasRuntime {
     this.text('检查挂载与等级 · 战斗时间已暂停',360,1054,22,'#a6c5d7');
     this.button('返回当前火力',1100,'rig-back',true);
   }
+  private drawContractReward() {
+    const w=this.world,reward=w.contractReward;if(!reward)return;
+    this.rect(35,120,650,1080,'#102330');
+    this.text('契约完成 · 选择强化',360,190,38,'#ffdc8a','center',true);
+    this.text('任选一项 · 其他武器与能力全部保留',360,245,24,'#bdd8e7');
+    const total=w.growth.energy+reward.charge;
+    const options=[{kind:'energy',title:`充能 +${reward.charge}`,detail:`充能 ${Math.floor(w.growth.energy)} → ${Math.floor(total%100)} · 额外突破 ${Math.floor(total/100)}次`,color:'#7fe4ff'},
+      ...w.activeWeapons.map(kind=>{const stage=w.weaponStage(kind),n=w.weaponCalibration(kind);return {kind,title:stage<3?`${weaponNames[kind]} T${stage} → T${stage+1}`:`${weaponNames[kind]} · 专属精校${n+1}`,detail:stage<3?'升一阶，其他配件等级保留':`该武器伤害系数 ${100+n*50}% → ${150+n*50}%`,color:weaponColors[kind]};})];
+    for(const [i,option] of options.entries()){
+      const y=290+i*125;this.rect(65,y,590,110,'#203e50');
+      this.text(option.title,90,y+33,28,option.color,'left',true);
+      this.text(option.detail,90,y+78,23,'#d6e7f0','left');
+      this.text('›',625,y+50,32,option.color,'right');
+      this.buttons.push({x:65,y,w:590,h:110,action:`contract-claim:${option.kind}`,label:option.title});
+    }
+    this.text('战斗已暂停 · 选择后继续',360,1135,24,'#bdd8e7');
+  }
   private drawContracts() {
     this.rect(35,120,650,1080,'#102330');
     this.text('挑战契约',360,190,42,'#effaff','center',true);
     this.text('自选限制与增援挑战 · 每轮一次',360,245,25,'#bdd8e7');
     const current=this.world.contract;
-    const can=this.world.phase==='running'&&this.world.roundTime<=40&&current?.status!=='active'&&current?.round!==this.world.round;
+    const can=!this.world.contractReward&&this.world.phase==='running'&&this.world.roundTime<=40&&current?.status!=='active'&&current?.round!==this.world.round;
     for(const [i,kind] of (Object.keys(contracts) as ContractKind[]).entries()){
       const entry=contracts[kind],y=310+i*255;
       this.rect(65,y,590,225,'#203e50');
       this.text(entry.name,90,y+45,32,'#ffdc8a','left',true);
       this.text(entry.detail,90,y+95,24,'#effaff','left');
-      this.text(`成功：充能+${entry.charge} · 失败不扣已有能力`,90,y+142,23,'#bdd8e7','left');
+      this.text(`成功：充能+${entry.charge} 或定向强化已有配件`,90,y+142,23,'#bdd8e7','left');
       this.text(can?'接取契约　›':'本轮已接取或当前不可接取',625,y+190,23,'#80e4ff','right');
       if(can)this.buttons.push({x:65,y,w:590,h:225,label:entry.name,action:`contract:${kind}`});
     }
     this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中':current.status==='won'?'已完成':'失败：'+current.reason}`:'每轮前40秒可接取 · 追加22架敌机',360,895,25,'#ffdc8a');
     this.text('增援按安全路线入场 · 暂停与过场不计时',360,945,23,'#bdd8e7');
-    this.button('返回当前火力',1080,'contracts-back',true);
+    this.button(current?.status==='active'?'继续挑战':this.contractReturn==='paused'?'返回暂停菜单':'返回当前火力',1080,current?.status==='active'?'resume':'contracts-back',true);
   }
   private drawBuildTree() {
     this.rect(35,90,650,1120,'#102330');
@@ -941,6 +971,8 @@ export class CanvasRuntime {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
       mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, buildRefinements:{...this.world.build.refinements}, activeWeapons:this.world.activeWeapons,
       supportBeams:this.supportBeams.length,
+      weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
+      contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,

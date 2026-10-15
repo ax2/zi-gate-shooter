@@ -1,6 +1,10 @@
 # 火力突围
 
-当前固定试玩 **Stage-128**：http://127.0.0.1:5204/ 。新增可见机甲挂载、独立回弹和放大查看。[试玩说明](docs/stages/Stage-128/PLAY.md) · [验证边界](docs/stages/Stage-128/TEST_REPORT.md)。
+当前候选 **Stage-129**：http://127.0.0.1:5205/ 。契约可选充能或定向配件强化。[说明](docs/stages/Stage-129/PLAY.md) · [已知长帧与验证边界](docs/stages/Stage-129/TEST_REPORT.md)。
+
+当前开发源在本任务C盘zi-gate-shooter目录（dev5181）；E盘空间不足，原项目保留Stage128，D:\work也是E卷挂载。原源码/历史构建未删除。
+
+历史固定试玩 **Stage-128**：http://127.0.0.1:5204/ 。新增可见机甲挂载、独立回弹和放大查看。[试玩说明](docs/stages/Stage-128/PLAY.md) · [验证边界](docs/stages/Stage-128/TEST_REPORT.md)。
 
 历史固定试玩 **Stage-127**：http://127.0.0.1:5203/ 。含技能树、成就、契约、组合、持续精调与首领攻防修订。[试玩说明](docs/stages/Stage-127/PLAY.md) · [验证边界](docs/stages/Stage-127/TEST_REPORT.md)。以下入口保留历史版本。
 
