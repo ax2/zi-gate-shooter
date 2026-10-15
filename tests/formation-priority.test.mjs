@@ -15,7 +15,7 @@ it('measures tactical target priority against a fixed-health counterfactual and 
  const results=[];
  for(const policy of ['baseline','baseline-stationary','boss','escorts','stationary']){
   const w=policy.startsWith('baseline')?new Baseline(1337,4):new World(1337,4);w.phase='boss';
-  const boss=w.spawn('boss',360,260);boss.bossVariant=0;const initialHP=boss.hp;
+  const boss=w.spawn('boss',360,C.bossY);boss.bossVariant=0;const initialHP=boss.hp;
   // Explicit moderate build fixture: identical real pickups/choices, not normal growth evidence.
   for(const kind of ['pulse','blast']){const p=w.spawn('pickup',360,C.playerY,3);p.weaponKind=kind;w.step(C.step,360);w.drainEffects();}
   w.growth.mastery=4;w.chooseBuild('electric');w.chooseBuild('ballistic');w.chooseBuild('ballistic');w.chooseBuild('optical');

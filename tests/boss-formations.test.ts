@@ -2,10 +2,10 @@ import {it,expect} from 'vitest';
 import {World,type Body} from '../src/core/world';
 import {C} from '../src/core/config';
 import {bossFormationFor} from '../src/core/boss-formations';
-function battle(round=4,start=360){const w=new World(1337,round);w.phase='boss';w.player.x=start;const b=w.spawn('boss',360,260);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];return {w,b};}
+function battle(round=4,start=360){const w=new World(1337,round);w.phase='boss';w.player.x=start;const b=w.spawn('boss',360,C.bossY);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];return {w,b};}
 function frames(w:World,n:number,x=w.player.x){for(let i=0;i<n;i++)w.step(C.step,x);}
 let id=100000;
-function hit(w:World,b:Body,damage=10000){w.bullets=[];w.bullets.push({id:id++,x:b.x,y:b.y,px:b.x,py:b.y,vx:0,vy:0,damage,age:0,active:true,hostile:false,weaponKind:'pulse'});w.step(C.step,68);return w.drainEffects();}
+function hit(w:World,b:Body,damage=10000){w.bullets=[];const y=b.y+b.height/2+6;w.bullets.push({id:id++,x:b.x,y,px:b.x,py:y,vx:0,vy:-C.bulletSpeed,damage,age:0,active:true,hostile:false,weaponKind:'pulse'});w.step(C.step,68);return w.drainEffects();}
 it('keeps the first three rounds unchanged and schedules three authored, bounded late formations',()=>{
  for(let r=1;r<=3;r++){expect(bossFormationFor(r)).toBeUndefined();const {w}=battle(r);frames(w,180,68);expect(w.escortSpawns).toBe(0);}
  expect([4,5,6].map(r=>bossFormationFor(r)?.id)).toEqual(['bulwark','pincer','crossfire']);

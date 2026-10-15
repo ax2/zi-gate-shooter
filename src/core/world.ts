@@ -318,7 +318,7 @@ export class World {
     } else if (this.phase === 'boss-entry') {
       this.phaseTime += dt;
       const boss = this.bodies.find(b => b.kind === 'boss' && b.active);
-      if (boss) boss.y = -150 + Math.min(1, this.phaseTime / 2) * 410;
+      if (boss) boss.y = -150 + Math.min(1, this.phaseTime / 2) * (C.bossY+150);
       if (this.phaseTime >= 2) { this.phase = 'boss'; this.phaseTime = 0; }
     } else if (this.phase === 'boss') {this.phaseTime += dt;this.spawnEscorts();}
     else if (this.phase === 'recovery') {

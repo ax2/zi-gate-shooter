@@ -5,7 +5,7 @@ import {safeRoute} from '../src/core/reachability';
 it('keeps late boss admissions escapable with 450ms reaction, no kills and no immunity from three starting lanes',()=>{
  for(const round of [4,5,6])for(const start of [68,360,652]){
   const w=new World(1337,round);w.phase='boss';w.player.x=start;
-  const b=w.spawn('boss',360,260);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];
+  const b=w.spawn('boss',360,C.bossY);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];
   let path:number[]=[],planAt=0,seenSpawns=0;
   for(let frame=0;frame<1200;frame++){
    if(frame===0||frame-planAt>=60||seenSpawns!==w.escortSpawns){

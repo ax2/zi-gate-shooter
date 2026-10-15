@@ -50,7 +50,7 @@ it('dead targets, reward contacts and other weapon families cannot generate deto
 });
 it('does not splash across the active strip or into an entering boss and clears counts on a new run',()=>{
  const w=setup(),a=enemy(w,360,275),hidden=enemy(w,360,200);w.phase='boss-entry';w.phaseTime=1.9;
- const boss=w.spawn('boss',360,260);boss.hp=boss.maxHp=2000;
+ const boss=w.spawn('boss',360,C.bossY);boss.hp=boss.maxHp=2000;
  for(let i=0;i<3;i++)hit(w,a);expect(w.fractureBursts).toBe(1);expect(hidden.hp).toBe(1000);expect(boss.hp).toBe(2000);
  expect(new World().fractureBursts).toBe(0);expect(new World().fractureUnlocked()).toBe(false);
 });

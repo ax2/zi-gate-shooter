@@ -70,7 +70,7 @@ it('weaving, diagonal charge and fan fire execute different real movements and e
   advanceBody(drone, .5, 'running', 0, () => {}); expect(drone.x).not.toBe(360);
   advanceBody(charge, .5, 'running', 0, () => {}); expect(charge.x).toBe(280);
   advanceBody(elite, C.step, 'running', 0, (_x, _y, vx = 0) => shots.push(vx)); expect(shots).toEqual([-100, 0, 100]);
-  const boss = w.spawn('boss', 360, 260); boss.bossVariant = 1; boss.attackCycle = 2; boss.timer = 0;
+  const boss = w.spawn('boss',360,C.bossY); boss.bossVariant = 1; boss.attackCycle = 2; boss.timer = 0;
   advanceBody(boss, C.step, 'boss', 1, () => {}); expect(bossWarningLanes(boss)).toEqual([200, 520]);
   const lanes: number[] = []; advanceBody(boss, 1.35, 'boss', 2.35, x => lanes.push(x));
   expect(lanes).toEqual([200, 200, 200, 200, 520, 520, 520, 520]);

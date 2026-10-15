@@ -14,7 +14,7 @@ it('round depth increases enemy durability without reading player growth',()=>{
 });
 it('the first boss emits real shots before two seconds of combat and keeps a local charge period',()=>{
  const w=new World();w.phase='boss';w.player.x=68;w.player.px=68;
- const boss=w.spawn('boss',360,260);let firstShot=0,warningTime=0;
+ const boss=w.spawn('boss',360,C.bossY);let firstShot=0,warningTime=0;
  for(let i=0;i<120;i++){
   w.step(C.step,68);w.drainEffects();
   if(boss.warning>0&&!warningTime)warningTime=w.time;

@@ -1,5 +1,5 @@
 /** Presentation only. No timers, rewards or collision objects enter World. */
-export const BOSS_VISUAL = { width: 360, height: 280, offsetY: 50 } as const;
+export const BOSS_VISUAL = { width: 360, height: 280, offsetY: 0 } as const;
 export class BossDestruction {
   age = 0;
   private next = 0;

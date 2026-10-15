@@ -156,7 +156,7 @@ it.each([[2, 'cooling-corridor-v1.jpg'], [3, 'armored-corridor-v1.jpg']] as cons
 
 it.each([false,true])('ties boss preparation to real A/B warnings, freezes the second beat and preserves World (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const reference=new World(1337);
- const setup=(w:World)=>{w.time=w.roundTime=80;w.phase='boss';w.player.x=68;return w.spawn('boss',360,260);};
+ const setup=(w:World)=>{w.time=w.roundTime=80;w.phase='boss';w.player.x=68;return w.spawn('boss',360,C.bossY);};
  const body=setup(f.runtime.world),baseline=setup(reference);
  f.runtime.touchStart(1,360,1100);f.runtime.touchMove(1,68,1100);
  const draws=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('boss-v1.png'));
@@ -512,7 +512,7 @@ it.each([false, true])('keeps hostile cores and gate numbers above capped explos
 function bossKillFixture(world: World) {
   world.time = 80; world.roundTime = 80;
   world.phase = 'boss'; world.player.hp = 2;
-  const boss = world.spawn('boss', 360, 260); boss.hp = 4;
+  const boss = world.spawn('boss',360,C.bossY); boss.hp = 4;
   world.bullets.push({ id: 9999, x: 360, y: 270, px: 360, py: 270, vx: 0, vy: 0,
     damage: 4, age: 0, active: true, hostile: false });
 }
@@ -598,7 +598,7 @@ it('makes room within the four-blast budget and clears pending boss beats on ret
 
 it.each([[false,1],[true,1],[false,2],[true,2]] as const)('keeps chapter artwork through preparation and death (weak=%s variant=%s)',async (weak,variant)=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
- const b=f.runtime.world.spawn('boss',360,260);b.bossVariant=variant;b.attackCycle=variant===1?2:3;b.timer=0;
+ const b=f.runtime.world.spawn('boss',360,C.bossY);b.bossVariant=variant;b.attackCycle=variant===1?2:3;b.timer=0;
  f.tick();f.tick();
  const art=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith(variant===1?'boss-flanker-v1.png':'boss-bastion-v1.png'));
  expect(art().some(c=>c.args[1]===256)).toBe(true);
@@ -758,7 +758,7 @@ it('explicitly names a newly completed prism combination after the final choice'
 });
 it('keeps boss status above the HUD background and separate from the charge line',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
- f.runtime.world.spawn('boss',360,260);f.tick();
+ f.runtime.world.spawn('boss',360,C.bossY);f.tick();
  const label=f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('重装首领'));
  const charge=f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('充能 0/100'));
  const background=f.calls.findIndex(c=>c.kind==='fillRect'&&c.args[0]===0&&c.args[1]===0&&c.args[2]===720&&c.color==='#08131be8');
@@ -870,7 +870,7 @@ it('optical branch browsing spends no point, remains frozen, and commits one exp
  expect(f.runtime.diagnostics().opticalBranch).toBe('relay');
 });
 it('late boss shield remains below clear HUD labels and the expanded achievement catalogue fits',async()=>{
- const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.round=4;w.phase='boss';w.player.x=68;w.spawn('boss',360,260);
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.round=4;w.phase='boss';w.player.x=68;w.spawn('boss',360,C.bossY);
  for(let i=0;i<180;i++)f.tick();expect(w.bossShieldActive()).toBe(true);
  const shield=f.calls.findIndex(c=>c.kind==='stroke'&&c.stroke==='#8ce8ff');
  const label=f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('重装首领'));
@@ -930,4 +930,14 @@ it('a real equipment research point pauses for a real choice without granting gl
  expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.mode).toBe('playing');expect(w.build.spent).toBe(1);expect(w.activeWeapons).toContain('scatter');expect(w.weaponStage('pulse')).toBe(2);expect(w.growth.mastery??0).toBe(0);
  const a=w.spawn('pickup',360,C.playerY,2);a.row=99;a.weaponKind='pierce';f.tick();expect(f.runtime.mode).toBe('choice');expect(w.researchPoints).toBe(2);expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.mode).toBe('branch');expect(f.runtime.activateControl('branch:fragment')).toBe(true);expect(f.runtime.mode).toBe('playing');expect(w.build.ballisticBranch).toBe('fragment');
  expect(f.runtime.diagnostics().unspentBuildPoints).toBe(0);expect(f.runtime.diagnostics().researchPoints).toBe(2);f.runtime.start();expect(f.runtime.world.researchPoints).toBe(0);
+});
+
+it('keeps live-boss upgrade receipts below danger and defers achievements without losing them',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.phase='boss';w.player.x=68;w.spawn('boss',360,C.bossY);w.growth.energy=100;f.tick();
+ expect(f.runtime.mode).toBe('choice');expect(f.runtime.activateControl('build:optical')).toBe(true);const runtime=f.runtime as any;
+ runtime.achievementToast='测试成就';runtime.achievementUntil=w.time+4;f.tick();
+ const title=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='配件强化 · 聚焦镜组');expect(title?.args[2]).toBe(1208);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(false);expect(runtime.achievementUntil).toBeGreaterThan(w.time+6);
+ for(let i=0;i<250;i++)f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(true);
+ runtime.effect({type:'reward',x:360,y:500,text:'测试战斗回执',detail:'奖励仍清楚可见'});f.tick();expect(f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='测试战斗回执')?.args[2]).toBe(1208);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(false);
 });

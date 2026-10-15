@@ -28,7 +28,7 @@ it('reaction delay cannot be bypassed by quantizing the starting position', () =
 
 it('forecast intervals cover actual fixed-step future bullets and charger bodies', () => {
   const world = new World(); world.phase = 'boss'; world.phaseTime = 7;
-  const boss = world.spawn('boss', 360, 260); boss.timer = 0.05;
+  const boss = world.spawn('boss',360,C.bossY); boss.timer = 0.05;
   const armor = world.spawn('armor', 200, 450); armor.timer = 0.1;
   const charger = world.spawn('charger', 520, 400); charger.age = 2.4;
   const forecast = dangerTimeline(world.bodies, [], 5, { phase: 'boss', phaseTime: 7 });
@@ -62,7 +62,7 @@ it('unsafe queued rewards are delayed and eventually admitted, not silently drop
 
 it('new boss warnings wait when existing danger leaves no safe reaction path', () => {
   const world = new World(); world.phase = 'boss';
-  const boss = world.spawn('boss', 360, 260); boss.timer = 0;
+  const boss = world.spawn('boss',360,C.bossY); boss.timer = 0;
   world.bullets.push(projectile(360, C.playerY - 48, 280));
   world.step(C.step);
   expect(world.attackDeferrals).toBe(1); expect(boss.warning).toBe(0);
@@ -92,7 +92,7 @@ it('100 seeds x 3 threat fixtures replay predicted escape paths without kills or
     world.phaseTime = random.next() * 40;
     world.player.x = 100 + random.next() * 520; world.player.px = world.player.x;
     if (profile === 9) {
-      const boss = world.spawn('boss', 360, 260); boss.timer = 0.1;
+      const boss = world.spawn('boss',360,C.bossY); boss.timer = 0.1;
     } else {
       for (const x of [180, 540]) { const armor = world.spawn('armor', x, 450); armor.timer = 0.1; }
       const charger = world.spawn('charger', 360, 200); charger.age = 2.4;

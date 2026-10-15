@@ -552,19 +552,28 @@ export class CanvasRuntime {
     if (this.platform.now() < this.shakeUntil) c.translate(Math.sin(this.platform.now()) * 3, Math.cos(this.platform.now()) * 3);
     this.drawWorld(dt);
     c.restore();
+    const bossLive=w.bodies.some(b=>b.active&&b.kind==='boss');
+    const activeBuild=this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until;
+    const noticeVisible=this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil&&!activeBuild;
+    const bottomNotice=bossLive||this.noticeY===1195;
+    const bottomBusy=(activeBuild&&bossLive)||(noticeVisible&&bottomNotice);
+    // Preserve a newly earned achievement until the preceding combat receipt can be read.
+    if(bottomBusy&&w.time<this.achievementUntil)this.achievementUntil=Math.max(this.achievementUntil,
+      activeBuild?this.buildFeedback!.until+3:w.time+(this.noticeUntil-this.platform.now())/1000+3);
     if (this.mode === 'menu') this.drawMenu();
     else {
       this.drawHud();
-      if (this.notice && this.platform.now() < this.noticeUntil && this.mode === 'playing' && !(this.buildFeedback && w.time<this.buildFeedback.until)) {
-        this.rect(58, this.noticeY - 31, 604, this.noticeDetail?104:62, '#0a1c2af0'); this.text(this.notice, 360, this.noticeY, 28, '#d2f2ff');
-        if(this.noticeDetail)this.text(this.noticeDetail,360,this.noticeY+43,24,'#f2d598');
+      if(noticeVisible){
+        const y=bottomNotice?1208:this.noticeY;
+        this.rect(58,y-31,604,this.noticeDetail?(bottomNotice?94:104):62,'#0a1c2af0');this.text(this.notice,360,y,28,'#d2f2ff');
+        if(this.noticeDetail)this.text(this.noticeDetail,360,y+(bottomNotice?37:43),bottomNotice?22:24,'#f2d598');
       }
     }
-    if(this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until){
-      const f=this.buildFeedback;this.rect(58,240,604,104,'#0a1c2af0');
-      this.rect(58,240,5,104,f.combo?'#d3a3ff':'#7fe4ff');
-      this.text(f.title,360,272,30,f.combo?'#e1bfff':'#d2f2ff','center',true);
-      this.text(f.detail,360,316,23,'#f2d598');
+    if(activeBuild){
+      const f=this.buildFeedback!,top=bossLive?1180:240,height=bossLive?88:104;
+      this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.combo?'#d3a3ff':'#7fe4ff');
+      this.text(f.title,360,top+(bossLive?28:32),bossLive?28:30,f.combo?'#e1bfff':'#d2f2ff','center',true);
+      this.text(f.detail,360,top+(bossLive?63:76),bossLive?22:23,'#f2d598');
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;
@@ -573,7 +582,7 @@ export class CanvasRuntime {
       const progress=contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
       this.rect(40,y,640,44,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${progress}`,360,y+22,24,'#ffdc8a');
     }
-    if(this.mode==='playing' && w.time<this.achievementUntil){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
+    if(this.mode==='playing' && w.time<this.achievementUntil&&!bottomBusy){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
     c.restore();
   }
@@ -838,7 +847,10 @@ export class CanvasRuntime {
   }
   private drawGuide() {
     if (this.mode !== 'playing') return;
-    if(this.notice&&this.noticeY===1195&&this.platform.now()<this.noticeUntil)return;
+    const bossLive=this.world.bodies.some(b=>b.active&&b.kind==='boss');
+    if(this.world.time<this.achievementUntil)return;
+    if(bossLive&&this.buildFeedback&&this.world.time<this.buildFeedback.until)return;
+    if(this.notice&&(this.noticeY===1195||bossLive)&&this.platform.now()<this.noticeUntil)return;
     // Optional help is below all entities, effects, projectiles and native labels.
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.

@@ -13,7 +13,7 @@ it('time-expanded routes detect a full-width trap, and preserve a side exit', ()
 
 it('boss warning geometry remains locked until the shot is emitted', () => {
   const world = new World(); world.phase = 'boss'; world.phaseTime = 3.8;
-  const boss = world.spawn('boss', 360, 260); boss.timer = 0;
+  const boss = world.spawn('boss',360,C.bossY); boss.timer = 0;
   world.step(C.step); const lane = boss.lane, attack = boss.attack;
   for (let i = 0; i < 82; i++) { world.player.invulnerable = 100; world.step(C.step, 650); world.drainEffects(); }
   expect(boss.lane).toBe(lane); expect(boss.attack).toBe(attack);

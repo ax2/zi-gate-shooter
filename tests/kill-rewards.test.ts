@@ -7,8 +7,8 @@ function hit(w:World,x:number,y:number){w.bullets.push({id:999,x,y,px:x,py:y,vx:
 it.each([2,3])('boss charge is granted once, with truthful armor recovery at %s HP', hp => {
   const w=new World();w.phase='boss';w.player.hp=hp;w.player.x=68;
   w.growth.energy=50;w.growth.mastery=2;
-  const boss=w.spawn('boss',360,260);boss.hp=1;
-  hit(w,360,260);w.step(C.step,68);
+  const boss=w.spawn('boss',360,C.bossY);boss.hp=1;
+  hit(w,360,C.bossY);w.step(C.step,68);
   expect(w.phase).toBe('recovery');expect(w.player.hp).toBe(3);
   expect(w.growth.mastery).toBe(3);expect(w.growth.energy).toBe(0);expect(w.growth.overload).toBe(6);
   const events=w.drainEffects(),receipt=events.find(e=>e.type==='victory')!;
@@ -30,8 +30,8 @@ it('elite charge preserves the remainder and does not grant duplicate rewards', 
 
 it('simultaneous player death still wins over boss recovery and its charge reward', () => {
   const w=new World();w.phase='boss';w.player.hp=1;w.growth.energy=50;
-  const boss=w.spawn('boss',360,260);boss.hp=1;
-  hit(w,360,260);
+  const boss=w.spawn('boss',360,C.bossY);boss.hp=1;
+  hit(w,360,C.bossY);
   w.bullets.push({id:1000,x:360,y:C.playerY,px:360,py:C.playerY,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});
   w.step(C.step);expect(w.phase).toBe('dead');expect(w.growth.energy).toBe(50);
   expect(w.drainEffects().some(e=>e.type==='victory')).toBe(false);

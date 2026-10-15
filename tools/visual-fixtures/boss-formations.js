@@ -11,12 +11,13 @@ await runtime.load();let scene='bulwark';
 function simulate(w){w.step(C.step,360);for(const e of w.drainEffects())runtime.effect(e);runtime.render(C.step);}
 function show(id){
  scene=id;runtime.start();const round=id==='pincer'?5:id==='crossfire'?6:4;
- runtime.world=new World(1337,round);const w=runtime.world;w.phase='boss';const b=w.spawn('boss',360,260);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];
+ runtime.world=new World(1337,round);const w=runtime.world;w.phase='boss';const b=w.spawn('boss',360,C.bossY);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];
  runtime.save.settings.effects=document.querySelector('#quality').value;
  for(let i=0;i<200;i++)simulate(w);
  if(id==='break'){
   for(const guard of [...w.activeEscorts]){
-   w.bullets.push({id:99000+guard.id,x:guard.x,y:guard.y,px:guard.x,py:guard.y,vx:0,vy:0,damage:10000,age:0,active:true,hostile:false});simulate(w);
+   const y=guard.y+guard.height/2+6;
+   w.bullets.push({id:99000+guard.id,x:guard.x,y,px:guard.x,py:y,vx:0,vy:-C.bulletSpeed,damage:10000,age:0,active:true,hostile:false});simulate(w);
   }
   for(let i=0;i<10;i++)simulate(w);
  }

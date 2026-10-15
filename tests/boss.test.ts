@@ -15,7 +15,7 @@ it.each([[1, 0], [2, 2], [3, 3], [4, 0], [5, 2], [6, 3]])('round %s opens with c
   expect(world.phase).toBe('boss-entry');
   const boss = world.bodies.find(body => body.kind === 'boss')!;
   expect(boss).toBeDefined(); expect(boss.attackCycle).toBe(signature);
-  boss.y = 260; boss.timer = 0;
+  boss.y = C.bossY; boss.timer = 0;
   advanceBody(boss, C.step, 'boss', 0, () => { throw new Error('shot before warning'); });
   expect(boss.attack).toBe(signature); expect(boss.warning).toBe(1.35);
   for (const start of [C.minX, 360, C.maxX])
@@ -23,7 +23,7 @@ it.each([[1, 0], [2, 2], [3, 3], [4, 0], [5, 2], [6, 3]])('round %s opens with c
 });
 
 it.each([3, 7, 11])('later boss blockade cycle %s advertises its rotating gap and leaves a reachable route', cycle => {
-  const world = new World(); const boss = world.spawn('boss', 360, 260);
+  const world = new World(); const boss = world.spawn('boss',360,C.bossY);
   boss.bossVariant = 2; boss.attackCycle = cycle; boss.timer = 0;
   const emitted: number[] = [];
   advanceBody(boss, C.step, 'boss', 1, x => emitted.push(x));
@@ -47,7 +47,7 @@ it.each([3, 7, 11])('later boss blockade cycle %s advertises its rotating gap an
 });
 
 it.each([1,2])('chapter %s sustains its own four-attack phrase and full double-lock route', variant => {
-  const world = new World(); const boss = world.spawn('boss',360,260);
+  const world = new World(); const boss = world.spawn('boss',360,C.bossY);
   boss.bossVariant=variant;boss.attackCycle=variant===1?2:3;boss.timer=0;
   const phrase:number[]=[];let cycle=-1;
   for(let frame=0;frame<40*60 && phrase.length<8;frame++){
@@ -63,7 +63,7 @@ it.each([1,2])('chapter %s sustains its own four-attack phrase and full double-l
 
 it('boss alternates A/B, sweeps in two timed beats, mirrors sides and keeps warnings locked', () => {
   const world = new World(); world.phase = 'boss'; world.player.x = 68;
-  const boss = world.spawn('boss', 360, 260);
+  const boss = world.spawn('boss',360,C.bossY);
   const warnings: { attack: number; lane: number; time: number }[] = [];
   const batches: { xs: number[]; time: number }[] = [];
   const seen = new Set<number>();
@@ -104,7 +104,7 @@ it.each([1,3])('entry freezes boss cooldown and victory cancels unfinished attac
   const boss = world.spawn('boss', 360, -150); boss.timer = 2.8;
   for (let i = 0; i < 60; i++) { world.step(C.step); world.drainEffects(); }
   expect(boss.timer).toBe(2.8); expect(world.bullets).toHaveLength(0);
-  world.phase = 'boss'; boss.y = 260; boss.attack = attack; boss.burst = 1; boss.warning = 0.35; boss.timer = 0.35; boss.hp = 1;
+  world.phase = 'boss'; boss.y = C.bossY; boss.attack = attack; boss.burst = 1; boss.warning = 0.35; boss.timer = 0.35; boss.hp = 1;
   world.bullets.push({ id: 9999, x: boss.x, y: 380, px: boss.x, py: 380, vx: 0, vy: -1200, damage: 4, age: 0, active: true, hostile: false });
   world.step(C.step); world.drainEffects();
   expect(world.phase).toBe('recovery'); expect(world.bodies).toHaveLength(0);
