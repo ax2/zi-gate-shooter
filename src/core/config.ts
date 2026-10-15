@@ -18,7 +18,7 @@ export const C = {
     charger: { hp: 24, score: 20, width: 62, height: 78, speed: 170 },
     armor: { hp: 80, score: 50, width: 86, height: 102, speed: 110 },
     elite: { hp: 200, score: 150, width: 118, height: 136, speed: 90 },
-    boss: { hp: 900, score: 1000, width: 300, height: 220, speed: 0 },
+    boss: { hp: 2250, score: 1000, width: 300, height: 220, speed: 0 },
   },
   limits: { bullets: 80, hostile: 48, enemies: 26, rewards: 6 },
 } as const;

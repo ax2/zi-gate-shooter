@@ -1,3 +1,4 @@
+import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, type ContractKind } from './contracts';
 import { BuildTree, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
@@ -105,15 +106,14 @@ export class World {
 
   spawn(kind: BodyKind, x: number, y = -80, stage = 2): Body {
     const enemy = kind in C.enemies ? C.enemies[kind as EnemyKind] : null;
-    const hpScale = kind === 'boss' ? Math.min(1.35, 1 + (this.round - 1) * 0.1)
-      : kind === 'drone' ? 1 : Math.min(1.6, 1 + (this.round - 1) * 0.15);
+    const hpScale = enemy ? enemyHealthScale(kind as EnemyKind,this.round) : 1;
     const hp = enemy ? enemy.hp * hpScale : kind === 'crate' ? stage === 3 ? 112 : 48 : 1;
     const body: Body = {
       id: this.nextId++, kind, x, y, px: x, py: y,
       width: enemy?.width ?? (kind === 'gate' ? 240 : kind === 'pickup' ? 46 : 96),
       height: enemy?.height ?? (kind === 'gate' ? 138 : kind === 'pickup' ? 54 : 110),
       hp, maxHp: hp, speed: enemy ? enemy.speed * Math.min(1.15, 1 + (this.round - 1) * 0.05) : this.scrollSpeed,
-      active: true, age: 0, timer: kind === 'boss' ? 2.8 : 2.4, warning: 0, hit: 0,
+      active: true, age: 0, timer: enemy ? firstAttackDelay(kind as EnemyKind) : 2.4, warning: 0, hit: 0,
       energy: 0, row: 0, stage, rewardKind: this.growth.bonus >= 100 ? 'energy' : 'power', attack: 0, lane: kind === 'boss' ? 360 : x, attackCycle: 0, burst: 0,
     };
     this.bodies.push(body); return body;

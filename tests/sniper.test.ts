@@ -35,7 +35,8 @@ it('killing a charging sentry cancels its shot and grants its score once',()=>{
  expect(w.bullets.some(b=>b.hostile)).toBe(false);expect(w.score).toBe(C.enemies.sniper.score);
 });
 
-it('introduces sentries in chapter two and three normal schedules, not the first tutorial',()=>{
- expect(timeline(1,1337).some(s=>s.kind==='sniper')).toBe(false);
+it('keeps sentries out of the first supply tutorial, then introduces them in chapter pressure windows',()=>{
+ expect(timeline(1,1337).some(s=>s.kind==='sniper'&&s.at<30)).toBe(false);
+ expect(timeline(1,1337).some(s=>s.kind==='sniper'&&s.at>=50)).toBe(true);
  for(const round of [2,3,5,6])expect(timeline(round,1337).some(s=>s.kind==='sniper')).toBe(true);
 });

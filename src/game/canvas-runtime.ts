@@ -641,8 +641,7 @@ export class CanvasRuntime {
         const progress = tier < 0 ? 1 : (b.energy - C.thresholds[tier - 1]) / (C.thresholds[tier] - C.thresholds[tier - 1]);
         this.bar(b.x, b.y + (mixed ? 72 : 46), b.width - 32, progress, b.rewardKind === 'power' ? '#5bddff' : '#e5b96a');
       } else if (b.kind === 'boss') {
-        this.text(`${b.bossVariant === 2 ? '封锁堡垒' : b.bossVariant === 1 ? '双翼压制者' : '重装首领'}　${Math.ceil(b.hp)} / ${Math.ceil(b.maxHp)}`, 360, this.hudTop + 145, 25, '#ffd59e');
-        this.bar(360, this.hudTop + 166, 430, b.hp / b.maxHp, '#ff925d');
+        // Boss status is drawn after the HUD background in drawHud.
       } else if (b.kind === 'guard') {
         this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
         this.text(b.burst ? '弱点暴露' : '装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
@@ -675,7 +674,8 @@ export class CanvasRuntime {
   }
   private drawHud() {
     const y = this.hudTop, w = this.world;
-    this.rect(0, 0, 720, y + 162, '#08131be8');
+    const boss=w.bodies.find(b=>b.active&&b.kind==='boss');
+    this.rect(0, 0, 720, y + (boss?210:162), '#08131be8');
     this.text('分数', 30, y + 6, 20, '#91adbf', 'left');
     this.text(w.score.toString().padStart(6, '0'), 28, y + 43, 42, '#e9f6ff', 'left', true);
     this.text('◈ '.repeat(w.player.hp) + '◇ '.repeat(3 - w.player.hp), 430, y + 35, 34, '#82deff');
@@ -687,6 +687,10 @@ export class CanvasRuntime {
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
     this.text(w.growth.overload > 0 ? `超载×1.35 · ${w.growth.overload.toFixed(1)}秒  |  再充能 ${Math.floor(w.growth.energy)}/100`
       : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：本局火力+10% / 超载6秒`, 360, y + 144, 22, '#d4e8ee');
+    if(boss){
+      this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
+      this.bar(360,y+196,620,boss.hp/boss.maxHp,'#ff925d');
+    }
   }
   private drawGuide() {
     if (this.mode !== 'playing') return;
@@ -842,8 +846,9 @@ export class CanvasRuntime {
     const w = this.world;
     if (this.mode === 'paused' && this.pausePreview) {
       this.buttons = [];
-      this.rect(80, 170, 560, 82, '#081a25ee');
-      this.text('战场已冻结 · 看清危险再继续', 360, 211, 27, '#e3f4ff', 'center', true);
+      const bannerY=this.world.phase==='boss'||this.world.phase==='boss-entry'?980:170;
+      this.rect(80, bannerY, 560, 64, '#081a25ee');
+      this.text('战场已冻结 · 看清危险再继续', 360, bannerY+32, 27, '#e3f4ff', 'center', true);
       this.button('继续战斗', 1070, 'resume', true);
       this.button('返回暂停菜单', 1170, 'pause-menu');
       return;

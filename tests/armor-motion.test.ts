@@ -23,6 +23,6 @@ it('prepares for the unchanged real 0.6-second warning and returns to travel on 
   if(shots>before){expect(b.warning).toBe(0);expect(armorFrame(b)).not.toBe(1);}
   if(b.y>=600)expect(b.warning).toBe(0);
  }
- expect(warningAt).toBeCloseTo(2.4);expect(shotAt).toBeCloseTo(3);
+ expect(warningAt).toBeCloseTo(1.5);expect(shotAt).toBeCloseTo(2.1);
  expect(shotAt-warningAt).toBeCloseTo(.6);expect(shots).toBe(2);
 });

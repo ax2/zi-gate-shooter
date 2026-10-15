@@ -153,7 +153,7 @@ it.each([false,true])('ties boss preparation to real A/B warnings, freezes the s
  const draws=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('boss-v1.png'));
  const frames=new Set<number>();let paused=false,finishedB=false;
  for(let i=0;i<620;i++){
-  body.hit=baseline.hit=.07;f.tick();reference.step(C.step,68);reference.drainEffects();
+  const previousCycle=body.attackCycle;body.hit=baseline.hit=.07;f.tick();reference.step(C.step,68);reference.drainEffects();
   expect(body).toEqual(baseline);expect(f.runtime.world.bullets).toEqual(reference.bullets);
   expect(f.runtime.world.player).toEqual(reference.player);expect(f.runtime.world.growth).toEqual(reference.growth);
   expect(f.runtime.world.score).toBe(reference.score);expect(f.runtime.world.phase).toBe(reference.phase);
@@ -170,7 +170,7 @@ it.each([false,true])('ties boss preparation to real A/B warnings, freezes the s
    f.runtime.touchStart(1,360,603);f.runtime.touchEnd(1,360,603);expect(f.runtime.mode).toBe('playing');
    f.runtime.touchStart(1,360,1100);f.runtime.touchMove(1,68,1100);paused=true;
   }
-  if(body.attackCycle===2){expect(body.warning).toBe(0);finishedB=true;}
+  if(previousCycle<2&&body.attackCycle===2){expect(body.warning).toBe(0);finishedB=true;}
  }
  expect(frames).toEqual(new Set([0,256]));expect(paused).toBe(true);expect(finishedB).toBe(true);
  f.runtime.start();f.tick();expect(draws()).toHaveLength(0);
@@ -745,4 +745,13 @@ it('explicitly names a newly completed prism combination after the final choice'
  f.runtime.touchStart(1,360,410);f.runtime.touchEnd(1,360,410);f.tick();
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='组合完成 · 棱镜激光')).toBe(true);
  expect(f.runtime.world.supportProfile().prism).toBe(true);
+});
+it('keeps boss status above the HUD background and separate from the charge line',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
+ f.runtime.world.spawn('boss',360,260);f.tick();
+ const label=f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('重装首领'));
+ const charge=f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('充能 0/100'));
+ const background=f.calls.findIndex(c=>c.kind==='fillRect'&&c.args[0]===0&&c.args[1]===0&&c.args[2]===720&&c.color==='#08131be8');
+ expect(label).toBeGreaterThan(background);expect(label).toBeGreaterThan(charge);
+ expect(f.calls[label].args[2]-f.calls[charge].args[2]).toBeGreaterThanOrEqual(28);
 });
