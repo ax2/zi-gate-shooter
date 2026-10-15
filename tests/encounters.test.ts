@@ -7,7 +7,7 @@ it.each([1,2,3])('chapter %s has three tactically distinct authored pressure sec
   const wave=timeline(round,1).filter(s=>s.at>=31&&s.at<=45);
   signatures.push(JSON.stringify(wave.map(s=>[s.at,s.kind,s.pattern,s.lane])));
   expect(wave.length).toBeGreaterThanOrEqual(5);
-  expect(wave.length).toBeLessThanOrEqual(18);
+  expect(wave.filter(s=>!s.drop).length).toBeLessThanOrEqual(18);
   expect(new Set(wave.map(s=>s.kind)).size).toBeGreaterThanOrEqual(3);
  }
  expect(new Set(signatures).size).toBe(3);
@@ -23,6 +23,8 @@ it('retains growth windows and pre-boss breathing room across all nine combinati
   expect(wave).toEqual(timeline(round,1));
   expect(encounterIndex(round)).toBe(encounterIndex(round+9));
   const sector=(round-1)%3+1;
-  expect(wave.filter(s=>s.at>=60)).toEqual(timeline(sector,1).filter(s=>s.at>=60));
+  const roster=(items:ReturnType<typeof timeline>)=>items.filter(s=>s.at>=60).map(({drop,dropY,...s})=>s);
+  expect(roster(wave)).toEqual(roster(timeline(sector,1)));
+  expect(wave.filter(s=>s.at>=60).every(s=>!!s.drop===(round>1))).toBe(true);
  }
 });

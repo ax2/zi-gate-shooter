@@ -1,5 +1,7 @@
 # 火力突围
 
+最新内容候选 **Stage-143**：http://127.0.0.1:5220/ 。新增护航/交叉哨/装甲纵列，改善后续章节开场和尾段衔接。[试玩](docs/stages/Stage-143/PLAY.md) · [验证边界](docs/stages/Stage-143/TEST_REPORT.md)。
+
 最新火力候选 **Stage-142**：http://127.0.0.1:5219/ 。电弧有限索敌快弹与锯齿电光，正常T1已有真实链伤；已有武器叠加保留。[试玩](docs/stages/Stage-142/PLAY.md) · [验证边界](docs/stages/Stage-142/TEST_REPORT.md)。
 
 最新内容候选 **Stage-141**：http://127.0.0.1:5218/ 。第二轮起新增三种突降机群，提供贯穿/范围爆破的实际目标；结算显示真实雷电链伤。[试玩](docs/stages/Stage-141/PLAY.md) · [验证与边界](docs/stages/Stage-141/TEST_REPORT.md)。

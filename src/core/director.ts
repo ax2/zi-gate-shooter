@@ -1,5 +1,5 @@
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan'; lane?: number; drop?:boolean; dropNotice?:boolean }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan'; lane?: number; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 export const sectorNames = ['突围走廊', '侧翼夹击', '重装封锁'];
 export const sectorIndex = (round: number) => (Math.max(1, round) - 1) % 3;
@@ -118,6 +118,28 @@ export function timeline(round: number, seed: number): Spawn[] {
       add(32+row*2.2,'drone',x);out[out.length-1].drop=true;
       out[out.length-1].dropNotice=row===0&&index===0;
     }));
+    // Fixed tactical phrases between supply windows. Front shields, rear guns
+    // and vertical armour offer different aiming problems without scaling HP
+    // to the player. Every body still passes the existing admission forecast.
+    const reinforcement=(at:number,kind:EnemyKind,x:number,y:number,label?:string)=>{
+      add(at,kind,x);Object.assign(out[out.length-1],{drop:true,dropY:y,dropLabel:label});
+    };
+    if(sector===0){
+      reinforcement(44.5,'guard',360,440,'哨卫护航');reinforcement(44.5,'sniper',360,320);
+      for(const x of [300,420])reinforcement(44.5,'drone',x,360);
+      reinforcement(55.5,'guard',360,440,'护航补阵');for(const x of [300,420])reinforcement(55.5,'drone',x,360);
+    }else if(sector===1){
+      reinforcement(44.5,'sniper',240,360,'交叉哨阵');reinforcement(44.5,'sniper',480,360);
+      for(const x of [300,420])reinforcement(44.5,'drone',x,420);
+      reinforcement(55.5,'guard',360,440,'屏障增援');for(const x of [300,420])reinforcement(55.5,'drone',x,360);
+    }else{
+      reinforcement(44.5,'armor',300,440,'装甲突击');reinforcement(44.5,'armor',300,320);reinforcement(44.5,'charger',480,360);
+      reinforcement(55.5,'armor',420,440,'穿甲纵列');reinforcement(55.5,'armor',420,320);reinforcement(55.5,'drone',300,360);
+    }
+    // Preserve the authored opening/tail roster, but let upgraded weapons meet
+    // those enemies inside the visible battlefield before they can be erased.
+    for(const spawn of out)if(spawn.kind in {drone:1,sniper:1,guard:1,charger:1,armor:1,elite:1}
+      &&(spawn.at<=13||spawn.at>=60)){spawn.drop=true;spawn.dropY=SWARM.arrivalY;}
   }
   return out.sort((a, b) => a.at - b.at);
 }
