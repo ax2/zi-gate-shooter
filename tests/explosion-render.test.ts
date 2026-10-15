@@ -747,6 +747,7 @@ it('choice receipt names new power, remains through pause and clears on restart'
  f.runtime.touchStart(1,360,410);f.runtime.touchEnd(1,360,410);f.tick();
  const receipt=()=>f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='配件强化 · 霰射机构');
  expect(receipt()).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='新增T1霰射 · 每轮3发 · 直伤12.1')).toBe(true);
  f.runtime.pause();for(let i=0;i<300;i++)f.tick();
  f.runtime.touchStart(1,360,603);f.runtime.touchEnd(1,360,603);f.tick();expect(receipt()).toBe(true);
  f.runtime.start();f.tick();expect(receipt()).toBe(false);

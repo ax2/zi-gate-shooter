@@ -4,7 +4,8 @@ import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, type ContractKind } from './contracts';
 import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
-import { supportProfile, supportMilestone } from './support-profile';
+import { supportMilestone } from './support-profile';
+import {builtWeapon,builtSupport} from './build-profile';
 import { C, clamp } from './config';
 import {CONDUIT,canDisrupt} from './conduit';
 import type { EnemyKind } from './config';
@@ -15,7 +16,7 @@ import { timeline, sectorIndex, sectorNames, SWARM } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
 import { advanceBody, guardClosed } from './behavior';
-import { weaponProfile, weaponNames, ARC_SHOT } from './weapons';
+import { weaponNames, ARC_SHOT } from './weapons';
 import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
@@ -146,17 +147,10 @@ export class World {
   private calibrations=new Map<WeaponKind,number>();
   weaponCalibration(kind:WeaponKind){return this.calibrations.get(kind)??0;}
   profileFor(kind:WeaponKind) {
-    const p=weaponProfile(kind,this.weaponStage(kind)),rank=this.build.ranks;
-    const refinement=1+.1*this.build.refinements[kind==='arc'?'electric':'ballistic'];
-    return {...p,targets:kind==='scatter'&&this.build.ballisticBranch==='penetrator'?BALLISTIC_FORK.targets:p.targets,
-      splashRadius:kind==='scatter'&&this.build.ballisticBranch==='fragment'?BALLISTIC_FORK.radius:p.splashRadius,
-      damage:p.damage.map(n=>n*(1+.5*this.weaponCalibration(kind))*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
-      chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0)+(this.build.electricBranch==='spread'?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
+    return builtWeapon(kind,this.weaponStage(kind),this.weaponCalibration(kind),this.build);
   }
   supportProfile() {
-    const p=supportProfile(this.growth.mastery),rank=this.build.ranks.optical;
-    return {...p,laserUnlocked:p.laserUnlocked||rank>0,laserDamage:p.laserDamage*(rank>0?1.15:1)*(1+.1*this.build.refinements.optical),
-      laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0),prism:rank>=3&&this.build.ranks.ballistic>=1};
+    return builtSupport(this.growth.mastery,this.build);
   }
   bossWins=0;
   private bossLootRounds:number[]=[];

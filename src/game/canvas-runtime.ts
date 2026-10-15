@@ -1,4 +1,5 @@
 import {dropLight} from './drop-light';
+import {buildPreview} from './build-preview';
 import {empWave,offlineLight} from './emp-light';
 import {runReport} from './run-report';
 import { capacitorLight, capacitorMarks } from './capacitor-light';
@@ -323,12 +324,13 @@ export class CanvasRuntime {
     return true;
   }
   private selectBuild(route:Route,branch?:BuildBranch){
+    const preview=buildPreview(this.world,route,branch);
     const chosenNode=this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
     this.checkAchievements();
     const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
-    this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${chosenNode.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':chosenNode.detail,until:this.world.time+4,combo:!!combo};
+    this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${chosenNode.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':preview.gain,until:this.world.time+4,combo:!!combo};
     if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
     this.mode='choice';
     if(!this.world.build.available(this.world.buildPoints).length)this.action('resume');
@@ -1167,16 +1169,19 @@ export class CanvasRuntime {
     this.rect(35,150,650,1000,'#102330');
     this.text((this.world.growth.mastery??0)===0&&this.world.researchPoints>0?'装备研发 · 选择升级路线':'战地改造 · 选择升级路线',360,220,34,'#effaff','center',true);
     this.text(`可用${this.world.buildPoints-this.world.build.spent}点 · 研发${this.world.researchPoints} + 充能突破${this.world.growth.mastery??0}`,360,270,24,'#b8d4e3');
-    this.text('首件装备/首排补给各1点 · 其后充能突破',360,305,20,'#bdd8e7');
+    this.text('直伤含常驻火力 · 不计超载、命中率与派生',360,305,20,'#bdd8e7');
     const available=this.world.build.available(this.world.buildPoints);
     for(const [i,route] of routes.entries()){
       const rank=this.world.build.ranks[route],y=330+i*235,node=this.world.build.next(route);
       const enabled=available.includes(route);
+      const preview=buildPreview(this.world,route),color=['#ffd28a','#c6a1ff','#7fe4ff'][i];
       this.rect(65,y,590,205,enabled?'#203e50':'#15232e');
-      this.text(`${['弹道','雷电','光学'][i]}路线 · ${rank}/3 · 精调${this.world.build.refinements[route]}`,90,y+35,26,'#f0d19a','left');
+      this.rect(65,y,4,205,enabled?color:'#435462');
+      this.text(`${['弹道','雷电','光学'][i]}路线 · ${rank}/3 · 精调${this.world.build.refinements[route]}`,90,y+35,26,color,'left');
       this.text(node?.name??'路线已完成',90,y+83,30,enabled?'#effaff':'#8396a2','left',true);
-      this.text(node?.detail??'所有已选能力继续生效',90,y+128,23,'#bdd8e7','left');
-      this.text(enabled?'选择此节点　›':rank===3?'已完成':'需先选择导电线圈',610,y+174,23,enabled?'#80e4ff':'#8396a2','right');
+      this.text(preview.gain,90,y+128,23,enabled?'#e1f7ff':'#8396a2','left');
+      this.text(preview.plan,90,y+174,21,enabled?'#c4dca9':'#8396a2','left');
+      if(enabled)this.text('›',625,y+80,32,color,'right',true);
       if(enabled)this.buttons.push({x:65,y,w:590,h:205,action:`build:${route}`,label:node!.name});
     }
     this.button('查看完整技能树',1050,'tree');

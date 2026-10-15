@@ -1,5 +1,7 @@
 # 火力突围
 
+最新体验候选 **Stage-147**：http://127.0.0.1:5227/ 。升级卡显示当前→选后真实参数与组合缺口，选后回执核对收益；已有配件与战斗数值保留。[试玩](docs/stages/Stage-147/PLAY.md) · [验证边界](docs/stages/Stage-147/TEST_REPORT.md)。
+
 最新战术候选 **Stage-146**：http://127.0.0.1:5225/ 。第二章起新增导电中继，击破可短暂停火并打开盾卫；新增双蓄能中断的时机成就。[试玩](docs/stages/Stage-146/PLAY.md) · [验证边界](docs/stages/Stage-146/TEST_REPORT.md)。
 
 最新首局候选 **Stage-145**：http://127.0.0.1:5223/ 。第一局完整敌机与早期分支火力检验，修正装甲入场叠形。[试玩](docs/stages/Stage-145/PLAY.md) · [验证边界](docs/stages/Stage-145/TEST_REPORT.md)。

@@ -1,0 +1,36 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/build-preview.test.ts tests/build-tree.test.ts tests/ballistic-branches.test.ts tests/electric-branches.test.ts tests/optical-branches.test.ts tests/explosion-render.test.ts tests/native-controls.test.ts tests/native-flow.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/build-preview.test.ts (4 tests | 1 failed) 64ms
+   × distinguishes adding a T1 gun from strengthening an owned T3 gun and excludes overload 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/build-preview.test.ts > distinguishes adding a T1 gun from strengthening an owned T3 gun and excludes overload
+AssertionError: expected '霰射每轮直伤 43.5 → 47.9' to be '霰射每轮直伤 46.5 → 51.2' // Object.is equality
+
+Expected: "霰射每轮直伤 46.5 → 51.2"
+Received: "霰射每轮直伤 43.5 → 47.9"
+
+ ❯ tests/build-preview.test.ts:34:44
+     32|   expect(buildPreview(w,'ballistic').gain).toBe('新增T1霰射 · 每轮3发 · 直伤16.…
+     33|   w.weaponKind='scatter';
+     34|   expect(buildPreview(w,'ballistic').gain).toBe('霰射每轮直伤 46.5 → 51.2');
+       |                                            ^
+     35|   expect(buildPreview(w,'ballistic').stage).toBe(3);
+     36|   expect(buildPreview(w,'optical').gain).toBe('新增激光 · 3秒/束 · 直伤51.8');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  1 failed | 133 passed (134)
+   Start at  15:02:26
+   Duration  7.42s (tests 60%, transform 27%, import 12%, worker 1%)
+
+  Transform  transforming modules took 2.93s · 27% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
