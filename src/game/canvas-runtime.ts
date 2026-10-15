@@ -376,6 +376,7 @@ export class CanvasRuntime {
     if(fresh.length){this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
+    if(e.type==='bounty-progress'){this.notify(e.text??'悬赏推进',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.escortReward){this.notify(e.text??'编队击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
 
     if(e.type==='formation'){
@@ -564,7 +565,11 @@ export class CanvasRuntime {
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;
-    if(this.mode==='playing'&&contract?.status==='active'){this.rect(40,1130,640,50,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${Math.min(15,w.kills-contract.startKills)}/15敌`,360,1155,24,'#ffdc8a');}
+    if(this.mode==='playing'&&contract?.status==='active'){
+      const y=w.bodies.some(b=>b.active&&b.kind==='boss')?1130:this.hudTop+164;
+      const progress=contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
+      this.rect(40,y,640,44,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${progress}`,360,y+22,24,'#ffdc8a');
+    }
     if(this.mode==='playing' && w.time<this.achievementUntil){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
     c.restore();
@@ -643,6 +648,10 @@ export class CanvasRuntime {
     const protectedBoss=w.bodies.find(b=>b.active&&b.kind==='boss');
     if(protectedBoss&&w.bossShieldActive())formationShield(c,protectedBoss.x,protectedBoss.y+BOSS_VISUAL.offsetY,w.time,0,this.save.settings.effects==='weak');
     if(this.shieldBreak&&w.time<this.shieldBreak.until)formationShield(c,this.shieldBreak.x,this.shieldBreak.y,w.time,1-(this.shieldBreak.until-w.time)/.45,this.save.settings.effects==='weak');
+    for(const b of w.bodies)if(b.active&&b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active'){
+      c.save();c.strokeStyle='#ffd884';c.lineWidth=3;c.globalAlpha=.7+.2*Math.sin(w.time*7);
+      for(const side of [-1,1]){const x=b.x+side*b.width*.65;c.beginPath();c.moveTo(x-side*14,b.y-24);c.lineTo(x,b.y-14);c.lineTo(x,b.y+14);c.lineTo(x-side*14,b.y+24);c.stroke();}c.restore();
+    }
     for(const b of w.bodies)if(b.active&&b.burnTicks)burnLight(c,b.x,b.y,b.width,b.height,w.time,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&b.fractureHits)fractureMarks(c,b.x,b.y+(b.kind==='boss'?BOSS_VISUAL.offsetY:0),b.width,b.fractureHits);
     for (const b of w.bullets.filter(b => !b.hostile)) {
@@ -768,7 +777,10 @@ export class CanvasRuntime {
       } else if (b.kind === 'guard') {
         this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
         this.text(b.burst ? '弱点暴露' : b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
-      } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
+      } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
+        this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
+        if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text('悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
+      }
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
     for (const b of w.bullets.filter(b => b.hostile)) {
@@ -979,22 +991,22 @@ export class CanvasRuntime {
     this.text('战斗已暂停 · 选择后继续',360,1135,24,'#bdd8e7');
   }
   private drawContracts() {
+    const w=this.world,current=w.contract?.round===w.round?w.contract:undefined;
     this.rect(35,120,650,1080,'#102330');
-    this.text('挑战契约',360,190,42,'#effaff','center',true);
-    this.text('自选限制与增援挑战 · 每轮一次',360,245,25,'#bdd8e7');
-    const current=this.world.contract;
-    const can=!this.world.contractReward&&this.world.phase==='running'&&this.world.roundTime<=40&&current?.status!=='active'&&current?.round!==this.world.round;
+    this.text('挑战契约',360,180,42,'#effaff','center',true);
+    this.text('自选限制或狩猎目标 · 每轮一次',360,235,25,'#bdd8e7');
     for(const [i,kind] of (Object.keys(contracts) as ContractKind[]).entries()){
-      const entry=contracts[kind],y=310+i*255;
-      this.rect(65,y,590,225,'#203e50');
-      this.text(entry.name,90,y+45,32,'#ffdc8a','left',true);
-      this.text(entry.detail,90,y+95,24,'#effaff','left');
-      this.text(`成功：充能+${entry.charge} 或定向强化已有配件`,90,y+142,23,'#bdd8e7','left');
-      this.text(can?'接取契约　›':'本轮已接取或当前不可接取',625,y+190,23,'#80e4ff','right');
-      if(can)this.buttons.push({x:65,y,w:590,h:225,label:entry.name,action:`contract:${kind}`});
+      const entry=contracts[kind],y=285+i*205,can=w.canAcceptContract(kind);
+      const needTier=kind==='hunter'&&!w.activeWeapons.some(k=>w.weaponStage(k)>=2);
+      this.rect(65,y,590,185,can?'#203e50':'#172c3b');
+      this.text(entry.name,90,y+34,30,'#ffdc8a','left',true);
+      this.text(entry.detail,90,y+76,23,'#effaff','left');
+      this.text(`成功：充能+${entry.charge} 或定向强化已有配件`,90,y+116,22,'#bdd8e7','left');
+      this.text(can?'接取契约　›':needTier?'需要任一T2配件':'本轮已接取或当前不可接取',625,y+157,23,can?'#80e4ff':'#97adbd','right');
+      if(can)this.buttons.push({x:65,y,w:590,h:185,label:entry.name,action:`contract:${kind}`});
     }
-    this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中':current.status==='won'?'已完成':'失败：'+current.reason}`:'每轮前40秒可接取 · 追加22架敌机',360,895,25,'#ffdc8a');
-    this.text('增援按安全路线入场 · 暂停与过场不计时',360,945,23,'#bdd8e7');
+    this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中'+(current.kind==='hunter'?` ${current.targetKills}/2`:''):current.status==='won'?'已完成':'失败：'+current.reason}`:'每轮前40秒可接取 · 一次选择贯穿本段',360,950,24,'#ffdc8a');
+    this.text(current?.kind==='hunter'?'追加2名驻留精英 · 全破立即选强化':'猎手追加精英 · 其他契约追加无人机',360,992,23,'#bdd8e7');
     this.button(current?.status==='active'?'继续挑战':this.contractReturn==='paused'?'返回暂停菜单':'返回当前火力',1080,current?.status==='active'?'resume':'contracts-back',true);
   }
   private drawBuildTree() {
@@ -1094,11 +1106,13 @@ export class CanvasRuntime {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
       mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, buildRefinements:{...this.world.build.refinements}, activeWeapons:this.world.activeWeapons,
       supportBeams:this.supportBeams.length,
+      weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
       weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
       contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
+      contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,

@@ -870,3 +870,17 @@ it('late boss shield remains below clear HUD labels and the expanded achievement
  expect(f.runtime.activateControl('achievements')).toBe(true);
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='战术拆解')).toBe(true);
 });
+it('locks the hunter before tier2 and enters a real immediate reward after both marked deaths',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();f.tick();
+ expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.runtime.activateControl('contract:hunter')).toBe(false);
+ expect(f.runtime.activateControl('contracts-back')).toBe(true);expect(f.runtime.activateControl('resume')).toBe(true);
+ const w=f.runtime.world,p=w.spawn('pickup',360,C.playerY,2);p.weaponKind='pulse';f.tick();
+ expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.runtime.activateControl('contract:hunter')).toBe(true);
+ expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<430;i++)f.tick();
+ expect(w.contract!.reinforcements).toBe(2);expect(w.contract!.targetKills).toBe(0);
+ for(const b of w.bodies.filter(b=>b.active&&b.bountyRound===w.round)){
+  const y=b.y+b.height*.4;w.bullets.push({id:90000+b.id,x:b.x,y,px:b.x,py:y,vx:0,vy:0,damage:1000,age:0,active:true,hostile:false});
+ }
+ f.tick();expect(f.runtime.mode).toBe('contract-reward');expect(w.contract!.targetKills).toBe(2);expect(w.contract!.elapsed).toBeLessThan(30);
+ expect(f.runtime.activateControl('contract-claim:pulse')).toBe(true);expect(w.weaponStage('pulse')).toBe(3);expect(f.runtime.mode).toBe('playing');
+});

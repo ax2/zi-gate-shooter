@@ -1,5 +1,7 @@
 # 火力突围
 
+最新挑战候选 **Stage-135**：http://127.0.0.1:5212/ 。新增危险猎手：两名标记精英、主动转火、全破立即选强化。[试玩](docs/stages/Stage-135/PLAY.md) · [验证与边界](docs/stages/Stage-135/TEST_REPORT.md)。
+
 当前战术候选 **Stage-134**：http://127.0.0.1:5211/ 。4轮起新增三种首领编队、供能屏障与技巧成就。[试玩](docs/stages/Stage-134/PLAY.md) · [证据与边界](docs/stages/Stage-134/TEST_REPORT.md)。
 
 当前构筑候选 **Stage-133**：http://127.0.0.1:5210/ 。光学第二点增加灼热/分光二选一，已获火力保留。[试玩](docs/stages/Stage-133/PLAY.md) · [证据与边界](docs/stages/Stage-133/TEST_REPORT.md)。

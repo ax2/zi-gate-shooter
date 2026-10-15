@@ -1,3 +1,4 @@
+import { HUNTER } from './contracts';
 import { ESCORT } from './boss-formations';
 import type { Body, Phase } from './world';
 import { C, clamp } from './config';
@@ -100,7 +101,8 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     b.y += b.speed * dt;
   } else {
     if (b.kind === 'drone' && b.pattern === 'weave') b.x = clamp(b.lane + Math.sin(b.age * 2) * 70, C.minX, C.maxX);
-    b.y += b.speed * dt;
+    if(b.kind==='elite'&&b.bountyRound!==undefined&&b.age<HUNTER.holdSeconds){if(b.y<HUNTER.hoverY)b.y=Math.min(HUNTER.hoverY,b.y+b.speed*dt);}
+    else b.y += b.speed * dt;
     if ((b.kind === 'armor' || b.kind === 'elite') && b.y > 0 && b.y < 600) {
       if (b.timer <= 1e-9) {
         if (b.warning <= 0) { b.warning = 0.6; b.timer = 0.6; }

@@ -1,7 +1,7 @@
 import { bossFormationFor, ESCORT } from './boss-formations';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
-import { Contract, contracts, type ContractKind } from './contracts';
+import { Contract, contracts, HUNTER, type ContractKind } from './contracts';
 import { BuildTree, OPTICAL_FORK, type OpticalBranch, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
 import { supportProfile, supportMilestone } from './support-profile';
@@ -24,7 +24,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  escort?:boolean;
+  bountyRound?:number;escort?:boolean;
   weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
@@ -141,8 +141,12 @@ export class World {
     return true;
   }
   damageTaken=0;
+  canAcceptContract(kind:ContractKind){
+    return kind in contracts&&!this.contractReward&&this.phase==='running'&&this.roundTime<=40&&this.player.hp>0&&this.contract?.status!=='active'&&this.contract?.round!==this.round
+      &&(kind!=='hunter'||this.activeWeapons.some(k=>this.weaponStage(k)>=2));
+  }
   acceptContract(kind:ContractKind){
-    if(this.contractReward||this.phase!=='running'||this.roundTime>40||this.player.hp<=0||this.contract?.status==='active'||this.contract?.round===this.round)return false;
+    if(!this.canAcceptContract(kind))return false;
     this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken);return true;
   }
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
@@ -367,12 +371,13 @@ export class World {
     this.director(dt);
     // Opt-in combat supplies its own targets; it must not depend on a sparse chapter tail.
     const challenge=this.contract;
-    if(challenge?.status==='active'&&this.phase==='running'&&challenge.reinforcements<22&&challenge.elapsed>=challenge.nextReinforcement){
+    if(challenge?.status==='active'&&this.phase==='running'&&challenge.reinforcements<(challenge.kind==='hunter'?HUNTER.targets:22)&&challenge.elapsed>=challenge.nextReinforcement){
       const count=this.bodies.filter(b=>b.active&&b.kind in C.enemies).length;
       if(count<C.limits.enemies){
-        const x=[200,360,520,360][challenge.reinforcements%4];
-        const candidate=this.spawn('drone',x,180);
-        if(this.admit(candidate)){challenge.reinforcements++;challenge.nextReinforcement=challenge.elapsed+.8;}
+        const hunter=challenge.kind==='hunter',x=hunter?[220,500][challenge.reinforcements]:[200,360,520,360][challenge.reinforcements%4];
+        const candidate=this.spawn(hunter?'elite':'drone',x,180);
+        if(this.admit(candidate)){if(hunter)candidate.bountyRound=challenge.round;challenge.reinforcements++;challenge.nextReinforcement=challenge.elapsed+(hunter?HUNTER.spacing:.8);}
+        else challenge.nextReinforcement=challenge.elapsed+HUNTER.retry;
       }
     }
     const hadBossShield=this.bossShieldActive();
@@ -535,6 +540,7 @@ export class World {
       this.effects.push({type:'victory',x:360,y:430,text:`首领击破 · 充能+${C.killCharge.boss}`,
         detail:[restored?'装甲恢复+1':'装甲完好',this.chargeReceipt(reward.activated)].join(' · ')});
     }
+    for(const b of this.bodies)if(b.bountyRound!==undefined&&b.hp>0&&(!b.active||b.y>=1344))this.contract?.targetEscaped(b.bountyRound);
     this.bodies = this.bodies.filter(b => b.active && b.y < 1344);
     this.bullets = this.bullets.filter(b => b.active && b.y > (b.hostile ? -90 : C.playerShotTop) && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
     const contract=this.contract;
@@ -589,6 +595,9 @@ export class World {
         const reward=grantGate(this.growth,C.killCharge.elite,'energy');
         if(reward.activated)this.emit('overload',this.player.x,C.playerY);
         this.effects.push({type:'reward',x:b.x,y:b.y,text:`精英击破 · 充能+${C.killCharge.elite}`,detail:this.chargeReceipt(reward.activated)});
+      }
+      if(b.bountyRound!==undefined&&this.contract?.targetKilled(b.id,b.bountyRound)){
+        this.effects.push({type:'bounty-progress',x:b.x,y:b.y,text:`悬赏精英 ${this.contract.targetKills}/2`,detail:this.contract.targetKills<2?'再击破一名领取契约强化':'目标全破 · 即将选择强化'});
       }
     }
   }
