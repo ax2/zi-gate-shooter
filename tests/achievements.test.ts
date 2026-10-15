@@ -28,3 +28,9 @@ it('records fracture engineering only after ten real burst counts and retains it
  expect(awardAchievements(s,ranks,3,20)).toEqual([]);
  expect(parseAchievements(s).unlocked).toEqual(['fracture']);
 });
+it('persists tactical mastery only from a successful recorded tactical victory',()=>{
+ const s=emptyAchievements(),ranks={ballistic:0,electric:0,optical:0};
+ expect(awardAchievements(s,ranks,1,0,0)).toEqual([]);
+ expect(awardAchievements(s,ranks,1,0,1).map(a=>a.id)).toEqual(['tactician']);
+ expect(awardAchievements(s,ranks,1,0,2)).toEqual([]);expect(parseAchievements(s).unlocked).toContain('tactician');
+});

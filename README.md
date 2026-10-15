@@ -1,5 +1,7 @@
 # 火力突围
 
+当前战术候选 **Stage-134**：http://127.0.0.1:5211/ 。4轮起新增三种首领编队、供能屏障与技巧成就。[试玩](docs/stages/Stage-134/PLAY.md) · [证据与边界](docs/stages/Stage-134/TEST_REPORT.md)。
+
 当前构筑候选 **Stage-133**：http://127.0.0.1:5210/ 。光学第二点增加灼热/分光二选一，已获火力保留。[试玩](docs/stages/Stage-133/PLAY.md) · [证据与边界](docs/stages/Stage-133/TEST_REPORT.md)。
 
 当前内容候选 **Stage-132**：http://127.0.0.1:5209/ 。新增裂甲爆破、三组合配方与实触发成就。[试玩](docs/stages/Stage-132/PLAY.md) · [证据与边界](docs/stages/Stage-132/TEST_REPORT.md)。

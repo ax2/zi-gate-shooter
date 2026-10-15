@@ -1,3 +1,4 @@
+import { formationShield } from './formation-shield';
 import { burnLight } from './burn-light';
 import { fractureLight, fractureMarks } from './fracture-light';
 import { FRACTURE } from '../core/combos';
@@ -97,6 +98,7 @@ export class CanvasRuntime {
   private noticeY = 277;
   private noticeUntil = 0;
   private shakeUntil = 0;
+  private shieldBreak?:{x:number;y:number;until:number};
   private weaponMotion = new WeaponMotion();
   private mountedMotion=new Map(dossierWeapons.map(kind=>[kind,new WeaponMotion()]));
   private opticalFiredAt=-Infinity;
@@ -231,7 +233,7 @@ export class CanvasRuntime {
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear();this.callbackWork.clear();this.maxCallbackWorkMs=0;this.previousCallbackWorkMs=0;this.interruptedFrames=[]; this.downAction = '';
-    this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0; this.upgradeUntil = 0;
+    this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0;this.shieldBreak=undefined; this.upgradeUntil = 0;
     this.platform.silence();
     this.updateMusic();
   }
@@ -357,7 +359,7 @@ export class CanvasRuntime {
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
     else if (action === 'resume') { this.pausePreview = false; this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.shieldBreak=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -370,10 +372,22 @@ export class CanvasRuntime {
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private checkAchievements() {
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts);
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins);
     if(fresh.length){this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
+    if(e.escortReward){this.notify(e.text??'编队击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
+
+    if(e.type==='formation'){
+      if(this.save.settings.sound)this.platform.sound('alert',this.world.weaponStage(this.world.weaponKind));
+      return;
+    }
+    if(e.type==='shield-down'){
+      this.shieldBreak={x:e.x,y:e.y+BOSS_VISUAL.offsetY,until:this.world.time+.45};
+      if(this.save.settings.sound)this.platform.sound('shield-down',this.world.weaponStage(this.world.weaponKind));
+      return;
+    }
+
     if(e.type==='combination'){
       this.buildFeedback={title:e.text??'组合完成',detail:e.detail??'',until:this.world.time+4,combo:true};
       if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
@@ -381,7 +395,7 @@ export class CanvasRuntime {
     }
     if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
     if(e.type==='boss-kill')this.save.achievements.bosses++;
-    if(['fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
+    if(['formation-clear','fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
     if(e.type==='laser')this.opticalFiredAt=this.world.time;
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
@@ -626,6 +640,9 @@ export class CanvasRuntime {
         }
       }
     }
+    const protectedBoss=w.bodies.find(b=>b.active&&b.kind==='boss');
+    if(protectedBoss&&w.bossShieldActive())formationShield(c,protectedBoss.x,protectedBoss.y+BOSS_VISUAL.offsetY,w.time,0,this.save.settings.effects==='weak');
+    if(this.shieldBreak&&w.time<this.shieldBreak.until)formationShield(c,this.shieldBreak.x,this.shieldBreak.y,w.time,1-(this.shieldBreak.until-w.time)/.45,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&b.burnTicks)burnLight(c,b.x,b.y,b.width,b.height,w.time,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&b.fractureHits)fractureMarks(c,b.x,b.y+(b.kind==='boss'?BOSS_VISUAL.offsetY:0),b.width,b.fractureHits);
     for (const b of w.bullets.filter(b => !b.hostile)) {
@@ -750,7 +767,7 @@ export class CanvasRuntime {
         // Boss status is drawn after the HUD background in drawHud.
       } else if (b.kind === 'guard') {
         this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
-        this.text(b.burst ? '弱点暴露' : '装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
+        this.text(b.burst ? '弱点暴露' : b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') this.bar(b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, '#f39b69');
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
@@ -789,7 +806,7 @@ export class CanvasRuntime {
     this.buttons.push({ x: 624, y: y + 2, w: 64, h: 64, label: '暂停', action: 'pause' });
     this.text(`T${w.weaponStage(w.weaponKind)} · ${w.activeWeapons.length}种武器叠加`, 30, y + 88, 25, weaponColors[w.weaponKind], 'left', true);
     this.text(`火力 +${permanentPower(w.growth)}%`, 300, y + 88, 24, '#74dcff', 'left', true);
-    this.text(`${w.round}轮·${sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
+    this.text(`${w.round}轮·${boss&&w.bossFormation?w.bossFormation.name:sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
     this.text(w.growth.overload > 0 ? `超载×1.35 · ${w.growth.overload.toFixed(1)}秒  |  再充能 ${Math.floor(w.growth.energy)}/100`
       : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：本局火力+10% / 超载6秒`, 360, y + 144, 22, '#d4e8ee');
@@ -798,17 +815,19 @@ export class CanvasRuntime {
       this.buttons.push({x:480,y:y+170,w:210,h:44,action:'contracts-live',label:'挑战契约'});
     }
     if(boss){
-      this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
-      this.bar(360,y+196,620,boss.hp/boss.maxHp,'#ff925d');
+      this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}${w.bossShieldActive()?'·屏障45%':''}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
+      this.bar(360,y+196,620,boss.hp/boss.maxHp,w.bossShieldActive()?'#82dfff':'#ff925d');
     }
   }
   private drawGuide() {
     if (this.mode !== 'playing') return;
+    if(this.notice&&this.noticeY===1195&&this.platform.now()<this.noticeUntil)return;
     // Optional help is below all entities, effects, projectiles and native labels.
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.
     if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
     let guide = contextGuide(this.world);
+    if(this.world.phase==='boss'&&this.world.phaseTime<8&&this.world.bossFormation)guide={kind:'move',title:this.world.bossFormation.name,detail:this.world.bossFormation.hint};
     if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
       guide = weaponGuide(this.weaponGuideKind, this.world.weaponStage(this.weaponGuideKind));
     if (guide.detail) {
@@ -833,11 +852,11 @@ export class CanvasRuntime {
     this.text('突围成就',360,155,42,'#effaff','center',true);
     const state=this.save.achievements;
     this.text(`已达成 ${state.unlocked.length}/${achievements.length} · 选择留下战绩`,360,210,25,'#bdd8e7');
-    for(const [i,a] of achievements.entries()){const y=255+i*108,done=state.unlocked.includes(a.id);
-      this.rect(65,y,590,96,done?'#263d43':'#142b39');
-      this.text(a.name,85,y+35,29,done?'#ffdc8a':'#effaff','left',true);
-      this.text(done?'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+35,23,done?'#ffdc8a':'#a5bac8','right');
-      this.text(a.detail,85,y+73,22,'#bdd8e7','left');
+    for(const [i,a] of achievements.entries()){const y=255+i*94,done=state.unlocked.includes(a.id);
+      this.rect(65,y,590,86,done?'#263d43':'#142b39');
+      this.text(a.name,85,y+30,27,done?'#ffdc8a':'#effaff','left',true);
+      this.text(done?'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+30,23,done?'#ffdc8a':'#a5bac8','right');
+      this.text(a.detail,85,y+65,22,'#bdd8e7','left');
     }
     this.text('成就保存在本机 · 不增加局外伤害',360,1040,23,'#bdd8e7');
     this.button('返回主界面',1100,'armory-back',true);
@@ -1080,6 +1099,7 @@ export class CanvasRuntime {
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
+      bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,

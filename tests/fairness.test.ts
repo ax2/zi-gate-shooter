@@ -82,10 +82,13 @@ it('queued crates wait for reward capacity without deleting existing rewards', (
 });
 
 it('100 seeds x 3 threat fixtures replay predicted escape paths without kills or immunity', () => {
+  // This fixed forecast covers only its authored emitters. Future boss formations
+  // have a separate live-admission/reaction test in boss-formation-routes.test.ts.
+  class IsolatedThreatWorld extends World { override get bossFormation(){return undefined;} }
   let moved = 0;
   for (let seed = 1; seed <= 100; seed++) for (const profile of [1, 5, 9]) {
     const random = new Random(seed * 113 + profile);
-    const world = new World(seed); world.phase = 'boss'; world.round = profile;
+    const world = new IsolatedThreatWorld(seed); world.phase = 'boss'; world.round = profile;
     world.phaseTime = random.next() * 40;
     world.player.x = 100 + random.next() * 520; world.player.px = world.player.x;
     if (profile === 9) {

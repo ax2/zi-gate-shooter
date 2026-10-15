@@ -859,3 +859,14 @@ it('optical branch browsing spends no point, remains frozen, and commits one exp
  expect(f.runtime.activateControl('branch:burn')).toBe(false);expect(w.build.spent).toBe(2);
  expect(f.runtime.diagnostics().opticalBranch).toBe('relay');
 });
+it('late boss shield remains below clear HUD labels and the expanded achievement catalogue fits',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.round=4;w.phase='boss';w.player.x=68;w.spawn('boss',360,260);
+ for(let i=0;i<180;i++)f.tick();expect(w.bossShieldActive()).toBe(true);
+ const shield=f.calls.findIndex(c=>c.kind==='stroke'&&c.stroke==='#8ce8ff');
+ const label=f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('重装首领'));
+ expect(shield).toBeGreaterThanOrEqual(0);expect(label).toBeGreaterThan(shield);
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('屏障45%'))).toBe(true);
+ expect(f.runtime.activateControl('pause')).toBe(true);expect(f.runtime.activateControl('home')).toBe(true);
+ expect(f.runtime.activateControl('achievements')).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='战术拆解')).toBe(true);
+});

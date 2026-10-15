@@ -1,3 +1,4 @@
+import { bossFormationFor, ESCORT } from './boss-formations';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, type ContractKind } from './contracts';
@@ -23,6 +24,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
+  escort?:boolean;
   weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
@@ -30,7 +32,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -164,6 +166,27 @@ export class World {
   get activeWeapons(): WeaponKind[] { return this.acquiredWeapons.size ? [...this.acquiredWeapons] : [this.weaponKind]; }
   private scheduled: Spawn[];
   private scheduleIndex = 0;
+  escortSpawns=0;escortKills=0;tacticalWins=0;
+  private escortGroup=0;private escortRetry=0;private bossEscortKills=0;private bossEscortSpawns=0;private bossStartDamage=0;
+  get bossFormation(){return bossFormationFor(this.round);}
+  get activeEscorts(){return this.bodies.filter(b=>b.active&&b.escort&&b.y<1344);}
+  bossShieldActive(){return this.phase==='boss'&&this.bossFormation?.id==='bulwark'&&this.activeEscorts.some(b=>b.kind==='guard');}
+  private spawnEscorts(){
+    const formation=this.bossFormation;if(!formation||!this.bodies.some(b=>b.active&&b.kind==='boss'))return;
+    while(this.escortGroup<formation.groups.length){
+      const group=formation.groups[this.escortGroup];
+      if(this.phaseTime<group.at||this.phaseTime<this.escortRetry)return;
+      if(this.phaseTime>group.at+ESCORT.deadline){this.escortGroup++;continue;}
+      if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.troops.length>C.limits.enemies){this.escortRetry=this.phaseTime+ESCORT.retry;return;}
+      const candidates=group.troops.map(t=>{const b=this.spawn(t.kind,t.x,180);b.escort=true;if(b.kind==='guard'){b.hp*=ESCORT.guardDurability;b.maxHp=b.hp;}b.pattern=t.pattern;b.lane=t.lane??t.x;return b;});
+      const horizon=Math.max(...candidates.map(b=>Math.max(3,(C.playerY-b.y)/Math.max(1,b.speed)+1)));
+      if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
+        for(const b of candidates)b.active=false;this.fallbackCount++;this.escortRetry=this.phaseTime+ESCORT.retry;return;
+      }
+      this.escortSpawns+=candidates.length;this.bossEscortSpawns+=candidates.length;this.escortGroup++;
+      this.effects.push({type:'formation',x:360,y:400,text:formation.name,detail:formation.hint});
+    }
+  }
   private bossVictory = false;
   private secondChance = false;
   private nextSpawnRetry = 0;
@@ -258,6 +281,7 @@ export class World {
       }
       if (this.roundTime >= 72 && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {
         this.phase = 'boss-entry'; this.phaseTime = 0;
+        this.escortGroup=0;this.escortRetry=0;this.bossEscortKills=0;this.bossEscortSpawns=0;this.bossStartDamage=this.damageTaken;
         const boss = this.spawn('boss', 360, -150); boss.speed = 0;
         boss.bossVariant = sectorIndex(this.round);
         // Show each chapter's signature before high firepower can skip it.
@@ -269,7 +293,7 @@ export class World {
       const boss = this.bodies.find(b => b.kind === 'boss' && b.active);
       if (boss) boss.y = -150 + Math.min(1, this.phaseTime / 2) * 410;
       if (this.phaseTime >= 2) { this.phase = 'boss'; this.phaseTime = 0; }
-    } else if (this.phase === 'boss') this.phaseTime += dt;
+    } else if (this.phase === 'boss') {this.phaseTime += dt;this.spawnEscorts();}
     else if (this.phase === 'recovery') {
       this.phaseTime += dt;
       if (this.phaseTime >= 4) {
@@ -351,6 +375,7 @@ export class World {
         if(this.admit(candidate)){challenge.reinforcements++;challenge.nextReinforcement=challenge.elapsed+.8;}
       }
     }
+    const hadBossShield=this.bossShieldActive();
     this.advanceBurn(dt);
     this.shoot(dt);
     for (const b of this.bodies) {
@@ -492,9 +517,15 @@ export class World {
     }
     contacts.sort((a, b) => Math.round(a.t * 1e8) - Math.round(b.t * 1e8) || a.rank - b.rank || a.id - b.id);
     for (const contact of contacts) contact.apply();
+    const liveBoss=this.bodies.find(b=>b.active&&b.kind==='boss');
+    if(hadBossShield&&!this.bossShieldActive()&&liveBoss&&this.player.hp>0)this.emit('shield-down',liveBoss.x,liveBoss.y,'护卫屏障瓦解');
     if (this.player.hp <= 0) {
       this.phase = 'dead'; this.emit('death', this.player.x, C.playerY, '本次突围结束', 150);
     } else if (this.bossVictory) {
+      const planned=this.bossFormation?.groups.reduce((n,g)=>n+g.troops.length,0)??0;
+      if(planned>0&&this.bossEscortSpawns===planned&&this.bossEscortKills===planned&&this.damageTaken===this.bossStartDamage){
+        this.tacticalWins++;this.emit('formation-clear',360,400,'战术拆解 · 编队全破且无伤获胜');
+      }
       this.bossVictory = false; this.bullets = []; this.bodies = [];
       const restored=this.player.hp<3;
       this.player.hp = Math.min(3, this.player.hp + 1); this.player.invulnerable = 1;
@@ -536,7 +567,8 @@ export class World {
       if (gateValue(b.energy, b.rewardKind) > before) this.emit('gate-level', b.x, b.y, `+${gateValue(b.energy, b.rewardKind)}${b.rewardKind === 'power' ? '%' : ''}`);
       this.emit('impact-gate', b.x, b.y); return;
     }
-    b.hp = Math.max(0, b.hp - damage * (guardClosed(b) ? 0.5 : 1));
+    const shield=b.kind==='boss'&&this.bossShieldActive()?1-(this.bossFormation?.shieldReduction??0):1;
+    b.hp = Math.max(0, b.hp - damage * (guardClosed(b) ? 0.5 : 1)*shield);
     this.effects.push({ type: 'impact', x: b.x, y: b.y, size: b.width, weaponKind });
     if (b.hp > 0) return;
     b.active = false;
@@ -548,6 +580,11 @@ export class World {
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
       this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind, bossVariant: b.bossVariant });
       if (b.kind === 'boss') this.bossVictory = true;
+      else if(b.escort){
+        this.escortKills++;this.bossEscortKills++;
+        const reward=grantGate(this.growth,ESCORT.charge,'energy');if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+        this.effects.push({type:'reward',escortReward:true,x:b.x,y:b.y,text:`编队击破 · 充能+${ESCORT.charge}`,detail:this.chargeReceipt(reward.activated)});
+      }
       else if(b.kind==='elite'){
         const reward=grantGate(this.growth,C.killCharge.elite,'energy');
         if(reward.activated)this.emit('overload',this.player.x,C.playerY);

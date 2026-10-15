@@ -1,3 +1,4 @@
+import { ESCORT } from './boss-formations';
 import type { Body, Phase } from './world';
 import { C, clamp } from './config';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
@@ -68,7 +69,8 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       }
     }
   } else if (b.kind === 'guard') {
-    b.y += b.speed * dt;
+    if(b.escort&&b.age<ESCORT.holdSeconds){if(b.y<ESCORT.hoverY)b.y=Math.min(ESCORT.hoverY,b.y+b.speed*dt);}
+    else b.y += b.speed * dt;
     if (b.y >= 650) { b.warning = 0; b.burst = 0; }
     else if (b.y > 0 && b.timer <= 1e-9) {
       if (!b.burst) { b.burst = 1; b.warning = 0.8; b.timer = 0.8; }
