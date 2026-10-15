@@ -42,9 +42,10 @@ export interface Platform {
   requestFrame: (callback: (time: number) => void) => void;
   openLicenses?: () => void;
   frameContext?: () => {hidden?:boolean;focused?:boolean};
+  controls?: (buttons: readonly CanvasControl[], placement: {scale:number;offsetX:number;offsetY:number}) => void;
   width: number; height: number; dpr: number; menuBottom: number;
 }
-interface Button { x: number; y: number; w: number; h: number; label: string; action: string }
+export interface CanvasControl { x: number; y: number; w: number; h: number; label: string; action: string }
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; total: number; color: string }
 interface Blast { x: number; y: number; size: number; life: number; total: number }
 const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
@@ -63,7 +64,7 @@ export class CanvasRuntime {
   private previousMode: 'menu' | 'paused' = 'menu';
   private ctx: CanvasRenderingContext2D;
   private images = new Map<string, HTMLImageElement>();
-  private buttons: Button[] = [];
+  private buttons: CanvasControl[] = [];
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
@@ -81,6 +82,7 @@ export class CanvasRuntime {
   private renderBudget = C.step;
   private renderElapsed = 0;
   private renderedMode: string = '';
+  private controlsMode = '';
   private target = 360;
   private pointer: number | null = null;
   private keys = new HorizontalKeys();
@@ -291,6 +293,14 @@ export class CanvasRuntime {
     if (this.mode === 'result') { this.action('home'); return 'stay'; }
     return 'exit';
   }
+  /** Standard browser controls share the exact same actions as canvas touches. */
+  activateControl(action: string): boolean {
+    if (this.controlsMode !== this.mode || !this.buttons.some(button => button.action === action)) return false;
+    this.cancelTouch();
+    this.action(action);
+    this.render(0);
+    return true;
+  }
   private action(action: string) {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
@@ -449,6 +459,13 @@ export class CanvasRuntime {
     this.text(label, 360, y + 43, 32, primary ? '#0a1823' : '#d8eaf5', 'center', true);
   }
   private render(dt: number) {
+    this.renderFrame(dt);
+    this.controlsMode = this.mode;
+    try {
+      this.platform.controls?.(this.buttons.map(button => ({...button})), {scale:this.scale,offsetX:this.offsetX,offsetY:this.offsetY});
+    } catch { /* A browser accessibility adapter must never stop the game loop. */ }
+  }
+  private renderFrame(dt: number) {
     const c = this.ctx, p = this.platform, w = this.world;
     c.save(); c.fillStyle = '#0a1119'; c.fillRect(0, 0, p.width, p.height);
     c.translate(this.offsetX, this.offsetY); c.scale(this.scale, this.scale);

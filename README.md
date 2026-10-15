@@ -1,5 +1,7 @@
 # 火力突围
 
+当前操作候选 **Stage-131**：http://127.0.0.1:5208/ 。菜单支持标准按钮与Tab/Enter/空格，保留技能树、契约和叠加配装。[验证与边界](docs/stages/Stage-131/TEST_REPORT.md)。长帧根因仍待定位。
+
 当前诊断候选 **Stage-130**：http://127.0.0.1:5207/ 。已区分回调工作耗时与更新间隔，长帧根因仍待定位。[验证记录](docs/stages/Stage-130/TEST_REPORT.md)。正常开发入口仍5181。
 
 历史候选 **Stage-129**：http://127.0.0.1:5205/ 。契约可选充能或定向配件强化。[说明](docs/stages/Stage-129/PLAY.md) · [已知长帧与验证边界](docs/stages/Stage-129/TEST_REPORT.md)。
