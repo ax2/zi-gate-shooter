@@ -755,3 +755,22 @@ it('keeps boss status above the HUD background and separate from the charge line
  expect(label).toBeGreaterThan(background);expect(label).toBeGreaterThan(charge);
  expect(f.calls[label].args[2]-f.calls[charge].args[2]).toBeGreaterThanOrEqual(28);
 });
+it('shows retained weapon mounts, freezes independent recoil and inspects the same World without granting power',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
+ for(const kind of ['scatter','pierce'] as const){const p=f.runtime.world.spawn('pickup',360,1024,2);p.weaponKind=kind;p.speed=0;}
+ f.tick();f.tick();
+ const modules=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('mounted-modules-v1.png'));
+ expect(modules()).toHaveLength(2);
+ expect(modules().map(c=>c.args[1])).toEqual([0,256]);
+ const positions=new Set();
+ for(let i=0;i<16;i++){f.tick();positions.add(modules().map(c=>c.args[6]).join(','));}
+ expect(positions.size).toBeGreaterThan(2);
+ f.runtime.pause();f.tick();const frozen=JSON.stringify(f.runtime.world),poses=modules().map(c=>c.args.slice(1));
+ for(let i=0;i<30;i++)f.tick();expect(JSON.stringify(f.runtime.world)).toBe(frozen);
+ expect(modules().map(c=>c.args.slice(1))).toEqual(poses);
+ f.runtime.touchStart(1,360,1043);f.runtime.touchEnd(1,360,1043);f.tick();
+ f.runtime.touchStart(1,570,165);f.runtime.touchEnd(1,570,165);f.tick();expect(f.runtime.mode).toBe('rig');
+ expect(modules()).toHaveLength(2);expect(JSON.stringify(f.runtime.world)).toBe(frozen);
+ expect(f.runtime.back()).toBe('stay');expect(f.runtime.mode).toBe('loadout');
+ f.runtime.start();f.tick();expect(modules()).toHaveLength(0);
+});

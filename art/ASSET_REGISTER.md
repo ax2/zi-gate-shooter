@@ -89,3 +89,5 @@ Stage-86：guard-v1原创盾卫三态，内置imagegen，source/guard-v1.png和g
 Stage-87：blast-player-v1内置imagegen原创三阶机体，prompt与source保留；导出768×256/231713字节，格边4px空白技术裁切去除生成细线后边界通过。候选未最终签收。
 
 Stage-88：arc-player-v1内置imagegen原创三阶，完整source/prompt保留；export-arc-player.mjs以58/0/-58横向窗口对齐，导出768×256/220808字节，候选未最终签收。
+
+Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成六格原创挂载，1536×1024透明源图；export-mounted-modules.mjs裁格缩放导出768×512/415736字节，六格安全边界通过。包含速射/霰射/穿甲/爆裂/电弧/光学；候选接入，最终美术待验。

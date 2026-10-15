@@ -1,6 +1,8 @@
 # 火力突围
 
-当前固定试玩 **Stage-127**：http://127.0.0.1:5203/ 。含技能树、成就、契约、组合、持续精调与首领攻防修订。[试玩说明](docs/stages/Stage-127/PLAY.md) · [验证边界](docs/stages/Stage-127/TEST_REPORT.md)。以下入口保留历史版本。
+当前固定试玩 **Stage-128**：http://127.0.0.1:5204/ 。新增可见机甲挂载、独立回弹和放大查看。[试玩说明](docs/stages/Stage-128/PLAY.md) · [验证边界](docs/stages/Stage-128/TEST_REPORT.md)。
+
+历史固定试玩 **Stage-127**：http://127.0.0.1:5203/ 。含技能树、成就、契约、组合、持续精调与首领攻防修订。[试玩说明](docs/stages/Stage-127/PLAY.md) · [验证边界](docs/stages/Stage-127/TEST_REPORT.md)。以下入口保留历史版本。
 
 最新Stage-119构筑候选：http://127.0.0.1:5202/，独立模块等级、突破路线选择与雷暴霰射前置。[验证边界](docs/stages/Stage-119/TEST_REPORT.md)。
 

@@ -1,3 +1,4 @@
+import { mountedRig } from './mounted-rig';
 import { contracts, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
 import { tree, routes, type Route } from '../core/build-tree';
@@ -50,7 +51,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'contracts' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'contracts' | 'tree' | 'choice' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
@@ -90,6 +91,8 @@ export class CanvasRuntime {
   private noticeUntil = 0;
   private shakeUntil = 0;
   private weaponMotion = new WeaponMotion();
+  private mountedMotion=new Map(dossierWeapons.map(kind=>[kind,new WeaponMotion()]));
+  private opticalFiredAt=-Infinity;
   private weaponGuideUntil = 0;
   private drawCount = 0;
   private callbackCount = 0;
@@ -134,7 +137,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -189,6 +192,8 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    for(const motion of this.mountedMotion.values())motion.reset();
+    this.opticalFiredAt=-Infinity;
     this.buildFeedback=undefined;
     this.achievementUntil=0;
     this.supportBeams=[];
@@ -260,6 +265,7 @@ export class CanvasRuntime {
     if (this.mode === 'choice') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'rig') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'contracts') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
@@ -292,6 +298,8 @@ export class CanvasRuntime {
       if (dossierWeapons.includes(weapon)) this.dossierWeapon = weapon;
     }
     else if (action === 'armory-back') this.mode = 'menu';
+    else if(action==='rig-view'&&this.mode==='loadout')this.mode='rig';
+    else if(action==='rig-back')this.mode='loadout';
     else if(action==='contracts')this.mode='contracts';
     else if(action==='contracts-back')this.mode='loadout';
     else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts)this.world.acceptContract(kind);}
@@ -323,6 +331,7 @@ export class CanvasRuntime {
     if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
     if(e.type==='boss-kill')this.save.achievements.bosses++;
     if(['kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
+    if(e.type==='laser')this.opticalFiredAt=this.world.time;
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser',prism:e.prism});
@@ -330,7 +339,7 @@ export class CanvasRuntime {
     }
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
     if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
-    if (e.type === 'fire') { if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
+    if (e.type === 'fire') { const kind=e.weaponKind??this.world.weaponKind;this.mountedMotion.get(kind)?.fire(kind,this.world.weaponStage(kind),this.world.time);if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
     if (e.type === 'weapon' || e.type === 'upgrade') this.weaponGuideUntil = this.world.time + 5;
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
@@ -382,6 +391,32 @@ export class CanvasRuntime {
     }
     c.drawImage(img, frame * sw, 0, sw, sh * 0.6875, left, top + pose.bob + recoil, width, height * 0.6875);
   }
+  private drawMountedRig(y:number,pose:PlayerPose) {
+    const w=this.world;
+    for(const kind of w.activeWeapons){
+      if(kind===w.weaponKind)continue;
+      const mount=mountedRig[kind],stage=w.weaponStage(kind);
+      const motion=this.mountedMotion.get(kind)!.sample(kind,stage,w.time)*.65;
+      const size=mount.size*(1+(stage-1)*.07);
+      const c=this.ctx,px=w.player.x+Math.sign(mount.x)*25,py=y-24+pose.bob;
+      const tx=w.player.x+mount.x,ty=y+mount.y+pose.bob+motion+size*.22;
+      c.save();c.lineCap='round';
+      for(const [width,color] of [[10,'#101b25'],[5,'#9aaab4'],[1,'#e0e6df']] as const){
+        c.lineWidth=width;c.strokeStyle=color;c.beginPath();c.moveTo(px,py);c.lineTo(tx,ty);c.stroke();
+      }
+      c.fillStyle='#d0d7d3';c.beginPath();c.arc(tx,ty,3,0,Math.PI*2);c.fill();c.restore();
+      this.frameSprite('mounted-modules-v1.png',mount.frame,3,w.player.x+mount.x,y+mount.y+pose.bob+motion,size,size,2);
+    }
+  }
+  private drawOpticalRig(y:number,pose:PlayerPose) {
+    const w=this.world,support=w.supportProfile();if(!support.laserUnlocked)return;
+    const kick=Math.max(0,1-(w.time-this.opticalFiredAt)/.2)*3;
+    for(const side of support.prism?[-1,0,1]:[0]){
+      const c=this.ctx,x=w.player.x+side*42;
+      c.save();c.lineWidth=4;c.strokeStyle='#9aaab4';c.beginPath();c.moveTo(w.player.x,y-72+pose.bob);c.lineTo(x,y-82+pose.bob+kick);c.stroke();c.restore();
+      this.frameSprite('mounted-modules-v1.png',5,3,w.player.x+side*42,y-100+pose.bob+kick,side===0?46:38,side===0?46:38,2);
+    }
+  }
   private bar(x: number, y: number, width: number, ratio: number, color: string) {
     this.rect(x - width / 2 - 2, y - 2, width + 4, 12, '#07121b');
     this.rect(x - width / 2, y, width, 8, '#314852'); this.rect(x - width / 2, y, width * clamp(ratio, 0, 1), 8, color);
@@ -405,6 +440,7 @@ export class CanvasRuntime {
     }
     if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
+    if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
     if (this.mode === 'tree') { this.drawBuildTree(); c.restore(); return; }
@@ -541,7 +577,9 @@ export class CanvasRuntime {
     if (w.player.hp > 0) {
       if (this.mode === 'menu') this.frameSprite('units.png', 2, 4, w.player.x, playerY, 200, 267);
       else {
+        this.drawMountedRig(playerY,pose);
         this.playerSprite(w.weaponStage(w.weaponKind) - 1, w.player.x, playerY, pose, recoil);
+        this.drawOpticalRig(playerY,pose);
         const remaining = w.player.invulnerable - (C.invulnerability - 0.12);
         if (remaining > 0) {
           c.save(); c.globalCompositeOperation = 'lighter';
@@ -763,7 +801,9 @@ export class CanvasRuntime {
   private drawLoadout() {
     const w = this.world, power = permanentPower(w.growth);
     this.rect(40, 100, 640, 1100, '#102330');
-    this.text('当前火力', 360, 165, 46, '#e7f5ff', 'center', true);
+    this.text('当前火力', 330, 165, 46, '#e7f5ff', 'center', true);
+    this.rect(490,135,160,60,'#203e50');this.text('查看机甲',570,165,25,'#80e4ff');
+    this.buttons.push({x:490,y:135,w:160,h:60,action:'rig-view',label:'查看机甲'});
     this.text(`T${w.weaponStage(w.weaponKind)} · 已叠加 ${w.activeWeapons.length} 种武器`, 360, 228, 28, '#a5d9ed');
     this.text(`本局火力 +${power}% · 充能突破 ${w.growth.mastery ?? 0} 次`, 360, 278, 27, '#f0d19a');
     for (const [index, kind] of w.activeWeapons.entries()) {
@@ -783,6 +823,25 @@ export class CanvasRuntime {
     this.text(`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
     for(const [i,label] of ['技能树','挑战契约'].entries()){const x=72+i*298;this.rect(x,1030,278,86,'#1a2d3c');this.text(label,x+139,1073,28,'#d8eaf5');this.buttons.push({x,y:1030,w:278,h:86,label,action:i?'contracts':'tree'});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
+  }
+  private drawRigView() {
+    const w=this.world,c=this.ctx;
+    this.rect(35,90,650,1120,'#102330');
+    this.text('本局机甲',360,150,42,'#effaff','center',true);
+    this.text(`${w.activeWeapons.length}种武器叠加 · 机体与挂载保留`,360,208,25,'#bdd8e7');
+    const ground=this.images.get('runway.jpg');
+    if(ground)c.drawImage(ground,70,260,580,660);
+    this.rect(70,260,580,660,'#06121c55');
+    c.save();c.translate(360,610);c.scale(2.25,2.25);c.translate(-w.player.x,-C.playerY);
+    const pose=this.playerMotion.sample(w.player.x,w.time);
+    this.drawMountedRig(C.playerY,pose);
+    this.playerSprite(w.weaponStage(w.weaponKind)-1,w.player.x,C.playerY,pose,this.weaponMotion.sample(w.weaponKind,w.weaponStage(w.weaponKind),w.time));
+    this.drawOpticalRig(C.playerY,pose);c.restore();
+    this.text(w.activeWeapons.map(kind=>`${weaponNames[kind]}T${w.weaponStage(kind)}`).join(' · '),360,965,22,'#d6e7f0');
+    const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':''].filter(Boolean);
+    this.text(combinations.length?`组合：${combinations.join(' · ')}`:'已有配件随真实射击独立回弹',360,1010,25,'#d6b5ff');
+    this.text('检查挂载与等级 · 战斗时间已暂停',360,1054,22,'#a6c5d7');
+    this.button('返回当前火力',1100,'rig-back',true);
   }
   private drawContracts() {
     this.rect(35,120,650,1080,'#102330');
