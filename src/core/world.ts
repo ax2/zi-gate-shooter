@@ -10,7 +10,7 @@ import type { EnemyKind } from './config';
 import { sweep } from './collision';
 import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate, permanentPower } from './rewards';
 import type { Growth } from './rewards';
-import { timeline, sectorIndex, sectorNames } from './director';
+import { timeline, sectorIndex, sectorNames, SWARM } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
 import { advanceBody, guardClosed } from './behavior';
@@ -24,7 +24,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  capacitorHits?:number; bountyRound?:number;escort?:boolean;
+  dropGrace?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
   weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
@@ -58,6 +58,7 @@ export class World {
     }
     return true;
   }
+  dropSpawns=0;dropKills=0;arcLinks=0;
   scatterPierces=0;scatterBursts=0;scatterSplashHits=0;
   capacitorBursts=0;
   private capacitor(body:Body,damage:number){
@@ -71,7 +72,7 @@ export class World {
   }
   burnHits=0;relayHits=0;
   private opticalSecondary(body:Body,damage:number){
-    if(!(body.kind in C.enemies)||guardClosed(body))return;
+    if(!(body.kind in C.enemies)||guardClosed(body)||(body.dropGrace??0)>0)return;
     if(this.build.opticalBranch==='burn'){
       if(!body.active)return;
       body.burnDamage=Math.max(body.burnDamage??0,damage*OPTICAL_FORK.burnDamage);
@@ -301,11 +302,14 @@ export class World {
         else {
           const enemyCount = this.bodies.filter(b => b.active && b.kind in C.enemies).length;
           if (enemyCount >= C.limits.enemies) { this.scheduleIndex--; break; }
-          const candidate = this.spawn(s.kind, s.x);
+          const candidate = this.spawn(s.kind,s.x,s.drop?SWARM.arrivalY:undefined);
+          if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
+          if(s.drop)this.dropSpawns++;
+          if(s.dropNotice)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'突降机群',detail:'短暂投送屏障 · 群攻可快速清场'});
         }
       }
       if (this.roundTime >= 72 && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {
@@ -366,7 +370,7 @@ export class World {
             && Math.abs(b.x-beamX(b.y))<=b.width/2+8).sort((a,b)=>b.y-a.y || a.id-b.id);
           let end=C.playerShotTop, count=0;
           for(const body of targets){
-            const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body);
+            const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
             const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
             this.hit(body,damage,'pulse');
             if(side===0&&count===0&&!blocked)this.opticalSecondary(body,damage);
@@ -443,11 +447,13 @@ export class World {
           if (!bullet.active || !body.active || bullet.hitBodies?.includes(body.id)) return;
           bullet.hitBodies?.push(body.id);
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
-          if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
-          if(bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='penetrator'&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
+          if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body) || (body.dropGrace??0)>0) bullet.active = false;
+          const protectedEntry=(body.dropGrace??0)>0;
+          if(!protectedEntry&&bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='penetrator'&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
             this.scatterPierces++;this.effects.push({type:'scatter-pierce',x:body.x,y:body.y,weaponKind:'scatter'});
           }
           this.hit(body, bullet.damage, bullet.weaponKind);
+          if(protectedEntry)return;
           if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);
           if(bullet.weaponKind==='arc')this.capacitor(body,bullet.damage);
           const support=this.supportProfile();
@@ -462,7 +468,7 @@ export class World {
           }
           if (bullet.chainHops && body.kind in C.enemies) {
             const visited = new Set([body.id]); let origin = body, damage = bullet.damage;
-            for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin); hop++) {
+            for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin) && !(origin.dropGrace??0); hop++) {
               const candidates = this.bodies.filter(other => other.active && !visited.has(other.id) && other.kind in C.enemies
                 && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss')
                 && Math.hypot(other.x-origin.x,other.y-origin.y) <= (this.build.ranks.electric>=2?220:160));
@@ -470,7 +476,7 @@ export class World {
               const next = candidates[0]; if (!next) break;
               visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
               this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y});
-              this.hit(next,damage,bullet.weaponKind); origin = next;
+              const before=next.hp;this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before)this.arcLinks++;origin = next;
             }
           }
           if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {
@@ -478,7 +484,7 @@ export class World {
             if(bullet.weaponKind==='scatter')this.scatterBursts++;
             this.effects.push({type:bullet.weaponKind==='scatter'?'scatter-burst':'blast',x:body.x,y:body.y,size:bullet.splashRadius,weaponKind:bullet.weaponKind});
             for (const other of this.bodies) if (other !== body && other.active && other.kind in C.enemies
-              && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss')
+              && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss') && !(other.dropGrace??0)
               && Math.hypot(other.x-body.x,other.y-body.y) <= bullet.splashRadius)
               {if(bullet.weaponKind==='scatter')this.scatterSplashHits++;this.hit(other,bullet.damage*BALLISTIC_FORK.splash,bullet.weaponKind);}
           }
@@ -602,6 +608,7 @@ export class World {
     return milestone ? `${milestone} · 火力+10%` : '火力+10% · 超载6秒';
   }
   private hit(b: Body, damage: number, weaponKind?: WeaponKind) {
+    if((b.dropGrace??0)>0){this.effects.push({type:'drop-impact',x:b.x,y:b.y,weaponKind});return;}
     this.hits++; b.hit = 0.07;
     if (b.kind === 'gate') {
       const before = gateValue(b.energy, b.rewardKind); b.energy = Math.min(144, b.energy + damage);
@@ -618,6 +625,7 @@ export class World {
       const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;
       this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
+      if(b.dropGrace!==undefined)this.dropKills++;
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
       this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind, bossVariant: b.bossVariant });
       if (b.kind === 'boss') this.bossVictory = true;

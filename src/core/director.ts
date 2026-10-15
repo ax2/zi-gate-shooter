@@ -1,5 +1,6 @@
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan'; lane?: number }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan'; lane?: number; drop?:boolean; dropNotice?:boolean }
+export const SWARM={arrivalY:360,grace:.45} as const;
 export const sectorNames = ['突围走廊', '侧翼夹击', '重装封锁'];
 export const sectorIndex = (round: number) => (Math.max(1, round) - 1) % 3;
 export const encounterIndex = (round: number) => Math.floor((Math.max(1, round) - 1) / 3) % 3;
@@ -106,6 +107,17 @@ export function timeline(round: number, seed: number): Spawn[] {
   if(round>1){
     if(sector===2){add(35,'armor',220);add(36.5,'armor',220);}
     else {add(35,'armor',300);add(35,'armor',420);}
+  }
+  // Visible reinforcement packs, each leaving the outer road open. The existing
+  // director still admits each actual body through its conservative route check.
+  if(round>1){
+    const rows=sector===0?[[240,300,360,420,480],[240,300,360,420,480],[240,300,360,420,480]]
+      :sector===1?[[180,240,300],[420,480,540],[240,300,360,420,480]]
+      :[[300,420],[300,420],[300,420]];
+    rows.forEach((xs,row)=>xs.forEach((x,index)=>{
+      add(32+row*2.2,'drone',x);out[out.length-1].drop=true;
+      out[out.length-1].dropNotice=row===0&&index===0;
+    }));
   }
   return out.sort((a, b) => a.at - b.at);
 }

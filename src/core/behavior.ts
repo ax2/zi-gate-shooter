@@ -25,6 +25,7 @@ export function bossAttackForCycle(variant: number | undefined, cycle: number) {
 
 /** Shared by the live simulation and conservative no-kill route forecast. */
 export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, shot: EnemyShot) {
+  if(b.dropGrace!==undefined)b.dropGrace=Math.max(0,b.dropGrace-dt);
   b.age += dt; b.hit = Math.max(0, b.hit - dt);
   if (b.kind === 'boss' && phase !== 'boss') return;
   b.timer -= dt;

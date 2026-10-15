@@ -1,5 +1,7 @@
 # 火力突围
 
+最新内容候选 **Stage-141**：http://127.0.0.1:5218/ 。第二轮起新增三种突降机群，提供贯穿/范围爆破的实际目标；结算显示真实雷电链伤。[试玩](docs/stages/Stage-141/PLAY.md) · [验证与边界](docs/stages/Stage-141/TEST_REPORT.md)。
+
 最新反馈候选 **Stage-140**：http://127.0.0.1:5217/ 。结算展示真实构筑/机制/跨轮契约与本局新成就，提供下一局目标。[试玩](docs/stages/Stage-140/PLAY.md) · [验证与边界](docs/stages/Stage-140/TEST_REPORT.md)。
 
 最新画面候选 **Stage-139**：http://127.0.0.1:5216/ 。首领整机离开HUD、显示与战斗中心对齐，交战收益提示避开首领。[试玩](docs/stages/Stage-139/PLAY.md) · [验证与边界](docs/stages/Stage-139/TEST_REPORT.md)。

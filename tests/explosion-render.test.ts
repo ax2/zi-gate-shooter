@@ -958,3 +958,10 @@ it('celebrates only a strictly improved score and clears the per-run record flag
  for(const [index,score] of [70,70].entries()){const w=f.runtime.world;w.score=score;w.player.hp=1;w.bullets=[{id:99999,x:360,y:C.playerY,px:360,py:C.playerY,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}];f.tick();expect(f.runtime.mode).toBe('result');const first=index===0;expect(f.runtime.diagnostics().runNewBest).toBe(first);
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===(first?'刷新最高分 70':'最高分 70'))).toBe(true);expect(f.runtime.activateControl('start')).toBe(true);expect(f.runtime.diagnostics().runNewBest).toBe(false);}
 });
+
+it.each([false,true])('draws a visible local arrival shield beneath enemy bullets and keeps its burst budgets (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;const b=w.spawn('drone',360,360);b.dropGrace=.45;b.speed=0;
+ w.bullets.push({id:99999,x:360,y:360,px:360,py:360,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});f.tick();
+ const ring=f.calls.findIndex(c=>c.kind==='stroke'&&(c.stroke==='#b6d2ff'||c.stroke==='#8bffe3')),enemy=f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ff7756');expect(ring).toBeGreaterThanOrEqual(0);expect(enemy).toBeGreaterThan(ring);
+ for(let i=0;i<40;i++)(f.runtime as any).effect({type:'drop-impact',x:360,y:360});expect((f.runtime as any).particles.length).toBeLessThanOrEqual(weak?50:160);
+});
