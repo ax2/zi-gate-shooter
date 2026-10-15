@@ -1,0 +1,8 @@
+import {CanvasRuntime} from '/src/game/canvas-runtime.ts';import {World} from '/src/core/world.ts';import {C} from '/src/core/config.ts';import {defaults} from '/src/ui/storage.ts';
+const canvas=document.querySelector('canvas'),save=defaults(),r=canvas.getBoundingClientRect();save.settings.sound=false;save.settings.shake=false;
+const runtime=new CanvasRuntime({canvas,width:r.width,height:r.height,dpr:devicePixelRatio,menuBottom:0,image:src=>new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src='/'+src;}),read:()=>save,write(){},sound(){},silence(){},now:()=>10000,requestFrame(){}});await runtime.load();let mode='flight';
+function show(id){mode=id;runtime.start();runtime.save.settings.effects=document.querySelector('#quality').value;const w=new World(1337);runtime.world=w;w.weaponKind='arc';w.growth.stage=2;w.growth.mastery=2;w.chooseBuild('electric');w.chooseBuild('electric','spread');
+for(const x of [420,480,540]){const b=w.spawn('drone',x,500);b.speed=0;}
+for(let i=0;i<60;i++){w.step(C.step,360);for(const e of w.drainEffects())runtime.effect(e);runtime.render(C.step);if(id==='flight'&&i>=2)break;if(id==='chain'&&w.arcLinks>0)break;}
+if(id==='chain')for(let i=0;i<3;i++)runtime.render(C.step);runtime.render(0);document.querySelector('#status').textContent=`${w.time.toFixed(2)}秒 · 实际击破${w.kills} · 连锁伤敌${w.arcLinks}`;}
+for(const id of ['flight','chain'])document.getElementById(id).onclick=()=>show(id);document.querySelector('#quality').onchange=()=>show(mode);window.addEventListener('resize',()=>{const r=canvas.getBoundingClientRect();runtime.resize(r.width,r.height,devicePixelRatio);});show('flight');

@@ -14,7 +14,7 @@ import { timeline, sectorIndex, sectorNames, SWARM } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
 import { advanceBody, guardClosed } from './behavior';
-import { weaponProfile, weaponNames } from './weapons';
+import { weaponProfile, weaponNames, ARC_SHOT } from './weapons';
 import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
@@ -338,6 +338,20 @@ export class World {
     }
   }
 
+  private arcVelocity(x:number,y:number){
+    const straight={vx:0,vy:-ARC_SHOT.speed};
+    // Aimed rewards retain the player's straight shot. Never steer away from a
+    // box or gate to farm an enemy; collision still decides every real hit.
+    if(this.bodies.some(b=>b.active&&(b.kind==='crate'||b.kind==='gate')&&b.y>=C.playerShotTop&&b.y<y
+      &&Math.abs(b.x-x)<=b.width/2+3))return straight;
+    const target=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&(b.kind!=='boss'||this.phase==='boss')
+      &&b.y>=C.playerShotTop&&b.y<=y-ARC_SHOT.minLead&&!(b.dropGrace??0)
+      &&Math.abs(b.x-x)<=Math.min(ARC_SHOT.aimWidth,(y-b.y)*ARC_SHOT.maxSlope))
+      .sort((a,b)=>b.y-a.y||a.id-b.id)[0];
+    if(!target)return straight;
+    const dx=target.x-x,dy=target.y-y,length=Math.hypot(dx,dy);
+    return {vx:dx/length*ARC_SHOT.speed,vy:dy/length*ARC_SHOT.speed};
+  }
   private shoot(dt: number) {
     if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0; return; }
     for (const kind of this.activeWeapons) {
@@ -347,7 +361,8 @@ export class World {
       if (this.bullets.filter(b => b.active && !b.hostile).length + w.offsets.length > C.limits.bullets) throw new Error('Player bullet budget exceeded');
       for (let i = 0; i < w.offsets.length; i++) {
         const x = this.player.x + w.offsets[i], y = C.playerY - (w.muzzleY ?? 72);
-        this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, vx: w.vx[i], vy: -C.bulletSpeed,
+        const velocity=kind==='arc'?this.arcVelocity(x,y):{vx:w.vx[i],vy:-C.bulletSpeed};
+        this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, ...velocity,
           damage: w.damage[i] * (1 + permanentPower(this.growth) / 100) * (this.growth.overload > 0 ? 1.35 : 1),
           age: 0, active: true, hostile: false, weaponKind: kind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops });
         this.shots++;

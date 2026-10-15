@@ -33,7 +33,7 @@ import { eliteFrame } from './elite-motion';
 import { bossFrame } from './boss-motion';
 import { EnemyWreck, isWreckKind } from './enemy-wreck';
 import type { Save } from '../ui/storage';
-import { weaponProfile, weaponNames, weaponColors } from '../core/weapons';
+import { weaponProfile, weaponNames, weaponColors, ARC_SHOT } from '../core/weapons';
 import type { WeaponKind } from '../core/weapons';
 import { sectorIndex, sectorNames, SWARM } from '../core/director';
 
@@ -767,7 +767,7 @@ export class CanvasRuntime {
       if (b.kind === 'crate') {
         if (b.weaponKind) {
           const choice = w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加';
-          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '邻敌连锁 · 盾卫截断' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
+          const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '前方索敌 · 命中跳电' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
           const panelY = b.y - 158 >= this.hudTop + 172 ? b.y - 158 : Math.max(this.hudTop + 172, b.y + 70);
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
@@ -941,7 +941,7 @@ export class CanvasRuntime {
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
-      this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
+      this.text(kind === 'arc' ? `索敌${ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');

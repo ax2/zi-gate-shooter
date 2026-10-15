@@ -71,6 +71,14 @@ export function energyShot(c: CanvasRenderingContext2D, x: number, y: number, vx
   line(c, `${color}18`, width * 5, [0, tail, 0, -9]);
   line(c, `${color}66`, width * 2.2, [0, tail * .65, 0, -10]);
   line(c, `${color}99`, width, [0, tail * .38, 0, -12]);
+  if(kind==='arc'){
+    // The discharge follows the real projectile velocity, trailing behind it.
+    // It does not point to a predicted impact or a future enemy shot.
+    const sway=Math.sin(time*32+x*.1)*3;
+    const path=[0,-10,4+sway,6,-5,22,5-sway,38,-3,56,0,74];
+    if(!weak)line(c,'#82ffa344',8,path);
+    line(c,'#a2ff9cbb',weak?2:3,path);line(c,'#edffda',1.2,path);
+  }
   c.globalCompositeOperation = 'screen';
   if (!weak) {
     const phase = time * 15 + x * .13;
@@ -78,7 +86,7 @@ export function energyShot(c: CanvasRenderingContext2D, x: number, y: number, vx
       const side = i % 2 ? -1 : 1, yy = 17 + i * 15 + Math.sin(phase + i) * 5;
       line(c, `${color}aa`, 1.3, [side * (5 + i * 2), yy, side * (7 + i * 2), yy + 6]);
     }
-    if (kind === 'pierce' || kind === 'arc') line(c, `${color}aa`, 1.4, [-6, 4, 6, 17, -5, 29, 4, 40, -3, 52]);
+    if (kind === 'pierce') line(c, `${color}aa`, 1.4, [-6, 4, 6, 17, -5, 29, 4, 40, -3, 52]);
   }
   c.restore();
 }

@@ -13,7 +13,7 @@ export function weaponGuide(kind: WeaponKind, stage: number): Guide {
     scatter: '近距聚弹更强 · 留意碰撞与敌弹',
     pierce: `对准纵列 · 最多贯穿${weaponProfile('pierce', stage).targets}个敌人`,
     blast: '直击敌群中心 · 爆炸波及附近敌人',
-    arc: `追击相邻敌人 · 最多追加${weaponProfile('arc', stage).chainHops}次跳电`,
+    arc: `前方索敌快弹 · 最多追加${weaponProfile('arc', stage).chainHops}次跳电`,
   };
   return { kind: 'weapon', title: `${weaponNames[kind]} · T${stage}`, detail: details[kind] };
 }
