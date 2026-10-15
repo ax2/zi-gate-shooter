@@ -64,7 +64,7 @@ export class CanvasRuntime {
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number}[] = [];
-  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean}[] = [];
+  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
@@ -317,7 +317,7 @@ export class CanvasRuntime {
     if(['kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
-      if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser'});
+      if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser',prism:e.prism});
       return;
     }
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
@@ -514,7 +514,7 @@ export class CanvasRuntime {
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
-    for(const beam of this.supportBeams) if(this.mode!=='menu')supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak');
+    for(const beam of this.supportBeams) if(this.mode!=='menu')supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism);
     for(const b of w.bullets) if(!b.hostile) projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0)
@@ -761,7 +761,7 @@ export class CanvasRuntime {
     const support=w.supportProfile();
     this.text(support.laserUnlocked?`激光：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
-    this.text('数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
+    this.text(support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
     this.text(`路线节点 ${w.build.spent}/9 · 充能突破继续选择`, 360, 1004, 23, '#f0d19a');
     for(const [i,label] of ['技能树','挑战契约'].entries()){const x=72+i*298;this.rect(x,1030,278,86,'#1a2d3c');this.text(label,x+139,1073,28,'#d8eaf5');this.buttons.push({x,y:1030,w:278,h:86,label,action:i?'contracts':'tree'});}
     this.button('返回暂停菜单', 1130, 'loadout-back');

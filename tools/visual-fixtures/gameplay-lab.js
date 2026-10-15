@@ -8,7 +8,7 @@ let frameEvidence=[], previousCallback=0, previousWork=0;
 function measuredFrame(fn){return requestAnimationFrame(time=>{
  const started=performance.now(), gap=previousCallback?started-previousCallback:0;
  previousCallback=started;const mode=runtime.mode, simulated=runtime.world.time;
- fn(time);const work=performance.now()-started;
+ fn(time);if(document.querySelector('#scenario').value==='prism'&&runtime.mode==='playing'&&runtime.world.time>.05){runtime.pause('组合原帧 · 非自然局');runtime.pausePreview=true;}const work=performance.now()-started;
  if(mode==='playing') {frameEvidence.push({simulated,gap,work,previousWork,modeAfter:runtime.mode,hidden:document.hidden});if(frameEvidence.length>120)frameEvidence.shift();}
  previousWork=work;
 });}
@@ -19,6 +19,7 @@ function start(){
   if(runtime.mode==='loading'||runtime.mode==='error')return;
  frameEvidence=[];previousCallback=0;previousWork=0;void audio.unlock();runtime.start();runtime.world=new World(1337,Number(document.querySelector('#sector').value));
  runtime.save.settings.effects=document.querySelector('#effects').value;
+ if(document.querySelector('#scenario').value==='prism'){runtime.world.phase='boss';runtime.world.growth.mastery=4;for(const route of ['optical','optical','optical','ballistic'])runtime.world.chooseBuild(route);for(const x of [248,360,472]){const b=runtime.world.spawn('armor',x,575);b.speed=0;b.hp=b.maxHp=10000;b.timer=1000;}return;}
  if(document.querySelector('#scenario').value==='boss-reward') {
    runtime.world.phase='boss';runtime.world.player.hp=2;runtime.world.growth.mastery=2;runtime.world.growth.energy=50;
    const boss=runtime.world.spawn('boss',360,260);boss.hp=1;

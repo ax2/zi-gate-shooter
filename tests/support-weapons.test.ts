@@ -53,3 +53,15 @@ it('double refraction hits two distinct nearby enemies, never a reward or third 
   expect(crate.hp).toBe(crate.maxHp);
   expect(w.drainEffects().filter(e=>e.type==='refract')).toHaveLength(2);
 });
+it('prism combination retains main beam and adds two weaker independent lanes',()=>{
+ const w=new World();w.growth.mastery=4;
+ for(const route of ['optical','optical','optical','ballistic'] as const)expect(w.chooseBuild(route)).toBe(true);
+ const targets=[248,360,472].map(x=>{const b=w.spawn('armor',x,575);b.speed=0;return b;});
+ w.step(C.step);
+ const full=30*1.15*1.4;
+ expect(targets[1].hp).toBeCloseTo(80-full);
+ expect(targets[0].hp).toBeCloseTo(80-full*.45);
+ expect(targets[2].hp).toBeCloseTo(80-full*.45);
+ expect(w.drainEffects().filter(e=>e.type==='laser')).toHaveLength(3);
+ expect(new World().supportProfile().prism).toBe(false);
+});

@@ -1,17 +1,18 @@
 /** Local, short-lived support beams: no full-screen flash or threat occlusion. */
-export function supportLight(c:CanvasRenderingContext2D,x:number,y:number,tx:number,ty:number,life:number,laser:boolean,weak:boolean){
+export function supportLight(c:CanvasRenderingContext2D,x:number,y:number,tx:number,ty:number,life:number,laser:boolean,weak:boolean,prism=false){
   const alpha=Math.min(1,life/.12);
   c.save();c.globalCompositeOperation='lighter';c.globalAlpha=alpha;
   c.lineCap='round';
-  if(!weak){c.strokeStyle=laser?'#178de655':'#6aeaff55';c.lineWidth=laser?24:12;c.beginPath();c.moveTo(x,y);c.lineTo(tx,ty);c.stroke();}
-  c.strokeStyle=laser?'#62dfff':'#a2f9ed';c.lineWidth=laser?7:3;c.beginPath();c.moveTo(x,y);c.lineTo(tx,ty);c.stroke();
-  c.strokeStyle='#efffff';c.lineWidth=laser?2:1;c.beginPath();c.moveTo(x,y);c.lineTo(tx,ty);c.stroke();
+  if(prism){c.strokeStyle='#cb9dff';c.lineWidth=2;c.beginPath();c.moveTo(x,y-12);c.lineTo(x+9,y);c.lineTo(x,y+12);c.lineTo(x-9,y);c.closePath();c.stroke();}
+  if(!weak){c.strokeStyle=prism?'#a348e655':laser?'#178de655':'#6aeaff55';c.lineWidth=laser?24:12;c.beginPath();c.moveTo(x,y);c.lineTo(tx,ty);c.stroke();}
+  c.strokeStyle=prism?'#cb9dff':laser?'#62dfff':'#a2f9ed';c.lineWidth=prism?4:laser?7:3;c.beginPath();c.moveTo(x,y);c.lineTo(tx,ty);c.stroke();
+  c.strokeStyle=prism?'#ead2ff':'#efffff';c.lineWidth=prism?1:laser?2:1;c.beginPath();c.moveTo(x,y);c.lineTo(tx,ty);c.stroke();
   // Motion follows the actual hit segment; particles never imply a wider hit box.
   const dx=tx-x,dy=ty-y,length=Math.hypot(dx,dy);
   if(length>1 && !weak){
     const nx=-dy/length,ny=dx/length,age=(laser?.32:.12)-life;
     const count=laser?6:3;
-    c.strokeStyle=laser?'#8beaff':'#b7ffdf';c.lineWidth=1.5;
+    c.strokeStyle=prism?'#d8aaff':laser?'#8beaff':'#b7ffdf';c.lineWidth=1.5;
     for(let i=0;i<count;i++){
       const t=(i/count+age*(laser?2:4))%1;
       const px=x+dx*t,py=y+dy*t;

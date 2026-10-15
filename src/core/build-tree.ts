@@ -14,7 +14,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   optical: [
     {name:'聚焦镜组',detail:'立即解锁激光 · 激光伤害+15%'},
     {name:'循环冷却',detail:'激光发射间隔缩短25%'},
-    {name:'深穿光束',detail:'激光额外贯穿两个敌人'},
+    {name:'深穿光束',detail:'贯穿+2；搭配霰射机构追加棱镜双束'},
   ],
 };
 export class BuildTree {

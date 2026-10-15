@@ -28,7 +28,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { type: string; x: number; y: number; targetX?: number; targetY?: number; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -52,7 +52,7 @@ export class World {
   supportProfile() {
     const p=supportProfile(this.growth.mastery),rank=this.build.ranks.optical;
     return {...p,laserUnlocked:p.laserUnlocked||rank>0,laserDamage:p.laserDamage*(rank>0?1.15:1),
-      laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0)};
+      laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0),prism:rank>=3&&this.build.ranks.ballistic>=1};
   }
   contract?: Contract;
   damageTaken=0;
@@ -223,16 +223,20 @@ export class World {
       this.laserTimer -= dt;
       if (this.laserTimer <= 0) {
         this.laserTimer += support.laserInterval;
-        const x=this.player.x, start=C.playerY-100;
-        const targets=this.bodies.filter(b=>b.active && b.kind!=='pickup' && b.y>=C.playerShotTop && b.y<start
-          && Math.abs(b.x-x)<=b.width/2+8).sort((a,b)=>b.y-a.y || a.id-b.id);
-        let end=C.playerShotTop, count=0;
-        for(const body of targets){
-          const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body);
-          this.hit(body,support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1),'pulse');
-          if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
+        const start=C.playerY-100;
+        for(const side of support.prism?[0,-1,1]:[0]) {
+          const x=this.player.x+side*42, topX=this.player.x+side*180;
+          const beamX=(y:number)=>x+(topX-x)*(start-y)/(start-C.playerShotTop);
+          const targets=this.bodies.filter(b=>b.active && b.kind!=='pickup' && b.y>=C.playerShotTop && b.y<start
+            && Math.abs(b.x-beamX(b.y))<=b.width/2+8).sort((a,b)=>b.y-a.y || a.id-b.id);
+          let end=C.playerShotTop, count=0;
+          for(const body of targets){
+            const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body);
+            this.hit(body,support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1),'pulse');
+            if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
+          }
+          this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0});
         }
-        this.effects.push({type:'laser',x,y:start,targetX:x,targetY:end});
       }
     }
   }
