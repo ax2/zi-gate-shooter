@@ -6,6 +6,7 @@ export class GameAudio {
   private lastRefraction = -Infinity;
   private lastLaser = -Infinity;
   private lastFracture = -Infinity;
+  private lastCapacitor = -Infinity;
   private nodes = new Map<OscillatorNode, GainNode>();
   private retryAt = 0;
   enabled = true;
@@ -66,6 +67,10 @@ export class GameAudio {
       return;
     }
     if (type === 'arc') { this.tone(850,180,.09,.025,'sawtooth'); return; }
+    if(type==='capacitor'){
+      if(this.now()-this.lastCapacitor<150)return;this.lastCapacitor=this.now();
+      this.tone(1700,180,.12,.035,'sawtooth');this.tone(320,55,.18,.04,'triangle');return;
+    }
     if(type==='fracture'){
       if(this.now()-this.lastFracture<150)return;this.lastFracture=this.now();
       this.tone(900,120,.09,.035,'sawtooth');this.tone(100,25,.25,.07,'triangle');return;

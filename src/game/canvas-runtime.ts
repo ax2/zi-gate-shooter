@@ -1,3 +1,4 @@
+import { capacitorLight, capacitorMarks } from './capacitor-light';
 import { formationShield } from './formation-shield';
 import { burnLight } from './burn-light';
 import { fractureLight, fractureMarks } from './fracture-light';
@@ -5,7 +6,7 @@ import { FRACTURE } from '../core/combos';
 import { mountedRig } from './mounted-rig';
 import { contracts, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
-import { tree, routes, opticalBranches, OPTICAL_FORK, type OpticalBranch, type Route } from '../core/build-tree';
+import { tree, routes, opticalBranches, electricBranches, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -51,7 +52,7 @@ export interface Platform {
 }
 export interface CanvasControl { x: number; y: number; w: number; h: number; label: string; action: string }
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; total: number; color: string }
-interface Blast { fracture?: boolean; x: number; y: number; size: number; life: number; total: number }
+interface Blast { electric?: boolean; fracture?: boolean; x: number; y: number; size: number; life: number; total: number }
 const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
@@ -101,6 +102,7 @@ export class CanvasRuntime {
   private shieldBreak?:{x:number;y:number;until:number};
   private weaponMotion = new WeaponMotion();
   private mountedMotion=new Map(dossierWeapons.map(kind=>[kind,new WeaponMotion()]));
+  private branchRoute:'optical'|'electric'='optical';
   private opticalFiredAt=-Infinity;
   private weaponGuideUntil = 0;
   private weaponGuideKind:WeaponKind='pulse';
@@ -307,7 +309,7 @@ export class CanvasRuntime {
     this.render(0);
     return true;
   }
-  private selectBuild(route:Route,branch?:OpticalBranch){
+  private selectBuild(route:Route,branch?:BuildBranch){
     const chosenNode=this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
@@ -322,13 +324,13 @@ export class CanvasRuntime {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
       if(!routes.includes(route))return;
-      if(route==='optical'&&this.world.build.ranks.optical===1&&this.world.build.available(this.world.growth.mastery??0).includes(route))this.mode='branch';
+      if((route==='optical'||route==='electric')&&this.world.build.ranks[route]===1&&this.world.build.available(this.world.growth.mastery??0).includes(route)){this.branchRoute=route;this.mode='branch';}
       else this.selectBuild(route);
     }
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
-      const branch=action.slice(7) as OpticalBranch;
-      if((branch==='burn'||branch==='relay')&&this.world.build.ranks.optical===1)this.selectBuild('optical',branch);
+      const branch=action.slice(7) as BuildBranch,route=this.branchRoute;
+      if(this.world.build.ranks[route]===1&&((route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'))))this.selectBuild(route,branch);
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -411,21 +413,21 @@ export class CanvasRuntime {
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
     if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277, e.detail);
     if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
-    const explosion = ['fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
+    const explosion = ['capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
     if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);
     else if(explosion){
       // A combination gets a readable burst even when ordinary explosions fill the budget.
-      if(e.type==='fracture'&&this.blasts.length>=4){const ordinary=this.blasts.findIndex(b=>!b.fracture);this.blasts.splice(ordinary<0?0:ordinary,1);}
-      if(this.blasts.length<4)this.blasts.push({fracture:e.type==='fracture',x:e.x,y:e.y,size:e.size??80,life:.45,total:.45});
+      if((e.type==='fracture'||e.type==='capacitor')&&this.blasts.length>=4){const ordinary=this.blasts.findIndex(b=>!b.fracture&&!b.electric);this.blasts.splice(ordinary<0?0:ordinary,1);}
+      if(this.blasts.length<4)this.blasts.push({electric:e.type==='capacitor',fracture:e.type==='fracture',x:e.x,y:e.y,size:e.size??80,life:.45,total:.45});
     }
     if ((e.type === 'hurt' || e.type === 'boss-kill') && this.save.settings.shake) this.shakeUntil = this.platform.now() + 100;
     const cap = this.save.settings.effects === 'weak' ? 50 : 160;
     const amount = explosion ? (this.save.settings.effects === 'weak' ? 14 : 32) : e.type.startsWith('impact') ? 4 : 7;
     for (let i = 0; i < amount && this.particles.length < cap; i++) {
       const angle = Math.random() * Math.PI * 2, speed = (explosion ? 130 : 75) + Math.random() * (explosion ? 330 : 180), life = 0.18 + Math.random() * 0.4;
-      this.particles.push({ x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: explosion ? (i % 4 === 0 ? '#99ddff' : i % 3 === 0 ? '#ffe2a0' : '#ffad42') : weaponColors[e.weaponKind ?? this.world.weaponKind] });
+      this.particles.push({ x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: e.type==='capacitor'?(i%3===0?'#efffff':i%2?'#c5a9ff':'#80ffd1'):explosion ? (i % 4 === 0 ? '#99ddff' : i % 3 === 0 ? '#ffe2a0' : '#ffad42') : weaponColors[e.weaponKind ?? this.world.weaponKind] });
     }
   }
   private text(text: string, x: number, y: number, size: number, color = '#ecf7ff', align: CanvasTextAlign = 'center', bold = false) {
@@ -519,7 +521,7 @@ export class CanvasRuntime {
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
     if (this.mode === 'combos') {this.drawCombos();c.restore();return;}
-    if(this.mode==='branch'){this.drawOpticalBranch();c.restore();return;}
+    if(this.mode==='branch'){this.drawBuildBranch();c.restore();return;}
     if(this.mode==='contract-reward'){this.drawContractReward();c.restore();return;}
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
@@ -652,6 +654,7 @@ export class CanvasRuntime {
       c.save();c.strokeStyle='#ffd884';c.lineWidth=3;c.globalAlpha=.7+.2*Math.sin(w.time*7);
       for(const side of [-1,1]){const x=b.x+side*b.width*.65;c.beginPath();c.moveTo(x-side*14,b.y-24);c.lineTo(x,b.y-14);c.lineTo(x,b.y+14);c.lineTo(x-side*14,b.y+24);c.stroke();}c.restore();
     }
+    for(const b of w.bodies)if(b.active&&b.capacitorHits)capacitorMarks(c,b.x,b.y+(b.kind==='boss'?BOSS_VISUAL.offsetY:0),b.width,b.capacitorHits,w.time);
     for(const b of w.bodies)if(b.active&&b.burnTicks)burnLight(c,b.x,b.y,b.width,b.height,w.time,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&b.fractureHits)fractureMarks(c,b.x,b.y+(b.kind==='boss'?BOSS_VISUAL.offsetY:0),b.width,b.fractureHits);
     for (const b of w.bullets.filter(b => !b.hostile)) {
@@ -702,6 +705,7 @@ export class CanvasRuntime {
     }
     for (const e of this.blasts) {
       e.life -= dt; const age = 1 - e.life / e.total;
+      if(e.electric){capacitorLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');continue;}
       c.save(); c.globalAlpha = Math.pow(Math.max(0, 1 - age), 0.65) * (this.save.settings.effects === 'weak' ? 0.5 : 0.9);
       this.frameSprite('explosion-v1.png', Math.min(8, Math.floor(age * 9)), 3, e.x, e.y, e.size * 2, e.size * 2, 3); c.restore();
       detonationLight(c, e.x, e.y, e.size, age, this.save.settings.effects === 'weak');
@@ -913,7 +917,7 @@ export class CanvasRuntime {
       const profile = w.profileFor(kind), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
-      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
+      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
       this.text(kind === 'arc' ? `跳电${profile.chainHops}次 · 每跳${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? '近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
@@ -1032,7 +1036,8 @@ export class CanvasRuntime {
     this.text('路线点满后可持续精调 · 能力保留',360,1055,23,'#bdd8e7');
     this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
-  private drawOpticalBranch(){
+  private drawBuildBranch(){
+    if(this.branchRoute==='electric'){this.drawElectricBranch();return;}
     this.rect(35,120,650,1080,'#102330');
     this.text('光学改造 · 二选一',360,190,40,'#effaff','center',true);
     this.text('都保留原激光 · 发射间隔缩短25%',360,250,25,'#bdd8e7');
@@ -1046,6 +1051,22 @@ export class CanvasRuntime {
       this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
     }
     this.text('本局选定不可切换 · 三阶棱镜与旧武器保留',360,965,23,'#f0d19a');
+    this.button('返回升级选择',1050,'branch-back');
+  }
+  private drawElectricBranch(){
+    this.rect(35,120,650,1080,'#102330');
+    this.text('雷电改造 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('原电弧保留 · 都将跳电范围提升至220',360,250,25,'#bdd8e7');
+    for(const [i,branch] of (['spread','capacitor'] as const).entries()){
+      const node=electricBranches[branch],y=315+i*290,color=branch==='spread'?'#adf3bf':'#c7b1ff';
+      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
+      this.text(node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,25,'#effaff','left');
+      this.text(branch==='spread'?'每发电弧额外多跳一名敌人':'同一敌人累计3次电弧直击后放电',90,y+133,24,'#d9e8f1','left');
+      this.text(branch==='spread'?'伤害与原跳数保留 · 适合密集群敌':`追加${ELECTRIC_FORK.damage*100}%直击伤害 · 链电不积层`,90,y+175,23,'#bdd8e7','left');
+      this.text('选择此改造　›',625,y+219,25,color,'right');
+      this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
+    }
+    this.text('本局选定不可切换 · 高效传导与旧武器保留',360,965,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
   }
   private drawBuildChoices() {
@@ -1114,6 +1135,7 @@ export class CanvasRuntime {
       inputMode: this.inputMode,
       contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
+      electricBranch:this.world.build.electricBranch??null,capacitorBursts:this.world.capacitorBursts,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,

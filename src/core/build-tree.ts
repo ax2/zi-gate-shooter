@@ -1,3 +1,10 @@
+export type ElectricBranch='spread'|'capacitor';
+export type BuildBranch=OpticalBranch|ElectricBranch;
+export const electricBranches={
+ spread:{name:'连锁扩散',detail:'跳电范围220 · 额外多跳一次',role:'优先连通群敌，扩大清场范围'},
+ capacitor:{name:'电容蓄爆',detail:'跳电范围220 · 同敌3次直击追加200%',role:'持续瞄准精英与首领，单体放电'},
+} as const;
+export const ELECTRIC_FORK={hits:3,damage:2} as const;
 export type OpticalBranch='burn'|'relay';
 export const opticalBranches={
  burn:{name:'灼热透镜',detail:'间隔-25% · 灼烧3×25% /0.3秒',role:'对重装与首领持续施压'},
@@ -14,7 +21,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
   electric: [
     {name:'导电线圈',detail:'安装T1电弧 · 电弧多跳一次'},
-    {name:'远距电桥',detail:'跳电范围160→220'},
+    {name:'远距电桥 · 选择分支',detail:'范围160→220 · 二选一：扩散/蓄爆'},
     {name:'高效传导',detail:'每跳保留80%伤害（原65%）'},
   ],
   optical: [
@@ -25,8 +32,10 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
 };
 export class BuildTree {
   opticalBranch?:OpticalBranch;
-  node(route:Route,index:number,branch=this.opticalBranch){
-    return route==='optical'&&index===1&&branch?opticalBranches[branch]:tree[route][index];
+  electricBranch?:ElectricBranch;
+  node(route:Route,index:number,branch:BuildBranch|undefined=route==='electric'?this.electricBranch:this.opticalBranch){
+    if(route==='electric'&&index===1&&(branch==='spread'||branch==='capacitor'))return electricBranches[branch];
+    return route==='optical'&&index===1&&(branch==='burn'||branch==='relay')?opticalBranches[branch]:tree[route][index];
   }
   readonly ranks: Record<Route,number> = {ballistic:0,electric:0,optical:0};
   readonly refinements: Record<Route,number> = {ballistic:0,electric:0,optical:0};
@@ -41,12 +50,16 @@ export class BuildTree {
     if(earned<=this.spent)return [];
     return routes.filter(r=>!(r==='ballistic'&&this.ranks[r]===2&&this.ranks.electric===0));
   }
-  choose(route:Route,earned:number,branch?:OpticalBranch){
+  choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(branch!==undefined&&(route!=='optical'||this.ranks.optical!==1||!['burn','relay'].includes(branch)))return false;
+    if(branch!==undefined&&!(this.ranks[route]===1&&((route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor')))))return false;
+    if(route==='electric'&&this.ranks.electric===1){
+      if(this.electricBranch)return false;
+      this.electricBranch=branch==='capacitor'?'capacitor':'spread';
+    }
     if(route==='optical'&&this.ranks.optical===1){
       if(this.opticalBranch)return false;
-      this.opticalBranch=branch??'burn';
+      this.opticalBranch=branch==='relay'?'relay':'burn';
     }
     if(this.ranks[route]<3)this.ranks[route]++;else this.refinements[route]++;return true;
   }

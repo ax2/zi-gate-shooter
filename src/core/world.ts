@@ -2,7 +2,7 @@ import { bossFormationFor, ESCORT } from './boss-formations';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, type ContractKind } from './contracts';
-import { BuildTree, OPTICAL_FORK, type OpticalBranch, type Route } from './build-tree';
+import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from './build-tree';
 import { armoryOffers } from './armory-offers';
 import { supportProfile, supportMilestone } from './support-profile';
 import { C, clamp } from './config';
@@ -24,7 +24,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  bountyRound?:number;escort?:boolean;
+  capacitorHits?:number; bountyRound?:number;escort?:boolean;
   weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
 }
 export interface Bullet {
@@ -39,7 +39,7 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
   readonly build = new BuildTree();
-  chooseBuild(route: Route,branch?:OpticalBranch) {
+  chooseBuild(route: Route,branch?:BuildBranch) {
     if(!this.build.choose(route,this.growth.mastery??0,branch))return false;
     const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
     if(kind && !this.activeWeapons.includes(kind)) {
@@ -47,6 +47,16 @@ export class World {
       this.weaponStages.set(kind,1);this.acquiredWeapons.add(kind);
     }
     return true;
+  }
+  capacitorBursts=0;
+  private capacitor(body:Body,damage:number){
+    if(this.build.electricBranch!=='capacitor'||!body.active||!(body.kind in C.enemies)||guardClosed(body)
+      ||body.y<C.playerShotTop||body.y>C.playerY||(body.kind==='boss'&&this.phase!=='boss'))return;
+    body.capacitorHits=(body.capacitorHits??0)+1;
+    if(body.capacitorHits<ELECTRIC_FORK.hits)return;
+    body.capacitorHits=0;this.capacitorBursts++;
+    this.effects.push({type:'capacitor',x:body.x,y:body.y,size:100,weaponKind:'arc'});
+    this.hit(body,damage*ELECTRIC_FORK.damage,'arc');
   }
   burnHits=0;relayHits=0;
   private opticalSecondary(body:Body,damage:number){
@@ -113,7 +123,7 @@ export class World {
     const p=weaponProfile(kind,this.weaponStage(kind)),rank=this.build.ranks;
     const refinement=1+.1*this.build.refinements[kind==='arc'?'electric':'ballistic'];
     return {...p,damage:p.damage.map(n=>n*(1+.5*this.weaponCalibration(kind))*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
-      chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
+      chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0)+(this.build.electricBranch==='spread'?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
   }
   supportProfile() {
     const p=supportProfile(this.growth.mastery),rank=this.build.ranks.optical;
@@ -421,6 +431,7 @@ export class World {
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body)) bullet.active = false;
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);
+          if(bullet.weaponKind==='arc')this.capacitor(body,bullet.damage);
           const support=this.supportProfile();
           if (support.refractionTargets > 0 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
             const reflected=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies

@@ -722,6 +722,7 @@ it('route achievements unlock through real choice actions and survive a new run'
   f.runtime.world.growth.energy=100;f.tick();
   expect(f.runtime.mode).toBe('choice');
   f.runtime.touchStart(1,360,640);f.runtime.touchEnd(1,360,640);f.tick();
+  if(i===1){expect(f.runtime.mode).toBe('branch');expect(f.runtime.activateControl('branch:spread')).toBe(true);}
  }
  expect(f.runtime.save.achievements.unlocked).toContain('specialist');
  f.runtime.start();expect(f.runtime.world.build.spent).toBe(0);
@@ -883,4 +884,19 @@ it('locks the hunter before tier2 and enters a real immediate reward after both 
  }
  f.tick();expect(f.runtime.mode).toBe('contract-reward');expect(w.contract!.targetKills).toBe(2);expect(w.contract!.elapsed).toBeLessThan(30);
  expect(f.runtime.activateControl('contract-claim:pulse')).toBe(true);expect(w.weaponStage('pulse')).toBe(3);expect(f.runtime.mode).toBe('playing');
+});
+
+it('electric fork requires explicit choice, does not spend while browsing, and retains other mounted weapons',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=1;w.chooseBuild('electric');w.growth.energy=100;f.tick();
+ const owned=[...w.activeWeapons];expect(f.runtime.activateControl('build:electric')).toBe(true);expect(f.runtime.mode).toBe('branch');const time=w.time;
+ for(let i=0;i<30;i++)f.tick();expect(w.time).toBe(time);expect(w.build.spent).toBe(1);expect(w.build.electricBranch).toBeUndefined();
+ expect(f.runtime.activateControl('branch:burn')).toBe(false);expect(f.runtime.activateControl('branch-back')).toBe(true);expect(w.build.spent).toBe(1);
+ expect(f.runtime.activateControl('build:electric')).toBe(true);expect(f.runtime.activateControl('branch:capacitor')).toBe(true);expect(f.runtime.mode).toBe('playing');
+ expect(w.build.electricBranch).toBe('capacitor');expect(w.build.spent).toBe(2);expect(w.activeWeapons).toEqual(owned);expect(f.runtime.diagnostics().electricBranch).toBe('capacitor');expect(f.runtime.activateControl('branch:spread')).toBe(false);
+});
+it.each([false,true])('electrical discharge stays bounded and distinct from orange blast atlas (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const runtime=f.runtime as any;
+ for(let i=0;i<20;i++)runtime.effect({type:'capacitor',x:360,y:600,size:70,weaponKind:'arc'});expect(runtime.blasts).toHaveLength(4);expect(runtime.particles.length).toBeLessThanOrEqual(weak?50:160);
+ f.tick();expect(blasts(f)).toHaveLength(0);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#a99aff')).toBe(true);
+ for(let i=0;i<30;i++)f.tick();expect(runtime.blasts).toHaveLength(0);
 });
