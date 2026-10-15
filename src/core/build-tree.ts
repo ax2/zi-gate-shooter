@@ -19,13 +19,20 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
 };
 export class BuildTree {
   readonly ranks: Record<Route,number> = {ballistic:0,electric:0,optical:0};
-  get spent(){return Object.values(this.ranks).reduce((a,b)=>a+b,0);}
+  readonly refinements: Record<Route,number> = {ballistic:0,electric:0,optical:0};
+  get baseSpent(){return Object.values(this.ranks).reduce((a,b)=>a+b,0);}
+  get spent(){return this.baseSpent+Object.values(this.refinements).reduce((a,b)=>a+b,0);}
+  next(route:Route){
+    if(this.ranks[route]<3)return tree[route][this.ranks[route]];
+    const n=this.refinements[route],label={ballistic:'弹道武器',electric:'电弧炮',optical:'激光与棱镜'}[route];
+    return {name:`${label}精调 ${n+1}`,detail:`伤害系数 ${100+n*10}% → ${110+n*10}%`};
+  }
   available(earned:number){
     if(earned<=this.spent)return [];
-    return routes.filter(r=>this.ranks[r]<3 && !(r==='ballistic'&&this.ranks[r]===2&&this.ranks.electric===0));
+    return routes.filter(r=>!(r==='ballistic'&&this.ranks[r]===2&&this.ranks.electric===0));
   }
   choose(route:Route,earned:number){
     if(!this.available(earned).includes(route))return false;
-    this.ranks[route]++;return true;
+    if(this.ranks[route]<3)this.ranks[route]++;else this.refinements[route]++;return true;
   }
 }

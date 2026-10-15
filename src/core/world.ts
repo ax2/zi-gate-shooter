@@ -46,12 +46,13 @@ export class World {
   }
   profileFor(kind:WeaponKind) {
     const p=weaponProfile(kind,this.weaponStage(kind)),rank=this.build.ranks;
-    return {...p,damage:p.damage.map(n=>n*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
+    const refinement=1+.1*this.build.refinements[kind==='arc'?'electric':'ballistic'];
+    return {...p,damage:p.damage.map(n=>n*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
       chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
   }
   supportProfile() {
     const p=supportProfile(this.growth.mastery),rank=this.build.ranks.optical;
-    return {...p,laserUnlocked:p.laserUnlocked||rank>0,laserDamage:p.laserDamage*(rank>0?1.15:1),
+    return {...p,laserUnlocked:p.laserUnlocked||rank>0,laserDamage:p.laserDamage*(rank>0?1.15:1)*(1+.1*this.build.refinements.optical),
       laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0),prism:rank>=3&&this.build.ranks.ballistic>=1};
   }
   contract?: Contract;

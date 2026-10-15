@@ -19,6 +19,7 @@ function start(){
   if(runtime.mode==='loading'||runtime.mode==='error')return;
  frameEvidence=[];previousCallback=0;previousWork=0;void audio.unlock();runtime.start();runtime.world=new World(1337,Number(document.querySelector('#sector').value));
  runtime.save.settings.effects=document.querySelector('#effects').value;
+ if(document.querySelector('#scenario').value==='refinement'){runtime.world.growth.mastery=9;for(const route of ['electric','electric','electric','ballistic','ballistic','ballistic','optical','optical','optical'])runtime.world.chooseBuild(route);runtime.world.growth.energy=100;return;}
  if(document.querySelector('#scenario').value==='prism'){runtime.world.phase='boss';runtime.world.growth.mastery=4;for(const route of ['optical','optical','optical','ballistic'])runtime.world.chooseBuild(route);for(const x of [248,360,472]){const b=runtime.world.spawn('armor',x,575);b.speed=0;b.hp=b.maxHp=10000;b.timer=1000;}return;}
  if(document.querySelector('#scenario').value==='boss-reward') {
    runtime.world.phase='boss';runtime.world.player.hp=2;runtime.world.growth.mastery=2;runtime.world.growth.energy=50;

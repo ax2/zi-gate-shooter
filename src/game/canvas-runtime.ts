@@ -272,10 +272,11 @@ export class CanvasRuntime {
   private action(action: string) {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
+      const chosenNode=routes.includes(route)?this.world.build.next(route):undefined;
       const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
       if(routes.includes(route)&&this.world.chooseBuild(route)){
         this.checkAchievements();
-        const node=tree[route][this.world.build.ranks[route]-1];
+        const node=chosenNode!;
         const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
         this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${node.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':node.detail,until:this.world.time+4,combo:!!combo};
         if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
@@ -775,7 +776,7 @@ export class CanvasRuntime {
     this.text(support.laserUnlocked?`激光：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text(support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
-    this.text(`路线节点 ${w.build.spent}/9 · 充能突破继续选择`, 360, 1004, 23, '#f0d19a');
+    this.text(`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
     for(const [i,label] of ['技能树','挑战契约'].entries()){const x=72+i*298;this.rect(x,1030,278,86,'#1a2d3c');this.text(label,x+139,1073,28,'#d8eaf5');this.buttons.push({x,y:1030,w:278,h:86,label,action:i?'contracts':'tree'});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
   }
@@ -801,11 +802,11 @@ export class CanvasRuntime {
   private drawBuildTree() {
     this.rect(35,90,650,1120,'#102330');
     this.text('本局技能树',360,145,40,'#effaff','center',true);
-    this.text(`已投入 ${this.world.build.spent}/9 · 每次充能突破选择一项`,360,192,24,'#bdd8e7');
+    this.text(`技能 ${this.world.build.baseSpent}/9 · 已精调 ${this.world.build.spent-this.world.build.baseSpent}次`,360,192,24,'#bdd8e7');
     for(const [i,route] of routes.entries()) {
       const rank=this.world.build.ranks[route], top=235+i*265;
       const color=['#ffd28a','#c6a1ff','#7fe4ff'][i];
-      this.text(`${['弹道','雷电','光学'][i]}路线`,72,top,27,color,'left',true);
+      this.text(`${['弹道','雷电','光学'][i]}路线 · 精调${this.world.build.refinements[route]}次`,72,top,27,color,'left',true);
       this.rect(85,top+28,2,155,'#456478');
       for(const [j,node] of tree[route].entries()) {
         const y=top+42+j*68, owned=j<rank;
@@ -817,7 +818,7 @@ export class CanvasRuntime {
         this.text(node.detail,110,y+29,21,'#bdd8e7','left');
       }
     }
-    this.text('可跨路线投入 · 已获得能力保留到本局结束',360,1055,23,'#bdd8e7');
+    this.text('路线点满后可持续精调 · 能力保留',360,1055,23,'#bdd8e7');
     this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
   private drawBuildChoices() {
@@ -826,10 +827,10 @@ export class CanvasRuntime {
     this.text('能力保留 · 可专精，也可跨路线组合',360,270,24,'#b8d4e3');
     const available=this.world.build.available(this.world.growth.mastery??0);
     for(const [i,route] of routes.entries()){
-      const rank=this.world.build.ranks[route],y=330+i*235,node=tree[route][rank];
+      const rank=this.world.build.ranks[route],y=330+i*235,node=this.world.build.next(route);
       const enabled=available.includes(route);
       this.rect(65,y,590,205,enabled?'#203e50':'#15232e');
-      this.text(`${['弹道','雷电','光学'][i]}路线 · ${rank}/3`,90,y+35,26,'#f0d19a','left');
+      this.text(`${['弹道','雷电','光学'][i]}路线 · ${rank}/3 · 精调${this.world.build.refinements[route]}`,90,y+35,26,'#f0d19a','left');
       this.text(node?.name??'路线已完成',90,y+83,30,enabled?'#effaff':'#8396a2','left',true);
       this.text(node?.detail??'所有已选能力继续生效',90,y+128,23,'#bdd8e7','left');
       this.text(enabled?'选择此节点　›':rank===3?'已完成':'需先选择导电线圈',610,y+174,23,enabled?'#80e4ff':'#8396a2','right');
@@ -874,7 +875,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
-      mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, activeWeapons:this.world.activeWeapons,
+      mode: this.mode, time: this.world.time, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, buildRefinements:{...this.world.build.refinements}, activeWeapons:this.world.activeWeapons,
       supportBeams:this.supportBeams.length,
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
