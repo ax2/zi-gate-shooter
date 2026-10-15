@@ -1,5 +1,7 @@
 # 火力突围
 
+最新反馈候选 **Stage-140**：http://127.0.0.1:5217/ 。结算展示真实构筑/机制/跨轮契约与本局新成就，提供下一局目标。[试玩](docs/stages/Stage-140/PLAY.md) · [验证与边界](docs/stages/Stage-140/TEST_REPORT.md)。
+
 最新画面候选 **Stage-139**：http://127.0.0.1:5216/ 。首领整机离开HUD、显示与战斗中心对齐，交战收益提示避开首领。[试玩](docs/stages/Stage-139/PLAY.md) · [验证与边界](docs/stages/Stage-139/TEST_REPORT.md)。
 
 最新节奏候选 **Stage-138**：http://127.0.0.1:5215/ 。首件装备和首排互斥补给各给1研发点，正常首分钟可形成分支，原火力/充能保留。[试玩](docs/stages/Stage-138/PLAY.md) · [验证与边界](docs/stages/Stage-138/TEST_REPORT.md)。

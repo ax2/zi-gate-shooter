@@ -941,3 +941,20 @@ it('keeps live-boss upgrade receipts below danger and defers achievements withou
  for(let i=0;i<250;i++)f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(true);
  runtime.effect({type:'reward',x:360,y:500,text:'测试战斗回执',detail:'奖励仍清楚可见'});f.tick();expect(f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='测试战斗回执')?.args[2]).toBe(1208);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(false);
 });
+
+it('real death shows earned build and new achievements, returns without mutation, and restarts cleanly',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ for(let i=0;i<3;i++){w.growth.energy=100;f.tick();expect(f.runtime.activateControl('build:optical')).toBe(true);if(i===1)expect(f.runtime.activateControl('branch:burn')).toBe(true);}
+ expect(f.runtime.save.achievements.unlocked).toContain('specialist');w.player.hp=1;w.bullets=[{id:99999,x:360,y:C.playerY,px:360,py:C.playerY,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}];f.tick();
+ expect(f.runtime.mode).toBe('result');expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='本局战绩')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('新成就 1 · 专精工程师'))).toBe(true);
+ expect(f.runtime.activateControl('resume')).toBe(false);const frozen=JSON.stringify(w),best=f.runtime.save.best;
+ expect(f.runtime.activateControl('achievements')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='本局新达成')).toBe(true);for(let i=0;i<30;i++)f.tick();expect(JSON.stringify(w)).toBe(frozen);
+ expect(f.runtime.activateControl('achievements-back')).toBe(true);expect(f.runtime.mode).toBe('result');expect(f.runtime.save.best).toBe(best);expect(f.runtime.activateControl('achievements')).toBe(true);expect(f.runtime.back()).toBe('stay');expect(f.runtime.mode).toBe('result');
+ f.tick();expect(f.runtime.activateControl('start')).toBe(true);expect(f.runtime.world.bossWins).toBe(0);expect(f.runtime.diagnostics().runAchievements).toEqual([]);expect(f.runtime.save.achievements.unlocked).toContain('specialist');
+});
+
+it('celebrates only a strictly improved score and clears the per-run record flag on restart',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();
+ for(const [index,score] of [70,70].entries()){const w=f.runtime.world;w.score=score;w.player.hp=1;w.bullets=[{id:99999,x:360,y:C.playerY,px:360,py:C.playerY,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}];f.tick();expect(f.runtime.mode).toBe('result');const first=index===0;expect(f.runtime.diagnostics().runNewBest).toBe(first);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===(first?'刷新最高分 70':'最高分 70'))).toBe(true);expect(f.runtime.activateControl('start')).toBe(true);expect(f.runtime.diagnostics().runNewBest).toBe(false);}
+});

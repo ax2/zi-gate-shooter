@@ -9,7 +9,8 @@ it('reaches and beats all three chapters at the new real docking geometry throug
   if(w.phase==='boss'&&lastPhase!=='boss'){const b=w.bodies.find(b=>b.active&&b.kind==='boss');entries.push({time:w.time,round:w.round,y:b.y,variant:b.bossVariant,hp:b.maxHp});}
   if(events.some(e=>e.type==='boss-kill'))victories.push({time:w.time,round:w.round,hp:w.player.hp,escorts:w.escortKills});lastPhase=w.phase;
  }
- const result={time:w.time,hp:w.player.hp,round:w.round,entries,victories,escortSpawns:w.escortSpawns,escortKills:w.escortKills,kills:w.kills,peakBodies:w.peakBodies,peakBullets:w.peakBullets};
+ expect(w.bossWins).toBe(victories.length);
+ const result={bossWins:w.bossWins,time:w.time,hp:w.player.hp,round:w.round,entries,victories,escortSpawns:w.escortSpawns,escortKills:w.escortKills,kills:w.kills,peakBodies:w.peakBodies,peakBullets:w.peakBullets};
  const directory=`build/qa/runs/${new Date().toISOString().replace(/[:.]/g,'-')}-boss-placement`;mkdirSync(directory,{recursive:true});writeFileSync(`${directory}/normal.json`,JSON.stringify(result,null,2));
  expect(w.time).toBeCloseTo(600);expect(new Set(entries.map(e=>e.variant)).size).toBe(3);expect(entries.every(e=>e.y===C.bossY)).toBe(true);expect(victories.length).toBeGreaterThanOrEqual(3);expect(w.peakBullets).toBeLessThanOrEqual(C.limits.bullets+C.limits.hostile);
 },60000);

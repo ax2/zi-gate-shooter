@@ -143,12 +143,14 @@ export class World {
     return {...p,laserUnlocked:p.laserUnlocked||rank>0,laserDamage:p.laserDamage*(rank>0?1.15:1)*(1+.1*this.build.refinements.optical),
       laserInterval:p.laserInterval*(rank>=2?.75:1),laserTargets:p.laserTargets+(rank>=3?2:0),prism:rank>=3&&this.build.ranks.ballistic>=1};
   }
+  bossWins=0;
+  readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   contract?: Contract;
   contractReward?: {charge:number;round:number};
   claimContractReward(kind:WeaponKind|'energy'){
     if(!this.contractReward||this.player.hp<=0)return false;
     if(kind!=='energy'&&!this.activeWeapons.includes(kind))return false;
-    const reward=this.contractReward;this.contractReward=undefined;
+    const reward=this.contractReward;this.contractReward=undefined;this.contractStats.claimed++;
     if(kind==='energy'){
       const result=grantGate(this.growth,reward.charge,'energy');
       if(result.activated)this.emit('overload',this.player.x,C.playerY);
@@ -170,7 +172,7 @@ export class World {
   }
   acceptContract(kind:ContractKind){
     if(!this.canAcceptContract(kind))return false;
-    this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken);return true;
+    this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken);this.contractStats.accepted++;return true;
   }
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
   weaponKind: WeaponKind = 'pulse';
@@ -557,6 +559,7 @@ export class World {
     if (this.player.hp <= 0) {
       this.phase = 'dead'; this.emit('death', this.player.x, C.playerY, '本次突围结束', 150);
     } else if (this.bossVictory) {
+      this.bossWins++;
       const planned=this.bossFormation?.groups.reduce((n,g)=>n+g.troops.length,0)??0;
       if(planned>0&&this.bossEscortSpawns===planned&&this.bossEscortKills===planned&&this.damageTaken===this.bossStartDamage){
         this.tacticalWins++;this.emit('formation-clear',360,400,'战术拆解 · 编队全破且无伤获胜');
@@ -576,8 +579,10 @@ export class World {
     const contract=this.contract;
     if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0)){
       if(contract.status==='won'){
+        this.contractStats.won++;
         this.contractReward={charge:contracts[contract.kind].charge,round:this.round};
       }
+      if(contract.status==='failed')this.contractStats.failed++;
       this.effects.push({type:'contract',x:this.player.x,y:C.playerY,text:contract.status==='won'?'契约完成 · 选择强化奖励':`契约失败 · ${contract.reason}`,detail:'每轮可接取一次 · 失败仅失去额外奖励'});
     }
     this.peakBodies = Math.max(this.peakBodies, this.bodies.length);

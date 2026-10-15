@@ -1,3 +1,4 @@
+import {runReport} from './run-report';
 import { capacitorLight, capacitorMarks } from './capacitor-light';
 import { formationShield } from './formation-shield';
 import { burnLight } from './burn-light';
@@ -69,6 +70,9 @@ export class CanvasRuntime {
   private previousMode: 'menu' | 'paused' = 'menu';
   private ctx: CanvasRenderingContext2D;
   private images = new Map<string, HTMLImageElement>();
+  private runNewBest=false;
+  private runAchievements:string[]=[];
+  private achievementReturn:'menu'|'result'='menu';
   private buttons: CanvasControl[] = [];
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
@@ -194,7 +198,7 @@ export class CanvasRuntime {
               this.mode='choice';this.cancelTouch();this.accumulator=0;this.platform.silence();
             }
             if (this.world.player.hp <= 0) {
-              this.mode = 'result'; this.cancelTouch(); this.save.best = Math.max(this.save.best, this.world.score); this.platform.write(this.save); this.platform.silence();
+              this.mode = 'result'; this.cancelTouch();this.runNewBest=this.world.score>this.save.best; this.save.best = Math.max(this.save.best, this.world.score); this.platform.write(this.save); this.platform.silence();
             }
           }
           if (this.accumulator > C.step * 2) this.pause('设备暂时繁忙，已暂停');
@@ -220,6 +224,7 @@ export class CanvasRuntime {
     for(const motion of this.mountedMotion.values())motion.reset();
     this.opticalFiredAt=-Infinity;
     this.buildFeedback=undefined;
+    this.runNewBest=false;this.runAchievements=[];this.achievementReturn='menu';
     this.achievementUntil=0;
     this.supportBeams=[];
     this.pausePreview = false;
@@ -290,7 +295,7 @@ export class CanvasRuntime {
     if(this.mode==='branch'){this.mode='choice';return 'stay';}
     if (this.mode === 'choice'||this.mode==='contract-reward') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
-    if (this.mode === 'achievements') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'achievements') { this.mode = this.achievementReturn; return 'stay'; }
     if (this.mode === 'rig'||this.mode==='combos') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'contracts') { this.mode=this.contractReturn;return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
@@ -334,7 +339,8 @@ export class CanvasRuntime {
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
-    else if (action === 'achievements') this.mode = 'achievements';
+    else if (action === 'achievements'){this.achievementReturn=this.mode==='result'?'result':'menu';this.mode='achievements';}
+    else if(action==='achievements-back'&&this.mode==='achievements')this.mode=this.achievementReturn;
     else if (action === 'armory') { this.dossierWeapon = 'pulse'; this.mode = 'armory'; }
     else if (action.startsWith('dossier:')) {
       const weapon = action.slice(8) as WeaponKind;
@@ -375,7 +381,7 @@ export class CanvasRuntime {
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private checkAchievements() {
     const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins);
-    if(fresh.length){this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
+    if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
     if(e.type==='bounty-progress'){this.notify(e.text??'悬赏推进',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
@@ -884,11 +890,11 @@ export class CanvasRuntime {
     for(const [i,a] of achievements.entries()){const y=255+i*94,done=state.unlocked.includes(a.id);
       this.rect(65,y,590,86,done?'#263d43':'#142b39');
       this.text(a.name,85,y+30,27,done?'#ffdc8a':'#effaff','left',true);
-      this.text(done?'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+30,23,done?'#ffdc8a':'#a5bac8','right');
+      this.text(done?this.achievementReturn==='result'&&this.runAchievements.includes(a.id)?'本局新达成':'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+30,23,done?'#ffdc8a':'#a5bac8','right');
       this.text(a.detail,85,y+65,22,'#bdd8e7','left');
     }
     this.text('成就保存在本机 · 不增加局外伤害',360,1040,23,'#bdd8e7');
-    this.button('返回主界面',1100,'armory-back',true);
+    this.button(this.achievementReturn==='result'?'返回本局战绩':'返回主界面',1100,'achievements-back',true);
   }
   private drawArmory() {
     const kind = this.dossierWeapon, entry = weaponDossier[kind], color = weaponColors[kind];
@@ -1119,8 +1125,23 @@ export class CanvasRuntime {
     }
     this.button('查看完整技能树',1050,'tree');
   }
+  private drawRunReport(){
+    const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked);
+    this.buttons=[];this.rect(0,0,720,1280,'#050e18dd');this.rect(35,90,650,1140,'#102330');
+    this.text('本局战绩',360,145,34,'#effaff','center',true);this.text(w.score.toString(),360,218,68,'#eff8ff','center',true);
+    this.text(`${this.runNewBest?'刷新最高分':'最高分'} ${this.save.best}`,360,276,23,'#e8c88b');
+    this.text(`存活 ${Math.floor(w.time/60)}:${Math.floor(w.time%60).toString().padStart(2,'0')} · 第${w.round}轮 · 火力叠加${w.activeWeapons.length}种`,360,319,23,'#bdd8e7');
+    this.text(r.growth,360,344,20,'#bdd8e7');
+    for(let i=0;i<2;i++)this.text(r.weapons.slice(i*3,i*3+3).join(' / '),360,374+i*34,23,'#c2edff');
+    for(const [i,line] of r.routes.entries())this.text(line,78,450+i*36,23,['#ffd28a','#c6a1ff','#7fe4ff'][i],'left');
+    this.text(r.combat,360,577,24,'#effaff');this.text(r.contracts,360,614,23,'#bdd8e7');
+    for(const [i,line] of r.mechanics.entries())this.text(line,360,655+i*34,22,'#cddfea');
+    this.text(r.fresh,360,737,23,'#ffdc8a');this.text('下一局目标',360,786,24,'#aee7ff','center',true);this.text(r.next,360,824,22,'#d6e7f0');
+    if(w.lastDamageCause)this.text({bullet:'敌弹击毁 · 留意已发射子弹的空隙',enemy:'碰撞敌机 · 留出横向避让空间',crate:'撞上箱体 · 先击碎再拾取'}[w.lastDamageCause],360,873,22,'#edbc98');
+    this.button('再次突围　›',920,'start',true);this.button('查看成就',1020,'achievements');this.button('返回主界面',1120,'home');
+  }
   private drawDialog() {
-    const w = this.world;
+    if(this.mode==='result'){this.drawRunReport();return;}
     if (this.mode === 'paused' && this.pausePreview) {
       this.buttons = [];
       const bannerY=this.world.phase==='boss'||this.world.phase==='boss-entry'?980:170;
@@ -1147,12 +1168,6 @@ export class CanvasRuntime {
         this.button('开源许可', 910, 'licenses');
         this.button('返回', 1010, 'back', true);
       } else this.button('返回', 920, 'back', true);
-    } else {
-      this.text('本次突围结束', 360, 415, 30, '#b6d2e2'); this.text(w.score.toString(), 360, 510, 94, '#eff8ff', 'center', true);
-      this.text(`最高分 ${this.save.best}`, 360, 585, 26, '#e8c88b');
-      this.text(`存活 ${Math.floor(w.time / 60)}:${Math.floor(w.time % 60).toString().padStart(2, '0')}　/　T${w.maxStage}　/　第${w.round}轮`, 360, 660, 26, '#bcd5e4');
-      if (w.lastDamageCause) this.text({ bullet: '被敌弹击中 · 留意弹道空隙', enemy: '与敌机相撞 · 提前横移避让', crate: '撞上未破坏箱体 · 先击碎再拾取' }[w.lastDamageCause], 360, 704, 22, '#e8c88b');
-      this.button('再次突围　›', 740, 'start', true); this.button('返回主界面', 850, 'home');
     }
   }
   diagnostics() {
@@ -1167,6 +1182,7 @@ export class CanvasRuntime {
       inputMode: this.inputMode,
       contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
+      runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticBranch:this.world.build.ballisticBranch??null,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       electricBranch:this.world.build.electricBranch??null,capacitorBursts:this.world.capacitorBursts,
