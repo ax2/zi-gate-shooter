@@ -1,6 +1,8 @@
 # 火力突围
 
-当前候选 **Stage-129**：http://127.0.0.1:5205/ 。契约可选充能或定向配件强化。[说明](docs/stages/Stage-129/PLAY.md) · [已知长帧与验证边界](docs/stages/Stage-129/TEST_REPORT.md)。
+当前诊断候选 **Stage-130**：http://127.0.0.1:5207/ 。已区分回调工作耗时与更新间隔，长帧根因仍待定位。[验证记录](docs/stages/Stage-130/TEST_REPORT.md)。正常开发入口仍5181。
+
+历史候选 **Stage-129**：http://127.0.0.1:5205/ 。契约可选充能或定向配件强化。[说明](docs/stages/Stage-129/PLAY.md) · [已知长帧与验证边界](docs/stages/Stage-129/TEST_REPORT.md)。
 
 当前开发源在本任务C盘zi-gate-shooter目录（dev5181）；E盘空间不足，原项目保留Stage128，D:\work也是E卷挂载。原源码/历史构建未删除。
 

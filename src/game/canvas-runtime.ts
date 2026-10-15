@@ -41,6 +41,7 @@ export interface Platform {
   now: () => number;
   requestFrame: (callback: (time: number) => void) => void;
   openLicenses?: () => void;
+  frameContext?: () => {hidden?:boolean;focused?:boolean};
   width: number; height: number; dpr: number; menuBottom: number;
 }
 interface Button { x: number; y: number; w: number; h: number; label: string; action: string }
@@ -105,6 +106,10 @@ export class CanvasRuntime {
   private hidden = false;
   private loadAttempt?: { since: number; fail: () => void };
   private frameTimes = new FrameWindow();
+  private callbackWork=new FrameWindow(3600);
+  private previousCallbackWorkMs=0;
+  private maxCallbackWorkMs=0;
+  private interruptedFrames:{gapMs:number;previousCallbackWorkMs:number;hidden?:boolean;focused?:boolean}[]=[];
   private scale = 1;
   private offsetX = 0;
   private offsetY = 0;
@@ -151,14 +156,20 @@ export class CanvasRuntime {
     }
   }
   private frame(_timestamp: number) {
-    const time = this.platform.now();
+    const time = this.platform.now(), measuredPlaying=this.mode==='playing';
     const elapsed = Math.max(0, (time - this.lastTime) / 1000); this.lastTime = time;
     const dt = Math.min(elapsed, 0.1);
     if (!this.hidden && this.loadAttempt && time - this.loadAttempt.since >= 15000) this.loadAttempt.fail();
     if (this.mode === 'playing') {
       this.callbackCount++;
       this.frameTimes.add(elapsed * 1000);
-      if (elapsed > 0.25) this.pause('运行中断，已暂停');
+      if (elapsed > 0.25) {
+        let context:{hidden?:boolean;focused?:boolean}={};
+        try{context=this.platform.frameContext?.()??{};}catch{/* Diagnostics must never affect play. */}
+        this.interruptedFrames.push({gapMs:elapsed*1000,previousCallbackWorkMs:this.previousCallbackWorkMs,hidden:context.hidden,focused:context.focused});
+        if(this.interruptedFrames.length>12)this.interruptedFrames.shift();
+        this.pause('画面更新中断，已暂停');
+      }
       else {
         this.accumulator += dt;
         let steps = 0;
@@ -192,6 +203,8 @@ export class CanvasRuntime {
       this.renderElapsed = 0;
       this.renderedMode = this.mode;
     }
+    this.previousCallbackWorkMs=Math.max(0,this.platform.now()-time);
+    if(measuredPlaying){this.callbackWork.add(this.previousCallbackWorkMs);this.maxCallbackWorkMs=Math.max(this.maxCallbackWorkMs,this.previousCallbackWorkMs);}
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
@@ -212,7 +225,7 @@ export class CanvasRuntime {
     this.drawCount = 0; this.callbackCount = 0;
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
-    this.frameTimes.clear(); this.downAction = '';
+    this.frameTimes.clear();this.callbackWork.clear();this.maxCallbackWorkMs=0;this.previousCallbackWorkMs=0;this.interruptedFrames=[]; this.downAction = '';
     this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0; this.upgradeUntil = 0;
     this.platform.silence();
     this.updateMusic();
@@ -982,6 +995,7 @@ export class CanvasRuntime {
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
       enemyFragments: this.enemyWreck.pieces.length,
       gateReceipts: this.gateFeedback.receipts.length,
+      callbackWork:{...this.callbackWork.snapshot(),maxMs:this.maxCallbackWorkMs},interruptedFrames:this.interruptedFrames.map(frame=>({...frame})),
       ...this.frameTimes.snapshot() };
   }
 }

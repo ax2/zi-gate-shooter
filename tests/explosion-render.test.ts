@@ -16,7 +16,7 @@ it.each([false,true])('support beam expires, freezes on pause, and clears on res
   expect(f.runtime.diagnostics().supportBeams).toBe(0);
 });
 
-function fixture(weak = false) {
+function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boolean}) {
   let clock = 0, next: FrameRequestCallback = () => {};
   const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; composite: string; font?: string }> = [];
   const state: Record<string, any> = { globalAlpha: 1, globalCompositeOperation: 'source-over' };
@@ -31,7 +31,7 @@ function fixture(weak = false) {
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
     image: async src => ({ src, width: (src.includes('scatter-player') || src.includes('pierce-player')) ? 576 : 768, height: (src.includes('scatter-player') || src.includes('pierce-player')) || src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') || src.includes('boss-flanker-v1') || src.includes('boss-bastion-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
-    read: () => save, write() {}, sound() {}, silence() {}, now: () => clock,
+    read: () => save, write() {}, sound() {}, silence() {}, frameContext:contextProbe,now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick(ms = 1000 / 60) { calls.length = 0; clock += ms; next(clock); } };
 }
@@ -804,4 +804,24 @@ it('guides the selected reward weapon rather than the unchanged main gun',async(
  f.runtime.touchStart(1,360,590);f.runtime.touchEnd(1,360,590);f.tick();
  expect(f.runtime.world.weaponKind).toBe('pulse');expect(f.runtime.world.weaponStage('scatter')).toBe(2);
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='霰射炮 · T2')).toBe(true);
+});
+it('separates frame scheduling gaps from callback work without advancing simulation and bounds evidence',async()=>{
+ const f=fixture(false,()=>({hidden:false,focused:true}));await f.runtime.load();f.runtime.start();f.tick();
+ const before=f.runtime.world.time;
+ for(let i=0;i<14;i++){
+  f.tick(1000);expect(f.runtime.mode).toBe('paused');
+  expect(f.runtime.world.time).toBe(before);
+  if(i<13){f.runtime.touchStart(1,360,603);f.runtime.touchEnd(1,360,603);}
+ }
+ const state=f.runtime.diagnostics();expect(state.interruptedFrames).toHaveLength(12);
+ expect(state.interruptedFrames[0]).toMatchObject({gapMs:1000,previousCallbackWorkMs:0,hidden:false,focused:true});
+ expect(state.callbackWork.maxMs).toBe(0);
+ state.interruptedFrames[0].gapMs=0;expect(f.runtime.diagnostics().interruptedFrames[0].gapMs).toBe(1000);
+ f.runtime.start();expect(f.runtime.diagnostics().interruptedFrames).toHaveLength(0);
+ expect(f.runtime.diagnostics().callbackWork.frameSamples).toBe(0);
+});
+it('a failed browser context probe cannot turn a safe interruption into a game error',async()=>{
+ const f=fixture(false,()=>{throw Error('probe unavailable');});await f.runtime.load();f.runtime.start();f.tick(1000);
+ expect(f.runtime.mode).toBe('paused');expect(f.runtime.world.time).toBe(0);
+ expect(f.runtime.diagnostics().interruptedFrames).toHaveLength(1);
 });

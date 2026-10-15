@@ -25,6 +25,7 @@ export const runtime = new CanvasRuntime({
   write: value => { try { localStorage.setItem('zi-gate-shooter-v1', JSON.stringify(value)); } catch { /* In-memory fallback. */ } },
   sound: (type, stage, weapon) => audio.event(type, stage, weapon), silence: () => audio.stop(),
   music: playing => music.setPlaying(playing),
+  frameContext:()=>({hidden:document.hidden,focused:document.hasFocus()}),
   now: () => performance.now(), requestFrame: callback => requestAnimationFrame(callback),
   openLicenses: () => licenses.open(),
 });

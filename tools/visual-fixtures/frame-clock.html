@@ -1,0 +1,4 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>动画帧时钟对照 · 无游戏负载</title>
+<style>body{margin:0;background:#0a1520;color:#dcecf4;font:16px/1.7 system-ui;padding:24px;max-width:800px}button{padding:12px 22px;background:#7fdcff;border:0;border-radius:6px;color:#102330;font-size:16px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}small{color:#a7becb}</style>
+<h1>动画帧时钟对照</h1><p>此页不加载游戏、素材或音频。只测量动画帧与100毫秒定时器，观察页面调度间隔。单次12秒。</p><label>测量模式 <select id="mode" aria-label="测量模式"><option value="dom">DOM文本更新</option><option value="canvas">Canvas绘制</option><option value="idle">纯回调不更新画面</option></select></label><canvas id="control" width="240" height="120" style="display:block;margin:12px 0"></canvas><button id="start">开始12秒测量</button><p id="status">未开始</p><pre id="report"></pre><small>测量仅供当前浏览器环境归因，不等于设备性能或游戏体验验收。</small>
+<script type="module" src="./frame-clock.js"></script></html>
