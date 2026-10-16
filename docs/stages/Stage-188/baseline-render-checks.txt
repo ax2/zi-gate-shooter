@@ -1,0 +1,105 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run build/qa/Stage-188/baseline.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ build/qa/Stage-188/baseline.test.ts (144 tests | 8 failed) 3252ms
+   × evolved optical effects share impact budgets, stay beneath hazards, freeze, expire and reset (weak=false) 11ms
+   × evolved optical effects share impact budgets, stay beneath hazards, freeze, expire and reset (weak=true) 2ms
+   × real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=false) 2ms
+   × real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=true) 1ms
+   × actual solo discharge draws finite rings and preserves its distinct counter through menus (weak=false) 1ms
+   × actual solo discharge draws finite rings and preserves its distinct counter through menus (weak=true) 1ms
+   × publishes the actual round projectile pressure in the bottom receipt 1ms
+   × guides real crate and gate progression with matching earned research choices 844ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  build/qa/Stage-188/baseline.test.ts > evolved optical effects share impact budgets, stay beneath hazards, freeze, expire and reset (weak=false)
+ FAIL  build/qa/Stage-188/baseline.test.ts > evolved optical effects share impact budgets, stay beneath hazards, freeze, expire and reset (weak=true)
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ build/qa/Stage-188/baseline.test.ts:111:85
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  build/qa/Stage-188/baseline.test.ts > real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=false)
+ FAIL  build/qa/Stage-188/baseline.test.ts > real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=true)
+AssertionError: expected +0 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ build/qa/Stage-188/baseline.test.ts:162:34
+    160|  w.growth.mastery=4;for(let i=0;i<4;i++)w.chooseBuild('optical');w.pha…
+    161|  for(const x of [360,500,590]){const b=w.spawn('armor',x,700);b.hp=b.m…
+    162|  f.tick();expect(w.laserArcHits).toBe(2);expect(f.runtime.diagnostics(…
+       |                                  ^
+    163|  expect(f.calls.some(c=>c.kind==='stroke'&&c.composite==='lighter')).t…
+    164|  f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(f.runtime.diag…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  build/qa/Stage-188/baseline.test.ts > actual solo discharge draws finite rings and preserves its distinct counter through menus (weak=false)
+ FAIL  build/qa/Stage-188/baseline.test.ts > actual solo discharge draws finite rings and preserves its distinct counter through menus (weak=true)
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ build/qa/Stage-188/baseline.test.ts:171:110
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  build/qa/Stage-188/baseline.test.ts > publishes the actual round projectile pressure in the bottom receipt
+AssertionError: expected undefined to be 1245 // Object.is equality
+
+- Expected:
+1245
+
++ Received:
+undefined
+
+ ❯ build/qa/Stage-188/baseline.test.ts:184:26
+    182|  w.phase='recovery';w.phaseTime=3.99;f.tick();expect(w.round).toBe(2);
+    183|  const detail=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='敌弹速度+1…
+    184|  expect(detail?.args[2]).toBe(1245);expect(f.runtime.diagnostics().ene…
+       |                          ^
+    185| });
+    186|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  build/qa/Stage-188/baseline.test.ts > guides real crate and gate progression with matching earned research choices
+AssertionError: expected [ '‹　左右拖动 · 自动开火　›', '分数', …(106) ] to include '对准装备箱持续射击'
+ ❯ build/qa/Stage-188/baseline.test.ts:478:16
+    476|   expect(seen).toContain('对准一箱，增加火力能力');
+    477|   expect(seen).toContain('靠近领取，叠加新火力');
+    478|   expect(seen).toContain('对准装备箱持续射击');
+       |                ^
+    479|   expect(seen).toContain('装备已掉落，移到它下方');
+    480|   expect(seen).toContain('持续射击，把门的奖励打高');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 136 passed (144)
+   Start at  06:06:44
+   Duration  3.60s (tests 93%, transform 5%, import 1%)
+

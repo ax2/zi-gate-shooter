@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/lockshot-challenge.test.ts tests/lockshot-challenge-progression.test.mjs tests/lockshot.test.ts tests/achievements.test.ts tests/explosion-render.test.ts tests/run-report.test.ts tests/queued-receipt.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (145 tests | 1 failed) 3455ms
+   × shows every achievement once across readable groups and keeps the local-record footer clear of the return control 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > shows every achievement once across readable groups and keeps the local-record footer clear of the return control
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/explosion-render.test.ts:122:134
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 179 passed (180)
+   Start at  06:07:40
+   Duration  4.19s (tests 62%, transform 29%, import 8%)
+
+  Transform  transforming modules took 2.50s · 29% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

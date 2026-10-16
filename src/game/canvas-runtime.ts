@@ -1,3 +1,4 @@
+import {lockshotGoal,lockshotTargetLabel} from './lockshot-goal';
 import {lockshotLeaving} from '../core/lockshot';
 import {lockshotMount} from './lockshot-mount';
 import {hostileShot} from './hostile-shot';
@@ -114,6 +115,7 @@ export class CanvasRuntime {
   private runAchievements:string[]=[];
   private achievementReturn:'menu'|'result'='menu';
   private achievementTab:AchievementGroup='growth';
+  private achievementPage=0;
   private buttons: CanvasControl[] = [];
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
@@ -399,8 +401,10 @@ export class CanvasRuntime {
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
-    else if (action === 'achievements'){this.achievementReturn=this.mode==='result'?'result':'menu';const focus=this.achievementReturn==='result'?this.runAchievements.at(-1):this.save.achievements.tracked;if(focus)this.achievementTab=achievementGroup(focus);this.mode='achievements';}
-    else if(action.startsWith('achievement-group:')&&this.mode==='achievements'){const group=action.slice(18);if(Object.hasOwn(achievementGroups,group))this.achievementTab=group as AchievementGroup;}
+    else if (action === 'achievements'){this.achievementReturn=this.mode==='result'?'result':'menu';const focus=this.achievementReturn==='result'?this.runAchievements.at(-1):this.save.achievements.tracked;if(focus)this.achievementTab=achievementGroup(focus);const ids=achievementGroups[this.achievementTab].ids as readonly string[];this.achievementPage=focus&&ids.length>6?Math.floor(ids.indexOf(focus)/4):0;this.mode='achievements';}
+    else if(action.startsWith('achievement-group:')&&this.mode==='achievements'){const group=action.slice(18);if(Object.hasOwn(achievementGroups,group)){this.achievementTab=group as AchievementGroup;this.achievementPage=0;}}
+    else if(action==='achievement-page:next'&&this.mode==='achievements')this.achievementPage++;
+    else if(action==='achievement-page:previous'&&this.mode==='achievements')this.achievementPage--;
     else if(action.startsWith('track:')&&this.mode==='achievements')trackAchievement(this.save.achievements,action.slice(6));
     else if(action==='track-clear'&&this.mode==='achievements')this.save.achievements.tracked=null;
     else if(action==='achievements-back'&&this.mode==='achievements')this.mode=this.achievementReturn;
@@ -469,7 +473,7 @@ export class CanvasRuntime {
   }
   private checkAchievements() {
     const beforeCertifications=this.save.achievements.certifiedBuilds.length,beforeMagnetic=this.save.achievements.magneticCertifications.length;
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,magneticCertifications:[...this.world.magneticCertifications]});
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,magneticCertifications:[...this.world.magneticCertifications]});
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;}
     if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length||beforeMagnetic!==this.save.achievements.magneticCertifications.length)this.platform.write(this.save);
   }
@@ -998,7 +1002,10 @@ export class CanvasRuntime {
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
-        if(b.pattern==='lockshot')this.text(lockshotLeaving(b)?'斜射·撤离':(b.empRemaining??0)>0?'斜射·停火':b.warning>0?'斜射·蓄能':'斜射哨机',b.x,b.y-b.height/2-36,22,'#ffce9b','center',true);
+        if(b.pattern==='lockshot'){
+          const target=!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')?lockshotTargetLabel(w,b,this.save.achievements.tracked):null;
+          this.text(target??(lockshotLeaving(b)?'斜射·撤离':(b.empRemaining??0)>0?'斜射·停火':b.warning>0?'斜射·蓄能':'斜射哨机'),b.x,b.y-b.height/2-36,22,target?'#adf0ff':'#ffce9b','center',true);
+        }
         if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);
         if(b.pattern==='intercept')this.text(b.warning>0?(b.burst?'截击·核心蓄能':'截击·翼炮蓄能'):(b.interceptCoreRemaining??0)>0?'截击·核心连射':'截击精英',b.x,b.y-b.height*.68-20,21,b.burst?'#ffb19c':'#ffe1a7','center',true);
         if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text(w.contract.hunt==='crossfire'?'王牌 · 扇射':'悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
@@ -1087,6 +1094,8 @@ export class CanvasRuntime {
         guide={kind:guide.kind,title:`目标补给 · ${status.name}`,detail:`${names} · ${drops.length?'靠近拾取':'打碎再拾取'} · 同排只领一件`};
       }else if(guide.kind==='move')guide={kind:'move',title:`构筑目标 · ${status.name}${status.ready?' · 已成形':''}`,detail:status.ready?'按配方条件触发 · 暂停可选择新目标':status.need};
     }
+    const tactic=!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')&&this.world.phase==='running'?lockshotGoal(this.world,this.save.achievements.tracked):null;
+    if(tactic&&(guide.kind==='move'||(guide.kind==='enemy'&&guide.title.startsWith('斜射'))))guide=tactic;
     if (guide.detail) {
       this.rect(44, 1150, 632, 106, '#081a25df');
       this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
@@ -1136,7 +1145,9 @@ export class CanvasRuntime {
       this.buttons.push({x,y:245,w:186,h:66,label:achievementGroups[group].name,action:`achievement-group:${group}`});
     }
     const ids=achievementGroups[this.achievementTab].ids as readonly string[];
-    const items=achievements.filter(a=>ids.includes(a.id)),compact=items.length>5,step=compact?108:130,height=compact?98:120;
+    const all=achievements.filter(a=>ids.includes(a.id)),paged=all.length>6,pages=paged?Math.ceil(all.length/4):1;
+    this.achievementPage=Math.max(0,Math.min(pages-1,this.achievementPage));
+    const items=paged?all.slice(this.achievementPage*4,this.achievementPage*4+4):all,compact=items.length>5,step=compact?108:130,height=compact?98:120;
     for(const [i,a] of items.entries()){
       const y=335+i*step,done=state.unlocked.includes(a.id),tracked=state.tracked===a.id;
       this.rect(65,y,590,height,done?'#263d43':tracked?'#203f52':'#142b39');if(tracked)this.rect(65,y,4,height,'#7fe4ff');
@@ -1144,6 +1155,14 @@ export class CanvasRuntime {
       this.text(done?this.achievementReturn==='result'&&this.runAchievements.includes(a.id)?'本局新达成':'已达成':tracked?'追踪中':'设为目标',635,y+(compact?24:29),22,done?'#ffdc8a':'#8bddf5','right');
       this.text(a.detail,85,y+(compact?52:66),compact?22:23,'#c6dce9','left');this.text(achievementProgress(a.id,state),85,y+(compact?80:100),compact?18:20,'#9fbccf','left');
       if(!done)this.buttons.push({x:65,y,w:590,h:height,label:`追踪${a.name}`,action:`track:${a.id}`});
+    }
+    if(paged){
+      this.text(`${this.achievementPage+1}/${pages}页`,360,920,23,'#bceeff');
+      for(const [offset,label,x] of [[-1,'上一页',85],[1,'下一页',475]] as const){
+        const page=this.achievementPage+offset;if(page<0||page>=pages)continue;
+        this.rect(x,889,160,62,'#21414b');this.text(label,x+80,920,24,'#d1e8ee');
+        this.buttons.push({x,y:889,w:160,h:62,label,action:offset<0?'achievement-page:previous':'achievement-page:next'});
+      }
     }
     const target=achievements.find(a=>a.id===state.tracked);
     this.text(target?`已追踪：${target.name}`:'点选未达成成就，设为下局目标',target?85:360,1025,23,'#bceeff',target?'left':'center');
@@ -1540,7 +1559,7 @@ export class CanvasRuntime {
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
-      lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
+      lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,

@@ -5,7 +5,7 @@ import {safeRoute} from '../src/core/reachability';import {awardAchievements,emp
 function setup(round=2,x=68){const w=new World(1337,round);w.player.x=w.player.px=x;const b=w.spawn('elite',360,360);b.pattern='intercept';b.timer=INTERCEPTOR.opening;b.dropGrace=SWARM.grace;return {w,b};}
 it('replaces at most one existing elite, retains first chapter and never scales its health to player growth',()=>{
  expect(timeline(1,1337).some(s=>s.pattern==='intercept')).toBe(false);
- for(let round=2;round<=12;round++){const list=timeline(round,1337),elite=list.filter(s=>s.kind==='elite'),variant=list.filter(s=>s.pattern==='intercept');expect(variant).toHaveLength(Math.min(1,elite.length));for(const s of variant){expect(s.drop).toBe(true);expect(s.dropY).toBe(360);}}
+ for(let round=2;round<=12;round++){const list=timeline(round,1337),elite=list.filter(s=>s.kind==='elite'),variant=list.filter(s=>s.pattern==='intercept');expect(variant).toHaveLength(Math.min(1,elite.filter(s=>s.pattern!=='sweep').length));for(const s of variant){expect(s.drop).toBe(true);expect(s.dropY).toBe(360);}}
  const low=setup().b,high=new World(1337,2);high.growth.mastery=100;high.growth.bonus=100;expect(high.spawn('elite',360,360).maxHp).toBe(low.maxHp);
 });
 it('uses complete local wing and core charges before distinct actual volleys',()=>{

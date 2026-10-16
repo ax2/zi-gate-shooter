@@ -1,0 +1,32 @@
+[
+  {
+    "opening": "pulse",
+    "round": 8,
+    "hp": 3,
+    "frames": 36000
+  },
+  {
+    "opening": "scatter",
+    "round": 8,
+    "hp": 3,
+    "frames": 36000
+  },
+  {
+    "opening": "pierce",
+    "round": 8,
+    "hp": 3,
+    "frames": 36000
+  },
+  {
+    "opening": "blast",
+    "round": 8,
+    "hp": 3,
+    "frames": 36000
+  },
+  {
+    "opening": "arc",
+    "round": 8,
+    "hp": 3,
+    "frames": 36000
+  }
+]

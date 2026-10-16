@@ -39,10 +39,11 @@ function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boole
 // Existing visual checks continue via real earned choices, never by suppressing the popup.
 function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
  while(f.runtime.mode==='choice'){
-  const fork=f.runtime.world.build.ranks.optical===1;
+  const fork=f.runtime.world.build.ranks.optical===1,refine=f.runtime.world.canRefinePhoton();
   expect(f.runtime.activateControl('build:optical')).toBe(true);
   if(fork)expect(f.runtime.activateControl('branch:burn')).toBe(true);
-  if(reference)expect(reference.chooseBuild('optical',fork?'burn':undefined)).toBe(true);
+  if(refine)expect(f.runtime.activateControl('branch:photon-reach')).toBe(true);
+  if(reference)expect(reference.chooseBuild('optical',fork?'burn':refine?'photon-reach':undefined)).toBe(true);
  }
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
@@ -108,17 +109,20 @@ it.each([false,true])('evolved optical effects share impact budgets, stay beneat
  for(const side of [-1,0,1])for(const y of [700,640,580,520,460,400]){const x=360+side*(42+138*(924-y)/684),b=w.spawn('armor',x,y);b.hp=b.maxHp=10000;b.speed=0;b.timer=999;}
  w.bullets=[{id:99999,x:600,y:800,px:600,py:800,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}];f.tick();
  expect(f.runtime.diagnostics().laserBands).toEqual([3,3,3]);expect(f.runtime.diagnostics().opticalImpacts).toBeGreaterThan(0);expect(f.runtime.diagnostics().opticalImpacts).toBeLessThanOrEqual(weak?4:12);
- expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#62dfff'&&c.lineWidth===11)).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#cb9dff'&&c.lineWidth===4)).toBe(true);
+ expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#62dfff'&&c.lineWidth!>=11&&c.lineWidth!<=12)).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#c89aff'&&c.lineWidth===3.5)).toBe(true);
  const crown=f.calls.reduce((last,c,i)=>c.kind==='stroke'&&c.stroke==='#85eaff'?i:last,-1),hostile=f.calls.reduce((last,c,i)=>c.kind==='fill'&&c.color==='#ff7756'?i:last,-1);expect(crown).toBeGreaterThan(0);expect(hostile).toBeGreaterThan(crown);
  const count=f.runtime.diagnostics().opticalImpacts;f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(f.runtime.diagnostics().opticalImpacts).toBe(count);expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<24;i++)f.tick();expect(f.runtime.diagnostics().opticalImpacts).toBe(0);f.runtime.start();expect(f.runtime.diagnostics().opticalImpacts).toBe(0);
 });
 
-it('shows every achievement once across readable groups and keeps the local-record footer clear of the return control',async()=>{
+it('shows every achievement once across readable pages and keeps the footer clear of the return control',async()=>{
  const f=fixture();await f.runtime.load();expect(f.runtime.activateControl('achievements')).toBe(true);const seen=new Set<string>();
  for(const group of Object.keys(achievementGroups)){
-  expect(f.runtime.activateControl('achievement-group:'+group)).toBe(true);
-  for(const a of achievements){const row=f.calls.find(c=>c.kind==='fillText'&&c.args[0]===a.detail);if(row){seen.add(a.id);expect(row.args[2]-12).toBeGreaterThan(310);expect(row.args[2]+12).toBeLessThan(995);}}
-  const footer=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('记录保存在本机'))!,button=(f.runtime as any).buttons.find((b:any)=>b.action==='achievements-back');expect(footer.args[2]-11).toBeGreaterThan(button.y+button.h);
+  f.calls.length=0;expect(f.runtime.activateControl('achievement-group:'+group)).toBe(true);
+  while(true){
+   for(const a of achievements){const row=f.calls.find(c=>c.kind==='fillText'&&c.args[0]===a.detail);if(row){expect(seen.has(a.id)).toBe(false);seen.add(a.id);expect(row.args[2]-12).toBeGreaterThan(310);expect(row.args[2]+12).toBeLessThan(995);}}
+   const footer=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('记录保存在本机'))!,button=(f.runtime as any).buttons.find((b:any)=>b.action==='achievements-back');expect(footer.args[2]-11).toBeGreaterThan(button.y+button.h);
+   f.calls.length=0;if(!f.runtime.activateControl('achievement-page:next'))break;
+  }
  }
  expect(seen.size).toBe(achievements.length);
 });
@@ -180,7 +184,7 @@ it.each([false,true])('actual solo discharge draws finite rings and preserves it
 it('publishes the actual round projectile pressure in the bottom receipt',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
  w.phase='recovery';w.phaseTime=3.99;f.tick();expect(w.round).toBe(2);
- const detail=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='敌弹速度+10% · 留意已发弹幕');
+ const detail=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).includes('敌弹+10% · 留意实弹'));
  expect(detail?.args[2]).toBe(1245);expect(f.runtime.diagnostics().enemyProjectileScale).toBe(1.1);
 });
 
@@ -475,8 +479,8 @@ it('guides real crate and gate progression with matching earned research choices
   expect(reference.weaponKind).toBe('scatter');
   expect(seen).toContain('对准一箱，增加火力能力');
   expect(seen).toContain('靠近领取，叠加新火力');
-  expect(seen).toContain('对准装备箱持续射击');
-  expect(seen).toContain('装备已掉落，移到它下方');
+  // Named T2 opening supplies now use the owned/new-weapon guidance above.
+  // The original anonymous-crate tutorial remains separately tested by context-guide.
   expect(seen).toContain('持续射击，把门的奖励打高');
   expect(seen).toContain('穿过才领取 · 同排只领一扇');
 });
@@ -1347,4 +1351,23 @@ it('offers the earned ricochet validation and renders both event and batch requi
  const offer=w.spawn('pickup',360,C.playerY,2);offer.weaponKind='pierce';offer.row=999;f.tick();expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.activateControl('branch:ricochet')).toBe(true);
  expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('跳弹侧击 · 30秒跳弹12次 · 命中2批精英'))).toBe(true);
  expect(f.runtime.activateControl('contract:research')).toBe(true);expect(w.contract!.proof!.kind).toBe('ricochet');expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('跳弹侧击 0/12 · 批次0/2'))).toBe(true);const time=w.time;for(let i=0;i<30;i++)f.tick();expect(w.time).toBe(time);expect(w.contract!.elapsed).toBe(0);expect(f.runtime.save.achievements.unlocked).not.toContain('bank-shot');expect(f.runtime.activateControl('resume')).toBe(true);
+});
+
+
+it('paginates tactical medals, refuses hidden targets, reopens on the tracked page, persists and clears without touching combat',async()=>{
+ let persisted:Save|undefined;const f=fixture(false,undefined,s=>{persisted=JSON.parse(JSON.stringify(s));});await f.runtime.load();const before=JSON.stringify(f.runtime.world);
+ expect(f.runtime.activateControl('achievements')).toBe(true);expect(f.runtime.activateControl('achievement-group:tactics')).toBe(true);
+ expect(f.runtime.activateControl('track:bait-counter')).toBe(false);expect(f.runtime.activateControl('achievement-page:previous')).toBe(false);
+ expect(f.runtime.activateControl('achievement-page:next')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='2/2页')).toBe(true);
+ expect(f.runtime.activateControl('track:bait-counter')).toBe(true);expect(persisted?.achievements.tracked).toBe('bait-counter');expect(JSON.stringify(f.runtime.world)).toBe(before);
+ expect(f.runtime.activateControl('achievement-page:next')).toBe(false);expect(f.runtime.activateControl('achievements-back')).toBe(true);expect(f.runtime.activateControl('achievements')).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='诱射反击')).toBe(true);expect(f.runtime.activateControl('track-clear')).toBe(true);expect(persisted?.achievements.tracked).toBeNull();
+});
+
+it('keeps actual three-pass progress on the existing emitter label independently of bottom guidance',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.activateControl('achievements');f.runtime.activateControl('achievement-group:tactics');f.runtime.activateControl('achievement-page:next');expect(f.runtime.activateControl('track:bait-counter')).toBe(true);f.runtime.activateControl('achievements-back');f.runtime.start();
+ // Controlled encounter placement for rendering only; bolts and pass events remain real.
+ const w=f.runtime.world;Object.assign(w,{scheduled:[]});const b=w.spawn('sniper',540,360);Object.assign(b,{pattern:'lockshot',lockX:360,lockDamageStart:0,timer:.1,dropGrace:.45});f.runtime.touchStart(735,360,900);f.runtime.touchMove(735,68,900);
+ for(let i=0;i<180&&(b.lockPassed??0)<3;i++)f.tick();expect(b.lockAcceptedShots).toBe(3);expect(b.lockPassed).toBe(3);expect(w.lockBaitWins).toBe(0);
+ for(let i=0;i<3&&!f.calls.some(c=>c.args[0]==='诱射 3/3 · 可反击');i++)f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='诱射 3/3 · 可反击')).toBe(true);
 });

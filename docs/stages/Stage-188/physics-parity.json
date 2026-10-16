@@ -1,0 +1,87 @@
+[
+  {
+    "opening": "pulse",
+    "seconds": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "frames": 36000,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "blast",
+      "arc"
+    ],
+    "score": 15840,
+    "physicalAndEffectHash": "8984dd93b537c0645b81b433d807eece77b77d6ab5b1eb7116e6483486fee124",
+    "comparison": "every fixed-step physical state and effect identical to e770d82"
+  },
+  {
+    "opening": "scatter",
+    "seconds": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "frames": 36000,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "score": 15945,
+    "physicalAndEffectHash": "0ae3a34520ffacf7034012a27379ceaa184501bf0a2b56763747485bb7fb72d5",
+    "comparison": "every fixed-step physical state and effect identical to e770d82"
+  },
+  {
+    "opening": "pierce",
+    "seconds": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "frames": 36000,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "arc",
+      "blast"
+    ],
+    "score": 15935,
+    "physicalAndEffectHash": "ee157dfda60dc3e497326aec247b313bbe31afa5aa257845b9da7b0341b67463",
+    "comparison": "every fixed-step physical state and effect identical to e770d82"
+  },
+  {
+    "opening": "blast",
+    "seconds": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "frames": 36000,
+    "weapons": [
+      "pulse",
+      "blast",
+      "scatter",
+      "arc",
+      "pierce"
+    ],
+    "score": 15915,
+    "physicalAndEffectHash": "0b12f6c365e684ed743755933871e5e74bf8699fc5278ead34b8d5ac579cbee3",
+    "comparison": "every fixed-step physical state and effect identical to e770d82"
+  },
+  {
+    "opening": "arc",
+    "seconds": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "frames": 36000,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "score": 15965,
+    "physicalAndEffectHash": "9283f461961b31bd3fe63536b73d18451aa0665cc18ef7a962fca92784fa0e6c",
+    "comparison": "every fixed-step physical state and effect identical to e770d82"
+  }
+]

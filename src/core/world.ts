@@ -43,7 +43,7 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;lockShots?:number;lockAcceptedShots?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot'; bossVariant?: number;
 }
 export interface Bullet {
@@ -59,6 +59,7 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
   interceptorBreaks=0;
+  lockPreemptWins=0;lockBaitWins=0;
   readonly build = new BuildTree();
   private firstEquipmentResearch=false;
   private firstArmoryResearch=false;
@@ -543,7 +544,7 @@ export class World {
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
           if(s.drop)this.dropSpawns++;
-          if(s.pattern==='lockshot')this.lockshotSpawns++;
+          if(s.pattern==='lockshot'){candidate.lockDamageStart=this.damageTaken;this.lockshotSpawns++;}
           if(s.dropNotice)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'突降机群',detail:'短暂投送屏障 · 群攻可快速清场'});
           if(s.dropLabel)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:s.dropLabel,detail:s.dropDetail??(s.kind==='guard'?'前盾后援 · 留意转火角度':s.kind==='sniper'?'两侧哨机 · 优先压制一翼':'装甲纵列 · 集中火力突破')});
         }
@@ -711,6 +712,17 @@ export class World {
           if (!bullet.active || this.player.hp <= 0) return;
           bullet.active = false; this.hurt('bullet');
         });
+        // A fired bolt is evaded only after it has cleared the entire player
+        // collision band. Queue this with damage/kill contacts: a same-time
+        // kill or hurt must resolve first, never manufacture a counter window.
+        const passY=C.playerY+40;
+        if(bullet.vy>0&&bullet.py<=passY&&bullet.y>passY){
+          const source=this.bodies.find(b=>b.active&&b.id===bullet.sourceId&&b.pattern==='lockshot');
+          if(source)add((passY-bullet.py)/(bullet.y-bullet.py),4,bullet.id,()=>{
+            if(bullet.active&&source.active&&this.player.hp>0&&!this.bossVictory)
+              source.lockPassed=Math.min(LOCKSHOT.shots,(source.lockPassed??0)+1);
+          });
+        }
       } else for (const body of this.bodies) {
         if (!body.active || body.kind === 'pickup' || (body.kind === 'boss' && this.phase !== 'boss')) continue;
         // Player shots end in the visible combat strip, below the HUD. Clip both
@@ -940,6 +952,10 @@ export class World {
       const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;pickup.openingSupply=b.openingSupply;
       this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
+      if(b.kind==='sniper'&&b.pattern==='lockshot'){
+        if(b.warning>0&&!(b.lockAcceptedShots??0))this.lockPreemptWins++;
+        if((b.lockAcceptedShots??0)===LOCKSHOT.shots&&(b.lockPassed??0)===LOCKSHOT.shots&&b.lockDamageStart===this.damageTaken)this.lockBaitWins++;
+      }
       if(b.dropGrace!==undefined)this.dropKills++;
       if(b.kind==='conduit')this.dischargeConduit(b);
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
