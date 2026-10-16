@@ -1,0 +1,24 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\boss-roster-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\boss-roster-routes.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\encounters.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\formation-priority.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\magnetic-field.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\magnetic-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\mobile-sentry-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\mobile-sentry.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\native-flow.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\rebound-charger.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\rebound-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\reward-window.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\rules.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\shooter-entry.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\supply-convoy.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\supply-pressure.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\sweeper-priority-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\sweeper-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\sweeper.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/magnetic-progression.test.mjs (1 test | 1 failed) 8533ms
+   × normally earns magnetic fields through three branch builds and measures real later entrants 8531ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/magnetic-progression.test.mjs:2 > normally earns magnetic fields through three branch builds and measures real later entrants
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/magnetic-progression.test.mjs:2:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 18 passed (19)
+      Tests  1 failed | 114 passed (115)
+   Start at  01:14:51
+   Duration  31.34s (tests 96%, import 2%, transform 2%)

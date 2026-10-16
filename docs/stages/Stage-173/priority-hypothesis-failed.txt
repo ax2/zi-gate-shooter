@@ -1,0 +1,23 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/sweeper-priority-progression.test.mjs --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/sweeper-priority-progression.test.mjs (1 test | 1 failed) 1738ms
+   × compares a normal supply pilot against deliberate escort suppression with actually earned rewards 1738ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/sweeper-priority-progression.test.mjs > compares a normal supply pilot against deliberate escort suppression with actually earned rewards
+AssertionError: expected 4 to be greater than 4
+ ❯ tests/sweeper-priority-progression.test.mjs:14:341
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  01:10:51
+   Duration  2.04s (tests 90%, transform 8%, import 2%)

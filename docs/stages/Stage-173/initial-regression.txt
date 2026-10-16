@@ -1,0 +1,67 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\boss-roster-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\boss-roster-routes.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\encounters.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\formation-priority.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\magnetic-field.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\magnetic-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\mobile-sentry-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\mobile-sentry.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\native-flow.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\rebound-charger.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\rebound-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\reward-window.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\rules.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\shooter-entry.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\supply-convoy.test.ts C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\supply-pressure.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\sweeper-priority-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\sweeper-progression.test.mjs C:\Users\ax2\Documents\Codex\2026-10-11\game-design-handoff-md-agents-md\zi-gate-shooter\tests\sweeper.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/sweeper.test.ts (13 tests | 6 failed) 3110ms
+   × keeps all five mixed crossing packs escapable without kills in R4 x68 407ms
+   × keeps all five mixed crossing packs escapable without kills in R4 x360 375ms
+   × keeps all five mixed crossing packs escapable without kills in R7 x68 277ms
+   × keeps all five mixed crossing packs escapable without kills in R7 x360 249ms
+   × keeps all five mixed crossing packs escapable without kills in R10 x68 282ms
+   × keeps all five mixed crossing packs escapable without kills in R10 x360 293ms
+ ❯ tests/encounters.test.ts (4 tests | 1 failed) 14ms
+   × retains growth windows and pre-boss breathing room across all nine combinations 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/encounters.test.ts:16 > retains growth windows and pre-boss breathing room across all nine combinations
+AssertionError: expected [ Array(7) ] to deeply equal [ Array(7) ]
+
+- Expected
++ Received
+
+@@ -35,10 +35,11 @@
+      "stage": undefined,
+      "x": 360,
+    },
+    {
+      "at": 48,
++     "convoy": true,
+      "kind": "armory",
+      "lane": undefined,
+      "pair": undefined,
+      "pattern": undefined,
+      "stage": 3,
+
+ ❯ tests/encounters.test.ts:21:33
+     19|  for(let round=1;round<=18;round++){
+     20|   const wave=timeline(round,1);
+     21|   expect(wave.filter(isReward)).toEqual(expected);
+       |                                 ^
+     22|   expect(wave.every(s=>s.at<69)).toBe(true);
+     23|   expect(wave).toEqual(timeline(round,1));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/sweeper.test.ts:18 > keeps all five mixed crossing packs escapable without kills in R4 x68
+ FAIL  tests/sweeper.test.ts:18 > keeps all five mixed crossing packs escapable without kills in R4 x360
+ FAIL  tests/sweeper.test.ts:18 > keeps all five mixed crossing packs escapable without kills in R7 x68
+ FAIL  tests/sweeper.test.ts:18 > keeps all five mixed crossing packs escapable without kills in R7 x360
+ FAIL  tests/sweeper.test.ts:18 > keeps all five mixed crossing packs escapable without kills in R10 x68
+ FAIL  tests/sweeper.test.ts:18 > keeps all five mixed crossing packs escapable without kills in R10 x360
+AssertionError: expected 0 to be greater than 0
+ ❯ tests/sweeper.test.ts:21:231
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+
+ Test Files  2 failed | 17 passed (19)
+      Tests  7 failed | 108 passed (115)
+   Start at  01:12:29
+   Duration  22.57s (tests 95%, import 3%, transform 2%)
+
+    Isolate  19 workers spawned · ~152ms startup each (spawn + environment, per file)
+             at least ~1.30s faster with isolate: false — reuses workers across files instead of one per file

@@ -1,6 +1,7 @@
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
+import {SWEEPER} from './sweeper';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -180,6 +181,12 @@ export function timeline(round: number, seed: number): Spawn[] {
     const guard=out.find(s=>s.at===50&&(s.kind==='sniper'||s.kind==='guard')&&s.pattern!=='relocate')
       ??out.find(s=>s.at===56&&(s.kind==='sniper'||s.kind==='guard')&&s.pattern!=='relocate');
     if(armory&&guard){armory.convoy=true;Object.assign(guard,{kind:'guard',at:SUPPLY_CONVOY.guardAt,x:360,pattern:'convoy',drop:true,dropY:SUPPLY_CONVOY.y,dropLabel:'补给护卫',dropDetail:'外侧补给二选一 · 中央盾卫驻守压制'});}
+  }
+  if(round>=4&&sector===0)for(const s of out)if(s.kind==='drone'&&s.at>=60){
+    const row=Math.round((s.at-62)/1.2),center=s.x===360,armored=!center&&((s.x<360)!==!!(row%2));
+    Object.assign(s,{kind:armored?(row%3===0?'elite':'armor'):'drone',at:58+row*2+(center?0:.2),drop:true,dropY:center?SWEEPER.centerY:(armored?SWEEPER.upperY:SWEEPER.lowerY),
+      pattern:center?undefined:'sweep',lane:center?undefined:720-s.x,
+      dropLabel:center&&row===0?'斜掠护航':undefined,dropDetail:center&&row===0?'护航横穿扇射 · 轻机分层斜掠 · 击破精英得充能':undefined});
   }
   return out.sort((a, b) => a.at - b.at);
 }

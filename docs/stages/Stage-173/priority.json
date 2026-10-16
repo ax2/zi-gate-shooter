@@ -1,0 +1,226 @@
+[
+  {
+    "priority": false,
+    "hp": 3,
+    "time": 369.99999999999216,
+    "start": {
+      "time": 306.76666666671633,
+      "hp": 3,
+      "gates": 15,
+      "pickups": 12,
+      "kills": 203,
+      "score": 7125,
+      "energy": 65,
+      "mastery": 9,
+      "bonus": 100
+    },
+    "end": {
+      "time": 320.7666666667036,
+      "hp": 3,
+      "gates": 16,
+      "pickups": 12,
+      "kills": 213,
+      "score": 7585,
+      "energy": 55,
+      "mastery": 10,
+      "bonus": 100
+    },
+    "sweepers": [
+      {
+        "id": 15497,
+        "kind": "elite",
+        "shots": 3,
+        "killed": true,
+        "move": 256,
+        "round": 4
+      },
+      {
+        "id": 15498,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 116,
+        "round": 4
+      },
+      {
+        "id": 15635,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 128,
+        "round": 4
+      },
+      {
+        "id": 15636,
+        "kind": "armor",
+        "shots": 3,
+        "killed": false,
+        "move": 320,
+        "round": 4
+      },
+      {
+        "id": 15772,
+        "kind": "armor",
+        "shots": 3,
+        "killed": true,
+        "move": 252,
+        "round": 4
+      },
+      {
+        "id": 15773,
+        "kind": "drone",
+        "shots": 0,
+        "killed": false,
+        "move": 320,
+        "round": 4
+      },
+      {
+        "id": 15909,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 140,
+        "round": 4
+      },
+      {
+        "id": 15910,
+        "kind": "elite",
+        "shots": 0,
+        "killed": true,
+        "move": 164,
+        "round": 4
+      },
+      {
+        "id": 16043,
+        "kind": "armor",
+        "shots": 3,
+        "killed": true,
+        "move": 320,
+        "round": 4
+      },
+      {
+        "id": 16044,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 148,
+        "round": 4
+      }
+    ],
+    "escortKills": 4,
+    "eliteKills": 2,
+    "shots": 12
+  },
+  {
+    "priority": true,
+    "hp": 3,
+    "time": 369.99999999999216,
+    "start": {
+      "time": 306.76666666671633,
+      "hp": 3,
+      "gates": 15,
+      "pickups": 12,
+      "kills": 203,
+      "score": 7125,
+      "energy": 65,
+      "mastery": 9,
+      "bonus": 100
+    },
+    "end": {
+      "time": 320.7666666667036,
+      "hp": 2,
+      "gates": 16,
+      "pickups": 12,
+      "kills": 216,
+      "score": 7625,
+      "energy": 55,
+      "mastery": 10,
+      "bonus": 100
+    },
+    "sweepers": [
+      {
+        "id": 15497,
+        "kind": "elite",
+        "shots": 3,
+        "killed": true,
+        "move": 200,
+        "round": 4
+      },
+      {
+        "id": 15498,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 112,
+        "round": 4
+      },
+      {
+        "id": 15635,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 120,
+        "round": 4
+      },
+      {
+        "id": 15636,
+        "kind": "armor",
+        "shots": 3,
+        "killed": true,
+        "move": 320,
+        "round": 4
+      },
+      {
+        "id": 15801,
+        "kind": "armor",
+        "shots": 3,
+        "killed": false,
+        "move": 320,
+        "round": 4
+      },
+      {
+        "id": 15802,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 184,
+        "round": 4
+      },
+      {
+        "id": 15939,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 120,
+        "round": 4
+      },
+      {
+        "id": 15940,
+        "kind": "elite",
+        "shots": 3,
+        "killed": true,
+        "move": 192,
+        "round": 4
+      },
+      {
+        "id": 16048,
+        "kind": "armor",
+        "shots": 0,
+        "killed": true,
+        "move": 164,
+        "round": 4
+      },
+      {
+        "id": 16049,
+        "kind": "drone",
+        "shots": 0,
+        "killed": true,
+        "move": 128,
+        "round": 4
+      }
+    ],
+    "escortKills": 4,
+    "eliteKills": 2,
+    "shots": 12
+  }
+]

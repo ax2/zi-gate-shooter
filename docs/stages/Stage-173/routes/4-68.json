@@ -1,0 +1,82 @@
+{
+  "round": 4,
+  "start": 68,
+  "time": 71.9999999999972,
+  "hp": 3,
+  "kills": 0,
+  "sweepers": [
+    {
+      "id": 565,
+      "lane": 520,
+      "move": 320,
+      "reached": true,
+      "shots": 3
+    },
+    {
+      "id": 566,
+      "lane": 200,
+      "move": 320,
+      "reached": true,
+      "shots": 0
+    },
+    {
+      "id": 595,
+      "lane": 520,
+      "move": 320,
+      "reached": true,
+      "shots": 0
+    },
+    {
+      "id": 596,
+      "lane": 200,
+      "move": 320,
+      "reached": true,
+      "shots": 3
+    },
+    {
+      "id": 614,
+      "lane": 520,
+      "move": 320,
+      "reached": true,
+      "shots": 3
+    },
+    {
+      "id": 615,
+      "lane": 200,
+      "move": 320,
+      "reached": true,
+      "shots": 0
+    },
+    {
+      "id": 639,
+      "lane": 520,
+      "move": 320,
+      "reached": true,
+      "shots": 0
+    },
+    {
+      "id": 640,
+      "lane": 200,
+      "move": 320,
+      "reached": true,
+      "shots": 3
+    },
+    {
+      "id": 661,
+      "lane": 520,
+      "move": 320,
+      "reached": true,
+      "shots": 3
+    },
+    {
+      "id": 662,
+      "lane": 200,
+      "move": 320,
+      "reached": true,
+      "shots": 0
+    }
+  ],
+  "emitted": 55,
+  "peakBodies": 23,
+  "peakBullets": 10
+}

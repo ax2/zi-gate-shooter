@@ -1,0 +1,61 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/sweeper.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/sweeper.test.ts (12 tests | 10 failed) 4901ms
+   × preserves all early/other chapters and every roster, reward and timing across 36 authored timelines 13ms
+   × keeps all four crossing packs escapable without kills in R4 x68 523ms
+   × keeps all four crossing packs escapable without kills in R4 x360 390ms
+   × keeps all four crossing packs escapable without kills in R4 x652 379ms
+   × keeps all four crossing packs escapable without kills in R7 x68 355ms
+   × keeps all four crossing packs escapable without kills in R7 x360 406ms
+   × keeps all four crossing packs escapable without kills in R7 x652 543ms
+   × keeps all four crossing packs escapable without kills in R10 x68 755ms
+   × keeps all four crossing packs escapable without kills in R10 x360 767ms
+   × keeps all four crossing packs escapable without kills in R10 x652 764ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/sweeper.test.ts > preserves all early/other chapters and every roster, reward and timing across 36 authored timelines
+AssertionError: expected [ …(10) ] to have a length of 8 but got 10
+
+- Expected
++ Received
+
+- 8
++ 10
+
+ ❯ tests/sweeper.test.ts:4:357
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R4 x68
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R4 x360
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R4 x652
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R7 x68
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R7 x360
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R7 x652
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R10 x68
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R10 x360
+ FAIL  tests/sweeper.test.ts > keeps all four crossing packs escapable without kills in R10 x652
+AssertionError: expected 10 to be 8 // Object.is equality
+
+- Expected
++ Received
+
+- 8
++ 10
+
+ ❯ tests/sweeper.test.ts:20:44
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  10 failed | 2 passed (12)
+   Start at  01:03:24
+   Duration  5.38s (tests 94%, transform 5%, import 1%)

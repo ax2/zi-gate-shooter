@@ -1,0 +1,17 @@
+{
+  "url": "http://127.0.0.1:5255/tools/visual-fixtures/sweeper.html",
+  "logs": [],
+  "virtualClock": true,
+  "isolatedSave": true,
+  "worldInjection": false,
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 900
+    }
+  ]
+}

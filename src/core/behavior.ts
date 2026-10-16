@@ -1,4 +1,5 @@
 import {SUPPLY_CONVOY} from './supply-convoy';
+import {SWEEPER,sweeperDirection} from './sweeper';
 import {REBOUND,reboundState} from './rebound-charger';
 import {BOSS_COUNTER,counterMuzzles,counterAttack} from './boss-counter';
 import { HUNTER } from './contracts';
@@ -156,6 +157,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       }
     }
   } else {
+    if(b.pattern==='sweep')b.x+=sweeperDirection(b)*Math.min(Math.abs(b.lane-b.x),SWEEPER.speed*dt);
     if (b.kind === 'drone' && b.pattern === 'weave') b.x = clamp(b.lane + Math.sin(b.age * 2) * 70, C.minX, C.maxX);
     if(b.kind==='elite'&&b.bountyRound!==undefined&&b.age<HUNTER.holdSeconds){if(b.y<HUNTER.hoverY)b.y=Math.min(HUNTER.hoverY,b.y+b.speed*dt);}
     else b.y += b.speed * dt;
@@ -163,7 +165,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       if (b.timer <= 1e-9 && !offline) {
         if (b.warning <= 0) { b.warning = 0.6; b.timer = 0.6; }
         else {
-          if (b.pattern === 'fan') for (const vx of b.kind === 'elite' && b.burst ? [-50, 0, 50] : [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);
+          if (b.pattern === 'fan'||b.pattern==='sweep') for (const vx of b.kind === 'elite' && b.burst ? [-50, 0, 50] : [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);
           else shot(b.x, b.y + b.height / 2);
           if (b.kind === 'elite' && b.pattern === 'fan' && !b.burst) {
             b.burst = 1; b.warning = 0.6; b.timer = 0.6;

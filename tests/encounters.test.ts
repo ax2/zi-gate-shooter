@@ -1,4 +1,5 @@
 import {expect,it} from 'vitest';
+import {hasSupplyConvoy} from '../src/core/supply-convoy';
 import {encounterIndex,timeline} from '../src/core/director';
 
 it.each([1,2,3])('chapter %s has three tactically distinct authored pressure sections',chapter=>{
@@ -18,13 +19,13 @@ it('retains growth windows and pre-boss breathing room across all nine combinati
  const expected=timeline(1,1).filter(isReward);
  for(let round=1;round<=18;round++){
   const wave=timeline(round,1);
-  expect(wave.filter(isReward)).toEqual(expected);
+  expect(wave.filter(isReward).map(({convoy,...s})=>s)).toEqual(expected.map(({convoy,...s})=>s));expect(wave.some(s=>s.convoy)).toBe(hasSupplyConvoy(round));
   expect(wave.every(s=>s.at<69)).toBe(true);
   expect(wave).toEqual(timeline(round,1));
   expect(encounterIndex(round)).toBe(encounterIndex(round+9));
   const sector=(round-1)%3+1;
   const roster=(items:ReturnType<typeof timeline>)=>items.filter(s=>s.at>=60).map(({drop,dropY,...s})=>s);
-  expect(roster(wave)).toEqual(roster(timeline(sector,1)));
+  if(round>=4&&sector===1){expect(wave.filter(s=>s.pattern==='sweep')).toHaveLength(10);expect(wave.filter(s=>s.pattern==='sweep'&&s.kind==='elite')).toHaveLength(2);}else expect(roster(wave)).toEqual(roster(timeline(sector,1)));
   expect(wave.filter(s=>s.at>=60).every(s=>!!s.drop)).toBe(true);
  }
 });

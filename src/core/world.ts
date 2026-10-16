@@ -1,3 +1,4 @@
+import {SWEEPER} from './sweeper';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {MAGNETIC,type MagneticField} from './magnetic-field';
 import {canLaserChain,LASER_CHAIN} from './laser-chain';
@@ -35,13 +36,13 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofGroup?:number;proofRound?:number;escort?:boolean;
-  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy'; bossVariant?: number;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofGroup?:number;proofRound?:number;escort?:boolean;
+  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
-  weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
+  sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
 export interface EffectEvent { fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
@@ -470,6 +471,7 @@ export class World {
           if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
+          if(s.pattern==='sweep'&&s.kind!=='drone')candidate.timer=SWEEPER.opening;
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
@@ -609,6 +611,7 @@ export class World {
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
+        if(b.pattern==='sweep'){b.sweeperShots=(b.sweeperShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
         if(b.pattern==='intercept'){
           if(b.burst)b.interceptCoreShots=(b.interceptCoreShots??0)+1;else b.interceptWingShots=(b.interceptWingShots??0)+1;
           b.interceptFiredAt=b.age;b.interceptFireBeat=b.burst?1:0;

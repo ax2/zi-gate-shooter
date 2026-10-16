@@ -1,5 +1,7 @@
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
 import {magneticLight} from './magnetic-light';
+import {sweeperDirection} from '../core/sweeper';
+import {sweeperLight} from './sweeper-light';
 import {ricochetLight} from './ricochet-light';
 import {reboundState} from '../core/rebound-charger';
 import {reboundLight} from './rebound-light';
@@ -749,17 +751,20 @@ export class CanvasRuntime {
         const height = b.kind === 'boss' ? BOSS_VISUAL.height : b.height * 1.55;
         if (b.kind === 'drone') {
           const frame = droneFrame(b.age), side = b.width * 1.65;
-          this.frameSprite('drone-v1.png', frame, 3, b.x, y, side, side, 1);
-          this.hitSprite('drone-v1.png', frame, 3, b.x, y, side, side, b.hit, 0.07, 1);
+          const direction=sweeperDirection(b),bank=direction*Math.min(1,b.age/.12,Math.abs(b.lane-b.x)/36);
+          c.save();c.translate(b.x,y);c.rotate(-bank*.14);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak');
+          this.frameSprite('drone-v1.png', frame, 3, 0, 0, side, side, 1);
+          this.hitSprite('drone-v1.png', frame, 3, 0, 0, side, side, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'charger') {
           const frame = chargerFrame(b), side = b.height * 1.35;
           const local=b.pattern==='rebound';c.save();if(local){c.translate(b.x,y);c.rotate(reboundState(b).direction*.14);}
           this.frameSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, 1);
           this.hitSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'armor') {
-          const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38;
-          this.frameSprite('armor-v1.png', frame, 3, b.x, y, width, height, 1);
-          this.hitSprite('armor-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+          const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
+          c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
+          this.frameSprite('armor-v1.png', frame, 3, 0, 0, width, height, 1);
+          this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);c.restore();
         } else if(b.kind==='conduit'){
           const bob=Math.sin(b.age*3)*2;
           this.frameSprite('conduit-v1.png',0,1,b.x,y+bob,150,165,1);this.hitSprite('conduit-v1.png',0,1,b.x,y+bob,150,165,b.hit,.07,1);
@@ -775,9 +780,10 @@ export class CanvasRuntime {
           this.frameSprite('sniper-v1.png', frame, 3, 0, 0, 140, 140, 1);
           this.hitSprite('sniper-v1.png', frame, 3, 0, 0, 140, 140, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'elite') {
-          const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36;
-          this.frameSprite('elite-v1.png', frame, 3, b.x, y, width, height, 1);
-          this.hitSprite('elite-v1.png', frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+          const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36,direction=sweeperDirection(b);
+          c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
+          this.frameSprite('elite-v1.png', frame, 3, 0, 0, width, height, 1);
+          this.hitSprite('elite-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);c.restore();
         } else {
           const frame = bossFrame(b), bossArt = b.bossVariant === 2 ? 'boss-bastion-v1.png' : b.bossVariant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png';
           this.frameSprite(bossArt, frame, 3, b.x, y, width, height, 1);
@@ -1419,6 +1425,7 @@ export class CanvasRuntime {
       laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
+      sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,

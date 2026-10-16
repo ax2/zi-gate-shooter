@@ -1,0 +1,15 @@
+import {it,expect} from 'vitest';import {mkdirSync,writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {C,clamp} from '../src/core/config';import {progressionTarget} from './helpers/progression-driver';import {dangerTimeline,safeRoute} from '../src/core/reachability';
+function escortAim(w){const target=w.bodies.filter(b=>b.active&&b.pattern==='sweep'&&b.kind!=='drone').sort((a,b)=>Number(b.kind==='elite')-Number(a.kind==='elite')||a.hp-b.hp)[0];if(!target)return progressionTarget(w);const x=w.player.x,next=x+clamp(target.x-x,-68,68),options={phase:w.phase,phaseTime:w.phaseTime};return dangerTimeline(w.bodies,w.bullets,1.5,options).some(row=>row.some(([lo,hi])=>Math.max(x,next)>=lo&&Math.min(x,next)<=hi))?(safeRoute(x,w.bodies,w.bullets,4,options)?.[0]??x):next;}
+it('compares a normal supply pilot against deliberate escort suppression with actually earned rewards',()=>{
+ const runs=[];for(const priority of [false,true]){const w=new World(1337);let aim=360,start=null,end=null;const seen=new Map();
+ for(let frame=0;frame<370*60&&w.phase!=='dead';frame++){
+  if(w.bossRewardRound!==null&&w.phase==='recovery'&&w.phaseTime>=C.bossLootReveal)w.claimBossReward('research');const a=w.build.available(w.buildPoints),r=a.includes('electric')&&w.build.ranks.electric<2?'electric':a.find(r=>w.build.ranks[r]<3)??a[0];if(r)w.chooseBuild(r,w.build.ranks[r]===1?r==='electric'?'spread':r==='ballistic'?'ricochet':'relay':undefined);
+  const snapshot=()=>({time:w.time,hp:w.player.hp,gates:w.gatesTaken,pickups:w.pickups,kills:w.kills,score:w.score,energy:w.growth.energy,mastery:w.growth.mastery??0,bonus:w.growth.bonus});
+  if(w.round===4&&w.roundTime>=58&&start===null)start=snapshot();if(start&&end===null&&(w.round!==4||w.phase!=='running'))end=snapshot();
+  if(frame%6===0)aim=priority&&w.round===4&&w.roundTime>=58&&w.phase==='running'?escortAim(w):progressionTarget(w);
+  const watched=w.bodies.filter(b=>b.pattern==='sweep');w.step(C.step,aim);w.drainEffects();
+  for(const b of [...watched,...w.bodies.filter(b=>b.pattern==='sweep')]){let e=seen.get(b.id);if(!e){e={id:b.id,kind:b.kind,shots:0,killed:false,move:0,round:w.round};seen.set(b.id,e);}e.shots=Math.max(e.shots,b.sweeperShots??0);e.killed||=b.hp<=0;e.move=Math.max(e.move,Math.abs(b.x-(720-b.lane)));}
+ }
+ runs.push({priority,hp:w.player.hp,time:w.time,start,end,sweepers:[...seen.values()],escortKills:[...seen.values()].filter(s=>s.killed&&s.kind!=='drone').length,eliteKills:[...seen.values()].filter(s=>s.killed&&s.kind==='elite').length,shots:[...seen.values()].reduce((n,s)=>n+s.shots,0)});}
+ mkdirSync('build/qa/Stage-173',{recursive:true});writeFileSync('build/qa/Stage-173/priority.json',JSON.stringify(runs,null,2));for(const r of runs){expect(r.hp).toBeGreaterThan(0);expect(r.time).toBeCloseTo(370,5);expect(r.sweepers).toHaveLength(10);expect(r.start).not.toBeNull();expect(r.end).not.toBeNull();}expect(runs[1].end.kills).toBeGreaterThan(runs[0].end.kills);expect(runs[1].end.hp).toBeLessThan(runs[0].end.hp);
+},60000);

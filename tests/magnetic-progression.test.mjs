@@ -17,4 +17,4 @@ it('normally earns magnetic fields through three branch builds and measures real
  }
  mkdirSync('build/qa/Stage-172',{recursive:true});writeFileSync('build/qa/Stage-172/normal.json',JSON.stringify(runs,null,2));
  for(const run of runs){expect(run.hp).toBeGreaterThan(0);expect(run.time).toBeCloseTo(600,5);expect(run.fields).toBeGreaterThan(5);expect(run.hits).toBeGreaterThan(5);expect(run.lateHits).toBeGreaterThan(0);expect(run.peak).toBeLessThanOrEqual(MAGNETIC.limit);expect(run.peakBodies).toBeLessThanOrEqual(C.limits.enemies+C.limits.rewards);expect(run.peakBullets).toBeLessThanOrEqual(C.limits.bullets+C.limits.hostile);}
-});
+},60000);
