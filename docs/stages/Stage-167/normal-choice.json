@@ -1,0 +1,2262 @@
+[
+  {
+    "mode": "early",
+    "time": 419.9999999999467,
+    "hp": 3,
+    "round": 6,
+    "shots": 3,
+    "beforeWave": {
+      "time": 297.55000000005805,
+      "hp": 3,
+      "playerX": 427.9999999999999,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "mastery": 9
+    },
+    "contacts": [],
+    "claims": [
+      {
+        "time": 302.70000000005336,
+        "roundTime": 52.66666666666496,
+        "x": 150,
+        "pickups": 12
+      }
+    ],
+    "samples": [
+      {
+        "time": 298.1166666667242,
+        "roundTime": 48.083333333331886,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.2166666667241,
+        "roundTime": 48.18333333333188,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.316666666724,
+        "roundTime": 48.283333333331875,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.4166666667239,
+        "roundTime": 48.38333333333187,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.51666666672384,
+        "roundTime": 48.48333333333186,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.61666666672375,
+        "roundTime": 48.58333333333186,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.71666666672365,
+        "roundTime": 48.68333333333185,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.81666666672356,
+        "roundTime": 48.783333333331846,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.9166666667235,
+        "roundTime": 48.88333333333184,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.0166666667234,
+        "roundTime": 48.983333333331835,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.1166666667233,
+        "roundTime": 49.08333333333183,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.2166666667232,
+        "roundTime": 49.183333333331824,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.3166666667231,
+        "roundTime": 49.28333333333182,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.416666666723,
+        "roundTime": 49.38333333333181,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.5166666667229,
+        "roundTime": 49.48333333333181,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.61666666672284,
+        "roundTime": 49.5833333333318,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.71666666672274,
+        "roundTime": 49.683333333331795,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.81666666672265,
+        "roundTime": 49.78333333333179,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.91666666672256,
+        "roundTime": 49.883333333331784,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.0166666667225,
+        "roundTime": 49.98333333333178,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.1166666667224,
+        "roundTime": 50.08333333333177,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.2166666667223,
+        "roundTime": 50.18333333333177,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.3166666667222,
+        "roundTime": 50.28333333333176,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.4166666667221,
+        "roundTime": 50.383333333331755,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.516666666722,
+        "roundTime": 50.48333333333175,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.6166666667219,
+        "roundTime": 50.583333333331744,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.71666666672184,
+        "roundTime": 50.68333333333174,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.81666666672174,
+        "roundTime": 50.78333333333173,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.91666666672165,
+        "roundTime": 50.88333333333173,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.01666666672156,
+        "roundTime": 50.98333333333172,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.11666666672147,
+        "roundTime": 51.083333333331716,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.2166666667214,
+        "roundTime": 51.18333333333171,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.3166666667213,
+        "roundTime": 51.283333333331704,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.4166666667212,
+        "roundTime": 51.3833333333317,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.5166666667211,
+        "roundTime": 51.48333333333169,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.616666666721,
+        "roundTime": 51.58333333333169,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.7166666667209,
+        "roundTime": 51.68333333333168,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.81666666672083,
+        "roundTime": 51.783333333331676,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.91666666672074,
+        "roundTime": 51.88333333333167,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.01666666672065,
+        "roundTime": 51.983333333331665,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.11666666672056,
+        "roundTime": 52.08333333333166,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.21666666672047,
+        "roundTime": 52.18333333333165,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.3166666667204,
+        "roundTime": 52.28333333333165,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.4166666667203,
+        "roundTime": 52.38333333333164,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.5166666667202,
+        "roundTime": 52.483333333331636,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.6166666667201,
+        "roundTime": 52.58333333333163,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.71666666672,
+        "roundTime": 52.683333333331625,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.8166666667199,
+        "roundTime": 52.78333333333162,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.91666666671983,
+        "roundTime": 52.88333333333161,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.01666666671974,
+        "roundTime": 52.98333333333161,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.11666666671965,
+        "roundTime": 53.0833333333316,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.21666666671956,
+        "roundTime": 53.183333333331596,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.31666666671947,
+        "roundTime": 53.28333333333159,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.4166666667194,
+        "roundTime": 53.383333333331585,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.5166666667193,
+        "roundTime": 53.48333333333158,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.6166666667192,
+        "roundTime": 53.583333333331574,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.7166666667191,
+        "roundTime": 53.68333333333157,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.816666666719,
+        "roundTime": 53.78333333333156,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.9166666667189,
+        "roundTime": 53.88333333333156,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 304.01666666671883,
+        "roundTime": 53.98333333333155,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      }
+    ]
+  },
+  {
+    "mode": "early-right",
+    "time": 419.9999999999467,
+    "hp": 3,
+    "round": 6,
+    "shots": 3,
+    "beforeWave": {
+      "time": 297.55000000005805,
+      "hp": 3,
+      "playerX": 427.9999999999999,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "mastery": 9
+    },
+    "contacts": [],
+    "claims": [
+      {
+        "time": 302.70000000005336,
+        "roundTime": 52.66666666666496,
+        "x": 570,
+        "pickups": 12
+      }
+    ],
+    "samples": [
+      {
+        "time": 298.1166666667242,
+        "roundTime": 48.083333333331886,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.2166666667241,
+        "roundTime": 48.18333333333188,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.316666666724,
+        "roundTime": 48.283333333331875,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.4166666667239,
+        "roundTime": 48.38333333333187,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.51666666672384,
+        "roundTime": 48.48333333333186,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.61666666672375,
+        "roundTime": 48.58333333333186,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.71666666672365,
+        "roundTime": 48.68333333333185,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.81666666672356,
+        "roundTime": 48.783333333331846,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.9166666667235,
+        "roundTime": 48.88333333333184,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.0166666667234,
+        "roundTime": 48.983333333331835,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.1166666667233,
+        "roundTime": 49.08333333333183,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.2166666667232,
+        "roundTime": 49.183333333331824,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.3166666667231,
+        "roundTime": 49.28333333333182,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.416666666723,
+        "roundTime": 49.38333333333181,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.5166666667229,
+        "roundTime": 49.48333333333181,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.61666666672284,
+        "roundTime": 49.5833333333318,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.71666666672274,
+        "roundTime": 49.683333333331795,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.81666666672265,
+        "roundTime": 49.78333333333179,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.91666666672256,
+        "roundTime": 49.883333333331784,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.0166666667225,
+        "roundTime": 49.98333333333178,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.1166666667224,
+        "roundTime": 50.08333333333177,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.2166666667223,
+        "roundTime": 50.18333333333177,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.3166666667222,
+        "roundTime": 50.28333333333176,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.4166666667221,
+        "roundTime": 50.383333333331755,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.516666666722,
+        "roundTime": 50.48333333333175,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.6166666667219,
+        "roundTime": 50.583333333331744,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.71666666672184,
+        "roundTime": 50.68333333333174,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.81666666672174,
+        "roundTime": 50.78333333333173,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.91666666672165,
+        "roundTime": 50.88333333333173,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.01666666672156,
+        "roundTime": 50.98333333333172,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.11666666672147,
+        "roundTime": 51.083333333331716,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.2166666667214,
+        "roundTime": 51.18333333333171,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.3166666667213,
+        "roundTime": 51.283333333331704,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.4166666667212,
+        "roundTime": 51.3833333333317,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.5166666667211,
+        "roundTime": 51.48333333333169,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.616666666721,
+        "roundTime": 51.58333333333169,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.7166666667209,
+        "roundTime": 51.68333333333168,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.81666666672083,
+        "roundTime": 51.783333333331676,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.91666666672074,
+        "roundTime": 51.88333333333167,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.01666666672065,
+        "roundTime": 51.983333333331665,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.11666666672056,
+        "roundTime": 52.08333333333166,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.21666666672047,
+        "roundTime": 52.18333333333165,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.3166666667204,
+        "roundTime": 52.28333333333165,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.4166666667203,
+        "roundTime": 52.38333333333164,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.5166666667202,
+        "roundTime": 52.483333333331636,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.6166666667201,
+        "roundTime": 52.58333333333163,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.71666666672,
+        "roundTime": 52.683333333331625,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.8166666667199,
+        "roundTime": 52.78333333333162,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.91666666671983,
+        "roundTime": 52.88333333333161,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.01666666671974,
+        "roundTime": 52.98333333333161,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.11666666671965,
+        "roundTime": 53.0833333333316,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.21666666671956,
+        "roundTime": 53.183333333331596,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.31666666671947,
+        "roundTime": 53.28333333333159,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.4166666667194,
+        "roundTime": 53.383333333331585,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.5166666667193,
+        "roundTime": 53.48333333333158,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.6166666667192,
+        "roundTime": 53.583333333331574,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.7166666667191,
+        "roundTime": 53.68333333333157,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.816666666719,
+        "roundTime": 53.78333333333156,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.9166666667189,
+        "roundTime": 53.88333333333156,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 304.01666666671883,
+        "roundTime": 53.98333333333155,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": true
+      }
+    ]
+  },
+  {
+    "mode": "late",
+    "time": 419.9999999999467,
+    "hp": 3,
+    "round": 6,
+    "shots": 3,
+    "beforeWave": {
+      "time": 297.55000000005805,
+      "hp": 3,
+      "playerX": 427.9999999999999,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "mastery": 9
+    },
+    "contacts": [
+      {
+        "time": 302.43333333338694,
+        "round": 4,
+        "roundTime": 52.39999999999831,
+        "x": 240.66666666666674,
+        "cause": "bullet",
+        "guardShotIds": [
+          14639
+        ],
+        "hp": 2
+      }
+    ],
+    "claims": [],
+    "samples": [
+      {
+        "time": 298.1166666667242,
+        "roundTime": 48.083333333331886,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.2166666667241,
+        "roundTime": 48.18333333333188,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.316666666724,
+        "roundTime": 48.283333333331875,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.4166666667239,
+        "roundTime": 48.38333333333187,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.51666666672384,
+        "roundTime": 48.48333333333186,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.61666666672375,
+        "roundTime": 48.58333333333186,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.71666666672365,
+        "roundTime": 48.68333333333185,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.81666666672356,
+        "roundTime": 48.783333333331846,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.9166666667235,
+        "roundTime": 48.88333333333184,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.0166666667234,
+        "roundTime": 48.983333333331835,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.1166666667233,
+        "roundTime": 49.08333333333183,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.2166666667232,
+        "roundTime": 49.183333333331824,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.3166666667231,
+        "roundTime": 49.28333333333182,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.416666666723,
+        "roundTime": 49.38333333333181,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.5166666667229,
+        "roundTime": 49.48333333333181,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.61666666672284,
+        "roundTime": 49.5833333333318,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.71666666672274,
+        "roundTime": 49.683333333331795,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.81666666672265,
+        "roundTime": 49.78333333333179,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.91666666672256,
+        "roundTime": 49.883333333331784,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.0166666667225,
+        "roundTime": 49.98333333333178,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.1166666667224,
+        "roundTime": 50.08333333333177,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.2166666667223,
+        "roundTime": 50.18333333333177,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.3166666667222,
+        "roundTime": 50.28333333333176,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.4166666667221,
+        "roundTime": 50.383333333331755,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.516666666722,
+        "roundTime": 50.48333333333175,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.6166666667219,
+        "roundTime": 50.583333333331744,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.71666666672184,
+        "roundTime": 50.68333333333174,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.81666666672174,
+        "roundTime": 50.78333333333173,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.91666666672165,
+        "roundTime": 50.88333333333173,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.01666666672156,
+        "roundTime": 50.98333333333172,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.11666666672147,
+        "roundTime": 51.083333333331716,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.2166666667214,
+        "roundTime": 51.18333333333171,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.3166666667213,
+        "roundTime": 51.283333333331704,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.4166666667212,
+        "roundTime": 51.3833333333317,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.5166666667211,
+        "roundTime": 51.48333333333169,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.616666666721,
+        "roundTime": 51.58333333333169,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.7166666667209,
+        "roundTime": 51.68333333333168,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.81666666672083,
+        "roundTime": 51.783333333331676,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.91666666672074,
+        "roundTime": 51.88333333333167,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.01666666672065,
+        "roundTime": 51.983333333331665,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.11666666672056,
+        "roundTime": 52.08333333333166,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.21666666672047,
+        "roundTime": 52.18333333333165,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.3166666667204,
+        "roundTime": 52.28333333333165,
+        "x": 161.33333333333334,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.4166666667203,
+        "roundTime": 52.38333333333164,
+        "x": 229.3333333333334,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.5166666667202,
+        "roundTime": 52.483333333331636,
+        "x": 297.33333333333337,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 302.6166666667201,
+        "roundTime": 52.58333333333163,
+        "x": 365.33333333333326,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 302.71666666672,
+        "roundTime": 52.683333333331625,
+        "x": 433.33333333333314,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 302.8166666667199,
+        "roundTime": 52.78333333333162,
+        "x": 501.33333333333303,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 302.91666666671983,
+        "roundTime": 52.88333333333161,
+        "x": 569.3333333333333,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.01666666671974,
+        "roundTime": 52.98333333333161,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.11666666671965,
+        "roundTime": 53.0833333333316,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.21666666671956,
+        "roundTime": 53.183333333331596,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.31666666671947,
+        "roundTime": 53.28333333333159,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.4166666667194,
+        "roundTime": 53.383333333331585,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.5166666667193,
+        "roundTime": 53.48333333333158,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.6166666667192,
+        "roundTime": 53.583333333331574,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.7166666667191,
+        "roundTime": 53.68333333333157,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.816666666719,
+        "roundTime": 53.78333333333156,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 303.9166666667189,
+        "roundTime": 53.88333333333156,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      },
+      {
+        "time": 304.01666666671883,
+        "roundTime": 53.98333333333155,
+        "x": 570,
+        "hp": 2,
+        "guardAlive": true
+      }
+    ]
+  },
+  {
+    "mode": "clear",
+    "time": 419.9999999999467,
+    "hp": 3,
+    "round": 6,
+    "shots": 0,
+    "beforeWave": {
+      "time": 297.55000000005805,
+      "hp": 3,
+      "playerX": 427.9999999999999,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "mastery": 9
+    },
+    "contacts": [],
+    "claims": [
+      {
+        "time": 302.70000000005336,
+        "roundTime": 52.66666666666496,
+        "x": 570,
+        "pickups": 12
+      }
+    ],
+    "samples": [
+      {
+        "time": 298.1166666667242,
+        "roundTime": 48.083333333331886,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.2166666667241,
+        "roundTime": 48.18333333333188,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.316666666724,
+        "roundTime": 48.283333333331875,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.4166666667239,
+        "roundTime": 48.38333333333187,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.51666666672384,
+        "roundTime": 48.48333333333186,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.61666666672375,
+        "roundTime": 48.58333333333186,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.71666666672365,
+        "roundTime": 48.68333333333185,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.81666666672356,
+        "roundTime": 48.783333333331846,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.9166666667235,
+        "roundTime": 48.88333333333184,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.0166666667234,
+        "roundTime": 48.983333333331835,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.1166666667233,
+        "roundTime": 49.08333333333183,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.2166666667232,
+        "roundTime": 49.183333333331824,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.3166666667231,
+        "roundTime": 49.28333333333182,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.416666666723,
+        "roundTime": 49.38333333333181,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.5166666667229,
+        "roundTime": 49.48333333333181,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.61666666672284,
+        "roundTime": 49.5833333333318,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.71666666672274,
+        "roundTime": 49.683333333331795,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.81666666672265,
+        "roundTime": 49.78333333333179,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.91666666672256,
+        "roundTime": 49.883333333331784,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.0166666667225,
+        "roundTime": 49.98333333333178,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.1166666667224,
+        "roundTime": 50.08333333333177,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.2166666667223,
+        "roundTime": 50.18333333333177,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.3166666667222,
+        "roundTime": 50.28333333333176,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.4166666667221,
+        "roundTime": 50.383333333331755,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.516666666722,
+        "roundTime": 50.48333333333175,
+        "x": 360,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.6166666667219,
+        "roundTime": 50.583333333331744,
+        "x": 371.3333333333333,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.71666666672184,
+        "roundTime": 50.68333333333174,
+        "x": 439.3333333333332,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.81666666672174,
+        "roundTime": 50.78333333333173,
+        "x": 507.3333333333331,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 300.91666666672165,
+        "roundTime": 50.88333333333173,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.01666666672156,
+        "roundTime": 50.98333333333172,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.11666666672147,
+        "roundTime": 51.083333333331716,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.2166666667214,
+        "roundTime": 51.18333333333171,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.3166666667213,
+        "roundTime": 51.283333333331704,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.4166666667212,
+        "roundTime": 51.3833333333317,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.5166666667211,
+        "roundTime": 51.48333333333169,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.616666666721,
+        "roundTime": 51.58333333333169,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.7166666667209,
+        "roundTime": 51.68333333333168,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.81666666672083,
+        "roundTime": 51.783333333331676,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 301.91666666672074,
+        "roundTime": 51.88333333333167,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.01666666672065,
+        "roundTime": 51.983333333331665,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.11666666672056,
+        "roundTime": 52.08333333333166,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.21666666672047,
+        "roundTime": 52.18333333333165,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.3166666667204,
+        "roundTime": 52.28333333333165,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.4166666667203,
+        "roundTime": 52.38333333333164,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.5166666667202,
+        "roundTime": 52.483333333331636,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.6166666667201,
+        "roundTime": 52.58333333333163,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.71666666672,
+        "roundTime": 52.683333333331625,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.8166666667199,
+        "roundTime": 52.78333333333162,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 302.91666666671983,
+        "roundTime": 52.88333333333161,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.01666666671974,
+        "roundTime": 52.98333333333161,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.11666666671965,
+        "roundTime": 53.0833333333316,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.21666666671956,
+        "roundTime": 53.183333333331596,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.31666666671947,
+        "roundTime": 53.28333333333159,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.4166666667194,
+        "roundTime": 53.383333333331585,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.5166666667193,
+        "roundTime": 53.48333333333158,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.6166666667192,
+        "roundTime": 53.583333333331574,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.7166666667191,
+        "roundTime": 53.68333333333157,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.816666666719,
+        "roundTime": 53.78333333333156,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 303.9166666667189,
+        "roundTime": 53.88333333333156,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 304.01666666671883,
+        "roundTime": 53.98333333333155,
+        "x": 570,
+        "hp": 3,
+        "guardAlive": false
+      }
+    ]
+  },
+  {
+    "mode": "forecast",
+    "time": 419.9999999999467,
+    "hp": 3,
+    "round": 6,
+    "shots": 3,
+    "beforeWave": {
+      "time": 297.55000000005805,
+      "hp": 3,
+      "playerX": 427.9999999999999,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "mastery": 9
+    },
+    "contacts": [],
+    "claims": [
+      {
+        "time": 302.70000000005336,
+        "roundTime": 52.66666666666496,
+        "x": 150,
+        "pickups": 12
+      }
+    ],
+    "samples": [
+      {
+        "time": 298.1166666667242,
+        "roundTime": 48.083333333331886,
+        "x": 416.6666666666666,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.2166666667241,
+        "roundTime": 48.18333333333188,
+        "x": 348.6666666666667,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.316666666724,
+        "roundTime": 48.283333333331875,
+        "x": 280.6666666666668,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.4166666667239,
+        "roundTime": 48.38333333333187,
+        "x": 212.6666666666668,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.51666666672384,
+        "roundTime": 48.48333333333186,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.61666666672375,
+        "roundTime": 48.58333333333186,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.71666666672365,
+        "roundTime": 48.68333333333185,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.81666666672356,
+        "roundTime": 48.783333333331846,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 298.9166666667235,
+        "roundTime": 48.88333333333184,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.0166666667234,
+        "roundTime": 48.983333333331835,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": false
+      },
+      {
+        "time": 299.1166666667233,
+        "roundTime": 49.08333333333183,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.2166666667232,
+        "roundTime": 49.183333333331824,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.3166666667231,
+        "roundTime": 49.28333333333182,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.416666666723,
+        "roundTime": 49.38333333333181,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.5166666667229,
+        "roundTime": 49.48333333333181,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.61666666672284,
+        "roundTime": 49.5833333333318,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.71666666672274,
+        "roundTime": 49.683333333331795,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.81666666672265,
+        "roundTime": 49.78333333333179,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 299.91666666672256,
+        "roundTime": 49.883333333331784,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.0166666667225,
+        "roundTime": 49.98333333333178,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.1166666667224,
+        "roundTime": 50.08333333333177,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.2166666667223,
+        "roundTime": 50.18333333333177,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.3166666667222,
+        "roundTime": 50.28333333333176,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.4166666667221,
+        "roundTime": 50.383333333331755,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.516666666722,
+        "roundTime": 50.48333333333175,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.6166666667219,
+        "roundTime": 50.583333333331744,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.71666666672184,
+        "roundTime": 50.68333333333174,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.81666666672174,
+        "roundTime": 50.78333333333173,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 300.91666666672165,
+        "roundTime": 50.88333333333173,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.01666666672156,
+        "roundTime": 50.98333333333172,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.11666666672147,
+        "roundTime": 51.083333333331716,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.2166666667214,
+        "roundTime": 51.18333333333171,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.3166666667213,
+        "roundTime": 51.283333333331704,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.4166666667212,
+        "roundTime": 51.3833333333317,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.5166666667211,
+        "roundTime": 51.48333333333169,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.616666666721,
+        "roundTime": 51.58333333333169,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.7166666667209,
+        "roundTime": 51.68333333333168,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.81666666672083,
+        "roundTime": 51.783333333331676,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 301.91666666672074,
+        "roundTime": 51.88333333333167,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.01666666672065,
+        "roundTime": 51.983333333331665,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.11666666672056,
+        "roundTime": 52.08333333333166,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.21666666672047,
+        "roundTime": 52.18333333333165,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.3166666667204,
+        "roundTime": 52.28333333333165,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.4166666667203,
+        "roundTime": 52.38333333333164,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.5166666667202,
+        "roundTime": 52.483333333331636,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.6166666667201,
+        "roundTime": 52.58333333333163,
+        "x": 150,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.71666666672,
+        "roundTime": 52.683333333331625,
+        "x": 161.33333333333334,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.8166666667199,
+        "roundTime": 52.78333333333162,
+        "x": 229.33333333333334,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 302.91666666671983,
+        "roundTime": 52.88333333333161,
+        "x": 297.3333333333333,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.01666666671974,
+        "roundTime": 52.98333333333161,
+        "x": 365.3333333333332,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.11666666671965,
+        "roundTime": 53.0833333333316,
+        "x": 433.3333333333331,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.21666666671956,
+        "roundTime": 53.183333333331596,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.31666666671947,
+        "roundTime": 53.28333333333159,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.4166666667194,
+        "roundTime": 53.383333333331585,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.5166666667193,
+        "roundTime": 53.48333333333158,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.6166666667192,
+        "roundTime": 53.583333333331574,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.7166666667191,
+        "roundTime": 53.68333333333157,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.816666666719,
+        "roundTime": 53.78333333333156,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 303.9166666667189,
+        "roundTime": 53.88333333333156,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      },
+      {
+        "time": 304.01666666671883,
+        "roundTime": 53.98333333333155,
+        "x": 500,
+        "hp": 3,
+        "guardAlive": true
+      }
+    ]
+  }
+]

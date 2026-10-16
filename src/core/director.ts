@@ -1,5 +1,6 @@
+import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound'; lane?: number; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -172,6 +173,13 @@ export function timeline(round: number, seed: number): Spawn[] {
   if(round>1){
     const charger=out.filter(s=>s.kind==='charger'&&s.drop).sort((a,b)=>a.at-b.at)[0];
     if(charger)Object.assign(charger,{pattern:'rebound',lane:charger.x<360?480:240,dropLabel:'折返冲锋',dropDetail:'内切冲刺 · 再蓄能折返 · 注意机体转向'});
+  }
+  if(hasSupplyConvoy(round)){
+    const armory=out.find(s=>s.kind==='armory'&&s.at===SUPPLY_CONVOY.armoryAt);
+    // Keep the chapter's mobile sentry; use the other late pressure gun if needed.
+    const guard=out.find(s=>s.at===50&&(s.kind==='sniper'||s.kind==='guard')&&s.pattern!=='relocate')
+      ??out.find(s=>s.at===56&&(s.kind==='sniper'||s.kind==='guard')&&s.pattern!=='relocate');
+    if(armory&&guard){armory.convoy=true;Object.assign(guard,{kind:'guard',at:SUPPLY_CONVOY.guardAt,x:360,pattern:'convoy',drop:true,dropY:SUPPLY_CONVOY.y,dropLabel:'补给护卫',dropDetail:'外侧补给二选一 · 中央盾卫驻守压制'});}
   }
   return out.sort((a, b) => a.at - b.at);
 }

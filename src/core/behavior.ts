@@ -1,3 +1,4 @@
+import {SUPPLY_CONVOY} from './supply-convoy';
 import {REBOUND,reboundState} from './rebound-charger';
 import {BOSS_COUNTER,counterMuzzles,counterAttack} from './boss-counter';
 import { HUNTER } from './contracts';
@@ -97,7 +98,8 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       }
     }
   } else if (b.kind === 'guard') {
-    if(b.escort&&b.age<ESCORT.holdSeconds){if(b.y<ESCORT.hoverY)b.y=Math.min(ESCORT.hoverY,b.y+b.speed*dt);}
+    if(b.pattern==='convoy'&&b.age<SUPPLY_CONVOY.hold){if(b.y<SUPPLY_CONVOY.y)b.y=Math.min(SUPPLY_CONVOY.y,b.y+b.speed*dt);}
+    else if(b.escort&&b.age<ESCORT.holdSeconds){if(b.y<ESCORT.hoverY)b.y=Math.min(ESCORT.hoverY,b.y+b.speed*dt);}
     else b.y += b.speed * dt;
     if (b.y >= 650) { b.warning = 0; b.burst = 0; }
     else if (b.y > 0 && b.timer <= 1e-9 && !offline) {

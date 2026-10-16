@@ -1,0 +1,38 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/supply-convoy.test.ts tests/supply-pressure.test.mjs tests/supply-choice-progression.test.mjs tests/swarm-routes.test.ts tests/explosion-render.test.ts tests/rules.test.ts tests/formation-readability.test.ts tests/rebound-charger.test.ts tests/interceptor.test.ts tests/recipe-goal.test.ts tests/native-flow.test.ts tests/build-proof-progression.test.mjs --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (136 tests | 1 failed) 4144ms
+   × guides the selected reward weapon rather than the unchanged main gun 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > guides the selected reward weapon rather than the unchanged main gun
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:986:71
+    984|  f.runtime.touchStart(1,360,590);f.runtime.touchEnd(1,360,590);f.tick(…
+    985|  expect(f.runtime.world.weaponKind).toBe('pulse');expect(f.runtime.wor…
+    986|  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='霰射炮 · T2')).…
+       |                                                                       ^
+    987| });
+    988| it('separates frame scheduling gaps from callback work without advanci…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 11 passed (12)
+      Tests  1 failed | 178 passed (179)
+   Start at  22:58:24
+   Duration  13.98s (tests 93%, transform 4%, import 3%, worker 1%)
+
+    Isolate  12 workers spawned · ~274ms startup each (spawn + environment, per file)
+             at least ~1.37s faster with isolate: false — reuses workers across files instead of one per file

@@ -1,0 +1,30 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/explosion-render.test.ts -t guides the selected reward weapon --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (136 tests | 1 failed | 135 skipped) 32ms
+   × guides the selected reward weapon rather than the unchanged main gun 30ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > guides the selected reward weapon rather than the unchanged main gun
+AssertionError: {"mode":"playing","phase":"running","time":0.03333333333333333,"feedback":{"title":"霰射炮 · 升至T2","detail":"其他配件与已有火力保留","until":4.016666666666667,"combo":false,"observedAt":0.03333333333333333,"hidden":false},"location":1180,"notice":"契约完成 · 选择强化奖励","noticeY":277,"achievementUntil":0,"guideUntil":5.016666666666667,"guideKind":"scatter","bodies":[{"kind":"drone","x":200,"y":185.66666666666669}],"text":["分数","000000","◈ ◈ ◈ ","Ⅱ","T1 · 2种武器叠加","火力 +10%","1轮·突围走廊","充能 0/100 · 满100：本局火力+10% / 超载6秒","霰射炮 · 升至T2","其他配件与已有火力保留"]}: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:986:597
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 135 skipped (136)
+   Start at  23:03:15
+   Duration  819ms (transform 77%, import 17%, tests 5%, worker 1%)

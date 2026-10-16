@@ -1285,3 +1285,24 @@ it.each([false,true])('rebound intent is local, uses original detailed charge po
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返冲锋：看清第二次转向')).toBe(true);
  f.runtime.pause();f.tick();const age=b.age,x=b.x,y=b.y;for(let i=0;i<30;i++)f.tick();expect([b.age,b.x,b.y]).toEqual([age,x,y]);f.runtime.start();f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返·再蓄能')).toBe(false);
 });
+
+
+it('keeps pickup names inside the viewport and legible over fire while actual hostile bullets stay above the label',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world,p=w.spawn('pickup',68,600,2);p.weaponKind='arc';
+ w.bullets.push({id:99999,x:128,y:548,px:128,py:548,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});f.tick();
+ const plate=f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#0b1723f7'),label=f.calls.findIndex(c=>c.kind==='fillText'&&c.args[0]==='拾取叠加电弧炮'),bullet=f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ffead7');
+ expect(plate).toBeGreaterThanOrEqual(0);expect(label).toBeGreaterThan(plate);expect(bullet).toBeGreaterThan(label);expect(f.calls[plate].args[0]).toBe(12);expect(f.calls[plate].args[2]).toBe(232);expect(f.calls[label].args[1]).toBe(128);
+ const enemy=w.spawn('drone',128,550);enemy.hp=enemy.maxHp=1000;enemy.speed=0;f.tick();expect(f.calls.some(c=>c.kind==='fillRect'&&c.color==='#0b1723f7')).toBe(false);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='拾取叠加电弧炮')).toBe(true);
+});
+
+
+it('routes an actual calibration pickup through readable combat receipts instead of covering a charging enemy',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ w.spawn('pickup',360,C.playerY,2);f.tick();resolveResearch(f);
+ const install=w.spawn('pickup',360,C.playerY,3);install.weaponKind='scatter';f.tick();
+ const enemy=w.spawn('charger',500,320);enemy.pattern='rebound';enemy.reboundOrigin=500;enemy.lane=240;enemy.age=.5;enemy.hp=enemy.maxHp=1000;
+ const refit=w.spawn('pickup',360,C.playerY,3);refit.weaponKind='scatter';refit.refit=true;f.tick();
+ expect(w.refitsClaimed).toBe(1);expect(w.weaponCalibration('scatter')).toBe(1);expect(f.runtime.mode).toBe('playing');
+ const receipt=()=>f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='霰射炮 · 专属精校1');expect(receipt()).toBeUndefined();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返冲锋：看清第二次转向')).toBe(true);
+ enemy.active=false;f.tick();expect(receipt()?.args[2]).toBe(272);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='该武器伤害系数 150%')).toBe(true);
+});

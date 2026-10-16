@@ -1,3 +1,4 @@
+import {SUPPLY_CONVOY} from './supply-convoy';
 import {canLaserChain,LASER_CHAIN} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,type BuildProof} from './build-proof';
@@ -34,7 +35,7 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;escort?:boolean;
-  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound'; bossVariant?: number;
+  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
@@ -413,7 +414,7 @@ export class World {
           const choices: WeaponKind[][] = this.round > 3 ? [['arc', 'scatter'], ['blast', 'pierce'], ['pulse', 'arc']] : [['scatter', 'pierce'], ['blast', 'arc'], ['pulse', 'blast']];
           const chapterChoices = choices[sectorIndex(this.round)];
           const offered = armoryChoices(this.activeWeapons, chapterChoices,this.round>1?refitFocus(this.activeWeapons,this.weaponKind,this.build.ranks):undefined);
-          const crates = [222, 498].map((x, i) => { const offer=offered[i],stage=offer.refit?Math.min(3,this.weaponStage(offer.kind)+1):Math.max(2,s.stage??2,this.growth.stage);
+          const crates = (s.convoy?SUPPLY_CONVOY.lanes:[222,498]).map((x, i) => { const offer=offered[i],stage=offer.refit?Math.min(3,this.weaponStage(offer.kind)+1):Math.max(2,s.stage??2,this.growth.stage);
             const b = this.spawn('crate', x, 180, stage); b.row = row; b.weaponKind = offer.kind;b.refit=offer.refit; return b; });
           if (!this.admit(crates[0])) { for (const b of crates) b.active = false; this.scheduleIndex--; break; }
         } else if (s.kind === 'gates') {

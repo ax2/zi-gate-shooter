@@ -32,6 +32,7 @@ export function contextGuide(world: Context): Guide {
     return { kind: 'enemy', title: '狙击蓄能：保持横向移动', detail: '也可抢先击毁 · 命中不会打断蓄能' };
   if (visible.some(b => b.kind === 'guard' && b.warning > 0))
     return { kind: 'enemy', title: '盾卫开盾：避开扇形弹道', detail: '弱点已暴露 · 趁开盾集中火力' };
+  if(visible.some(b=>b.pattern==='convoy'))return {kind:'enemy',title:'补给护卫：尽早决定外侧路线',detail:'可集火击毁或等弱点暴露 · 留意实际扇形弹幕'};
   const equipment = visible.filter(b => b.weaponKind && (b.kind === 'pickup' || b.kind === 'crate'));
   if(equipment.some(b=>b.refit))return {kind:equipment.some(b=>b.refit&&b.kind==='pickup')?'pickup':'crate',
     title:equipment.some(b=>!b.refit&&!world.activeWeapons.includes(b.weaponKind!))?'补给取舍：扩展火力或改装核心':'配件改装：选择强化已有配件',detail:'同排只领一件 · 直伤不计超载与派生'};

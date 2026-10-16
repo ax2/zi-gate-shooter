@@ -505,7 +505,10 @@ export class CanvasRuntime {
     if (e.type === 'weapon' || e.type === 'upgrade') {this.weaponGuideUntil = this.world.time + 5;this.weaponGuideKind=e.weaponKind??this.world.weaponKind;}
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
-    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') this.notify(e.text, e.type === 'victory' ? 820 : 277, e.detail);
+    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') {
+      if(e.type==='upgrade')this.buildFeedback={title:e.text,detail:e.detail??'',until:this.world.time+4,combo:false};
+      else this.notify(e.text,e.type==='victory'?820:277,e.detail);
+    }
     if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
     const explosion = ['ion-storm','scatter-burst', 'capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
@@ -899,7 +902,16 @@ export class CanvasRuntime {
           this.text(`T${b.stage} ${w.weaponStage(w.weaponKind) >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
           this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
         }
-      } else if (b.kind === 'pickup') this.text((recipeSupplyMatch(w,this.save.recipeGoal,b)?'目标·':'')+(b.weaponKind ? `拾取${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`), b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
+      } else if (b.kind === 'pickup') {
+        const target=recipeSupplyMatch(w,this.save.recipeGoal,b),width=target?264:232,x=clamp(b.x,width/2+12,720-width/2-12);
+        // Keep the real reward readable over friendly fire; hostile shots are
+        // still drawn after every native label and panel below.
+        const behindEnemy=w.bodies.some(other=>other.active&&other.kind in C.enemies
+          &&Math.abs(x-other.x)<width/2+Math.max(80,other.width*.85)
+          &&Math.abs(b.y-54-other.y)<20+Math.max(84,other.height*.8)+40);
+        if(!behindEnemy)this.rect(x-width/2,b.y-74,width,40,'#0b1723f7');
+        this.text((target?'目标·':'')+(b.weaponKind ? `拾取${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`),x,b.y-54,24,'#ffe7b1','center',true);
+      }
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy, b.rewardKind), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
@@ -920,7 +932,7 @@ export class CanvasRuntime {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#8bdce9');this.text('停火',b.x,b.y-b.height/2-34,22,'#b5f4ff','center',true);
       } else if (b.kind === 'guard') {
         this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
-        this.text(b.burst ? '弱点暴露' : b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
+        this.text(b.burst ? '弱点暴露' : b.pattern==='convoy'?'补给护卫':b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
       } else if(b.kind==='conduit'){
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text('中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
       } else if(b.pattern==='rebound'){
@@ -986,7 +998,8 @@ export class CanvasRuntime {
     const combat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     // A current instruction (break, collect, cross, or dodge) wins the shared
     // bottom area. Keep the earned receipt queued until it has its own space.
-    if(position===1180&&!combat&&contextGuide(w).kind!=='move')return null;
+    const guide=contextGuide(w),weaponBrief=guide.kind==='move'&&w.phase==='running'&&w.time<this.weaponGuideUntil;
+    if(position===1180&&!combat&&(guide.kind!=='move'||weaponBrief))return null;
     return position;
   }
   private drawGuide() {
@@ -994,7 +1007,8 @@ export class CanvasRuntime {
     const receiptThreat=this.world.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     if(this.world.time<this.achievementUntil)return;
     if(this.buildFeedback&&this.world.time<this.buildFeedback.until&&this.buildReceiptLocation()===1180)return;
-    if(this.notice&&(this.noticeY===1195||receiptThreat)&&this.platform.now()<this.noticeUntil)return;
+    const activeReceipt=this.buildFeedback&&this.world.time<this.buildFeedback.until;
+    if(!activeReceipt&&this.notice&&(this.noticeY===1195||receiptThreat)&&this.platform.now()<this.noticeUntil)return;
     // Optional help is below all entities, effects, projectiles and native labels.
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.

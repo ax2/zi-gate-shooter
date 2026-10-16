@@ -1,0 +1,33 @@
+{
+  "url": "http://127.0.0.1:5251/tools/visual-fixtures/supply-convoy.html",
+  "virtualClock": true,
+  "normalEarnedGrowth": true,
+  "worldInjection": false,
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "quality": "standard",
+      "flows": [
+        "actual-pressure",
+        "actual-outcome early HP3 claim1",
+        "actual-outcome late HP2 claim0 source guard bullet",
+        "same earned upgrade receipt restored"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "quality": "weak",
+      "capture": "pressure-mobile-weak.jpg"
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "quality": "weak",
+      "capture": "pressure-desktop-weak.jpg"
+    }
+  ],
+  "dom": "- text: 正常成长 / 受控选择对照 / 虚拟时钟\n- text: 两次均正常获取装备；特意晚换边不是人类难度模型\n- button \"提前选左\"\n- button \"提前选右\"\n- button \"先清护卫\"\n- button \"临近拾取换边\"\n- button \"查看选择结果\" [disabled]\n- button \"观察升级回执恢复\" [disabled]\n- button \"切换弱特效\"\n- generic: 304.70秒 / 第4轮55.20 / HP3 / actual-upgrade-receipt",
+  "logs": []
+}

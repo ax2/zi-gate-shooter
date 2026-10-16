@@ -1,0 +1,47 @@
+[
+  {
+    "file": "screenshots/early-outcome-final-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/first-early-outcome-mobile-weak.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/first-pressure-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/late-outcome-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/pressure-desktop-weak.jpg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "screenshots/pressure-final-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/pressure-mobile-weak.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/pressure-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/receipt-restored-mobile.jpg",
+    "width": 390,
+    "height": 843
+  }
+]
