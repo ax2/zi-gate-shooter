@@ -56,6 +56,17 @@ it.each([false,true])('real photon damage has bounded visible light, freezes on 
  expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().laserArcBeams).toBe(0);
  f.runtime.start();expect(f.runtime.diagnostics().laserArcBeams).toBe(0);expect(f.runtime.world.laserChainReady).toBe(false);
 });
+it.each([false,true])('actual solo discharge draws finite rings and preserves its distinct counter through menus (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ w.growth.mastery=4;for(let i=0;i<4;i++)w.chooseBuild('optical');w.phase='recovery';const pickup=w.spawn('pickup',360,C.playerY,2);pickup.weaponKind='arc';f.tick();resolveResearch(f);w.phase='boss';
+ const a=w.spawn('armor',360,600);a.hp=a.maxHp=10000;a.speed=0;a.timer=999;f.tick();expect(w.laserFocusHits).toBe(1);expect(w.laserArcHits).toBe(0);expect(f.runtime.diagnostics().laserFocusBeams).toBe(1);expect(f.runtime.diagnostics().laserArcBeams).toBe(0);
+ expect(f.calls.some(c=>c.kind==='ellipse'&&c.composite==='lighter'&&c.stroke==='#83eaff')).toBe(true);
+ f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(f.runtime.diagnostics().laserFocusBeams).toBe(1);
+ expect(f.runtime.activateControl('loadout')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('聚能80%'))).toBe(true);
+ expect(f.runtime.activateControl('combos')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('聚能 1次'))).toBe(true);
+ expect(f.runtime.activateControl('combos-back')).toBe(true);expect(f.runtime.activateControl('loadout-back')).toBe(true);expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<24;i++)f.tick();expect(f.runtime.diagnostics().laserFocusBeams).toBe(0);
+ f.runtime.start();expect(f.runtime.world.laserFocusHits).toBe(0);expect(f.runtime.diagnostics().laserFocusBeams).toBe(0);
+});
 
 it('publishes the actual round projectile pressure in the bottom receipt',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;

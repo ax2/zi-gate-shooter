@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/laser-chain.test.ts tests/laser-chain-progression.test.mjs tests/build-proof-progression.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/laser-chain.test.ts (12 tests | 1 failed) 30ms
+   × stored payload waits through lone or protected arc contacts and does not count harmless flashes 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/laser-chain.test.ts > stored payload waits through lone or protected arc contacts and does not count harmless flashes
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/laser-chain.test.ts:52:97
+     50|  expect(impact().some(e=>e.type==='laser-arc')).toBe(false);expect(b.h…
+     51|  a.burst=1;a.dropGrace=1;expect(impact().some(e=>e.type==='laser-arc')…
+     52|  b.active=false;a.dropGrace=0;impact();expect(w.laserArcHits).toBe(0);…
+       |                                                                                                 ^
+     53| });
+     54|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 13 passed (14)
+   Start at  11:26:52
+   Duration  3.21s (tests 85%, transform 11%, import 4%)

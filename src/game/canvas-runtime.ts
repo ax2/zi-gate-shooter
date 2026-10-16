@@ -20,7 +20,7 @@ import { mountedRig } from './mounted-rig';
 import { contracts, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
 import { tree, routes, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
-import { overloadWake, coilDischarge, chainArc, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
+import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
@@ -90,7 +90,7 @@ export class CanvasRuntime {
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
-  private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean}[] = [];
+  private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
   private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean}[] = [];
   private destruction?: BossDestruction;
@@ -453,6 +453,11 @@ export class CanvasRuntime {
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser',prism:e.prism});
       return;
     }
+    if(e.type==='laser-focus'){
+      if(this.arcs.length>=12){const index=this.arcs.findIndex(a=>!a.photon);this.arcs.splice(index<0?0:index,1);}
+      this.arcs.push({x:e.x,y:e.y,tx:e.x,ty:e.y,life:.32,photon:true,focus:true});
+      if(this.save.settings.sound)this.platform.sound('refract',1);return;
+    }
     if(e.type==='laser-arc'&&e.targetX!==undefined&&e.targetY!==undefined){
       if(this.arcs.length>=12){const index=this.arcs.findIndex(a=>!a.photon);this.arcs.splice(index<0?0:index,1);}
       this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.24,photon:true});
@@ -790,7 +795,7 @@ export class CanvasRuntime {
     this.blasts = this.blasts.filter(e => e.life > 0);
     for(const e of this.empWaves){e.life-=dt;empWave(c,e.x,e.y,e.radius,1-e.life/.5,this.save.settings.effects==='weak');}
     this.empWaves=this.empWaves.filter(e=>e.life>0);
-    for (const arc of this.arcs) { arc.life -= dt; chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon); }
+    for (const arc of this.arcs) { arc.life -= dt;if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon); }
     this.arcs = this.arcs.filter(arc=>arc.life>0);
     for (const hit of this.impacts) { hit.life -= dt; impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
     this.impacts = this.impacts.filter(hit => hit.life > 0);
@@ -1014,7 +1019,7 @@ export class CanvasRuntime {
     const support=w.supportProfile();
     this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
-    this.text(w.laserChainUnlocked()?(support.prism?'棱镜双束45% · 电光连锁80%→64%':`电光连锁：${w.laserChainReady?'光链待发':'待激光储备'} · 80%→64%`):support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 23, '#c7deeb');
+    this.text(w.laserChainUnlocked()?(support.prism?'棱镜45% · 光链80%/64% · 聚能80%':`光链${w.laserChainReady?'待发':'储备中'} · 跳伤80%/64% · 聚能80%`):support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 23, '#c7deeb');
     this.text(w.build.ranks.electric>=3?`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
     for(const [i,label] of ['技能树','组合配方','挑战契约'].entries()){const x=72+i*198;this.rect(x,1030,180,86,'#1a2d3c');this.text(label,x+90,1073,25,'#d8eaf5');this.buttons.push({x,y:1030,w:180,h:86,label,action:['tree','combos','contracts'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
@@ -1033,7 +1038,7 @@ export class CanvasRuntime {
         effect:'主束保留 · 两侧各追加45%伤害',hint:'横移对齐侧束，扩大清场覆盖',color:'#d7b1ff'},
       {name:'电光连锁',on:w.laserChainUnlocked(),
         need:`光学 ${w.build.ranks.optical}/3 · 精调 ${Math.min(1,w.build.refinements.optical)}/1 · 电弧${w.activeWeapons.includes('arc')?'T'+w.weaponStage('arc'):'未持有'}/T2`,
-        effect:'激光存光链 · 主束/电弧命中自动释放',hint:`最多1束 · ${LASER_CHAIN.hops}跳${LASER_CHAIN.range}范围 · 80%/64%`,color:'#a7e7ff'},
+        effect:'全武器直击 · 群敌跳链 / 单体聚能',hint:`${LASER_CHAIN.hops}跳${LASER_CHAIN.range}范围80%/64% · 聚能80%`,color:'#a7e7ff'},
       {name:'裂甲爆破',on:w.fractureUnlocked(),
         need:`穿甲炮 ${w.activeWeapons.includes('pierce')?'T'+w.weaponStage('pierce'):'未持有'}/T2 ＋ 爆裂炮 ${w.activeWeapons.includes('blast')?'T'+w.weaponStage('blast'):'未持有'}/T2`,
         effect:`同敌${FRACTURE.hits}次穿甲命中：额外${FRACTURE.direct*100}%爆破`,hint:`邻敌${FRACTURE.splash*100}%伤害 · 范围${FRACTURE.radius} · 冷却${FRACTURE.cooldown}秒`,color:'#ffca8b'},
@@ -1046,7 +1051,7 @@ export class CanvasRuntime {
       this.text(row.effect,90,y+109,23,'#dbeaf3','left');
       this.text(row.hint,90,y+148,21,'#bdd8e7','left');
     }
-    this.text(`裂甲引爆 ${w.fractureBursts}次 · 电光跳伤 ${w.laserArcHits}次`,360,1055,23,'#ffca8b');
+    this.text(`裂甲引爆 ${w.fractureBursts}次 · 跳伤 ${w.laserArcHits}次 · 聚能 ${w.laserFocusHits}次`,360,1055,23,'#ffca8b');
     this.button('返回当前火力',1100,'combos-back',true);
   }
   private drawRigView() {
@@ -1299,7 +1304,7 @@ export class CanvasRuntime {
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
       electricBranch:this.world.build.electricBranch??null,capacitorBursts:this.world.capacitorBursts,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
-      laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserArcBeams:this.arcs.filter(a=>a.photon).length,
+      laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,

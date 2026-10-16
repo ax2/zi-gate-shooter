@@ -52,6 +52,17 @@ export function chainArc(c: CanvasRenderingContext2D, x:number,y:number,tx:numbe
   c.restore();
 }
 
+/** Actual single-target discharge, drawn only after damage has settled. */
+export function focusDischarge(c:CanvasRenderingContext2D,x:number,y:number,life:number,weak:boolean){
+  const t=Math.max(0,Math.min(1,1-life/.32)),r=44+t*40;
+  c.save();c.translate(x,y);c.globalCompositeOperation='lighter';c.globalAlpha=(1-t)*(weak?.7:1);
+  if(!weak){c.strokeStyle='#a9a0ff55';c.lineWidth=8;c.beginPath();c.ellipse(0,0,r,r*.65,-.35,0,Math.PI*2);c.stroke();}
+  c.strokeStyle='#83eaff';c.lineWidth=weak?1.5:3;c.beginPath();c.ellipse(0,0,r,r*.65,-.35,0,Math.PI*2);c.stroke();
+  line(c,'#fff2ff',weak?1:2,[0,-42*(1-t),8,-12,0,0,-7,12,0,42*(1-t)]);
+  if(!weak)for(let i=0;i<4;i++){const a=i*Math.PI/2+.4+t*.4;line(c,'#d3c2ff',2,[Math.cos(a)*(r+5),Math.sin(a)*(r+5),Math.cos(a)*(r+18),Math.sin(a)*(r+18)]);}
+  c.restore();
+}
+
 // Local additive light only: no fullscreen flash, shadowBlur, filters or extra textures.
 function line(c: CanvasRenderingContext2D, color: string, width: number, points: number[]) {
   c.strokeStyle = color; c.lineWidth = width; c.beginPath();

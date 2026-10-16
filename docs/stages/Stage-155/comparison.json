@@ -1,0 +1,38 @@
+[
+  {
+    "policy": "blueprint",
+    "before": {
+      "unlock": 186.26666666670704,
+      "firstEffectDelay": 24.483333333352817,
+      "hops": 11,
+      "kills": 227,
+      "damageTaken": 0
+    },
+    "after": {
+      "unlock": 186.26666666670704,
+      "firstEffectDelay": 11.86666666667611,
+      "hops": 18,
+      "focus": 18,
+      "kills": 227,
+      "damageTaken": 0
+    }
+  },
+  {
+    "policy": "arc-upgrade",
+    "before": {
+      "unlock": 137.31666666666808,
+      "firstEffectDelay": 60.06666666671447,
+      "hops": 12,
+      "kills": 231,
+      "damageTaken": 0
+    },
+    "after": {
+      "unlock": 137.31666666666808,
+      "firstEffectDelay": 10.050000000007998,
+      "hops": 17,
+      "focus": 22,
+      "kills": 231,
+      "damageTaken": 0
+    }
+  }
+]

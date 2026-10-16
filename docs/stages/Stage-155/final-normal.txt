@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/laser-chain.test.ts tests/laser-chain-progression.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/laser-chain.test.ts (20 tests | 1 failed) 39ms
+   × solo discharge does not fake the chain-only proof, and a focus kill gives exactly one ordinary reward 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/laser-chain.test.ts > solo discharge does not fake the chain-only proof, and a focus kill gives exactly one ordinary reward
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/laser-chain.test.ts:68:64
+     66| });
+     67| it('solo discharge does not fake the chain-only proof, and a focus kil…
+     68|  const w=setup();expect(w.acceptContract('research','photon')).toBe(tr…
+       |                                                                ^
+     69|  for(let i=0;i<8*60;i++){w.step(C.step,360);w.drainEffects();}
+     70|  expect(w.laserFocusHits).toBeGreaterThanOrEqual(4);expect(w.laserArcH…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 20 passed (21)
+   Start at  11:30:49
+   Duration  3.11s (tests 81%, transform 15%, import 4%)

@@ -7,8 +7,8 @@ import type {World} from '../core/world';
 const number=(value:number)=>String(+value.toFixed(1));
 function combinationPlan(build:BuildTree,route:Route,was:BuildTree,arcStage:number){
   const linked=canLaserChain(build,arcStage),wasLinked=canLaserChain(was,arcStage);
-  if(linked&&!wasLinked)return '本次组合：电光连锁 · 存1束光链，命中释出';
-  if(route==='optical'&&build.refinements.optical>=1)return linked?'电光连锁已生效 · 原光束与两次跳电保留':'电光还需：电弧炮T2';
+  if(linked&&!wasLinked)return '本次组合：电光连锁 · 群敌跳链 / 单体聚能';
+  if(route==='optical'&&build.refinements.optical>=1)return linked?'电光连锁已生效 · 跳链与聚能自动切换 · 原火力保留':'电光还需：电弧炮T2';
   const r=build.ranks;
   if(r.optical>=3&&r.ballistic>=1&&!(was.ranks.optical>=3&&was.ranks.ballistic>=1))return '本次组合：棱镜激光 · 两侧各追加45%';
   if(r.ballistic>=3&&r.electric>=1&&was.ranks.ballistic<3)return '本次组合：雷暴霰射 · 霰弹追加跳电';

@@ -1,6 +1,6 @@
 import {it,expect} from 'vitest';import {World} from '../src/core/world';import {C} from '../src/core/config';import {permanentPower} from '../src/core/rewards';import {buildPreview} from '../src/game/build-preview';
 function setup(arcStage=2,refine=true){const w=new World();w.growth.mastery=4;for(let i=0;i<(refine?4:3);i++)w.chooseBuild('optical');w.phase='recovery';const p=w.spawn('pickup',360,C.playerY,arcStage);p.weaponKind='arc';w.step(C.step,360);w.drainEffects();w.phase='boss';return w;}
-function enemy(w:World,x:number,y:number,kind:'armor'|'guard'|'boss'='armor'){const b=w.spawn(kind,x,y);b.hp=b.maxHp=10000;b.speed=0;b.timer=999;return b;}
+function enemy(w:World,x:number,y:number,kind:'armor'|'guard'|'boss'|'elite'='armor'){const b=w.spawn(kind,x,y);b.hp=b.maxHp=10000;b.speed=0;b.timer=999;return b;}
 const damage=(w:World)=>w.supportProfile().laserDamage*(1+permanentPower(w.growth)/100);
 it('requires the earned first optical refinement and an actually owned tier2 arc',()=>{
  expect(setup(1).laserChainUnlocked()).toBe(false);expect(setup(2,false).laserChainUnlocked()).toBe(false);expect(setup().laserChainUnlocked()).toBe(true);
@@ -44,10 +44,29 @@ it('empty beams retain only one payload, released by an actual arc impact after 
  expect(events.findIndex(e=>e.type==='arc')).toBeLessThan(events.findIndex(e=>e.type==='laser-arc'));
  w.bullets=[{id:100000,x:a.x,y:a.y,px:a.x,py:a.y,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc'}];w.step(C.step,68);w.drainEffects();expect(w.laserArcHits).toBe(2);expect(new World().laserChainReady).toBe(false);
 });
-it('stored payload waits through lone or protected arc contacts and does not count harmless flashes',()=>{
+it('stored payload waits through blocked or protected contacts, then focuses on the lone open target',()=>{
  const w=setup();w.step(C.step,68);w.drainEffects();const a=enemy(w,360,600,'guard'),b=enemy(w,510,600);
  const impact=()=>{w.bullets=[{id:99999,x:a.x,y:a.y,px:a.x,py:a.y,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc'}];w.step(C.step,68);return w.drainEffects();};
  expect(impact().some(e=>e.type==='laser-arc')).toBe(false);expect(b.hp).toBe(10000);expect(w.laserChainReady).toBe(true);
  a.burst=1;a.dropGrace=1;expect(impact().some(e=>e.type==='laser-arc')).toBe(false);expect(w.laserChainReady).toBe(true);
- b.active=false;a.dropGrace=0;impact();expect(w.laserArcHits).toBe(0);expect(w.laserChainReady).toBe(true);
+ b.active=false;a.dropGrace=0;const before=a.hp,events=impact();expect(w.laserArcHits).toBe(0);expect(w.laserFocusHits).toBe(1);expect(a.hp).toBeCloseTo(before-10-damage(w)*.8);expect(events.filter(e=>e.type==='laser-focus')).toHaveLength(1);expect(w.laserChainReady).toBe(false);
+});
+it.each(['pulse','scatter','pierce','blast','arc'] as const)('a real %s contact can spend one payload without replacing or recursively changing its original damage',kind=>{
+ const w=setup();w.step(C.step,68);w.drainEffects();const a=enemy(w,360,600),b=enemy(w,510,600),c=enemy(w,600,600),d=damage(w);
+ w.bullets=[{id:99999,x:a.x,y:a.y,px:a.x,py:a.y,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:kind}];w.step(C.step,68);const effects=w.drainEffects();
+ expect(a.hp).toBe(9990);expect(b.hp).toBeCloseTo(10000-d*.8);expect(c.hp).toBeCloseTo(10000-d*.64);expect(w.laserArcHits).toBe(2);expect(w.laserFocusHits).toBe(0);expect(w.laserChainReady).toBe(false);expect(effects.filter(e=>e.type==='laser-arc')).toHaveLength(2);expect(w.activeWeapons).toEqual(['pulse','arc']);
+});
+it('main laser adds one real solo discharge, keeps burn, and a lethal original hit cannot create phantom extra damage',()=>{
+ const w=setup(),a=enemy(w,360,600),d=damage(w);w.step(C.step,360);w.drainEffects();expect(a.hp).toBeCloseTo(10000-d*1.8);expect(a.burnTicks).toBe(3);expect(w.laserFocusHits).toBe(1);expect(w.laserArcHits).toBe(0);expect(w.laserChainReady).toBe(false);
+ const lethal=setup(),b=enemy(lethal,360,600);b.hp=1;lethal.step(C.step,360);expect(lethal.kills).toBe(1);expect(lethal.laserFocusHits).toBe(0);expect(lethal.laserChainReady).toBe(true);
+});
+it('an outside-strip source or a nearby blocked neighbor never releases focus around protection',()=>{
+ for(const blocked of [true,false]){const w=setup();w.step(C.step,68);w.drainEffects();const a=enemy(w,360,blocked?600:220);if(blocked)enemy(w,510,600,'guard');
+ w.bullets=[{id:99999,x:360,y:blocked?600:250,px:360,py:blocked?600:250,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'pulse'}];w.step(C.step,68);expect(a.hp).toBe(9990);expect(w.laserFocusHits).toBe(0);expect(w.laserArcHits).toBe(0);expect(w.laserChainReady).toBe(true);}
+});
+it('solo discharge does not fake the chain-only proof, and a focus kill gives exactly one ordinary reward',()=>{
+ const w=setup();w.phase='running';expect(w.acceptContract('research','photon')).toBe(true);w.phase='boss';enemy(w,360,600);
+ for(let i=0;i<8*60;i++){w.step(C.step,360);w.drainEffects();}
+ expect(w.laserFocusHits).toBeGreaterThanOrEqual(4);expect(w.laserArcHits).toBe(0);expect(w.contract!.proofProgress).toBe(0);expect(w.proofWins).toBe(0);
+ const lethal=setup(),a=enemy(lethal,360,600,'elite');a.hp=damage(lethal)*1.5;lethal.step(C.step,360);const effects=lethal.drainEffects();expect(lethal.kills).toBe(1);expect(lethal.laserFocusHits).toBe(1);expect(lethal.growth.energy).toBe(C.killCharge.elite);expect(effects.filter(e=>e.type==='kill')).toHaveLength(1);expect(lethal.laserChainReady).toBe(false);
 });

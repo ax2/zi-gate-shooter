@@ -135,6 +135,7 @@ export class World {
     this.hit(hit.body,damage*OPTICAL_FORK.relayDamage,'pulse');return hit.body.id;
   }
   laserArcHits=0;
+  laserFocusHits=0;
   private laserLinkEnergy=0;
   private laserLinkTargets=new Set<number>();
   get laserChainReady(){return this.laserLinkEnergy>0;}
@@ -143,27 +144,35 @@ export class World {
   private announceLaserChain(){
     if(this.announcedLaserChain||!this.laserChainUnlocked())return;
     this.announcedLaserChain=true;this.laserTimer=0;
-    this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'组合完成 · 电光连锁',detail:'激光存一束光链 · 主束/电弧命中自动释出'});
+    this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'组合完成 · 电光连锁',detail:'全武器直击释出 · 群敌跳链 / 单体聚能'});
   }
   private laserChain(origin:{x:number;y:number},damage:number,visited:Set<number>){
-    if(!this.laserChainUnlocked()||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))return false;
+    if(!this.laserChainUnlocked()||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))return 'blocked';
     const hits=this.laserArcHits;let from=origin;
     for(let hop=0;hop<LASER_CHAIN.hops;hop++){
       if(this.bossVictory)break;
       const target=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&(!visited.has(b.id)||guardClosed(b)||(b.dropGrace??0)>0)
         &&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&Math.hypot(b.x-from.x,b.y-from.y)<=LASER_CHAIN.range)
         .sort((a,b)=>Math.hypot(a.x-from.x,a.y-from.y)-Math.hypot(b.x-from.x,b.y-from.y)||a.id-b.id)[0];
-      if(!target||guardClosed(target)||(target.dropGrace??0)>0)break;visited.add(target.id);damage*=LASER_CHAIN.decay;
+      if(!target)break;
+      if(guardClosed(target)||(target.dropGrace??0)>0)return this.laserArcHits>hits?'hit':'blocked';
+      visited.add(target.id);damage*=LASER_CHAIN.decay;
       const before=target.hp;this.hit(target,damage,'pulse');
       if(target.hp<before){this.laserArcHits++;this.effects.push({type:'laser-arc',x:from.x,y:from.y,targetX:target.x,targetY:target.y});}
       from=target;
     }
-    return this.laserArcHits>hits;
+    return this.laserArcHits>hits?'hit':'none';
   }
   private releaseLaserLink(source:{x:number;y:number;id:number}){
-    if(this.laserLinkEnergy<=0)return;
+    if(this.laserLinkEnergy<=0||source.y<C.playerShotTop||source.y>C.playerY)return;
     const visited=new Set(this.laserLinkTargets);visited.add(source.id);
-    if(this.laserChain(source,this.laserLinkEnergy,visited)){this.laserLinkEnergy=0;this.laserLinkTargets.clear();}
+    let result=this.laserChain(source,this.laserLinkEnergy,visited);
+    if(result==='none'){
+      const target=this.bodies.find(b=>b.id===source.id&&b.active&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0));
+      if(target){const before=target.hp;this.hit(target,this.laserLinkEnergy*LASER_CHAIN.focus,'pulse');
+        if(target.hp<before){this.laserFocusHits++;this.effects.push({type:'laser-focus',x:target.x,y:target.y});result='hit';}}
+    }
+    if(result==='hit'){this.laserLinkEnergy=0;this.laserLinkTargets.clear();}
   }
   private advanceBurn(dt:number){
     if(this.phase!=='running'&&this.phase!=='boss')return;
@@ -577,6 +586,7 @@ export class World {
             this.scatterPierces++;this.effects.push({type:'scatter-pierce',x:body.x,y:body.y,weaponKind:'scatter'});
           }
           const ionEligible=bullet.weaponKind==='arc'&&body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
+          const linkEligible=body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
           const hpBefore=body.hp;
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(protectedEntry)return;
@@ -607,7 +617,6 @@ export class World {
               if(bullet.weaponKind==='scatter'&&next.hp<before)this.stormLinks++;origin = next;
             }
           }
-          if(ionEligible&&body.hp<hpBefore)this.releaseLaserLink(body);
           if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {
             // No secondary explosions, reward charging or off-screen farming.
             if(bullet.weaponKind==='scatter')this.scatterBursts++;
@@ -617,6 +626,9 @@ export class World {
               && Math.hypot(other.x-body.x,other.y-body.y) <= bullet.splashRadius)
               {if(bullet.weaponKind==='scatter')this.scatterSplashHits++;this.hit(other,bullet.damage*BALLISTIC_FORK.splash,bullet.weaponKind);}
           }
+          // Complete the original attack before spending at most one stored beam.
+          // Derived hits never enter this projectile-contact callback.
+          if(linkEligible&&body.hp<hpBefore)this.releaseLaserLink(body);
         });
       }
     }
