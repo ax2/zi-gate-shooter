@@ -1,0 +1,281 @@
+[
+  {
+    "route": "ballistic",
+    "time": 599.999999999783,
+    "hp": 3,
+    "interceptorBreaks": 1,
+    "elites": [
+      {
+        "id": 1122,
+        "round": 1,
+        "spawnTime": 42.016666666665564,
+        "kind": "single",
+        "hp": 200,
+        "aliveAtEnd": false,
+        "age": 1.3833333333333333,
+        "frames": 82,
+        "warningAt": 43.19999999999883,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 4610,
+        "round": 2,
+        "spawnTime": 128.36666666666096,
+        "kind": "intercept",
+        "hp": 292,
+        "aliveAtEnd": false,
+        "age": 0.9333333333333346,
+        "frames": 55,
+        "warningAt": 128.4999999999944,
+        "wingShots": 2,
+        "coreShots": 0,
+        "shots": [
+          {
+            "time": 129.249999999995,
+            "x": 308,
+            "y": 513.0499999999994,
+            "vx": -99.00000000000001,
+            "vy": 352
+          },
+          {
+            "time": 129.249999999995,
+            "x": 412,
+            "y": 513.0499999999994,
+            "vx": 99.00000000000001,
+            "vy": 352
+          }
+        ]
+      },
+      {
+        "id": 8620,
+        "round": 3,
+        "spawnTime": 204.9833333333886,
+        "kind": "intercept",
+        "hp": 408,
+        "aliveAtEnd": false,
+        "age": 0.733333333333334,
+        "frames": 43,
+        "warningAt": 205.11666666672204,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 24239,
+        "round": 6,
+        "spawnTime": 453.366666666583,
+        "kind": "intercept",
+        "hp": 900,
+        "aliveAtEnd": false,
+        "age": 0.6666666666666671,
+        "frames": 39,
+        "warningAt": 453.4999999999162,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 29282,
+        "round": 7,
+        "spawnTime": 532.4333333331778,
+        "kind": "intercept",
+        "hp": 1112,
+        "aliveAtEnd": false,
+        "age": 0.6666666666666671,
+        "frames": 39,
+        "warningAt": 532.566666666511,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "time": 599.999999999783,
+    "hp": 3,
+    "interceptorBreaks": 0,
+    "elites": [
+      {
+        "id": 1074,
+        "round": 1,
+        "spawnTime": 42.016666666665564,
+        "kind": "single",
+        "hp": 200,
+        "aliveAtEnd": false,
+        "age": 1.3833333333333333,
+        "frames": 82,
+        "warningAt": 43.19999999999883,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 4882,
+        "round": 2,
+        "spawnTime": 128.03333333332736,
+        "kind": "intercept",
+        "hp": 292,
+        "aliveAtEnd": false,
+        "age": 0.8333333333333343,
+        "frames": 49,
+        "warningAt": 128.1666666666608,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 8775,
+        "round": 3,
+        "spawnTime": 205.10000000005536,
+        "kind": "intercept",
+        "hp": 408,
+        "aliveAtEnd": false,
+        "age": 0.8333333333333343,
+        "frames": 49,
+        "warningAt": 205.2333333333888,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 24327,
+        "round": 6,
+        "spawnTime": 457.9999999999121,
+        "kind": "intercept",
+        "hp": 900,
+        "aliveAtEnd": false,
+        "age": 0.8333333333333343,
+        "frames": 49,
+        "warningAt": 458.13333333324533,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 29586,
+        "round": 7,
+        "spawnTime": 542.3499999998354,
+        "kind": "intercept",
+        "hp": 1112,
+        "aliveAtEnd": false,
+        "age": 0.6666666666666671,
+        "frames": 39,
+        "warningAt": 542.4833333331686,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      }
+    ]
+  },
+  {
+    "route": "optical",
+    "time": 599.999999999783,
+    "hp": 3,
+    "interceptorBreaks": 2,
+    "elites": [
+      {
+        "id": 1002,
+        "round": 1,
+        "spawnTime": 42.016666666665564,
+        "kind": "single",
+        "hp": 200,
+        "aliveAtEnd": false,
+        "age": 1.3833333333333333,
+        "frames": 82,
+        "warningAt": 43.19999999999883,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 4620,
+        "round": 2,
+        "spawnTime": 128.23333333332752,
+        "kind": "intercept",
+        "hp": 292,
+        "aliveAtEnd": false,
+        "age": 1.0500000000000012,
+        "frames": 62,
+        "warningAt": 128.36666666666096,
+        "wingShots": 2,
+        "coreShots": 0,
+        "shots": [
+          {
+            "time": 129.11666666666156,
+            "x": 308,
+            "y": 513.0499999999994,
+            "vx": -99.00000000000001,
+            "vy": 352
+          },
+          {
+            "time": 129.11666666666156,
+            "x": 412,
+            "y": 513.0499999999994,
+            "vx": 99.00000000000001,
+            "vy": 352
+          }
+        ]
+      },
+      {
+        "id": 7985,
+        "round": 3,
+        "spawnTime": 206.8166666667234,
+        "kind": "intercept",
+        "hp": 408,
+        "aliveAtEnd": false,
+        "age": 1.0500000000000012,
+        "frames": 62,
+        "warningAt": 206.95000000005683,
+        "wingShots": 2,
+        "coreShots": 0,
+        "shots": [
+          {
+            "time": 207.70000000005743,
+            "x": 308,
+            "y": 517.0999999999988,
+            "vx": -108,
+            "vy": 384
+          },
+          {
+            "time": 207.70000000005743,
+            "x": 412,
+            "y": 517.0999999999988,
+            "vx": 108,
+            "vy": 384
+          }
+        ]
+      },
+      {
+        "id": 19212,
+        "round": 6,
+        "spawnTime": 466.61666666657095,
+        "kind": "intercept",
+        "hp": 900,
+        "aliveAtEnd": false,
+        "age": 0.8166666666666675,
+        "frames": 49,
+        "warningAt": 466.74999999990416,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      },
+      {
+        "id": 23038,
+        "round": 7,
+        "spawnTime": 551.2999999998273,
+        "kind": "intercept",
+        "hp": 1112,
+        "aliveAtEnd": false,
+        "age": 0.5833333333333335,
+        "frames": 34,
+        "warningAt": 551.4333333331605,
+        "wingShots": 0,
+        "coreShots": 0,
+        "shots": []
+      }
+    ]
+  }
+]

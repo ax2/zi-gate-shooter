@@ -1,5 +1,5 @@
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; lane?: number; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept'; lane?: number; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -164,6 +164,10 @@ export function timeline(round: number, seed: number): Spawn[] {
       ??out.find(s=>s.kind==='sniper'&&s.at>=50&&s.at<=56);
     if(sentry)Object.assign(sentry,{pattern:'relocate',lane:sentry.x,drop:true,dropY:SWARM.arrivalY,
       dropLabel:'机动哨机',dropDetail:'入场侧移抢位 · 齐射后再次换位'});
+  }
+  if(round>1){
+    const elite=out.find(s=>s.kind==='elite');
+    if(elite)Object.assign(elite,{pattern:'intercept',drop:true,dropY:SWARM.arrivalY,dropLabel:'截击精英',dropDetail:'翼炮压边 · 核心连射 · 蓄能可打断'});
   }
   return out.sort((a, b) => a.at - b.at);
 }

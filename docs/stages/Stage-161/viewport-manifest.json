@@ -1,0 +1,50 @@
+[
+  {
+    "file": "achievement-desktop.jpg",
+    "format": "jpeg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "achievement-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "break-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "core-charge-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "flight-desktop.jpg",
+    "format": "jpeg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "flight-mobile-weak.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "flight-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "wing-charge-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  }
+]

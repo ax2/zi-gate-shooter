@@ -55,8 +55,9 @@ it('prepares for the unchanged real 0.6-second warning and returns to travel on 
   if(b.y>=600){passedCutoff=true;expect(b.warning).toBe(0);}
  }
  expect(warningAt).toBeCloseTo(1.2);expect(shotAt).toBeCloseTo(1.8);
- expect(shotAt-warningAt).toBeCloseTo(.6);expect(shots).toBe(2);
- expect(passedCutoff).toBe(true);expect(positions).toHaveLength(2);
- expect(positions[0][0]).toBe(100);expect(positions[0][1]).toBeCloseTo(130);
- expect(positions[1][0]).toBe(100);expect(positions[1][1]).toBeCloseTo(400);
+ // Stage159's deployment reaches the visible station earlier and leaves the
+ // firing zone before a second cycle. The opening clock/charge remain intact.
+ expect(shotAt-warningAt).toBeCloseTo(.6);expect(shots).toBe(1);
+ expect(passedCutoff).toBe(true);expect(positions).toHaveLength(1);
+ expect(positions[0][0]).toBe(100);expect(positions[0][1]).toBeCloseTo(490);
 });

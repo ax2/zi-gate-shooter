@@ -47,6 +47,20 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it.each([false,true])('interceptor wing/core cues follow actual guns, pause with the world and remain below real hostile bullets (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();f.runtime.touchStart(91,68,900);
+ const b=f.runtime.world.spawn('elite',360,360);b.pattern='intercept';b.timer=.15;b.dropGrace=.45;
+ for(let i=0;i<10;i++)f.tick();
+ expect(f.calls.some(c=>c.kind==='arc'&&c.args[0]===308&&Math.abs(Number(c.args[1])-b.y-b.height/2)<1e-6)).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='截击·翼炮蓄能')).toBe(true);
+ const label=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='截击·翼炮蓄能');expect(Number(label!.args[2])+11).toBeLessThan(b.y-b.height*.68);
+ const before=JSON.stringify(f.runtime.diagnostics().interceptors);f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(JSON.stringify(f.runtime.diagnostics().interceptors)).toBe(before);expect(f.runtime.activateControl('resume')).toBe(true);
+ for(let i=0;i<120;i++)f.tick();
+ expect(b.interceptWingShots).toBe(2);expect(b.interceptCoreShots).toBe(3);
+ const cue=f.calls.reduce((last,c,i)=>c.kind==='stroke'&&c.stroke==='#ff947b'?i:last,-1),hostile=f.calls.reduce((last,c,i)=>c.kind==='fill'&&c.color==='#ff7756'?i:last,-1);
+ expect(cue).toBeGreaterThan(0);expect(hostile).toBeGreaterThan(cue);f.runtime.start();expect(f.runtime.diagnostics().interceptors).toEqual([]);
+});
+
 it.each([false,true])('evolved optical effects share impact budgets, stay beneath hazards, freeze, expire and reset (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=4;for(let i=0;i<3;i++)w.chooseBuild('optical');w.chooseBuild('ballistic');
  for(const side of [-1,0,1])for(const y of [700,640,580,520,460,400]){const x=360+side*(42+138*(924-y)/684),b=w.spawn('armor',x,y);b.hp=b.maxHp=10000;b.speed=0;b.timer=999;}

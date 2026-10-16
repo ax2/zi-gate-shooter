@@ -1,0 +1,309 @@
+[
+  {
+    "proof": "storm",
+    "certifiedBefore": [],
+    "certifiedAfter": [
+      "storm"
+    ],
+    "fresh": [
+      "storm",
+      "proof"
+    ],
+    "time": 93.99999999999595,
+    "round": 2,
+    "hp": 3,
+    "kills": 48,
+    "accepted": {
+      "time": 83.34999999999656,
+      "round": 2,
+      "start": 0,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc"
+      ],
+      "levels": {
+        "pulse": 2,
+        "scatter": 1,
+        "pierce": 2,
+        "arc": 3
+      }
+    },
+    "won": {
+      "time": 93.98333333332928,
+      "elapsed": 10.633333333333441,
+      "progress": 18
+    },
+    "claim": {
+      "time": 93.98333333332928,
+      "kind": "scatter",
+      "before": {
+        "level": 1,
+        "calibration": 0,
+        "mastery": 1
+      },
+      "after": {
+        "level": 2,
+        "calibration": 0,
+        "mastery": 1
+      }
+    },
+    "status": "won",
+    "reason": "雷暴霰射检验通过",
+    "progress": 18,
+    "stats": {
+      "accepted": 1,
+      "won": 1,
+      "failed": 0,
+      "claimed": 1
+    },
+    "peakBodies": 8,
+    "peakBullets": 33
+  },
+  {
+    "proof": "prism",
+    "certifiedBefore": [
+      "storm"
+    ],
+    "certifiedAfter": [
+      "storm",
+      "prism"
+    ],
+    "fresh": [],
+    "time": 98.983333333329,
+    "round": 2,
+    "hp": 3,
+    "kills": 49,
+    "accepted": {
+      "time": 83.21666666666323,
+      "round": 2,
+      "start": 0,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce"
+      ],
+      "levels": {
+        "pulse": 2,
+        "scatter": 2,
+        "pierce": 3
+      }
+    },
+    "won": {
+      "time": 98.96666666666233,
+      "elapsed": 15.750000000000362,
+      "progress": 6
+    },
+    "claim": {
+      "time": 98.96666666666233,
+      "kind": "energy",
+      "before": {
+        "level": null,
+        "calibration": null,
+        "mastery": 1
+      },
+      "after": {
+        "level": null,
+        "calibration": null,
+        "mastery": 2
+      }
+    },
+    "status": "won",
+    "reason": "棱镜激光检验通过",
+    "progress": 6,
+    "stats": {
+      "accepted": 1,
+      "won": 1,
+      "failed": 0,
+      "claimed": 1
+    },
+    "peakBodies": 8,
+    "peakBullets": 33
+  },
+  {
+    "proof": "fracture",
+    "certifiedBefore": [
+      "storm",
+      "prism"
+    ],
+    "certifiedAfter": [
+      "storm",
+      "prism"
+    ],
+    "fresh": [
+      "specialist",
+      "fracture",
+      "arsenal",
+      "tactician"
+    ],
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 387,
+    "accepted": {
+      "time": 596.6833333331193,
+      "round": 8,
+      "start": 10,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc",
+        "blast"
+      ],
+      "levels": {
+        "pulse": 2,
+        "scatter": 2,
+        "pierce": 3,
+        "arc": 3,
+        "blast": 3
+      }
+    },
+    "won": null,
+    "claim": null,
+    "status": "active",
+    "reason": "",
+    "progress": 1,
+    "stats": {
+      "accepted": 1,
+      "won": 0,
+      "failed": 0,
+      "claimed": 0
+    },
+    "peakBodies": 9,
+    "peakBullets": 52
+  },
+  {
+    "proof": "ion",
+    "certifiedBefore": [
+      "storm",
+      "prism"
+    ],
+    "certifiedAfter": [
+      "storm",
+      "prism",
+      "ion"
+    ],
+    "fresh": [
+      "versatile"
+    ],
+    "time": 108.69999999999511,
+    "round": 2,
+    "hp": 3,
+    "kills": 63,
+    "accepted": {
+      "time": 83.01666666666324,
+      "round": 2,
+      "start": 0,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce"
+      ],
+      "levels": {
+        "pulse": 2,
+        "arc": 1,
+        "scatter": 2,
+        "pierce": 3
+      }
+    },
+    "won": {
+      "time": 108.68333333332845,
+      "elapsed": 25.66666666666649,
+      "progress": 6
+    },
+    "claim": {
+      "time": 108.68333333332845,
+      "kind": "arc",
+      "before": {
+        "level": 1,
+        "calibration": 0,
+        "mastery": 2
+      },
+      "after": {
+        "level": 2,
+        "calibration": 0,
+        "mastery": 2
+      }
+    },
+    "status": "won",
+    "reason": "离子风暴检验通过",
+    "progress": 6,
+    "stats": {
+      "accepted": 1,
+      "won": 1,
+      "failed": 0,
+      "claimed": 1
+    },
+    "peakBodies": 8,
+    "peakBullets": 34
+  },
+  {
+    "proof": "photon",
+    "certifiedBefore": [
+      "storm",
+      "prism",
+      "ion"
+    ],
+    "certifiedAfter": [
+      "storm",
+      "prism",
+      "photon",
+      "ion"
+    ],
+    "fresh": [],
+    "time": 170.9333333333615,
+    "round": 3,
+    "hp": 3,
+    "kills": 109,
+    "accepted": {
+      "time": 165.43333333335713,
+      "round": 3,
+      "start": 0,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce"
+      ],
+      "levels": {
+        "pulse": 2,
+        "arc": 3,
+        "scatter": 2,
+        "pierce": 3
+      }
+    },
+    "won": {
+      "time": 170.91666666669482,
+      "elapsed": 5.483333333333319,
+      "progress": 4
+    },
+    "claim": {
+      "time": 170.91666666669482,
+      "kind": "arc",
+      "before": {
+        "level": 3,
+        "calibration": 1,
+        "mastery": 4
+      },
+      "after": {
+        "level": 3,
+        "calibration": 2,
+        "mastery": 4
+      }
+    },
+    "status": "won",
+    "reason": "电光连锁检验通过",
+    "progress": 4,
+    "stats": {
+      "accepted": 1,
+      "won": 1,
+      "failed": 0,
+      "claimed": 1
+    },
+    "peakBodies": 9,
+    "peakBullets": 37
+  }
+]

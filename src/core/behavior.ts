@@ -5,6 +5,7 @@ import type { Body, Phase } from './world';
 import { C, clamp } from './config';
 import {CONDUIT} from './conduit';
 import {MOBILE_SENTRY,sentryDestination} from './mobile-sentry';
+import {INTERCEPTOR,interceptorMuzzles} from './interceptor';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 export const guardClosed = (b: Pick<Body, 'kind' | 'burst' | 'empRemaining'>) => b.kind === 'guard' && b.burst === 0 && !(b.empRemaining??0);
 
@@ -130,6 +131,22 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       if (b.pattern === 'flank') b.x += clamp(b.lane - b.x, -240 * dt, 240 * dt);
     }
     b.y += b.speed * dt;
+  } else if(b.kind==='elite'&&b.pattern==='intercept'){
+    b.y+=b.speed*dt;
+    if(b.y>=600){b.warning=0;b.burst=0;b.interceptCoreRemaining=0;return;}
+    if(b.timer<=1e-9&&!offline){
+      if((b.interceptCoreRemaining??0)>0){
+        shot(b.x,b.y+b.height/2,0,INTERCEPTOR.coreVy);b.interceptCoreRemaining=(b.interceptCoreRemaining??0)-1;
+        if(!b.interceptCoreRemaining)b.burst=0;
+        b.timer=b.interceptCoreRemaining?INTERCEPTOR.coreSpacing:INTERCEPTOR.recovery;
+      }
+      else if(b.warning<=0){b.warning=b.burst?INTERCEPTOR.coreWarning:INTERCEPTOR.wingWarning;b.timer=b.warning;}
+      else {
+        if(b.burst){shot(b.x,b.y+b.height/2,0,INTERCEPTOR.coreVy);b.interceptCoreRemaining=2;b.timer=INTERCEPTOR.coreSpacing;}
+        else {for(const muzzle of interceptorMuzzles(b))shot(muzzle.x,muzzle.y,Math.sign(muzzle.x-b.x)*INTERCEPTOR.wingVx,INTERCEPTOR.wingVy);b.burst=1;b.timer=INTERCEPTOR.between;}
+        b.warning=0;
+      }
+    }
   } else {
     if (b.kind === 'drone' && b.pattern === 'weave') b.x = clamp(b.lane + Math.sin(b.age * 2) * 70, C.minX, C.maxX);
     if(b.kind==='elite'&&b.bountyRound!==undefined&&b.age<HUNTER.holdSeconds){if(b.y<HUNTER.hoverY)b.y=Math.min(HUNTER.hoverY,b.y+b.speed*dt);}

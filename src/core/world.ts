@@ -1,4 +1,5 @@
 import {canLaserChain,LASER_CHAIN} from './laser-chain';
+import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {ION_STORM} from './ion-storm';
@@ -29,10 +30,11 @@ export interface Body {
   width: number; height: number; hp: number; maxHp: number; speed: number;
   active: boolean; age: number; timer: number; warning: number; hit: number;
   deploying?: boolean;
+  interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;escort?:boolean;
-  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
+  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
@@ -45,6 +47,7 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
+  interceptorBreaks=0;
   readonly build = new BuildTree();
   private firstEquipmentResearch=false;
   private firstArmoryResearch=false;
@@ -429,6 +432,7 @@ export class World {
           const candidate = this.spawn(s.kind,s.x,s.drop?(s.dropY??SWARM.arrivalY):undefined);
           if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
+          if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
@@ -564,7 +568,15 @@ export class World {
       b.px = b.x; b.py = b.y;
       const previousWarning = b.warning;
       const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0;
-      advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {const before=this.bullets.length;this.hostile(x,y,vx,vy);if(b.bountyRound!==undefined&&this.bullets.length>before){b.bountyShots=(b.bountyShots??0)+1;this.bountyShots++;}});
+      advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
+        const before=this.bullets.length;this.hostile(x,y,vx,vy);
+        if(this.bullets.length<=before)return;
+        if(b.pattern==='intercept'){
+          if(b.burst)b.interceptCoreShots=(b.interceptCoreShots??0)+1;else b.interceptWingShots=(b.interceptWingShots??0)+1;
+          b.interceptFiredAt=b.age;b.interceptFireBeat=b.burst?1:0;
+        }
+        if(b.bountyRound!==undefined){b.bountyShots=(b.bountyShots??0)+1;this.bountyShots++;}
+      });
       if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · 双炮反击',detail:'双炮加入攻击循环 · 已发敌弹仍危险'});
       if(b.kind==='boss'&&(b.counterVolleys??0)>wasCounterVolleys)this.effects.push({type:'counter-fire',x:b.x,y:b.y});
       if (b.kind === 'boss' && previousWarning <= 0 && b.warning > 0
@@ -806,9 +818,11 @@ export class World {
         this.effects.push({type:'reward',escortReward:true,x:b.x,y:b.y,text:`编队击破 · 充能+${ESCORT.charge}`,detail:this.chargeReceipt(reward.activated)});
       }
       else if(b.kind==='elite'){
+        const brokeCore=b.pattern==='intercept'&&(b.interceptWingShots??0)>0&&!(b.interceptCoreShots??0);
+        if(brokeCore)this.interceptorBreaks++;
         const reward=grantGate(this.growth,C.killCharge.elite,'energy');
         if(reward.activated)this.emit('overload',this.player.x,C.playerY);
-        this.effects.push({type:'reward',x:b.x,y:b.y,text:`精英击破 · 充能+${C.killCharge.elite}`,detail:this.chargeReceipt(reward.activated)});
+        this.effects.push({type:'reward',x:b.x,y:b.y,text:`${brokeCore?'截击断核':b.pattern==='intercept'?'截击精英击破':'精英击破'} · 充能+${C.killCharge.elite}`,detail:this.chargeReceipt(reward.activated)});
       }
       if(b.bountyRound!==undefined&&this.contract?.targetKilled(b.id,b.bountyRound)){
         this.effects.push({type:'bounty-progress',x:b.x,y:b.y,text:`悬赏精英 ${this.contract.targetKills}/2`,detail:this.contract.targetKills<2?'再击破一名领取契约强化':'目标全破 · 即将选择强化'});

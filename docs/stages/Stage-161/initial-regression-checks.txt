@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/interceptor.test.ts tests/elite-progression.test.mjs tests/explosion-render.test.ts tests/achievements.test.ts tests/shooter-entry.test.ts tests/elite-motion.test.ts tests/swarm-routes.test.ts tests/formation-readability.test.ts tests/tactical-phrases.test.ts tests/conduit-safety.test.mjs tests/boss-escalation-progression.test.mjs tests/build-proof-progression.test.mjs tests/crossfire-hunt-progression.test.mjs tests/hunter-routes.test.ts tests/crossfire-hunt-routes.test.ts tests/boss-counter-routes.test.ts tests/boss-formation-routes.test.ts tests/build-proof-routes.test.ts tests/rules.test.ts tests/guard.test.ts tests/projectile-pressure.test.ts tests/mobile-sentry.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/build-proof-progression.test.mjs (1 test | 1 failed) 8376ms
+   × records real acceptance and actual outcomes for five normally earned builds 8372ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/build-proof-progression.test.mjs > records real acceptance and actual outcomes for five normally earned builds
+AssertionError: expected [ 'storm', 'prism', 'photon', 'ion' ] to have a length of 5 but got 4
+
+- Expected
++ Received
+
+- 5
++ 4
+
+ ❯ tests/build-proof-progression.test.mjs:21:34
+     19|  }
+     20|  const dir=`build/qa/runs/${new Date().toISOString().replace(/[:.]/g,'…
+     21|  expect(archive.certifiedBuilds).toHaveLength(5);expect(archive.unlock…
+       |                                  ^
+     22|  for(const r of results){expect(r.accepted,r.proof).not.toBeNull();exp…
+     23| },120000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 21 passed (22)
+      Tests  1 failed | 229 passed (230)
+   Start at  13:08:51
+   Duration  13.42s (tests 83%, transform 11%, import 6%)

@@ -1,0 +1,6692 @@
+[
+  {
+    "round": 1,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": true,
+    "counts": {
+      "armor": 1,
+      "armory": 2,
+      "charger": 1,
+      "crate": 1,
+      "drone": 36,
+      "elite": 1,
+      "gates": 4,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 34,
+        "kind": "drone",
+        "x": 200,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 34.35,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 34,
+        "kind": "drone",
+        "x": 200,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 34.35,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropY": 360
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": true,
+    "counts": {
+      "armor": 1,
+      "armory": 2,
+      "charger": 1,
+      "crate": 1,
+      "drone": 36,
+      "elite": 1,
+      "gates": 4,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 34,
+        "kind": "drone",
+        "x": 200,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 34.35,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 520,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 34,
+        "kind": "drone",
+        "x": 200,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 34.35,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 520,
+        "drop": true,
+        "dropY": 360
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": true,
+    "counts": {
+      "armor": 1,
+      "armory": 2,
+      "charger": 1,
+      "crate": 1,
+      "drone": 36,
+      "elite": 1,
+      "gates": 4,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 34,
+        "kind": "drone",
+        "x": 200,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 34.35,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 520,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 520,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 34,
+        "kind": "drone",
+        "x": 200,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 34.35,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 520,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropY": 360
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 520,
+        "drop": true,
+        "dropY": 360
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 43,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 43,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 43,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 8,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 29,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 8,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 29,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 8,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 29,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 4,
+      "armory": 2,
+      "charger": 7,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 46,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 6
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 4,
+      "armory": 2,
+      "charger": 7,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 46,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 6
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 4,
+      "armory": 2,
+      "charger": 7,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 46,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 6
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 220
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 6,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 37,
+      "gates": 4,
+      "guard": 1,
+      "sniper": 8
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 6,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 37,
+      "gates": 4,
+      "guard": 1,
+      "sniper": 8
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 6,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 37,
+      "gates": 4,
+      "guard": 1,
+      "sniper": 8
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 360,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 9,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 22,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 9,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 22,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 9,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 22,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 3,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 46,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 5
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 36,
+        "kind": "drone",
+        "x": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 36,
+        "kind": "drone",
+        "x": 360
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 3,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 46,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 5
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 36,
+        "kind": "drone",
+        "x": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 36,
+        "kind": "drone",
+        "x": 360
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 3,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 46,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 5
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 36,
+        "kind": "drone",
+        "x": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 36,
+        "kind": "drone",
+        "x": 360
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 7,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 34,
+      "elite": 1,
+      "gates": 4,
+      "guard": 1,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 7,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 34,
+      "elite": 1,
+      "gates": 4,
+      "guard": 1,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 7,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 34,
+      "elite": 1,
+      "gates": 4,
+      "guard": 1,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 9,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 23,
+      "elite": 1,
+      "gates": 4,
+      "guard": 4,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 540
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 540
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 9,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 23,
+      "elite": 1,
+      "gates": 4,
+      "guard": 4,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 540
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 540
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 9,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 23,
+      "elite": 1,
+      "gates": 4,
+      "guard": 4,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 540
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 540
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 4,
+      "armory": 2,
+      "charger": 6,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 55,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 5
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 32.95,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 200
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 32.95,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 200
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 4,
+      "armory": 2,
+      "charger": 6,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 55,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 5
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 32.95,
+        "kind": "drone",
+        "x": 240
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 32.95,
+        "kind": "drone",
+        "x": 240
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 360
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 360
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 4,
+      "armory": 2,
+      "charger": 6,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 55,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 5
+    },
+    "oldScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 520
+      },
+      {
+        "at": 32.95,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 360
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.6,
+        "kind": "drone",
+        "x": 520
+      },
+      {
+        "at": 32.95,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.4,
+        "kind": "drone",
+        "x": 200
+      },
+      {
+        "at": 35.75,
+        "kind": "drone",
+        "x": 480
+      },
+      {
+        "at": 36.8,
+        "kind": "drone",
+        "x": 360
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 43,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 43,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 2,
+      "armory": 2,
+      "charger": 8,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 43,
+      "elite": 1,
+      "gates": 4,
+      "guard": 2,
+      "sniper": 7
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 180,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 32.1,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 540,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 240,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 360,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 480,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35,
+        "kind": "drone",
+        "x": 230,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 490,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 8,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 29,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 77,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 8,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 29,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1337,
+    "countsUnchanged": true,
+    "rewardsUnchanged": true,
+    "firstChapterUnchanged": null,
+    "counts": {
+      "armor": 8,
+      "armory": 2,
+      "charger": 5,
+      "conduit": 1,
+      "crate": 1,
+      "drone": 29,
+      "elite": 1,
+      "gates": 4,
+      "guard": 5,
+      "sniper": 1
+    },
+    "oldScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ],
+    "newScreen": [
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 31.6,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": true
+      },
+      {
+        "at": 32,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.2,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 34.9,
+        "kind": "drone",
+        "x": 420,
+        "drop": true,
+        "dropNotice": false
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 180,
+        "pattern": "weave"
+      },
+      {
+        "at": 35.5,
+        "kind": "drone",
+        "x": 540,
+        "pattern": "weave"
+      }
+    ]
+  }
+]
