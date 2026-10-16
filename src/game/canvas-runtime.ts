@@ -1,4 +1,5 @@
 import {openingWeapons,isOpeningWeapon,parseOpeningWeapon,openingHints} from '../core/opening-plan';
+import {battleBrief,sideBattlePreview,nextBattlePlan,parseBattlePlan} from '../core/battle-plan';
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
 import {magneticLight} from './magnetic-light';
 import {sweeperDirection} from '../core/sweeper';
@@ -272,13 +273,15 @@ export class CanvasRuntime {
     this.weaponMotion.reset();
     this.weaponGuideUntil = 0;
     this.drawCount = 0; this.callbackCount = 0;
-    this.world = new World(1337,1,this.save.openingWeapon); this.mode = 'playing'; this.target = 360;
+    this.world = new World(1337,1,this.save.openingWeapon,this.save.nextBattlePlan);
+    this.save.nextBattlePlan=nextBattlePlan(this.world.battlePlan);this.mode = 'playing'; this.target = 360;
     this.goalWasReady=false;this.pendingRecipeCompletion=null;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear();this.callbackWork.clear();this.maxCallbackWorkMs=0;this.previousCallbackWorkMs=0;this.interruptedFrames=[]; this.downAction = '';
     this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0;this.shieldBreak=undefined; this.upgradeUntil = 0;
     this.platform.silence();
     this.updateMusic();
+    this.platform.write(this.save);
   }
   private pauseReason = '';
   pause(message = '暂停') {
@@ -441,7 +444,7 @@ export class CanvasRuntime {
     else if (action === 'shake') this.save.settings.shake = !this.save.settings.shake;
     else if (action === 'sound') { this.save.settings.sound = !this.save.settings.sound; this.platform.silence(); }
     else if (action === 'music') this.save.settings.music = !this.save.settings.music;
-    this.platform.write(this.save);
+    if(action!=='start')this.platform.write(this.save);
     this.updateMusic();
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
@@ -1008,7 +1011,7 @@ export class CanvasRuntime {
     this.buttons.push({ x: 624, y: y + 2, w: 64, h: 64, label: '暂停', action: 'pause' });
     this.text(`T${w.weaponStage(w.weaponKind)} · ${w.activeWeapons.length}种武器叠加`, 30, y + 88, 25, weaponColors[w.weaponKind], 'left', true);
     this.text(`火力 +${permanentPower(w.growth)}%`, 300, y + 88, 24, '#74dcff', 'left', true);
-    this.text(`${w.round}轮·${boss&&w.bossFormation?w.bossFormation.name:sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
+    this.text(`${w.round}轮·${boss&&w.bossFormation?w.bossFormation.name:w.round>1?battleBrief(w.round,w.battlePlan):sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
     this.text(w.growth.overload > 0 ? `超载×1.35 · ${w.growth.overload.toFixed(1)}秒  |  再充能 ${Math.floor(w.growth.energy)}/100`
       : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：本局火力+10% / 超载6秒`, 360, y + 144, 22, '#d4e8ee');
@@ -1073,6 +1076,7 @@ export class CanvasRuntime {
     this.rect(176,754,368,70,'#173442');const goal=this.save.recipeGoal;
     const goalLabel=goal?`构筑目标 · ${recipes[goal].name}`:'选择构筑目标　›';this.text(goalLabel,360,789,25,'#d3e9b7','center',true);
     this.buttons.push({x:176,y:754,w:368,h:70,action:'combos-menu',label:goalLabel});
+    this.text(`下次侧翼战况 · ${sideBattlePreview(this.save.nextBattlePlan)}`,360,850,22,'#b8d4e3');
     this.button('开始突围　›', 932, 'start', true);
     this.button('武器档案', 1030, 'armory');
     for(const [i,label] of ['成就','设置'].entries()){const x=112+i*258;this.rect(x,1128,238,86,'#1a2d3c');this.text(label, x+119,1171,30,'#d8eaf5');this.buttons.push({x,y:1128,w:238,h:86,label,action:i?'settings':'achievements'});}
@@ -1448,7 +1452,7 @@ export class CanvasRuntime {
       weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
       weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
       contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,bossRewardRound:this.world.bossRewardRound,bossLootStats:{...this.world.bossLootStats},
-      openingWeapon:this.world.openingWeapon??null,savedOpeningWeapon:this.save.openingWeapon,openingSupplies:this.world.bodies.filter(b=>b.active&&b.openingSupply).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,weapon:b.weaponKind,stage:b.stage})),score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
+      battlePlan:this.world.battlePlan,battleBrief:battleBrief(this.world.round,this.world.battlePlan),nextBattlePlan:this.save.nextBattlePlan,openingWeapon:this.world.openingWeapon??null,savedOpeningWeapon:this.save.openingWeapon,openingSupplies:this.world.bodies.filter(b=>b.active&&b.openingSupply).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,weapon:b.weaponKind,stage:b.stage})),score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
       magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
@@ -1490,6 +1494,7 @@ export function parseSave(value: unknown): Save {
   if (data.version !== 1) return result;
   result.achievements = parseAchievements(data.achievements);
   result.recipeGoal=parseRecipeGoal(data.recipeGoal);result.openingWeapon=parseOpeningWeapon(data.openingWeapon);
+  result.nextBattlePlan=parseBattlePlan(data.nextBattlePlan);
   if (Number.isFinite(data.best) && data.best! >= 0) result.best = Math.floor(data.best!);
   if (data.settings?.effects === 'weak') result.settings.effects = 'weak';
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];

@@ -1,6 +1,7 @@
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
 import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen} from './relay-screen';
+import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
 export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
@@ -14,12 +15,12 @@ export class Random {
   next() { let x = this.seed | 0; x ^= x << 13; x ^= x >>> 17; x ^= x << 5; this.seed = x >>> 0; return this.seed / 4294967296; }
 }
 /** Authored, mirrored motifs. Every row leaves an independent, wide escape lane. */
-export function timeline(round: number, seed: number): Spawn[] {
+export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[] {
   const rng = new Random(seed || 1);
   const mirror = round > 1 && rng.next() > 0.5;
   const out: Spawn[] = [];
   const sector = sectorIndex(round);
-  const encounter = encounterIndex(round);
+  const encounter = battleIndex(round,plan);
   const add = (at: number, kind: Spawn['kind'], x: number, stage?: number, pair?: boolean, pattern?: Spawn['pattern'], lane?: number) =>
     out.push({ at, kind, x: mirror ? 720 - x : x, stage, pair, pattern, lane: lane === undefined ? undefined : mirror ? 720 - lane : lane });
   // Eight authored motifs: introduction, crate, single gate, paired gate,

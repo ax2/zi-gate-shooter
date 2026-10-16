@@ -1,9 +1,10 @@
 import { emptyAchievements, parseAchievements, type Achievements } from '../core/achievements';
 import {parseRecipeGoal,type RecipeGoal} from '../core/recipe-goal';
 import {parseOpeningWeapon,type OpeningWeapon} from '../core/opening-plan';
+import {parseBattlePlan,type BattlePlan} from '../core/battle-plan';
 export interface Settings { effects: 'standard' | 'weak'; shake: boolean; sound: boolean; music: boolean }
-export interface Save { version: 1; best: number; achievements: Achievements; settings: Settings;recipeGoal?:RecipeGoal|null;openingWeapon:OpeningWeapon }
-export const defaults = (): Save => ({ version: 1, best: 0, achievements: emptyAchievements(),recipeGoal:null,openingWeapon:'scatter', settings: { effects: 'standard', shake: true, sound: true, music: false } });
+export interface Save { version: 1; best: number; achievements: Achievements; settings: Settings;recipeGoal?:RecipeGoal|null;openingWeapon:OpeningWeapon;nextBattlePlan:BattlePlan }
+export const defaults = (): Save => ({ version: 1, best: 0, achievements: emptyAchievements(),recipeGoal:null,openingWeapon:'scatter',nextBattlePlan:0, settings: { effects: 'standard', shake: true, sound: true, music: false } });
 export function loadSave(): Save {
   const result = defaults();
   try {
@@ -12,6 +13,7 @@ export function loadSave(): Save {
       result.achievements = parseAchievements(data.achievements);
       result.recipeGoal=parseRecipeGoal(data.recipeGoal);
       result.openingWeapon=parseOpeningWeapon(data.openingWeapon);
+      result.nextBattlePlan=parseBattlePlan(data.nextBattlePlan);
       if (Number.isFinite(data.best) && data.best >= 0) result.best = Math.floor(data.best);
       if (data.settings?.effects === 'weak') result.settings.effects = 'weak';
       for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];

@@ -1,0 +1,26 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/battle-plan.test.ts tests/opening-plan.test.ts tests/native-flow.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/battle-plan.test.ts (58 tests | 2 failed) 15232ms
+   × keeps a no-kill full chapter route plan2 R6 x68 138ms
+   × keeps a no-kill full chapter route plan2 R6 x360 132ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/battle-plan.test.ts > keeps a no-kill full chapter route plan2 R6 x68
+ FAIL  tests/battle-plan.test.ts > keeps a no-kill full chapter route plan2 R6 x360
+AssertionError: t=40.01666666666568: expected null not to be null
+ ❯ tests/battle-plan.test.ts:19:277
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  2 failed | 65 passed (67)
+   Start at  03:02:42
+   Duration  15.92s (tests 93%, transform 5%, import 2%)
+

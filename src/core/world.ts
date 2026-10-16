@@ -1,5 +1,6 @@
 import {RELAY_SCREEN} from './relay-screen';
 import type {OpeningWeapon} from './opening-plan';
+import {battleBrief,type BattlePlan} from './battle-plan';
 import {SWEEPER} from './sweeper';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
@@ -398,9 +399,9 @@ export class World {
 
   // initialRound supports deterministic replay fixtures; normal UI always starts
   // with the default round 1, T1 and zero bonus.
-  constructor(seed = 1337, initialRound = 1,readonly openingWeapon?:OpeningWeapon) {
+  constructor(seed = 1337, initialRound = 1,readonly openingWeapon?:OpeningWeapon,readonly battlePlan:BattlePlan=0) {
     this.seed = seed; this.round = Math.max(1, Math.floor(initialRound));
-    this.scheduled = timeline(this.round, seed);
+    this.scheduled = timeline(this.round, seed,this.battlePlan);
   }
   emit(type: string, x: number, y: number, text?: string, size?: number) {
     this.effects.push({ type, x, y, text, size });
@@ -517,9 +518,9 @@ export class World {
       if (this.phaseTime >= 4) {
         this.round++; this.roundTime = 0; this.phaseTime = 0; this.phase = 'running';
         this.scheduleIndex = 0; this.secondChance = this.growth.stage > 1; this.nextSpawnRetry = 0;
-        this.scheduled = timeline(this.round, this.seed + this.round * 719);
+        this.scheduled = timeline(this.round, this.seed + this.round * 719,this.battlePlan);
         this.effects.push({type:'round',x:360,y:400,text:`第 ${this.round} 轮 · ${sectorNames[sectorIndex(this.round)]}`,
-          detail:`敌弹速度+${Math.round((enemyProjectileScale(this.round)-1)*100)}% · 留意已发弹幕`});
+          detail:`${battleBrief(this.round,this.battlePlan)} · 敌弹+${Math.round((enemyProjectileScale(this.round)-1)*100)}% · 留意实弹`});
       }
     }
   }
@@ -628,9 +629,10 @@ export class World {
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
-        if(b.pattern==='relay-screen'){b.formationShots=(b.formationShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
-        if(b.proofTarget){b.proofShots=(b.proofShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
-        if(b.pattern==='sweep'){b.sweeperShots=(b.sweeperShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
+        this.bullets[this.bullets.length-1].sourceId=b.id;
+        if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
+        if(b.proofTarget)b.proofShots=(b.proofShots??0)+1;
+        if(b.pattern==='sweep')b.sweeperShots=(b.sweeperShots??0)+1;
         if(b.pattern==='intercept'){
           if(b.burst)b.interceptCoreShots=(b.interceptCoreShots??0)+1;else b.interceptWingShots=(b.interceptWingShots??0)+1;
           b.interceptFiredAt=b.age;b.interceptFireBeat=b.burst?1:0;
