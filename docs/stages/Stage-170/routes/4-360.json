@@ -1,0 +1,11 @@
+{
+  "round": 4,
+  "start": 360,
+  "hp": 3,
+  "proofShots": 36,
+  "kills": 0,
+  "groups": 6,
+  "peakBodies": 10,
+  "peakBullets": 10,
+  "fallbacks": 5
+}

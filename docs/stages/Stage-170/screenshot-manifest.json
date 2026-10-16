@@ -1,0 +1,47 @@
+[
+  {
+    "file": "screenshots/achievement-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/batch-desktop-weak.jpg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "screenshots/batch-mobile-weak.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/batch-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/claimed-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/failed-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/first-batch-before-pressure.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/offer-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/reward-mobile.jpg",
+    "width": 390,
+    "height": 843
+  }
+]

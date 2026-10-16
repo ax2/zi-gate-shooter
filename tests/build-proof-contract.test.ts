@@ -42,3 +42,19 @@ it('fails on death or expiry even with kills, freezes through recovery, and awar
  const s=emptyAchievements();expect(awardAchievements(s,w.build.ranks,2,0,0,0,w.proofWins).map(a=>a.id)).not.toContain('proof');
  expect(awardAchievements(s,w.build.ranks,2,0,0,0,1).map(a=>a.id)).toContain('proof');expect(awardAchievements(s,w.build.ranks,2,0,0,0,1)).toEqual([]);expect(parseAchievements(s).unlocked).toContain('proof');
 });
+it('ricochet proof counts only post-acceptance bounces and needs actual hits on two current validation groups',()=>{
+ const w=new World();w.growth.mastery=2;w.chooseBuild('ballistic');w.chooseBuild('ballistic','ricochet');w.player.x=w.player.px=68;w.scatterRicochets=50;
+ expect(w.availableProofs()).toEqual(['ricochet']);expect(w.acceptContract('research','ricochet')).toBe(true);expect(w.contract!.proof!.start).toBe(50);w.phase='boss';w.contract!.reinforcements=2;
+ const a=target(w),b=target(w,560);b.proofGroup=1;b.proofRound=1;
+ for(let i=0;i<12;i++)shot(w,a,'scatter',0);expect(w.contract!.proofProgress).toBe(12);expect(w.contract!.proofGroupCount).toBe(1);expect(w.contract!.status).toBe('active');expect(w.contractReward).toBeUndefined();expect(w.certifiedBuilds.size).toBe(0);
+ b.proofGroup=2;b.proofRound=0;shot(w,a,'scatter',0);expect(w.contract!.proofGroupCount).toBe(1);b.proofRound=1;shot(w,a,'scatter',0);
+ expect(w.contract!.status).toBe('won');expect(w.contract!.proofGroupCount).toBe(2);expect(w.certifiedBuilds.has('ricochet')).toBe(true);expect(w.claimContractReward('scatter')).toBe(true);expect(w.weaponStage('scatter')).toBe(2);expect(w.claimContractReward('scatter')).toBe(false);
+ const state=emptyAchievements();expect(awardAchievements(state,w.build.ranks,w.activeWeapons.length,0,0,0,w.proofWins,{certifiedBuilds:[...w.certifiedBuilds]}).map(a=>a.id)).toContain('bank-shot');expect(parseAchievements(JSON.parse(JSON.stringify(state))).unlocked).toContain('bank-shot');expect(awardAchievements(state,w.build.ranks,3,0,0,0,w.proofWins,{certifiedBuilds:[...w.certifiedBuilds]})).toEqual([]);
+});
+it('rejects non-ricochet builds and duplicate, stale or future batches; never awards for one batch, acceptance or expiry',()=>{
+ const fresh=new World();expect(fresh.acceptContract('research','ricochet')).toBe(false);fresh.growth.mastery=2;fresh.chooseBuild('ballistic');fresh.chooseBuild('ballistic','fragment');expect(fresh.availableProofs()).not.toContain('ricochet');
+ const c=new Contract('research',4,0,3,0,{kind:'ricochet',start:10});c.reinforcements=2;
+ for(const [group,round] of [[1,3],[0,4],[3,4],[1.5,4]])c.recordRicochetGroup(group,round);expect(c.proofGroupCount).toBe(0);c.recordRicochetGroup(1,4);c.recordRicochetGroup(1,4);expect(c.proofGroupCount).toBe(1);
+ c.update(30,100,5,0,true,22);expect(c.status).toBe('failed');expect(c.reason).toBe('验证批次不足');c.recordRicochetGroup(2,4);expect(c.proofGroupCount).toBe(1);
+ const empty=emptyAchievements();expect(awardAchievements(empty,{ballistic:2,electric:0,optical:0},3).map(a=>a.id)).not.toContain('bank-shot');
+});

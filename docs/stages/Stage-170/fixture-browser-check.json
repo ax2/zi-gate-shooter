@@ -1,0 +1,35 @@
+{
+  "url": "http://127.0.0.1:5254/tools/visual-fixtures/ricochet-proof.html",
+  "title": "跳弹侧击 · 正常挑战与技巧成就验证",
+  "dom": "- text: 正常装备/研发/挑战与奖励 / 虚拟时钟 / 内存存档\n- button \"推进至跳弹检验\"\n- button \"站中对照\"\n- button \"接取跳弹侧击\" [disabled]\n- button \"观察首批进度\" [disabled]\n- button \"推进至检验结果\" [disabled]\n- button \"领取霰射强化\" [disabled]\n- button \"重载查看成就\" [disabled]\n- button \"查看失败条件\" [disabled]\n- button \"切换弱特效\"\n- generic: 35.47秒 / result / actual-failed / 3次 · 0批",
+  "logs": [],
+  "virtualClock": true,
+  "worldInjection": false,
+  "save": "isolated in-memory write and fresh CanvasRuntime reload",
+  "flows": [
+    "actual earned ricochet offered",
+    "accept",
+    "12 hits 1 batch no reward",
+    "23 hits 2 batches actual reward",
+    "claim scatter T1→T2 original weapons retained",
+    "fresh reload bank-shot and ricochet certificate retained",
+    "center actual death failure no reward/certificate"
+  ],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "quality": [
+        "standard",
+        "weak"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "quality": [
+        "weak"
+      ]
+    }
+  ]
+}

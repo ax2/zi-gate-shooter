@@ -34,7 +34,7 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofGroup?:number;proofRound?:number;escort?:boolean;
   weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy'; bossVariant?: number;
 }
 export interface Bullet {
@@ -245,8 +245,8 @@ export class World {
   }
   stormLinks=0;prismHits=0;proofWins=0;
   aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
-  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:this.laserChainUnlocked());}
-  proofCount(kind:BuildProof){return kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:this.laserArcHits;}
+  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
+  proofCount(kind:BuildProof){return kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.scatterRicochets:this.laserArcHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
   contract?: Contract;
@@ -292,7 +292,7 @@ export class World {
     if(!challenge.proof||challenge.reinforcements>=PROOF_WAVES.groups||challenge.elapsed<challenge.nextReinforcement)return;
     const troops=proofFormation(challenge.proof.kind);
     if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+troops.length>C.limits.enemies){challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;}
-    const candidates=troops.map(t=>{const b=this.spawn(t.kind,t.x,t.y);b.proofTarget=true;b.dropGrace=SWARM.grace;return b;});
+    const candidates=troops.map(t=>{const b=this.spawn(t.kind,t.x,t.y);b.proofTarget=true;if('pattern' in t)b.pattern=t.pattern;if(challenge.proof?.kind==='ricochet'){b.proofGroup=challenge.reinforcements+1;b.proofRound=this.round;}b.dropGrace=SWARM.grace;return b;});
     const horizon=Math.max(...candidates.map(b=>(C.playerY-b.y)/b.speed+1));
     if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
       for(const b of candidates)b.active=false;this.fallbackCount++;challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;
@@ -631,7 +631,7 @@ export class World {
               &&Math.hypot(other.x-body.x,other.y-body.y)<=RICOCHET.range)
               .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id)[0];
             if(target){const before=target.hp;this.hit(target,bullet.damage*RICOCHET.damage,'scatter');
-              if(target.hp<before){this.scatterRicochets++;this.effects.push({type:'ricochet',x:body.x,y:body.y,targetX:target.x,targetY:target.y,weaponKind:'scatter'});}
+              if(target.hp<before){this.scatterRicochets++;if(target.proofRound===this.round&&target.proofGroup)this.contract?.recordRicochetGroup(target.proofGroup,this.round);this.effects.push({type:'ricochet',x:body.x,y:body.y,targetX:target.x,targetY:target.y,weaponKind:'scatter'});}
             }
           }
           if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);

@@ -1342,3 +1342,9 @@ it.each([false,true])('keeps paired gate borders distinct even during a real tie
  const left=pieces.slice(0,8),right=pieces.slice(8);expect(Math.max(...left.map(c=>c.args[5]+c.args[7]))).toBeLessThan(Math.min(...right.map(c=>c.args[5])));
  const panels=f.calls.filter(c=>c.kind==='fillRect'&&c.color==='#071927f5');expect(panels).toHaveLength(2);expect(panels.every(c=>c.args[2]===180)).toBe(true);expect(w.gatesTaken).toBe(0);expect(gates.every(g=>g.active&&g.width===240&&g.row===77)).toBe(true);
 });
+it('offers the earned ricochet validation and renders both event and batch requirements without granting an achievement',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.spawn('pickup',360,C.playerY,2);f.tick();expect(f.runtime.activateControl('build:ballistic')).toBe(true);
+ const offer=w.spawn('pickup',360,C.playerY,2);offer.weaponKind='pierce';offer.row=999;f.tick();expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.activateControl('branch:ricochet')).toBe(true);
+ expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('跳弹侧击 · 30秒跳弹12次 · 命中2批精英'))).toBe(true);
+ expect(f.runtime.activateControl('contract:research')).toBe(true);expect(w.contract!.proof!.kind).toBe('ricochet');expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('跳弹侧击 0/12 · 批次0/2'))).toBe(true);const time=w.time;for(let i=0;i<30;i++)f.tick();expect(w.time).toBe(time);expect(w.contract!.elapsed).toBe(0);expect(f.runtime.save.achievements.unlocked).not.toContain('bank-shot');expect(f.runtime.activateControl('resume')).toBe(true);
+});

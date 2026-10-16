@@ -1,0 +1,41 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/ricochet-contract-progression.test.mjs tests/ricochet-proof-routes.test.ts tests/build-proof-contract.test.ts tests/achievements.test.ts tests/run-report.test.ts tests/explosion-render.test.ts tests/native-flow.test.ts tests/build-proof-progression.test.mjs --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (144 tests | 2 failed) 3374ms
+   × shows every achievement once across readable groups and keeps the local-record footer clear of the return control 11ms
+   × offers the earned ricochet validation and renders both event and batch requirements without granting an achievement 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > shows every achievement once across readable groups and keeps the local-record footer clear of the return control
+AssertionError: expected 1063 to be less than 995
+ ❯ tests/explosion-render.test.ts:120:191
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/explosion-render.test.ts > offers the earned ricochet validation and renders both event and batch requirements without granting an achievement
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1348:103
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  2 failed | 170 passed (172)
+   Start at  23:57:39
+   Duration  4.64s (tests 84%, transform 9%, import 6%)
+
+    Isolate  8 workers spawned · ~112ms startup each (spawn + environment, per file)
+             at least ~336ms faster with isolate: false — reuses workers across files instead of one per file

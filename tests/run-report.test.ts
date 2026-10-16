@@ -31,3 +31,8 @@ it('names actual seeker effectiveness separately from ordinary chain hits, with 
  w.bullets=[{id:99999,x:150,y:750,px:150,py:750,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc',chainHops:1}];tick(w);expect(w.seekerLinks).toBe(1);
  const before=JSON.stringify(w),report=runReport(w,[],[]);expect(report.mechanics.some(line=>line.includes('猎隼 1'))).toBe(true);expect(JSON.stringify(w)).toBe(before);
 });
+it('reports actual ricochet hits instead of claiming no derived ability has triggered',()=>{
+ const w=new World();w.growth.mastery=2;w.chooseBuild('ballistic');w.chooseBuild('ballistic','ricochet');w.player.x=w.player.px=68;
+ for(const x of [360,560]){const b=w.spawn('armor',x,600);b.hp=b.maxHp=1000;b.speed=0;b.timer=999;}
+ w.bullets=[{id:991111,x:360,y:600,px:360,py:600,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'scatter'}];tick(w);expect(w.scatterRicochets).toBe(1);const before=JSON.stringify(w);expect(runReport(w,[],[]).mechanics[0]).toContain('跳弹 1');expect(JSON.stringify(w)).toBe(before);
+});
