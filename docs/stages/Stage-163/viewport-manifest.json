@@ -1,0 +1,32 @@
+[
+  {
+    "file": "before-target-box-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "receipt-returned-desktop.jpg",
+    "width": 1280,
+    "height": 720,
+    "format": "Jpeg"
+  },
+  {
+    "file": "receipt-returned-mobile-weak.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "receipt-returned-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "target-box-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  }
+]

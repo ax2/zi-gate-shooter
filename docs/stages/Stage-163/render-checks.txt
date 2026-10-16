@@ -1,0 +1,63 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/explosion-render.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (127 tests | 3 failed) 17510ms
+   × guides real crate and gate progression with matching earned research choices 3415ms
+   × shows a brief weapon briefing after real pickup, yields to danger and resets on restart 20ms
+   × keeps live-boss upgrade receipts below danger and defers achievements without losing them 240ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > guides real crate and gate progression with matching earned research choices
+AssertionError: expected [ '‹　左右拖动 · 自动开火　›', '分数', …(101) ] to include '对准一箱，增加火力能力'
+ ❯ tests/explosion-render.test.ts:476:16
+    474|   expect(reference.pickups).toBe(2); expect(reference.gatesTaken).toBe…
+    475|   expect(reference.weaponKind).toBe('scatter');
+    476|   expect(seen).toContain('对准一箱，增加火力能力');
+       |                ^
+    477|   expect(seen).toContain('靠近领取，叠加新火力');
+    478|   expect(seen).toContain('对准装备箱持续射击');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/explosion-render.test.ts > shows a brief weapon briefing after real pickup, yields to danger and resets on restart
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:807:55
+    805|   const sniper = f.runtime.world.spawn('sniper', 200, 320); sniper.war…
+    806|   f.tick(); expect(briefing()).toBe(false);
+    807|   sniper.active = false; f.tick(); expect(briefing()).toBe(true);
+       |                                                       ^
+    808|   f.runtime.pause(); for (let i = 0; i < 360; i++) f.tick();
+    809|   f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603); …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/explosion-render.test.ts > keeps live-boss upgrade receipts below danger and defers achievements without losing them
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1111:105
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 124 passed (127)
+   Start at  14:10:39
+   Duration  18.83s (tests 95%, transform 4%, import 1%)

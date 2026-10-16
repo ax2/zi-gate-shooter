@@ -1,0 +1,56 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/build-receipt.test.ts tests/explosion-render.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (127 tests | 3 failed) 7374ms
+   × keeps live-boss upgrade receipts below danger and defers achievements without losing them 102ms
+   × moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=false) 6ms
+   × moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=true) 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > keeps live-boss upgrade receipts below danger and defers achievements without losing them
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1116:74
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/explosion-render.test.ts > moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=false)
+ FAIL  tests/explosion-render.test.ts > moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=true)
+AssertionError: expected undefined to be 272 // Object.is equality
+
+- Expected:
+272
+
++ Received:
+undefined
+
+ ❯ tests/explosion-render.test.ts:1237:100
+    1235|  const r=f.runtime as any;const oldUntil=r.buildFeedback.until;w.time+…
+    1236|  expect(title()).toBeUndefined();expect(r.buildFeedback.until).toBeClo…
+    1237|  bullet.active=false;crate.active=false;f.calls.length=0;r.renderFrame…
+       |                                                                                                    ^
+    1238|  w.time+=4.1;f.calls.length=0;r.renderFrame(0);expect(title()).toBeUnd…
+    1239|  // An already expired receipt must never be revived by a later blocke…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  3 failed | 127 passed (130)
+   Start at  14:12:31
+   Duration  10.96s (tests 62%, transform 30%, import 5%, worker 3%)
+
+  Transform  transforming modules took 3.54s · 30% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

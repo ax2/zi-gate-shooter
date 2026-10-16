@@ -1108,7 +1108,13 @@ it('keeps live-boss upgrade receipts below danger and defers achievements withou
  runtime.achievementToast='测试成就';runtime.achievementUntil=w.time+4;f.tick();
  const title=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='配件强化 · 聚焦镜组');expect(title?.args[2]).toBe(1208);
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(false);expect(runtime.achievementUntil).toBeGreaterThan(w.time+6);
- for(let i=0;i<250;i++)f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(true);
+ for(let i=0;i<250;i++)f.tick();
+ // Live boss bullets can now defer the reading window; clear only the unit
+ // fixture danger, then wait for the preserved receipt and achievement.
+ w.bullets=[];for(const b of w.bodies){if(b.kind==='boss'){b.empRemaining=100;b.hp=1e6;}else b.active=false;}
+ let achievementRead=false;
+ for(let i=0;i<250;i++){w.bullets=[];f.tick();achievementRead ||= f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就');}
+ expect(achievementRead).toBe(true);
  runtime.effect({type:'reward',x:360,y:500,text:'测试战斗回执',detail:'奖励仍清楚可见'});f.tick();expect(f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='测试战斗回执')?.args[2]).toBe(1208);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(false);
 });
 
@@ -1214,4 +1220,23 @@ it.each([false,true])('half-health boss shows physical twin charge, a truthful s
  for(let i=0;i<40;i++)f.tick();expect(b.counterVolleys).toBe(1);expect(w.bullets.filter(b=>b.hostile).length).toBe(6);
  const low=f.calls.reduce((last,c,i)=>c.composite==='lighter'?i:last,-1),danger=f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ff7756');expect(danger).toBeGreaterThan(low);
  f.runtime.pause();const age=b.age;for(let i=0;i<20;i++)f.tick();expect(b.age).toBe(age);f.runtime.start();expect(f.runtime.diagnostics().bossCounterfire).toBe(false);
+});
+
+
+it.each([false,true])('moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ w.growth.energy=100;f.tick();expect(f.runtime.mode).toBe('choice');
+ const crate=w.spawn('crate',360,300,2);crate.weaponKind='pierce';
+ expect(f.runtime.activateControl('build:optical')).toBe(true);
+ const title=()=>f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='配件强化 · 聚焦镜组');
+ expect(title()).toBeUndefined();
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('穿甲'))).toBe(true);
+ const bullet={id:99999,x:360,y:1200,px:360,py:1200,vx:0,vy:0,damage:1,age:0,active:true,hostile:true};w.bullets.push(bullet);
+ f.tick();expect(title()).toBeUndefined();expect(f.calls.some(c=>c.kind==='fillRect'&&c.color==='#ffead7')).toBe(true);
+ const r=f.runtime as any;const oldUntil=r.buildFeedback.until;w.time+=5;f.calls.length=0;r.renderFrame(0);
+ expect(title()).toBeUndefined();expect(r.buildFeedback.until).toBeCloseTo(oldUntil+5);
+ bullet.active=false;for(const b of w.bodies)b.active=false;f.calls.length=0;r.renderFrame(0);expect(title()?.args[2]).toBe(272);
+ w.time+=4.1;f.calls.length=0;r.renderFrame(0);expect(title()).toBeUndefined();
+ // An already expired receipt must never be revived by a later blocked area.
+ crate.active=true;bullet.active=true;r.renderFrame(0);w.time+=6;r.renderFrame(0);bullet.active=false;crate.active=false;f.calls.length=0;r.renderFrame(0);expect(title()).toBeUndefined();
 });

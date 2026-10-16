@@ -1,0 +1,51 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/explosion-render.test.ts -t moves earned|keeps live-boss --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (127 tests | 3 failed | 124 skipped) 408ms
+   × keeps live-boss upgrade receipts below danger and defers achievements without losing them 358ms
+   × moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=false) 26ms
+   × moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=true) 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > keeps live-boss upgrade receipts below danger and defers achievements without losing them
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1116:74
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/explosion-render.test.ts > moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=false)
+ FAIL  tests/explosion-render.test.ts > moves earned upgrade feedback away from crates and real bullets, waits without losing reading time (weak=true)
+AssertionError: {"mode":"playing","receipt":{"title":"配件强化 · 聚焦镜组","detail":"新增激光 · 3秒/束 · 直伤38","until":9.033333333333333,"combo":false,"observedAt":5.033333333333333,"hidden":true},"bodies":[{"kind":"pickup","active":true,"y":302.5}],"location":null}: expected undefined to be 272 // Object.is equality
+
+- Expected:
+272
+
++ Received:
+undefined
+
+ ❯ tests/explosion-render.test.ts:1237:258
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 124 skipped (127)
+   Start at  14:13:37
+   Duration  4.15s (transform 73%, import 16%, tests 11%)
+
+  Transform  transforming modules took 2.84s · 73% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

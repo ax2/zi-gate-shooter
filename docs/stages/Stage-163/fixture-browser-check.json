@@ -1,0 +1,17 @@
+{
+  "url": "http://127.0.0.1:5237/tools/visual-fixtures/receipt-readability.html",
+  "title": "奖励回执 · 正常战斗避让",
+  "logs": [],
+  "flow": "正常奖励→17.05秒回执暂存/箱体与操作指引完整→观察回执恢复→18.13秒同一回执重新显示",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "virtualClock": true
+}

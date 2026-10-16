@@ -1,0 +1,34 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/build-receipt.test.ts tests/explosion-render.test.ts tests/native-controls.test.ts tests/native-flow.test.ts tests/recipe-goal.test.ts tests/build-preview.test.ts tests/rules.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (127 tests | 1 failed) 8216ms
+   × keeps live-boss upgrade receipts below danger and defers achievements without losing them 122ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > keeps live-boss upgrade receipts below danger and defers achievements without losing them
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1116:74
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 157 passed (158)
+   Start at  14:14:03
+   Duration  12.67s (tests 53%, transform 37%, import 7%, worker 2%)
+
+  Transform  transforming modules took 5.91s · 37% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

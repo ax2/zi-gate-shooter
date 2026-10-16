@@ -1,3 +1,4 @@
+import {buildReceiptPosition,type ReceiptPosition} from './build-receipt';
 import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
 import {interceptorLight} from './interceptor-light';
 import {bossHeatLight} from './boss-heat-light';
@@ -75,7 +76,7 @@ export class CanvasRuntime {
   mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
-  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
+  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;observedAt?:number;hidden?:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
   private contractReturn:'loadout'|'paused'='loadout';
@@ -650,10 +651,18 @@ export class CanvasRuntime {
       this.pendingRecipeCompletion=null;
     }
     const receiptThreat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
+    const f=this.buildFeedback;
+    if(f&&this.mode==='playing'){
+      // Only time actually spent displaying the receipt consumes its reading window.
+      if(f.hidden&&f.observedAt!==undefined)f.until+=Math.max(0,w.time-f.observedAt);
+      f.observedAt=w.time;
+    }
+    const receiptPosition=f?this.buildReceiptLocation():null;
+    if(f)f.hidden=w.time<f.until&&receiptPosition===null;
     const activeBuild=this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until;
     const noticeVisible=this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil&&!activeBuild;
     const bottomNotice=receiptThreat||this.noticeY===1195;
-    const bottomBusy=(activeBuild&&receiptThreat)||(noticeVisible&&bottomNotice);
+    const bottomBusy=(activeBuild&&receiptPosition!==240)||(noticeVisible&&bottomNotice);
     // Preserve a newly earned achievement until the preceding combat receipt can be read.
     if(bottomBusy&&w.time<this.achievementUntil)this.achievementUntil=Math.max(this.achievementUntil,
       activeBuild?this.buildFeedback!.until+3:w.time+(this.noticeUntil-this.platform.now())/1000+3);
@@ -666,11 +675,11 @@ export class CanvasRuntime {
         if(this.noticeDetail)this.text(this.noticeDetail,360,y+(bottomNotice?37:43),bottomNotice?22:24,'#f2d598');
       }
     }
-    if(activeBuild){
-      const f=this.buildFeedback!,top=receiptThreat?1180:240,height=receiptThreat?88:104;
+    if(activeBuild&&receiptPosition!==null){
+      const f=this.buildFeedback!,top=receiptPosition,bottom=top===1180,height=bottom?88:104;
       this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.combo?'#d3a3ff':'#7fe4ff');
-      this.text(f.title,360,top+(receiptThreat?28:32),receiptThreat?28:30,f.combo?'#e1bfff':'#d2f2ff','center',true);
-      this.text(f.detail,360,top+(receiptThreat?63:76),receiptThreat?22:23,'#f2d598');
+      this.text(f.title,360,top+(bottom?28:32),bottom?28:30,f.combo?'#e1bfff':'#d2f2ff','center',true);
+      this.text(f.detail,360,top+(bottom?63:76),bottom?22:23,'#f2d598');
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;
@@ -966,11 +975,19 @@ export class CanvasRuntime {
       this.bar(360,y+196,620,boss.hp/boss.maxHp,w.bossShieldActive()?'#82dfff':'#ff925d');
     }
   }
+  private buildReceiptLocation(): ReceiptPosition | null {
+    const w=this.world,position=buildReceiptPosition(w);
+    const combat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
+    // A current instruction (break, collect, cross, or dodge) wins the shared
+    // bottom area. Keep the earned receipt queued until it has its own space.
+    if(position===1180&&!combat&&contextGuide(w).kind!=='move')return null;
+    return position;
+  }
   private drawGuide() {
     if (this.mode !== 'playing') return;
     const receiptThreat=this.world.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     if(this.world.time<this.achievementUntil)return;
-    if(receiptThreat&&this.buildFeedback&&this.world.time<this.buildFeedback.until)return;
+    if(this.buildFeedback&&this.world.time<this.buildFeedback.until&&this.buildReceiptLocation()===1180)return;
     if(this.notice&&(this.noticeY===1195||receiptThreat)&&this.platform.now()<this.noticeUntil)return;
     // Optional help is below all entities, effects, projectiles and native labels.
     // Briefly omit it while a passing body occupies the help area: neither its
