@@ -1,0 +1,18 @@
+{
+  "automaticOutputs": "build/qa/Stage-189",
+  "historicalOutputsWrittenByTests": false,
+  "checks": [
+    {
+      "file": "normal-pressure.json",
+      "historicalSha256": "998ea166655112ad532f0cf1050424d97282b328cdf48d146ad7a6d22581887b",
+      "regeneratedSha256": "998ea166655112ad532f0cf1050424d97282b328cdf48d146ad7a6d22581887b",
+      "identical": true
+    },
+    {
+      "file": "no-kill-routes.json",
+      "historicalSha256": "ba60da0b9189ed8a229e3d8ff207f5f196ce2a394f6dabfcf4f23596180c8429",
+      "regeneratedSha256": "ba60da0b9189ed8a229e3d8ff207f5f196ce2a394f6dabfcf4f23596180c8429",
+      "identical": true
+    }
+  ]
+}

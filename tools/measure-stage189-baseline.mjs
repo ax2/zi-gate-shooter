@@ -1,4 +1,4 @@
-import {build} from 'esbuild';import {writeFileSync} from 'node:fs';import {World,C} from '../build/qa/Stage-189/baseline.mjs';
+import {build} from 'esbuild';import {mkdirSync,writeFileSync} from 'node:fs';import {World,C} from '../build/qa/Stage-189/baseline.mjs';
 const out=await build({stdin:{contents:`export {progressionTarget} from './tests/helpers/progression-driver';`,resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'node',format:'esm',write:false});const {progressionTarget}=await import('data:text/javascript;base64,'+Buffer.from(out.outputFiles[0].text).toString('base64'));
 const runs=[];for(const route of ['optical','ballistic','electric']){
  const w=new World(1337,1,route==='electric'?'arc':route==='ballistic'?'pierce':'scatter'),groups=new Map(),shots=new Set(),passed=new Set();let aim=360;
@@ -10,4 +10,4 @@ const runs=[];for(const route of ['optical','ballistic','electric']){
  }
  runs.push({route,time:w.time,hp:w.player.hp,round:w.round,groups:[...groups.entries()].map(([round,list])=>({round,units:list.map(({body,...g})=>({...g,kind:body.kind,x:body.x,y:body.y,age:body.age,hp:body.hp,pattern:body.pattern??null}))}))});
 }
-writeFileSync('docs/stages/Stage-189/baseline-pressure-modern.json',JSON.stringify(runs,null,2));console.log(JSON.stringify(runs,null,2));
+mkdirSync('build/qa/Stage-189',{recursive:true});writeFileSync('build/qa/Stage-189/baseline-pressure-modern.json',JSON.stringify(runs,null,2));console.log(JSON.stringify(runs,null,2));

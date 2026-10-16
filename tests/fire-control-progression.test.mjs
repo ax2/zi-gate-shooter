@@ -1,7 +1,7 @@
-import {it,expect} from 'vitest';import {writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {C,clamp} from '../src/core/config';import {safeRoute,dangerTimeline} from '../src/core/reachability';import {progressionTarget} from './helpers/progression-driver';
+import {it,expect} from 'vitest';import {mkdirSync,writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {C,clamp} from '../src/core/config';import {safeRoute,dangerTimeline} from '../src/core/reachability';import {progressionTarget} from './helpers/progression-driver';
 function aimAt(w,goal){const x=w.player.x,next=x+clamp(goal-x,-C.moveSpeed*.1,C.moveSpeed*.1),opts={phase:w.phase,phaseTime:w.phaseTime,reaction:0};const blocked=dangerTimeline(w.bodies,w.bullets,1.5,opts).some(slabs=>slabs.some(([lo,hi])=>Math.max(x,next)>=lo&&Math.min(x,next)<=hi));return blocked?safeRoute(x,w.bodies,w.bullets,4,opts)?.[0]??x:next;}
 it('normal cumulative builds meet actual source-powered volleys and can choose to shut the source down first',()=>{
- const runs=[];for(const route of ['optical','ballistic','electric'])for(const tactic of ['ordinary','relay-first','guns-first']){
+ mkdirSync('build/qa/Stage-189',{recursive:true});const runs=[];for(const route of ['optical','ballistic','electric'])for(const tactic of ['ordinary','relay-first','guns-first']){
   const w=new World(1337,1,route==='electric'?'arc':route==='ballistic'?'pierce':'scatter'),groups=new Map(),shots=new Set(),passed=new Set();let aim=360;
   for(let frame=0;frame<600*60&&w.phase!=='dead';frame++){
    if(w.bossRewardRound!==null&&w.phase==='recovery'&&w.phaseTime>=C.bossLootReveal)w.claimBossReward('research');const a=w.build.available(w.buildPoints),r=a.includes(route)?route:a[0];if(r){const branch=w.build.ranks[r]===1?r==='optical'?'relay':r==='electric'?'seeker':'penetrator':r==='optical'&&w.canRefinePhoton()?'photon-focus':r==='electric'&&w.canRefineMagnetic()?'field-link':r==='ballistic'&&w.canRefineFracture()?'fracture-quick':undefined;w.chooseBuild(r,branch);}
@@ -13,6 +13,6 @@ it('normal cumulative builds meet actual source-powered volleys and can choose t
   }
   runs.push({route,tactic,time:w.time,hp:w.player.hp,round:w.round,score:w.score,shots:w.fireControlShots,boosted:w.fireControlBoostedShots,bossWins:w.bossWins,weapons:w.activeWeapons,groups:[...groups.values()].map(g=>({...g,units:g.units.map(({body,...u})=>({...u,id:body.id,kind:body.kind,hp:body.hp,age:body.age,x:body.x,y:body.y}))}))});
  }
- writeFileSync('docs/stages/Stage-189/normal-pressure.json',JSON.stringify(runs,null,2));for(const r of runs){expect(r.time,JSON.stringify(r)).toBeCloseTo(600);expect(r.groups.length).toBeGreaterThanOrEqual(2);expect(r.weapons).toHaveLength(5);}
+ writeFileSync('build/qa/Stage-189/normal-pressure.json',JSON.stringify(runs,null,2));for(const r of runs){expect(r.time,JSON.stringify(r)).toBeCloseTo(600);expect(r.groups.length).toBeGreaterThanOrEqual(2);expect(r.weapons).toHaveLength(5);}
  for(const route of ['optical','ballistic','electric']){const r=runs.filter(r=>r.route===route),first=r.map(r=>r.groups[0].admission);expect(first[0]).toEqual(first[1]);expect(first[1]).toEqual(first[2]);}
 },60000);

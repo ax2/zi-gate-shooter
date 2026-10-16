@@ -34,3 +34,5 @@ CUA沿用本机浏览器会话，开发5255，从实际菜单开始，以正常�
 完整build/playable/Stage-189包含46个与dist逐文件SHA256一致的构建资源和serve.mjs（5271配置、未另启），无ZIP，清单frozen-manifest.json。最终观察器修正前后同一断供窗口的时间/位置/HP/武器/来源击破/各实体物理字段完全一致；右盾卫620/355确在场，双炮还活且EMP余0.5秒。
 
 最终固定5178实读BCx6EHob/6按钮/0错误警告、主页与脚本200，原PID38784；临时5255已通过原会话Ctrl+C停止且无监听（preview-health.json）。
+
+归档可靠性：测试与复现工具自动输出已移到build/qa/Stage-189。2项正常策略/路线复验通过，临时输出与本轮历史JSON逐字节/SHA256一致（evidence-preservation.json）；类型检查再次通过，未重复累计为额外独立用例。
