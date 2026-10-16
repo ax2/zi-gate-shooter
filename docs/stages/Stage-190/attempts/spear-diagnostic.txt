@@ -1,0 +1,39 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/ion-evolution.test.ts -t diagonal spears
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+stdout | tests/ion-evolution.test.ts > diagonal spears hit both wings, pierce twice, exclude the origin and do not recurse
+diag 910 0 []
+
+ ❯ tests/ion-evolution.test.ts (14 tests | 1 failed | 13 skipped) 13ms
+   × diagonal spears hit both wings, pierce twice, exclude the origin and do not recurse 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/ion-evolution.test.ts > diagonal spears hit both wings, pierce twice, exclude the origin and do not recurse
+AssertionError: expected 910 to be 1000 // Object.is equality
+
+- Expected
++ Received
+
+- 1000
++ 910
+
+ ❯ tests/ion-evolution.test.ts:43:152
+     41|  const w=setup('ion-spear'),a=enemy(w),left=enemy(w,260,488),right=ene…
+     42|  charge(w,a);const originHp=a.hp;console.log('diag',third.hp,w.ionSpea…
+     43|  expect(a.hp).toBe(originHp);expect(left.hp).toBeLessThan(1000);expect…
+       |                                                                                                                                                        ^
+     44|  expect(w.ionSpearHits).toBe(3);expect(w.ionBonusDamage).toBeCloseTo(3…
+     45| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 skipped (14)
+   Start at  07:21:30
+   Duration  435ms (transform 76%, import 19%, tests 4%, worker 1%)
+

@@ -1,0 +1,56 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/ion-evolution.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/ion-evolution.test.ts (14 tests | 2 failed) 27ms
+   × requires real T3 arc, two refinements and resolves an available magnetic choice first 9ms
+   × diagonal spears hit both wings, pierce twice, exclude the origin and do not recurse 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/ion-evolution.test.ts > requires real T3 arc, two refinements and resolves an available magnetic choice first
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/ion-evolution.test.ts:21:32
+     19|  const w=setup();expect(w.canRefineIon()).toBe(true);
+     20|  const p=w.spawn('pickup',360,C.playerY,2);p.weaponKind='blast';w.phas…
+     21|  expect(w.canRefineMagnetic()).toBe(true);const saved=JSON.stringify(w…
+       |                                ^
+     22|  expect(w.chooseBuild('electric','field-wide')).toBe(true);expect(w.ch…
+     23|  const low=new World();low.growth.mastery=20;for(let i=0;i<5;i++)low.c…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/ion-evolution.test.ts > diagonal spears hit both wings, pierce twice, exclude the origin and do not recurse
+AssertionError: expected 910 to be 1000 // Object.is equality
+
+- Expected
++ Received
+
+- 1000
++ 910
+
+ ❯ tests/ion-evolution.test.ts:43:152
+     41|  const w=setup('ion-spear'),a=enemy(w),left=enemy(w,260,488),right=ene…
+     42|  charge(w,a);const originHp=a.hp;expect(w.ionSpearShots).toBe(2);advan…
+     43|  expect(a.hp).toBe(originHp);expect(left.hp).toBeLessThan(1000);expect…
+       |                                                                                                                                                        ^
+     44|  expect(w.ionSpearHits).toBe(3);expect(w.ionBonusDamage).toBeCloseTo(3…
+     45| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 12 passed (14)
+   Start at  07:20:59
+   Duration  431ms (transform 71%, import 19%, tests 9%, worker 2%)
+

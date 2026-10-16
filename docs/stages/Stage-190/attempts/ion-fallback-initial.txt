@@ -1,0 +1,50 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/ion-evolution.test.ts tests/ion-evolution-progression.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/ion-evolution.test.ts (14 tests | 4 failed) 34ms
+   × spears stop at crate, never farming a reward or shield-protected neighbor 6ms
+   × spears stop at gate, never farming a reward or shield-protected neighbor 1ms
+   × spears stop at guard, never farming a reward or shield-protected neighbor 1ms
+   × spears stop at protected, never farming a reward or shield-protected neighbor 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/ion-evolution.test.ts > spears stop at crate, never farming a reward or shield-protected neighbor
+ FAIL  tests/ion-evolution.test.ts > spears stop at gate, never farming a reward or shield-protected neighbor
+ FAIL  tests/ion-evolution.test.ts > spears stop at protected, never farming a reward or shield-protected neighbor
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ tests/ion-evolution.test.ts:49:90
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/ion-evolution.test.ts > spears stop at guard, never farming a reward or shield-protected neighbor
+AssertionError: expected 1000 to be 996.25 // Object.is equality
+
+- Expected
++ Received
+
+- 996.25
++ 1000
+
+ ❯ tests/ion-evolution.test.ts:49:15
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  4 failed | 11 passed (15)
+   Start at  07:24:57
+   Duration  3.83s (tests 86%, transform 10%, import 3%)
+
