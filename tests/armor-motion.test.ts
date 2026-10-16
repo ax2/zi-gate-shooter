@@ -24,5 +24,7 @@ it('prepares for the unchanged real 0.6-second warning and returns to travel on 
   if(b.y>=600)expect(b.warning).toBe(0);
  }
  expect(warningAt).toBeCloseTo(1.5);expect(shotAt).toBeCloseTo(2.1);
- expect(shotAt-warningAt).toBeCloseTo(.6);expect(shots).toBe(2);
+ // Faster deployment shortens the travel window; this unit exits its firing
+ // zone before a second cycle, while its first shot and warning stay intact.
+ expect(shotAt-warningAt).toBeCloseTo(.6);expect(shots).toBe(1);
 });

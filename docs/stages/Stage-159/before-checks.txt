@@ -1,0 +1,72 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/shooter-entry.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/shooter-entry.test.ts (6 tests | 6 failed) 20ms
+   × armor starts a complete visible charge and then fires on its original opening schedule 7ms
+   × elite starts a complete visible charge and then fires on its original opening schedule 2ms
+   × guard starts a complete visible charge and then fires on its original opening schedule 2ms
+   × a lethal actual laser cancels an unlaunched armor attack and preserves prior enemy bullets 7ms
+   × a lethal actual laser cancels an unlaunched elite attack and preserves prior enemy bullets 1ms
+   × a lethal actual laser cancels an unlaunched guard attack and preserves prior enemy bullets 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/shooter-entry.test.ts > armor starts a complete visible charge and then fires on its original opening schedule
+AssertionError: expected 14.619999999999976 to be greater than or equal to 240
+ ❯ tests/shooter-entry.test.ts:6:123
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/shooter-entry.test.ts > elite starts a complete visible charge and then fires on its original opening schedule
+AssertionError: expected -64.48 to be greater than or equal to 240
+ ❯ tests/shooter-entry.test.ts:6:123
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/shooter-entry.test.ts > guard starts a complete visible charge and then fires on its original opening schedule
+AssertionError: expected -10.000000000000014 to be greater than or equal to 240
+ ❯ tests/shooter-entry.test.ts:6:123
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/shooter-entry.test.ts > a lethal actual laser cancels an unlaunched armor attack and preserves prior enemy bullets
+ FAIL  tests/shooter-entry.test.ts > a lethal actual laser cancels an unlaunched elite attack and preserves prior enemy bullets
+AssertionError: expected [ { id: 99999, x: 600, …(9) }, …(1) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ tests/shooter-entry.test.ts:10:219
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/shooter-entry.test.ts > a lethal actual laser cancels an unlaunched guard attack and preserves prior enemy bullets
+AssertionError: expected [ { id: 99999, x: 600, …(9) }, …(3) ] to have a length of 1 but got 4
+
+- Expected
++ Received
+
+- 1
++ 4
+
+ ❯ tests/shooter-entry.test.ts:10:219
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  12:36:58
+   Duration  436ms (transform 72%, import 18%, tests 8%, worker 2%)
+

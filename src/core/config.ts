@@ -6,6 +6,7 @@ export const C = {
   energyGateMultiplier: 2,
   killCharge: { elite: 15, boss: 50 },
   chargerBehavior: { warningAge: 1.8, dashAge: 2.6, dashSpeed: 380 },
+  shooterEntry: { stationY:344, speed:480 },
   weapon: [
     { rate: 8, offsets: [0], damage: [4] },
     { rate: 6, offsets: [-12, 12], damage: [4, 4] },

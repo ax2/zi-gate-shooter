@@ -1,0 +1,32 @@
+[
+  {
+    "file": "charge-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "final-menu.jpg",
+    "format": "jpeg",
+    "width": 826,
+    "height": 1084
+  },
+  {
+    "file": "shot-desktop.jpg",
+    "format": "jpeg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "shot-mobile-weak.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "shot-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  }
+]

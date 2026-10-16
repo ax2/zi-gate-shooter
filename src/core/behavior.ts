@@ -29,6 +29,8 @@ export function bossAttackForCycle(variant: number | undefined, cycle: number,co
 
 /** Shared by the live simulation and conservative no-kill route forecast. */
 export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, emit: EnemyShot) {
+  // Instant weapons resolve before movement: a killed emitter cannot launch a new volley.
+  if(!b.active)return;
   const scale=b.shotScale??1;
   const shot:EnemyShot=scale===1?emit:(x,y,vx=0,vy=280)=>emit(x,y,vx*scale,vy*scale);
   if(b.dropGrace!==undefined)b.dropGrace=Math.max(0,b.dropGrace-dt);
@@ -37,6 +39,13 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
   b.age += dt; b.hit = Math.max(0, b.hit - dt);
   if (b.kind === 'boss' && phase !== 'boss') return;
   if(!offline)b.timer -= dt;
+  // Top-entry shooters reach a fully visible station before charging. Keep the
+  // opening clock and use this same movement in the route forecast.
+  if(b.deploying){
+    b.y=Math.min(C.shooterEntry.stationY,b.y+C.shooterEntry.speed*dt);
+    if(b.y>=C.shooterEntry.stationY)b.deploying=false;
+    return;
+  }
   if (b.kind === 'boss') {
     if(!b.counterfire&&b.hp<=b.maxHp*BOSS_COUNTER.health){
       b.counterfire=true;b.counterReady=true;
