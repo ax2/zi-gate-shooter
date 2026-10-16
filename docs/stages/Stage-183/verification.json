@@ -1,0 +1,61 @@
+{
+  "historyCount": 4,
+  "historyMatch": true,
+  "weakCurrentMatch": true,
+  "calibrationBands": {
+    "pulse": 0,
+    "arc": 3,
+    "scatter": 1,
+    "pierce": 0,
+    "blast": 1
+  },
+  "calibratedShots": [
+    {
+      "id": 20119,
+      "kind": "arc",
+      "band": 3
+    },
+    {
+      "id": 20120,
+      "kind": "scatter",
+      "band": 1
+    },
+    {
+      "id": 20121,
+      "kind": "scatter",
+      "band": 1
+    },
+    {
+      "id": 20122,
+      "kind": "scatter",
+      "band": 1
+    },
+    {
+      "id": 20123,
+      "kind": "scatter",
+      "band": 1
+    },
+    {
+      "id": 20124,
+      "kind": "scatter",
+      "band": 1
+    },
+    {
+      "id": 20125,
+      "kind": "scatter",
+      "band": 1
+    },
+    {
+      "id": 20126,
+      "kind": "scatter",
+      "band": 1
+    },
+    {
+      "id": 20129,
+      "kind": "blast",
+      "band": 1
+    }
+  ],
+  "humanAcceptance": false,
+  "lowEndPerformance": false
+}

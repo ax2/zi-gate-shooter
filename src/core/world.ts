@@ -1,5 +1,6 @@
 import {RELAY_SCREEN} from './relay-screen';
 import {BATTERY} from './battery';
+import {calibrationVisualBand,type CalibrationBand} from './calibration-visual';
 import type {OpeningWeapon} from './opening-plan';
 import {battleBrief,type BattlePlan} from './battle-plan';
 import {SWEEPER} from './sweeper';
@@ -44,6 +45,7 @@ export interface Body {
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery'; bossVariant?: number;
 }
 export interface Bullet {
+  readonly calibrationBand?:CalibrationBand;
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
@@ -553,7 +555,7 @@ export class World {
     if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0; return; }
     for (const kind of this.activeWeapons) {
     let timer = (this.fireTimers.get(kind) ?? 0) - dt;
-    const w = this.profileFor(kind);
+    const w = this.profileFor(kind),calibrationBand=calibrationVisualBand(this.weaponCalibration(kind));
     while (timer <= 1e-9) {
       if (this.bullets.filter(b => b.active && !b.hostile).length + w.offsets.length > C.limits.bullets) throw new Error('Player bullet budget exceeded');
       for (let i = 0; i < w.offsets.length; i++) {
@@ -561,7 +563,8 @@ export class World {
         const velocity=kind==='arc'?this.arcVelocity(x,y):{vx:w.vx[i],vy:-C.bulletSpeed};
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, ...velocity,
           damage: w.damage[i] * (1 + permanentPower(this.growth) / 100) * (this.growth.overload > 0 ? 1.35 : 1),
-          age: 0, active: true, hostile: false, weaponKind: kind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops });
+          age: 0, active: true, hostile: false, weaponKind: kind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops,
+          ...(calibrationBand?{calibrationBand}:{}) });
         this.shots++;
       }
       this.effects.push({type:'fire',x:this.player.x,y:C.playerY-70,size:this.weaponStage(kind),weaponKind:kind});

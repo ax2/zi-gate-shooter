@@ -2,6 +2,8 @@ import {isPhotonAugment,photonAugments,laserChainProfile} from '../core/laser-ch
 import {batteryHolding} from '../core/battery';
 import {batteryMount} from './battery-mount';
 import {equipmentPreview} from './equipment-preview';
+import {calibrationVisualBand} from '../core/calibration-visual';
+import {calibrationShot,calibrationMount} from './calibration-light';
 import {openingWeapons,isOpeningWeapon,parseOpeningWeapon,openingHints} from '../core/opening-plan';
 import {battleBrief,sideBattlePreview,nextBattlePlan,parseBattlePlan} from '../core/battle-plan';
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
@@ -590,9 +592,9 @@ export class CanvasRuntime {
     const w=this.world;
     for(const kind of w.activeWeapons){
       if(kind===w.weaponKind)continue;
-      const mount=mountedRig[kind],stage=w.weaponStage(kind);
-      const motion=this.mountedMotion.get(kind)!.sample(kind,stage,w.time)*.65;
-      const size=mount.size*(1+(stage-1)*.07);
+      const mount=mountedRig[kind],stage=w.weaponStage(kind),band=calibrationVisualBand(w.weaponCalibration(kind));
+      const motion=this.calibratedRecoil(kind,this.mountedMotion.get(kind)!)*.65;
+      const size=mount.size*(1+(stage-1)*.07)*(1+band*.05);
       const c=this.ctx,px=w.player.x+Math.sign(mount.x)*25,py=y-24+pose.bob;
       const tx=w.player.x+mount.x,ty=y+mount.y+pose.bob+motion+size*.22;
       c.save();c.lineCap='round';
@@ -601,6 +603,7 @@ export class CanvasRuntime {
       }
       c.fillStyle='#d0d7d3';c.beginPath();c.arc(tx,ty,3,0,Math.PI*2);c.fill();c.restore();
       this.frameSprite('mounted-modules-v1.png',mount.frame,3,w.player.x+mount.x,y+mount.y+pose.bob+motion,size,size,2);
+      calibrationMount(c,w.player.x+mount.x,y+mount.y+pose.bob+motion-size*.12,size*.75,kind,band,this.mountedMotion.get(kind)!.flash(kind,stage,w.time),this.save.settings.effects==='weak');
     }
   }
   private drawOpticalRig(y:number,pose:PlayerPose) {
@@ -614,6 +617,10 @@ export class CanvasRuntime {
       opticalEmitterLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,pulse,side===0?band:1,this.save.settings.effects==='weak');
     }
   }
+  private drawCalibrationRig(y:number,pose:PlayerPose,recoil:number){
+    const w=this.world,kind=w.weaponKind,band=calibrationVisualBand(w.weaponCalibration(kind));calibrationMount(this.ctx,w.player.x,y-(w.profileFor(kind).muzzleY??78)+pose.bob+recoil,96*(1+band*.07),kind,band,this.weaponMotion.flash(kind,w.weaponStage(kind),w.time),this.save.settings.effects==='weak');
+  }
+  private calibratedRecoil(kind:WeaponKind,motion=this.weaponMotion){return motion.sample(kind,this.world.weaponStage(kind),this.world.time)*(1+calibrationVisualBand(this.world.weaponCalibration(kind))*.12);}
   private bar(x: number, y: number, width: number, ratio: number, color: string) {
     this.rect(x - width / 2 - 2, y - 2, width + 4, 12, '#07121b');
     this.rect(x - width / 2, y, width, 8, '#314852'); this.rect(x - width / 2, y, width * clamp(ratio, 0, 1), 8, color);
@@ -829,20 +836,24 @@ export class CanvasRuntime {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
     for(const beam of this.supportBeams) if(this.mode!=='menu'){if(beam.ricochet)ricochetLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);}
-    for(const b of w.bullets) if(!b.hostile) projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
+    for(const b of w.bullets) if(!b.hostile){
+      calibrationShot(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse',b.calibrationBand??0,b.age,this.save.settings.effects==='weak');
+      projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
+    }
     const playerY = this.mode === 'menu' ? 570 : C.playerY;
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0)
       overloadWake(c, w.player.x, playerY, w.time, w.growth.overload, this.save.settings.effects === 'weak');
     c.fillStyle = '#0005'; c.beginPath(); c.ellipse(this.mode==='menu'?365:w.player.x+5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
     c.save();
     if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.65;
-    const recoil = this.weaponMotion.sample(w.weaponKind, w.weaponStage(w.weaponKind), w.time);
+    const recoil = this.calibratedRecoil(w.weaponKind);
     const pose = this.playerMotion.sample(w.player.x, w.time);
     if (w.player.hp > 0||this.mode==='menu') {
       if (this.mode === 'menu') this.frameSprite(weaponDossier[this.save.openingWeapon].asset,1,3,360,playerY,110,147,1);
       else {
         this.drawMountedRig(playerY,pose);
         this.playerSprite(w.weaponStage(w.weaponKind) - 1, w.player.x, playerY, pose, recoil);
+        this.drawCalibrationRig(playerY,pose,recoil);
         this.drawOpticalRig(playerY,pose);
         const remaining = w.player.invulnerable - (C.invulnerability - 0.12);
         if (remaining > 0) {
@@ -1217,7 +1228,8 @@ export class CanvasRuntime {
     c.save();c.translate(360,610);c.scale(2.25,2.25);c.translate(-w.player.x,-C.playerY);
     const pose=this.playerMotion.sample(w.player.x,w.time);
     this.drawMountedRig(C.playerY,pose);
-    this.playerSprite(w.weaponStage(w.weaponKind)-1,w.player.x,C.playerY,pose,this.weaponMotion.sample(w.weaponKind,w.weaponStage(w.weaponKind),w.time));
+    this.playerSprite(w.weaponStage(w.weaponKind)-1,w.player.x,C.playerY,pose,this.calibratedRecoil(w.weaponKind));
+    this.drawCalibrationRig(C.playerY,pose,this.calibratedRecoil(w.weaponKind));
     this.drawOpticalRig(C.playerY,pose);c.restore();
     this.text(w.activeWeapons.map(kind=>`${weaponNames[kind]}T${w.weaponStage(kind)}`).join(' · '),360,965,22,'#d6e7f0');
     const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':'',w.laserChainUnlocked()?'电光连锁':'',w.magneticUnlocked()?'磁暴榴弹':''].filter(Boolean);
@@ -1477,6 +1489,7 @@ export class CanvasRuntime {
       supportBeams:this.supportBeams.length,laserCharge:this.world.laserCharge(),lastLaserAt:Number.isFinite(this.opticalFiredAt)?this.opticalFiredAt:null,opticalBand:laserVisualBand(this.world.growth.mastery,this.world.build.ranks.optical),laserBands:this.supportBeams.filter(b=>b.laser).map(b=>b.opticalBand??1),opticalImpacts:this.impacts.filter(i=>i.opticalBand).length,
       weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
       weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
+      calibrationBands:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,calibrationVisualBand(this.world.weaponCalibration(kind))])),calibratedShots:this.world.bullets.filter(b=>!b.hostile&&b.calibrationBand).map(b=>({id:b.id,kind:b.weaponKind,band:b.calibrationBand})),
       contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,bossRewardRound:this.world.bossRewardRound,bossLootStats:{...this.world.bossLootStats},
       battlePlan:this.world.battlePlan,battleBrief:battleBrief(this.world.round,this.world.battlePlan),nextBattlePlan:this.save.nextBattlePlan,openingWeapon:this.world.openingWeapon??null,savedOpeningWeapon:this.save.openingWeapon,openingSupplies:this.world.bodies.filter(b=>b.active&&b.openingSupply).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,weapon:b.weaponKind,stage:b.stage})),score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,

@@ -1,0 +1,1800 @@
+[
+  {
+    "kind": "pulse",
+    "milestones": {
+      "1": {
+        "time": 185.48333333337308,
+        "calibration": 1,
+        "round": 3,
+        "shots": 4
+      },
+      "2": {
+        "time": 330.8333333333611,
+        "calibration": 3,
+        "round": 5,
+        "shots": 4
+      },
+      "3": {
+        "time": 464.06666666657327,
+        "calibration": 6,
+        "round": 6,
+        "shots": 4
+      }
+    },
+    "effectsHash": "0b7f94aa276cafc26efec419123645eaf236423d29f4333c1e3710271bf5c7a1",
+    "physical": {
+      "time": 899.9999999995101,
+      "round": 11,
+      "phase": "boss-entry",
+      "phaseTime": 1.7999999999999985,
+      "hp": 3,
+      "score": 24095,
+      "kills": 610,
+      "shots": 53511,
+      "hits": 18572,
+      "growth": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 10,
+        "overload": 0,
+        "mastery": 36
+      },
+      "bossLoot": {
+        "claimed": 10,
+        "research": 0,
+        "equipment": 10
+      },
+      "weapons": [
+        {
+          "kind": "pulse",
+          "tier": 3,
+          "calibration": 13,
+          "profile": {
+            "rate": 6,
+            "offsets": [
+              -24,
+              -12,
+              12,
+              24
+            ],
+            "damage": [
+              58.50000000000001,
+              117.00000000000001,
+              117.00000000000001,
+              58.50000000000001
+            ],
+            "vx": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "targets": 1
+          }
+        },
+        {
+          "kind": "scatter",
+          "tier": 3,
+          "calibration": 6,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -36,
+              -24,
+              -12,
+              0,
+              12,
+              24,
+              36
+            ],
+            "damage": [
+              60.84000000000001,
+              60.84000000000001,
+              101.4,
+              141.96000000000004,
+              101.4,
+              60.84000000000001,
+              60.84000000000001
+            ],
+            "vx": [
+              -225,
+              -150,
+              -75,
+              0,
+              75,
+              150,
+              225
+            ],
+            "targets": 1,
+            "chainHops": 1
+          }
+        },
+        {
+          "kind": "arc",
+          "tier": 3,
+          "calibration": 2,
+          "profile": {
+            "rate": 2.5,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              56
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 99,
+            "chainHops": 4
+          }
+        },
+        {
+          "kind": "pierce",
+          "tier": 2,
+          "calibration": 0,
+          "profile": {
+            "rate": 5,
+            "offsets": [
+              -22,
+              22
+            ],
+            "muzzleY": 82,
+            "damage": [
+              19.5,
+              19.5
+            ],
+            "vx": [
+              0,
+              0
+            ],
+            "targets": 2
+          }
+        },
+        {
+          "kind": "blast",
+          "tier": 3,
+          "calibration": 4,
+          "profile": {
+            "rate": 3,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              374.40000000000003
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 100,
+            "splashRadius": 130
+          }
+        }
+      ],
+      "bodies": [
+        {
+          "id": 54562,
+          "kind": "boss",
+          "x": 360,
+          "y": 308.9999999999996,
+          "px": 360,
+          "py": 308.9999999999996,
+          "width": 300,
+          "height": 220,
+          "hp": 216000,
+          "maxHp": 216000,
+          "speed": 0,
+          "active": true,
+          "age": 1.816666666666665,
+          "timer": 0.45,
+          "warning": 0,
+          "hit": 0,
+          "shotScale": 1.3,
+          "deploying": false,
+          "energy": 0,
+          "row": 0,
+          "stage": 2,
+          "rewardKind": "energy",
+          "attack": 0,
+          "lane": 360,
+          "attackCycle": 2,
+          "burst": 0,
+          "bossVariant": 1
+        }
+      ],
+      "bullets": []
+    },
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "kind": "scatter",
+    "milestones": {
+      "1": {
+        "time": 83.21666666666323,
+        "calibration": 1,
+        "round": 2,
+        "shots": 7
+      },
+      "2": {
+        "time": 248.11666666675626,
+        "calibration": 3,
+        "round": 4,
+        "shots": 7
+      },
+      "3": {
+        "time": 409.6166666666228,
+        "calibration": 6,
+        "round": 6,
+        "shots": 7
+      }
+    },
+    "effectsHash": "e5bb9ee5f5bbf53e91f2701408220fd2af627b9aff09b40edafaf086428d36ac",
+    "physical": {
+      "time": 899.9999999995101,
+      "round": 11,
+      "phase": "recovery",
+      "phaseTime": 1.8999999999999981,
+      "hp": 3,
+      "score": 25210,
+      "kills": 614,
+      "shots": 52364,
+      "hits": 17689,
+      "growth": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 60,
+        "overload": 2.7500000000000115,
+        "mastery": 36
+      },
+      "bossLoot": {
+        "claimed": 10,
+        "research": 0,
+        "equipment": 10
+      },
+      "weapons": [
+        {
+          "kind": "pulse",
+          "tier": 3,
+          "calibration": 4,
+          "profile": {
+            "rate": 6,
+            "offsets": [
+              -24,
+              -12,
+              12,
+              24
+            ],
+            "damage": [
+              23.400000000000002,
+              46.800000000000004,
+              46.800000000000004,
+              23.400000000000002
+            ],
+            "vx": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "targets": 1
+          }
+        },
+        {
+          "kind": "scatter",
+          "tier": 3,
+          "calibration": 17,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -36,
+              -24,
+              -12,
+              0,
+              12,
+              24,
+              36
+            ],
+            "damage": [
+              144.495,
+              144.495,
+              240.82500000000005,
+              337.15500000000003,
+              240.82500000000005,
+              144.495,
+              144.495
+            ],
+            "vx": [
+              -225,
+              -150,
+              -75,
+              0,
+              75,
+              150,
+              225
+            ],
+            "targets": 1,
+            "chainHops": 1
+          }
+        },
+        {
+          "kind": "arc",
+          "tier": 3,
+          "calibration": 1,
+          "profile": {
+            "rate": 2.5,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              42
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 99,
+            "chainHops": 4
+          }
+        },
+        {
+          "kind": "pierce",
+          "tier": 2,
+          "calibration": 0,
+          "profile": {
+            "rate": 5,
+            "offsets": [
+              -22,
+              22
+            ],
+            "muzzleY": 82,
+            "damage": [
+              19.5,
+              19.5
+            ],
+            "vx": [
+              0,
+              0
+            ],
+            "targets": 2
+          }
+        },
+        {
+          "kind": "blast",
+          "tier": 3,
+          "calibration": 3,
+          "profile": {
+            "rate": 3,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              312
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 100,
+            "splashRadius": 130
+          }
+        }
+      ],
+      "bodies": [],
+      "bullets": []
+    },
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "kind": "pierce",
+    "milestones": {
+      "1": {
+        "time": 164.7833333333566,
+        "calibration": 1,
+        "round": 3,
+        "shots": 2
+      },
+      "2": {
+        "time": 331.1166666666942,
+        "calibration": 3,
+        "round": 5,
+        "shots": 2
+      },
+      "3": {
+        "time": 573.2499999998073,
+        "calibration": 6,
+        "round": 8,
+        "shots": 2
+      }
+    },
+    "effectsHash": "0914be11d55ec39f0a0cad8769c179b1d5f73d74428cd291cac2bce897f7ed22",
+    "physical": {
+      "time": 899.9999999995101,
+      "round": 11,
+      "phase": "boss",
+      "phaseTime": 0.08333333333333333,
+      "hp": 3,
+      "score": 24155,
+      "kills": 611,
+      "shots": 50855,
+      "hits": 17877,
+      "growth": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 10,
+        "overload": 0,
+        "mastery": 36
+      },
+      "bossLoot": {
+        "claimed": 10,
+        "research": 0,
+        "equipment": 10
+      },
+      "weapons": [
+        {
+          "kind": "pulse",
+          "tier": 3,
+          "calibration": 4,
+          "profile": {
+            "rate": 6,
+            "offsets": [
+              -24,
+              -12,
+              12,
+              24
+            ],
+            "damage": [
+              23.400000000000002,
+              46.800000000000004,
+              46.800000000000004,
+              23.400000000000002
+            ],
+            "vx": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "targets": 1
+          }
+        },
+        {
+          "kind": "pierce",
+          "tier": 3,
+          "calibration": 9,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -22,
+              22
+            ],
+            "muzzleY": 99,
+            "damage": [
+              171.60000000000002,
+              171.60000000000002
+            ],
+            "vx": [
+              0,
+              0
+            ],
+            "targets": 3
+          }
+        },
+        {
+          "kind": "arc",
+          "tier": 3,
+          "calibration": 1,
+          "profile": {
+            "rate": 2.5,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              42
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 99,
+            "chainHops": 4
+          }
+        },
+        {
+          "kind": "scatter",
+          "tier": 3,
+          "calibration": 6,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -36,
+              -24,
+              -12,
+              0,
+              12,
+              24,
+              36
+            ],
+            "damage": [
+              60.84000000000001,
+              60.84000000000001,
+              101.4,
+              141.96000000000004,
+              101.4,
+              60.84000000000001,
+              60.84000000000001
+            ],
+            "vx": [
+              -225,
+              -150,
+              -75,
+              0,
+              75,
+              150,
+              225
+            ],
+            "targets": 1,
+            "chainHops": 1
+          }
+        },
+        {
+          "kind": "blast",
+          "tier": 3,
+          "calibration": 4,
+          "profile": {
+            "rate": 3,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              374.40000000000003
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 100,
+            "splashRadius": 130
+          }
+        }
+      ],
+      "bodies": [
+        {
+          "id": 51898,
+          "kind": "boss",
+          "x": 362.16626545438896,
+          "y": 360,
+          "px": 361.7331279085387,
+          "py": 360,
+          "width": 300,
+          "height": 220,
+          "hp": 215632.91999999998,
+          "maxHp": 216000,
+          "speed": 0,
+          "active": true,
+          "age": 2.116666666666664,
+          "timer": 0.35000000000000003,
+          "warning": 0,
+          "hit": 0,
+          "shotScale": 1.3,
+          "deploying": false,
+          "energy": 0,
+          "row": 0,
+          "stage": 2,
+          "rewardKind": "energy",
+          "attack": 0,
+          "lane": 360,
+          "attackCycle": 2,
+          "burst": 0,
+          "bossVariant": 1
+        }
+      ],
+      "bullets": [
+        {
+          "id": 51899,
+          "x": 336,
+          "y": 832,
+          "px": 336,
+          "py": 852,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 51900,
+          "x": 348,
+          "y": 832,
+          "px": 348,
+          "py": 852,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 51901,
+          "x": 372,
+          "y": 832,
+          "px": 372,
+          "py": 852,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 51902,
+          "x": 384,
+          "y": 832,
+          "px": 384,
+          "py": 852,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 51903,
+          "x": 338,
+          "y": 805,
+          "px": 338,
+          "py": 825,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 960.96,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pierce",
+          "remainingTargets": 3,
+          "hitBodies": []
+        },
+        {
+          "id": 51904,
+          "x": 382,
+          "y": 805,
+          "px": 382,
+          "py": 825,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 960.96,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pierce",
+          "remainingTargets": 3,
+          "hitBodies": []
+        },
+        {
+          "id": 51905,
+          "x": 360,
+          "y": 565,
+          "px": 360,
+          "py": 625,
+          "vx": 0,
+          "vy": -3600,
+          "damage": 235.2,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "arc",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 4
+        },
+        {
+          "id": 51906,
+          "x": 301.5,
+          "y": 832,
+          "px": 305.25,
+          "py": 852,
+          "vx": -225,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 51907,
+          "x": 321,
+          "y": 832,
+          "px": 323.5,
+          "py": 852,
+          "vx": -150,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 51908,
+          "x": 340.5,
+          "y": 832,
+          "px": 341.75,
+          "py": 852,
+          "vx": -75,
+          "vy": -1200,
+          "damage": 567.84,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 51909,
+          "x": 360,
+          "y": 832,
+          "px": 360,
+          "py": 852,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 794.9760000000001,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 51910,
+          "x": 379.5,
+          "y": 832,
+          "px": 378.25,
+          "py": 852,
+          "vx": 75,
+          "vy": -1200,
+          "damage": 567.84,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 51911,
+          "x": 399,
+          "y": 832,
+          "px": 396.5,
+          "py": 852,
+          "vx": 150,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 51912,
+          "x": 418.5,
+          "y": 832,
+          "px": 414.75,
+          "py": 852,
+          "vx": 225,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 51913,
+          "x": 360,
+          "y": 804,
+          "px": 360,
+          "py": 824,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 2096.64,
+          "age": 0.09999999999999999,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "blast",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "splashRadius": 130
+        }
+      ]
+    },
+    "peakBodies": 10,
+    "peakBullets": 67
+  },
+  {
+    "kind": "blast",
+    "milestones": {
+      "1": {
+        "time": 164.06666666668937,
+        "calibration": 1,
+        "round": 3,
+        "shots": 1
+      },
+      "2": {
+        "time": 329.38333333336243,
+        "calibration": 3,
+        "round": 5,
+        "shots": 1
+      },
+      "3": {
+        "time": 409.4666666666229,
+        "calibration": 6,
+        "round": 6,
+        "shots": 1
+      }
+    },
+    "effectsHash": "146213ae0aeaf88cf925fed7ae45449d2dfee4936d11402fd8ca915d811d07a1",
+    "physical": {
+      "time": 899.9999999995101,
+      "round": 11,
+      "phase": "recovery",
+      "phaseTime": 1.266666666666667,
+      "hp": 3,
+      "score": 25180,
+      "kills": 612,
+      "shots": 47695,
+      "hits": 16613,
+      "growth": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 60,
+        "overload": 2.7500000000000115,
+        "mastery": 36
+      },
+      "bossLoot": {
+        "claimed": 10,
+        "research": 0,
+        "equipment": 10
+      },
+      "weapons": [
+        {
+          "kind": "pulse",
+          "tier": 3,
+          "calibration": 3,
+          "profile": {
+            "rate": 6,
+            "offsets": [
+              -24,
+              -12,
+              12,
+              24
+            ],
+            "damage": [
+              19.5,
+              39,
+              39,
+              19.5
+            ],
+            "vx": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "targets": 1
+          }
+        },
+        {
+          "kind": "blast",
+          "tier": 3,
+          "calibration": 13,
+          "profile": {
+            "rate": 3,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              936.0000000000001
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 100,
+            "splashRadius": 130
+          }
+        },
+        {
+          "kind": "arc",
+          "tier": 3,
+          "calibration": 1,
+          "profile": {
+            "rate": 2.5,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              42
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 99,
+            "chainHops": 4
+          }
+        },
+        {
+          "kind": "scatter",
+          "tier": 3,
+          "calibration": 7,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -36,
+              -24,
+              -12,
+              0,
+              12,
+              24,
+              36
+            ],
+            "damage": [
+              68.44500000000001,
+              68.44500000000001,
+              114.07500000000002,
+              159.705,
+              114.07500000000002,
+              68.44500000000001,
+              68.44500000000001
+            ],
+            "vx": [
+              -225,
+              -150,
+              -75,
+              0,
+              75,
+              150,
+              225
+            ],
+            "targets": 1,
+            "chainHops": 1
+          }
+        },
+        {
+          "kind": "pierce",
+          "tier": 3,
+          "calibration": 0,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -22,
+              22
+            ],
+            "muzzleY": 99,
+            "damage": [
+              31.200000000000003,
+              31.200000000000003
+            ],
+            "vx": [
+              0,
+              0
+            ],
+            "targets": 3
+          }
+        }
+      ],
+      "bodies": [],
+      "bullets": []
+    },
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "kind": "arc",
+    "milestones": {
+      "1": {
+        "time": 104.19999999999537,
+        "calibration": 1,
+        "round": 2,
+        "shots": 1
+      },
+      "2": {
+        "time": 248.45000000008986,
+        "calibration": 3,
+        "round": 4,
+        "shots": 1
+      },
+      "3": {
+        "time": 411.0666666666215,
+        "calibration": 6,
+        "round": 6,
+        "shots": 1
+      }
+    },
+    "effectsHash": "931d381047ea6470d7c6421940fa6d4e55695f8da8c6ba2b59c926ccd3e0bc93",
+    "physical": {
+      "time": 899.9999999995101,
+      "round": 11,
+      "phase": "running",
+      "phaseTime": 0,
+      "hp": 3,
+      "score": 24185,
+      "kills": 614,
+      "shots": 49836,
+      "hits": 17061,
+      "growth": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 10,
+        "overload": 0,
+        "mastery": 36
+      },
+      "bossLoot": {
+        "claimed": 10,
+        "research": 0,
+        "equipment": 10
+      },
+      "weapons": [
+        {
+          "kind": "pulse",
+          "tier": 3,
+          "calibration": 4,
+          "profile": {
+            "rate": 6,
+            "offsets": [
+              -24,
+              -12,
+              12,
+              24
+            ],
+            "damage": [
+              23.400000000000002,
+              46.800000000000004,
+              46.800000000000004,
+              23.400000000000002
+            ],
+            "vx": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "targets": 1
+          }
+        },
+        {
+          "kind": "arc",
+          "tier": 3,
+          "calibration": 12,
+          "profile": {
+            "rate": 2.5,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              196
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 99,
+            "chainHops": 4
+          }
+        },
+        {
+          "kind": "scatter",
+          "tier": 3,
+          "calibration": 6,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -36,
+              -24,
+              -12,
+              0,
+              12,
+              24,
+              36
+            ],
+            "damage": [
+              60.84000000000001,
+              60.84000000000001,
+              101.4,
+              141.96000000000004,
+              101.4,
+              60.84000000000001,
+              60.84000000000001
+            ],
+            "vx": [
+              -225,
+              -150,
+              -75,
+              0,
+              75,
+              150,
+              225
+            ],
+            "targets": 1,
+            "chainHops": 1
+          }
+        },
+        {
+          "kind": "pierce",
+          "tier": 3,
+          "calibration": 0,
+          "profile": {
+            "rate": 4,
+            "offsets": [
+              -22,
+              22
+            ],
+            "muzzleY": 99,
+            "damage": [
+              31.200000000000003,
+              31.200000000000003
+            ],
+            "vx": [
+              0,
+              0
+            ],
+            "targets": 3
+          }
+        },
+        {
+          "kind": "blast",
+          "tier": 3,
+          "calibration": 3,
+          "profile": {
+            "rate": 3,
+            "offsets": [
+              0
+            ],
+            "damage": [
+              312
+            ],
+            "vx": [
+              0
+            ],
+            "targets": 1,
+            "muzzleY": 100,
+            "splashRadius": 130
+          }
+        }
+      ],
+      "bodies": [],
+      "bullets": [
+        {
+          "id": 50840,
+          "x": 244.03565309543194,
+          "y": 272,
+          "px": 244.03565309543194,
+          "py": 292,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.5666666666666668,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50841,
+          "x": 256.03565309543194,
+          "y": 272,
+          "px": 256.03565309543194,
+          "py": 292,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.5666666666666668,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50842,
+          "x": 280.03565309543194,
+          "y": 272,
+          "px": 280.03565309543194,
+          "py": 292,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.5666666666666668,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50843,
+          "x": 292.03565309543194,
+          "y": 272,
+          "px": 292.03565309543194,
+          "py": 292,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.5666666666666668,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50844,
+          "x": 244.03565309543194,
+          "y": 472,
+          "px": 244.03565309543194,
+          "py": 492,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50845,
+          "x": 256.03565309543194,
+          "y": 472,
+          "px": 256.03565309543194,
+          "py": 492,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50846,
+          "x": 280.03565309543194,
+          "y": 472,
+          "px": 280.03565309543194,
+          "py": 492,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50847,
+          "x": 292.03565309543194,
+          "y": 472,
+          "px": 292.03565309543194,
+          "py": 492,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50848,
+          "x": 142.03565309543194,
+          "y": 472,
+          "px": 145.78565309543194,
+          "py": 492,
+          "vx": -225,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50849,
+          "x": 184.03565309543194,
+          "y": 472,
+          "px": 186.53565309543194,
+          "py": 492,
+          "vx": -150,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50850,
+          "x": 226.03565309543194,
+          "y": 472,
+          "px": 227.28565309543194,
+          "py": 492,
+          "vx": -75,
+          "vy": -1200,
+          "damage": 567.84,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50851,
+          "x": 268.03565309543194,
+          "y": 472,
+          "px": 268.03565309543194,
+          "py": 492,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 794.9760000000001,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50852,
+          "x": 310.03565309543194,
+          "y": 472,
+          "px": 308.78565309543194,
+          "py": 492,
+          "vx": 75,
+          "vy": -1200,
+          "damage": 567.84,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50853,
+          "x": 352.03565309543194,
+          "y": 472,
+          "px": 349.53565309543194,
+          "py": 492,
+          "vx": 150,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50854,
+          "x": 394.03565309543194,
+          "y": 472,
+          "px": 390.28565309543194,
+          "py": 492,
+          "vx": 225,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50855,
+          "x": 246.03565309543194,
+          "y": 445,
+          "px": 246.03565309543194,
+          "py": 465,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 174.72,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pierce",
+          "remainingTargets": 3,
+          "hitBodies": []
+        },
+        {
+          "id": 50856,
+          "x": 290.03565309543194,
+          "y": 445,
+          "px": 290.03565309543194,
+          "py": 465,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 174.72,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pierce",
+          "remainingTargets": 3,
+          "hitBodies": []
+        },
+        {
+          "id": 50857,
+          "x": 268.03565309543194,
+          "y": 444,
+          "px": 268.03565309543194,
+          "py": 464,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 1747.1999999999998,
+          "age": 0.39999999999999997,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "blast",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "splashRadius": 130
+        },
+        {
+          "id": 50858,
+          "x": 244.03565309543194,
+          "y": 672,
+          "px": 244.03565309543194,
+          "py": 692,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.2333333333333333,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50859,
+          "x": 256.03565309543194,
+          "y": 672,
+          "px": 256.03565309543194,
+          "py": 692,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.2333333333333333,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50860,
+          "x": 280.03565309543194,
+          "y": 672,
+          "px": 280.03565309543194,
+          "py": 692,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.2333333333333333,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50861,
+          "x": 292.03565309543194,
+          "y": 672,
+          "px": 292.03565309543194,
+          "py": 692,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.2333333333333333,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50863,
+          "x": 198.28565309543194,
+          "y": 772,
+          "px": 202.03565309543194,
+          "py": 792,
+          "vx": -225,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50864,
+          "x": 221.53565309543194,
+          "y": 772,
+          "px": 224.03565309543194,
+          "py": 792,
+          "vx": -150,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50865,
+          "x": 244.78565309543194,
+          "y": 772,
+          "px": 246.03565309543194,
+          "py": 792,
+          "vx": -75,
+          "vy": -1200,
+          "damage": 567.84,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50866,
+          "x": 268.03565309543194,
+          "y": 772,
+          "px": 268.03565309543194,
+          "py": 792,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 794.9760000000001,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50867,
+          "x": 291.28565309543194,
+          "y": 772,
+          "px": 290.03565309543194,
+          "py": 792,
+          "vx": 75,
+          "vy": -1200,
+          "damage": 567.84,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50868,
+          "x": 314.53565309543194,
+          "y": 772,
+          "px": 312.03565309543194,
+          "py": 792,
+          "vx": 150,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50869,
+          "x": 337.78565309543194,
+          "y": 772,
+          "px": 334.03565309543194,
+          "py": 792,
+          "vx": 225,
+          "vy": -1200,
+          "damage": 340.70400000000006,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "scatter",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "chainHops": 1
+        },
+        {
+          "id": 50870,
+          "x": 246.03565309543194,
+          "y": 745,
+          "px": 246.03565309543194,
+          "py": 765,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 174.72,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pierce",
+          "remainingTargets": 3,
+          "hitBodies": []
+        },
+        {
+          "id": 50871,
+          "x": 290.03565309543194,
+          "y": 745,
+          "px": 290.03565309543194,
+          "py": 765,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 174.72,
+          "age": 0.15,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pierce",
+          "remainingTargets": 3,
+          "hitBodies": []
+        },
+        {
+          "id": 50872,
+          "x": 244.03565309543194,
+          "y": 872,
+          "px": 244.03565309543194,
+          "py": 892,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.06666666666666667,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50873,
+          "x": 256.03565309543194,
+          "y": 872,
+          "px": 256.03565309543194,
+          "py": 892,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.06666666666666667,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50874,
+          "x": 280.03565309543194,
+          "y": 872,
+          "px": 280.03565309543194,
+          "py": 892,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 262.08,
+          "age": 0.06666666666666667,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50875,
+          "x": 292.03565309543194,
+          "y": 872,
+          "px": 292.03565309543194,
+          "py": 892,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 131.04,
+          "age": 0.06666666666666667,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "pulse",
+          "remainingTargets": 1,
+          "hitBodies": []
+        },
+        {
+          "id": 50876,
+          "x": 268.03565309543194,
+          "y": 844,
+          "px": 268.03565309543194,
+          "py": 864,
+          "vx": 0,
+          "vy": -1200,
+          "damage": 1747.1999999999998,
+          "age": 0.06666666666666667,
+          "active": true,
+          "hostile": false,
+          "weaponKind": "blast",
+          "remainingTargets": 1,
+          "hitBodies": [],
+          "splashRadius": 130
+        }
+      ]
+    },
+    "peakBodies": 9,
+    "peakBullets": 67
+  }
+]
