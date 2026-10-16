@@ -1038,3 +1038,32 @@ it.each([false,true])('actual ion discharge stays bounded, behind hazards and la
  const time=w.time;f.runtime.pause();const before=JSON.stringify((f.runtime as any).blasts);for(let i=0;i<20;i++)f.tick();expect(w.time).toBe(time);expect(JSON.stringify((f.runtime as any).blasts)).toBe(before);
  f.runtime.start();expect(f.runtime.diagnostics().ionBursts).toBe(0);expect(f.runtime.diagnostics().blasts).toBe(0);
 });
+
+it('browses four contract cards and switches earned proof targets without spending or accepting',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=6;
+ for(let i=0;i<3;i++)w.chooseBuild('electric');for(let i=0;i<3;i++)w.chooseBuild('ballistic');f.tick();
+ expect(f.runtime.activateControl('contracts-live')).toBe(true);const before=JSON.stringify(w);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='构筑检验')).toBe(true);
+ expect(f.runtime.activateControl('proof-next')).toBe(true);expect(JSON.stringify(w)).toBe(before);
+ expect(f.runtime.activateControl('contract:research')).toBe(true);expect(w.contract!.proof!.kind).toBe('storm');
+ expect(f.runtime.activateControl('proof-next')).toBe(false);expect(w.proofWins).toBe(0);expect(f.runtime.diagnostics().runAchievements).not.toContain('proof');
+ expect(f.runtime.activateControl('resume')).toBe(true);w.phase='boss';w.player.x=w.player.px=68;
+ const a=w.spawn('armor',360,600),b=w.spawn('armor',470,600);for(const enemy of [a,b]){enemy.hp=enemy.maxHp=10000;enemy.speed=0;enemy.timer=999;}
+ for(let i=0;i<18&&w.contract!.status==='active';i++){w.bullets=[{id:99999,x:a.x,y:a.y,px:a.x,py:a.y,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'scatter',chainHops:1}];f.tick();}
+ expect(w.contract!.status).toBe('won');expect(f.runtime.mode).toBe('contract-reward');expect(f.runtime.diagnostics().runAchievements).toContain('proof');
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='雷暴霰射 · 检验通过')).toBe(true);
+ expect(f.runtime.activateControl('contract-claim:scatter')).toBe(true);expect(w.contractStats.claimed).toBe(1);expect(w.proofWins).toBe(1);
+});
+it('keeps the tenth achievement readable above the footer',async()=>{
+ const f=fixture();await f.runtime.load();f.tick();expect(f.runtime.activateControl('achievements')).toBe(true);
+ const line=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='主动接取并完成一次构筑检验');expect(line).toBeDefined();expect(line!.args[2]+11).toBeLessThan(1029);
+});
+
+it('cycles from the displayed fallback when the previous proof preference is unavailable',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=7;
+ w.chooseBuild('ballistic');w.chooseBuild('ballistic');w.chooseBuild('electric');w.chooseBuild('ballistic');for(let i=0;i<3;i++)w.chooseBuild('optical');f.tick();
+ expect(w.availableProofs()).toEqual(['storm','prism']);expect(f.runtime.activateControl('contracts-live')).toBe(true);
+ for(const control of (f.runtime as any).buttons.filter((c:any)=>c.action==='proof-next'||c.action==='contract:research'))expect(control.h*390/720).toBeGreaterThanOrEqual(44);
+ expect(f.runtime.activateControl('proof-next')).toBe(true);
+ expect(f.runtime.activateControl('contract:research')).toBe(true);expect(w.contract!.proof!.kind).toBe('prism');
+});

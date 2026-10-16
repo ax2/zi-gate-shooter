@@ -1,3 +1,4 @@
+import {buildProofs,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
 import {ION_STORM} from '../core/ion-storm';
 import {dropLight} from './drop-light';
@@ -69,6 +70,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 export class CanvasRuntime {
   world = new World();
   mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  private proofChoice:BuildProof='ion';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
@@ -384,7 +386,8 @@ export class CanvasRuntime {
       }
     }
     else if(action==='contracts-back')this.mode=this.contractReturn;
-    else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts)this.world.acceptContract(kind);}
+    else if(action==='proof-next'&&this.mode==='contracts'){const options=this.world.availableProofs();if(options.length){const at=options.indexOf(this.proofChoice);this.proofChoice=options[((at<0?0:at)+1)%options.length];}}
+    else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts){const options=this.world.availableProofs();this.world.acceptContract(kind,kind==='research'?(options.includes(this.proofChoice)?this.proofChoice:options[0]):undefined);}}
     else if (action === 'tree' && (this.mode === 'choice' || this.mode === 'loadout')) { this.treeReturn = this.mode; this.mode = 'tree'; }
     else if (action === 'tree-back') this.mode = this.treeReturn;
     else if (action === 'loadout') this.mode = 'loadout';
@@ -406,7 +409,7 @@ export class CanvasRuntime {
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private checkAchievements() {
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins);
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins);
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
@@ -436,7 +439,7 @@ export class CanvasRuntime {
     }
     if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
     if(e.type==='boss-kill')this.save.achievements.bosses++;
-    if(['formation-clear','fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
+    if(['contract','formation-clear','fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
     if(e.type==='scatter-pierce'&&this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y+25,tx:e.x,ty:e.y-35,life:.12,laser:false});
     if(e.type==='laser')this.opticalFiredAt=this.world.time;
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
@@ -618,7 +621,7 @@ export class CanvasRuntime {
     const contract=w.contract;
     if(this.mode==='playing'&&contract?.status==='active'){
       const y=w.bodies.some(b=>b.active&&b.kind==='boss')?1130:this.hudTop+164;
-      const progress=contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
+      const progress=contract.kind==='research'&&contract.proof?`${buildProofs[contract.proof.kind].name} ${Math.min(contract.proofProgress,buildProofs[contract.proof.kind].goal)}/${buildProofs[contract.proof.kind].goal}`:contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
       this.rect(40,y,640,44,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${progress}`,360,y+22,24,'#ffdc8a');
     }
     if(this.mode==='playing' && w.time<this.achievementUntil&&!bottomBusy){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
@@ -702,6 +705,7 @@ export class CanvasRuntime {
         }
       }
     }
+    for(const b of w.bodies)if(b.active&&b.proofTarget&&w.contract?.kind==='research'&&w.contract.status==='active')this.text('验证目标',b.x,b.y-b.height/2-24,20,'#a9f4d7');
     for(const b of w.bodies)if(b.active&&(b.dropGrace??0)>0)dropLight(c,b.x,b.y,(b.dropGrace??0)/SWARM.grace,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&(b.empRemaining??0)>0)offlineLight(c,b.x,b.y,b.width,b.empRemaining??0);
     const protectedBoss=w.bodies.find(b=>b.active&&b.kind==='boss');
@@ -937,12 +941,12 @@ export class CanvasRuntime {
     this.text('突围成就',360,155,42,'#effaff','center',true);
     const state=this.save.achievements;
     this.text(`已达成 ${state.unlocked.length}/${achievements.length} · 选择留下战绩`,360,210,25,'#bdd8e7');
-    const rowStep=achievements.length>8?82:94;
+    const rowStep=Math.min(94,Math.floor(770/achievements.length));
     for(const [i,a] of achievements.entries()){const y=255+i*rowStep,done=state.unlocked.includes(a.id);
-      this.rect(65,y,590,rowStep-8,done?'#263d43':'#142b39');
-      this.text(a.name,85,y+30,27,done?'#ffdc8a':'#effaff','left',true);
-      this.text(done?this.achievementReturn==='result'&&this.runAchievements.includes(a.id)?'本局新达成':'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+30,23,done?'#ffdc8a':'#a5bac8','right');
-      this.text(a.detail,85,y+65,22,'#bdd8e7','left');
+      this.rect(65,y,590,rowStep-4,done?'#263d43':'#142b39');
+      this.text(a.name,85,y+(rowStep<82?26:30),27,done?'#ffdc8a':'#effaff','left',true);
+      this.text(done?this.achievementReturn==='result'&&this.runAchievements.includes(a.id)?'本局新达成':'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+(rowStep<82?26:30),23,done?'#ffdc8a':'#a5bac8','right');
+      this.text(a.detail,85,y+(rowStep<82?56:65),22,'#bdd8e7','left');
     }
     this.text('成就保存在本机 · 不增加局外伤害',360,1040,23,'#bdd8e7');
     this.button(this.achievementReturn==='result'?'返回本局战绩':'返回主界面',1100,'achievements-back',true);
@@ -1070,8 +1074,9 @@ export class CanvasRuntime {
   private drawContractReward() {
     const w=this.world,reward=w.contractReward;if(!reward)return;
     this.rect(35,120,650,1080,'#102330');
-    this.text('契约完成 · 选择强化',360,190,38,'#ffdc8a','center',true);
-    this.text('任选一项 · 其他武器与能力全部保留',360,245,24,'#bdd8e7');
+    const proof=w.contract?.proof?buildProofs[w.contract.proof.kind]:undefined;
+    this.text(proof?`${proof.name} · 检验通过`:'契约完成 · 选择强化',360,190,38,'#ffdc8a','center',true);
+    this.text(proof?`${Math.min(w.contract!.proofProgress,proof.goal)}/${proof.goal}${proof.unit} · 任选一项，旧能力保留`:'任选一项 · 其他武器与能力全部保留',360,245,24,'#bdd8e7');
     const total=w.growth.energy+reward.charge;
     const options=[{kind:'energy',title:`充能 +${reward.charge}`,detail:`充能 ${Math.floor(w.growth.energy)} → ${Math.floor(total%100)} · 额外突破 ${Math.floor(total/100)}次`,color:'#7fe4ff'},
       ...this.weaponUpgradeOptions()];
@@ -1085,22 +1090,31 @@ export class CanvasRuntime {
     this.text('战斗已暂停 · 选择后继续',360,1135,24,'#bdd8e7');
   }
   private drawContracts() {
-    const w=this.world,current=w.contract?.round===w.round?w.contract:undefined;
+    const w=this.world,current=w.contract?.round===w.round?w.contract:undefined,proofs=w.availableProofs();
+    const chosen=proofs.includes(this.proofChoice)?this.proofChoice:proofs[0],proof=chosen?buildProofs[chosen]:undefined;
     this.rect(35,120,650,1080,'#102330');
     this.text('挑战契约',360,180,42,'#effaff','center',true);
-    this.text('自选限制或狩猎目标 · 每轮一次',360,235,25,'#bdd8e7');
+    this.text('自选限制、狩猎或构筑检验 · 每轮一次',360,235,24,'#bdd8e7');
     for(const [i,kind] of (Object.keys(contracts) as ContractKind[]).entries()){
-      const entry=contracts[kind],y=285+i*205,can=w.canAcceptContract(kind);
+      const entry=contracts[kind],y=285+i*160,can=w.canAcceptContract(kind,kind==='research'?chosen:undefined);
       const needTier=kind==='hunter'&&!w.activeWeapons.some(k=>w.weaponStage(k)>=2);
-      this.rect(65,y,590,185,can?'#203e50':'#172c3b');
-      this.text(entry.name,90,y+34,30,'#ffdc8a','left',true);
-      this.text(entry.detail,90,y+76,23,'#effaff','left');
-      this.text(`成功：充能+${entry.charge} 或定向强化已有配件`,90,y+116,22,'#bdd8e7','left');
-      this.text(can?'接取契约　›':needTier?'需要任一T2配件':'本轮已接取或当前不可接取',625,y+157,23,can?'#80e4ff':'#97adbd','right');
-      if(can)this.buttons.push({x:65,y,w:590,h:185,label:entry.name,action:`contract:${kind}`});
+      this.rect(65,y,590,148,can?'#203e50':'#172c3b');
+      this.text(entry.name,90,y+26,28,'#ffdc8a','left',true);
+      this.text(kind==='research'?(proof?`${proof.name} · ${proof.detail}`:'先成型雷暴、棱镜、裂甲或离子风暴'):entry.detail,90,y+62,22,'#effaff','left');
+      this.text(`成功：充能+${entry.charge} 或强化已有配件`,90,y+96,21,'#bdd8e7','left');
+      this.text(can?'接取契约　›':needTier?'需要任一T2配件':kind==='research'&&!proof?'尚无可检验组合':'本轮已接取或当前不可接取',625,y+127,21,can?'#80e4ff':'#97adbd','right');
+      if(kind==='research'){
+        if(can)this.buttons.push({x:65,y,w:590,h:148,label:`接取构筑检验：${proof!.name}`,action:'contract:research'});
+      }else if(can)this.buttons.push({x:65,y,w:590,h:148,label:entry.name,action:`contract:${kind}`});
     }
-    this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中'+(current.kind==='hunter'?` ${current.targetKills}/2`:''):current.status==='won'?'已完成':'失败：'+current.reason}`:'每轮前40秒可接取 · 一次选择贯穿本段',360,950,24,'#ffdc8a');
-    this.text(current?.kind==='hunter'?'追加2名驻留精英 · 全破立即选强化':'猎手追加精英 · 其他契约追加无人机',360,992,23,'#bdd8e7');
+    const proofProgress=current?.proof?` ${buildProofs[current.proof.kind].name} ${Math.min(current.proofProgress,buildProofs[current.proof.kind].goal)}/${buildProofs[current.proof.kind].goal}`:'';
+    if(proofs.length>1&&!current){
+      this.rect(65,935,590,82,'#214a4e');this.text('切换检验目标 ↻',360,976,27,'#b9ffe1','center',true);
+      this.buttons.push({x:65,y:935,w:590,h:82,label:'切换检验目标',action:'proof-next'});
+    }else{
+    this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中'+(current.kind==='hunter'?` ${current.targetKills}/2`:proofProgress):current.status==='won'?'已完成'+proofProgress:'失败：'+current.reason}`:'每轮前40秒可接取 · 构筑检验只计接取后触发',360,950,22,'#ffdc8a');
+    this.text(current?.kind==='hunter'?'追加2名驻留精英 · 全破立即选强化':current?.kind==='research'?'最多6组验证敌阵 · 效果达标立即选强化':'猎手追加精英 · 构筑检验追加对应敌阵',360,992,22,'#bdd8e7');
+    }
     this.button(current?.status==='active'?'继续挑战':this.contractReturn==='paused'?'返回暂停菜单':'返回当前火力',1080,current?.status==='active'?'resume':'contracts-back',true);
   }
   private drawBuildTree() {
@@ -1253,6 +1267,7 @@ export class CanvasRuntime {
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
+      proofKind:this.world.contract?.proof?.kind??null,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,

@@ -1,0 +1,148 @@
+[
+  {
+    "proof": "storm",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 415,
+    "accepted": {
+      "time": 83.34999999999656,
+      "round": 2,
+      "start": 0,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc"
+      ],
+      "levels": {
+        "pulse": 2,
+        "scatter": 1,
+        "pierce": 2,
+        "arc": 3
+      }
+    },
+    "won": null,
+    "claim": null,
+    "status": "failed",
+    "reason": "组合有效触发不足",
+    "progress": 2,
+    "stats": {
+      "accepted": 1,
+      "won": 0,
+      "failed": 1,
+      "claimed": 0
+    },
+    "peakBodies": 9,
+    "peakBullets": 70
+  },
+  {
+    "proof": "prism",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 411,
+    "accepted": {
+      "time": 83.21666666666323,
+      "round": 2,
+      "start": 0,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce"
+      ],
+      "levels": {
+        "pulse": 2,
+        "scatter": 2,
+        "pierce": 3
+      }
+    },
+    "won": null,
+    "claim": null,
+    "status": "failed",
+    "reason": "组合有效触发不足",
+    "progress": 0,
+    "stats": {
+      "accepted": 1,
+      "won": 0,
+      "failed": 1,
+      "claimed": 0
+    },
+    "peakBodies": 9,
+    "peakBullets": 70
+  },
+  {
+    "proof": "fracture",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 401,
+    "accepted": {
+      "time": 165.6166666666906,
+      "round": 3,
+      "start": 5,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "levels": {
+        "pulse": 2,
+        "scatter": 2,
+        "pierce": 3,
+        "blast": 3
+      }
+    },
+    "won": null,
+    "claim": null,
+    "status": "failed",
+    "reason": "组合有效触发不足",
+    "progress": 0,
+    "stats": {
+      "accepted": 1,
+      "won": 0,
+      "failed": 1,
+      "claimed": 0
+    },
+    "peakBodies": 10,
+    "peakBullets": 55
+  },
+  {
+    "proof": "ion",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 416,
+    "accepted": {
+      "time": 83.01666666666324,
+      "round": 2,
+      "start": 0,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce"
+      ],
+      "levels": {
+        "pulse": 2,
+        "arc": 1,
+        "scatter": 2,
+        "pierce": 3
+      }
+    },
+    "won": null,
+    "claim": null,
+    "status": "failed",
+    "reason": "组合有效触发不足",
+    "progress": 1,
+    "stats": {
+      "accepted": 1,
+      "won": 0,
+      "failed": 1,
+      "claimed": 0
+    },
+    "peakBodies": 10,
+    "peakBullets": 67
+  }
+]

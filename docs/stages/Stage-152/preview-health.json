@@ -1,0 +1,17 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-B9HxVRhW.js",
+    "status": 200,
+    "bytes": 208775
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/elite-v1.png",
+    "status": 200,
+    "bytes": 254549
+  }
+]

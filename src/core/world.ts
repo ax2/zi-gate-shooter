@@ -1,3 +1,4 @@
+import {buildProofs,proofFormation,PROOF_WAVES,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {ION_STORM} from './ion-storm';
 import { FRACTURE } from './combos';
@@ -28,7 +29,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; bountyRound?:number;proofTarget?:boolean;escort?:boolean;
   weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
 }
 export interface Bullet {
@@ -193,6 +194,9 @@ export class World {
     else this.calibrations.set(kind,this.weaponCalibration(kind)+1);
     this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
   }
+  stormLinks=0;prismHits=0;proofWins=0;
+  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():this.build.ranks.electric>=3);}
+  proofCount(kind:BuildProof){return kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:this.ionHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
   contract?: Contract;
@@ -212,13 +216,27 @@ export class World {
     return true;
   }
   damageTaken=0;
-  canAcceptContract(kind:ContractKind){
+  canAcceptContract(kind:ContractKind,proof?:BuildProof){
     return kind in contracts&&!this.contractReward&&this.phase==='running'&&this.roundTime<=40&&this.player.hp>0&&this.contract?.status!=='active'&&this.contract?.round!==this.round
-      &&(kind!=='hunter'||this.activeWeapons.some(k=>this.weaponStage(k)>=2));
+      &&(kind!=='hunter'||this.activeWeapons.some(k=>this.weaponStage(k)>=2))
+      &&(kind==='research'?this.availableProofs().includes(proof??this.availableProofs()[0]):proof===undefined);
   }
-  acceptContract(kind:ContractKind){
-    if(!this.canAcceptContract(kind))return false;
-    this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken);this.contractStats.accepted++;return true;
+  acceptContract(kind:ContractKind,proof?:BuildProof){
+    if(!this.canAcceptContract(kind,proof))return false;
+    const selected=kind==='research'?(proof??this.availableProofs()[0]):undefined;
+    this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken,selected?{kind:selected,start:this.proofCount(selected)}:undefined);this.contractStats.accepted++;return true;
+  }
+  private spawnProofWave(challenge:Contract){
+    if(!challenge.proof||challenge.reinforcements>=PROOF_WAVES.groups||challenge.elapsed<challenge.nextReinforcement)return;
+    const troops=proofFormation(challenge.proof.kind);
+    if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+troops.length>C.limits.enemies){challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;}
+    const candidates=troops.map(t=>{const b=this.spawn(t.kind,t.x,t.y);b.proofTarget=true;b.dropGrace=SWARM.grace;return b;});
+    const horizon=Math.max(...candidates.map(b=>(C.playerY-b.y)/b.speed+1));
+    if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
+      for(const b of candidates)b.active=false;this.fallbackCount++;challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;
+    }
+    challenge.reinforcements++;challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.spacing;
+    this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:`构筑检验 · ${buildProofs[challenge.proof.kind].name}`,detail:`验证敌阵 ${challenge.reinforcements}/${PROOF_WAVES.groups} · 投送屏障后可命中`});
   }
   readonly growth: Growth = { stage: 1, bonus: 0, energy: 0, overload: 0 };
   weaponKind: WeaponKind = 'pulse';
@@ -438,7 +456,7 @@ export class World {
           for(const body of targets){
             const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
             const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
-            this.hit(body,damage,'pulse');
+            const before=body.hp;this.hit(body,damage,'pulse');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
             if(side===0&&count===0&&!blocked)this.opticalSecondary(body,damage);
             if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
           }
@@ -466,7 +484,8 @@ export class World {
     this.director(dt);
     // Opt-in combat supplies its own targets; it must not depend on a sparse chapter tail.
     const challenge=this.contract;
-    if(challenge?.status==='active'&&this.phase==='running'&&challenge.reinforcements<(challenge.kind==='hunter'?HUNTER.targets:22)&&challenge.elapsed>=challenge.nextReinforcement){
+    if(challenge?.status==='active'&&this.phase==='running'&&challenge.kind==='research')this.spawnProofWave(challenge);
+    if(challenge?.status==='active'&&challenge.kind!=='research'&&this.phase==='running'&&challenge.reinforcements<(challenge.kind==='hunter'?HUNTER.targets:22)&&challenge.elapsed>=challenge.nextReinforcement){
       const count=this.bodies.filter(b=>b.active&&b.kind in C.enemies).length;
       if(count<C.limits.enemies){
         const hunter=challenge.kind==='hunter',x=hunter?[220,500][challenge.reinforcements]:[200,360,520,360][challenge.reinforcements%4];
@@ -545,7 +564,8 @@ export class World {
               const next = candidates[0]; if (!next) break;
               visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
               this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y});
-              const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(conducts)this.ionImpact(next,damage);}origin = next;
+              const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(conducts)this.ionImpact(next,damage);}
+              if(bullet.weaponKind==='scatter'&&next.hp<before)this.stormLinks++;origin = next;
             }
           }
           if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {
@@ -660,9 +680,9 @@ export class World {
     this.bodies = this.bodies.filter(b => b.active && b.y < 1344);
     this.bullets = this.bullets.filter(b => b.active && b.y > (b.hostile ? -90 : C.playerShotTop) && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
     const contract=this.contract;
-    if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0)){
+    if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0,contract.proof?this.proofCount(contract.proof.kind):0)){
       if(contract.status==='won'){
-        this.contractStats.won++;
+        this.contractStats.won++;if(contract.kind==='research')this.proofWins++;
         this.contractReward={charge:contracts[contract.kind].charge,round:this.round};
       }
       if(contract.status==='failed')this.contractStats.failed++;

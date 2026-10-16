@@ -9,6 +9,7 @@ export const achievements = [
  {id:'arsenal',name:'移动军械库',detail:'单局同时持有五种武器'},
  {id:'tactician',name:'战术拆解',detail:'编队全破且无伤击败首领'},
  {id:'disruptor',name:'断电时机',detail:'一次中继爆破中断两台正在蓄能的敌机'},
+ {id:'proof',name:'实战工程师',detail:'主动接取并完成一次构筑检验'},
 ] as const;
 export interface Achievements {kills:number; bosses:number; unlocked:string[]}
 export const emptyAchievements=():Achievements=>({kills:0,bosses:0,unlocked:[]});
@@ -20,9 +21,9 @@ export function parseAchievements(value:unknown):Achievements {
  if(Array.isArray(data.unlocked))result.unlocked=achievements.filter(a=>data.unlocked!.includes(a.id)).map(a=>a.id);
  return result;
 }
-export function awardAchievements(state:Achievements,ranks:Record<Route,number>,weapons:number,fractureBursts=0,tacticalWins=0,conduitTacticalWins=0){
+export function awardAchievements(state:Achievements,ranks:Record<Route,number>,weapons:number,fractureBursts=0,tacticalWins=0,conduitTacticalWins=0,proofWins=0){
  const values=Object.values(ranks),spent=values.reduce((a,b)=>a+b,0);
- const met=[state.kills>=100,state.bosses>=1,spent===3&&values.includes(3),spent===3&&values.every(v=>v===1),ranks.ballistic>=3&&ranks.electric>=1,fractureBursts>=10,weapons>=5,tacticalWins>0,conduitTacticalWins>0];
+ const met=[state.kills>=100,state.bosses>=1,spent===3&&values.includes(3),spent===3&&values.every(v=>v===1),ranks.ballistic>=3&&ranks.electric>=1,fractureBursts>=10,weapons>=5,tacticalWins>0,conduitTacticalWins>0,proofWins>0];
  const fresh=achievements.filter((a,i)=>met[i]&&!state.unlocked.includes(a.id));
  state.unlocked.push(...fresh.map(a=>a.id));return fresh;
 }
