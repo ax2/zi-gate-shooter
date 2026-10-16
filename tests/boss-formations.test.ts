@@ -2,6 +2,7 @@ import {it,expect} from 'vitest';
 import {World,type Body} from '../src/core/world';
 import {C} from '../src/core/config';
 import {bossFormationFor} from '../src/core/boss-formations';
+import {safeRoute} from '../src/core/reachability';
 function battle(round=4,start=360){const w=new World(1337,round);w.phase='boss';w.player.x=start;const b=w.spawn('boss',360,C.bossY);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];return {w,b};}
 function frames(w:World,n:number,x=w.player.x){for(let i=0;i<n;i++)w.step(C.step,x);}
 let id=100000;
@@ -69,6 +70,9 @@ it('supply guards use authored durability and a bounded hover while ordinary gua
  const {w}=battle();frames(w,180,68);const guards=w.activeEscorts;expect(guards).toHaveLength(2);
  const ordinary=w.spawn('guard',620,180);const reference=ordinary.maxHp;
  for(const g of guards){expect(g.maxHp).toBeCloseTo(reference*3);expect(g.y).toBeCloseTo(440);}
- frames(w,60,68);expect(ordinary.y).toBeGreaterThan(180);
- frames(w,600,68);expect(guards.every(g=>g.y>440||!g.active)).toBe(true);
+ let path:number[]=[];for(let f=0;f<660;f++){
+  if(f%60===0){const route=safeRoute(w.player.x,w.bodies,w.bullets,6,{phase:w.phase,phaseTime:w.phaseTime,reaction:f===0?.45:0});expect(route).not.toBeNull();path=route??[];}
+  w.step(C.step,path[Math.floor((f%60)/6)]??w.player.x);w.bullets=w.bullets.filter(b=>b.hostile);expect(w.player.hp,`hover t=${w.time}`).toBe(3);if(f===59)expect(ordinary.y).toBeGreaterThan(180);
+ }
+ expect(guards.every(g=>g.y>440||!g.active),JSON.stringify({phase:w.phase,hp:w.player.hp,boss:w.bodies.find(b=>b.kind==='boss')?.hp,counter:w.bodies.find(b=>b.kind==='boss')?.counterfire,guards:guards.map(g=>({age:g.age,y:g.y,active:g.active}))})).toBe(true);
 });

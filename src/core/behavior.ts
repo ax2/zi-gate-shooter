@@ -1,3 +1,4 @@
+import {BOSS_COUNTER,counterMuzzles,counterAttack} from './boss-counter';
 import { HUNTER } from './contracts';
 import { ESCORT } from './boss-formations';
 import type { Body, Phase } from './world';
@@ -19,7 +20,8 @@ export function bossWarningLanes(b: Body) {
 }
 
 /** Chapters have different pressure/recovery phrases, not one shared playlist. */
-export function bossAttackForCycle(variant: number | undefined, cycle: number) {
+export function bossAttackForCycle(variant: number | undefined, cycle: number,counterfire=false) {
+  if(counterfire)return counterAttack(variant,cycle);
   if (variant === 1) return [2, 1, 2, 0][((cycle - 2) % 4 + 4) % 4];
   if (variant === 2) return [3, 0, 3, 1][((cycle - 3) % 4 + 4) % 4];
   return cycle % 2;
@@ -36,11 +38,15 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
   if (b.kind === 'boss' && phase !== 'boss') return;
   if(!offline)b.timer -= dt;
   if (b.kind === 'boss') {
+    if(!b.counterfire&&b.hp<=b.maxHp*BOSS_COUNTER.health){
+      b.counterfire=true;b.counterReady=true;
+      if(!b.warning&&!b.burst)b.timer=Math.min(b.timer,BOSS_COUNTER.lead);
+    }
     b.x = 360 + Math.sin(phaseTime * 0.4) * 65;
     if (b.timer <= 1e-9) {
       const finish = () => {
         b.warning = 0; b.burst = 0; b.attackCycle++;
-        b.timer = phaseTime > 35 ? 3.5 : 2.8;
+        b.timer = b.counterReady?BOSS_COUNTER.lead:b.counterfire?BOSS_COUNTER.recovery:phaseTime > 35 ? 3.5 : 2.8;
       };
       if (b.burst) {
         if (b.attack === 3) {
@@ -48,15 +54,18 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         } else for (let i = 0; i < 3; i++) shot(360, b.y + 90 - i * 60, 0, 300);
         finish();
       } else if (b.warning <= 0) {
-        b.warning = 1.35; b.timer = 1.35;
+        b.attack=b.counterReady?4:bossAttackForCycle(b.bossVariant,b.attackCycle,!!b.counterfire);b.counterReady=false;
+        b.warning = b.attack===4?BOSS_COUNTER.warning:1.35; b.timer = b.warning;
         // Advance only after an attack finishes, so delayed warnings cannot
         // accidentally repeat/skip a pattern. B alternates left/right sweep.
-        b.attack = bossAttackForCycle(b.bossVariant, b.attackCycle);
         b.lane = b.attack === 3 ? [140, 360, 580][Math.floor(b.attackCycle / 4) % 3]
           : b.attack ? Math.floor(b.attackCycle / 2) % 2 ? 520 : 200
           : [200, 360, 520][Math.floor(b.attackCycle / 2) % 3];
       } else {
-        if (b.attack === 3) {
+        if(b.attack===4){
+          for(const muzzle of counterMuzzles(b))for(const vx of BOSS_COUNTER.vx)shot(muzzle.x,muzzle.y,vx,BOSS_COUNTER.vy);
+          b.counterVolleys=(b.counterVolleys??0)+1;b.counterShotAge=b.age;finish();
+        }else if (b.attack === 3) {
           for (const x of bossWarningLanes(b)) for (let i = 0; i < 2; i++) shot(x, b.y + 90 - i * 75, 0, 280);
           // Only the third chapter locks twice. Advertise the adjacent new gap
           // before the second volley; never move an already-fired projectile.

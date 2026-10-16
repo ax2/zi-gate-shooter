@@ -1,0 +1,387 @@
+[
+  {
+    "route": "ballistic",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 395,
+    "bossWins": 7,
+    "peakBodies": 9,
+    "peakBullets": 70,
+    "battles": [
+      {
+        "round": 1,
+        "start": 74.03333333333042,
+        "half": 2.7666666666665094,
+        "low": 4.16666666666643,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0
+        ],
+        "counterAt": null,
+        "shots": 5,
+        "cycle": 1,
+        "duration": 5.299999999999699
+      },
+      {
+        "round": 2,
+        "start": 157.38333333335072,
+        "half": 1.8666666666681522,
+        "low": 2.9666666666690276,
+        "attacks": [
+          2
+        ],
+        "finished": [
+          2
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 3,
+        "duration": 3.566666666669505
+      },
+      {
+        "round": 3,
+        "start": 239.00000000008234,
+        "half": 1.683333333334673,
+        "low": 2.5333333333353494,
+        "attacks": [
+          3
+        ],
+        "finished": [
+          3
+        ],
+        "counterAt": null,
+        "shots": 24,
+        "cycle": 4,
+        "duration": 5.6166666666711365
+      },
+      {
+        "round": 4,
+        "start": 322.6666666667019,
+        "half": 2.366666666664514,
+        "low": 3.699999999996635,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 1,
+        "duration": 4.616666666662468
+      },
+      {
+        "round": 5,
+        "start": 405.33333333329335,
+        "half": 1.3499999999987722,
+        "low": 1.966666666664878,
+        "attacks": [
+          2
+        ],
+        "finished": [
+          2
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 3,
+        "duration": 2.366666666664514
+      },
+      {
+        "round": 6,
+        "start": 485.7499999998869,
+        "half": 1.116666666665651,
+        "low": 1.6999999999984539,
+        "attacks": [
+          3
+        ],
+        "finished": [],
+        "counterAt": null,
+        "shots": 12,
+        "cycle": 3,
+        "duration": 2.1166666666647416
+      },
+      {
+        "round": 7,
+        "start": 565.9166666664806,
+        "half": 1.6833333333318024,
+        "low": 2.3499999999978627,
+        "attacks": [
+          0
+        ],
+        "finished": [
+          0
+        ],
+        "counterAt": null,
+        "shots": 5,
+        "cycle": 1,
+        "duration": 2.5333333333310293
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 395,
+    "bossWins": 7,
+    "peakBodies": 10,
+    "peakBullets": 67,
+    "battles": [
+      {
+        "round": 1,
+        "start": 74.03333333333042,
+        "half": 2.5666666666665208,
+        "low": 4.099999999999767,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0
+        ],
+        "counterAt": null,
+        "shots": 5,
+        "cycle": 1,
+        "duration": 4.966666666666384
+      },
+      {
+        "round": 2,
+        "start": 157.05000000001712,
+        "half": 2.100000000001671,
+        "low": 3.2000000000025466,
+        "attacks": [
+          2
+        ],
+        "finished": [
+          2
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 3,
+        "duration": 4.016666666669863
+      },
+      {
+        "round": 3,
+        "start": 239.1166666667491,
+        "half": 2.166666666668391,
+        "low": 6.000000000004775,
+        "attacks": [
+          3,
+          0
+        ],
+        "finished": [
+          3
+        ],
+        "counterAt": null,
+        "shots": 24,
+        "cycle": 4,
+        "duration": 6.850000000005451
+      },
+      {
+        "round": 4,
+        "start": 324.01666666670064,
+        "half": 3.699999999996635,
+        "low": 5.366666666661786,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0,
+          1
+        ],
+        "counterAt": null,
+        "shots": 14,
+        "cycle": 2,
+        "duration": 6.349999999994225
+      },
+      {
+        "round": 5,
+        "start": 408.4166666666239,
+        "half": 2.3499999999978627,
+        "low": 3.6166666666633773,
+        "attacks": [
+          2
+        ],
+        "finished": [
+          2
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 3,
+        "duration": 4.499999999995907
+      },
+      {
+        "round": 6,
+        "start": 490.9666666665488,
+        "half": 2.4999999999977263,
+        "low": 6.116666666661104,
+        "attacks": [
+          3,
+          0
+        ],
+        "finished": [
+          3
+        ],
+        "counterAt": null,
+        "shots": 27,
+        "cycle": 4,
+        "duration": 7.099999999993543
+      },
+      {
+        "round": 7,
+        "start": 576.1166666664714,
+        "half": 3.2999999999969987,
+        "low": 4.099999999996271,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 1,
+        "duration": 4.699999999995725
+      }
+    ]
+  },
+  {
+    "route": "optical",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 380,
+    "bossWins": 7,
+    "peakBodies": 10,
+    "peakBullets": 55,
+    "battles": [
+      {
+        "round": 1,
+        "start": 74.03333333333042,
+        "half": 2.599999999999852,
+        "low": 4.199999999999761,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0
+        ],
+        "counterAt": null,
+        "shots": 5,
+        "cycle": 1,
+        "duration": 5.166666666666373
+      },
+      {
+        "round": 2,
+        "start": 157.25000000001728,
+        "half": 2.2500000000017906,
+        "low": 3.366666666669346,
+        "attacks": [
+          2
+        ],
+        "finished": [
+          2
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 3,
+        "duration": 4.350000000003462
+      },
+      {
+        "round": 3,
+        "start": 239.65000000008285,
+        "half": 2.35000000000187,
+        "low": 6.350000000005053,
+        "attacks": [
+          3,
+          0
+        ],
+        "finished": [
+          3
+        ],
+        "counterAt": null,
+        "shots": 24,
+        "cycle": 4,
+        "duration": 7.016666666672251
+      },
+      {
+        "round": 4,
+        "start": 324.7166666667,
+        "half": 3.699999999996635,
+        "low": 6.0166666666611945,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0,
+          1
+        ],
+        "counterAt": null,
+        "shots": 17,
+        "cycle": 2,
+        "duration": 7.533333333326482
+      },
+      {
+        "round": 5,
+        "start": 410.2999999999555,
+        "half": 2.3499999999978627,
+        "low": 3.5833333333300743,
+        "attacks": [
+          2
+        ],
+        "finished": [
+          2
+        ],
+        "counterAt": null,
+        "shots": 8,
+        "cycle": 3,
+        "duration": 4.349999999996044
+      },
+      {
+        "round": 6,
+        "start": 492.69999999988056,
+        "half": 2.3499999999978627,
+        "low": 6.166666666661058,
+        "attacks": [
+          3,
+          0
+        ],
+        "finished": [
+          3
+        ],
+        "counterAt": null,
+        "shots": 30,
+        "cycle": 4,
+        "duration": 7.016666666660285
+      },
+      {
+        "round": 7,
+        "start": 577.7666666664699,
+        "half": 4.0166666666630135,
+        "low": 6.283333333327619,
+        "attacks": [
+          0,
+          1
+        ],
+        "finished": [
+          0,
+          1
+        ],
+        "counterAt": null,
+        "shots": 17,
+        "cycle": 2,
+        "duration": 8.016666666659376
+      }
+    ]
+  }
+]

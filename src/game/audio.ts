@@ -53,6 +53,7 @@ export class GameAudio {
   }
   event(type: string, stage: number, weapon: WeaponKind = 'pulse') {
     if(type==='alert'){this.tone(240,110,.2,.035,'triangle');return;}
+    if(type==='boss-volley'){this.tone(135,42,.19,.04,'triangle');this.tone(450,90,.1,.025,'sawtooth');return;}
     if(type==='shield-down'){this.tone(480,1300,.2,.04,'sine');this.tone(220,70,.18,.025,'triangle');return;}
     if (type === 'laser') {
       if (this.now() - this.lastLaser < 500) return;

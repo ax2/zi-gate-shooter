@@ -29,7 +29,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; bountyRound?:number;proofTarget?:boolean;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;proofTarget?:boolean;escort?:boolean;
   weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
 }
 export interface Bullet {
@@ -500,11 +500,15 @@ export class World {
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;
       const previousWarning = b.warning;
+      const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0;
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => this.hostile(x, y, vx, vy));
+      if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · 双炮反击',detail:'双炮加入攻击循环 · 已发敌弹仍危险'});
+      if(b.kind==='boss'&&(b.counterVolleys??0)>wasCounterVolleys)this.effects.push({type:'counter-fire',x:b.x,y:b.y});
       if (b.kind === 'boss' && previousWarning <= 0 && b.warning > 0
         && !safeRoute(this.player.x, this.bodies, this.bullets, b.attack === 3 ? 8 : 4, { phase: this.phase, phaseTime: this.phaseTime })) {
         // The warning has not been rendered yet. Delay the unannounced attack;
         // once displayed its geometry and duration are never changed.
+        if(b.attack===4)b.counterReady=true;
         b.warning = 0; b.timer = 0.3; this.attackDeferrals++;
       }
     }

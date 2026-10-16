@@ -1,0 +1,17 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-B6heDUca.js",
+    "status": 200,
+    "bytes": 211622
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/boss-bastion-v1.png",
+    "status": 200,
+    "bytes": 245556
+  }
+]

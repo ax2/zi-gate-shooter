@@ -1,0 +1,44 @@
+[
+  {
+    "round": 4,
+    "at": 2,
+    "preserved": 5,
+    "hp": 3,
+    "counterVolleys": 4
+  },
+  {
+    "round": 4,
+    "at": 4,
+    "preserved": 10,
+    "hp": 3,
+    "counterVolleys": 3
+  },
+  {
+    "round": 5,
+    "at": 2,
+    "preserved": 8,
+    "hp": 3,
+    "counterVolleys": 3
+  },
+  {
+    "round": 5,
+    "at": 4,
+    "preserved": 8,
+    "hp": 3,
+    "counterVolleys": 3
+  },
+  {
+    "round": 6,
+    "at": 2,
+    "preserved": 12,
+    "hp": 3,
+    "counterVolleys": 2
+  },
+  {
+    "round": 6,
+    "at": 4,
+    "preserved": 25,
+    "hp": 3,
+    "counterVolleys": 2
+  }
+]

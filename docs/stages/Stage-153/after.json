@@ -1,0 +1,749 @@
+[
+  {
+    "route": "ballistic",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 391,
+    "bossWins": 7,
+    "damageTaken": 0,
+    "peakBodies": 9,
+    "peakBullets": 70,
+    "battles": [
+      {
+        "round": 1,
+        "start": 74.03333333333042,
+        "half": 2.7666666666665094,
+        "low": 4.16666666666643,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 2.783333333333175,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 76,
+        "counterIds": [
+          2478,
+          2479,
+          2480,
+          2481,
+          2482,
+          2483
+        ],
+        "arrivedIds": [
+          2478,
+          2479,
+          2480,
+          2481,
+          2482,
+          2483
+        ],
+        "damageStart": 0,
+        "shots": 11,
+        "cycle": 2,
+        "duration": 5.299999999999699,
+        "damage": 0
+      },
+      {
+        "round": 2,
+        "start": 157.38333333335072,
+        "half": 1.8666666666681522,
+        "low": 2.9666666666690276,
+        "attacks": [
+          2,
+          4
+        ],
+        "finished": [
+          2,
+          4
+        ],
+        "counterAt": 1.883333333334832,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 26,
+        "counterIds": [
+          6220,
+          6221,
+          6222,
+          6223,
+          6224,
+          6225
+        ],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 4,
+        "duration": 3.566666666669505,
+        "damage": 0
+      },
+      {
+        "round": 3,
+        "start": 239.00000000008234,
+        "half": 1.683333333334673,
+        "low": 2.5333333333353494,
+        "attacks": [
+          3,
+          4
+        ],
+        "finished": [
+          3,
+          4
+        ],
+        "counterAt": 1.7000000000013529,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 51,
+        "counterIds": [
+          11159,
+          11160,
+          11161,
+          11162,
+          11163,
+          11164
+        ],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 30,
+        "cycle": 5,
+        "duration": 5.683333333337856,
+        "damage": 0
+      },
+      {
+        "round": 4,
+        "start": 322.7333333333685,
+        "half": 2.366666666664514,
+        "low": 3.699999999996635,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 2.3833333333311657,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 59,
+        "counterIds": [
+          16443,
+          16444,
+          16445,
+          16446,
+          16447,
+          16448
+        ],
+        "arrivedIds": [
+          16443,
+          16444,
+          16445,
+          16446,
+          16447,
+          16448
+        ],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 2,
+        "duration": 4.616666666662468,
+        "damage": 0
+      },
+      {
+        "round": 5,
+        "start": 405.39999999995996,
+        "half": 1.3499999999987722,
+        "low": 1.966666666664878,
+        "attacks": [
+          2,
+          4
+        ],
+        "finished": [
+          2
+        ],
+        "counterAt": 1.3666666666654237,
+        "counterVolleys": 0,
+        "counterVisibleFrames": 0,
+        "counterIds": [],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 8,
+        "cycle": 3,
+        "duration": 2.366666666664514,
+        "damage": 0
+      },
+      {
+        "round": 6,
+        "start": 485.8166666665535,
+        "half": 1.1999999999989086,
+        "low": 1.6999999999984539,
+        "attacks": [
+          3
+        ],
+        "finished": [],
+        "counterAt": 1.2166666666655601,
+        "counterVolleys": 0,
+        "counterVisibleFrames": 0,
+        "counterIds": [],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 12,
+        "cycle": 3,
+        "duration": 2.0166666666648325,
+        "damage": 0
+      },
+      {
+        "round": 7,
+        "start": 565.8833333331473,
+        "half": 1.6999999999984539,
+        "low": 2.683333333330893,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0
+        ],
+        "counterAt": 1.7166666666651054,
+        "counterVolleys": 0,
+        "counterVisibleFrames": 0,
+        "counterIds": [],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 8,
+        "cycle": 1,
+        "duration": 3.016666666663923,
+        "damage": 0
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 391,
+    "bossWins": 7,
+    "damageTaken": 0,
+    "peakBodies": 10,
+    "peakBullets": 67,
+    "battles": [
+      {
+        "round": 1,
+        "start": 74.03333333333042,
+        "half": 2.5666666666665208,
+        "low": 4.099999999999767,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 2.5833333333331865,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 68,
+        "counterIds": [
+          2629,
+          2630,
+          2631,
+          2632,
+          2633,
+          2634
+        ],
+        "arrivedIds": [
+          2629,
+          2630,
+          2631,
+          2632,
+          2633,
+          2634
+        ],
+        "damageStart": 0,
+        "shots": 11,
+        "cycle": 2,
+        "duration": 4.966666666666384,
+        "damage": 0
+      },
+      {
+        "round": 2,
+        "start": 157.05000000001712,
+        "half": 2.100000000001671,
+        "low": 3.2000000000025466,
+        "attacks": [
+          2,
+          4
+        ],
+        "finished": [
+          2,
+          4
+        ],
+        "counterAt": 2.116666666668351,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 39,
+        "counterIds": [
+          6444,
+          6445,
+          6446,
+          6447,
+          6448,
+          6449
+        ],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 4,
+        "duration": 4.016666666669863,
+        "damage": 0
+      },
+      {
+        "round": 3,
+        "start": 239.1166666667491,
+        "half": 2.166666666668391,
+        "low": 6.016666666671455,
+        "attacks": [
+          3,
+          4
+        ],
+        "finished": [
+          3,
+          4
+        ],
+        "counterAt": 2.183333333335071,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 124,
+        "counterIds": [
+          11176,
+          11177,
+          11178,
+          11179,
+          11180,
+          11181
+        ],
+        "arrivedIds": [
+          11176,
+          11177,
+          11178,
+          11179,
+          11180,
+          11181
+        ],
+        "damageStart": 0,
+        "shots": 30,
+        "cycle": 5,
+        "duration": 6.900000000005491,
+        "damage": 0
+      },
+      {
+        "round": 4,
+        "start": 324.0666666667006,
+        "half": 3.699999999996635,
+        "low": 5.366666666661786,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 3.7166666666632864,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 83,
+        "counterIds": [
+          16398,
+          16399,
+          16400,
+          16401,
+          16402,
+          16403
+        ],
+        "arrivedIds": [
+          16398,
+          16399,
+          16400,
+          16401,
+          16402,
+          16403
+        ],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 2,
+        "duration": 6.349999999994225,
+        "damage": 0
+      },
+      {
+        "round": 5,
+        "start": 408.46666666662384,
+        "half": 2.3499999999978627,
+        "low": 3.6166666666633773,
+        "attacks": [
+          2,
+          4
+        ],
+        "finished": [
+          2,
+          4
+        ],
+        "counterAt": 2.366666666664514,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 53,
+        "counterIds": [
+          21562,
+          21563,
+          21564,
+          21565,
+          21566,
+          21567
+        ],
+        "arrivedIds": [
+          21562,
+          21563,
+          21564,
+          21565,
+          21566,
+          21567
+        ],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 4,
+        "duration": 4.499999999995907,
+        "damage": 0
+      },
+      {
+        "round": 6,
+        "start": 491.01666666654876,
+        "half": 2.199999999997999,
+        "low": 6.499999999994088,
+        "attacks": [
+          3,
+          4
+        ],
+        "finished": [
+          3,
+          4
+        ],
+        "counterAt": 2.2166666666646506,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 152,
+        "counterIds": [
+          26797,
+          26798,
+          26799,
+          26800,
+          26801,
+          26802
+        ],
+        "arrivedIds": [
+          26797,
+          26798,
+          26799,
+          26800,
+          26801,
+          26802
+        ],
+        "damageStart": 0,
+        "shots": 33,
+        "cycle": 5,
+        "duration": 7.366666666659967,
+        "damage": 0
+      },
+      {
+        "round": 7,
+        "start": 576.4333333331377,
+        "half": 3.2999999999969987,
+        "low": 4.099999999996271,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 3.31666666666365,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 8,
+        "counterIds": [
+          32107,
+          32108,
+          32109,
+          32110,
+          32111,
+          32112
+        ],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 2,
+        "duration": 4.699999999995725,
+        "damage": 0
+      }
+    ]
+  },
+  {
+    "route": "optical",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 379,
+    "bossWins": 7,
+    "damageTaken": 0,
+    "peakBodies": 10,
+    "peakBullets": 55,
+    "battles": [
+      {
+        "round": 1,
+        "start": 74.03333333333042,
+        "half": 2.599999999999852,
+        "low": 4.199999999999761,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 2.616666666666518,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 78,
+        "counterIds": [
+          2472,
+          2473,
+          2474,
+          2475,
+          2476,
+          2477
+        ],
+        "arrivedIds": [
+          2472,
+          2473,
+          2474,
+          2475,
+          2476,
+          2477
+        ],
+        "damageStart": 0,
+        "shots": 11,
+        "cycle": 2,
+        "duration": 5.166666666666373,
+        "damage": 0
+      },
+      {
+        "round": 2,
+        "start": 157.25000000001728,
+        "half": 2.2500000000017906,
+        "low": 3.366666666669346,
+        "attacks": [
+          2,
+          4
+        ],
+        "finished": [
+          2,
+          4
+        ],
+        "counterAt": 2.2500000000017906,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 51,
+        "counterIds": [
+          6114,
+          6115,
+          6116,
+          6117,
+          6118,
+          6119
+        ],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 4,
+        "duration": 4.350000000003462,
+        "damage": 0
+      },
+      {
+        "round": 3,
+        "start": 239.65000000008285,
+        "half": 2.35000000000187,
+        "low": 6.700000000005332,
+        "attacks": [
+          3,
+          4
+        ],
+        "finished": [
+          3,
+          4
+        ],
+        "counterAt": 2.36666666666855,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 152,
+        "counterIds": [
+          9977,
+          9978,
+          9979,
+          9980,
+          9981,
+          9982
+        ],
+        "arrivedIds": [
+          9977,
+          9978,
+          9979,
+          9980,
+          9981,
+          9982
+        ],
+        "damageStart": 0,
+        "shots": 30,
+        "cycle": 5,
+        "duration": 7.366666666672529,
+        "damage": 0
+      },
+      {
+        "round": 4,
+        "start": 325.0666666666997,
+        "half": 3.699999999996635,
+        "low": 6.0166666666611945,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 3.7166666666632864,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 154,
+        "counterIds": [
+          13912,
+          13913,
+          13914,
+          13915,
+          13916,
+          13917
+        ],
+        "arrivedIds": [
+          13912,
+          13913,
+          13914,
+          13915,
+          13916,
+          13917
+        ],
+        "damageStart": 0,
+        "shots": 17,
+        "cycle": 2,
+        "duration": 7.533333333326482,
+        "damage": 0
+      },
+      {
+        "round": 5,
+        "start": 410.6499999999552,
+        "half": 2.3499999999978627,
+        "low": 3.5833333333300743,
+        "attacks": [
+          2,
+          4
+        ],
+        "finished": [
+          2,
+          4
+        ],
+        "counterAt": 2.366666666664514,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 44,
+        "counterIds": [
+          17779,
+          17780,
+          17781,
+          17782,
+          17783,
+          17784
+        ],
+        "arrivedIds": [],
+        "damageStart": 0,
+        "shots": 14,
+        "cycle": 4,
+        "duration": 4.349999999996044,
+        "damage": 0
+      },
+      {
+        "round": 6,
+        "start": 493.04999999988024,
+        "half": 2.3499999999978627,
+        "low": 6.599999999993997,
+        "attacks": [
+          3,
+          4
+        ],
+        "finished": [
+          3,
+          4
+        ],
+        "counterAt": 2.366666666664514,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 151,
+        "counterIds": [
+          21634,
+          21635,
+          21636,
+          21637,
+          21638,
+          21639
+        ],
+        "arrivedIds": [
+          21634,
+          21635,
+          21636,
+          21637,
+          21638,
+          21639
+        ],
+        "damageStart": 0,
+        "shots": 36,
+        "cycle": 5,
+        "duration": 7.349999999993315,
+        "damage": 0
+      },
+      {
+        "round": 7,
+        "start": 578.4499999998026,
+        "half": 4.0166666666630135,
+        "low": 6.283333333327619,
+        "attacks": [
+          0,
+          4
+        ],
+        "finished": [
+          0,
+          4
+        ],
+        "counterAt": 4.033333333329665,
+        "counterVolleys": 1,
+        "counterVisibleFrames": 164,
+        "counterIds": [
+          25645,
+          25646,
+          25647,
+          25648,
+          25649,
+          25650
+        ],
+        "arrivedIds": [
+          25645,
+          25646,
+          25647,
+          25648,
+          25649,
+          25650
+        ],
+        "damageStart": 0,
+        "shots": 17,
+        "cycle": 2,
+        "duration": 8.016666666659376,
+        "damage": 0
+      }
+    ]
+  }
+]

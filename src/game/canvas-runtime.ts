@@ -1,3 +1,4 @@
+import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
 import {ION_STORM} from '../core/ion-storm';
@@ -413,6 +414,8 @@ export class CanvasRuntime {
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
+    if(e.type==='counter-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',1);return;}
+    if(e.type==='boss-counter'){this.notify(e.text??'首领过热',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
     if(e.type==='round'){this.notify(e.text??'下一轮',1195,e.detail);if(this.save.settings.sound)this.platform.sound('round',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.type==='emp'){
       if(this.empWaves.length>=2)this.empWaves.shift();this.empWaves.push({x:e.x,y:e.y,radius:e.size??300,life:.5});
@@ -702,6 +705,7 @@ export class CanvasRuntime {
           const frame = bossFrame(b), bossArt = b.bossVariant === 2 ? 'boss-bastion-v1.png' : b.bossVariant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png';
           this.frameSprite(bossArt, frame, 3, b.x, y, width, height, 1);
           this.hitSprite(bossArt, frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+          if(b.counterfire)bossHeatLight(c,b,this.save.settings.effects==='weak');
         }
       }
     }
@@ -801,7 +805,7 @@ export class CanvasRuntime {
     // Breaking is not collecting: keep the physical module visible above smoke.
     for (const b of w.bodies) if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
     for (const b of w.bodies) {
-      if (b.warning > 0) {
+      if (b.warning > 0 && !(b.kind==='boss'&&b.attack===4)) {
         // The enemy telegraphs its action locally; never preview future bullet paths.
         const charge = .65 + Math.sin(w.time * 22) * .2;
         const muzzleY = b.y + b.height * .32;
@@ -901,7 +905,7 @@ export class CanvasRuntime {
       this.buttons.push({x:480,y:y+170,w:210,h:44,action:'contracts-live',label:'挑战契约'});
     }
     if(boss){
-      this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}${w.bossShieldActive()?'·屏障45%':''}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
+      this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}${boss.counterfire?'·过热':''}${w.bossShieldActive()?'·屏障45%':''}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
       this.bar(360,y+196,620,boss.hp/boss.maxHp,w.bossShieldActive()?'#82dfff':'#ff925d');
     }
   }
@@ -1269,6 +1273,7 @@ export class CanvasRuntime {
       inputMode: this.inputMode,
       proofKind:this.world.contract?.proof?.kind??null,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
+      bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
       conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,

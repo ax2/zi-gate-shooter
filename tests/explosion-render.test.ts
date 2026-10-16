@@ -1067,3 +1067,17 @@ it('cycles from the displayed fallback when the previous proof preference is una
  expect(f.runtime.activateControl('proof-next')).toBe(true);
  expect(f.runtime.activateControl('contract:research')).toBe(true);expect(w.contract!.proof!.kind).toBe('prism');
 });
+
+it.each([false,true])('half-health boss shows physical twin charge, a truthful status and bounded enemy fire (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.phase='boss';w.player.x=w.player.px=68;
+ const b=w.spawn('boss',360,C.bossY);b.hp=b.maxHp*.49;f.tick();expect(b.counterfire).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='首领过热 · 双炮反击')).toBe(true);
+ for(let i=0;i<20;i++)f.tick();expect(b.attack).toBe(4);expect(b.warning).toBeGreaterThan(0);
+ for(const x of [b.x-96,b.x+96])expect(f.calls.some(c=>c.kind==='arc'&&Math.abs(c.args[0]-x)<.001&&c.args[1]===b.y+110)).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('重装首领·过热'))).toBe(true);
+ const radius=()=>f.calls.find(c=>c.kind==='arc'&&Math.abs(c.args[0]-(b.x-96))<.001&&c.args[1]===b.y+110)?.args[2];const early=radius();
+ for(let i=0;i<20;i++)f.tick();expect(radius()).toBeGreaterThan(early);
+ for(let i=0;i<40;i++)f.tick();expect(b.counterVolleys).toBe(1);expect(w.bullets.filter(b=>b.hostile).length).toBe(6);
+ const low=f.calls.reduce((last,c,i)=>c.composite==='lighter'?i:last,-1),danger=f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ff7756');expect(danger).toBeGreaterThan(low);
+ f.runtime.pause();const age=b.age;for(let i=0;i<20;i++)f.tick();expect(b.age).toBe(age);f.runtime.start();expect(f.runtime.diagnostics().bossCounterfire).toBe(false);
+});

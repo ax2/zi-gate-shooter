@@ -2,7 +2,9 @@
 
 固定试玩入口：**http://127.0.0.1:5178/** 。服务停止后双击项目中的“启动游戏.cmd”或运行 `npm run play`；首次需 `npm run build`，保持服务窗口运行。
 
-**最新候选Stage-152 构筑检验**：选择已成型组合的实战目标，面对对应敌阵，真实效果达标后领奖并获得成就；查看不花点、原能力保留。[试玩](docs/stages/Stage-152/PLAY.md) · [验证边界](docs/stages/Stage-152/TEST_REPORT.md)。
+**最新候选Stage-153 首领过热反击**：三种首领半血后加入真实双炮高速斜射，旧蓄能/飞行弹保留，机体热效与血量提示同步。正常三路/24受控安全场景及三章实际回放已检查，真人难度仍待调。[试玩](docs/stages/Stage-153/PLAY.md) · [验证边界](docs/stages/Stage-153/TEST_REPORT.md)。
+
+**Stage-152 构筑检验**：选择已成型组合的实战目标，面对对应敌阵，真实效果达标后领奖并获得成就；查看不花点、原能力保留。[试玩](docs/stages/Stage-152/PLAY.md) · [验证边界](docs/stages/Stage-152/TEST_REPORT.md)。
 
 **Stage-151 离子风暴**：雷电第三节点增加实际电击积累与范围放电，原跳伤、旧武器和两分支保留。正常两路线及虚拟时钟手机/桌面画面已检查，真人手感/实时长局待验。[试玩](docs/stages/Stage-151/PLAY.md) · [报告](docs/stages/Stage-151/TEST_REPORT.md)。
 
