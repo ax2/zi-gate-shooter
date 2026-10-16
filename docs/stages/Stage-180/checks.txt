@@ -1,0 +1,16 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/photon-refinement.test.ts tests/photon-progression.test.mjs tests/laser-chain.test.ts tests/build-preview.test.ts tests/magnetic-refinement.test.ts tests/build-tree.test.ts tests/run-report.test.ts tests/native-controls.test.ts tests/native-flow.test.ts tests/optical-feedback.test.ts tests/rules.test.ts tests/optical-pulse.test.ts tests/laser-chain-progression.test.mjs tests/support-weapons.test.ts tests/support-audio.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+
+ Test Files  15 passed (15)
+      Tests  97 passed (97)
+   Start at  03:37:32
+   Duration  4.17s (tests 52%, transform 30%, import 17%, worker 1%)
+
+  Transform  transforming modules took 3.87s · 30% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

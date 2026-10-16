@@ -4,7 +4,7 @@ import {battleBrief,type BattlePlan} from './battle-plan';
 import {SWEEPER} from './sweeper';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
-import {canLaserChain,LASER_CHAIN} from './laser-chain';
+import {canLaserChain,isPhotonAugment,photonAugments,laserChainProfile} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
@@ -68,8 +68,10 @@ export class World {
     return this.researchPoints-before;
   }
   chooseBuild(route: Route,branch?:BuildBranch) {
+    if(isPhotonAugment(branch)&&!this.canRefinePhoton())return false;
     if(isMagneticAugment(branch)&&!this.canRefineMagnetic())return false;
     if(!this.build.choose(route,this.buildPoints,branch))return false;
+    if(isPhotonAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'光链精研 · '+photonAugments[branch].name,detail:photonAugments[branch].detail+' · 常规精调保留'});
     if(isMagneticAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'磁暴精研 · '+magneticAugments[branch].name,detail:branch==='field-wide'?`半径${MAGNETIC_REFINEMENT.wideRadius} · 每拍${MAGNETIC_REFINEMENT.wideDamage*100}% · 常规精调保留`:`场外${MAGNETIC_REFINEMENT.linkRange}内一敌 · 原三拍/常规精调保留`});
     const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
     if(kind && !this.activeWeapons.includes(kind)) {
@@ -156,6 +158,7 @@ export class World {
   get laserChainReady(){return this.laserLinkEnergy>0;}
   private announcedLaserChain=false;
   laserChainUnlocked(){return canLaserChain(this.build,this.activeWeapons.includes('arc')?this.weaponStage('arc'):0);}
+  canRefinePhoton(){return this.laserChainUnlocked()&&!this.build.photonAugment;}
   private announceLaserChain(){
     if(this.announcedLaserChain||!this.laserChainUnlocked())return;
     this.announcedLaserChain=true;this.laserTimer=0;
@@ -163,15 +166,15 @@ export class World {
   }
   private laserChain(origin:{x:number;y:number},damage:number,visited:Set<number>){
     if(!this.laserChainUnlocked()||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))return 'blocked';
-    const hits=this.laserArcHits;let from=origin;
-    for(let hop=0;hop<LASER_CHAIN.hops;hop++){
+    const hits=this.laserArcHits,profile=laserChainProfile(this.build.photonAugment);let from=origin;
+    for(let hop=0;hop<profile.hops;hop++){
       if(this.bossVictory)break;
       const target=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&(!visited.has(b.id)||guardClosed(b)||(b.dropGrace??0)>0)
-        &&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&Math.hypot(b.x-from.x,b.y-from.y)<=LASER_CHAIN.range)
+        &&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&Math.hypot(b.x-from.x,b.y-from.y)<=profile.range)
         .sort((a,b)=>Math.hypot(a.x-from.x,a.y-from.y)-Math.hypot(b.x-from.x,b.y-from.y)||a.id-b.id)[0];
       if(!target)break;
       if(guardClosed(target)||(target.dropGrace??0)>0)return this.laserArcHits>hits?'hit':'blocked';
-      visited.add(target.id);damage*=LASER_CHAIN.decay;
+      visited.add(target.id);damage*=profile.decay;
       const before=target.hp;this.hit(target,damage,'pulse');
       if(target.hp<before){this.laserArcHits++;this.effects.push({type:'laser-arc',x:from.x,y:from.y,targetX:target.x,targetY:target.y});}
       from=target;
@@ -184,7 +187,7 @@ export class World {
     let result=this.laserChain(source,this.laserLinkEnergy,visited);
     if(result==='none'){
       const target=this.bodies.find(b=>b.id===source.id&&b.active&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0));
-      if(target){const before=target.hp;this.hit(target,this.laserLinkEnergy*LASER_CHAIN.focus,'pulse');
+      if(target){const before=target.hp;this.hit(target,this.laserLinkEnergy*laserChainProfile(this.build.photonAugment).focus,'pulse');
         if(target.hp<before){this.laserFocusHits++;this.effects.push({type:'laser-focus',x:target.x,y:target.y});result='hit';}}
     }
     if(result==='hit'){this.laserLinkEnergy=0;this.laserLinkTargets.clear();}

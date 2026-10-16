@@ -1,4 +1,5 @@
 import {MAGNETIC,MAGNETIC_REFINEMENT} from './magnetic-field';
+import {isPhotonAugment,type PhotonAugment} from './laser-chain';
 export type BallisticBranch='penetrator'|'fragment'|'ricochet';
 export const ballisticBranches={
  penetrator:{name:'贯穿弹芯',detail:'霰射总伤害+30% · 每颗贯穿2敌',role:'瞄准纵向敌列，打穿前排'},
@@ -14,7 +15,7 @@ export const magneticAugments={
  'field-link':{name:'分流电桥',detail:'原三拍保留 · 每拍追加一次场外跳击',role:`${MAGNETIC.radius}外至${MAGNETIC_REFINEMENT.linkRange}内，优先当前蓄能射手`},
 } as const;
 export const isMagneticAugment=(value:unknown):value is MagneticAugment=>value==='field-wide'||value==='field-link';
-export type BuildBranch=OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment;
+export type BuildBranch=OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment|PhotonAugment;
 export const SEEKER_BRIDGE={range:340} as const;
 export const electricBranches={
  seeker:{name:'猎隼电桥',detail:'首跳范围340 · 优先蓄能射手',role:'借前排目标，跳击后排火力点'},
@@ -48,6 +49,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
 };
 export class BuildTree {
+  photonAugment?:PhotonAugment;
   magneticAugment?:MagneticAugment;
   ballisticBranch?:BallisticBranch;
   opticalBranch?:OpticalBranch;
@@ -73,7 +75,10 @@ export class BuildTree {
   }
   choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(isMagneticAugment(branch)){
+    if(isPhotonAugment(branch)){
+      if(route!=='optical'||this.ranks.optical<3||this.refinements.optical<1||this.photonAugment)return false;
+      this.photonAugment=branch;
+    }else if(isMagneticAugment(branch)){
       if(route!=='electric'||this.ranks.electric<3||this.magneticAugment)return false;
       this.magneticAugment=branch;
     }else if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;

@@ -1,0 +1,132 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/photon-refinement.test.ts tests/photon-progression.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/photon-refinement.test.ts (7 tests | 7 failed) 19ms
+   × requires an actual tier2 arc and first optical refinement, rejects wrong route, overspending and re-fork without mutations 12ms
+   × photon-reach keeps all guns and ordinary refinement, previews read-only and appears in the run report 2ms
+   × photon-focus keeps all guns and ordinary refinement, previews read-only and appears in the run report 1ms
+   × reach preserves the first two hops and adds one bounded third hit without recursion or duplicate targets 1ms
+   × reach crosses a sparse 300 gap and rejects the next pixel without spending through a protected neighbor 1ms
+   × focus adds real solo damage but keeps normal group chains and does not hit crates or charge gates 1ms
+   × enhanced focus boss kill stops combat once and grants no phantom escort deaths 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/photon-refinement.test.ts > requires an actual tier2 arc and first optical refinement, rejects wrong route, overspending and re-fork without mutations
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/photon-refinement.test.ts:9:354
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/photon-refinement.test.ts > photon-reach keeps all guns and ordinary refinement, previews read-only and appears in the run report
+ FAIL  tests/photon-refinement.test.ts > photon-focus keeps all guns and ordinary refinement, previews read-only and appears in the run report
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/photon-refinement.test.ts:12:185
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/photon-refinement.test.ts > reach preserves the first two hops and adds one bounded third hit without recursion or duplicate targets
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ payload tests/photon-refinement.test.ts:5:88
+      3| function enemy(w:World,x:number,y=600,kind:'armor'|'guard'|'boss'|'eli…
+      4| const damage=(w:World)=>w.supportProfile().laserDamage*(1+permanentPow…
+      5| function payload(w:World){w.step(C.step,68);w.drainEffects();expect(w.…
+       |                                                                                        ^
+      6| function shot(w:World,b:Body){w.bullets=[{id:99999,x:b.x,y:b.y,px:b.x,…
+      7| it('requires an actual tier2 arc and first optical refinement, rejects…
+ ❯ tests/photon-refinement.test.ts:15:132
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/photon-refinement.test.ts > reach crosses a sparse 300 gap and rejects the next pixel without spending through a protected neighbor
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ payload tests/photon-refinement.test.ts:5:88
+      3| function enemy(w:World,x:number,y=600,kind:'armor'|'guard'|'boss'|'eli…
+      4| const damage=(w:World)=>w.supportProfile().laserDamage*(1+permanentPow…
+      5| function payload(w:World){w.step(C.step,68);w.drainEffects();expect(w.…
+       |                                                                                        ^
+      6| function shot(w:World,b:Body){w.bullets=[{id:99999,x:b.x,y:b.y,px:b.x,…
+      7| it('requires an actual tier2 arc and first optical refinement, rejects…
+ ❯ tests/photon-refinement.test.ts:18:86
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/photon-refinement.test.ts > focus adds real solo damage but keeps normal group chains and does not hit crates or charge gates
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ payload tests/photon-refinement.test.ts:5:88
+      3| function enemy(w:World,x:number,y=600,kind:'armor'|'guard'|'boss'|'eli…
+      4| const damage=(w:World)=>w.supportProfile().laserDamage*(1+permanentPow…
+      5| function payload(w:World){w.step(C.step,68);w.drainEffects();expect(w.…
+       |                                                                                        ^
+      6| function shot(w:World,b:Body){w.bullets=[{id:99999,x:b.x,y:b.y,px:b.x,…
+      7| it('requires an actual tier2 arc and first optical refinement, rejects…
+ ❯ tests/photon-refinement.test.ts:22:112
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  tests/photon-refinement.test.ts > enhanced focus boss kill stops combat once and grants no phantom escort deaths
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ payload tests/photon-refinement.test.ts:5:88
+      3| function enemy(w:World,x:number,y=600,kind:'armor'|'guard'|'boss'|'eli…
+      4| const damage=(w:World)=>w.supportProfile().laserDamage*(1+permanentPow…
+      5| function payload(w:World){w.step(C.step,68);w.drainEffects();expect(w.…
+       |                                                                                        ^
+      6| function shot(w:World,b:Body){w.bullets=[{id:99999,x:b.x,y:b.y,px:b.x,…
+      7| it('requires an actual tier2 arc and first optical refinement, rejects…
+ ❯ tests/photon-refinement.test.ts:25:58
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  7 failed | 1 passed (8)
+   Start at  03:35:41
+   Duration  3.82s (tests 85%, transform 11%, import 3%)
+

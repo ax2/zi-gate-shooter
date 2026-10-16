@@ -1,0 +1,70 @@
+[
+  {
+    "option": "photon-reach",
+    "selected": {
+      "time": 114.89999999999476,
+      "hp": 3,
+      "points": 5,
+      "spent": 5,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "third": 4,
+    "focus": 47,
+    "maxChain": 3,
+    "arc": 42,
+    "ranks": {
+      "ballistic": 3,
+      "electric": 3,
+      "optical": 3
+    },
+    "refinements": {
+      "ballistic": 0,
+      "electric": 0,
+      "optical": 22
+    },
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "option": "photon-focus",
+    "selected": {
+      "time": 114.89999999999476,
+      "hp": 3,
+      "points": 5,
+      "spent": 5,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "third": 0,
+    "focus": 56,
+    "maxChain": 2,
+    "arc": 28,
+    "ranks": {
+      "ballistic": 3,
+      "electric": 3,
+      "optical": 3
+    },
+    "refinements": {
+      "ballistic": 0,
+      "electric": 0,
+      "optical": 22
+    },
+    "peakBodies": 9,
+    "peakBullets": 67
+  }
+]
