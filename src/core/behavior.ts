@@ -26,7 +26,9 @@ export function bossAttackForCycle(variant: number | undefined, cycle: number) {
 }
 
 /** Shared by the live simulation and conservative no-kill route forecast. */
-export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, shot: EnemyShot) {
+export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, emit: EnemyShot) {
+  const scale=b.shotScale??1;
+  const shot:EnemyShot=scale===1?emit:(x,y,vx=0,vy=280)=>emit(x,y,vx*scale,vy*scale);
   if(b.dropGrace!==undefined)b.dropGrace=Math.max(0,b.dropGrace-dt);
   const offline=(b.empRemaining??0)>0;
   if(offline)b.empRemaining=Math.max(0,b.empRemaining!-dt);

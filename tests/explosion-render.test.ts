@@ -46,6 +46,13 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('publishes the actual round projectile pressure in the bottom receipt',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ w.phase='recovery';w.phaseTime=3.99;f.tick();expect(w.round).toBe(2);
+ const detail=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='敌弹速度+10% · 留意已发弹幕');
+ expect(detail?.args[2]).toBe(1245);expect(f.runtime.diagnostics().enemyProjectileScale).toBe(1.1);
+});
+
 it.each([false,true])('labels refit boxes distinctly and updates their live calibration after another earned pickup (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.phase='boss';w.weaponKind='scatter';w.growth.stage=3;w.growth.mastery=1;w.chooseBuild('electric');
  const refit=w.spawn('crate',222,400,3);refit.weaponKind='scatter';refit.refit=true;refit.speed=0;

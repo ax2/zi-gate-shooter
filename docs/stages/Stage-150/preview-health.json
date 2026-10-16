@@ -1,0 +1,12 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-B7PD4pma.js",
+    "status": 200,
+    "bytes": 200698
+  }
+]

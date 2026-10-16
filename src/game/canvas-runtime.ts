@@ -1,4 +1,5 @@
 import {dropLight} from './drop-light';
+import {enemyProjectileScale} from '../core/projectile-pressure';
 import {refitLabel} from './refit-label';
 import {sentryDirection} from '../core/mobile-sentry';
 import {sentryThrust} from './sentry-thrust';
@@ -407,6 +408,7 @@ export class CanvasRuntime {
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
   }
   private effect(e: EffectEvent) {
+    if(e.type==='round'){this.notify(e.text??'下一轮',1195,e.detail);if(this.save.settings.sound)this.platform.sound('round',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.type==='emp'){
       if(this.empWaves.length>=2)this.empWaves.shift();this.empWaves.push({x:e.x,y:e.y,radius:e.size??300,life:.5});
       this.notify(e.text??'中继击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;
@@ -1253,6 +1255,7 @@ export class CanvasRuntime {
       conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
       mobileSentries:this.world.bodies.filter(b=>b.active&&b.pattern==='relocate').map(b=>({x:b.x,y:b.y,lane:b.lane,age:b.age,warning:b.warning,volleys:b.sentryVolleys??0,direction:sentryDirection(b)})),
       refitsClaimed:this.world.refitsClaimed,
+      enemyProjectileScale:enemyProjectileScale(this.world.round),
       framePulses:this.framePulses,renderedMode:this.renderedMode,imageCount:this.images.size,
       runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,

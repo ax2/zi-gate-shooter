@@ -8,6 +8,7 @@ import { supportMilestone } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
 import { C, clamp } from './config';
 import {CONDUIT,canDisrupt} from './conduit';
+import {enemyProjectileScale} from './projectile-pressure';
 import type { EnemyKind } from './config';
 import { sweep } from './collision';
 import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate, permanentPower } from './rewards';
@@ -26,7 +27,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
   weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
 }
 export interface Bullet {
@@ -273,6 +274,7 @@ export class World {
       height: enemy?.height ?? (kind === 'gate' ? 138 : kind === 'pickup' ? 54 : 110),
       hp, maxHp: hp, speed: enemy ? enemy.speed * Math.min(1.15, 1 + (this.round - 1) * 0.05) : this.scrollSpeed,
       active: true, age: 0, timer: enemy ? firstAttackDelay(kind as EnemyKind) : 2.4, warning: 0, hit: 0,
+      shotScale:enemy?enemyProjectileScale(this.round):1,
       energy: 0, row: 0, stage, rewardKind: this.growth.bonus >= 100 ? 'energy' : 'power', attack: 0, lane: kind === 'boss' ? 360 : x, attackCycle: 0, burst: 0,
     };
     this.bodies.push(body); return body;
@@ -362,7 +364,8 @@ export class World {
         this.round++; this.roundTime = 0; this.phaseTime = 0; this.phase = 'running';
         this.scheduleIndex = 0; this.secondChance = this.growth.stage > 1; this.nextSpawnRetry = 0;
         this.scheduled = timeline(this.round, this.seed + this.round * 719);
-        this.emit('round', 360, 400, `第 ${this.round} 轮 · ${sectorNames[sectorIndex(this.round)]}`);
+        this.effects.push({type:'round',x:360,y:400,text:`第 ${this.round} 轮 · ${sectorNames[sectorIndex(this.round)]}`,
+          detail:`敌弹速度+${Math.round((enemyProjectileScale(this.round)-1)*100)}% · 留意已发弹幕`});
       }
     }
   }

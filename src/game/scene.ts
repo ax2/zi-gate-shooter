@@ -3,7 +3,6 @@ import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { Body, EffectEvent } from '../core/world';
 import { gateValue, previewReward } from '../core/rewards';
-import { bossWarningLanes } from '../core/behavior';
 import { GameAudio } from './audio';
 import { Interface } from '../ui/interface';
 import type { Settings } from '../ui/storage';
@@ -198,13 +197,8 @@ export class BattleScene extends Phaser.Scene {
       } else if (v.bar) this.bar(v.bar, b.x, b.y - b.height / 2 - 14, b.width, b.hp / b.maxHp, 0xf29e65);
       if (b.warning > 0) {
         const g = this.dangerGraphics;
-        if (b.kind === 'charger') {
-          g.fillStyle(0xff704b, 0.12).fillRect(b.x - 42, b.y + 20, 84, 1280 - b.y);
-          g.lineStyle(2, 0xffa876, 0.8).strokeRect(b.x - 42, b.y + 20, 84, 1280 - b.y);
-        } else if (b.kind === 'boss') {
-          const lanes = bossWarningLanes(b);
-          for (const x of lanes) { g.fillStyle(0xff6548, 0.13).fillRect(x - 36, b.y + 80, 72, 1050 - b.y); g.lineStyle(2, 0xffa36d, 0.65).strokeRect(x - 36, b.y + 80, 72, 1050 - b.y); }
-        } else g.fillStyle(0xffdc95, 0.8).fillCircle(b.x, b.y + b.height / 2, 8);
+        // Local charge only, matching the current Canvas entry: no future lanes.
+        g.fillStyle(0xffdc95,.65+Math.sin(w.time*22)*.2).fillCircle(b.x,b.y+b.height/2,8);
       }
     }
     const bg = this.bulletsGraphics; bg.clear();
