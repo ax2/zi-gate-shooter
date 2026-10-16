@@ -1250,11 +1250,29 @@ it('offers a real third electric tactic without spending on browse and retains o
  for(const name of ['连锁扩散','电容蓄爆','猎隼电桥'])expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===name)).toBe(true);
  expect(w.build.spent).toBe(before);expect(f.runtime.activateControl('branch-back')).toBe(true);expect(w.build.electricBranch).toBeUndefined();
  f.runtime.activateControl('build:electric');expect(f.runtime.activateControl('branch:seeker')).toBe(true);expect(w.build.electricBranch).toBe('seeker');expect(w.activeWeapons).toEqual(owned);expect(w.build.spent).toBe(before+1);expect(f.runtime.mode).toBe('playing');expect(f.runtime.activateControl('branch:capacitor')).toBe(false);
- f.runtime.pause();f.runtime.activateControl('loadout');expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('· 猎隼'))).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('首跳340'))).toBe(true);
+ f.runtime.pause();f.tick();expect(f.runtime.activateControl('loadout')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('· 猎隼'))).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('首跳340'))).toBe(true);
 });
 it.each([false,true])('actual seeker arcs retain a distinct narrow hit trace, freeze on pause and respect the existing pool (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const r=f.runtime as any;
  for(let i=0;i<20;i++)r.effect({type:'arc',x:200,y:700,targetX:430,targetY:480,seeker:true});f.tick();
  expect(r.arcs).toHaveLength(12);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffda92')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#fff0c5')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffc76028')).toBe(!weak);
  const before=structuredClone(r.arcs);f.runtime.pause();for(let i=0;i<60;i++)f.tick();expect(r.arcs).toEqual(before);f.runtime.start();expect(r.arcs).toHaveLength(0);
+});
+
+
+it('shows real per-recipe battle records with a separate ready-but-unused state without advancing the run',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=3;for(let i=0;i<3;i++)w.chooseBuild('electric');
+ const b=w.spawn('armor',360,600);b.hp=b.maxHp=1000;b.speed=0;b.timer=999;
+ for(let i=0;i<6;i++){w.bullets=[{id:99999,x:360,y:600,px:360,py:600,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc'}];w.step(C.step,68);w.drainEffects();}
+ f.runtime.pause();f.tick();expect(f.runtime.activateControl('loadout')).toBe(true);expect(f.runtime.activateControl('combos')).toBe(true);
+ const before=JSON.stringify(w);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='放电1次')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='未成形')).toBe(true);for(let i=0;i<60;i++)f.tick();expect(JSON.stringify(w)).toBe(before);
+ f.runtime.activateControl('combos-back');f.runtime.start();f.runtime.pause();f.tick();expect(f.runtime.activateControl('loadout')).toBe(true);expect(f.runtime.activateControl('combos')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='放电1次')).toBe(false);
+});
+
+
+it('renders actual seeker hits in a real death report instead of silently merging them into chain totals',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=2;w.chooseBuild('electric');w.chooseBuild('electric','seeker');
+ for(const [kind,x,y] of [['armor',150,750],['sniper',150,450]] as const){const b=w.spawn(kind,x,y);b.hp=b.maxHp=1000;b.speed=0;b.timer=999;}
+ w.bullets=[{id:99999,x:150,y:750,px:150,py:750,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc',chainHops:1}];f.tick();expect(w.seekerLinks).toBe(1);
+ w.player.hp=1;w.bullets=[{id:99998,x:w.player.x,y:C.playerY,px:w.player.x,py:C.playerY,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}];f.tick();expect(f.runtime.mode).toBe('result');expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('猎隼 1'))).toBe(true);
 });

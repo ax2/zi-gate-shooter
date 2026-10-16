@@ -1,5 +1,5 @@
 import {buildReceiptPosition,type ReceiptPosition} from './build-receipt';
-import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
+import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipePerformance,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
 import {interceptorLight} from './interceptor-light';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,type BuildProof} from '../core/build-proof';
@@ -1114,10 +1114,10 @@ export class CanvasRuntime {
     this.text(tracked?`已追踪 · ${tracked.name}`:'先选目标，再寻找需要的补给与升级',360,207,24,'#d4e7ad');
     this.text(tracked?(tracked.ready?'已成形 · 按配方条件触发':tracked.need):'打碎后仍需拾取 · 同排只领一件',360,237,20,'#bdd8e7');
     for(const [i,id] of recipeIds.entries()){
-      const row=recipeStatus(w,id),selected=goal===id,y=260+i*152;
+      const row=recipeStatus(w,id),performance=recipePerformance(w,id),selected=goal===id,y=260+i*152;
       this.rect(65,y,590,142,selected?'#294b4c':'#203e50');this.rect(65,y,5,142,row.color);
       this.text(row.name,90,y+28,28,row.color,'left',true);
-      this.text(row.ready?'已生效':'待构筑',470,y+28,20,row.ready?'#a2ffbb':'#b9cad6','right');
+      this.text(performance.label,470,y+28,18,performance.ready?(performance.count?'#a2ffbb':'#f0d19a'):'#b9cad6','right');
       this.rect(492,y+7,146,42,selected?'#46614c':'#112a39');
       const label=selected?'取消目标':'设为目标';this.text(label,565,y+28,21,selected?'#ffdf93':'#c4e8f5','center',true);
       this.buttons.push({x:492,y:y+7,w:146,h:42,action:`recipe-goal:${id}`,label:`${label} · ${row.name}`});

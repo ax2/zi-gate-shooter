@@ -48,3 +48,13 @@ export function recipeRouteHint(w:World,id:RecipeGoal|null|undefined,route:Route
  const completes=status.requirements.every(r=>r.current+(r===affected?1:0)>=r.target);
  return {text:completes?`目标·${status.name}：本次完成构筑`:`目标·${status.name}：${affected.label} ${affected.current}/${affected.target}→${affected.current+1}/${affected.target}`,advances:true};
 }
+
+
+/** Actual simulation counters, not particle counts or projected damage. */
+export function recipePerformance(w:World,id:RecipeGoal){
+ const ready=recipeStatus(w,id).ready;
+ const count=id==='storm'?w.stormLinks:id==='prism'?w.prismHits:id==='photon'?w.laserArcHits+w.laserFocusHits:id==='fracture'?w.fractureBursts:w.ionBursts;
+ const n=(v:number)=>v>=1e8?`${+(v/1e8).toFixed(1)}亿`:v>=1e4?`${+(v/1e4).toFixed(1)}万`:`${v}`;
+ const measured=id==='storm'?`跳伤${n(w.stormLinks)}次`:id==='prism'?`侧束命中${n(w.prismHits)}`:id==='photon'?`链${n(w.laserArcHits)}/聚${n(w.laserFocusHits)}`:id==='fracture'?`引爆${n(w.fractureBursts)}次`:`放电${n(w.ionBursts)}次`;
+ return {ready,count,label:!ready?'未成形':count===0?'已就绪 · 未触发':measured};
+}

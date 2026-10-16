@@ -22,3 +22,12 @@ it('read-only report retains weapon tiers, selected branches and actual event co
 it('suggests a real unmet objective and handles a fully unlocked archive',()=>{
  const w=new World();expect(nextRunGoal(w,[])).toContain('拾取装备');w.spawn('pickup',360,C.playerY,2);tick(w);expect(nextRunGoal(w,[])).toContain('首领终结者');expect(nextRunGoal(w,['boss'])).toContain('跨界试验');expect(nextRunGoal(w,achievements.map(a=>a.id))).toContain('最高分');
 });
+
+
+it('names actual seeker effectiveness separately from ordinary chain hits, with an honest empty state',()=>{
+ const w=new World();w.growth.mastery=2;w.chooseBuild('electric');w.chooseBuild('electric','seeker');
+ expect(runReport(w,[],[]).mechanics).toEqual(['猎隼尚未有效命中','借前排目标，首跳远距打击后排射手']);
+ const front=w.spawn('armor',150,750),rear=w.spawn('sniper',150,450);for(const b of [front,rear]){b.hp=b.maxHp=1000;b.speed=0;b.timer=999;}
+ w.bullets=[{id:99999,x:150,y:750,px:150,py:750,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc',chainHops:1}];tick(w);expect(w.seekerLinks).toBe(1);
+ const before=JSON.stringify(w),report=runReport(w,[],[]);expect(report.mechanics.some(line=>line.includes('猎隼 1'))).toBe(true);expect(JSON.stringify(w)).toBe(before);
+});

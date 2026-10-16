@@ -1,0 +1,33 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/recipe-goal.test.ts tests/run-report.test.ts tests/explosion-render.test.ts tests/native-flow.test.ts tests/build-preview.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (131 tests | 1 failed) 5487ms
+   × shows real per-recipe battle records with a separate ready-but-unused state without advancing the run 14ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > shows real per-recipe battle records with a separate ready-but-unused state without advancing the run
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1267:65
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 149 passed (150)
+   Start at  21:57:08
+   Duration  6.79s (tests 72%, transform 18%, import 9%, worker 1%)
+
+    Isolate  5 workers spawned · ~227ms startup each (spawn + environment, per file)
+             at least ~341ms faster with isolate: false — reuses workers across files instead of one per file

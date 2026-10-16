@@ -1,0 +1,21 @@
+{
+  "url": "http://127.0.0.1:5239/tools/visual-fixtures/build-records.html",
+  "title": "构筑实战记录 · 正常回放",
+  "dom": "- text: 正常成长 / 自动操作者 / 虚拟时钟\n- text: 独立内存存档 · 不代表真人体验或性能\n- button \"正常流程进入改造\"\n- button \"选择猎隼电桥\" [disabled]\n- button \"观察后排跳击\" [disabled]\n- button \"观察就绪未触发\" [disabled]\n- button \"查看组合实战记录\"\n- button \"切换弱特效\" [active]\n- generic: 81.22秒 / HP3 / ready-unused-records",
+  "logs": [],
+  "flow": [
+    "正常奖励→21.27秒选猎隼→115.52秒实际记录放电1次",
+    "正常奖励→81.22秒完成所有升级选择→就绪未触发"
+  ],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "virtualClock": true
+}

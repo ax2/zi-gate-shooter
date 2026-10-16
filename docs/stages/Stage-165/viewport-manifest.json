@@ -1,0 +1,32 @@
+[
+  {
+    "file": "actual-records-desktop.jpg",
+    "width": 1280,
+    "height": 720,
+    "format": "Jpeg"
+  },
+  {
+    "file": "actual-records-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "first-ready-capture-choice.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "ready-unused-mobile-weak.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "ready-unused-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  }
+]
