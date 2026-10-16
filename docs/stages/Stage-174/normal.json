@@ -1,0 +1,288 @@
+[
+  {
+    "option": null,
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 390,
+    "gates": 29,
+    "decision": {
+      "before": {
+        "time": 137.50000000000156,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2
+          },
+          {
+            "kind": "arc",
+            "stage": 2
+          },
+          {
+            "kind": "scatter",
+            "stage": 2
+          },
+          {
+            "kind": "pierce",
+            "stage": 3
+          },
+          {
+            "kind": "blast",
+            "stage": 3
+          }
+        ],
+        "spent": 5,
+        "refinements": 0
+      },
+      "afterSpent": 6,
+      "afterRefinement": 1
+    },
+    "refinement": 1,
+    "fields": 63,
+    "baseHits": 77,
+    "wideHits": 0,
+    "linkHits": 0,
+    "examples": [],
+    "peakBodies": 9,
+    "peakBullets": 62
+  },
+  {
+    "option": "field-wide",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 390,
+    "gates": 29,
+    "decision": {
+      "before": {
+        "time": 137.50000000000156,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2
+          },
+          {
+            "kind": "arc",
+            "stage": 2
+          },
+          {
+            "kind": "scatter",
+            "stage": 2
+          },
+          {
+            "kind": "pierce",
+            "stage": 3
+          },
+          {
+            "kind": "blast",
+            "stage": 3
+          }
+        ],
+        "spent": 5,
+        "refinements": 0
+      },
+      "afterSpent": 6,
+      "afterRefinement": 1
+    },
+    "refinement": 1,
+    "fields": 63,
+    "baseHits": 78,
+    "wideHits": 6,
+    "linkHits": 0,
+    "examples": [
+      {
+        "mode": "field-wide",
+        "fieldId": 20,
+        "targetId": 13399,
+        "time": 283.8166666667372,
+        "x": 420,
+        "y": 467.52499999999975,
+        "fromX": 240,
+        "fromY": 466.2333333333331,
+        "distance": 180.00463439250052
+      },
+      {
+        "mode": "field-wide",
+        "fieldId": 29,
+        "targetId": 15902,
+        "time": 324.86666666669987,
+        "x": 220,
+        "y": 360.1666666666673,
+        "fromX": 400.5336926257556,
+        "fromY": 375,
+        "distance": 181.14204909647168
+      },
+      {
+        "mode": "field-wide",
+        "fieldId": 28,
+        "targetId": 15902,
+        "time": 325.0000000000331,
+        "x": 220,
+        "y": 375.5000000000008,
+        "fromX": 385.71075323323356,
+        "fromY": 495,
+        "distance": 204.30443885810564
+      },
+      {
+        "mode": "field-wide",
+        "fieldId": 47,
+        "targetId": 24115,
+        "time": 456.6333333332467,
+        "x": 300,
+        "y": 393.7916666666672,
+        "fromX": 480,
+        "fromY": 472.7499999999998,
+        "distance": 196.55640005549975
+      },
+      {
+        "mode": "field-wide",
+        "fieldId": 56,
+        "targetId": 29080,
+        "time": 536.7166666665072,
+        "x": 360,
+        "y": 320,
+        "fromX": 520,
+        "fromY": 294.76666666666625,
+        "distance": 161.97753273559616
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 62
+  },
+  {
+    "option": "field-link",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 394,
+    "gates": 29,
+    "decision": {
+      "before": {
+        "time": 137.50000000000156,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2
+          },
+          {
+            "kind": "arc",
+            "stage": 2
+          },
+          {
+            "kind": "scatter",
+            "stage": 2
+          },
+          {
+            "kind": "pierce",
+            "stage": 3
+          },
+          {
+            "kind": "blast",
+            "stage": 3
+          }
+        ],
+        "spent": 5,
+        "refinements": 0
+      },
+      "afterSpent": 6,
+      "afterRefinement": 1
+    },
+    "refinement": 1,
+    "fields": 63,
+    "baseHits": 77,
+    "wideHits": 0,
+    "linkHits": 18,
+    "examples": [
+      {
+        "mode": "field-link",
+        "fieldId": 10,
+        "targetId": 8460,
+        "time": 201.9000000000528,
+        "x": 515.4451740617268,
+        "y": 247.25000000000048,
+        "fromX": 220,
+        "fromY": 255,
+        "distance": 295.54680403679555
+      },
+      {
+        "mode": "field-link",
+        "fieldId": 19,
+        "targetId": 13418,
+        "time": 284.1333333334036,
+        "x": 420,
+        "y": 467.52499999999975,
+        "fromX": 240,
+        "fromY": 466.2333333333331,
+        "distance": 180.00463439250052
+      },
+      {
+        "mode": "field-link",
+        "fieldId": 25,
+        "targetId": 15244,
+        "time": 312.7166666667109,
+        "x": 248,
+        "y": 781.5666666666662,
+        "fromX": 452,
+        "fromY": 547.825000000001,
+        "distance": 310.24372150957447
+      },
+      {
+        "mode": "field-link",
+        "fieldId": 25,
+        "targetId": 15107,
+        "time": 313.11666666671056,
+        "x": 200,
+        "y": 846.9666666666699,
+        "fromX": 452,
+        "fromY": 607.825000000001,
+        "distance": 347.40860198923144
+      },
+      {
+        "mode": "field-link",
+        "fieldId": 25,
+        "targetId": 15107,
+        "time": 313.5166666667102,
+        "x": 200,
+        "y": 897.5666666666702,
+        "fromX": 452,
+        "fromY": 667.825000000001,
+        "distance": 341.006207278957
+      },
+      {
+        "mode": "field-link",
+        "fieldId": 28,
+        "targetId": 15921,
+        "time": 325.18333333336625,
+        "x": 220,
+        "y": 360.1666666666673,
+        "fromX": 400.5336926257556,
+        "fromY": 375,
+        "distance": 181.14204909647168
+      },
+      {
+        "mode": "field-link",
+        "fieldId": 27,
+        "targetId": 15921,
+        "time": 325.31666666669946,
+        "x": 220,
+        "y": 375.5000000000008,
+        "fromX": 385.71075323323356,
+        "fromY": 495,
+        "distance": 204.30443885810564
+      },
+      {
+        "mode": "field-link",
+        "fieldId": 34,
+        "targetId": 19164,
+        "time": 376.5499999999862,
+        "x": 360,
+        "y": 560,
+        "fromX": 140,
+        "fromY": 294.76666666666625,
+        "distance": 344.5993631902289
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 62
+  }
+]

@@ -1,5 +1,5 @@
 import type {World,Body} from './world';
-import type {Route} from './build-tree';
+import {magneticAugments,type Route} from './build-tree';
 import type {WeaponKind} from './weapons';
 import {weaponNames} from './weapons';
 import {FRACTURE} from './combos';import {ION_STORM} from './ion-storm';import {LASER_CHAIN} from './laser-chain';
@@ -32,7 +32,7 @@ export function recipeStatus(w:World,id:RecipeGoal){
  const missing=requirements.filter(r=>r.current<r.target);
  const need=missing.map(r=>r.kind==='weapon'?r.current?`${r.label}T${r.current}→T${r.target}`:`获得${r.label}T${r.target}`:r.kind==='refinement'?`${r.label}${r.target-r.current}次`:`${routeNames[r.route!]}还需${r.target-r.current}点`).join(' ＋ ');
  const progress=requirements.map(r=>r.kind==='weapon'?`${r.label} ${r.current?'T'+r.current:'未持有'}/T${r.target}`:`${r.label} ${Math.min(r.current,r.target)}/${r.target}`).join(' ＋ ');
- return {id,...recipes[id],requirements,missing,ready:missing.length===0,need,progress};
+ return {id,...recipes[id],...(id==='magnetic'&&w.build.magneticAugment?{hint:magneticAugments[w.build.magneticAugment].detail}:{}),requirements,missing,ready:missing.length===0,need,progress};
 }
 export function recipeSupplyMatch(w:World,id:RecipeGoal|null|undefined,b:Body){
  if(!id||!b.active||!['crate','pickup'].includes(b.kind)||!b.weaponKind)return false;
@@ -56,8 +56,8 @@ export function recipeRouteHint(w:World,id:RecipeGoal|null|undefined,route:Route
 /** Actual simulation counters, not particle counts or projected damage. */
 export function recipePerformance(w:World,id:RecipeGoal){
  const ready=recipeStatus(w,id).ready;
- const count=id==='storm'?w.stormLinks:id==='prism'?w.prismHits:id==='photon'?w.laserArcHits+w.laserFocusHits:id==='fracture'?w.fractureBursts:id==='magnetic'?w.magneticHits:w.ionBursts;
+ const count=id==='storm'?w.stormLinks:id==='prism'?w.prismHits:id==='photon'?w.laserArcHits+w.laserFocusHits:id==='fracture'?w.fractureBursts:id==='magnetic'?w.magneticHits+w.magneticLinkHits:w.ionBursts;
  const n=(v:number)=>v>=1e8?`${+(v/1e8).toFixed(1)}亿`:v>=1e4?`${+(v/1e4).toFixed(1)}万`:`${v}`;
- const measured=id==='storm'?`跳伤${n(w.stormLinks)}次`:id==='prism'?`侧束命中${n(w.prismHits)}`:id==='photon'?`链${n(w.laserArcHits)}/聚${n(w.laserFocusHits)}`:id==='fracture'?`引爆${n(w.fractureBursts)}次`:id==='magnetic'?`电场命中${n(w.magneticHits)}`:`放电${n(w.ionBursts)}次`;
+ const measured=id==='storm'?`跳伤${n(w.stormLinks)}次`:id==='prism'?`侧束命中${n(w.prismHits)}`:id==='photon'?`链${n(w.laserArcHits)}/聚${n(w.laserFocusHits)}`:id==='fracture'?`引爆${n(w.fractureBursts)}次`:id==='magnetic'?`场${n(w.magneticHits)}/${w.build.magneticAugment==='field-wide'?'扩'+n(w.magneticWideHits):'桥'+n(w.magneticLinkHits)}`:`放电${n(w.ionBursts)}次`;
  return {ready,count,label:!ready?'未成形':count===0?'已就绪 · 未触发':measured};
 }

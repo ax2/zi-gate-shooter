@@ -1,3 +1,4 @@
+import {MAGNETIC,MAGNETIC_REFINEMENT} from './magnetic-field';
 export type BallisticBranch='penetrator'|'fragment'|'ricochet';
 export const ballisticBranches={
  penetrator:{name:'贯穿弹芯',detail:'霰射总伤害+30% · 每颗贯穿2敌',role:'瞄准纵向敌列，打穿前排'},
@@ -7,7 +8,13 @@ export const ballisticBranches={
 export const BALLISTIC_FORK={targets:2,radius:140,splash:.5} as const;
 export const RICOCHET={range:280,minSide:80,damage:.55} as const;
 export type ElectricBranch='spread'|'capacitor'|'seeker';
-export type BuildBranch=OpticalBranch|ElectricBranch|BallisticBranch;
+export type MagneticAugment='field-wide'|'field-link';
+export const magneticAugments={
+ 'field-wide':{name:'广域磁场',detail:`原三拍保留 · 半径${MAGNETIC.radius}→${MAGNETIC_REFINEMENT.wideRadius} · 每拍${MAGNETIC_REFINEMENT.wideDamage*100}%`,role:'扩大持续覆盖，迎接侧翼来敌'},
+ 'field-link':{name:'分流电桥',detail:'原三拍保留 · 每拍追加一次场外跳击',role:`${MAGNETIC.radius}外至${MAGNETIC_REFINEMENT.linkRange}内，优先当前蓄能射手`},
+} as const;
+export const isMagneticAugment=(value:unknown):value is MagneticAugment=>value==='field-wide'||value==='field-link';
+export type BuildBranch=OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment;
 export const SEEKER_BRIDGE={range:340} as const;
 export const electricBranches={
  seeker:{name:'猎隼电桥',detail:'首跳范围340 · 优先蓄能射手',role:'借前排目标，跳击后排火力点'},
@@ -41,6 +48,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
 };
 export class BuildTree {
+  magneticAugment?:MagneticAugment;
   ballisticBranch?:BallisticBranch;
   opticalBranch?:OpticalBranch;
   electricBranch?:ElectricBranch;
@@ -65,7 +73,10 @@ export class BuildTree {
   }
   choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;
+    if(isMagneticAugment(branch)){
+      if(route!=='electric'||this.ranks.electric<3||this.magneticAugment)return false;
+      this.magneticAugment=branch;
+    }else if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;
     if(route==='ballistic'&&this.ranks.ballistic===1){
       if(this.ballisticBranch)return false;
       this.ballisticBranch=branch==='ricochet'?'ricochet':branch==='fragment'?'fragment':'penetrator';

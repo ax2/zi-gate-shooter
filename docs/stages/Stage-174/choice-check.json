@@ -1,0 +1,37 @@
+{
+  "beforeSpent": 5,
+  "cancelledSpent": 5,
+  "selectedSpent": 6,
+  "beforeRefinement": 0,
+  "afterRefinement": 1,
+  "namesMatch": true,
+  "levelsNondecreasing": true,
+  "beforeWeapons": [
+    "pulse",
+    "arc",
+    "scatter",
+    "pierce",
+    "blast"
+  ],
+  "afterWeapons": [
+    "pulse",
+    "arc",
+    "scatter",
+    "pierce",
+    "blast"
+  ],
+  "beforeLevels": {
+    "pulse": 2,
+    "arc": 2,
+    "scatter": 2,
+    "pierce": 3,
+    "blast": 3
+  },
+  "afterLevels": {
+    "pulse": 2,
+    "arc": 2,
+    "scatter": 2,
+    "pierce": 3,
+    "blast": 3
+  }
+}

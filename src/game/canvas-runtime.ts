@@ -27,7 +27,7 @@ import { fractureLight, fractureMarks } from './fracture-light';
 import { mountedRig } from './mounted-rig';
 import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
 import { achievements, achievementGroups, achievementGroup, achievementProgress, trackAchievement, type AchievementGroup, awardAchievements, parseAchievements } from '../core/achievements';
-import { tree, routes, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
+import { tree, routes, magneticAugments, isMagneticAugment, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -353,7 +353,7 @@ export class CanvasRuntime {
   }
   private selectBuild(route:Route,branch?:BuildBranch){
     const preview=buildPreview(this.world,route,branch);
-    const chosenNode=this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
+    const chosenNode=isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
     const earnedEffects=this.world.drainEffects();
@@ -369,13 +369,14 @@ export class CanvasRuntime {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
       if(!routes.includes(route))return;
-      if(this.world.build.ranks[route]===1&&this.world.build.available(this.world.buildPoints).includes(route)){this.branchRoute=route;this.mode='branch';}
+      if((this.world.build.ranks[route]===1||route==='electric'&&this.world.canRefineMagnetic())&&this.world.build.available(this.world.buildPoints).includes(route)){this.branchRoute=route;this.mode='branch';}
       else this.selectBuild(route);
     }
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
       const branch=action.slice(7) as BuildBranch,route=this.branchRoute;
-      if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
+      if(isMagneticAugment(branch)&&route==='electric'&&this.world.canRefineMagnetic())this.selectBuild(route,branch);
+      else if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -509,7 +510,7 @@ export class CanvasRuntime {
       if(this.save.settings.sound)this.platform.sound('refract',1);return;
     }
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
-    if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16,seeker:e.seeker});
+    if ((e.type === 'arc'||e.type==='magnetic-link') && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16,seeker:e.seeker});
     if (e.type === 'fire') { const kind=e.weaponKind??this.world.weaponKind;this.mountedMotion.get(kind)?.fire(kind,this.world.weaponStage(kind),this.world.time);if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
     if (e.type === 'weapon' || e.type === 'upgrade') {this.weaponGuideUntil = this.world.time + 5;this.weaponGuideKind=e.weaponKind??this.world.weaponKind;}
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
@@ -535,6 +536,9 @@ export class CanvasRuntime {
       const angle = Math.random() * Math.PI * 2, speed = (explosion ? 130 : 75) + Math.random() * (explosion ? 330 : 180), life = 0.18 + Math.random() * 0.4;
       this.particles.push({ x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: e.type==='drop-impact'?'#b6efff':(e.type==='capacitor'||e.type==='ion-storm')?(i%3===0?'#efffff':i%2?'#c5a9ff':'#80ffd1'):explosion ? (i % 4 === 0 ? '#99ddff' : i % 3 === 0 ? '#ffe2a0' : '#ffad42') : weaponColors[e.weaponKind ?? this.world.weaponKind] });
     }
+  }
+  private gateText(text:string,x:number,y:number,size:number,color:string,bold=false){
+    const c=this.ctx;c.save();c.font=`${bold?'700 ':''}${size}px ${fonts}`;c.textAlign='center';c.textBaseline='middle';c.strokeStyle='#020b13';c.lineWidth=Math.max(2,size*.09);c.lineJoin='round';c.strokeText(text,x,y);this.text(text,x,y,size,color,'center',bold);c.restore();
   }
   private text(text: string, x: number, y: number, size: number, color = '#ecf7ff', align: CanvasTextAlign = 'center', bold = false) {
     const c = this.ctx; c.fillStyle = color; c.font = `${bold ? '700 ' : ''}${size}px ${fonts}`; c.textAlign = align; c.textBaseline = 'middle'; c.fillText(text, x, y);
@@ -935,11 +939,11 @@ export class CanvasRuntime {
         const pulse = this.gateFeedback.pulse(b.id, w.time);
         const numberScale = 1 + Math.sin(pulse * Math.PI) * (this.save.settings.effects === 'weak' ? 0.03 : 0.08);
         if(!gatePanelBlocked(b,w.bodies,mixed))this.rect(b.x-panelWidth/2, b.y - (mixed ? 80 : 54), panelWidth, mixed ? 164 : 108, '#071927f5');
-        this.text(mixed ? '穿过领取' : value.power ? '穿过领取 · 火力' : value.energy ? '穿过领取 · 充能' : '储能已满', b.x, b.y - (mixed ? 60 : 33), paired?23:25, b.rewardKind==='energy'?'#e7c789':'#a4d6e9');
+        this.gateText(mixed ? '穿过领取' : value.power ? '穿过领取 · 火力' : value.energy ? '穿过领取 · 充能' : '储能已满', b.x, b.y - (mixed ? 60 : 33), paired?23:25, b.rewardKind==='energy'?'#e7c789':'#a4d6e9');
         if (mixed) {
-          this.text(`+${value.power}%`, b.x, b.y - 18, 50 * numberScale, '#effaff', 'center', true);
-          this.text(`充能 +${value.energy}`, b.x, b.y + 32, 36 * numberScale, '#ffe4ac', 'center', true);
-        } else this.text(`+${value.power || value.energy}${value.power ? '%' : ''}`, b.x, b.y + 8, 50 * numberScale, '#effaff', 'center', true);
+          this.gateText(`+${value.power}%`, b.x, b.y - 18, 50 * numberScale, '#effaff', true);
+          this.gateText(`充能 +${value.energy}`, b.x, b.y + 32, 36 * numberScale, '#ffe4ac', true);
+        } else this.gateText(`+${value.power || value.energy}${value.power ? '%' : ''}`, b.x, b.y + 8, 50 * numberScale, '#effaff', true);
         const tier = C.thresholds.findIndex(t => t > b.energy);
         const progress = tier < 0 ? 1 : (b.energy - C.thresholds[tier - 1]) / (C.thresholds[tier] - C.thresholds[tier - 1]);
         this.bar(b.x, b.y + (mixed ? 72 : 46), panelWidth - 22, progress, b.rewardKind === 'power' ? '#5bddff' : '#e5b96a');
@@ -1132,7 +1136,7 @@ export class CanvasRuntime {
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
-      this.text(kind === 'arc' ? `${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `范围${profile.splashRadius}${w.magneticUnlocked()?' · 三拍电场':''}`
+      this.text(kind === 'arc' ? `${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `范围${profile.splashRadius}${w.magneticUnlocked()?w.build.magneticAugment==='field-wide'?' · 广域电场':w.build.magneticAugment==='field-link'?' · 分流电场':' · 三拍电场':''}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':w.build.ballisticBranch==='ricochet'?'280范围 · 55%侧跳':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
@@ -1259,7 +1263,7 @@ export class CanvasRuntime {
     for(const [i,route] of routes.entries()) {
       const rank=this.world.build.ranks[route], top=235+i*265;
       const color=['#ffd28a','#c6a1ff','#7fe4ff'][i];
-      this.text(`${['弹道','雷电','光学'][i]}路线 · 精调${this.world.build.refinements[route]}次`,72,top,27,color,'left',true);
+      this.text(`${['弹道','雷电','光学'][i]}路线 · 精调${this.world.build.refinements[route]}次${route==='electric'&&this.world.build.magneticAugment?' · '+magneticAugments[this.world.build.magneticAugment].name:''}`,72,top,27,color,'left',true);
       this.rect(85,top+28,2,155,'#456478');
       for(const j of tree[route].keys()) {
         const node=this.world.build.node(route,j);
@@ -1276,7 +1280,7 @@ export class CanvasRuntime {
     this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
   private drawBuildBranch(){
-    if(this.branchRoute==='electric'){this.drawElectricBranch();return;}
+    if(this.branchRoute==='electric'){if(this.world.canRefineMagnetic())this.drawMagneticBranch();else this.drawElectricBranch();return;}
     if(this.branchRoute==='ballistic'){this.drawBallisticBranch();return;}
     this.rect(35,120,650,1080,'#102330');
     this.text('光学改造 · 二选一',360,190,40,'#effaff','center',true);
@@ -1309,6 +1313,21 @@ export class CanvasRuntime {
     this.text('本局选定不可切换 · 雷暴组合与旧武器保留',360,985,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
   }
+  private drawMagneticBranch(){
+    this.rect(35,120,650,1080,'#102330');this.text('磁暴精研 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('电弧精调照常生效 · 原三拍与旧武器保留',360,250,23,'#bdd8e7');
+    for(const [i,branch] of (['field-wide','field-link'] as const).entries()){
+      const power=1+permanentPower(this.world.growth)/100,node=magneticAugments[branch],y=325+i*305,preview=buildPreview(this.world,'electric',branch),color=i?'#b6dbff':'#9df5e5';
+      this.rect(65,y,590,275,'#203e50');this.rect(65,y,5,275,color);
+      this.text(node.name,90,y+38,34,color,'left',true);this.text(node.role,90,y+82,23,'#effaff','left');
+      this.text(node.detail,90,y+126,23,'#d9e8f1','left');
+      this.text(i?'每拍场外一敌 · 不递归、不充箱门':'每拍35%→50% · 场内压制与覆盖兼顾',90,y+166,22,'#bdd8e7','left');
+      this.text(`电弧直击 ${+(preview.before.damage[0]*power).toFixed(1)} → ${+(preview.after.damage[0]*power).toFixed(1)}`,90,y+207,22,'#bdd8e7','left');
+      this.text('选此精研　›',625,y+244,25,color,'right');this.buttons.push({x:65,y,w:590,h:275,action:`branch:${branch}`,label:node.name});
+    }
+    this.text('花费1技能点 · 本局选定不改选 · 后续仍可精调',360,1000,22,'#f0d19a');
+    this.button('返回升级选择',1080,'branch-back');
+  }
   private drawElectricBranch(){
     this.rect(35,120,650,1080,'#102330');
     this.text('雷电改造 · 三选一',360,190,40,'#effaff','center',true);
@@ -1333,7 +1352,7 @@ export class CanvasRuntime {
     this.text('直伤含常驻火力 · 不计超载、命中率与派生',360,305,20,'#bdd8e7');
     const available=this.world.build.available(this.world.buildPoints);
     for(const [i,route] of routes.entries()){
-      const rank=this.world.build.ranks[route],y=330+i*235,node=this.world.build.next(route);
+      const rank=this.world.build.ranks[route],y=330+i*235,node=route==='electric'&&this.world.canRefineMagnetic()?{name:'磁暴精研 · 二选一'}:this.world.build.next(route);
       const enabled=available.includes(route);
       const preview=buildPreview(this.world,route),color=['#ffd28a','#c6a1ff','#7fe4ff'][i],goalHint=recipeRouteHint(this.world,this.save.recipeGoal,route);
       this.rect(65,y,590,205,enabled?'#203e50':'#15232e');
@@ -1424,7 +1443,7 @@ export class CanvasRuntime {
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
-      lastMagneticHit:this.world.lastMagneticHit,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
+      lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,

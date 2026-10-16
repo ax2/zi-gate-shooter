@@ -1,5 +1,5 @@
 import {canLaserChain} from '../core/laser-chain';
-import {BuildTree,type Route,type BuildBranch} from '../core/build-tree';
+import {BuildTree,isMagneticAugment,magneticAugments,type Route,type BuildBranch} from '../core/build-tree';
 import {builtWeapon,builtSupport} from '../core/build-profile';
 import {permanentPower} from '../core/rewards';
 import type {World} from '../core/world';
@@ -24,8 +24,8 @@ function combinationPlan(build:BuildTree,route:Route,was:BuildTree,arcStage:numb
 export function buildPreview(world:World,route:Route,branch?:BuildBranch){
   const current=world.build,projected=new BuildTree();
   Object.assign(projected.ranks,current.ranks);Object.assign(projected.refinements,current.refinements);
-  projected.ballisticBranch=current.ballisticBranch;projected.electricBranch=current.electricBranch;projected.opticalBranch=current.opticalBranch;
-  const valid=projected.choose(route,world.buildPoints,branch);
+  projected.magneticAugment=current.magneticAugment;projected.ballisticBranch=current.ballisticBranch;projected.electricBranch=current.electricBranch;projected.opticalBranch=current.opticalBranch;
+  const valid=(!isMagneticAugment(branch)||world.canRefineMagnetic())&&projected.choose(route,world.buildPoints,branch);
   const rank=current.ranks[route],kind=route==='ballistic'?'scatter':'arc';
   const owned=world.activeWeapons.includes(kind),stage=owned?world.weaponStage(kind):1,calibration=owned?world.weaponCalibration(kind):0;
   const before=builtWeapon(kind,stage,calibration,current),after=builtWeapon(kind,stage,calibration,projected);
@@ -51,6 +51,7 @@ export function buildPreview(world:World,route:Route,branch?:BuildBranch){
       :rank===1?`激光间隔 ${laserBefore.laserInterval} → ${laserAfter.laserInterval}秒`
       :`激光贯穿 ${laserBefore.laserTargets} → ${laserAfter.laserTargets}敌`;
   }
-  return {gain,plan:valid?combinationPlan(projected,route,current,world.activeWeapons.includes('arc')?world.weaponStage('arc'):0):'先选导电线圈，再解锁雷暴霰射',
+  if(valid&&isMagneticAugment(branch))gain=`电弧直击 ${volley(before)} → ${volley(after)} · ${magneticAugments[branch].name}`;
+  return {gain,plan:valid&&!branch&&route==='electric'&&world.canRefineMagnetic()?'精研二选一：广域覆盖 / 场外分流 · 原三拍保留':valid&&isMagneticAugment(branch)?magneticAugments[branch].detail:valid?combinationPlan(projected,route,current,world.activeWeapons.includes('arc')?world.weaponStage('arc'):0):'先选导电线圈，再解锁雷暴霰射',
     valid,stage,before,after,laserBefore,laserAfter};
 }

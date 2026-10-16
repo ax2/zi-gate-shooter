@@ -1,6 +1,6 @@
 import type {World} from '../core/world';
 import {achievements} from '../core/achievements';
-import {routes} from '../core/build-tree';
+import {routes,magneticAugments} from '../core/build-tree';
 import {weaponNames} from '../core/weapons';
 export function nextRunGoal(w:World,unlocked:readonly string[],tracked?:string|null){
  const target=achievements.find(a=>a.id===tracked);if(target)return unlocked.includes(target.id)?`已达成${target.name}，到成就页选择新目标`:`目标：${target.name} · ${target.detail}`;
@@ -26,10 +26,10 @@ export function runReport(w:World,fresh:readonly string[],unlocked:readonly stri
  return {
   growth:`充能突破 ${w.growth.mastery??0}次 · 专属精校 ${w.activeWeapons.reduce((n,k)=>n+w.weaponCalibration(k),0)}次 · 研发 ${w.researchPoints}点${w.refitsClaimed?' · 改装'+w.refitsClaimed+'次':''}`,
   weapons:w.activeWeapons.map(k=>`${weaponNames[k]} T${w.weaponStage(k)}`),
-  routes:routes.map((r,i)=>`${['弹道','雷电','光学'][i]} ${w.build.ranks[r]}/3 · ${w.build.ranks[r]?w.build.node(r,Math.min(1,w.build.ranks[r]-1)).name:'未投入'}${w.build.refinements[r]?' · 精调'+w.build.refinements[r]:''}`),
+  routes:routes.map((r,i)=>`${['弹道','雷电','光学'][i]} ${w.build.ranks[r]}/3 · ${w.build.ranks[r]?w.build.node(r,Math.min(1,w.build.ranks[r]-1)).name:'未投入'}${w.build.refinements[r]?' · 精调'+w.build.refinements[r]:''}${r==='electric'&&w.build.magneticAugment?' · '+magneticAugments[w.build.magneticAugment].name:''}`),
   combat:`首领 ${w.bossWins} · 战利品 ${w.bossLootStats.claimed} · 击破 ${w.kills} · 门 ${w.gatesTaken}`,
   contracts:w.contractStats.accepted?`契约成功 ${w.contractStats.won}/${w.contractStats.accepted} · 领奖 ${w.contractStats.claimed} · 失败 ${w.contractStats.failed}${w.proofWins?` · 构筑认证${w.proofWins}`:''}`:'本局未接取契约 · 每轮可自选一次',
-  mechanics:w.magneticHits+w.scatterRicochets+w.scatterPierces+w.scatterSplashHits+w.fractureBursts+w.capacitorBursts+w.burnHits+w.relayHits+w.arcLinks+w.empTargets+w.ionBursts+w.laserArcHits+w.laserFocusHits===0?(w.build.electricBranch==='seeker'?['猎隼尚未有效命中','借前排目标，首跳远距打击后排射手']:['尚未触发派生能力','研发分支与配件组合可强化火力']):w.laserArcHits+w.laserFocusHits+w.magneticHits>0?[`${ballistic} · 溅射 ${w.scatterSplashHits} · 裂甲 ${w.fractureBursts}${w.magneticHits?` · 磁暴${w.magneticHits}`:''}`,`${electric} · 蓄爆 ${w.capacitorBursts} · 风暴 ${w.ionBursts} · 停火 ${w.empTargets}`,`灼烧 ${w.burnHits} · 分光 ${w.relayHits} · 光链 ${w.laserArcHits} · 聚能 ${w.laserFocusHits}`]:[`${ballistic} · 溅射 ${w.scatterSplashHits} · 裂甲 ${w.fractureBursts} · 停火 ${w.empTargets}`,`${electric} · 蓄爆 ${w.capacitorBursts} · 灼烧 ${w.burnHits} · 分光 ${w.relayHits}${w.ionBursts?` · 风暴${w.ionBursts}`:''}${w.magneticHits?` · 磁暴${w.magneticHits}`:''}`],
+  mechanics:w.magneticLinkHits+w.magneticHits+w.scatterRicochets+w.scatterPierces+w.scatterSplashHits+w.fractureBursts+w.capacitorBursts+w.burnHits+w.relayHits+w.arcLinks+w.empTargets+w.ionBursts+w.laserArcHits+w.laserFocusHits===0?(w.build.electricBranch==='seeker'?['猎隼尚未有效命中','借前排目标，首跳远距打击后排射手']:['尚未触发派生能力','研发分支与配件组合可强化火力']):w.laserArcHits+w.laserFocusHits+w.magneticHits+w.magneticLinkHits>0?[`${ballistic} · 溅射 ${w.scatterSplashHits} · 裂甲 ${w.fractureBursts}${w.magneticHits+w.magneticLinkHits?` · 磁暴${w.magneticHits}/${w.magneticLinkHits}`:''}`,`${electric} · 蓄爆 ${w.capacitorBursts} · 风暴 ${w.ionBursts} · 停火 ${w.empTargets}`,`灼烧 ${w.burnHits} · 分光 ${w.relayHits} · 光链 ${w.laserArcHits} · 聚能 ${w.laserFocusHits}`]:[`${ballistic} · 溅射 ${w.scatterSplashHits} · 裂甲 ${w.fractureBursts} · 停火 ${w.empTargets}`,`${electric} · 蓄爆 ${w.capacitorBursts} · 灼烧 ${w.burnHits} · 分光 ${w.relayHits}${w.ionBursts?` · 风暴${w.ionBursts}`:''}${w.magneticHits+w.magneticLinkHits?` · 磁暴${w.magneticHits}/${w.magneticLinkHits}`:''}`],
   fresh:names.length?`新成就 ${names.length} · ${names.slice(0,2).join(' / ')}${names.length>2?'…':''}`:`本局无新成就 · 累计 ${unlocked.length}/${achievements.length}`,
   next:nextRunGoal(w,unlocked,tracked),
  };

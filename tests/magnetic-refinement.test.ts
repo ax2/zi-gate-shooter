@@ -1,0 +1,29 @@
+import {it,expect} from 'vitest';import {World,type Body} from '../src/core/world';import {C} from '../src/core/config';import {BuildTree} from '../src/core/build-tree';import {buildPreview} from '../src/game/build-preview';import {recipePerformance} from '../src/core/recipe-goal';import {runReport} from '../src/game/run-report';
+function setup(){const w=new World();w.phase='boss';w.player.x=w.player.px=68;w.growth.mastery=20;const b=w.spawn('pickup',68,C.playerY,2);b.weaponKind='blast';w.step(C.step,68);for(let i=0;i<3;i++)w.chooseBuild('electric',i===1?'seeker':undefined);w.drainEffects();return w;}
+function enemy(w:World,x=360,y=600,kind:'armor'|'guard'|'elite'='armor'){const b=w.spawn(kind,x,y);b.speed=0;b.hp=b.maxHp=1000;b.timer=999;return b;}
+function shot(w:World,b:Body){w.bullets=[{id:99999,x:b.x,y:b.y,px:b.x,py:b.y,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'blast',splashRadius:110}];w.step(C.step,68);w.drainEffects();}
+function frames(w:World,n:number){const effects=[];for(let i=0;i<n;i++){w.bullets=[];w.step(C.step,68);effects.push(...w.drainEffects());}return effects;}
+it('gates run-local refinement by real prerequisites and rejects duplicate, cross-route and unaffordable choices atomically',()=>{
+ const empty=new World();empty.growth.mastery=20;for(let i=0;i<3;i++)empty.chooseBuild('electric');const before=JSON.stringify(empty);expect(empty.chooseBuild('electric','field-wide')).toBe(false);expect(JSON.stringify(empty)).toBe(before);
+ const w=setup(),snapshot=JSON.stringify(w);expect(w.chooseBuild('ballistic','field-link')).toBe(false);expect(JSON.stringify(w)).toBe(snapshot);expect(w.chooseBuild('electric','field-wide')).toBe(true);const chosen=JSON.stringify(w);expect(w.chooseBuild('electric','field-link')).toBe(false);expect(JSON.stringify(w)).toBe(chosen);expect(new World().build.magneticAugment).toBeUndefined();
+ const tree=new BuildTree();Object.assign(tree.ranks,{electric:3});const treeBefore=JSON.stringify(tree);expect(tree.choose('electric',3,'field-link')).toBe(false);expect(JSON.stringify(tree)).toBe(treeBefore);
+});
+it('both alternatives keep every gun, existing branch and the ordinary ten percent refinement with read-only previews',()=>{
+ for(const option of ['field-wide','field-link'] as const){const w=setup(),owned=w.activeWeapons.slice(),before=Object.fromEntries(owned.map(k=>[k,w.profileFor(k).damage])),saved=JSON.stringify(w),preview=buildPreview(w,'electric',option);expect(JSON.stringify(w)).toBe(saved);expect(preview.valid).toBe(true);expect(preview.plan).toContain('原三拍保留');expect(w.chooseBuild('electric',option)).toBe(true);expect(w.activeWeapons).toEqual(owned);expect(w.build.electricBranch).toBe('seeker');expect(w.build.refinements.electric).toBe(1);for(const k of owned)for(const [i,d]of w.profileFor(k).damage.entries())expect(d).toBeGreaterThanOrEqual(before[k][i]);}
+});
+it('wide fields hit an actual outside-base target and preserve old field snapshots',()=>{
+ const w=setup(),a=enemy(w),side=enemy(w,540,620);shot(w,a);expect(w.magneticFields[0].radius).toBe(150);w.chooseBuild('electric','field-wide');frames(w,7);expect(side.hp).toBe(1000);frames(w,30);shot(w,a);expect(w.magneticFields.at(-1)?.radius).toBe(240);frames(w,7);expect(side.hp).toBe(995);expect(w.magneticLinkHits).toBe(0);
+});
+it('link pulses keep the base hit and add exactly one current outside shooter without chaining another mechanic',()=>{
+ const w=setup();w.chooseBuild('electric','field-link');const a=enemy(w),near=enemy(w,530,620),shooter=enemy(w,600,580);shooter.warning=.6;shot(w,a);const events=frames(w,7);expect(a.hp).toBe(986.5);expect(shooter.hp).toBe(996.5);expect(near.hp).toBe(1000);expect(w.magneticLinkHits).toBe(1);expect(events.filter(e=>e.type==='magnetic-link')).toHaveLength(1);expect(events.find(e=>e.type==='magnetic-link')?.targetId).toBe(shooter.id);expect(w.ionCharge).toBe(0);expect(w.arcLinks).toBe(0);expect(w.magneticBursts).toBe(1);expect(recipePerformance(w,'magnetic').label).toBe('场1/桥1');expect(runReport(w,[],[]).routes[1]).toContain('分流电桥');
+});
+it('outside links skip protection, closed guards, rewards and the combat-strip bounds, and keep lethal rewards single',()=>{
+ const w=setup();w.chooseBuild('electric','field-link');const a=enemy(w),shield=enemy(w,540,620,'guard'),entry=enemy(w,560,620),elite=enemy(w,600,620,'elite'),gate=w.spawn('gate',530,620),crate=w.spawn('crate',550,620);entry.dropGrace=2;elite.hp=3;shot(w,a);frames(w,8);expect(w.magneticLinkHits).toBe(1);expect(elite.active).toBe(false);expect(w.growth.energy).toBe(15);expect(shield.hp).toBe(1000);expect(entry.hp).toBe(1000);expect(gate.energy).toBe(0);expect(crate.hp).toBe(crate.maxHp);frames(w,30);expect(w.growth.energy).toBe(15);expect(w.kills).toBe(1);expect(w.magneticBursts).toBe(1);
+ for(const [y,targetY]of [[260,220],[1000,1040]]){const v=setup();v.chooseBuild('electric','field-link');const from=enemy(v,360,y),outside=enemy(v,550,targetY);shot(v,from);frames(v,9);expect(outside.hp).toBe(1000);expect(v.magneticLinkHits).toBe(0);}
+});
+it('a link boss kill stops further fields and prevents phantom escort reward after victory',()=>{
+ const w=setup();w.chooseBuild('electric','field-link');const a=enemy(w,180),boss=w.spawn('boss',600,620);boss.hp=3;boss.warning=.7;boss.timer=999;const escort=enemy(w,570,620,'elite');escort.hp=3;shot(w,a);frames(w,9);expect(w.bossWins).toBe(1);expect(escort.hp).toBe(3);expect(w.magneticLinkHits).toBe(1);expect(w.magneticFields).toHaveLength(0);
+});
+it('enforces the actual 420 range boundary without replacing the ordinary in-field pulse',()=>{
+ for(const x of [600,610]){const w=setup();w.chooseBuild('electric','field-link');const a=enemy(w,180),b=enemy(w,x,615);shot(w,a);frames(w,7);expect(w.magneticHits).toBe(1);expect(w.magneticLinkHits).toBe(x===600?1:0);expect(b.hp).toBe(x===600?996.5:1000);}
+});

@@ -1,0 +1,45 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/magnetic-refinement.test.ts tests/magnetic-field.test.ts tests/build-tree.test.ts tests/recipe-goal.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/magnetic-refinement.test.ts (6 tests | 2 failed) 21ms
+   × link pulses keep the base hit and add exactly one current outside shooter without chaining another mechanic 6ms
+   × a link boss kill stops further fields and prevents phantom escort reward after victory 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/magnetic-refinement.test.ts > link pulses keep the base hit and add exactly one current outside shooter without chaining another mechanic
+AssertionError: expected 1000 to be 996.5 // Object.is equality
+
+- Expected
++ Received
+
+- 996.5
++ 1000
+
+ ❯ tests/magnetic-refinement.test.ts:18:219
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/magnetic-refinement.test.ts > a link boss kill stops further fields and prevents phantom escort reward after victory
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/magnetic-refinement.test.ts:25:296
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  2 failed | 22 passed (24)
+   Start at  01:26:19
+   Duration  780ms (transform 66%, import 24%, tests 8%, worker 2%)

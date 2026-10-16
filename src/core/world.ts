@@ -1,6 +1,6 @@
 import {SWEEPER} from './sweeper';
 import {SUPPLY_CONVOY} from './supply-convoy';
-import {MAGNETIC,type MagneticField} from './magnetic-field';
+import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
 import {canLaserChain,LASER_CHAIN} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,type BuildProof} from './build-proof';
@@ -9,7 +9,7 @@ import {ION_STORM} from './ion-storm';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
-import { BuildTree, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type BuildBranch, type Route } from './build-tree';
+import { BuildTree, isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
@@ -65,7 +65,9 @@ export class World {
     return this.researchPoints-before;
   }
   chooseBuild(route: Route,branch?:BuildBranch) {
+    if(isMagneticAugment(branch)&&!this.canRefineMagnetic())return false;
     if(!this.build.choose(route,this.buildPoints,branch))return false;
+    if(isMagneticAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'磁暴精研 · '+magneticAugments[branch].name,detail:branch==='field-wide'?`半径${MAGNETIC_REFINEMENT.wideRadius} · 每拍${MAGNETIC_REFINEMENT.wideDamage*100}% · 常规精调保留`:`场外${MAGNETIC_REFINEMENT.linkRange}内一敌 · 原三拍/常规精调保留`});
     const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
     if(kind && !this.activeWeapons.includes(kind)) {
       for(const owned of this.activeWeapons){this.weaponStages.set(owned,this.weaponStage(owned));this.acquiredWeapons.add(owned);}
@@ -198,10 +200,12 @@ export class World {
   }
   fractureBursts=0;
   magneticFields:MagneticField[]=[];
-  magneticBursts=0;magneticHits=0;
-  lastMagneticHit?:{fieldId:number;targetId:number;time:number;x:number;y:number};
+  magneticBursts=0;magneticHits=0;magneticLinkHits=0;magneticWideHits=0;
+  lastMagneticRefinementHit?:{mode:string;fieldId:number;targetId:number;time:number;x:number;y:number;fromX:number;fromY:number;distance:number};
+  lastMagneticHit?:{fieldId:number;targetId:number;time:number;x:number;y:number;link?:boolean};
   private magneticReadyAt=0;private magneticId=0;private announcedMagnetic=false;
   magneticUnlocked(){return this.activeWeapons.includes('blast')&&this.weaponStage('blast')>=2&&this.build.ranks.electric>=2;}
+  canRefineMagnetic(){return this.magneticUnlocked()&&this.build.ranks.electric>=3&&!this.build.magneticAugment;}
   private announceMagnetic(){
     if(this.announcedMagnetic||!this.magneticUnlocked())return;
     this.announcedMagnetic=true;
@@ -210,7 +214,7 @@ export class World {
   private leaveMagnetic(body:Body,damage:number){
     if(!this.magneticUnlocked()||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss')||this.time+1e-9<this.magneticReadyAt||this.magneticFields.length>=MAGNETIC.limit)return;
     this.magneticReadyAt=this.time+MAGNETIC.cooldown;this.magneticBursts++;
-    this.magneticFields.push({id:++this.magneticId,x:body.x,y:body.y,age:0,damage:damage*MAGNETIC.damage,pulses:0});
+    this.magneticFields.push({id:++this.magneticId,x:body.x,y:body.y,age:0,damage:damage*(this.build.magneticAugment==='field-wide'?MAGNETIC_REFINEMENT.wideDamage:MAGNETIC.damage),pulses:0,radius:this.build.magneticAugment==='field-wide'?MAGNETIC_REFINEMENT.wideRadius:MAGNETIC.radius,link:this.build.magneticAugment==='field-link'});
   }
   private advanceMagnetic(dt:number){
     if(this.phase!=='running'&&this.phase!=='boss'){this.magneticFields=[];return;}
@@ -220,13 +224,19 @@ export class World {
         field.pulses++;
         for(const target of this.bodies){
           if(this.bossVictory||this.player.hp<=0)break;
-          if(!target.active||!(target.kind in C.enemies)||guardClosed(target)||(target.dropGrace??0)>0||target.y<C.playerShotTop||target.y>C.playerY||(target.kind==='boss'&&this.phase!=='boss')||Math.hypot(target.x-field.x,target.y-field.y)>MAGNETIC.radius)continue;
+          if(!target.active||!(target.kind in C.enemies)||guardClosed(target)||(target.dropGrace??0)>0||target.y<C.playerShotTop||target.y>C.playerY||(target.kind==='boss'&&this.phase!=='boss')||Math.hypot(target.x-field.x,target.y-field.y)>(field.radius??MAGNETIC.radius))continue;
           const before=target.hp;this.hit(target,field.damage,'blast');
-          if(target.hp<before){this.magneticHits++;this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y};this.effects.push({type:'magnetic-hit',x:target.x,y:target.y,weaponKind:'arc',fieldId:field.id,targetId:target.id});}
+          if(target.hp<before){this.magneticHits++;if((field.radius??MAGNETIC.radius)>MAGNETIC.radius&&Math.hypot(target.x-field.x,target.y-field.y)>MAGNETIC.radius){this.magneticWideHits++;this.lastMagneticRefinementHit={mode:'field-wide',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:Math.hypot(target.x-field.x,target.y-field.y)};}this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y};this.effects.push({type:'magnetic-hit',x:target.x,y:target.y,weaponKind:'arc',fieldId:field.id,targetId:target.id});}
+        }
+        if(field.link&&!this.bossVictory&&this.player.hp>0){
+          const distance=(b:Body)=>Math.hypot(b.x-field.x,b.y-field.y),priority=(b:Body)=>['sniper','armor','elite','guard','boss'].includes(b.kind)&&b.warning>0?1:0;
+          const target=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0)&&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&distance(b)>(field.radius??MAGNETIC.radius)&&distance(b)<=MAGNETIC_REFINEMENT.linkRange)
+            .sort((a,b)=>priority(b)-priority(a)||distance(a)-distance(b)||a.id-b.id)[0];
+          if(target){const before=target.hp;this.hit(target,field.damage,'arc');if(target.hp<before){this.magneticLinkHits++;this.lastMagneticRefinementHit={mode:'field-link',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:distance(target)};this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,link:true};this.effects.push({type:'magnetic-link',x:field.x,y:field.y,targetX:target.x,targetY:target.y,fieldId:field.id,targetId:target.id,weaponKind:'arc'});}}
         }
       }
     }
-    this.magneticFields=this.magneticFields.filter(f=>f.age<MAGNETIC.life&&f.y-MAGNETIC.radius<C.playerY);
+    this.magneticFields=this.magneticFields.filter(f=>f.age<MAGNETIC.life&&f.y-(f.radius??MAGNETIC.radius)<C.playerY);
     if(this.bossVictory||this.player.hp<=0)this.magneticFields=[];
   }
   private announcedFracture=false;

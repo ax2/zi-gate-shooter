@@ -1,0 +1,14 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/magnetic-refinement.test.ts tests/native-flow.test.ts tests/build-preview.test.ts tests/run-report.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+
+ Test Files  4 passed (4)
+      Tests  20 passed (20)
+   Start at  01:35:19
+   Duration  2.22s (transform 62%, import 26%, tests 10%, worker 1%)
+
+    Isolate  4 workers spawned · ~337ms startup each (spawn + environment, per file)
+             at least ~337ms faster with isolate: false — reuses workers across files instead of one per file
