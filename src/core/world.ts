@@ -1,4 +1,5 @@
 import {RELAY_SCREEN} from './relay-screen';
+import {BATTERY} from './battery';
 import type {OpeningWeapon} from './opening-plan';
 import {battleBrief,type BattlePlan} from './battle-plan';
 import {SWEEPER} from './sweeper';
@@ -40,7 +41,7 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen'; bossVariant?: number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
@@ -495,6 +496,7 @@ export class World {
           const candidate = this.spawn(s.kind,s.x,s.drop?(s.dropY??SWARM.arrivalY):undefined);
           if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
+          if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
           if(s.pattern==='sweep'&&s.kind!=='drone')candidate.timer=SWEEPER.opening;
           if(s.pattern==='relay-screen'){candidate.timer=s.kind==='guard'?RELAY_SCREEN.guardOpening:RELAY_SCREEN.sniperOpening;if(s.kind==='guard'||s.kind==='sniper'){candidate.hp*=RELAY_SCREEN.durability;candidate.maxHp=candidate.hp;}}
@@ -639,6 +641,7 @@ export class World {
         if(this.bullets.length<=before)return;
         this.bullets[this.bullets.length-1].sourceId=b.id;
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
+        if(b.pattern==='battery')b.batteryShots=(b.batteryShots??0)+1;
         if(b.proofTarget)b.proofShots=(b.proofShots??0)+1;
         if(b.pattern==='sweep')b.sweeperShots=(b.sweeperShots??0)+1;
         if(b.pattern==='intercept'){

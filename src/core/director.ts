@@ -1,9 +1,10 @@
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
+import {BATTERY} from './battery';
 import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -196,6 +197,12 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     else if(s.kind==='conduit'){s.dropY=RELAY_SCREEN.conduitY;s.at+=RELAY_SCREEN.relayDelay;}
     s.pattern='relay-screen';
     if(s.dropLabel){s.dropLabel='双盾哨阵';s.dropDetail='前盾后哨 · 中路中继可击破停火开盾';}
+  }
+  if(round%3===0){
+    const guns=out.filter(s=>s.at===BATTERY.at&&s.kind==='armor');
+    guns.forEach((s,i)=>Object.assign(s,{x:i===0?(mirror?500:220):(mirror?220:500),at:BATTERY.at+i*BATTERY.delay,dropY:BATTERY.y,pattern:'battery',dropLabel:i===0?'交替炮阵':undefined,dropDetail:i===0?'左右驻炮错时扇射 · 中路中继可击破停火':undefined}));
+    const relay=out.find(s=>s.at===BATTERY.at&&s.kind==='conduit');
+    if(relay)Object.assign(relay,{x:360,at:BATTERY.at+BATTERY.relayDelay,dropY:BATTERY.relayY,pattern:'battery'});
   }
   return out.sort((a, b) => a.at - b.at);
 }

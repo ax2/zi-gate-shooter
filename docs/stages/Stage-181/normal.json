@@ -1,0 +1,727 @@
+[
+  {
+    "branch": "seeker",
+    "policy": "ordinary",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "formation": [
+      {
+        "id": 8105,
+        "round": 3,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 209.18333333339194,
+        "age": 1.5999999999999992,
+        "hp": 489.59999999999997,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 8106,
+        "round": 3,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.1166666666667,
+        "time": 209.18333333339194,
+        "age": 0.4833333333333333,
+        "hp": 34.08,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8168,
+        "round": 3,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 210.28333333339282,
+        "age": 1.6999999999999988,
+        "hp": 489.59999999999997,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8169,
+        "round": 3,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 210.28333333339282,
+        "age": 0.5666666666666668,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23082,
+        "round": 6,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 455.9833333332473,
+        "age": 1.866666666666665,
+        "hp": 1080,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 23083,
+        "round": 6,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.2583333333333,
+        "time": 455.9833333332473,
+        "age": 0.49999999999999994,
+        "hp": 54.599999999999994,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23153,
+        "round": 6,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 457.0833333332463,
+        "age": 1.9333333333333313,
+        "hp": 1080,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23154,
+        "round": 6,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 457.0833333332463,
+        "age": 0.4833333333333333,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      }
+    ],
+    "emitted": 6,
+    "arrived": 6,
+    "emps": [
+      {
+        "time": 210.83333333339326,
+        "round": 3,
+        "text": "中继击破 · 1台停火",
+        "detail": "中断1台蓄能 · 已发敌弹仍危险"
+      },
+      {
+        "time": 457.54999999991253,
+        "round": 6,
+        "text": "中继击破 · 2台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 62
+  },
+  {
+    "branch": "seeker",
+    "policy": "relay",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "formation": [
+      {
+        "id": 8105,
+        "round": 3,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 209.18333333339194,
+        "age": 1.5999999999999992,
+        "hp": 489.59999999999997,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 8106,
+        "round": 3,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.1166666666667,
+        "time": 209.18333333339194,
+        "age": 0.4833333333333333,
+        "hp": 34.08,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8168,
+        "round": 3,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 210.28333333339282,
+        "age": 1.6999999999999988,
+        "hp": 489.59999999999997,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8169,
+        "round": 3,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 210.28333333339282,
+        "age": 0.5666666666666668,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23082,
+        "round": 6,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 455.9833333332473,
+        "age": 1.866666666666665,
+        "hp": 1080,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 23083,
+        "round": 6,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.2583333333333,
+        "time": 455.9833333332473,
+        "age": 0.49999999999999994,
+        "hp": 54.599999999999994,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23153,
+        "round": 6,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 457.0833333332463,
+        "age": 1.9333333333333313,
+        "hp": 1080,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23154,
+        "round": 6,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 457.0833333332463,
+        "age": 0.4833333333333333,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      }
+    ],
+    "emitted": 6,
+    "arrived": 6,
+    "emps": [
+      {
+        "time": 210.83333333339326,
+        "round": 3,
+        "text": "中继击破 · 1台停火",
+        "detail": "中断1台蓄能 · 已发敌弹仍危险"
+      },
+      {
+        "time": 457.54999999991253,
+        "round": 6,
+        "text": "中继击破 · 2台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 62
+  },
+  {
+    "branch": "seeker",
+    "policy": "wing",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "formation": [
+      {
+        "id": 8105,
+        "round": 3,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 209.18333333339194,
+        "age": 1.0666666666666678,
+        "hp": 489.59999999999997,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 8106,
+        "round": 3,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.1166666666667,
+        "time": 209.18333333339194,
+        "age": 0.8000000000000008,
+        "hp": 34.08,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8168,
+        "round": 3,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 210.28333333339282,
+        "age": 4.0666666666666575,
+        "hp": 489.59999999999997,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 8169,
+        "round": 3,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 210.28333333339282,
+        "age": 1.6333333333333324,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 20921,
+        "round": 6,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 455.4666666665811,
+        "age": 0.8666666666666677,
+        "hp": 1080,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 20922,
+        "round": 6,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.2583333333333,
+        "time": 455.4666666665811,
+        "age": 0.49999999999999994,
+        "hp": 54.599999999999994,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 20992,
+        "round": 6,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 456.5666666665801,
+        "age": 3.7499999999999916,
+        "hp": 1080,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 20993,
+        "round": 6,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 456.5666666665801,
+        "age": 1.6166666666666658,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      }
+    ],
+    "emitted": 12,
+    "arrived": 12,
+    "emps": [
+      {
+        "time": 211.91666666672745,
+        "round": 3,
+        "text": "中继击破 · 1台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      },
+      {
+        "time": 458.1833333332453,
+        "round": 6,
+        "text": "中继击破 · 1台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 59
+  },
+  {
+    "branch": "photon-reach",
+    "policy": "ordinary",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "formation": [
+      {
+        "id": 8091,
+        "round": 3,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 208.78333333339162,
+        "age": 1.2000000000000006,
+        "hp": 489.59999999999997,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 8092,
+        "round": 3,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.1166666666667,
+        "time": 208.78333333339162,
+        "age": 0.4833333333333333,
+        "hp": 34.08,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8154,
+        "round": 3,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 209.8833333333925,
+        "age": 1.9999999999999978,
+        "hp": 489.59999999999997,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8155,
+        "round": 3,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 209.8833333333925,
+        "age": 0.4666666666666666,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23096,
+        "round": 6,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 455.89999999991403,
+        "age": 2.0999999999999974,
+        "hp": 1080,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 23097,
+        "round": 6,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.2583333333333,
+        "time": 455.89999999991403,
+        "age": 0.49999999999999994,
+        "hp": 54.599999999999994,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23167,
+        "round": 6,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 456.99999999991303,
+        "age": 1.9333333333333313,
+        "hp": 1080,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 23168,
+        "round": 6,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 456.99999999991303,
+        "age": 0.4833333333333333,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      }
+    ],
+    "emitted": 6,
+    "arrived": 6,
+    "emps": [
+      {
+        "time": 210.33333333339286,
+        "round": 3,
+        "text": "中继击破 · 1台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      },
+      {
+        "time": 457.4666666665793,
+        "round": 6,
+        "text": "中继击破 · 2台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 62
+  },
+  {
+    "branch": "photon-focus",
+    "policy": "ordinary",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "formation": [
+      {
+        "id": 8085,
+        "round": 3,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 208.75000000005826,
+        "age": 1.183333333333334,
+        "hp": 489.59999999999997,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 8086,
+        "round": 3,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.1166666666667,
+        "time": 208.75000000005826,
+        "age": 0.4666666666666666,
+        "hp": 34.08,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 8148,
+        "round": 3,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 209.85000000005914,
+        "age": 11.650000000000158,
+        "hp": 489.59999999999997,
+        "shots": 3,
+        "killed": false
+      },
+      {
+        "id": 8149,
+        "round": 3,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 209.85000000005914,
+        "age": 1.6333333333333324,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 20929,
+        "round": 6,
+        "kind": "armor",
+        "x": 220,
+        "y": 420,
+        "time": 455.51666666658105,
+        "age": 1.3666666666666667,
+        "hp": 1080,
+        "shots": 3,
+        "killed": true
+      },
+      {
+        "id": 20930,
+        "round": 6,
+        "kind": "charger",
+        "x": 480,
+        "y": 363.2583333333333,
+        "time": 455.51666666658105,
+        "age": 0.49999999999999994,
+        "hp": 54.599999999999994,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 21000,
+        "round": 6,
+        "kind": "armor",
+        "x": 500,
+        "y": 420,
+        "time": 456.61666666658004,
+        "age": 1.6999999999999988,
+        "hp": 1080,
+        "shots": 0,
+        "killed": true
+      },
+      {
+        "id": 21001,
+        "round": 6,
+        "kind": "conduit",
+        "x": 360,
+        "y": 560,
+        "time": 456.61666666658004,
+        "age": 0.4666666666666666,
+        "hp": 48,
+        "shots": 0,
+        "killed": true
+      }
+    ],
+    "emitted": 9,
+    "arrived": 9,
+    "emps": [
+      {
+        "time": 211.48333333339377,
+        "round": 3,
+        "text": "中继击破 · 1台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      },
+      {
+        "time": 457.06666666657964,
+        "round": 6,
+        "text": "中继击破 · 1台停火",
+        "detail": "停火1.5秒 · 已发敌弹仍危险"
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 59
+  }
+]

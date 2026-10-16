@@ -1,0 +1,31 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/battery.test.ts tests/battery-progression.test.mjs tests/sweeper.test.ts tests/relay-screen.test.ts tests/battle-plan.test.ts tests/armor-motion.test.ts tests/optical-feedback.test.ts tests/photon-refinement.test.ts tests/rules.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/battery-progression.test.mjs (1 test | 1 failed) 9185ms
+   × normally meets the heavy battery with cumulative weapons and compares targeting decisions 9184ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/battery-progression.test.mjs > normally meets the heavy battery with cumulative weapons and compares targeting decisions
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/battery-progression.test.mjs:14:407
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 126 passed (127)
+   Start at  03:50:26
+   Duration  16.27s (tests 93%, transform 5%, import 3%)
+

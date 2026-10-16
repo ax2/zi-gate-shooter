@@ -1,4 +1,6 @@
 import {isPhotonAugment,photonAugments,laserChainProfile} from '../core/laser-chain';
+import {batteryHolding} from '../core/battery';
+import {batteryMount} from './battery-mount';
 import {openingWeapons,isOpeningWeapon,parseOpeningWeapon,openingHints} from '../core/opening-plan';
 import {battleBrief,sideBattlePreview,nextBattlePlan,parseBattlePlan} from '../core/battle-plan';
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
@@ -777,8 +779,9 @@ export class CanvasRuntime {
           this.frameSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, 1);
           this.hitSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'armor') {
-          const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
+          const braced=batteryHolding(b),frame = armorFrame(b,braced), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
+          if(braced)batteryMount(c,b.warning,(b.empRemaining??0)>0,this.save.settings.effects==='weak');
           this.frameSprite('armor-v1.png', frame, 3, 0, 0, width, height, 1);
           this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);c.restore();
         } else if(b.kind==='conduit'){

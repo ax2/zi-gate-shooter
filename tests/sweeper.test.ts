@@ -3,7 +3,7 @@ import {it,expect} from 'vitest';import {readFileSync,mkdirSync,writeFileSync} f
 const baseline:{seed:number;round:number;timeline:Spawn[]}[]=JSON.parse(readFileSync('docs/stages/Stage-173/baseline-timelines.json','utf8'));
 it('preserves early and other chapters plus rewards, with exactly five authored tail replacements',()=>{
  for(const old of baseline){const now=timeline(old.round,old.seed),changed=old.round>=4&&(old.round-1)%3===0;
-  if(!changed){if(hasRelayScreen(old.round))expect(now.filter(s=>s.pattern!=='relay-screen')).toEqual(old.timeline.filter(s=>s.at!==44.5));else expect(now).toEqual(old.timeline);continue;}
+  if(!changed){if(hasRelayScreen(old.round))expect(now.filter(s=>s.pattern!=='relay-screen')).toEqual(old.timeline.filter(s=>s.at!==44.5));else expect(now.filter(s=>s.pattern!=='battery')).toEqual(old.timeline.filter(s=>!(old.round%3===0&&s.at===44.5&&(s.kind==='armor'||s.kind==='conduit'))));continue;}
   const tail=now.filter(s=>s.pattern==='sweep'||s.kind==='drone'&&s.x===360&&s.dropY===SWEEPER.centerY),prior=old.timeline.filter(s=>s.kind==='drone'&&s.at>=62);
   expect(tail).toHaveLength(15);expect(prior).toHaveLength(15);expect(now.filter(s=>!tail.includes(s))).toEqual(old.timeline.filter(s=>!prior.includes(s)));
   expect(tail.filter(s=>s.kind==='armor')).toHaveLength(3);expect(tail.filter(s=>s.kind==='elite')).toHaveLength(2);expect(tail.filter(s=>s.pattern==='sweep')).toHaveLength(10);
