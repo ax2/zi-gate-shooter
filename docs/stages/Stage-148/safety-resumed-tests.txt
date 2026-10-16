@@ -1,0 +1,33 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/fairness.test.ts tests/boss-formation-routes.test.ts tests/hunter-routes.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/fairness.test.ts (11 tests | 3 failed) 600304ms
+   × 100 seeds of round 2 retain a no-kill escape through boss entry 202173ms
+   × 100 seeds of round 3 retain a no-kill escape through boss entry 189036ms
+   × 100 seeds of round 5 retain a no-kill escape through boss entry 153534ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fairness.test.ts > 100 seeds of round 2 retain a no-kill escape through boss entry
+ FAIL  tests/fairness.test.ts > 100 seeds of round 3 retain a no-kill escape through boss entry
+ FAIL  tests/fairness.test.ts > 100 seeds of round 5 retain a no-kill escape through boss entry
+Error: Test timed out in 120000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/fairness.test.ts:120:22
+    118| }, 20000);
+    119|
+    120| it.each([1, 2, 3, 5])('100 seeds of round %i retain a no-kill escape t…
+       |                      ^
+    121|   for (let seed = 1; seed <= 100; seed++) {
+    122|     // Later rounds are explicit isolated replay fixtures at T1/zero b…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  3 failed | 11 passed (14)
+   Start at  08:27:17
+   Duration  602.82s (tests 100%)

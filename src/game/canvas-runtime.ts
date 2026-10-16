@@ -1,4 +1,6 @@
 import {dropLight} from './drop-light';
+import {sentryDirection} from '../core/mobile-sentry';
+import {sentryThrust} from './sentry-thrust';
 import {buildPreview} from './build-preview';
 import {empWave,offlineLight} from './emp-light';
 import {runReport} from './run-report';
@@ -680,8 +682,10 @@ export class CanvasRuntime {
           this.hitSprite('guard-v1.png', frame, 3, b.x, y, 160, 160, b.hit, 0.07, 1);
         } else if (b.kind === 'sniper') {
           const frame = b.warning > 0 ? 1 : 0;
-          this.frameSprite('sniper-v1.png', frame, 3, b.x, y, 140, 140, 1);
-          this.hitSprite('sniper-v1.png', frame, 3, b.x, y, 140, 140, b.hit, 0.07, 1);
+          const direction=sentryDirection(b);c.save();c.translate(b.x,y);c.rotate(direction*.07);
+          sentryThrust(c,direction,b.age,this.save.settings.effects==='weak');
+          this.frameSprite('sniper-v1.png', frame, 3, 0, 0, 140, 140, 1);
+          this.hitSprite('sniper-v1.png', frame, 3, 0, 0, 140, 140, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'elite') {
           const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36;
           this.frameSprite('elite-v1.png', frame, 3, b.x, y, width, height, 1);
@@ -837,6 +841,7 @@ export class CanvasRuntime {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text('中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
+        if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);
         if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text('悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
       }
     }
@@ -1245,6 +1250,7 @@ export class CanvasRuntime {
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
       conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
+      mobileSentries:this.world.bodies.filter(b=>b.active&&b.pattern==='relocate').map(b=>({x:b.x,y:b.y,lane:b.lane,age:b.age,warning:b.warning,volleys:b.sentryVolleys??0,direction:sentryDirection(b)})),
       framePulses:this.framePulses,renderedMode:this.renderedMode,imageCount:this.images.size,
       runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,

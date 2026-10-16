@@ -3,6 +3,7 @@ import { ESCORT } from './boss-formations';
 import type { Body, Phase } from './world';
 import { C, clamp } from './config';
 import {CONDUIT} from './conduit';
+import {MOBILE_SENTRY,sentryDestination} from './mobile-sentry';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 export const guardClosed = (b: Pick<Body, 'kind' | 'burst' | 'empRemaining'>) => b.kind === 'guard' && b.burst === 0 && !(b.empRemaining??0);
 
@@ -85,6 +86,8 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       } else { b.burst = 0; b.timer = 2.4; }
     }
   } else if (b.kind === 'sniper') {
+    const destination=sentryDestination(b);
+    if(destination!==undefined)b.x+=clamp(destination-b.x,-MOBILE_SENTRY.speed*dt,MOBILE_SENTRY.speed*dt);
     // A short-lived firing position: kill during charge or leave its fixed lane.
     // Leaving after ten seconds prevents an unkillable off-axis stall at boss entry.
     if (b.age >= 10) { b.warning = 0; b.y += 220 * dt; }
@@ -93,6 +96,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       if (b.warning <= 0) { b.warning = 1.2; b.timer = 1.2; }
       else {
         for (let i = 0; i < 3; i++) shot(b.x, b.y + 58 - i * 45, 0, 620);
+        if(b.pattern==='relocate')b.sentryVolleys=(b.sentryVolleys??0)+1;
         b.warning = 0; b.timer = 2.4;
       }
     }

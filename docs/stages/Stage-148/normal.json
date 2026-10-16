@@ -1,0 +1,38 @@
+[
+  {
+    "primary": "ballistic",
+    "time": 300.0000000000558,
+    "round": 4,
+    "hp": 3,
+    "seen": 3,
+    "moved": 3,
+    "maxVolleys": 0,
+    "kills": 191,
+    "peakBodies": 10,
+    "peakBullets": 58
+  },
+  {
+    "primary": "electric",
+    "time": 300.0000000000558,
+    "round": 4,
+    "hp": 3,
+    "seen": 3,
+    "moved": 3,
+    "maxVolleys": 0,
+    "kills": 194,
+    "peakBodies": 9,
+    "peakBullets": 64
+  },
+  {
+    "primary": "optical",
+    "time": 300.0000000000558,
+    "round": 4,
+    "hp": 3,
+    "seen": 3,
+    "moved": 3,
+    "maxVolleys": 0,
+    "kills": 192,
+    "peakBodies": 9,
+    "peakBullets": 64
+  }
+]

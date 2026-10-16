@@ -46,6 +46,19 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it.each([false,true])('renders real sentry relocation with local thrust and freezes it on pause (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
+ const b=f.runtime.world.spawn('sniper',220,360);b.pattern='relocate';
+ f.runtime.touchStart(1,360,1100);f.runtime.touchMove(1,652,1100);
+ for(let i=0;i<240;i++)f.tick();
+ expect(b.sentryVolleys).toBe(1);expect(b.x).toBeGreaterThan(220);expect(b.x).toBeLessThan(360);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='换位中')).toBe(true);
+ expect(f.calls.some(c=>c.kind==='rotate'&&Math.abs(c.args[0])===.07)).toBe(true);
+ expect(f.calls.some(c=>c.kind==='quadraticCurveTo')).toBe(true);
+ const x=b.x,age=b.age;f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(b.x).toBe(x);expect(b.age).toBe(age);
+ f.runtime.start();f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='换位中')).toBe(false);
+});
+
 it('retains the interruption reason after the transient notice expires and replaces it for a manual pause', async () => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
   f.runtime.hide(); for (let i = 0; i < 180; i++) f.tick();

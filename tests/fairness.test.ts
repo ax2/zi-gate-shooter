@@ -117,8 +117,8 @@ it('100 seeds x 3 threat fixtures replay predicted escape paths without kills or
   expect(moved).toBeGreaterThan(100);
 }, 20000);
 
-it.each([1, 2, 3, 5])('100 seeds of round %i retain a no-kill escape through boss entry', round => {
-  for (let seed = 1; seed <= 100; seed++) {
+it.each([1,2,3,5].flatMap(round=>[0,1,2,3,4].map(batch=>[round,batch] as const)))('20 seeds of round %i batch %i retain a no-kill escape through boss entry', (round,batch) => {
+  for (let seed = batch*20+1; seed <= (batch+1)*20; seed++) {
     // Later rounds are explicit isolated replay fixtures at T1/zero bonus, not
     // a claim that a no-kill player legitimately beat the previous boss.
     const world = new World(seed, round); let path: number[] = [];
@@ -140,4 +140,4 @@ it.each([1, 2, 3, 5])('100 seeds of round %i retain a no-kill escape through bos
     expect(world.phase, `stalled seed ${seed}`).toBe('boss-entry');
     expect(world.kills).toBe(0); expect(world.cratesBroken).toBe(0);
   }
-}, 120000); // 100 independent simulated runs; all route/damage assertions remain mandatory.
+}, 120000); // Five groups preserve all 100 seeds per round and every original assertion.

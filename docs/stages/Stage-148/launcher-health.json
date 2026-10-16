@@ -1,0 +1,14 @@
+[
+  {
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "method": "HEAD",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "status": 405
+  }
+]

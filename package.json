@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "play": "node tools/serve-preview.mjs",
     "dev": "vite --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "node tools/build-wechat.mjs && vitest run",

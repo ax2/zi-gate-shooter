@@ -1,0 +1,25 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "path": "/assets/canvas-preview-G_8RkMKx.js",
+    "status": 200,
+    "bytes": 198285
+  },
+  {
+    "path": "/assets/sniper-v1.png",
+    "status": 200,
+    "bytes": 195933
+  },
+  {
+    "path": "/%2e%2e%2fpackage.json",
+    "status": 403
+  },
+  {
+    "path": "/missing.txt",
+    "status": 404
+  }
+]

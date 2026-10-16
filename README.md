@@ -1,5 +1,9 @@
 # 火力突围
 
+固定试玩入口：**http://127.0.0.1:5178/** 。服务停止后双击项目中的“启动游戏.cmd”或运行 `npm run play`；首次需 `npm run build`，保持服务窗口运行。
+
+最新机制候选 **Stage-148 机动哨机**：后续章节一台原哨机增加入场抢位/齐射后换位，侧推与倾斜反馈。规则/正常成长及400种子安全已验证，新动作实机画面待验，尚非视觉验收完成。[试玩说明](docs/stages/Stage-148/PLAY.md) · [验证边界](docs/stages/Stage-148/TEST_REPORT.md)。
+
 最新体验候选 **Stage-147**：http://127.0.0.1:5227/ 。升级卡显示当前→选后真实参数与组合缺口，选后回执核对收益；已有配件与战斗数值保留。[试玩](docs/stages/Stage-147/PLAY.md) · [验证边界](docs/stages/Stage-147/TEST_REPORT.md)。
 
 最新战术候选 **Stage-146**：http://127.0.0.1:5225/ 。第二章起新增导电中继，击破可短暂停火并打开盾卫；新增双蓄能中断的时机成就。[试玩](docs/stages/Stage-146/PLAY.md) · [验证边界](docs/stages/Stage-146/TEST_REPORT.md)。

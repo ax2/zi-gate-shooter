@@ -26,8 +26,8 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
-  weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan'; bossVariant?: number;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
+  weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
