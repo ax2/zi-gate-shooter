@@ -1,3 +1,4 @@
+import {LOCKSHOT} from './lockshot';
 import {RELAY_SCREEN} from './relay-screen';
 import {BATTERY} from './battery';
 import {calibrationVisualBand,type CalibrationBand} from './calibration-visual';
@@ -42,8 +43,8 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply'; bossVariant?: number;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;lockShots?:number;lockAcceptedShots?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot'; bossVariant?: number;
 }
 export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
@@ -397,6 +398,7 @@ export class World {
   effects: EffectEvent[] = [];
   phase: Phase = 'running';
   round = 1; time = 0; roundTime = 0; phaseTime = 0; score = 0;
+  lockshotSpawns=0;lockshotShots=0;
   shots = 0; hits = 0; kills = 0; cratesBroken = 0; pickups = 0; gatesTaken = 0;
   lastEquipmentPickup?:{id:number;row:number;kind?:WeaponKind;refit:boolean;time:number;x:number;y:number};
   maxStage = 1; peakBodies = 0; peakBullets = 0; fallbackCount = 0; attackDeferrals = 0;
@@ -533,6 +535,7 @@ export class World {
           if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
+          if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;}
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
           if(s.pattern==='sweep'&&s.kind!=='drone')candidate.timer=SWEEPER.opening;
           if(s.pattern==='relay-screen'){candidate.timer=s.kind==='guard'?RELAY_SCREEN.guardOpening:RELAY_SCREEN.sniperOpening;if(s.kind==='guard'||s.kind==='sniper'){candidate.hp*=RELAY_SCREEN.durability;candidate.maxHp=candidate.hp;}}
@@ -540,6 +543,7 @@ export class World {
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
           if(s.drop)this.dropSpawns++;
+          if(s.pattern==='lockshot')this.lockshotSpawns++;
           if(s.dropNotice)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'突降机群',detail:'短暂投送屏障 · 群攻可快速清场'});
           if(s.dropLabel)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:s.dropLabel,detail:s.dropDetail??(s.kind==='guard'?'前盾后援 · 留意转火角度':s.kind==='sniper'?'两侧哨机 · 优先压制一翼':'装甲纵列 · 集中火力突破')});
         }
@@ -678,6 +682,7 @@ export class World {
         if(this.bullets.length<=before)return;
         this.bullets[this.bullets.length-1].sourceId=b.id;
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
+        if(b.pattern==='lockshot'){b.lockAcceptedShots=(b.lockAcceptedShots??0)+1;b.lockFiredAt=b.age;this.lockshotShots++;}
         if(b.pattern==='battery')b.batteryShots=(b.batteryShots??0)+1;
         if(b.proofTarget)b.proofShots=(b.proofShots??0)+1;
         if(b.pattern==='sweep')b.sweeperShots=(b.sweeperShots??0)+1;

@@ -1,0 +1,57 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/queued-receipt.test.ts tests/build-receipt.test.ts tests/pickup-receipt.test.ts tests/intro-feedback.test.ts tests/native-flow.test.ts tests/lockshot.test.ts tests/context-guide.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/pickup-receipt.test.ts (2 tests | 1 failed) 15ms
+   × new module acquisition does not also charge the arsenal or upgrade old modules 13ms
+ ❯ tests/queued-receipt.test.ts (1 test | 1 failed) 34ms
+   × a hidden earned receipt permits the actual new encounter notice, then resumes its own readable feedback 33ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/pickup-receipt.test.ts > new module acquisition does not also charge the arsenal or upgrade old modules
+AssertionError: expected [ …(2) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ tests/pickup-receipt.test.ts:10:19
+      8|   w.step(C.step);
+      9|   const events=w.drainEffects();const notices=events.filter(e=>e.text);
+     10|   expect(notices).toHaveLength(1);
+       |                   ^
+     11|   expect(notices[0].text).toContain('新增电弧炮');
+     12|   expect(notices[0].detail).toContain('电弧炮 T3');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/queued-receipt.test.ts > a hidden earned receipt permits the actual new encounter notice, then resumes its own readable feedback
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/queued-receipt.test.ts:10:42
+      8|  while(r.world.time<.5)frame();expect(text).toContain('斜射哨机');expect(t…
+      9|  const gun=r.world.bodies.find(b=>b.active&&b.pattern==='lockshot')!;r…
+     10|  expect(text.some(t=>t==='配件强化 · 聚焦镜组')).toBe(true);expect(r.world.sup…
+       |                                          ^
+     11| });
+     12|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 5 passed (7)
+      Tests  2 failed | 26 passed (28)
+   Start at  05:48:54
+   Duration  2.52s (tests 46%, transform 40%, import 14%, worker 1%)
+

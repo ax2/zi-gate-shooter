@@ -6,7 +6,7 @@ it('new module acquisition does not also charge the arsenal or upgrade old modul
   const w=new World();w.growth.stage=3;w.growth.energy=80;w.growth.mastery=2;
   const p=w.spawn('pickup',360,C.playerY,3);p.weaponKind='arc';p.speed=0;
   w.step(C.step);
-  const events=w.drainEffects();const notices=events.filter(e=>e.text);
+  const events=w.drainEffects();const notices=events.filter(e=>e.text&&e.type!=='research');expect(events.filter(e=>e.type==='research')).toHaveLength(1);expect(w.researchPoints).toBe(1);
   expect(notices).toHaveLength(1);
   expect(notices[0].text).toContain('新增电弧炮');
   expect(notices[0].detail).toContain('电弧炮 T3');

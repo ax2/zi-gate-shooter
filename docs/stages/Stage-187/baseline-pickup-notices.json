@@ -1,0 +1,15 @@
+{
+  "base": "8f3d8e7",
+  "events": [
+    {
+      "type": "upgrade",
+      "text": "新增电弧炮 · 2种火力叠加"
+    },
+    {
+      "type": "research",
+      "text": "装备研发 +1点"
+    }
+  ],
+  "energy": 80,
+  "research": 1
+}

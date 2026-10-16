@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/lockshot.test.ts tests/lockshot-routes.test.ts tests/swarm-routes.test.ts tests/mobile-sentry.test.ts tests/projectile-pressure.test.ts tests/context-guide.test.ts tests/rules.test.ts tests/native-flow.test.ts tests/native-controls.test.ts tests/conduit.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/conduit.test.ts (6 tests | 1 failed) 28ms
+   × authors exactly one optional-target relay per later chapter without changing first-run or reward windows 10ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/conduit.test.ts > authors exactly one optional-target relay per later chapter without changing first-run or reward windows
+AssertionError: expected 45.6 to be 44.5 // Object.is equality
+
+- Expected
++ Received
+
+- 44.5
++ 45.6
+
+ ❯ tests/conduit.test.ts:7:188
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 9 passed (10)
+      Tests  1 failed | 49 passed (50)
+   Start at  05:36:55
+   Duration  3.77s (tests 60%, transform 28%, import 11%, worker 1%)
+
+  Transform  transforming modules took 2.52s · 28% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

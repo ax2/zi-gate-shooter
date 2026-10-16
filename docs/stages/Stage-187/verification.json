@@ -1,0 +1,19 @@
+{
+  "weakCurrentMatch": true,
+  "admittedTarget": 360,
+  "targetAfterMovement": 360,
+  "playerAfterMovement": 287,
+  "rayIntersections": [
+    360.00000000000045,
+    360.00000000000034,
+    360.0000000000002
+  ],
+  "accepted": 3,
+  "projectilesAtFire": 3,
+  "healthyAfterMovement": 3,
+  "chargeTime": 106.14999999999526,
+  "fireTime": 106.96666666666188,
+  "movedTime": 107.18333333332853,
+  "frozenResources": 46,
+  "finalHash": "CpN8bbSF"
+}

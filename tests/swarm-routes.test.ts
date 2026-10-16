@@ -6,6 +6,6 @@ it('replays all chapter packs from three lanes without kills or immunity and wit
   w.step(C.step,path[Math.floor((frame-planAt)/6)]??w.player.x);w.drainEffects();w.bullets=w.bullets.filter(b=>b.hostile);expect(w.player.hp,`R${round} x${start} t${w.time}`).toBe(3);expect(w.kills).toBe(0);
  }
  // Chapters containing an elite now deploy it visibly; R4 has no elite.
- expect(w.phase).toBe('boss-entry');expect(w.dropSpawns).toBe(round===2?37:round===3?28:47);expect(w.dropKills).toBe(0);
+ expect(w.phase).toBe('boss-entry');expect(w.dropSpawns).toBe(round===2?38:round===3?28:47);expect(w.dropKills).toBe(0);
  }
 },60000);

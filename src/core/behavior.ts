@@ -1,3 +1,4 @@
+import {LOCKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
 import {driftOffset} from './drift-supply';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {batteryHolding} from './battery';
@@ -114,6 +115,13 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         for (const vx of fanWarningVelocities(b)) shot(b.x, b.y + b.height / 2, vx, 280);
         b.warning = 0; b.burst = 2; b.timer = 0.8;
       } else { b.burst = 0; b.timer = 2.4; }
+    }
+  } else if(b.kind==='sniper'&&b.pattern==='lockshot'){
+    if(lockshotLeaving(b)){b.warning=0;b.burst=0;b.y+=LOCKSHOT.exitSpeed*dt;return;}
+    if(b.y<320){b.y=Math.min(320,b.y+b.speed*dt);b.timer=LOCKSHOT.opening;return;}
+    if(b.timer<=1e-9&&!offline){
+      if(!b.burst&&b.warning<=0){b.warning=LOCKSHOT.warning;b.timer=LOCKSHOT.warning;}
+      else {const p=lockshotProfile(b);b.warning=0;b.burst=1;shot(p.x,p.y,p.vx,p.vy);b.lockShots=(b.lockShots??0)+1;b.timer=LOCKSHOT.spacing;}
     }
   } else if (b.kind === 'sniper') {
     const destination=sentryDestination(b);

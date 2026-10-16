@@ -1,0 +1,58 @@
+{
+  "base": "8f3d8e7",
+  "rows": [
+    {
+      "round": 2,
+      "node": {
+        "at": 44.5,
+        "kind": "conduit",
+        "x": 360,
+        "drop": true,
+        "dropY": 560
+      }
+    },
+    {
+      "round": 3,
+      "node": {
+        "at": 45.6,
+        "kind": "conduit",
+        "x": 360,
+        "pattern": "battery",
+        "drop": true,
+        "dropY": 560
+      }
+    },
+    {
+      "round": 4,
+      "node": {
+        "at": 44.5,
+        "kind": "conduit",
+        "x": 500,
+        "drop": true,
+        "dropY": 360
+      }
+    },
+    {
+      "round": 8,
+      "node": {
+        "at": 45.7,
+        "kind": "conduit",
+        "x": 360,
+        "pattern": "relay-screen",
+        "drop": true,
+        "dropY": 560
+      }
+    },
+    {
+      "round": 12,
+      "node": {
+        "at": 45.6,
+        "kind": "conduit",
+        "x": 360,
+        "pattern": "battery",
+        "drop": true,
+        "dropY": 560
+      }
+    }
+  ]
+}

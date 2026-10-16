@@ -1,3 +1,6 @@
+import {lockshotLeaving} from '../core/lockshot';
+import {lockshotMount} from './lockshot-mount';
+import {hostileShot} from './hostile-shot';
 import {DRIFT_SUPPLY} from '../core/drift-supply';
 import {driftCarrier} from './drift-carrier';
 import {isFractureAugment,fractureAugments} from '../core/combos';
@@ -704,7 +707,7 @@ export class CanvasRuntime {
     }
     const receiptPosition=f?this.buildReceiptLocation():null;
     if(f)f.hidden=w.time<f.until&&receiptPosition===null;
-    const activeBuild=this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until;
+    const activeBuild=this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until&&receiptPosition!==null;
     const noticeVisible=this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil&&!activeBuild;
     const bottomNotice=receiptThreat||this.noticeY===1195;
     const bottomBusy=(activeBuild&&receiptPosition!==240)||(noticeVisible&&bottomNotice);
@@ -812,6 +815,7 @@ export class CanvasRuntime {
           sentryThrust(c,direction,b.age,this.save.settings.effects==='weak');
           this.frameSprite('sniper-v1.png', frame, 3, 0, 0, 140, 140, 1);
           this.hitSprite('sniper-v1.png', frame, 3, 0, 0, 140, 140, b.hit, 0.07, 1);c.restore();
+          if(b.pattern==='lockshot')lockshotMount(c,b,this.save.settings.effects==='weak');
         } else if (b.kind === 'elite') {
           const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
@@ -928,7 +932,7 @@ export class CanvasRuntime {
     for (const b of w.bodies) {
       if(b.pattern==='rebound')reboundLight(c,b,this.save.settings.effects==='weak');
       if(b.pattern==='intercept')interceptorLight(c,b,this.save.settings.effects==='weak');
-      if (b.warning > 0 && b.pattern!=='intercept' && !(b.kind==='boss'&&b.attack===4)) {
+      if (b.warning > 0 && b.pattern!=='lockshot' && b.pattern!=='intercept' && !(b.kind==='boss'&&b.attack===4)) {
         // The enemy telegraphs its action locally; never preview future bullet paths.
         const charge = .65 + Math.sin(w.time * 22) * .2;
         const muzzleY = b.y + b.height * .32;
@@ -994,6 +998,7 @@ export class CanvasRuntime {
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
+        if(b.pattern==='lockshot')this.text(lockshotLeaving(b)?'斜射·撤离':(b.empRemaining??0)>0?'斜射·停火':b.warning>0?'斜射·蓄能':'斜射哨机',b.x,b.y-b.height/2-36,22,'#ffce9b','center',true);
         if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);
         if(b.pattern==='intercept')this.text(b.warning>0?(b.burst?'截击·核心蓄能':'截击·翼炮蓄能'):(b.interceptCoreRemaining??0)>0?'截击·核心连射':'截击精英',b.x,b.y-b.height*.68-20,21,b.burst?'#ffb19c':'#ffe1a7','center',true);
         if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text(w.contract.hunt==='crossfire'?'王牌 · 扇射':'悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
@@ -1001,8 +1006,7 @@ export class CanvasRuntime {
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
     for (const b of w.bullets.filter(b => b.hostile)) {
-      c.fillStyle = '#ff7756'; c.strokeStyle = '#1a171d'; c.lineWidth = 3; c.beginPath(); c.moveTo(b.x - 8, b.y - 7); c.lineTo(b.x + 8, b.y - 7); c.lineTo(b.x, b.y + 12); c.closePath(); c.fill(); c.stroke();
-      c.fillStyle = '#ffead7'; c.fillRect(b.x - 2, b.y - 5, 4, 8);
+      hostileShot(c,b);
     }
   }
   private drawDestruction(dt: number) {
@@ -1062,7 +1066,7 @@ export class CanvasRuntime {
     const receiptThreat=this.world.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     if(this.world.time<this.achievementUntil)return;
     if(this.buildFeedback&&this.world.time<this.buildFeedback.until&&this.buildReceiptLocation()===1180)return;
-    const activeReceipt=this.buildFeedback&&this.world.time<this.buildFeedback.until;
+    const activeReceipt=this.buildFeedback&&this.world.time<this.buildFeedback.until&&this.buildReceiptLocation()!==null;
     if(!activeReceipt&&this.notice&&(this.noticeY===1195||receiptThreat)&&this.platform.now()<this.noticeUntil)return;
     // Optional help is below all entities, effects, projectiles and native labels.
     // Briefly omit it while a passing body occupies the help area: neither its
@@ -1536,7 +1540,7 @@ export class CanvasRuntime {
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
-      lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
+      lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
