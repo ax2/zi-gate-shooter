@@ -1020,3 +1020,21 @@ it('keeps all nine achievement descriptions above the footer and return control'
  const f=fixture();await f.runtime.load();f.tick();f.calls.length=0;expect(f.runtime.activateControl('achievements')).toBe(true);
  const row=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='一次中继爆破中断两台正在蓄能的敌机');expect(row).toBeDefined();expect(row!.args[2]).toBeLessThan(1040);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='断电时机')).toBe(true);
 });
+
+it.each([false,true])('actual ion discharge stays bounded, behind hazards and labels, freezes and resets (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.phase='boss';w.player.x=w.player.px=68;w.growth.mastery=3;
+ for(let i=0;i<3;i++)w.chooseBuild('electric');
+ const target=w.spawn('armor',360,700);target.hp=target.maxHp=1000;target.speed=0;target.timer=999;
+ const gate=w.spawn('gate',500,850);gate.speed=0;
+ for(let i=0;i<6;i++){
+  w.bullets=[{id:99999,x:target.x,y:target.y,px:target.x,py:target.y,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc'},
+   {id:99998,x:650,y:600,px:650,py:600,vx:0,vy:100,damage:1,age:0,active:true,hostile:true}];f.tick();
+ }
+ expect(w.ionBursts).toBe(1);expect(f.runtime.diagnostics().ionHits).toBe(1);
+ expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#7dffd9')).toBe(true);
+ expect(f.calls.some(c=>c.kind==='rect'&&c.args[1]===C.playerShotTop&&c.args[3]===C.playerY-C.playerShotTop)).toBe(true);
+ const light=f.calls.reduce((last,c,i)=>c.composite==='lighter'?i:last,-1),danger=f.calls.findIndex(c=>c.kind==='fill'&&c.color==='#ff7756'),label=f.calls.findIndex(c=>c.kind==='fillText'&&c.args[2]===gate.y+8);
+ expect(danger).toBeGreaterThan(light);expect(label).toBeGreaterThan(light);
+ const time=w.time;f.runtime.pause();const before=JSON.stringify((f.runtime as any).blasts);for(let i=0;i<20;i++)f.tick();expect(w.time).toBe(time);expect(JSON.stringify((f.runtime as any).blasts)).toBe(before);
+ f.runtime.start();expect(f.runtime.diagnostics().ionBursts).toBe(0);expect(f.runtime.diagnostics().blasts).toBe(0);
+});

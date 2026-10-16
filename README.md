@@ -2,7 +2,9 @@
 
 固定试玩入口：**http://127.0.0.1:5178/** 。服务停止后双击项目中的“启动游戏.cmd”或运行 `npm run play`；首次需 `npm run build`，保持服务窗口运行。
 
-**最新候选Stage-150**：后续弹速按轮次提升，首轮不变、第四轮起封顶+30%，保持奖励与成长。安全回放通过，真人难度与新画面待验。[试玩说明](docs/stages/Stage-150/PLAY.md) · [验证边界](docs/stages/Stage-150/TEST_REPORT.md)。
+**最新候选Stage-151 离子风暴**：雷电第三节点增加实际电击积累与范围放电，原跳伤、旧武器和两分支保留。正常两路线及虚拟时钟手机/桌面画面已检查，真人手感/实时长局待验。[试玩](docs/stages/Stage-151/PLAY.md) · [报告](docs/stages/Stage-151/TEST_REPORT.md)。
+
+**Stage-150**：后续弹速按轮次提升，首轮不变、第四轮起封顶+30%，保持奖励与成长。安全回放通过，真人难度与新画面待验。[试玩说明](docs/stages/Stage-150/PLAY.md) · [验证边界](docs/stages/Stage-150/TEST_REPORT.md)。
 
 最新成长候选 **Stage-149 定向改装**：后续补给可选扩展新火力或升级已有核心，T3后专属精校，旧武器与普通重复充能规则保留。正常扩展/改装两策略及专精契约已对照，画面待实机复查。[试玩说明](docs/stages/Stage-149/PLAY.md) · [验证边界](docs/stages/Stage-149/TEST_REPORT.md)。
 

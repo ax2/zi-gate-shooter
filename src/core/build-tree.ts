@@ -28,7 +28,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   electric: [
     {name:'导电线圈',detail:'安装T1电弧 · 电弧多跳一次'},
     {name:'远距电桥 · 选择分支',detail:'范围160→220 · 二选一：扩散/蓄爆'},
-    {name:'高效传导',detail:'每跳保留80%伤害（原65%）'},
+    {name:'离子风暴',detail:'保留80%跳伤 · 每6次有效电击范围放电'},
   ],
   optical: [
     {name:'聚焦镜组',detail:'立即解锁激光 · 激光伤害+15%'},

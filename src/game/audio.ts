@@ -68,6 +68,7 @@ export class GameAudio {
       return;
     }
     if (type === 'arc') { this.tone(850,180,.09,.025,'sawtooth'); return; }
+    if(type==='ion-storm'){this.tone(110,40,.24,.04,'triangle');this.tone(2100,220,.16,.025,'sawtooth');return;}
     if(type==='capacitor'){
       if(this.now()-this.lastCapacitor<150)return;this.lastCapacitor=this.now();
       this.tone(1700,180,.12,.035,'sawtooth');this.tone(320,55,.18,.04,'triangle');return;

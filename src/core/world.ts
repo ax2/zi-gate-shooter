@@ -1,4 +1,5 @@
 import { bossFormationFor, ESCORT } from './boss-formations';
+import {ION_STORM} from './ion-storm';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, type ContractKind } from './contracts';
@@ -76,6 +77,24 @@ export class World {
     this.effects.push({type:'emp',x:source.x,y:source.y,size:CONDUIT.radius,text:`中继击破 · ${affected}台停火`,detail:interrupted?`中断${interrupted}台蓄能 · 已发敌弹仍危险`:'停火1.5秒 · 已发敌弹仍危险'});
   }
   scatterPierces=0;scatterBursts=0;scatterSplashHits=0;
+  ionCharge=0;ionBursts=0;ionHits=0;
+  private ionReadyAt=0;
+  private ionImpact(body:Body,damage:number){
+    if(this.build.ranks.electric<3||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))return;
+    this.ionCharge=Math.min(ION_STORM.hits,this.ionCharge+1);
+    if(this.ionCharge<ION_STORM.hits||this.time+1e-9<this.ionReadyAt)return;
+    const targets=this.bodies.filter(target=>target.active&&target.kind in C.enemies&&!guardClosed(target)&&!(target.dropGrace??0)
+      &&target.y>=C.playerShotTop&&target.y<=C.playerY&&!(target.kind==='boss'&&this.phase!=='boss')
+      &&Math.hypot(target.x-body.x,target.y-body.y)<=ION_STORM.radius);
+    // Hold a full circuit rather than spend it on an already empty impact point.
+    if(!targets.length)return;
+    this.ionCharge=0;this.ionReadyAt=this.time+ION_STORM.cooldown;this.ionBursts++;
+    this.effects.push({type:'ion-storm',x:body.x,y:body.y,size:ION_STORM.radius,weaponKind:'arc'});
+    for(const target of targets){
+      if(!target.active||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))continue;
+      const before=target.hp;this.hit(target,damage*ION_STORM.damage,'arc');if(target.hp<before)this.ionHits++;
+    }
+  }
   capacitorBursts=0;
   private capacitor(body:Body,damage:number){
     if(this.build.electricBranch!=='capacitor'||!body.active||!(body.kind in C.enemies)||guardClosed(body)
@@ -499,10 +518,13 @@ export class World {
           if(!protectedEntry&&bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='penetrator'&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
             this.scatterPierces++;this.effects.push({type:'scatter-pierce',x:body.x,y:body.y,weaponKind:'scatter'});
           }
+          const ionEligible=bullet.weaponKind==='arc'&&body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
+          const hpBefore=body.hp;
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(protectedEntry)return;
           if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);
           if(bullet.weaponKind==='arc')this.capacitor(body,bullet.damage);
+          if(ionEligible&&body.hp<hpBefore)this.ionImpact(body,bullet.damage);
           const support=this.supportProfile();
           if (support.refractionTargets > 0 && bullet.weaponKind === 'pulse' && body.kind in C.enemies && !guardClosed(body)) {
             const reflected=this.bodies.filter(other=>other!==body && other.active && other.kind in C.enemies
@@ -523,7 +545,7 @@ export class World {
               const next = candidates[0]; if (!next) break;
               visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
               this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y});
-              const before=next.hp;this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before)this.arcLinks++;origin = next;
+              const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(conducts)this.ionImpact(next,damage);}origin = next;
             }
           }
           if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {

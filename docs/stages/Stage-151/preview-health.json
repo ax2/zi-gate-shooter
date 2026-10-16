@@ -1,0 +1,17 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-DrMpevXz.js",
+    "status": 200,
+    "bytes": 203653
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/arc-player-v1.png",
+    "status": 200,
+    "bytes": 220808
+  }
+]
