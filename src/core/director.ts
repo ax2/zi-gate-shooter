@@ -1,6 +1,8 @@
 import type { EnemyKind } from './config';
 export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; lane?: number; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
+// Light screens pass first; the armoured pair keeps a readable firing window.
+export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
 export const sectorNames = ['突围走廊', '侧翼夹击', '重装封锁'];
 export const sectorIndex = (round: number) => (Math.max(1, round) - 1) % 3;
 export const encounterIndex = (round: number) => Math.floor((Math.max(1, round) - 1) / 3) % 3;
@@ -106,7 +108,10 @@ export function timeline(round: number, seed: number): Spawn[] {
   // These ordinary authored spawns still use each admission's no-kill safety check.
   if(round>1){
     if(sector===2){add(35,'armor',220);add(36.5,'armor',220);}
-    else {add(35,'armor',300);add(35,'armor',420);}
+    else for(const x of ARMOURED_PACK.pairXs)add(35,'armor',x);
+    // The old light screen and the last drop row otherwise converge on the
+    // deployed armour during its first charge. Keep their roster and motion.
+    for(const spawn of out)if(spawn.kind==='drone'&&spawn.at>=33&&spawn.at<35)spawn.at-=ARMOURED_PACK.screenLead;
   }
   // Visible reinforcement packs, each leaving the outer road open. The existing
   // director still admits each actual body through its conservative route check.
@@ -115,7 +120,7 @@ export function timeline(round: number, seed: number): Spawn[] {
       :sector===1?[[180,240,300],[420,480,540],[240,300,360,420,480]]
       :[[300,420],[300,420],[300,420]];
     rows.forEach((xs,row)=>xs.forEach((x,index)=>{
-      add(32+row*2.2,'drone',x);out[out.length-1].drop=true;
+      add(ARMOURED_PACK.droneRows[row],'drone',x);out[out.length-1].drop=true;
       out[out.length-1].dropNotice=row===0&&index===0;
     }));
     // Fixed tactical phrases between supply windows. Front shields, rear guns

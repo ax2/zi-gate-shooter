@@ -1,0 +1,26 @@
+[
+  {
+    "file": "charge-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "flight-desktop.jpg",
+    "format": "jpeg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "flight-mobile-weak.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "flight-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  }
+]
