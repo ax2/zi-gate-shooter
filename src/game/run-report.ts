@@ -11,6 +11,7 @@ export function nextRunGoal(w:World,unlocked:readonly string[],tracked?:string|n
  if(!unlocked.includes('specialist'))return '前三点投入雷电或光学，挑战专精工程师';
  if(!unlocked.includes('storm'))return '组合弹道与雷电，完成雷暴霰射';
  if(!unlocked.includes('proof')&&w.availableProofs().length)return '接取构筑检验，用实际组合效果挑战实战工程师';
+ if(!unlocked.includes('magnetic-master')&&w.build.magneticAugment)return '广域与分流分别通过磁暴检验，挑战磁暴双修';
  if(!unlocked.includes('ace')&&w.activeWeapons.some(k=>w.weaponStage(k)>=2))return '接取双线王牌并全破，挑战王牌猎手';
  if(!unlocked.includes('flawless-ace')&&unlocked.includes('ace'))return '接取后无伤全破双线王牌，挑战交火零伤';
  if(!unlocked.includes('versatile')&&unlocked.includes('proof'))return '换一种构筑完成检验，挑战构筑全才';

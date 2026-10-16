@@ -3,13 +3,13 @@ import {SUPPLY_CONVOY} from './supply-convoy';
 import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
 import {canLaserChain,LASER_CHAIN} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
-import {buildProofs,proofFormation,PROOF_WAVES,type BuildProof} from './build-proof';
+import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {ION_STORM} from './ion-storm';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
-import { BuildTree, isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type BuildBranch, type Route } from './build-tree';
+import { BuildTree, isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
@@ -36,7 +36,7 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofGroup?:number;proofRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep'; bossVariant?: number;
 }
 export interface Bullet {
@@ -203,6 +203,8 @@ export class World {
   magneticBursts=0;magneticHits=0;magneticLinkHits=0;magneticWideHits=0;
   lastMagneticRefinementHit?:{mode:string;fieldId:number;targetId:number;time:number;x:number;y:number;fromX:number;fromY:number;distance:number};
   lastMagneticHit?:{fieldId:number;targetId:number;time:number;x:number;y:number;link?:boolean};
+  magneticProofHits=0;readonly magneticCertifications=new Set<MagneticAugment>();
+  private recordMagneticProofHit(target:Body){if(target.proofRound===this.round&&target.proofGroup&&this.contract?.recordMagneticGroup(target.proofGroup,this.round))this.magneticProofHits++;}
   private magneticReadyAt=0;private magneticId=0;private announcedMagnetic=false;
   magneticUnlocked(){return this.activeWeapons.includes('blast')&&this.weaponStage('blast')>=2&&this.build.ranks.electric>=2;}
   canRefineMagnetic(){return this.magneticUnlocked()&&this.build.ranks.electric>=3&&!this.build.magneticAugment;}
@@ -226,13 +228,13 @@ export class World {
           if(this.bossVictory||this.player.hp<=0)break;
           if(!target.active||!(target.kind in C.enemies)||guardClosed(target)||(target.dropGrace??0)>0||target.y<C.playerShotTop||target.y>C.playerY||(target.kind==='boss'&&this.phase!=='boss')||Math.hypot(target.x-field.x,target.y-field.y)>(field.radius??MAGNETIC.radius))continue;
           const before=target.hp;this.hit(target,field.damage,'blast');
-          if(target.hp<before){this.magneticHits++;if((field.radius??MAGNETIC.radius)>MAGNETIC.radius&&Math.hypot(target.x-field.x,target.y-field.y)>MAGNETIC.radius){this.magneticWideHits++;this.lastMagneticRefinementHit={mode:'field-wide',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:Math.hypot(target.x-field.x,target.y-field.y)};}this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y};this.effects.push({type:'magnetic-hit',x:target.x,y:target.y,weaponKind:'arc',fieldId:field.id,targetId:target.id});}
+          if(target.hp<before){this.magneticHits++;if((field.radius??MAGNETIC.radius)>MAGNETIC.radius&&Math.hypot(target.x-field.x,target.y-field.y)>MAGNETIC.radius){this.magneticWideHits++;this.recordMagneticProofHit(target);this.lastMagneticRefinementHit={mode:'field-wide',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:Math.hypot(target.x-field.x,target.y-field.y)};}this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y};this.effects.push({type:'magnetic-hit',x:target.x,y:target.y,weaponKind:'arc',fieldId:field.id,targetId:target.id});}
         }
         if(field.link&&!this.bossVictory&&this.player.hp>0){
           const distance=(b:Body)=>Math.hypot(b.x-field.x,b.y-field.y),priority=(b:Body)=>['sniper','armor','elite','guard','boss'].includes(b.kind)&&b.warning>0?1:0;
           const target=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0)&&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&distance(b)>(field.radius??MAGNETIC.radius)&&distance(b)<=MAGNETIC_REFINEMENT.linkRange)
             .sort((a,b)=>priority(b)-priority(a)||distance(a)-distance(b)||a.id-b.id)[0];
-          if(target){const before=target.hp;this.hit(target,field.damage,'arc');if(target.hp<before){this.magneticLinkHits++;this.lastMagneticRefinementHit={mode:'field-link',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:distance(target)};this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,link:true};this.effects.push({type:'magnetic-link',x:field.x,y:field.y,targetX:target.x,targetY:target.y,fieldId:field.id,targetId:target.id,weaponKind:'arc'});}}
+          if(target){const before=target.hp;this.hit(target,field.damage,'arc');if(target.hp<before){this.magneticLinkHits++;this.recordMagneticProofHit(target);this.lastMagneticRefinementHit={mode:'field-link',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:distance(target)};this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,link:true};this.effects.push({type:'magnetic-link',x:field.x,y:field.y,targetX:target.x,targetY:target.y,fieldId:field.id,targetId:target.id,weaponKind:'arc'});}}
         }
       }
     }
@@ -290,8 +292,8 @@ export class World {
   }
   stormLinks=0;prismHits=0;proofWins=0;
   aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
-  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
-  proofCount(kind:BuildProof){return kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.scatterRicochets:this.laserArcHits;}
+  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='magnetic'?this.magneticUnlocked()&&!!this.build.magneticAugment:kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
+  proofCount(kind:BuildProof){return kind==='magnetic'?this.magneticProofHits:kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.scatterRicochets:this.laserArcHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
   contract?: Contract;
@@ -337,7 +339,7 @@ export class World {
     if(!challenge.proof||challenge.reinforcements>=PROOF_WAVES.groups||challenge.elapsed<challenge.nextReinforcement)return;
     const troops=proofFormation(challenge.proof.kind);
     if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+troops.length>C.limits.enemies){challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;}
-    const candidates=troops.map(t=>{const b=this.spawn(t.kind,t.x,t.y);b.proofTarget=true;if('pattern' in t)b.pattern=t.pattern;if(challenge.proof?.kind==='ricochet'){b.proofGroup=challenge.reinforcements+1;b.proofRound=this.round;}b.dropGrace=SWARM.grace;return b;});
+    const candidates=troops.map(t=>{const b=this.spawn(t.kind,t.x,t.y);b.proofTarget=true;if('pattern' in t)b.pattern=t.pattern;if(challenge.proof?.kind==='magnetic'){b.hp*=MAGNETIC_PROOF.durability;b.maxHp=b.hp;}if(challenge.proof?.kind==='ricochet'||challenge.proof?.kind==='magnetic'){b.proofGroup=challenge.reinforcements+1;b.proofRound=this.round;}b.dropGrace=SWARM.grace;return b;});
     const horizon=Math.max(...candidates.map(b=>(C.playerY-b.y)/b.speed+1));
     if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
       for(const b of candidates)b.active=false;this.fallbackCount++;challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;
@@ -621,6 +623,7 @@ export class World {
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
+        if(b.proofTarget){b.proofShots=(b.proofShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
         if(b.pattern==='sweep'){b.sweeperShots=(b.sweeperShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
         if(b.pattern==='intercept'){
           if(b.burst)b.interceptCoreShots=(b.interceptCoreShots??0)+1;else b.interceptWingShots=(b.interceptWingShots??0)+1;
@@ -830,7 +833,7 @@ export class World {
     if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0,contract.proof?this.proofCount(contract.proof.kind):0)){
       if(contract.status==='won'){
         this.contractStats.won++;
-        if(contract.kind==='research'&&contract.proof){this.proofWins++;this.certifiedBuilds.add(contract.proof.kind);}
+        if(contract.kind==='research'&&contract.proof){this.proofWins++;this.certifiedBuilds.add(contract.proof.kind);if(contract.proof.kind==='magnetic'&&this.build.magneticAugment)this.magneticCertifications.add(this.build.magneticAugment);}
         if(contract.kind==='hunter'&&contract.hunt==='crossfire'){this.aceWins++;if(this.damageTaken===contract.damage)this.flawlessAceWins++;}
         this.contractReward={charge:contracts[contract.kind].charge,round:this.round,...(contract.kind==='hunter'&&hunts[contract.hunt].research?{research:hunts[contract.hunt].research}:{})};
       }

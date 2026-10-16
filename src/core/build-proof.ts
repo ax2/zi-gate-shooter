@@ -6,12 +6,16 @@ export const buildProofs={
  photon:{name:'电光连锁',goal:4,unit:'跳伤',detail:'30秒光链跳伤4次 · 瞄准阵心'},
  ricochet:{name:'跳弹侧击',goal:12,groups:2,unit:'侧击',detail:'30秒跳弹12次 · 命中2批精英'},
  ion:{name:'离子风暴',goal:6,unit:'命中',detail:'30秒放电命中6次 · 瞄准阵心'},
+ magnetic:{name:'磁暴精研',goal:6,groups:2,unit:'有效命中',detail:'30秒精研命中6次 · 命中2批强化精英'},
 } as const;
 export type BuildProof=keyof typeof buildProofs;
+export function requiredProofGroups(kind:BuildProof){const proof=buildProofs[kind];return 'groups' in proof?proof.groups:0;}
+export const MAGNETIC_PROOF={durability:2} as const;
 export interface ProofTarget {kind:BuildProof;start:number}
 
 export const PROOF_WAVES={groups:6,spacing:5,retry:.5} as const;
 export function proofFormation(kind:BuildProof){
+ if(kind==='magnetic')return [{kind:'elite',x:220,y:380,pattern:'fan'},{kind:'elite',x:430,y:380,pattern:'fan'}] as const;
  if(kind==='ricochet')return [{kind:'elite',x:230,y:380,pattern:'fan'},{kind:'elite',x:490,y:380,pattern:'fan'}] as const;
  if(kind==='prism')return [{kind:'armor',x:215,y:420},{kind:'elite',x:360,y:420},{kind:'armor',x:505,y:420}] as const;
  if(kind==='fracture')return [{kind:'elite',x:360,y:500},{kind:'armor',x:360,y:330},{kind:'drone',x:520,y:420}] as const;

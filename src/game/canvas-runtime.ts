@@ -9,7 +9,7 @@ import {buildReceiptPosition,type ReceiptPosition} from './build-receipt';
 import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipePerformance,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
 import {interceptorLight} from './interceptor-light';
 import {bossHeatLight} from './boss-heat-light';
-import {buildProofs,type BuildProof} from '../core/build-proof';
+import {buildProofs,requiredProofGroups,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
 import {ION_STORM} from '../core/ion-storm';
 import {dropLight} from './drop-light';
@@ -356,6 +356,7 @@ export class CanvasRuntime {
     const chosenNode=isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
+    if(isMagneticAugment(branch)&&this.world.contract?.status!=='active')this.proofChoice='magnetic';
     const earnedEffects=this.world.drainEffects();
     this.checkAchievements();
     const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
@@ -446,10 +447,10 @@ export class CanvasRuntime {
     this.goalWasReady=status?.ready??false;
   }
   private checkAchievements() {
-    const beforeCertifications=this.save.achievements.certifiedBuilds.length;
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks});
+    const beforeCertifications=this.save.achievements.certifiedBuilds.length,beforeMagnetic=this.save.achievements.magneticCertifications.length;
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,magneticCertifications:[...this.world.magneticCertifications]});
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;}
-    if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length)this.platform.write(this.save);
+    if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length||beforeMagnetic!==this.save.achievements.magneticCertifications.length)this.platform.write(this.save);
   }
   private effect(e: EffectEvent) {
     if(e.type==='counter-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',1);return;}
@@ -703,7 +704,7 @@ export class CanvasRuntime {
     const contract=w.contract;
     if(this.mode==='playing'&&contract?.status==='active'){
       const y=w.bodies.some(b=>b.active&&b.kind==='boss')?1130:this.hudTop+164;
-      const progress=contract.kind==='research'&&contract.proof?`${buildProofs[contract.proof.kind].name} ${Math.min(contract.proofProgress,buildProofs[contract.proof.kind].goal)}/${buildProofs[contract.proof.kind].goal}${contract.proof.kind==='ricochet'?' · 批次'+Math.min(contract.proofGroupCount,buildProofs.ricochet.groups)+'/'+buildProofs.ricochet.groups:''}`:contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
+      const progress=contract.kind==='research'&&contract.proof?`${buildProofs[contract.proof.kind].name} ${Math.min(contract.proofProgress,buildProofs[contract.proof.kind].goal)}/${buildProofs[contract.proof.kind].goal}${requiredProofGroups(contract.proof.kind)?' · 批次'+Math.min(contract.proofGroupCount,requiredProofGroups(contract.proof.kind))+'/'+requiredProofGroups(contract.proof.kind):''}`:contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
       this.rect(40,y,640,44,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${progress}`,360,y+22,24,'#ffdc8a');
     }
     if(this.mode==='playing' && w.time<this.achievementUntil&&!bottomBusy){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
@@ -1215,6 +1216,7 @@ export class CanvasRuntime {
     const proof=w.contract?.proof?buildProofs[w.contract.proof.kind]:undefined;
     this.text(proof?`${proof.name} · 检验通过`:'契约完成 · 选择强化',360,190,38,'#ffdc8a','center',true);
     this.text(proof?`${Math.min(w.contract!.proofProgress,proof.goal)}/${proof.goal}${proof.unit} · 任选一项，旧能力保留`:'任选一项 · 其他武器与能力全部保留',360,245,24,'#bdd8e7');
+    if(w.contract?.proof?.kind==='magnetic'&&w.build.magneticAugment)this.text(`本局认证：${magneticAugments[w.build.magneticAugment].name} · 另一精研可跨局完成`,360,278,21,'#aee8ce');
     const total=w.growth.energy+reward.charge;
     const options=[{kind:'energy',title:`充能 +${reward.charge}`,detail:`充能 ${Math.floor(w.growth.energy)} → ${Math.floor(total%100)} · 额外突破 ${Math.floor(total/100)}次`,color:'#7fe4ff'},
       ...this.weaponUpgradeOptions()];
@@ -1239,14 +1241,15 @@ export class CanvasRuntime {
       const needTier=kind==='hunter'&&!w.activeWeapons.some(k=>w.weaponStage(k)>=2);
       this.rect(65,y,590,148,can?'#203e50':'#172c3b');
       this.text(kind==='hunter'?`${entry.name} · ${hunt.name}`:entry.name,90,y+26,28,'#ffdc8a','left',true);
-      this.text(kind==='research'?(proof?`${proof.name} · ${proof.detail}`:'先形成组合或选择跳弹分支'):kind==='hunter'?hunt.detail:entry.detail,90,y+62,22,'#effaff','left');
+      const proofDetail=chosen==='magnetic'?`${w.build.magneticAugment==='field-wide'?'广域扩圈':'分流桥击'} · 30秒命中6次/2批强化精英`:proof?`${proof.name} · ${proof.detail}`:'先形成组合或选择跳弹分支';
+      this.text(kind==='research'?proofDetail:kind==='hunter'?hunt.detail:entry.detail,90,y+62,22,'#effaff','left');
       this.text(`成功：充能+${entry.charge} 或强化已有配件${kind==='hunter'&&hunt.research?' ＋研发1点':''}`,90,y+96,21,'#bdd8e7','left');
       this.text(can?'接取契约　›':needTier?'需要任一T2配件':kind==='research'&&!proof?'尚无可检验构筑':'本轮已接取或当前不可接取',625,y+127,21,can?'#80e4ff':'#97adbd','right');
       if(kind==='research'){
         if(can)this.buttons.push({x:65,y,w:590,h:148,label:`接取构筑检验：${proof!.name}`,action:'contract:research'});
       }else if(can)this.buttons.push({x:65,y,w:590,h:148,label:kind==='hunter'?`${entry.name}：${hunt.name}`:entry.name,action:`contract:${kind}`});
     }
-    const proofProgress=current?.proof?` ${buildProofs[current.proof.kind].name} ${Math.min(current.proofProgress,buildProofs[current.proof.kind].goal)}/${buildProofs[current.proof.kind].goal}${current.proof.kind==='ricochet'?' · 批次'+Math.min(current.proofGroupCount,buildProofs.ricochet.groups)+'/'+buildProofs.ricochet.groups:''}`:'';
+    const proofProgress=current?.proof?` ${buildProofs[current.proof.kind].name} ${Math.min(current.proofProgress,buildProofs[current.proof.kind].goal)}/${buildProofs[current.proof.kind].goal}${requiredProofGroups(current.proof.kind)?' · 批次'+Math.min(current.proofGroupCount,requiredProofGroups(current.proof.kind))+'/'+requiredProofGroups(current.proof.kind):''}`:'';
     if(!current){
       this.rect(65,935,282,82,'#214a4e');this.text('切换狩猎目标 ↻',206,976,24,'#ffdc8a','center',true);this.buttons.push({x:65,y:935,w:282,h:82,label:'切换狩猎目标',action:'hunt-next'});
       if(proofs.length>1){this.rect(359,935,296,82,'#214a4e');this.text('切换检验目标 ↻',507,976,24,'#b9ffe1','center',true);this.buttons.push({x:359,y:935,w:296,h:82,label:'切换检验目标',action:'proof-next'});}else this.text('目标在接取后锁定',507,976,21,'#bdd8e7');
@@ -1424,7 +1427,7 @@ export class CanvasRuntime {
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
-      proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
+      magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),

@@ -1,0 +1,1098 @@
+[
+  {
+    "policy": "wide",
+    "time": 170.98333333336154,
+    "selected": true,
+    "accepted": {
+      "time": 164.43333333335633,
+      "round": 3,
+      "hp": 3,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "levels": {
+        "pulse": 2,
+        "arc": 2,
+        "scatter": 2,
+        "pierce": 3,
+        "blast": 3
+      },
+      "start": 0,
+      "mode": "field-wide"
+    },
+    "terminal": {
+      "time": 170.98333333336154,
+      "status": "won",
+      "reason": "磁暴精研检验通过",
+      "elapsed": 6.549999999999982,
+      "progress": 6,
+      "hp": 3,
+      "hitGroups": 2,
+      "spawned": 2
+    },
+    "reward": {
+      "time": 170.98333333336154,
+      "before": {
+        "stage": 3,
+        "calibration": 0,
+        "energy": 65
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 1,
+        "energy": 65
+      }
+    },
+    "certified": [
+      "magnetic"
+    ],
+    "magneticCertifications": [
+      "field-wide"
+    ],
+    "persistedMagnetic": [
+      "field-wide",
+      "field-link"
+    ],
+    "fresh": [
+      "storm",
+      "arsenal",
+      "proof"
+    ],
+    "proofEmitted": 0,
+    "proofArrivals": 0,
+    "hits": [
+      {
+        "time": 165.18333333335693,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 7,
+          "targetId": 6451,
+          "time": 165.18333333335693,
+          "x": 430,
+          "y": 452.599999999999,
+          "fromX": 220,
+          "fromY": 459.3499999999991,
+          "distance": 210.10845413738116
+        },
+        "progress": 1,
+        "groups": 1
+      },
+      {
+        "time": 165.18333333335693,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 7,
+          "targetId": 6451,
+          "time": 165.18333333335693,
+          "x": 430,
+          "y": 452.599999999999,
+          "fromX": 220,
+          "fromY": 459.3499999999991,
+          "distance": 210.10845413738116
+        },
+        "progress": 1,
+        "groups": 1
+      },
+      {
+        "time": 165.58333333335725,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 7,
+          "targetId": 6451,
+          "time": 165.58333333335725,
+          "x": 430,
+          "y": 492.19999999999845,
+          "fromX": 220,
+          "fromY": 519.3499999999991,
+          "distance": 211.74778038978363
+        },
+        "progress": 2,
+        "groups": 1
+      },
+      {
+        "time": 165.98333333335756,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 7,
+          "targetId": 6502,
+          "time": 165.98333333335756,
+          "x": 360,
+          "y": 426.5499999999995,
+          "fromX": 220,
+          "fromY": 579.3499999999991,
+          "distance": 207.23860644194625
+        },
+        "progress": 3,
+        "groups": 1
+      },
+      {
+        "time": 165.98333333335756,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 7,
+          "targetId": 6502,
+          "time": 165.98333333335756,
+          "x": 360,
+          "y": 426.5499999999995,
+          "fromX": 220,
+          "fromY": 579.3499999999991,
+          "distance": 207.23860644194625
+        },
+        "progress": 3,
+        "groups": 1
+      },
+      {
+        "time": 170.1833333333609,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 9,
+          "targetId": 6707,
+          "time": 170.1833333333609,
+          "x": 430,
+          "y": 450.949999999999,
+          "fromX": 220,
+          "fromY": 457.69999999999914,
+          "distance": 210.10845413738116
+        },
+        "progress": 4,
+        "groups": 2
+      },
+      {
+        "time": 170.1833333333609,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 9,
+          "targetId": 6707,
+          "time": 170.1833333333609,
+          "x": 430,
+          "y": 450.949999999999,
+          "fromX": 220,
+          "fromY": 457.69999999999914,
+          "distance": 210.10845413738116
+        },
+        "progress": 4,
+        "groups": 2
+      },
+      {
+        "time": 170.58333333336122,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 9,
+          "targetId": 6707,
+          "time": 170.58333333336122,
+          "x": 430,
+          "y": 490.5499999999985,
+          "fromX": 220,
+          "fromY": 517.6999999999991,
+          "distance": 211.74778038978363
+        },
+        "progress": 5,
+        "groups": 2
+      },
+      {
+        "time": 170.98333333336154,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 9,
+          "targetId": 6707,
+          "time": 170.98333333336154,
+          "x": 430,
+          "y": 530.1499999999979,
+          "fromX": 220,
+          "fromY": 577.6999999999991,
+          "distance": 215.3160525831739
+        },
+        "progress": 6,
+        "groups": 2
+      }
+    ]
+  },
+  {
+    "policy": "link",
+    "time": 171.1833333333617,
+    "selected": true,
+    "accepted": {
+      "time": 164.6333333333565,
+      "round": 3,
+      "hp": 3,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "levels": {
+        "pulse": 2,
+        "arc": 2,
+        "scatter": 2,
+        "pierce": 3,
+        "blast": 3
+      },
+      "start": 0,
+      "mode": "field-link"
+    },
+    "terminal": {
+      "time": 171.1833333333617,
+      "status": "won",
+      "reason": "磁暴精研检验通过",
+      "elapsed": 6.549999999999982,
+      "progress": 6,
+      "hp": 3,
+      "hitGroups": 2,
+      "spawned": 2
+    },
+    "reward": {
+      "time": 171.1833333333617,
+      "before": {
+        "stage": 3,
+        "calibration": 0,
+        "energy": 65
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 1,
+        "energy": 65
+      }
+    },
+    "certified": [
+      "magnetic"
+    ],
+    "magneticCertifications": [
+      "field-link"
+    ],
+    "persistedMagnetic": [
+      "field-wide",
+      "field-link"
+    ],
+    "fresh": [
+      "magnetic-master"
+    ],
+    "proofEmitted": 3,
+    "proofArrivals": 3,
+    "hits": [
+      {
+        "time": 165.3833333333571,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 7,
+          "targetId": 6460,
+          "time": 165.3833333333571,
+          "x": 430,
+          "y": 452.599999999999,
+          "fromX": 220,
+          "fromY": 459.3499999999991,
+          "distance": 210.10845413738116
+        },
+        "progress": 1,
+        "groups": 1
+      },
+      {
+        "time": 165.3833333333571,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 7,
+          "targetId": 6460,
+          "time": 165.3833333333571,
+          "x": 430,
+          "y": 452.599999999999,
+          "fromX": 220,
+          "fromY": 459.3499999999991,
+          "distance": 210.10845413738116
+        },
+        "progress": 1,
+        "groups": 1
+      },
+      {
+        "time": 165.7833333333574,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 7,
+          "targetId": 6460,
+          "time": 165.7833333333574,
+          "x": 430,
+          "y": 492.19999999999845,
+          "fromX": 220,
+          "fromY": 519.3499999999991,
+          "distance": 211.74778038978363
+        },
+        "progress": 2,
+        "groups": 1
+      },
+      {
+        "time": 166.18333333335772,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 7,
+          "targetId": 6460,
+          "time": 166.18333333335772,
+          "x": 430,
+          "y": 531.7999999999979,
+          "fromX": 220,
+          "fromY": 579.3499999999991,
+          "distance": 215.3160525831739
+        },
+        "progress": 3,
+        "groups": 1
+      },
+      {
+        "time": 170.38333333336107,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 9,
+          "targetId": 6719,
+          "time": 170.38333333336107,
+          "x": 430,
+          "y": 450.949999999999,
+          "fromX": 220,
+          "fromY": 457.69999999999914,
+          "distance": 210.10845413738116
+        },
+        "progress": 4,
+        "groups": 2
+      },
+      {
+        "time": 170.38333333336107,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 9,
+          "targetId": 6719,
+          "time": 170.38333333336107,
+          "x": 430,
+          "y": 450.949999999999,
+          "fromX": 220,
+          "fromY": 457.69999999999914,
+          "distance": 210.10845413738116
+        },
+        "progress": 4,
+        "groups": 2
+      },
+      {
+        "time": 170.78333333336138,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 9,
+          "targetId": 6719,
+          "time": 170.78333333336138,
+          "x": 430,
+          "y": 490.5499999999985,
+          "fromX": 220,
+          "fromY": 517.6999999999991,
+          "distance": 211.74778038978363
+        },
+        "progress": 5,
+        "groups": 2
+      },
+      {
+        "time": 171.1833333333617,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 9,
+          "targetId": 6719,
+          "time": 171.1833333333617,
+          "x": 430,
+          "y": 530.1499999999979,
+          "fromX": 220,
+          "fromY": 577.6999999999991,
+          "distance": 215.3160525831739
+        },
+        "progress": 6,
+        "groups": 2
+      }
+    ]
+  },
+  {
+    "policy": "center",
+    "time": 177.3333333333666,
+    "selected": true,
+    "accepted": {
+      "time": 164.43333333335633,
+      "round": 3,
+      "hp": 3,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "levels": {
+        "pulse": 2,
+        "arc": 2,
+        "scatter": 2,
+        "pierce": 3,
+        "blast": 3
+      },
+      "start": 0,
+      "mode": "field-wide"
+    },
+    "terminal": {
+      "time": 177.3333333333666,
+      "status": "failed",
+      "reason": "机体被摧毁",
+      "elapsed": 12.883333333333553,
+      "progress": 0,
+      "hp": 0,
+      "hitGroups": 0,
+      "spawned": 3
+    },
+    "reward": null,
+    "certified": [],
+    "magneticCertifications": [],
+    "persistedMagnetic": [
+      "field-wide",
+      "field-link"
+    ],
+    "fresh": [],
+    "proofEmitted": 15,
+    "proofArrivals": 15,
+    "hits": []
+  },
+  {
+    "policy": "late-wide",
+    "time": 502.8333333332047,
+    "selected": true,
+    "accepted": {
+      "time": 491.6833333332148,
+      "round": 7,
+      "hp": 3,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "levels": {
+        "pulse": 3,
+        "arc": 3,
+        "scatter": 3,
+        "pierce": 3,
+        "blast": 3
+      },
+      "start": 0,
+      "mode": "field-wide"
+    },
+    "terminal": {
+      "time": 502.8333333332047,
+      "status": "won",
+      "reason": "磁暴精研检验通过",
+      "elapsed": 11.150000000000134,
+      "progress": 6,
+      "hp": 3,
+      "hitGroups": 3,
+      "spawned": 3
+    },
+    "reward": {
+      "time": 502.8333333332047,
+      "before": {
+        "stage": 3,
+        "calibration": 2,
+        "energy": 95
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 3,
+        "energy": 95
+      }
+    },
+    "certified": [
+      "magnetic"
+    ],
+    "magneticCertifications": [
+      "field-wide"
+    ],
+    "persistedMagnetic": [
+      "field-wide",
+      "field-link"
+    ],
+    "fresh": [
+      "fracture",
+      "tactician"
+    ],
+    "proofEmitted": 0,
+    "proofArrivals": 0,
+    "hits": [
+      {
+        "time": 283.8166666667372,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 20,
+          "targetId": 13399,
+          "time": 283.8166666667372,
+          "x": 420,
+          "y": 467.52499999999975,
+          "fromX": 240,
+          "fromY": 466.2333333333331,
+          "distance": 180.00463439250052
+        }
+      },
+      {
+        "time": 324.86666666669987,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 29,
+          "targetId": 15902,
+          "time": 324.86666666669987,
+          "x": 220,
+          "y": 360.1666666666673,
+          "fromX": 400.5336926257556,
+          "fromY": 375,
+          "distance": 181.14204909647168
+        }
+      },
+      {
+        "time": 324.86666666669987,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 29,
+          "targetId": 15902,
+          "time": 324.86666666669987,
+          "x": 220,
+          "y": 360.1666666666673,
+          "fromX": 400.5336926257556,
+          "fromY": 375,
+          "distance": 181.14204909647168
+        }
+      },
+      {
+        "time": 325.0000000000331,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 28,
+          "targetId": 15902,
+          "time": 325.0000000000331,
+          "x": 220,
+          "y": 375.5000000000008,
+          "fromX": 385.71075323323356,
+          "fromY": 495,
+          "distance": 204.30443885810564
+        }
+      },
+      {
+        "time": 325.0000000000331,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 28,
+          "targetId": 15902,
+          "time": 325.0000000000331,
+          "x": 220,
+          "y": 375.5000000000008,
+          "fromX": 385.71075323323356,
+          "fromY": 495,
+          "distance": 204.30443885810564
+        }
+      },
+      {
+        "time": 456.6333333332467,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 47,
+          "targetId": 24115,
+          "time": 456.6333333332467,
+          "x": 300,
+          "y": 393.7916666666672,
+          "fromX": 480,
+          "fromY": 472.7499999999998,
+          "distance": 196.55640005549975
+        }
+      },
+      {
+        "time": 456.6333333332467,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 47,
+          "targetId": 24115,
+          "time": 456.6333333332467,
+          "x": 300,
+          "y": 393.7916666666672,
+          "fromX": 480,
+          "fromY": 472.7499999999998,
+          "distance": 196.55640005549975
+        }
+      },
+      {
+        "time": 492.43333333321414,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 51,
+          "targetId": 26122,
+          "time": 492.43333333321414,
+          "x": 430,
+          "y": 455.900000000001,
+          "fromX": 220,
+          "fromY": 462.2750000000009,
+          "distance": 210.0967411098992
+        },
+        "progress": 1,
+        "groups": 1
+      },
+      {
+        "time": 492.8333333332138,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 51,
+          "targetId": 26122,
+          "time": 492.8333333332138,
+          "x": 430,
+          "y": 497.30000000000155,
+          "fromX": 220,
+          "fromY": 522.2750000000009,
+          "distance": 211.4799059603535
+        },
+        "progress": 2,
+        "groups": 1
+      },
+      {
+        "time": 493.2333333332134,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 51,
+          "targetId": 26188,
+          "time": 493.2333333332134,
+          "x": 360,
+          "y": 467.52499999999975,
+          "fromX": 220,
+          "fromY": 582.2750000000009,
+          "distance": 181.01812754528277
+        },
+        "progress": 2,
+        "groups": 1
+      },
+      {
+        "time": 497.4333333332096,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 53,
+          "targetId": 26453,
+          "time": 497.4333333332096,
+          "x": 430,
+          "y": 454.175000000001,
+          "fromX": 220,
+          "fromY": 460.55000000000086,
+          "distance": 210.0967411098992
+        },
+        "progress": 3,
+        "groups": 2
+      },
+      {
+        "time": 497.8333333332092,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 53,
+          "targetId": 26453,
+          "time": 497.8333333332092,
+          "x": 430,
+          "y": 495.5750000000015,
+          "fromX": 220,
+          "fromY": 520.5500000000009,
+          "distance": 211.4799059603535
+        },
+        "progress": 4,
+        "groups": 2
+      },
+      {
+        "time": 502.43333333320504,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 55,
+          "targetId": 26787,
+          "time": 502.43333333320504,
+          "x": 430,
+          "y": 454.175000000001,
+          "fromX": 220,
+          "fromY": 460.55000000000086,
+          "distance": 210.0967411098992
+        },
+        "progress": 5,
+        "groups": 3
+      },
+      {
+        "time": 502.43333333320504,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 55,
+          "targetId": 26787,
+          "time": 502.43333333320504,
+          "x": 430,
+          "y": 454.175000000001,
+          "fromX": 220,
+          "fromY": 460.55000000000086,
+          "distance": 210.0967411098992
+        },
+        "progress": 5,
+        "groups": 3
+      },
+      {
+        "time": 502.8333333332047,
+        "hit": {
+          "mode": "field-wide",
+          "fieldId": 55,
+          "targetId": 26787,
+          "time": 502.8333333332047,
+          "x": 430,
+          "y": 495.5750000000015,
+          "fromX": 220,
+          "fromY": 520.5500000000009,
+          "distance": 211.4799059603535
+        },
+        "progress": 6,
+        "groups": 3
+      }
+    ]
+  },
+  {
+    "policy": "late-link",
+    "time": 503.4499999998708,
+    "selected": true,
+    "accepted": {
+      "time": 492.2999999998809,
+      "round": 7,
+      "hp": 3,
+      "weapons": [
+        "pulse",
+        "arc",
+        "scatter",
+        "pierce",
+        "blast"
+      ],
+      "levels": {
+        "pulse": 3,
+        "arc": 3,
+        "scatter": 3,
+        "pierce": 3,
+        "blast": 3
+      },
+      "start": 0,
+      "mode": "field-link"
+    },
+    "terminal": {
+      "time": 503.4499999998708,
+      "status": "won",
+      "reason": "磁暴精研检验通过",
+      "elapsed": 11.150000000000134,
+      "progress": 6,
+      "hp": 3,
+      "hitGroups": 3,
+      "spawned": 3
+    },
+    "reward": {
+      "time": 503.4499999998708,
+      "before": {
+        "stage": 3,
+        "calibration": 2,
+        "energy": 95
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 3,
+        "energy": 95
+      }
+    },
+    "certified": [
+      "magnetic"
+    ],
+    "magneticCertifications": [
+      "field-link"
+    ],
+    "persistedMagnetic": [
+      "field-wide",
+      "field-link"
+    ],
+    "fresh": [],
+    "proofEmitted": 0,
+    "proofArrivals": 0,
+    "hits": [
+      {
+        "time": 201.9000000000528,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 10,
+          "targetId": 8460,
+          "time": 201.9000000000528,
+          "x": 515.4451740617268,
+          "y": 247.25000000000048,
+          "fromX": 220,
+          "fromY": 255,
+          "distance": 295.54680403679555
+        }
+      },
+      {
+        "time": 284.1333333334036,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 19,
+          "targetId": 13418,
+          "time": 284.1333333334036,
+          "x": 420,
+          "y": 467.52499999999975,
+          "fromX": 240,
+          "fromY": 466.2333333333331,
+          "distance": 180.00463439250052
+        }
+      },
+      {
+        "time": 312.7166666667109,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 25,
+          "targetId": 15244,
+          "time": 312.7166666667109,
+          "x": 248,
+          "y": 781.5666666666662,
+          "fromX": 452,
+          "fromY": 547.825000000001,
+          "distance": 310.24372150957447
+        }
+      },
+      {
+        "time": 313.11666666671056,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 25,
+          "targetId": 15107,
+          "time": 313.11666666671056,
+          "x": 200,
+          "y": 846.9666666666699,
+          "fromX": 452,
+          "fromY": 607.825000000001,
+          "distance": 347.40860198923144
+        }
+      },
+      {
+        "time": 313.5166666667102,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 25,
+          "targetId": 15107,
+          "time": 313.5166666667102,
+          "x": 200,
+          "y": 897.5666666666702,
+          "fromX": 452,
+          "fromY": 667.825000000001,
+          "distance": 341.006207278957
+        }
+      },
+      {
+        "time": 325.18333333336625,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 28,
+          "targetId": 15921,
+          "time": 325.18333333336625,
+          "x": 220,
+          "y": 360.1666666666673,
+          "fromX": 400.5336926257556,
+          "fromY": 375,
+          "distance": 181.14204909647168
+        }
+      },
+      {
+        "time": 325.18333333336625,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 28,
+          "targetId": 15921,
+          "time": 325.18333333336625,
+          "x": 220,
+          "y": 360.1666666666673,
+          "fromX": 400.5336926257556,
+          "fromY": 375,
+          "distance": 181.14204909647168
+        }
+      },
+      {
+        "time": 325.31666666669946,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 27,
+          "targetId": 15921,
+          "time": 325.31666666669946,
+          "x": 220,
+          "y": 375.5000000000008,
+          "fromX": 385.71075323323356,
+          "fromY": 495,
+          "distance": 204.30443885810564
+        }
+      },
+      {
+        "time": 325.31666666669946,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 27,
+          "targetId": 15921,
+          "time": 325.31666666669946,
+          "x": 220,
+          "y": 375.5000000000008,
+          "fromX": 385.71075323323356,
+          "fromY": 495,
+          "distance": 204.30443885810564
+        }
+      },
+      {
+        "time": 376.5499999999862,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 34,
+          "targetId": 19164,
+          "time": 376.5499999999862,
+          "x": 360,
+          "y": 560,
+          "fromX": 140,
+          "fromY": 294.76666666666625,
+          "distance": 344.5993631902289
+        }
+      },
+      {
+        "time": 376.5499999999862,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 34,
+          "targetId": 19164,
+          "time": 376.5499999999862,
+          "x": 360,
+          "y": 560,
+          "fromX": 140,
+          "fromY": 294.76666666666625,
+          "distance": 344.5993631902289
+        }
+      },
+      {
+        "time": 376.94999999998583,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 34,
+          "targetId": 19161,
+          "time": 376.94999999998583,
+          "x": 480,
+          "y": 360,
+          "fromX": 140,
+          "fromY": 354.76666666666625,
+          "distance": 340.04027375853263
+        }
+      },
+      {
+        "time": 394.74999999996965,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 36,
+          "targetId": 20364,
+          "time": 394.74999999996965,
+          "x": 269.3396781640238,
+          "y": 500.108333333333,
+          "fromX": 497.6434753530105,
+          "fromY": 713.8666666666659,
+          "distance": 312.7542947432604
+        }
+      },
+      {
+        "time": 395.1499999999693,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 36,
+          "targetId": 20264,
+          "time": 395.1499999999693,
+          "x": 139.28553062062653,
+          "y": 871.5583333333321,
+          "fromX": 497.6434753530105,
+          "fromY": 773.8666666666659,
+          "distance": 371.4351602755579
+        }
+      },
+      {
+        "time": 406.4166666666257,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 37,
+          "targetId": 21030,
+          "time": 406.4166666666257,
+          "x": 140,
+          "y": 267.9749999999998,
+          "fromX": 369.49919131023995,
+          "fromY": 435,
+          "distance": 283.8436707715255
+        }
+      },
+      {
+        "time": 406.4166666666257,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 37,
+          "targetId": 21030,
+          "time": 406.4166666666257,
+          "x": 140,
+          "y": 267.9749999999998,
+          "fromX": 369.49919131023995,
+          "fromY": 435,
+          "distance": 283.8436707715255
+        }
+      },
+      {
+        "time": 457.16666666657954,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 46,
+          "targetId": 24147,
+          "time": 457.16666666657954,
+          "x": 300,
+          "y": 513.7916666666672,
+          "fromX": 480,
+          "fromY": 472.7499999999998,
+          "distance": 184.6196587657388
+        }
+      },
+      {
+        "time": 493.04999999988024,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 51,
+          "targetId": 26159,
+          "time": 493.04999999988024,
+          "x": 430,
+          "y": 455.900000000001,
+          "fromX": 220,
+          "fromY": 462.2750000000009,
+          "distance": 210.0967411098992
+        },
+        "progress": 1,
+        "groups": 1
+      },
+      {
+        "time": 493.4499999998799,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 51,
+          "targetId": 26159,
+          "time": 493.4499999998799,
+          "x": 430,
+          "y": 497.30000000000155,
+          "fromX": 220,
+          "fromY": 522.2750000000009,
+          "distance": 211.4799059603535
+        },
+        "progress": 2,
+        "groups": 1
+      },
+      {
+        "time": 493.8499999998795,
+        "hit": {
+          "mode": "field-link",
+          "fieldId": 51,
+          "targetId": 26225,
+          "time": 493.8499999998795,
+          "x": 360,
+          "y": 467.52499999999975,
+          "fromX": 220,
+          "fromY": 582.2750000000009,
+          "distance": 181.01812754528277
+        },
+        "progress": 2,
+        "groups": 1
+      }
+    ]
+  }
+]

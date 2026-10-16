@@ -1,4 +1,4 @@
-import {buildProofs,PROOF_WAVES,type ProofTarget} from './build-proof';
+import {buildProofs,PROOF_WAVES,requiredProofGroups,type ProofTarget,type BuildProof} from './build-proof';
 export const HUNTER={targets:2,spacing:6,hoverY:500,holdSeconds:20,retry:.5} as const;
 export const hunts={
  staggered:{name:'分批悬赏',detail:'两名精英分批入场 · 30秒全破',research:0,durability:1},
@@ -21,11 +21,15 @@ export class Contract {
   this.killedTargets.add(id);return true;
  }
  targetEscaped(round:number){if(this.kind==='hunter'&&this.status==='active'&&round===this.round)this.lostTarget=true;}
- private ricochetGroups=new Set<number>();
- get proofGroupCount(){return this.ricochetGroups.size;}
+ private proofGroups=new Set<number>();
+ get proofGroupCount(){return this.proofGroups.size;}
  recordRicochetGroup(group:number,round:number){
-  if(this.kind!=='research'||this.proof?.kind!=='ricochet'||this.status!=='active'||round!==this.round||!Number.isInteger(group)||group<1||group>Math.min(this.reinforcements,PROOF_WAVES.groups))return;
-  this.ricochetGroups.add(group);
+  this.recordGroup('ricochet',group,round);
+ }
+ recordMagneticGroup(group:number,round:number){return this.recordGroup('magnetic',group,round);}
+ private recordGroup(kind:BuildProof,group:number,round:number){
+  if(this.kind!=='research'||this.proof?.kind!==kind||this.status!=='active'||round!==this.round||!Number.isInteger(group)||group<1||group>Math.min(this.reinforcements,PROOF_WAVES.groups))return false;
+  this.proofGroups.add(group);return true;
  }
  proofProgress=0;
  elapsed=0; status:'active'|'won'|'failed'='active';reason='';
@@ -38,9 +42,9 @@ export class Contract {
   if(this.kind==='hunter'&&this.targetKills>=HUNTER.targets&&this.elapsed<=30+1e-8){this.status='won';this.reason='悬赏目标全破';return true;}
   if(this.kind==='research'){
    if(this.proof)this.proofProgress=Math.max(0,proofTotal-this.proof.start);
-   if(this.proof&&this.proofProgress>=buildProofs[this.proof.kind].goal&&(this.proof.kind!=='ricochet'||this.proofGroupCount>=buildProofs.ricochet.groups)&&this.elapsed<=30+1e-8){this.status='won';this.reason=`${buildProofs[this.proof.kind].name}检验通过`;return true;}
+   if(this.proof&&this.proofProgress>=buildProofs[this.proof.kind].goal&&this.proofGroupCount>=requiredProofGroups(this.proof.kind)&&this.elapsed<=30+1e-8){this.status='won';this.reason=`${buildProofs[this.proof.kind].name}检验通过`;return true;}
    if(this.elapsed+1e-8<30)return false;
-   this.status='failed';this.reason=this.proof?.kind==='ricochet'?(this.proofProgress>=buildProofs.ricochet.goal?'验证批次不足':'有效跳弹不足'):'组合有效触发不足';return true;
+   this.status='failed';this.reason=this.proof?.kind==='magnetic'?(this.proofProgress>=buildProofs.magnetic.goal?(this.proofGroupCount>=requiredProofGroups('magnetic')?'超过验证时限':'验证批次不足'):'有效精研命中不足'):this.proof?.kind==='ricochet'?(this.proofProgress>=buildProofs.ricochet.goal?'验证批次不足':'有效跳弹不足'):'组合有效触发不足';return true;
   }
   if(this.elapsed+1e-8<30)return false;
   this.status=this.kind!=='hunter'&&kills-this.startKills>=15?'won':'failed';this.reason=this.status==='won'?'挑战完成':this.kind==='hunter'?'悬赏目标未全破':'击毁数量不足';return true;
