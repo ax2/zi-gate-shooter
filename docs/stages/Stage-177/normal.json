@@ -1,0 +1,2710 @@
+[
+  {
+    "kind": "scatter",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 389,
+    "score": 15815,
+    "spawn": {
+      "time": 8.016666666666644,
+      "x": 240,
+      "y": 182.5,
+      "weapon": "scatter",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "broken": {
+      "time": 10.200000000000086,
+      "weapon": "scatter",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "collected": {
+      "time": 13.283333333333573,
+      "tier": 2,
+      "weapons": [
+        "pulse",
+        "scatter"
+      ],
+      "pickups": 1,
+      "research": 1
+    },
+    "firstBranch": {
+      "time": 21.26666666666674,
+      "route": "ballistic",
+      "branch": "ricochet"
+    },
+    "firstCombo": {
+      "time": 135.51666666666665,
+      "text": "组合完成 · 磁暴榴弹"
+    },
+    "samples": [
+      {
+        "time": 0.016666666666666666,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        }
+      },
+      {
+        "time": 30.016666666666243,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          }
+        ],
+        "ranks": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 0
+        }
+      },
+      {
+        "time": 60.01666666666454,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 0
+        }
+      },
+      {
+        "time": 90.01666666666284,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        }
+      },
+      {
+        "time": 120.01666666666114,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 2,
+          "optical": 0
+        }
+      },
+      {
+        "time": 150.0166666666782,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 0
+        }
+      },
+      {
+        "time": 180.01666666670206,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 2
+        }
+      },
+      {
+        "time": 210.01666666672594,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 240.0166666667498,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 270.01666666674976,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 300.0166666667225,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 330.0166666666952,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 360.0166666666679,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 390.0166666666406,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 420.01666666661333,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 450.01666666658605,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 480.01666666655876,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 510.0166666665315,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 540.0166666665042,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 570.0166666664769,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 2
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "kind": "pierce",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 384,
+    "score": 15755,
+    "spawn": {
+      "time": 8.016666666666644,
+      "x": 240,
+      "y": 182.5,
+      "weapon": "pierce",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "broken": {
+      "time": 10.200000000000086,
+      "weapon": "pierce",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "collected": {
+      "time": 13.283333333333573,
+      "tier": 2,
+      "weapons": [
+        "pulse",
+        "pierce"
+      ],
+      "pickups": 1,
+      "research": 1
+    },
+    "firstBranch": {
+      "time": 21.26666666666674,
+      "route": "electric",
+      "branch": "seeker"
+    },
+    "firstCombo": {
+      "time": 21.26666666666674,
+      "text": "组合完成 · 裂甲爆破"
+    },
+    "samples": [
+      {
+        "time": 0.016666666666666666,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        }
+      },
+      {
+        "time": 30.016666666666243,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "pierce",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        }
+      },
+      {
+        "time": 60.01666666666454,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        }
+      },
+      {
+        "time": 90.01666666666284,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 1,
+          "electric": 3,
+          "optical": 0
+        }
+      },
+      {
+        "time": 120.01666666666114,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 2,
+          "electric": 3,
+          "optical": 0
+        }
+      },
+      {
+        "time": 150.0166666666782,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 0
+        }
+      },
+      {
+        "time": 180.01666666670206,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 2
+        }
+      },
+      {
+        "time": 210.01666666672594,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 240.0166666667498,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 270.01666666674976,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 300.0166666667225,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 330.0166666666952,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 360.0166666666679,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 390.0166666666406,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 420.01666666661333,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 450.01666666658605,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 480.01666666655876,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 510.0166666665315,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 540.0166666665042,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 570.0166666664769,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 2
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 2
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 1
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 49
+  },
+  {
+    "kind": "blast",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 394,
+    "score": 15925,
+    "spawn": {
+      "time": 8.016666666666644,
+      "x": 240,
+      "y": 182.5,
+      "weapon": "blast",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "broken": {
+      "time": 10.200000000000086,
+      "weapon": "blast",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "collected": {
+      "time": 13.283333333333573,
+      "tier": 2,
+      "weapons": [
+        "pulse",
+        "blast"
+      ],
+      "pickups": 1,
+      "research": 1
+    },
+    "firstBranch": {
+      "time": 21.26666666666674,
+      "route": "electric",
+      "branch": "seeker"
+    },
+    "firstCombo": {
+      "time": 21.283333333333406,
+      "text": "组合完成 · 磁暴榴弹"
+    },
+    "samples": [
+      {
+        "time": 0.016666666666666666,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        }
+      },
+      {
+        "time": 30.016666666666243,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        }
+      },
+      {
+        "time": 60.01666666666454,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        }
+      },
+      {
+        "time": 90.01666666666284,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 1
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 1,
+          "electric": 3,
+          "optical": 0
+        }
+      },
+      {
+        "time": 120.01666666666114,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 2,
+          "electric": 3,
+          "optical": 0
+        }
+      },
+      {
+        "time": 150.0166666666782,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 0
+        }
+      },
+      {
+        "time": 180.01666666670206,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 2
+        }
+      },
+      {
+        "time": 210.01666666672594,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 240.0166666667498,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 270.01666666674976,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 300.0166666667225,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 330.0166666666952,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 360.0166666666679,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 390.0166666666406,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 420.01666666661333,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 450.01666666658605,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 480.01666666655876,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 510.0166666665315,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 540.0166666665042,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 570.0166666664769,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 59
+  },
+  {
+    "kind": "arc",
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "kills": 395,
+    "score": 15915,
+    "spawn": {
+      "time": 8.016666666666644,
+      "x": 240,
+      "y": 182.5,
+      "weapon": "arc",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "broken": {
+      "time": 10.200000000000086,
+      "weapon": "arc",
+      "weapons": [
+        "pulse"
+      ]
+    },
+    "collected": {
+      "time": 13.283333333333573,
+      "tier": 2,
+      "weapons": [
+        "pulse",
+        "arc"
+      ],
+      "pickups": 1,
+      "research": 1
+    },
+    "firstBranch": {
+      "time": 21.26666666666674,
+      "route": "optical",
+      "branch": "relay"
+    },
+    "firstCombo": {
+      "time": 80.83333333333003,
+      "text": "组合完成 · 电光连锁"
+    },
+    "samples": [
+      {
+        "time": 0.016666666666666666,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        }
+      },
+      {
+        "time": 30.016666666666243,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 2
+        }
+      },
+      {
+        "time": 60.01666666666454,
+        "round": 1,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 2
+        }
+      },
+      {
+        "time": 90.01666666666284,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        }
+      },
+      {
+        "time": 120.01666666666114,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 1,
+          "electric": 0,
+          "optical": 3
+        }
+      },
+      {
+        "time": 150.0166666666782,
+        "round": 2,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 3
+        }
+      },
+      {
+        "time": 180.01666666670206,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 1
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 3
+        }
+      },
+      {
+        "time": 210.01666666672594,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 2
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 2,
+          "optical": 3
+        }
+      },
+      {
+        "time": 240.0166666667498,
+        "round": 3,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 2
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 270.01666666674976,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 300.0166666667225,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 330.0166666666952,
+        "round": 4,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 360.0166666666679,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 390.0166666666406,
+        "round": 5,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 420.01666666661333,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 2
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 450.01666666658605,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 480.01666666655876,
+        "round": 6,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 510.0166666665315,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 540.0166666665042,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      },
+      {
+        "time": 570.0166666664769,
+        "round": 7,
+        "hp": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "tier": 3
+          },
+          {
+            "kind": "arc",
+            "tier": 3
+          },
+          {
+            "kind": "scatter",
+            "tier": 3
+          },
+          {
+            "kind": "pierce",
+            "tier": 3
+          },
+          {
+            "kind": "blast",
+            "tier": 3
+          }
+        ],
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        }
+      }
+    ],
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 3
+      },
+      {
+        "kind": "arc",
+        "tier": 3
+      },
+      {
+        "kind": "scatter",
+        "tier": 3
+      },
+      {
+        "kind": "pierce",
+        "tier": 3
+      },
+      {
+        "kind": "blast",
+        "tier": 3
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 59
+  }
+]

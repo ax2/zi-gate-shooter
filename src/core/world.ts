@@ -1,4 +1,5 @@
 import {RELAY_SCREEN} from './relay-screen';
+import type {OpeningWeapon} from './opening-plan';
 import {SWEEPER} from './sweeper';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
@@ -38,7 +39,7 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen'; bossVariant?: number;
+  weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
@@ -397,7 +398,7 @@ export class World {
 
   // initialRound supports deterministic replay fixtures; normal UI always starts
   // with the default round 1, T1 and zero bonus.
-  constructor(seed = 1337, initialRound = 1) {
+  constructor(seed = 1337, initialRound = 1,readonly openingWeapon?:OpeningWeapon) {
     this.seed = seed; this.round = Math.max(1, Math.floor(initialRound));
     this.scheduled = timeline(this.round, seed);
   }
@@ -475,7 +476,9 @@ export class World {
           }
         } else if (s.kind === 'crate') {
           if (!this.rewardSlots(1)) { this.scheduleIndex--; break; }
-          if (!this.admit(this.spawn('crate', s.x, 180, s.stage))) { this.scheduleIndex--; break; }
+          const crate=this.spawn('crate',s.x,180,s.stage);
+          if(this.round===1&&s.at===8&&this.openingWeapon){crate.weaponKind=this.openingWeapon;crate.openingSupply=true;}
+          if (!this.admit(crate)) { this.scheduleIndex--; break; }
         }
         else {
           const enemyCount = this.bodies.filter(b => b.active && b.kind in C.enemies).length;
@@ -875,7 +878,7 @@ export class World {
     b.active = false;
     if (b.kind === 'crate') {
       this.cratesBroken++;
-      const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;
+      const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;pickup.openingSupply=b.openingSupply;
       this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
       if(b.dropGrace!==undefined)this.dropKills++;

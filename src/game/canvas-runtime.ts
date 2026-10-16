@@ -1,3 +1,4 @@
+import {openingWeapons,isOpeningWeapon,parseOpeningWeapon,openingHints} from '../core/opening-plan';
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
 import {magneticLight} from './magnetic-light';
 import {sweeperDirection} from '../core/sweeper';
@@ -80,7 +81,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;observedAt?:number;hidden?:boolean};
@@ -271,7 +272,7 @@ export class CanvasRuntime {
     this.weaponMotion.reset();
     this.weaponGuideUntil = 0;
     this.drawCount = 0; this.callbackCount = 0;
-    this.world = new World(1337); this.mode = 'playing'; this.target = 360;
+    this.world = new World(1337,1,this.save.openingWeapon); this.mode = 'playing'; this.target = 360;
     this.goalWasReady=false;this.pendingRecipeCompletion=null;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear();this.callbackWork.clear();this.maxCallbackWorkMs=0;this.previousCallbackWorkMs=0;this.interruptedFrames=[]; this.downAction = '';
@@ -329,7 +330,7 @@ export class CanvasRuntime {
     this.cancelTouch();
     if(this.mode==='branch'){this.mode='choice';return 'stay';}
     if (this.mode === 'choice'||this.mode==='contract-reward'||this.mode==='boss-reward') return 'stay';
-    if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'armory'||this.mode==='opening') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = this.achievementReturn; return 'stay'; }
     if(this.mode==='combos'){this.mode=this.combosReturn;return 'stay';}
     if (this.mode === 'rig') { this.mode='loadout';return 'stay'; }
@@ -386,6 +387,9 @@ export class CanvasRuntime {
     else if(action.startsWith('track:')&&this.mode==='achievements')trackAchievement(this.save.achievements,action.slice(6));
     else if(action==='track-clear'&&this.mode==='achievements')this.save.achievements.tracked=null;
     else if(action==='achievements-back'&&this.mode==='achievements')this.mode=this.achievementReturn;
+    else if(action==='opening-menu'&&this.mode==='menu')this.mode='opening';
+    else if(action==='opening-back'&&this.mode==='opening')this.mode='menu';
+    else if(action.startsWith('opening:')&&this.mode==='opening'){const kind=action.slice(8);if(isOpeningWeapon(kind))this.save.openingWeapon=kind;}
     else if (action === 'armory') { this.dossierWeapon = 'pulse'; this.mode = 'armory'; }
     else if (action.startsWith('dossier:')) {
       const weapon = action.slice(8) as WeaponKind;
@@ -630,6 +634,7 @@ export class CanvasRuntime {
       c.restore(); return;
     }
     if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
+    if(this.mode==='opening'){this.drawOpening();c.restore();return;}
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
     if (this.mode === 'combos') {this.drawCombos();c.restore();return;}
@@ -815,16 +820,16 @@ export class CanvasRuntime {
     }
     for(const beam of this.supportBeams) if(this.mode!=='menu'){if(beam.ricochet)ricochetLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);}
     for(const b of w.bullets) if(!b.hostile) projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
-    const playerY = this.mode === 'menu' ? 750 : C.playerY;
+    const playerY = this.mode === 'menu' ? 570 : C.playerY;
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0)
       overloadWake(c, w.player.x, playerY, w.time, w.growth.overload, this.save.settings.effects === 'weak');
-    c.fillStyle = '#0005'; c.beginPath(); c.ellipse(w.player.x + 5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#0005'; c.beginPath(); c.ellipse(this.mode==='menu'?365:w.player.x+5, playerY + 32, 53, 30, 0, 0, Math.PI * 2); c.fill();
     c.save();
     if (w.player.invulnerable > 0 && Math.floor(w.time * 15) % 2 === 0) c.globalAlpha = 0.65;
     const recoil = this.weaponMotion.sample(w.weaponKind, w.weaponStage(w.weaponKind), w.time);
     const pose = this.playerMotion.sample(w.player.x, w.time);
-    if (w.player.hp > 0) {
-      if (this.mode === 'menu') this.frameSprite('units.png', 2, 4, w.player.x, playerY, 200, 267);
+    if (w.player.hp > 0||this.mode==='menu') {
+      if (this.mode === 'menu') this.frameSprite(weaponDossier[this.save.openingWeapon].asset,1,3,360,playerY,110,147,1);
       else {
         this.drawMountedRig(playerY,pose);
         this.playerSprite(w.weaponStage(w.weaponKind) - 1, w.player.x, playerY, pose, recoil);
@@ -907,7 +912,7 @@ export class CanvasRuntime {
       }
       if (b.kind === 'crate') {
         if (b.weaponKind) {
-          const choice = w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加';
+          const choice = b.openingSupply?'预定':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加';
           const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '前方索敌 · 命中跳电' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
           const panelY = b.y - 158 >= this.hudTop + 172 ? b.y - 158 : Math.max(this.hudTop + 172, b.y + 70);
@@ -1063,6 +1068,8 @@ export class CanvasRuntime {
     this.text('G A T E  S H O O T E R', 360, 370, 27, '#72cde9');
     this.rect(280, 420, 160, 2, '#5bddff'); this.text('把奖励打高。把火力打满。', 360, 475, 29, '#c2dbe8');
     this.text(`最高分　${this.save.best}`, 360, 890, 26, '#e8c98d');
+    this.rect(176,650,368,96,'#173442');const openingLabel=`首箱预定 · ${weaponNames[this.save.openingWeapon]} T2　›`;this.text(openingLabel,360,685,25,weaponColors[this.save.openingWeapon],'center',true);
+    this.buttons.push({x:176,y:650,w:368,h:96,action:'opening-menu',label:openingLabel});this.text('8秒投送 · 击碎后拾取',360,734,21,'#b8d4e3');
     this.rect(176,754,368,70,'#173442');const goal=this.save.recipeGoal;
     const goalLabel=goal?`构筑目标 · ${recipes[goal].name}`:'选择构筑目标　›';this.text(goalLabel,360,789,25,'#d3e9b7','center',true);
     this.buttons.push({x:176,y:754,w:368,h:70,action:'combos-menu',label:goalLabel});
@@ -1071,6 +1078,22 @@ export class CanvasRuntime {
     for(const [i,label] of ['成就','设置'].entries()){const x=112+i*258;this.rect(x,1128,238,86,'#1a2d3c');this.text(label, x+119,1171,30,'#d8eaf5');this.buttons.push({x,y:1128,w:238,h:86,label,action:i?'settings':'achievements'});}
     const tracked=achievements.find(a=>a.id===this.save.achievements.tracked);
     this.text(tracked?`${this.save.achievements.unlocked.includes(tracked.id)?'已达成':'下局目标'} · ${tracked.name} · 到成就页查看`:'射击装备，再走位领取强化', 360, 1230, 23, '#99b6c9');
+  }
+  private drawOpening(){
+    this.rect(40,100,640,1100,'#102330');this.text('首箱预定',360,180,44,'#e7f5ff','center',true);
+    this.text('决定早期配件 · 后续仍可自由叠加',360,235,24,'#bdd8e7');
+    for(const [i,kind]of openingWeapons.entries()){
+      const y=270+i*180,selected=this.save.openingWeapon===kind,color=weaponColors[kind],entry=weaponDossier[kind];
+      this.rect(65,y,590,160,selected?'#2a4b59':'#1a3242');this.rect(65,y,5,160,color);
+      this.frameSprite(entry.asset,1,3,139,y+80,100,133,1);
+      this.text(`${weaponNames[kind]} T2`,220,y+38,31,color,'left',true);
+      this.text(selected?'已预定':'选择 ›',625,y+38,23,selected?'#f5dfa0':'#c5e0ec','right');
+      this.text(entry.role,220,y+82,24,'#e5f3fa','left');
+      this.text(openingHints[kind],220,y+124,22,'#bdd8e7','left');
+      this.buttons.push({x:65,y,w:590,h:160,action:`opening:${kind}`,label:`预定${weaponNames[kind]}`});
+    }
+    this.text('8秒首箱 · 打碎后仍需拾取 · 开局不直接发枪',360,1040,23,'#e2c994');
+    this.button('返回主界面',1100,'opening-back',true);
   }
   private drawAchievements() {
     this.rect(40,90,640,1120,'#102330');this.text('突围成就',360,155,42,'#effaff','center',true);
@@ -1425,7 +1448,7 @@ export class CanvasRuntime {
       weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
       weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
       contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,bossRewardRound:this.world.bossRewardRound,bossLootStats:{...this.world.bossLootStats},
-      score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
+      openingWeapon:this.world.openingWeapon??null,savedOpeningWeapon:this.save.openingWeapon,openingSupplies:this.world.bodies.filter(b=>b.active&&b.openingSupply).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,weapon:b.weaponKind,stage:b.stage})),score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
       magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
@@ -1466,7 +1489,7 @@ export function parseSave(value: unknown): Save {
   const data = value as Partial<Save>;
   if (data.version !== 1) return result;
   result.achievements = parseAchievements(data.achievements);
-  result.recipeGoal=parseRecipeGoal(data.recipeGoal);
+  result.recipeGoal=parseRecipeGoal(data.recipeGoal);result.openingWeapon=parseOpeningWeapon(data.openingWeapon);
   if (Number.isFinite(data.best) && data.best! >= 0) result.best = Math.floor(data.best!);
   if (data.settings?.effects === 'weak') result.settings.effects = 'weak';
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];
