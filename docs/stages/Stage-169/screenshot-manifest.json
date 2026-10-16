@@ -1,0 +1,37 @@
+[
+  {
+    "file": "screenshots/claim-mobile-weak.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/first-pair-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/mixed-desktop-weak.jpg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "screenshots/mixed-mobile-weak.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/mixed-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/pair-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/tier-mobile.jpg",
+    "width": 390,
+    "height": 843
+  }
+]

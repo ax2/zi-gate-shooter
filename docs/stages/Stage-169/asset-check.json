@@ -1,0 +1,25 @@
+{
+  "source": "art/source/gate-frame-v1.png",
+  "sourceSize": [
+    1659,
+    948
+  ],
+  "sourceSHA256": "db76dd26b5ae971d3a9cba6a21e4673c69818934218bb4e83cf10a5a4b1b7293",
+  "box": {
+    "left": 13,
+    "top": 46,
+    "width": 1630,
+    "height": 837
+  },
+  "centerOpaque": 0,
+  "centerPixels": 458490,
+  "visible": 522305,
+  "output": "public/assets/gate-frame-v1.png",
+  "outputSize": [
+    640,
+    329
+  ],
+  "outputBytes": 262016,
+  "rgbaDecodedBytes": 842240,
+  "outputSHA256": "fc500aef964c5270fd09241e29316e8cda0c161d79c09b5639e3faaf81438e22"
+}

@@ -631,7 +631,7 @@ it.each([false, true])('uses real hit timers for local flashes, freezes on pause
   setup(f.runtime.world); setup(reference);
   f.tick(); reference.step(C.step, 360); reference.drainEffects();
   const flashes = () => f.calls.filter(c => c.kind === 'drawImage' && c.composite === 'lighter');
-  expect(flashes()).toHaveLength(10); // Seven targets and three articulated player pieces.
+  expect(flashes()).toHaveLength(9); // Six sprite flashes and three player pieces; gate uses local conduits.
   expect(flashes().every(c => c.alpha > 0 && c.alpha <= (weak ? 0.18 : 0.48))).toBe(true);
   // The final number panel must remain opaque and use normal compositing.
   const label = f.calls.find(c => c.kind === 'fillText' && /^\+\d+%$/.test(c.args[0]));
@@ -1316,4 +1316,29 @@ it.each([false,true])('selects the earned third ballistic fork and draws only ac
  f.tick();expect(w.scatterRicochets).toBe(25);expect(f.runtime.diagnostics().ricochetTraces).toBeLessThanOrEqual(16);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffc35b')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#efad3244')).toBe(!weak);
  const count=f.runtime.diagnostics().ricochetTraces;f.runtime.pause();for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(count);
  expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(0);f.runtime.start();f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(0);
+});
+it.each([false,true])('renders the authored eight-slice gate, uses real tier energy and keeps numbers and hostile cores above it (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.player.x=w.player.px=68;const gate=w.spawn('gate',360,600);gate.speed=0;f.tick();
+ const pieces=()=>f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('gate-frame-v1.png'));
+ expect(pieces()).toHaveLength(8);expect(pieces().every(c=>c.composite==='source-over')).toBe(true);expect(f.calls.some(c=>c.kind==='fillRect'&&c.color==='#68e8ff')).toBe(false);
+ w.bullets.push({id:900001,x:360,y:600,px:360,py:600,vx:0,vy:0,damage:28,age:0,active:true,hostile:false});f.tick();
+ expect(gate.energy).toBe(28);expect(w.gatesTaken).toBe(0);expect(w.growth.bonus).toBe(0);expect(f.calls.filter(c=>c.kind==='fillRect'&&c.color==='#68e8ff')).toHaveLength(4);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#68e8ff'&&c.composite==='lighter')).toBe(true);
+ const x=pieces()[0].args[5];f.tick();expect(pieces()[0].args[5]).toBeLessThan(x);
+ const body=w.spawn('armor',360,600);body.hp=body.maxHp=1000;body.speed=0;body.timer=999;
+ w.bullets.push({id:900002,x:360,y:610,px:360,py:610,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});f.tick();
+ const frame=f.calls.findIndex(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('gate-frame-v1.png')),enemy=f.calls.findIndex(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('armor-v1.png')),number=f.calls.findIndex(c=>c.kind==='fillText'&&c.args[0]==='+15%'),shot=f.calls.findIndex(c=>c.kind==='fillRect'&&c.color==='#ffead7');
+ expect(frame).toBeLessThan(enemy);expect(number).toBeGreaterThan(enemy);expect(shot).toBeGreaterThan(number);expect(f.calls.some(c=>c.kind==='fillRect'&&c.color==='#071927f5')).toBe(false);
+ f.runtime.pause();f.tick();const before=pieces().map(c=>c.args.slice(1));for(let i=0;i<20;i++)f.tick();expect(pieces().map(c=>c.args.slice(1))).toEqual(before);
+});
+it('fits two native reward lines inside the extended physical gate without changing reward geometry',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.bonus=95;const gate=w.spawn('gate',360,600);gate.energy=144;gate.speed=0;const size=[gate.width,gate.height];f.tick();
+ const pieces=f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('gate-frame-v1.png'));expect(pieces).toHaveLength(8);expect(Math.min(...pieces.map(c=>c.args[6]))).toBe(488);expect(Math.max(...pieces.map(c=>c.args[6]+c.args[8]))).toBe(712);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='+5%')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='充能 +25')).toBe(true);expect([gate.width,gate.height]).toEqual(size);expect(w.growth.bonus).toBe(95);expect(w.gatesTaken).toBe(0);
+});
+it.each([false,true])('keeps paired gate borders distinct even during a real tier pulse and preserves the exclusive row (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.player.x=w.player.px=68;
+ const gates=[222,498].map(x=>{const b=w.spawn('gate',x,600);b.row=77;b.speed=0;return b;});f.tick();w.bullets.push({id:900009,x:222,y:600,px:222,py:600,vx:0,vy:0,damage:28,age:0,active:true,hostile:false});f.tick();f.tick();
+ const pieces=f.calls.filter(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('gate-frame-v1.png'));expect(pieces).toHaveLength(16);
+ const left=pieces.slice(0,8),right=pieces.slice(8);expect(Math.max(...left.map(c=>c.args[5]+c.args[7]))).toBeLessThan(Math.min(...right.map(c=>c.args[5])));
+ const panels=f.calls.filter(c=>c.kind==='fillRect'&&c.color==='#071927f5');expect(panels).toHaveLength(2);expect(panels.every(c=>c.args[2]===180)).toBe(true);expect(w.gatesTaken).toBe(0);expect(gates.every(g=>g.active&&g.width===240&&g.row===77)).toBe(true);
 });

@@ -1,0 +1,5 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 typecheck
+npm notice run tsc --noEmit
+src/game/canvas-runtime.ts(737,47): error TS2554: Expected 7-8 arguments, but got 6.
+src/game/gate-machine.ts(20,38): error TS2554: Expected 7-8 arguments, but got 6.

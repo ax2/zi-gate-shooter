@@ -91,3 +91,6 @@ Stage-87：blast-player-v1内置imagegen原创三阶机体，prompt与source保�
 Stage-88：arc-player-v1内置imagegen原创三阶，完整source/prompt保留；export-arc-player.mjs以58/0/-58横向窗口对齐，导出768×256/220808字节，候选未最终签收。
 
 Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成六格原创挂载，1536×1024透明源图；export-mounted-modules.mjs裁格缩放导出768×512/415736字节，六格安全边界通过。包含速射/霰射/穿甲/爆裂/电弧/光学；候选接入，最终美术待验。
+
+## Stage-169 机械数字门候选
+2026-10-16，内置image_gen生成原创透明门框，实际提示词gate-frame-v1-prompt.md、原图source/gate-frame-v1.png（1659×948 RGBA）；技术导出public/assets/gate-frame-v1.png为640×329、262016字节、解码842240字节。八片边框、真实蓄能导管/局部升档动作、双门紧凑排版与数字底板避敌；实际来源/哈希/alpha/导出/验收范围见GATE_FRAME_V1.md与docs/stages/Stage-169。非商业游戏素材，候选未获用户最终美术签收。

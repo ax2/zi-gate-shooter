@@ -1,0 +1,28 @@
+{
+  "url": "http://127.0.0.1:5253/tools/visual-fixtures/gate-machine.html",
+  "title": "机械成长门 · 正常流程验证",
+  "dom": "- text: 正常成长 / 真实门蓄能与穿过结算 / 虚拟时钟\n- button \"观察真实升档\" [disabled]\n- button \"观察同排双门\"\n- button \"观察混合奖励\"\n- button \"观察穿过领取\" [active]\n- button \"切换弱特效\"\n- generic: 108.28秒 / playing / actual-claim / 已领5门",
+  "logs": [],
+  "virtualClock": true,
+  "worldInjection": false,
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "captures": [
+        "tier-mobile",
+        "pair-mobile",
+        "mixed-mobile",
+        "mixed-mobile-weak",
+        "claim-mobile-weak"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "captures": [
+        "mixed-desktop-weak"
+      ]
+    }
+  ]
+}

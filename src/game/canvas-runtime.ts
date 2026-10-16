@@ -1,3 +1,4 @@
+import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
 import {ricochetLight} from './ricochet-light';
 import {reboundState} from '../core/rebound-charger';
 import {reboundLight} from './rebound-light';
@@ -182,7 +183,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v1.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -726,13 +727,15 @@ export class CanvasRuntime {
       c.globalAlpha = Math.min(1, (piece.life - piece.age) / 0.3) * (this.save.settings.effects === 'weak' ? 0.55 : 0.9);
       this.frameSprite('crate-v1.png', piece.frame, 3, 0, 0, piece.size, piece.size, 3); c.restore();
     }
+    // Physical reward frames sit below enemy art; the number panel is later.
+    for(const b of w.bodies)if(b.kind==='gate'){
+      const value=previewReward(w.growth,gateValue(b.energy,b.rewardKind),b.rewardKind),image=this.images.get('gate-frame-v1.png');
+      if(image)gateMachine(c,image,b,value.power>0&&value.energy>0,this.gateFeedback.pulse(b.id,w.time),this.save.settings.effects==='weak',pairedGate(b,w.bodies));
+    }
     for (const b of w.bodies) {
+      if(b.kind==='gate')continue;
       c.fillStyle = '#0005'; c.beginPath(); c.ellipse(b.x + 5, b.y + b.height * 0.3, b.width * 0.45, b.height * 0.2, 0, 0, Math.PI * 2); c.fill();
-      if (b.kind === 'gate') {
-        this.frameSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225);
-        this.hitSprite('props.png', b.rewardKind === 'energy' ? 4 : 3, 3, b.x, b.y, b.width + 72, 225, Math.max(b.hit, this.gateFeedback.pulse(b.id, w.time) * 0.07));
-        this.rect(b.x - b.width / 2 + 5, b.y - 54, b.width - 10, 108, '#071927f5');
-      } else if (b.kind === 'crate') {
+      if (b.kind === 'crate') {
         const frame = crateFrame(b.hp, b.maxHp);
         this.frameSprite('crate-v1.png', frame, 3, b.x, b.y, 148, 154, 3);
         this.hitSprite('crate-v1.png', frame, 3, b.x, b.y, 148, 154, b.hit, 0.07, 3);
@@ -920,17 +923,18 @@ export class CanvasRuntime {
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy, b.rewardKind), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
+        const paired=pairedGate(b,w.bodies),panelWidth=b.width-(paired?60:10);
         const pulse = this.gateFeedback.pulse(b.id, w.time);
         const numberScale = 1 + Math.sin(pulse * Math.PI) * (this.save.settings.effects === 'weak' ? 0.03 : 0.08);
-        this.rect(b.x - b.width / 2 + 5, b.y - (mixed ? 80 : 54), b.width - 10, mixed ? 164 : 108, '#071927f5');
-        this.text(mixed ? '穿过领取' : value.power ? '穿过领取 · 火力' : value.energy ? '穿过领取 · 充能' : '储能已满', b.x, b.y - (mixed ? 60 : 33), 25, '#a4d6e9');
+        if(!gatePanelBlocked(b,w.bodies,mixed))this.rect(b.x-panelWidth/2, b.y - (mixed ? 80 : 54), panelWidth, mixed ? 164 : 108, '#071927f5');
+        this.text(mixed ? '穿过领取' : value.power ? '穿过领取 · 火力' : value.energy ? '穿过领取 · 充能' : '储能已满', b.x, b.y - (mixed ? 60 : 33), paired?23:25, b.rewardKind==='energy'?'#e7c789':'#a4d6e9');
         if (mixed) {
           this.text(`+${value.power}%`, b.x, b.y - 18, 50 * numberScale, '#effaff', 'center', true);
           this.text(`充能 +${value.energy}`, b.x, b.y + 32, 36 * numberScale, '#ffe4ac', 'center', true);
         } else this.text(`+${value.power || value.energy}${value.power ? '%' : ''}`, b.x, b.y + 8, 50 * numberScale, '#effaff', 'center', true);
         const tier = C.thresholds.findIndex(t => t > b.energy);
         const progress = tier < 0 ? 1 : (b.energy - C.thresholds[tier - 1]) / (C.thresholds[tier] - C.thresholds[tier - 1]);
-        this.bar(b.x, b.y + (mixed ? 72 : 46), b.width - 32, progress, b.rewardKind === 'power' ? '#5bddff' : '#e5b96a');
+        this.bar(b.x, b.y + (mixed ? 72 : 46), panelWidth - 22, progress, b.rewardKind === 'power' ? '#5bddff' : '#e5b96a');
       } else if (b.kind === 'boss') {
         // Boss status is drawn after the HUD background in drawHud.
       } else if((b.empRemaining??0)>0){
