@@ -1,0 +1,32 @@
+[
+  {
+    "file": "screenshots/fork-desktop.jpg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "screenshots/fork-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/loadout-mobile.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/ricochet-desktop-weak.jpg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "screenshots/ricochet-mobile-weak.jpg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "screenshots/ricochet-mobile.jpg",
+    "width": 390,
+    "height": 843
+  }
+]

@@ -1,3 +1,4 @@
+import {ricochetLight} from './ricochet-light';
 import {reboundState} from '../core/rebound-charger';
 import {reboundLight} from './rebound-light';
 import {buildReceiptPosition,type ReceiptPosition} from './build-receipt';
@@ -101,7 +102,7 @@ export class CanvasRuntime {
   private impacts: { x: number; y: number; kind: WeaponKind; life: number;opticalBand?:number;prism?:boolean }[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean;seeker?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
-  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number}[] = [];
+  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number;ricochet?:boolean}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
@@ -370,7 +371,7 @@ export class CanvasRuntime {
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
       const branch=action.slice(7) as BuildBranch,route=this.branchRoute;
-      if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
+      if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -475,6 +476,10 @@ export class CanvasRuntime {
     if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
     if(e.type==='boss-kill')this.save.achievements.bosses++;
     if(['contract','formation-clear','fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
+    if(e.type==='ricochet'&&e.targetX!==undefined&&e.targetY!==undefined){
+      if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.2,laser:false,ricochet:true});
+      return;
+    }
     if(e.type==='scatter-pierce'&&this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y+25,tx:e.x,ty:e.y-35,life:.12,laser:false});
     if(e.type==='laser')this.opticalFiredAt=this.world.time;
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
@@ -792,7 +797,7 @@ export class CanvasRuntime {
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
-    for(const beam of this.supportBeams) if(this.mode!=='menu')supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);
+    for(const beam of this.supportBeams) if(this.mode!=='menu'){if(beam.ricochet)ricochetLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);}
     for(const b of w.bullets) if(!b.hostile) projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0)
@@ -1115,7 +1120,7 @@ export class CanvasRuntime {
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
       this.text(kind === 'arc' ? `${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
-        : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
+        : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':w.build.ballisticBranch==='ricochet'?'280范围 · 55%侧跳':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
     }
@@ -1276,18 +1281,18 @@ export class CanvasRuntime {
   }
   private drawBallisticBranch(){
     this.rect(35,120,650,1080,'#102330');
-    this.text('弹道改造 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('弹道改造 · 三选一',360,190,40,'#effaff','center',true);
     this.text('都保留霰射总伤害+30% · 弹数与扇角不变',360,250,24,'#bdd8e7');
-    for(const [i,branch] of (['penetrator','fragment'] as const).entries()){
-      const node=ballisticBranches[branch],y=315+i*290,color=branch==='penetrator'?'#aee6ff':'#ffd092';
-      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
-      this.text(node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,25,'#effaff','left');
-      this.text(branch==='penetrator'?'每颗霰弹最多命中两敌，直伤保留':`命中敌人后追加${BALLISTIC_FORK.radius}范围邻敌爆破`,90,y+133,24,'#d9e8f1','left');
-      this.text(branch==='penetrator'?'箱子、数字门与闭合护盾会截断':`${BALLISTIC_FORK.splash*100}%伤害 · 不充门 · 闭盾不扩散`,90,y+175,23,'#bdd8e7','left');
-      this.text('选择此改造　›',625,y+219,25,color,'right');
-      this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
+    for(const [i,branch] of (['penetrator','fragment','ricochet'] as const).entries()){
+      const node=ballisticBranches[branch],y=300+i*215,color=branch==='penetrator'?'#aee6ff':branch==='ricochet'?'#ffe3a4':'#ffd092';
+      this.rect(65,y,590,200,'#203e50');this.rect(65,y,5,200,color);
+      this.text(node.name,90,y+35,32,color,'left',true);this.text(node.role,90,y+68,24,'#effaff','left');
+      this.text(branch==='penetrator'?'每颗霰弹最多命中两敌，直伤保留':branch==='ricochet'?'每颗命中后跳向280范围内一名侧敌':`命中敌人后追加${BALLISTIC_FORK.radius}范围邻敌爆破`,90,y+105,23,'#d9e8f1','left');
+      this.text(branch==='penetrator'?'箱子、数字门与闭合护盾会截断':branch==='ricochet'?'横距至少80 · 55%伤害 · 不递归/不充门':`${BALLISTIC_FORK.splash*100}%伤害 · 不充门 · 闭盾不扩散`,90,y+141,22,'#bdd8e7','left');
+      this.text('选择此改造　›',625,y+177,24,color,'right');
+      this.buttons.push({x:65,y,w:590,h:200,action:`branch:${branch}`,label:node.name});
     }
-    this.text('本局选定不可切换 · 雷暴组合与旧武器保留',360,965,23,'#f0d19a');
+    this.text('本局选定不可切换 · 雷暴组合与旧武器保留',360,985,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
   }
   private drawElectricBranch(){
@@ -1399,7 +1404,7 @@ export class CanvasRuntime {
       framePulses:this.framePulses,renderedMode:this.renderedMode,imageCount:this.images.size,
       runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
-      ballisticBranch:this.world.build.ballisticBranch??null,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
+      ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
       electricBranch:this.world.build.electricBranch??null,seekerLinks:this.world.seekerLinks,capacitorBursts:this.world.capacitorBursts,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,

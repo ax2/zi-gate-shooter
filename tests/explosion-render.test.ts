@@ -1306,3 +1306,14 @@ it('routes an actual calibration pickup through readable combat receipts instead
  const receipt=()=>f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='霰射炮 · 专属精校1');expect(receipt()).toBeUndefined();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返冲锋：看清第二次转向')).toBe(true);
  enemy.active=false;f.tick();expect(receipt()?.args[2]).toBe(272);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='该武器伤害系数 150%')).toBe(true);
 });
+it.each([false,true])('selects the earned third ballistic fork and draws only actual bounded golden bounces (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.spawn('pickup',360,C.playerY,2);f.tick();
+ expect(f.runtime.activateControl('build:ballistic')).toBe(true);f.tick();const offer=w.spawn('pickup',360,C.playerY,2);offer.row=99;offer.weaponKind='pierce';f.tick();expect(f.runtime.activateControl('build:ballistic')).toBe(true);f.tick();
+ expect(f.runtime.mode).toBe('branch');for(const name of ['贯穿弹芯','爆破弹芯','跳弹弹芯'])expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===name)).toBe(true);
+ expect(f.runtime.activateControl('branch:ricochet')).toBe(true);f.tick();expect(w.build.ballisticBranch).toBe('ricochet');expect(w.build.spent).toBe(2);
+ w.player.x=w.player.px=68;const a=w.spawn('armor',360,600),b=w.spawn('armor',560,600);for(const body of [a,b]){body.hp=body.maxHp=1000;body.speed=0;body.timer=999;}
+ for(let i=0;i<25;i++)w.bullets.push({id:900000+i,x:360,y:600,px:360,py:600,vx:0,vy:0,damage:1,age:0,active:true,hostile:false,weaponKind:'scatter'});
+ f.tick();expect(w.scatterRicochets).toBe(25);expect(f.runtime.diagnostics().ricochetTraces).toBeLessThanOrEqual(16);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffc35b')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#efad3244')).toBe(!weak);
+ const count=f.runtime.diagnostics().ricochetTraces;f.runtime.pause();for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(count);
+ expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(0);f.runtime.start();f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(0);
+});

@@ -1,9 +1,11 @@
-export type BallisticBranch='penetrator'|'fragment';
+export type BallisticBranch='penetrator'|'fragment'|'ricochet';
 export const ballisticBranches={
  penetrator:{name:'贯穿弹芯',detail:'霰射总伤害+30% · 每颗贯穿2敌',role:'瞄准纵向敌列，打穿前排'},
  fragment:{name:'爆破弹芯',detail:'霰射总伤害+30% · 140范围50%溅射',role:'瞄准紧凑敌群，扩散清场'},
+ ricochet:{name:'跳弹弹芯',detail:'霰射总伤害+30% · 280范围55%跳弹',role:'借前排命中，打击分散侧翼'},
 } as const;
 export const BALLISTIC_FORK={targets:2,radius:140,splash:.5} as const;
+export const RICOCHET={range:280,minSide:80,damage:.55} as const;
 export type ElectricBranch='spread'|'capacitor'|'seeker';
 export type BuildBranch=OpticalBranch|ElectricBranch|BallisticBranch;
 export const SEEKER_BRIDGE={range:340} as const;
@@ -24,7 +26,7 @@ export const routes: Route[] = ['ballistic','electric','optical'];
 export const tree: Record<Route, {name:string; detail:string}[]> = {
   ballistic: [
     {name:'霰射机构',detail:'安装T1霰射 · 霰射伤害+10%'},
-    {name:'重型弹芯 · 选择分支',detail:'总伤害+30% · 二选一：贯穿/爆破'},
+    {name:'重型弹芯 · 选择分支',detail:'总伤害+30% · 贯穿/爆破/跳弹'},
     {name:'雷暴霰射',detail:'霰射命中追加一次跳电 · 需雷电路线'},
   ],
   electric: [
@@ -43,7 +45,7 @@ export class BuildTree {
   opticalBranch?:OpticalBranch;
   electricBranch?:ElectricBranch;
   node(route:Route,index:number,branch:BuildBranch|undefined=route==='ballistic'?this.ballisticBranch:route==='electric'?this.electricBranch:this.opticalBranch){
-    if(route==='ballistic'&&index===1&&(branch==='penetrator'||branch==='fragment'))return ballisticBranches[branch];
+    if(route==='ballistic'&&index===1&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))return ballisticBranches[branch];
     if(route==='electric'&&index===1&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))return electricBranches[branch];
     return route==='optical'&&index===1&&(branch==='burn'||branch==='relay')?opticalBranches[branch]:tree[route][index];
   }
@@ -63,10 +65,10 @@ export class BuildTree {
   }
   choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;
+    if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;
     if(route==='ballistic'&&this.ranks.ballistic===1){
       if(this.ballisticBranch)return false;
-      this.ballisticBranch=branch==='fragment'?'fragment':'penetrator';
+      this.ballisticBranch=branch==='ricochet'?'ricochet':branch==='fragment'?'fragment':'penetrator';
     }
     if(route==='electric'&&this.ranks.electric===1){
       if(this.electricBranch)return false;

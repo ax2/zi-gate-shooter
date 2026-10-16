@@ -1,0 +1,28 @@
+{
+  "url": "http://127.0.0.1:5252/tools/visual-fixtures/ricochet.html",
+  "title": "跳弹弹芯 · 正常成长验证",
+  "dom": "- text: 正常获得研发与装备 / 虚拟时钟 / 无World注入\n- button \"推进至弹芯选择\" [disabled]\n- button \"选择跳弹弹芯\" [disabled]\n- button \"观察下次跳弹\" [disabled]\n- button \"切换弱特效\" [disabled]\n- button \"查看当前火力\" [disabled]\n- generic: 25.93秒 / loadout / actual-loadout / 跳弹1次",
+  "logs": [],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "flows": [
+        "fork-mobile",
+        "ricochet-mobile",
+        "ricochet-mobile-weak",
+        "loadout-mobile"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "flows": [
+        "fork-desktop",
+        "ricochet-desktop-weak"
+      ]
+    }
+  ],
+  "virtualClock": true,
+  "worldInjection": false
+}

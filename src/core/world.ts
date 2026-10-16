@@ -7,7 +7,7 @@ import {ION_STORM} from './ion-storm';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
-import { BuildTree, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
+import { BuildTree, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
@@ -85,7 +85,7 @@ export class World {
     if(interrupted>=2)this.conduitTacticalWins++;
     this.effects.push({type:'emp',x:source.x,y:source.y,size:CONDUIT.radius,text:`中继击破 · ${affected}台停火`,detail:interrupted?`中断${interrupted}台蓄能 · 已发敌弹仍危险`:'停火1.5秒 · 已发敌弹仍危险'});
   }
-  scatterPierces=0;scatterBursts=0;scatterSplashHits=0;
+  scatterPierces=0;scatterBursts=0;scatterSplashHits=0;scatterRicochets=0;
   ionCharge=0;ionBursts=0;ionHits=0;
   private ionReadyAt=0;
   private ionImpact(body:Body,damage:number){
@@ -624,6 +624,16 @@ export class World {
           const hpBefore=body.hp;
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(protectedEntry)return;
+          if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='ricochet'){
+            const target=this.bodies.filter(other=>other!==body&&other.active&&other.kind in C.enemies
+              &&!(other.dropGrace??0)&&!guardClosed(other)&&!(other.kind==='boss'&&this.phase!=='boss')
+              &&other.y>=C.playerShotTop&&other.y<=C.playerY&&Math.abs(other.x-body.x)>=RICOCHET.minSide
+              &&Math.hypot(other.x-body.x,other.y-body.y)<=RICOCHET.range)
+              .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id)[0];
+            if(target){const before=target.hp;this.hit(target,bullet.damage*RICOCHET.damage,'scatter');
+              if(target.hp<before){this.scatterRicochets++;this.effects.push({type:'ricochet',x:body.x,y:body.y,targetX:target.x,targetY:target.y,weaponKind:'scatter'});}
+            }
+          }
           if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);
           if(bullet.weaponKind==='arc')this.capacitor(body,bullet.damage);
           if(ionEligible&&body.hp<hpBefore)this.ionImpact(body,bullet.damage);
