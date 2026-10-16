@@ -1,0 +1,15 @@
+{
+  "weakCurrentMatch": true,
+  "lineActualHit": 1,
+  "lineActualBeam": 1,
+  "lineTime": 323.0666666667015,
+  "quickHitsRequired": 2,
+  "quickTime": 157.36666666668404,
+  "choiceSameTime": true,
+  "pointSpentDelta": 1,
+  "weaponsKept": true,
+  "relatedTests": 58,
+  "additionalChecks": 51,
+  "frozenResources": 46,
+  "humanBalance": false
+}

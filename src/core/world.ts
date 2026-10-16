@@ -11,7 +11,7 @@ import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {ION_STORM} from './ion-storm';
-import { FRACTURE } from './combos';
+import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
 import { BuildTree, isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BuildBranch, type Route } from './build-tree';
@@ -71,9 +71,11 @@ export class World {
     return this.researchPoints-before;
   }
   chooseBuild(route: Route,branch?:BuildBranch) {
+    if(isFractureAugment(branch)&&!this.canRefineFracture())return false;
     if(isPhotonAugment(branch)&&!this.canRefinePhoton())return false;
     if(isMagneticAugment(branch)&&!this.canRefineMagnetic())return false;
     if(!this.build.choose(route,this.buildPoints,branch))return false;
+    if(isFractureAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'裂甲精研 · '+fractureAugments[branch].name,detail:fractureAugments[branch].detail+' · 常规精调保留'});
     if(isPhotonAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'光链精研 · '+photonAugments[branch].name,detail:photonAugments[branch].detail+' · 常规精调保留'});
     if(isMagneticAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'磁暴精研 · '+magneticAugments[branch].name,detail:branch==='field-wide'?`半径${MAGNETIC_REFINEMENT.wideRadius} · 每拍${MAGNETIC_REFINEMENT.wideDamage*100}% · 常规精调保留`:`场外${MAGNETIC_REFINEMENT.linkRange}内一敌 · 原三拍/常规精调保留`});
     const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
@@ -252,6 +254,9 @@ export class World {
   }
   private announcedFracture=false;
   fractureUnlocked(){return this.activeWeapons.includes('pierce')&&this.activeWeapons.includes('blast')&&this.weaponStage('pierce')>=2&&this.weaponStage('blast')>=2;}
+  canRefineFracture(){return this.fractureUnlocked()&&this.build.ranks.ballistic>=3&&!this.build.fractureAugment;}
+  fractureProfile(){return fractureProfile(this.build.fractureAugment);}
+  fractureWaves=0;fractureWaveHits=0;
   private announceFracture(){
     this.announceMagnetic();
     if(!this.announcedFracture&&this.fractureUnlocked()){
@@ -260,15 +265,35 @@ export class World {
     }
   }
   private fracture(body:Body,damage:number){
-    if(!this.fractureUnlocked()||!body.active||!(body.kind in C.enemies)||guardClosed(body)||this.time<(body.fractureReadyAt??0))return;
+    if(this.bossVictory||this.player.hp<=0||!this.fractureUnlocked()||!body.active||!(body.kind in C.enemies)||guardClosed(body)||this.time<(body.fractureReadyAt??0))return;
+    const profile=this.fractureProfile();
     body.fractureHits=(body.fractureHits??0)+1;
-    if(body.fractureHits<FRACTURE.hits)return;
+    if(body.fractureHits<profile.hits)return;
     body.fractureHits=0;body.fractureReadyAt=this.time+FRACTURE.cooldown;this.fractureBursts++;
     this.effects.push({type:'fracture',x:body.x,y:body.y,size:FRACTURE.radius,weaponKind:'blast'});
     this.hit(body,damage*FRACTURE.direct,'blast');
+    if(this.bossVictory)return;
     for(const other of this.bodies)if(other!==body&&other.active&&other.kind in C.enemies
       &&other.y>=C.playerShotTop&&other.y<=C.playerY&&!(other.kind==='boss'&&this.phase!=='boss')
-      &&Math.hypot(other.x-body.x,other.y-body.y)<=FRACTURE.radius)this.hit(other,damage*FRACTURE.splash,'blast');
+      &&Math.hypot(other.x-body.x,other.y-body.y)<=FRACTURE.radius){
+        if(this.bossVictory)break;this.hit(other,damage*FRACTURE.splash,'blast');
+      }
+    if(this.build.fractureAugment==='fracture-line'&&!this.bossVictory)this.fractureWave(body,damage);
+  }
+  private fractureWave(source:Body,damage:number){
+    const start=source.y,top=Math.max(C.playerShotTop,start-FRACTURE_LINE.range);if(top>=start)return;
+    const candidates=this.bodies.filter(b=>b.active&&b.id!==source.id&&b.kind!=='pickup'&&b.y<start&&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss'))
+      .map(b=>({b,t:sweep(source.x,start,source.x,top,b.x,b.y,b.x,b.y,b.width/2+FRACTURE_LINE.width/2,b.height/2)}))
+      .filter((h):h is {b:Body;t:number}=>h.t!==null).sort((a,b)=>a.t-b.t||a.b.id-b.b.id);
+    let end:number=top,count=0;
+    for(const {b}of candidates){
+      if(this.bossVictory||this.player.hp<=0)break;if(!b.active)continue;
+      const contact=Math.min(start,b.y+b.height/2),blocked=guardClosed(b)||(b.dropGrace??0)>0;
+      if(b.kind==='gate'||b.kind==='crate'||(b.dropGrace??0)>0){end=contact;break;}
+      const before=b.hp;this.hit(b,damage*FRACTURE_LINE.damage,'blast');if(b.hp<before)this.fractureWaveHits++;
+      if(blocked||++count>=FRACTURE_LINE.targets||this.bossVictory){end=contact;break;}
+    }
+    this.fractureWaves++;this.effects.push({type:'fracture-wave',x:source.x,y:start,targetX:source.x,targetY:end});
   }
   private calibrations=new Map<WeaponKind,number>();
   weaponCalibration(kind:WeaponKind){return this.calibrations.get(kind)??0;}

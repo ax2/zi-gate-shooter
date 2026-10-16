@@ -1,0 +1,10 @@
+import {it,expect} from 'vitest';import {mkdirSync,writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {C} from '../src/core/config';import {progressionTarget} from './helpers/progression-driver';
+it('earns both fracture refinements through normal pierce openings and records actual effects',()=>{const runs=[];for(const option of ['fracture-quick','fracture-line']){const w=new World(1337,1,'pierce');let aim=360,selected=null;const samples=[];
+for(let frame=0;frame<900*60&&w.phase!=='dead';frame++){
+ if(w.bossRewardRound!==null&&w.phase==='recovery'&&w.phaseTime>=C.bossLootReveal)w.claimBossReward(w.weaponStage('blast')<2?'blast':'research');
+ const available=w.build.available(w.buildPoints),route=w.build.ranks.electric<1?'electric':w.build.ranks.ballistic<3||w.canRefineFracture()?'ballistic':available.find(r=>w.build.ranks[r]<3)??'ballistic';
+ if(available.includes(route)){const branch=route==='ballistic'&&w.canRefineFracture()?option:w.build.ranks[route]===1?route==='ballistic'?'ricochet':route==='electric'?'seeker':'relay':undefined;if(w.chooseBuild(route,branch)&&w.build.fractureAugment&&!selected)selected={time:w.time,hp:w.player.hp,points:w.buildPoints,spent:w.build.spent,weapons:[...w.activeWeapons]};}
+ if(frame%6===0)aim=progressionTarget(w,w.weaponStage('blast')<2?'blast':undefined);w.step(C.step,aim);const effects=w.drainEffects();if(samples.length<60&&effects.some(e=>e.type==='fracture-wave'))samples.push({time:w.time,effects:effects.filter(e=>e.type==='fracture-wave'),bodies:w.bodies.filter(b=>b.active).map(b=>({kind:b.kind,x:b.x,y:b.y,hp:b.hp}))});}
+ runs.push({option,selected,samples,time:w.time,hp:w.player.hp,round:w.round,bursts:w.fractureBursts,waves:w.fractureWaves,hits:w.fractureWaveHits,ranks:w.build.ranks,refinements:w.build.refinements,peakBodies:w.peakBodies,peakBullets:w.peakBullets});}
+ mkdirSync('build/qa/Stage-184',{recursive:true});writeFileSync('build/qa/Stage-184/normal.json',JSON.stringify(runs,null,2));for(const r of runs){expect(r.selected).not.toBeNull();expect(r.time).toBeCloseTo(900);expect(r.bursts).toBeGreaterThan(0);}expect(runs[1].hits).toBeGreaterThan(0);
+},60000);
