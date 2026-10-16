@@ -1,7 +1,15 @@
+import type {IonAugment} from '../core/ion-storm';
 import {C} from '../core/config';
-export function ionChargeLight(c:CanvasRenderingContext2D,x:number,y:number,hits:number){
+export function ionChargeLight(c:CanvasRenderingContext2D,x:number,y:number,hits:number,augment?:IonAugment){
   c.save();c.translate(x,y);c.lineWidth=3;
   for(let i=0;i<6;i++){c.strokeStyle=i<hits?'#b3ffe2':'#263d45';c.beginPath();c.arc(0,0,25,-Math.PI+i*Math.PI/3,-Math.PI+(i+.65)*Math.PI/3);c.stroke();}
+  if(augment){
+    c.fillStyle='#162f3c';c.strokeStyle='#b3e8ed';c.lineWidth=2;
+    for(const side of [-1,1]){
+      c.beginPath();c.moveTo(side*22,18);c.lineTo(side*36,10);c.lineTo(side*34,-20);c.lineTo(side*24,-30);c.closePath();c.fill();c.stroke();
+      c.strokeStyle=augment==='ion-orb'?'#a1ffe5':'#bdd6ff';c.beginPath();c.moveTo(side*29,4);c.lineTo(side*(augment==='ion-orb'?29:38),-22);c.stroke();
+    }
+  }
   c.restore();
 }
 /** Impact corona with a bright core and broken orbiting arcs; never an opaque disk. */

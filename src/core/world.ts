@@ -13,7 +13,7 @@ import {canLaserChain,isPhotonAugment,photonAugments,laserChainProfile} from './
 import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
-import {ION_STORM} from './ion-storm';
+import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type IonSpear} from './ion-storm';
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
@@ -76,6 +76,7 @@ export class World {
     return this.researchPoints-before;
   }
   chooseBuild(route: Route,branch?:BuildBranch) {
+    if(isIonAugment(branch)&&!this.canRefineIon())return false;
     if(isFractureAugment(branch)&&!this.canRefineFracture())return false;
     if(isPhotonAugment(branch)&&!this.canRefinePhoton())return false;
     if(isMagneticAugment(branch)&&!this.canRefineMagnetic())return false;
@@ -83,6 +84,7 @@ export class World {
     if(isFractureAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'裂甲精研 · '+fractureAugments[branch].name,detail:fractureAugments[branch].detail+' · 常规精调保留'});
     if(isPhotonAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'光链精研 · '+photonAugments[branch].name,detail:photonAugments[branch].detail+' · 常规精调保留'});
     if(isMagneticAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'磁暴精研 · '+magneticAugments[branch].name,detail:branch==='field-wide'?`半径${MAGNETIC_REFINEMENT.wideRadius} · 每拍${MAGNETIC_REFINEMENT.wideDamage*100}% · 常规精调保留`:`场外${MAGNETIC_REFINEMENT.linkRange}内一敌 · 原三拍/常规精调保留`});
+    if(isIonAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'离子精研 · '+ionAugments[branch].name,detail:ionAugments[branch].detail+' · 原放电与常规精调保留'});
     const kind=route==='ballistic'?'scatter':route==='electric'?'arc':null;
     if(kind && !this.activeWeapons.includes(kind)) {
       for(const owned of this.activeWeapons){this.weaponStages.set(owned,this.weaponStage(owned));this.acquiredWeapons.add(owned);}
@@ -108,6 +110,77 @@ export class World {
   }
   scatterPierces=0;scatterBursts=0;scatterSplashHits=0;scatterRicochets=0;
   ionCharge=0;ionBursts=0;ionHits=0;
+  ionOrbs:IonOrb[]=[];ionSpears:IonSpear[]=[];
+  ionOrbSpawns=0;ionOrbHits=0;ionSpearShots=0;ionSpearHits=0;ionBonusDamage=0;
+  canRefineIon(){return this.build.ranks.electric>=3&&this.build.refinements.electric>=2&&!this.build.ionAugment
+    &&this.activeWeapons.includes('arc')&&this.weaponStage('arc')>=3&&!this.canRefineMagnetic();}
+  private ionLive(){return this.player.hp>0&&!this.bossVictory&&(this.phase==='running'||this.phase==='boss');}
+  private launchIon(body:Body,damage:number){
+    if(!this.ionLive()||body.y<=C.playerShotTop)return;
+    const base={x:body.x,y:body.y,px:body.x,py:body.y,age:0,damage,active:true,originId:body.id};
+    if(this.build.ionAugment==='ion-orb'&&this.ionOrbs.filter(p=>p.active).length<ION_ORB.limit){
+      const y=Math.min(C.playerY-24,body.y+Math.min(80,body.height/2+32));
+      this.ionOrbs.push({...base,y,py:y,id:this.nextId++,pulses:0});this.ionOrbSpawns++;
+    }
+    if(this.build.ionAugment==='ion-spear'&&body.y-12>C.playerShotTop&&this.ionSpears.filter(p=>p.active).length<=ION_SPEAR.limit-2){
+      for(const side of [-1,1]){
+        let x=body.x+side*12,y=body.y-12;
+        const target=this.bodies.filter(b=>b.active&&b.id!==body.id&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0)
+          &&(b.x-body.x)*side>24&&b.y<=body.y+32&&b.y>=C.playerShotTop&&b.y<=C.playerY
+          &&!(b.kind==='boss'&&this.phase!=='boss')&&Math.hypot(b.x-x,b.y-y)<=ION_SPEAR.aimRange)
+          .sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)||a.id-b.id)[0];
+        const fallback=!target&&side===-1&&body.active&&body.hp>0&&!guardClosed(body)&&!(body.dropGrace??0);
+        if(fallback){x=body.x-body.width/2-16;y=body.y+16;}
+        const aim=target??(fallback?body:undefined);
+        const dx=aim?aim.x-x:side,dy=aim?Math.min(-16,aim.y-y):-1,length=Math.hypot(dx,dy),speed=ION_SPEAR.speed*Math.SQRT2;
+        this.ionSpears.push({...base,id:this.nextId++,x,px:x,y,py:y,vx:dx/length*speed,vy:dy/length*speed,remaining:ION_SPEAR.targets,hitBodies:fallback?[]:[body.id]});
+      }
+      this.ionSpearShots+=2;
+    }
+  }
+  private ionBonusHit(body:Body,damage:number,orb:boolean){
+    const before=body.hp;this.hit(body,damage,'arc');
+    if(body.hp<before){if(orb)this.ionOrbHits++;else this.ionSpearHits++;this.ionBonusDamage+=Math.min(before,before-body.hp);}
+  }
+  /** Derived projectiles share chronological contact resolution, without calling electric procs. */
+  private advanceIon(dt:number,add:(t:number|null,rank:number,id:number,apply:()=>void)=>void){
+    if(!this.ionLive()){this.ionOrbs=[];this.ionSpears=[];return;}
+    for(const p of [...this.ionOrbs,...this.ionSpears]){
+      if(!p.active)continue;
+      const orb='pulses' in p,life=orb?ION_ORB.life:ION_SPEAR.life,oldAge=p.age;
+      const duration=Math.min(dt,Math.max(0,life-oldAge));p.px=p.x;p.py=p.y;
+      p.x+=(orb?0:p.vx)*duration;p.y+=(orb?-ION_ORB.speed:p.vy)*duration;p.age+=dt;
+      const fraction=Math.min(duration/dt,p.y<C.playerShotTop?(p.py-C.playerShotTop)/(p.py-p.y)*duration/dt:1);
+      for(const b of this.bodies){
+        if(!b.active||b.kind==='pickup'||(b.kind==='boss'&&this.phase!=='boss')||(b.id===p.originId&&(orb||p.hitBodies.includes(b.id))))continue;
+        const blocker=b.kind==='crate'||b.kind==='gate'||guardClosed(b);
+        if(orb&&!blocker)continue;
+        const scale=duration>0?fraction*dt/duration:0;
+        const contact=sweep(p.px,p.py,p.px+(p.x-p.px)*scale,p.py+(p.y-p.py)*scale,b.px,b.py,b.px+(b.x-b.px)*fraction,b.py+(b.y-b.py)*fraction,b.width/2+5,b.height/2+5);
+        add(contact===null?null:contact*fraction,0,p.id,()=>{
+          if(!p.active||!b.active||!this.ionLive())return;
+          if(orb){if(b.kind==='crate'||b.kind==='gate'||guardClosed(b))p.active=false;return;}
+          if(p.hitBodies.includes(b.id))return;
+          p.hitBodies.push(b.id);
+          if(b.kind==='crate'||b.kind==='gate'||(b.dropGrace??0)>0){p.active=false;return;}
+          this.ionBonusHit(b,p.damage*ION_SPEAR.damage,false);
+          if(guardClosed(b)||--p.remaining<=0)p.active=false;
+        });
+      }
+      if(orb)while(p.pulses<ION_ORB.pulses.length&&ION_ORB.pulses[p.pulses]<=Math.min(life,p.age)+1e-9){
+        const t=Math.max(0,(ION_ORB.pulses[p.pulses++]-oldAge)/dt),y=p.py-ION_ORB.speed*t*dt;
+        add(t,.5,p.id,()=>{
+          if(!p.active||!this.ionLive()||y<C.playerShotTop)return;
+          const targets=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0)
+            &&!(b.kind==='boss'&&this.phase!=='boss')&&b.y>=C.playerShotTop&&b.y<=C.playerY)
+            .map(b=>({b,d:Math.hypot(b.px+(b.x-b.px)*t-p.x,b.py+(b.y-b.py)*t-y)}))
+            .filter(v=>v.d<=ION_ORB.radius).sort((a,b)=>a.d-b.d||a.b.id-b.b.id).slice(0,ION_ORB.targets);
+          this.effects.push({type:'ion-storm',x:p.x,y,size:ION_ORB.radius,weaponKind:'arc'});
+          for(const {b} of targets){if(!this.ionLive())break;if(b.active)this.ionBonusHit(b,p.damage*ION_ORB.damage,true);}
+        });
+      }
+    }
+  }
   private ionReadyAt=0;
   private ionImpact(body:Body,damage:number){
     if(this.build.ranks.electric<3||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))return;
@@ -124,6 +197,7 @@ export class World {
       if(!target.active||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))continue;
       const before=target.hp;this.hit(target,damage*ION_STORM.damage,'arc');if(target.hp<before)this.ionHits++;
     }
+    this.launchIon(body,damage);
   }
   seekerLinks=0;
   capacitorBursts=0;
@@ -725,6 +799,7 @@ export class World {
     for (const b of this.bullets) { b.px = b.x; b.py = b.y; b.x += b.vx * dt; b.y += b.vy * dt; b.age += dt; }
     const contacts: Contact[] = [];
     const add = (t: number | null, rank: number, id: number, apply: () => void) => { if (t !== null) contacts.push({ t, rank, id, apply }); };
+    this.advanceIon(dt,add);
     for (const bullet of this.bullets) {
       if (bullet.hostile) {
         add(sweep(bullet.px, bullet.py, bullet.x, bullet.y, this.player.px, C.playerY, this.player.x, C.playerY, 27, 31), 1, bullet.id, () => {
@@ -925,6 +1000,10 @@ export class World {
     for(const b of this.bodies)if(b.bountyRound!==undefined&&b.hp>0&&(!b.active||b.y>=1344))this.contract?.targetEscaped(b.bountyRound);
     this.bodies = this.bodies.filter(b => b.active && b.y < 1344);
     this.bullets = this.bullets.filter(b => b.active && b.y > (b.hostile ? -90 : C.playerShotTop) && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
+    if(!this.ionLive()){this.ionOrbs=[];this.ionSpears=[];}else{
+      this.ionOrbs=this.ionOrbs.filter(p=>p.active&&p.age<ION_ORB.life&&p.y>C.playerShotTop);
+      this.ionSpears=this.ionSpears.filter(p=>p.active&&p.age<ION_SPEAR.life&&p.y>C.playerShotTop&&p.x>-40&&p.x<760);
+    }
     const contract=this.contract;
     if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0,contract.proof?this.proofCount(contract.proof.kind):0)){
       if(contract.status==='won'){

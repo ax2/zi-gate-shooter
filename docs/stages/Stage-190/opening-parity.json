@@ -1,0 +1,37 @@
+[
+  {
+    "weapon": "pulse",
+    "steps": 10800,
+    "seconds": 180.00000000003539,
+    "hp": 3,
+    "sha256": "6205d0486704e3a0c487995edbbf61a79e14146c6be475557b5a4c2b3f4368b0"
+  },
+  {
+    "weapon": "scatter",
+    "steps": 10800,
+    "seconds": 180.00000000003539,
+    "hp": 3,
+    "sha256": "21ebe6842e552e38fec3a9e4c983779709a75b90ee2dbbfecdf5df2ef3ccdc11"
+  },
+  {
+    "weapon": "pierce",
+    "steps": 10800,
+    "seconds": 180.00000000003539,
+    "hp": 3,
+    "sha256": "5f05b666782e3abe061a21a7fb6e2936b002b369b514b45043e31c7dc9938dc9"
+  },
+  {
+    "weapon": "blast",
+    "steps": 10800,
+    "seconds": 180.00000000003539,
+    "hp": 3,
+    "sha256": "a53716108d012a3b50f12f8bf1931df2542984ef1941f5c386119335bbc6cd76"
+  },
+  {
+    "weapon": "arc",
+    "steps": 10800,
+    "seconds": 180.00000000003539,
+    "hp": 3,
+    "sha256": "e72ce75e3806f7fbae7ffb45260e55d25c6df8323dfae23922762ea6cfdcc411"
+  }
+]

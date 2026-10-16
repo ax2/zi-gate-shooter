@@ -1,0 +1,206 @@
+[
+  {
+    "seed": 1337,
+    "option": "ion-orb",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 384,
+    "decision": {
+      "before": {
+        "time": 138.56666666666908,
+        "spent": 5,
+        "refinements": 2,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2
+          },
+          {
+            "kind": "arc",
+            "stage": 3
+          },
+          {
+            "kind": "scatter",
+            "stage": 3
+          }
+        ],
+        "charge": 0
+      },
+      "afterSpent": 6,
+      "afterRefinements": 3,
+      "afterCharge": 0
+    },
+    "firstHit": {
+      "time": 158.33333333335148,
+      "round": 2,
+      "orbHits": 1,
+      "spearHits": 0,
+      "damage": 29.302000000000135
+    },
+    "bursts": 31,
+    "baseHits": 41,
+    "orbSpawns": 29,
+    "orbHits": 36,
+    "spearShots": 0,
+    "spearHits": 0,
+    "bonusDamage": 2001.8925500000003,
+    "maxOrbs": 1,
+    "maxSpears": 0,
+    "peakBodies": 9,
+    "peakBullets": 51
+  },
+  {
+    "seed": 1337,
+    "option": "ion-spear",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 384,
+    "decision": {
+      "before": {
+        "time": 138.56666666666908,
+        "spent": 5,
+        "refinements": 2,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2
+          },
+          {
+            "kind": "arc",
+            "stage": 3
+          },
+          {
+            "kind": "scatter",
+            "stage": 3
+          }
+        ],
+        "charge": 0
+      },
+      "afterSpent": 6,
+      "afterRefinements": 3,
+      "afterCharge": 0
+    },
+    "firstHit": {
+      "time": 158.25000000001808,
+      "round": 2,
+      "orbHits": 0,
+      "spearHits": 1,
+      "damage": 62.789999999999964
+    },
+    "bursts": 31,
+    "baseHits": 41,
+    "orbSpawns": 0,
+    "orbHits": 0,
+    "spearShots": 58,
+    "spearHits": 23,
+    "bonusDamage": 2571.5398999999966,
+    "maxOrbs": 0,
+    "maxSpears": 2,
+    "peakBodies": 9,
+    "peakBullets": 51
+  },
+  {
+    "seed": 9001,
+    "option": "ion-orb",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 380,
+    "decision": {
+      "before": {
+        "time": 138.56666666666908,
+        "spent": 5,
+        "refinements": 2,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2
+          },
+          {
+            "kind": "arc",
+            "stage": 3
+          },
+          {
+            "kind": "scatter",
+            "stage": 3
+          }
+        ],
+        "charge": 1
+      },
+      "afterSpent": 6,
+      "afterRefinements": 3,
+      "afterCharge": 1
+    },
+    "firstHit": {
+      "time": 158.33333333335148,
+      "round": 2,
+      "orbHits": 1,
+      "spearHits": 0,
+      "damage": 29.302000000000135
+    },
+    "bursts": 28,
+    "baseHits": 38,
+    "orbSpawns": 25,
+    "orbHits": 34,
+    "spearShots": 0,
+    "spearHits": 0,
+    "bonusDamage": 2427.0876000000035,
+    "maxOrbs": 1,
+    "maxSpears": 0,
+    "peakBodies": 9,
+    "peakBullets": 59
+  },
+  {
+    "seed": 9001,
+    "option": "ion-spear",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 380,
+    "decision": {
+      "before": {
+        "time": 138.56666666666908,
+        "spent": 5,
+        "refinements": 2,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2
+          },
+          {
+            "kind": "arc",
+            "stage": 3
+          },
+          {
+            "kind": "scatter",
+            "stage": 3
+          }
+        ],
+        "charge": 1
+      },
+      "afterSpent": 6,
+      "afterRefinements": 3,
+      "afterCharge": 1
+    },
+    "firstHit": {
+      "time": 158.25000000001808,
+      "round": 2,
+      "orbHits": 0,
+      "spearHits": 1,
+      "damage": 62.789999999999964
+    },
+    "bursts": 28,
+    "baseHits": 38,
+    "orbSpawns": 0,
+    "orbHits": 0,
+    "spearShots": 50,
+    "spearHits": 20,
+    "bonusDamage": 2813.1179999999995,
+    "maxOrbs": 0,
+    "maxSpears": 2,
+    "peakBodies": 10,
+    "peakBullets": 59
+  }
+]

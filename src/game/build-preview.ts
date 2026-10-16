@@ -1,3 +1,4 @@
+import {isIonAugment,ionAugments} from '../core/ion-storm';
 import {canLaserChain,isPhotonAugment,photonAugments} from '../core/laser-chain';
 import {BuildTree,isMagneticAugment,magneticAugments,type Route,type BuildBranch} from '../core/build-tree';
 import {builtWeapon,builtSupport} from '../core/build-profile';
@@ -27,8 +28,8 @@ export function buildPreview(world:World,route:Route,branch?:BuildBranch){
   Object.assign(projected.ranks,current.ranks);Object.assign(projected.refinements,current.refinements);
   projected.magneticAugment=current.magneticAugment;projected.ballisticBranch=current.ballisticBranch;projected.electricBranch=current.electricBranch;projected.opticalBranch=current.opticalBranch;
   projected.photonAugment=current.photonAugment;
-  projected.fractureAugment=current.fractureAugment;
-  const valid=(!isFractureAugment(branch)||world.canRefineFracture())&&(!isPhotonAugment(branch)||world.canRefinePhoton())&&(!isMagneticAugment(branch)||world.canRefineMagnetic())&&projected.choose(route,world.buildPoints,branch);
+  projected.fractureAugment=current.fractureAugment;projected.ionAugment=current.ionAugment;
+  const valid=(!isIonAugment(branch)||world.canRefineIon())&&(!isFractureAugment(branch)||world.canRefineFracture())&&(!isPhotonAugment(branch)||world.canRefinePhoton())&&(!isMagneticAugment(branch)||world.canRefineMagnetic())&&projected.choose(route,world.buildPoints,branch);
   const rank=current.ranks[route],kind=route==='ballistic'?'scatter':'arc';
   const owned=world.activeWeapons.includes(kind),stage=owned?world.weaponStage(kind):1,calibration=owned?world.weaponCalibration(kind):0;
   const before=builtWeapon(kind,stage,calibration,current),after=builtWeapon(kind,stage,calibration,projected);
@@ -54,10 +55,11 @@ export function buildPreview(world:World,route:Route,branch?:BuildBranch){
       :rank===1?`激光间隔 ${laserBefore.laserInterval} → ${laserAfter.laserInterval}秒`
       :`激光贯穿 ${laserBefore.laserTargets} → ${laserAfter.laserTargets}敌`;
   }
+  if(valid&&isIonAugment(branch))gain+=' · '+ionAugments[branch].name;
   if(valid&&isMagneticAugment(branch))gain=`电弧直击 ${volley(before)} → ${volley(after)} · ${magneticAugments[branch].name}`;
   if(valid&&isPhotonAugment(branch))gain+=' · '+photonAugments[branch].name;
   if(valid&&isFractureAugment(branch))gain+=' · '+fractureAugments[branch].name;
   if(valid&&route==='ballistic'&&(isFractureAugment(branch)||!branch&&world.canRefineFracture()))return {gain,plan:isFractureAugment(branch)?fractureAugments[branch].detail:'裂甲精研二选一：双击破核 / 贯通冲击 · 原火力保留',valid,stage,before,after,laserBefore,laserAfter};
-  return {gain,plan:valid&&!branch&&route==='optical'&&world.canRefinePhoton()?'精研二选一：远链清群 / 孤立聚能 · 原火力保留':valid&&isPhotonAugment(branch)?photonAugments[branch].detail:valid&&!branch&&route==='electric'&&world.canRefineMagnetic()?'精研二选一：广域覆盖 / 场外分流 · 原三拍保留':valid&&isMagneticAugment(branch)?magneticAugments[branch].detail:valid?combinationPlan(projected,route,current,world.activeWeapons.includes('arc')?world.weaponStage('arc'):0):isPhotonAugment(branch)?'前置未满足 · 原火力保留':'先选导电线圈，再解锁雷暴霰射',
+  return {gain,plan:valid&&isIonAugment(branch)?ionAugments[branch].detail:valid&&!branch&&route==='electric'&&world.canRefineIon()?'离子精研二选一：巡航雷核 / 分岔雷矛 · 原放电保留':valid&&!branch&&route==='optical'&&world.canRefinePhoton()?'精研二选一：远链清群 / 孤立聚能 · 原火力保留':valid&&isPhotonAugment(branch)?photonAugments[branch].detail:valid&&!branch&&route==='electric'&&world.canRefineMagnetic()?'精研二选一：广域覆盖 / 场外分流 · 原三拍保留':valid&&isMagneticAugment(branch)?magneticAugments[branch].detail:valid?combinationPlan(projected,route,current,world.activeWeapons.includes('arc')?world.weaponStage('arc'):0):isPhotonAugment(branch)?'前置未满足 · 原火力保留':'先选导电线圈，再解锁雷暴霰射',
     valid,stage,before,after,laserBefore,laserAfter};
 }
