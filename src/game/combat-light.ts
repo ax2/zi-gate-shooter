@@ -41,13 +41,14 @@ export function coilDischarge(c: CanvasRenderingContext2D, x: number, y: number,
   c.restore();
 }
 
-export function chainArc(c: CanvasRenderingContext2D, x:number,y:number,tx:number,ty:number,life:number,weak:boolean,photon=false) {
+export function chainArc(c: CanvasRenderingContext2D, x:number,y:number,tx:number,ty:number,life:number,weak:boolean,photon=false,seeker=false) {
   const dx=tx-x,dy=ty-y,length=Math.max(1,Math.hypot(dx,dy)),points=[x,y];
   for(let i=1;i<8;i++){const bend=(i%2?1:-1)*7;points.push(x+dx*i/8-dy/length*bend,y+dy*i/8+dx/length*bend);}
   points.push(tx,ty);c.save();c.globalCompositeOperation='lighter';
   c.globalAlpha=Math.max(0,life/(photon?.24:.16))*(weak?.65:1);
-  if(!weak)line(c,photon?'#b5a8ff33':'#80ff8028',photon?12:10,points);
-  line(c,photon?'#83eaff':'#9fffad',weak?2:photon?4:3,points);line(c,photon?'#fff1ff':'#f5ffed',photon?1.5:1,points);
+  if(!weak)line(c,photon?'#b5a8ff33':seeker?'#ffc76028':'#80ff8028',photon?12:10,points);
+  line(c,photon?'#83eaff':seeker?'#ffda92':'#9fffad',weak?2:photon?4:3,points);line(c,photon?'#fff1ff':'#f5ffed',photon?1.5:1,points);
+  if(seeker){c.strokeStyle='#fff0c5';c.lineWidth=weak?1:2;for(const side of [-1,1]){c.beginPath();c.moveTo(tx+side*12,ty-8);c.lineTo(tx+side*6,ty);c.lineTo(tx+side*12,ty+8);c.stroke();}}
   if(photon){const r=6+(1-life/.24)*8;c.strokeStyle='#d8bdff';c.lineWidth=1.5;c.beginPath();c.moveTo(x,y-r);c.lineTo(x+r,y);c.lineTo(x,y+r);c.lineTo(x-r,y);c.closePath();c.stroke();}
   c.restore();
 }

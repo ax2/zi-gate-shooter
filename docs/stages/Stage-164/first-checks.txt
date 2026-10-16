@@ -1,0 +1,33 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/electric-branches.test.ts tests/build-preview.test.ts tests/build-tree.test.ts tests/seeker-progression.test.mjs --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/electric-branches.test.ts (11 tests | 1 failed) 23ms
+   × a closed primary shield blocks seeker and an actual rear kill awards exactly the original reward 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/electric-branches.test.ts > a closed primary shield blocks seeker and an actual rear kill awards exactly the original reward
+AssertionError: expected +0 to be undefined // Object.is equality
+
+- Expected:
+undefined
+
++ Received:
+0
+
+ ❯ tests/electric-branches.test.ts:70:178
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 20 passed (21)
+   Start at  21:45:30
+   Duration  5.64s (tests 86%, transform 8%, import 4%, worker 2%)
+
+    Isolate  4 workers spawned · ~383ms startup each (spawn + environment, per file)
+             at least ~383ms faster with isolate: false — reuses workers across files instead of one per file

@@ -6,7 +6,7 @@ function setup(branch:ElectricBranch='capacitor') {const w=new World();w.growth.
 function enemy(w:World,x=360,y=600,kind:'armor'|'guard'|'boss'='armor'){const b=w.spawn(kind,x,y);b.hp=b.maxHp=1000;b.speed=0;b.timer=999;return b;}
 function shot(w:World,b:Body,kind:'arc'|'scatter'='arc',damage=10,hops=0){w.bullets=[{id:999999,x:b.x,y:b.y,px:b.x,py:b.y,vx:0,vy:0,damage,age:0,active:true,hostile:false,weaponKind:kind,chainHops:hops}];w.step(C.step,68);return w.drainEffects();}
 it('spends one immutable fork, preserves direct damage and all weapons, and keeps the final node',()=>{
- for(const branch of ['spread','capacitor'] as const){const w=new World();w.growth.mastery=3;w.chooseBuild('electric');const damage=w.profileFor('arc').damage;const owned=[...w.activeWeapons];
+ for(const branch of ['spread','capacitor','seeker'] as const){const w=new World();w.growth.mastery=3;w.chooseBuild('electric');const damage=w.profileFor('arc').damage;const owned=[...w.activeWeapons];
  expect(w.chooseBuild('electric',branch)).toBe(true);expect(w.build.spent).toBe(2);expect(w.build.electricBranch).toBe(branch);expect(w.profileFor('arc').damage).toEqual(damage);expect(w.activeWeapons).toEqual(owned);
  expect(w.profileFor('arc').chainHops).toBe(branch==='spread'?3:2);expect(w.chooseBuild('electric',branch==='spread'?'capacitor':'spread')).toBe(false);expect(w.build.spent).toBe(2);
  expect(w.chooseBuild('electric')).toBe(true);expect(w.build.ranks.electric).toBe(3);expect(w.build.electricBranch).toBe(branch);
@@ -42,4 +42,30 @@ it('a real capacitor kill awards one elite death and normal charge without rewar
  shot(w,b);shot(w,b);expect(w.growth.energy).toBe(0);const events=shot(w,b);
  expect(w.capacitorBursts).toBe(1);expect(w.kills).toBe(1);expect(w.growth.energy).toBe(C.killCharge.elite);expect(events.filter(e=>e.type==='kill')).toHaveLength(1);
  shot(w,b);expect(w.kills).toBe(1);expect(w.growth.energy).toBe(C.killCharge.elite);
+});
+
+
+it('seeker skips a closer screen to hit a charging rear gun beyond ordinary range, then returns to 220',()=>{
+ const w=setup('seeker'),front=enemy(w,150,760),screen=enemy(w,200,760);
+ const rear=w.spawn('sniper',150,450);rear.hp=rear.maxHp=1000;rear.speed=0;rear.warning=1;rear.timer=10;
+ const distant=enemy(w,150,190); // off strip is never a candidate
+ const events=shot(w,front,'arc',10,w.profileFor('arc').chainHops);
+ expect(front.hp).toBe(990);expect(rear.hp).toBeCloseTo(993.5);expect(screen.hp).toBe(1000);expect(distant.hp).toBe(1000);
+ const jumps=events.filter(e=>e.type==='arc');expect(jumps).toHaveLength(1);expect(jumps[0].seeker).toBe(true);expect(jumps[0].targetY).toBe(rear.y);expect(w.seekerLinks).toBe(1);
+ expect(w.capacitorBursts).toBe(0);expect(w.profileFor('arc').chainHops).toBe(2);
+});
+it('seeker prioritizes visible charging guns over idle guns and otherwise uses stable distance order',()=>{
+ const w=setup('seeker'),front=enemy(w,360,700),idle=enemy(w,400,650),ready=enemy(w,600,520);ready.warning=1;ready.timer=10;
+ let e=shot(w,front,'arc',10,1).find(e=>e.type==='arc');expect(e?.targetX).toBe(ready.x);
+ ready.warning=0;e=shot(w,front,'arc',10,1).find(e=>e.type==='arc');expect(e?.targetX).toBe(idle.x);
+});
+it('seeker does not unlock storm scatter long jumps or reach reward targets, entry protection or out of range',()=>{
+ for(const kind of ['gate','crate','armor'] as const){const w=setup('seeker'),front=enemy(w,150,750);const b=w.spawn(kind,150,450);b.speed=0;b.hp=b.maxHp=1000;b.timer=10;if(kind==='armor')b.dropGrace=.45;
+ shot(w,front,'arc',10,1);expect(b.hp).toBe(1000);expect(b.energy).toBe(0);expect(w.seekerLinks).toBe(0);}
+ const w=setup('seeker'),front=enemy(w,150,750),rear=enemy(w,150,400);shot(w,front,'arc',10,1);expect(rear.hp).toBe(1000);
+ rear.y=450;rear.py=450;shot(w,front,'scatter',10,1);expect(rear.hp).toBe(1000);expect(w.seekerLinks).toBe(0);
+});
+it('a closed primary shield blocks seeker and an actual rear kill awards exactly the original reward',()=>{
+ const w=setup('seeker'),shield=enemy(w,150,750,'guard'),rear=enemy(w,150,450);shot(w,shield,'arc',10,2);expect(rear.hp).toBe(1000);expect(w.seekerLinks).toBe(0);
+ shield.active=false;const front=enemy(w,150,750);rear.hp=1;const before=w.growth.energy;const e=shot(w,front,'arc',10,1);expect(w.kills).toBe(1);expect(w.growth.energy-before).toBe(0);expect(e.filter(e=>e.type==='kill')).toHaveLength(1);expect(w.seekerLinks).toBe(1);
 });

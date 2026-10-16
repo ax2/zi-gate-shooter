@@ -4,9 +4,11 @@ export const ballisticBranches={
  fragment:{name:'爆破弹芯',detail:'霰射总伤害+30% · 140范围50%溅射',role:'瞄准紧凑敌群，扩散清场'},
 } as const;
 export const BALLISTIC_FORK={targets:2,radius:140,splash:.5} as const;
-export type ElectricBranch='spread'|'capacitor';
+export type ElectricBranch='spread'|'capacitor'|'seeker';
 export type BuildBranch=OpticalBranch|ElectricBranch|BallisticBranch;
+export const SEEKER_BRIDGE={range:340} as const;
 export const electricBranches={
+ seeker:{name:'猎隼电桥',detail:'首跳范围340 · 优先蓄能射手',role:'借前排目标，跳击后排火力点'},
  spread:{name:'连锁扩散',detail:'跳电范围220 · 额外多跳一次',role:'优先连通群敌，扩大清场范围'},
  capacitor:{name:'电容蓄爆',detail:'跳电范围220 · 同敌3次直击追加200%',role:'持续瞄准精英与首领，单体放电'},
 } as const;
@@ -27,7 +29,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
   electric: [
     {name:'导电线圈',detail:'安装T1电弧 · 电弧多跳一次'},
-    {name:'远距电桥 · 选择分支',detail:'范围160→220 · 二选一：扩散/蓄爆'},
+    {name:'远距电桥 · 选择分支',detail:'范围160→220 · 扩散/蓄爆/猎隼'},
     {name:'离子风暴',detail:'保留80%跳伤 · 每6次有效电击范围放电'},
   ],
   optical: [
@@ -42,7 +44,7 @@ export class BuildTree {
   electricBranch?:ElectricBranch;
   node(route:Route,index:number,branch:BuildBranch|undefined=route==='ballistic'?this.ballisticBranch:route==='electric'?this.electricBranch:this.opticalBranch){
     if(route==='ballistic'&&index===1&&(branch==='penetrator'||branch==='fragment'))return ballisticBranches[branch];
-    if(route==='electric'&&index===1&&(branch==='spread'||branch==='capacitor'))return electricBranches[branch];
+    if(route==='electric'&&index===1&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))return electricBranches[branch];
     return route==='optical'&&index===1&&(branch==='burn'||branch==='relay')?opticalBranches[branch]:tree[route][index];
   }
   readonly ranks: Record<Route,number> = {ballistic:0,electric:0,optical:0};
@@ -61,14 +63,14 @@ export class BuildTree {
   }
   choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor')))))return false;
+    if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;
     if(route==='ballistic'&&this.ranks.ballistic===1){
       if(this.ballisticBranch)return false;
       this.ballisticBranch=branch==='fragment'?'fragment':'penetrator';
     }
     if(route==='electric'&&this.ranks.electric===1){
       if(this.electricBranch)return false;
-      this.electricBranch=branch==='capacitor'?'capacitor':'spread';
+      this.electricBranch=branch==='seeker'?'seeker':branch==='capacitor'?'capacitor':'spread';
     }
     if(route==='optical'&&this.ranks.optical===1){
       if(this.opticalBranch)return false;

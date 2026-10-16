@@ -12,7 +12,7 @@ it('never changes the run, rewards, pending events or RNG while inspecting every
   const unearned=new World();expect(buildPreview(unearned,'optical').valid).toBe(false);
 });
 it('matches the actual next combat profiles for all routes, forks, tiers and continued refinements',()=>{
-  for(const stage of [1,2,3])for(const route of routes)for(const branch of (route==='ballistic'?['penetrator','fragment']:route==='electric'?['spread','capacitor']:['burn','relay']) as BuildBranch[]){
+  for(const stage of [1,2,3])for(const route of routes)for(const branch of (route==='ballistic'?['penetrator','fragment']:route==='electric'?['spread','capacitor','seeker']:['burn','relay']) as BuildBranch[]){
     const w=new World();w.growth.stage=stage;w.growth.mastery=30;
     // Unit setup includes an already owned high-tier arc/scatter, not a playable-run claim.
     w.weaponKind=route==='electric'?'arc':'scatter';
@@ -45,7 +45,7 @@ it('shows only common fork gains and actionable missing combination nodes',()=>{
   expect(buildPreview(w,'electric').plan).toBe('雷暴还需：弹道1点');
   w.chooseBuild('electric');
   expect(buildPreview(w,'ballistic').plan).toContain('本次组合：雷暴霰射');
-  expect(buildPreview(w,'electric').gain).toBe('跳电范围 160 → 220 · 选扩散/蓄爆');
+  expect(buildPreview(w,'electric').gain).toBe('跳电范围 160 → 220 · 选扩散/蓄爆/猎隼');
   expect(w.build.electricBranch).toBeUndefined();
   for(let i=0;i<3;i++)w.chooseBuild('optical');
   expect(buildPreview(w,'ballistic').plan).toContain('雷暴霰射');

@@ -6,7 +6,7 @@ import {ION_STORM} from './ion-storm';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
-import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
+import { BuildTree, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
@@ -41,7 +41,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -103,6 +103,7 @@ export class World {
       const before=target.hp;this.hit(target,damage*ION_STORM.damage,'arc');if(target.hp<before)this.ionHits++;
     }
   }
+  seekerLinks=0;
   capacitorBursts=0;
   private capacitor(body:Body,damage:number){
     if(this.build.electricBranch!=='capacitor'||!body.active||!(body.kind in C.enemies)||guardClosed(body)
@@ -638,14 +639,16 @@ export class World {
           if (bullet.chainHops && body.kind in C.enemies) {
             const visited = new Set([body.id]); let origin = body, damage = bullet.damage;
             for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin) && !(origin.dropGrace??0); hop++) {
-              const candidates = this.bodies.filter(other => other.active && !visited.has(other.id) && other.kind in C.enemies
+              const seeker=hop===0&&bullet.weaponKind==='arc'&&this.build.electricBranch==='seeker';
+              const candidates = this.bodies.filter(other => other.active && !visited.has(other.id)&&(!seeker||!(other.dropGrace??0)) && other.kind in C.enemies
                 && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss')
-                && Math.hypot(other.x-origin.x,other.y-origin.y) <= (this.build.ranks.electric>=2?220:160));
-              candidates.sort((a,b) => Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y) || a.id-b.id);
+                && Math.hypot(other.x-origin.x,other.y-origin.y) <= (seeker?SEEKER_BRIDGE.range:this.build.ranks.electric>=2?220:160));
+              const priority=(target:Body)=>seeker&&!guardClosed(target)&&['sniper','armor','elite','guard','boss'].includes(target.kind)?target.warning>0?2:1:0;
+              candidates.sort((a,b) => priority(b)-priority(a)||Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y) || a.id-b.id);
               const next = candidates[0]; if (!next) break;
               visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
-              this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y});
-              const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(conducts)this.ionImpact(next,damage);}
+              this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y,seeker});
+              const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(seeker)this.seekerLinks++;if(conducts)this.ionImpact(next,damage);}
               if(bullet.weaponKind==='scatter'&&next.hp<before)this.stormLinks++;origin = next;
             }
           }

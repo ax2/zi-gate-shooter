@@ -1,0 +1,32 @@
+[
+  {
+    "file": "choice-desktop.jpg",
+    "width": 1280,
+    "height": 720,
+    "format": "Jpeg"
+  },
+  {
+    "file": "choice-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "rear-hit-desktop-weak.jpg",
+    "width": 1280,
+    "height": 720,
+    "format": "Jpeg"
+  },
+  {
+    "file": "rear-hit-mobile-weak.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "rear-hit-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  }
+]

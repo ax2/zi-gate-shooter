@@ -97,7 +97,7 @@ export class CanvasRuntime {
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number;opticalBand?:number;prism?:boolean }[] = [];
-  private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean}[] = [];
+  private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean;seeker?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
   private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number}[] = [];
   private destruction?: BossDestruction;
@@ -368,7 +368,7 @@ export class CanvasRuntime {
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
       const branch=action.slice(7) as BuildBranch,route=this.branchRoute;
-      if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'))))this.selectBuild(route,branch);
+      if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -498,7 +498,7 @@ export class CanvasRuntime {
       if(this.save.settings.sound)this.platform.sound('refract',1);return;
     }
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
-    if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
+    if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16,seeker:e.seeker});
     if (e.type === 'fire') { const kind=e.weaponKind??this.world.weaponKind;this.mountedMotion.get(kind)?.fire(kind,this.world.weaponStage(kind),this.world.time);if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
     if (e.type === 'weapon' || e.type === 'upgrade') {this.weaponGuideUntil = this.world.time + 5;this.weaponGuideKind=e.weaponKind??this.world.weaponKind;}
     if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
@@ -843,7 +843,7 @@ export class CanvasRuntime {
     this.blasts = this.blasts.filter(e => e.life > 0);
     for(const e of this.empWaves){e.life-=dt;empWave(c,e.x,e.y,e.radius,1-e.life/.5,this.save.settings.effects==='weak');}
     this.empWaves=this.empWaves.filter(e=>e.life>0);
-    for (const arc of this.arcs) { arc.life -= dt;if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon); }
+    for (const arc of this.arcs) { arc.life -= dt;if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon,arc.seeker); }
     this.arcs = this.arcs.filter(arc=>arc.life>0);
     for (const hit of this.impacts) { hit.life -= dt;if(hit.opticalBand)opticalImpactLight(c,hit.x,hit.y,hit.life,hit.opticalBand,this.save.settings.effects==='weak',hit.prism);else impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
     this.impacts = this.impacts.filter(hit => hit.life > 0);
@@ -1093,8 +1093,8 @@ export class CanvasRuntime {
       const profile = w.profileFor(kind), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
-      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
-      this.text(kind === 'arc' ? `索敌${ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
+      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
+      this.text(kind === 'arc' ? `${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
@@ -1272,16 +1272,16 @@ export class CanvasRuntime {
   }
   private drawElectricBranch(){
     this.rect(35,120,650,1080,'#102330');
-    this.text('雷电改造 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('雷电改造 · 三选一',360,190,40,'#effaff','center',true);
     this.text('原电弧保留 · 都将跳电范围提升至220',360,250,25,'#bdd8e7');
-    for(const [i,branch] of (['spread','capacitor'] as const).entries()){
-      const node=electricBranches[branch],y=315+i*290,color=branch==='spread'?'#adf3bf':'#c7b1ff';
-      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
-      this.text(node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,25,'#effaff','left');
-      this.text(branch==='spread'?'每发电弧额外多跳一名敌人':'同一敌人累计3次电弧直击后放电',90,y+133,24,'#d9e8f1','left');
-      this.text(branch==='spread'?'伤害与原跳数保留 · 适合密集群敌':`追加${ELECTRIC_FORK.damage*100}%直击伤害 · 链电不积层`,90,y+175,23,'#bdd8e7','left');
-      this.text('选择此改造　›',625,y+219,25,color,'right');
-      this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
+    for(const [i,branch] of (['spread','capacitor','seeker'] as const).entries()){
+      const node=electricBranches[branch],y=295+i*215,color=branch==='spread'?'#adf3bf':branch==='seeker'?'#ffda92':'#c7b1ff';
+      this.rect(65,y,590,200,'#203e50');this.rect(65,y,5,200,color);
+      this.text(node.name,90,y+32,31,color,'left',true);this.text(node.role,90,y+68,24,'#effaff','left');
+      this.text(branch==='spread'?'每发电弧额外多跳一名敌人':branch==='seeker'?'首跳340 · 优先蓄能射手，再普通射手':'同一敌人累计3次电弧直击后放电',90,y+105,23,'#d9e8f1','left');
+      this.text(branch==='spread'?'伤害与原跳数保留 · 适合密集群敌':branch==='seeker'?'原伤害与跳数保留 · 后续跳距220':`追加${ELECTRIC_FORK.damage*100}%直击伤害 · 链电不积层`,90,y+141,22,'#bdd8e7','left');
+      this.text('选择此改造　›',625,y+177,24,color,'right');
+      this.buttons.push({x:65,y,w:590,h:200,action:`branch:${branch}`,label:node.name});
     }
     this.text('本局选定不可切换 · 后续风暴与旧武器保留',360,965,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
@@ -1381,7 +1381,7 @@ export class CanvasRuntime {
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticBranch:this.world.build.ballisticBranch??null,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
-      electricBranch:this.world.build.electricBranch??null,capacitorBursts:this.world.capacitorBursts,
+      electricBranch:this.world.build.electricBranch??null,seekerLinks:this.world.seekerLinks,capacitorBursts:this.world.capacitorBursts,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,

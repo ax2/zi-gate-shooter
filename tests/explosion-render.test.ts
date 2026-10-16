@@ -1240,3 +1240,21 @@ it.each([false,true])('moves earned upgrade feedback away from crates and real b
  // An already expired receipt must never be revived by a later blocked area.
  crate.active=true;bullet.active=true;r.renderFrame(0);w.time+=6;r.renderFrame(0);bullet.active=false;crate.active=false;f.calls.length=0;r.renderFrame(0);expect(title()).toBeUndefined();
 });
+
+
+it('offers a real third electric tactic without spending on browse and retains old weapons after selection',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=1;w.chooseBuild('electric');w.growth.energy=100;f.tick();
+ const owned=[...w.activeWeapons],before=w.build.spent;
+ expect(f.runtime.activateControl('build:electric')).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='雷电改造 · 三选一')).toBe(true);
+ for(const name of ['连锁扩散','电容蓄爆','猎隼电桥'])expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===name)).toBe(true);
+ expect(w.build.spent).toBe(before);expect(f.runtime.activateControl('branch-back')).toBe(true);expect(w.build.electricBranch).toBeUndefined();
+ f.runtime.activateControl('build:electric');expect(f.runtime.activateControl('branch:seeker')).toBe(true);expect(w.build.electricBranch).toBe('seeker');expect(w.activeWeapons).toEqual(owned);expect(w.build.spent).toBe(before+1);expect(f.runtime.mode).toBe('playing');expect(f.runtime.activateControl('branch:capacitor')).toBe(false);
+ f.runtime.pause();f.runtime.activateControl('loadout');expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('· 猎隼'))).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('首跳340'))).toBe(true);
+});
+it.each([false,true])('actual seeker arcs retain a distinct narrow hit trace, freeze on pause and respect the existing pool (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const r=f.runtime as any;
+ for(let i=0;i<20;i++)r.effect({type:'arc',x:200,y:700,targetX:430,targetY:480,seeker:true});f.tick();
+ expect(r.arcs).toHaveLength(12);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffda92')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#fff0c5')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffc76028')).toBe(!weak);
+ const before=structuredClone(r.arcs);f.runtime.pause();for(let i=0;i<60;i++)f.tick();expect(r.arcs).toEqual(before);f.runtime.start();expect(r.arcs).toHaveLength(0);
+});

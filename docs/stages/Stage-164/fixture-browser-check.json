@@ -1,0 +1,18 @@
+{
+  "url": "http://127.0.0.1:5238/tools/visual-fixtures/seeker-bridge.html",
+  "title": "猎隼电桥 · 正常成长回放",
+  "dom": "- text: 正常成长 / 自动操作者 / 虚拟时钟\n- text: 独立内存存档 · 不代表真人体验或性能\n- button \"正常流程进入改造\"\n- button \"选择猎隼电桥\" [disabled]\n- button \"观察后排跳击\"\n- button \"切换弱特效\" [active]\n- generic: 115.52秒 / HP3 / actual-rear-hit",
+  "logs": [],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "flow": "正常奖励21.27秒→三选一→选择猎隼→115.52秒真实后排跳击",
+  "virtualClock": true
+}
