@@ -45,7 +45,7 @@ import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
 import { contextGuide, weaponGuide } from './context-guide';
 import { dossierWeapons, weaponDossier } from './weapon-dossier';
-import { supportLight,opticalImpactLight,opticalEmitterLight } from './support-light';
+import { supportLight,opticalImpactLight,opticalEmitterLight,opticalChargeLight } from './support-light';
 import {laserVisualBand} from '../core/support-profile';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
@@ -600,11 +600,12 @@ export class CanvasRuntime {
   }
   private drawOpticalRig(y:number,pose:PlayerPose) {
     const w=this.world,support=w.supportProfile();if(!support.laserUnlocked)return;
-    const band=laserVisualBand(w.growth.mastery,w.build.ranks.optical),pulse=Math.max(0,1-(w.time-this.opticalFiredAt)/.22),kick=pulse*(3+band);const size=50+band*6;
+    const band=laserVisualBand(w.growth.mastery,w.build.ranks.optical),pulse=Math.max(0,1-(w.time-this.opticalFiredAt)/.22),kick=pulse*(3+band),charge=w.laserCharge();const size=50+band*6;
     for(const side of support.prism?[-1,0,1]:[0]){
       const c=this.ctx,x=w.player.x+side*42;
       c.save();c.lineWidth=4;c.strokeStyle='#9aaab4';c.beginPath();c.moveTo(w.player.x,y-72+pose.bob);c.lineTo(x,y-82+pose.bob+kick);c.stroke();c.restore();
       this.frameSprite('mounted-modules-v1.png',5,3,w.player.x+side*42,y-100+pose.bob+kick,side===0?size:42,side===0?size:42,2);
+      opticalChargeLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,charge,side===0?band:1,this.save.settings.effects==='weak',side!==0);
       opticalEmitterLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,pulse,side===0?band:1,this.save.settings.effects==='weak');
     }
   }
@@ -1216,7 +1217,7 @@ export class CanvasRuntime {
     const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':'',w.laserChainUnlocked()?'电光连锁':'',w.magneticUnlocked()?'磁暴榴弹':''].filter(Boolean);
     this.text(combinations.length?`组合：${combinations.slice(0,3).join(' · ')}`:'已有配件随真实射击独立回弹',360,1000,25,'#d6b5ff');
     if(combinations.length>3)this.text(combinations.slice(3).join(' · '),360,1031,25,'#d6b5ff');
-    this.text('检查挂载与等级 · 战斗时间已暂停',360,1065,22,'#a6c5d7');
+    this.text(w.supportProfile().laserUnlocked?`镜组蓄能 ${Math.round(w.laserCharge()*100)}% · 战斗时间已暂停`:'检查挂载与等级 · 战斗时间已暂停',360,1065,22,'#a6c5d7');
     this.button('返回当前火力',1100,'rig-back',true);
   }
   private weaponUpgradeOptions(){
@@ -1448,7 +1449,7 @@ export class CanvasRuntime {
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
       mode: this.mode, time: this.world.time,roundTime:this.world.roundTime,phaseTime:this.world.phaseTime, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, buildRefinements:{...this.world.build.refinements}, activeWeapons:this.world.activeWeapons,
-      supportBeams:this.supportBeams.length,opticalBand:laserVisualBand(this.world.growth.mastery,this.world.build.ranks.optical),laserBands:this.supportBeams.filter(b=>b.laser).map(b=>b.opticalBand??1),opticalImpacts:this.impacts.filter(i=>i.opticalBand).length,
+      supportBeams:this.supportBeams.length,laserCharge:this.world.laserCharge(),lastLaserAt:Number.isFinite(this.opticalFiredAt)?this.opticalFiredAt:null,opticalBand:laserVisualBand(this.world.growth.mastery,this.world.build.ranks.optical),laserBands:this.supportBeams.filter(b=>b.laser).map(b=>b.opticalBand??1),opticalImpacts:this.impacts.filter(i=>i.opticalBand).length,
       weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
       weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
       contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,bossRewardRound:this.world.bossRewardRound,bossLootStats:{...this.world.bossLootStats},

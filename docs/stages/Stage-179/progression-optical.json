@@ -1,0 +1,149 @@
+{
+  "comparisons": [
+    {
+      "branch": "burn",
+      "encounter": "heavy",
+      "damage": [
+        72.45000000000005,
+        0
+      ],
+      "kills": 0,
+      "burnHits": 3,
+      "relayHits": 0
+    },
+    {
+      "branch": "burn",
+      "encounter": "cluster",
+      "damage": [
+        12,
+        0
+      ],
+      "kills": 1,
+      "burnHits": 0,
+      "relayHits": 0
+    },
+    {
+      "branch": "relay",
+      "encounter": "heavy",
+      "damage": [
+        41.39999999999998,
+        26.909999999999968
+      ],
+      "kills": 0,
+      "burnHits": 0,
+      "relayHits": 1
+    },
+    {
+      "branch": "relay",
+      "encounter": "cluster",
+      "damage": [
+        12,
+        12
+      ],
+      "kills": 2,
+      "burnHits": 0,
+      "relayHits": 1
+    }
+  ],
+  "runs": [
+    {
+      "branch": "burn",
+      "selected": "burn",
+      "neighborSamples": [],
+      "time": 300.0000000000558,
+      "hp": 3,
+      "round": 4,
+      "burnHits": 16,
+      "relayHits": 0,
+      "kills": 189,
+      "mastery": 9,
+      "peakBodies": 9,
+      "peakBullets": 51
+    },
+    {
+      "branch": "relay",
+      "selected": "relay",
+      "neighborSamples": [
+        {
+          "time": 121.51666666666105,
+          "kind": "drone",
+          "nearest": null
+        },
+        {
+          "time": 130.51666666666267,
+          "kind": "sniper",
+          "nearest": null
+        },
+        {
+          "time": 158.05000000001792,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 160.3000000000197,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 162.5500000000215,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 172.53333333336278,
+          "kind": "drone",
+          "nearest": null
+        },
+        {
+          "time": 204.03333333338784,
+          "kind": "guard",
+          "nearest": 320.0018906194149
+        },
+        {
+          "time": 208.53333333339143,
+          "kind": "elite",
+          "nearest": 114.6775215227983
+        },
+        {
+          "time": 213.033333333395,
+          "kind": "armor",
+          "nearest": 120
+        },
+        {
+          "time": 242.06666666675144,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 248.81666666675682,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 268.43333333341786,
+          "kind": "charger",
+          "nearest": null
+        },
+        {
+          "time": 288.68333333339945,
+          "kind": "drone",
+          "nearest": 20
+        },
+        {
+          "time": 290.0333333333982,
+          "kind": "drone",
+          "nearest": 60
+        }
+      ],
+      "time": 300.0000000000558,
+      "hp": 3,
+      "round": 4,
+      "burnHits": 0,
+      "relayHits": 21,
+      "kills": 187,
+      "mastery": 9,
+      "peakBodies": 9,
+      "peakBullets": 51
+    }
+  ]
+}

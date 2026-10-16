@@ -365,6 +365,11 @@ export class World {
   private nextRow = 1;
   private fireTimers = new Map<WeaponKind, number>();
   private laserTimer = 0;
+  laserCharge(){
+    const support=this.supportProfile();
+    if(!support.laserUnlocked||this.player.hp<=0||(this.phase!=='running'&&this.phase!=='boss'))return 0;
+    return clamp(1-this.laserTimer/support.laserInterval,0,1);
+  }
   private acquiredWeapons = new Set<WeaponKind>();
   private weaponStages = new Map<WeaponKind, number>();
   weaponStage(kind: WeaponKind) { return this.weaponStages.get(kind) ?? this.growth.stage; }
@@ -572,15 +577,15 @@ export class World {
           const beamX=(y:number)=>x+(topX-x)*(start-y)/(start-C.playerShotTop);
           const targets=this.bodies.filter(b=>b.active && b.kind!=='pickup' && (b.kind!=='boss'||this.phase==='boss') && b.y>=C.playerShotTop && b.y<start
             && Math.abs(b.x-beamX(b.y))<=b.width/2+8).sort((a,b)=>b.y-a.y || a.id-b.id);
-          let end=C.playerShotTop, count=0;
+          let end:number=C.playerShotTop, count=0;
           for(const body of targets){
             const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
             const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
             visited.add(body.id);if(side===0&&count===0){mainBlocked=blocked;if(!blocked&&body.kind in C.enemies)origin={x:body.x,y:body.y,id:body.id};}
             const before=body.hp,beforeEnergy=body.energy;this.hit(body,damage,'pulse');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
-            if(body.hp<before||body.kind==='gate'&&body.energy>beforeEnergy){const contactY=blocked?body.y+body.height/2:body.y;this.effects.push({type:'laser-impact',x:body.x,y:body.y,targetX:beamX(contactY),targetY:contactY,opticalBand,prism:side!==0});}
+            if(body.hp<before||body.kind==='gate'&&body.energy>beforeEnergy){const contactY=blocked?Math.min(start,body.y+body.height/2):body.y;this.effects.push({type:'laser-impact',x:body.x,y:body.y,targetX:beamX(contactY),targetY:contactY,opticalBand,prism:side!==0});}
             if(side===0&&count===0&&!blocked)this.opticalSecondary(body,damage);
-            if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
+            if(blocked || ++count>=support.laserTargets){end=Math.min(start,body.y+body.height/2);break;}
           }
           this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0,opticalBand});
         }

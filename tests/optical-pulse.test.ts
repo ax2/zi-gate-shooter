@@ -1,0 +1,24 @@
+import {it,expect} from 'vitest';import {World} from '../src/core/world';import {C} from '../src/core/config';
+import {supportLight,opticalImpactLight,opticalChargeLight,opticalEmitterLight} from '../src/game/support-light';
+function recorder(){
+ const calls:{name:string,args:unknown[]}[]=[],stack:Record<string,unknown>[]=[];let state:Record<string,unknown>={globalAlpha:.37,lineWidth:7,globalCompositeOperation:'source-over'};
+ const ctx=new Proxy({}, {get(_t,key){if(key in state)return state[String(key)];return (...args:unknown[])=>{calls.push({name:String(key),args});if(key==='save')stack.push({...state});if(key==='restore'){expect(stack.length).toBeGreaterThan(0);state=stack.pop()!;}for(const v of args)if(typeof v==='number')expect(Number.isFinite(v)).toBe(true);};},set(_t,key,value){state[String(key)]=value;if(key==='lineWidth')calls.push({name:'width',args:[value]});return true;}}) as CanvasRenderingContext2D;
+ return {ctx,calls,check(){expect(stack).toHaveLength(0);expect(state).toEqual({globalAlpha:.37,lineWidth:7,globalCompositeOperation:'source-over'});}};
+}
+it.each([1,2,3])('keeps band %i light finite, bounded and isolated from the next canvas draw',band=>{
+ const counts:number[]=[];for(const weak of [false,true]){const r=recorder();for(const life of [.32,.21,.01]){supportLight(r.ctx,360,900,365,240,life,true,weak,false,band);supportLight(r.ctx,360,800,510,400,life,true,weak,true,band);}opticalImpactLight(r.ctx,360,400,.1,band,weak);opticalChargeLight(r.ctx,360,800,.86,band,weak);opticalEmitterLight(r.ctx,360,800,.7,band,weak);r.check();expect(Math.max(...r.calls.filter(c=>c.name==='width').map(c=>Number(c.args[0])))).toBeLessThanOrEqual(35);expect(r.calls.some(c=>c.name==='fillRect')).toBe(false);counts.push(r.calls.length);}expect(counts[1]).toBeLessThan(counts[0]);
+});
+it('does not draw spent beams, zero-length absorption or an empty capacitor',()=>{const r=recorder();supportLight(r.ctx,360,900,360,240,0,true,false);supportLight(r.ctx,360,900,360,900,.32,true,false);opticalImpactLight(r.ctx,360,400,0,3,false);opticalChargeLight(r.ctx,360,800,0,3,false);opticalEmitterLight(r.ctx,360,800,0,3,false);expect(r.calls).toEqual([]);r.check();});
+function ready(rank=1){const w=new World();w.growth.mastery=rank;for(let i=0;i<rank;i++)w.chooseBuild('optical',i===1?'relay':undefined);return w;}
+it('reads the actual laser timer without advancing time, granting charge or producing effects',()=>{
+ const locked=new World();expect(locked.laserCharge()).toBe(0);const w=ready();expect(w.laserCharge()).toBe(1);w.step(C.step,360);const fired=w.drainEffects().filter(e=>e.type==='laser');expect(fired).toHaveLength(1);expect(w.laserCharge()).toBeLessThan(.01);for(let i=0;i<90;i++){w.step(C.step,360);w.drainEffects();}const time=w.time,charge=w.laserCharge();expect(charge).toBeCloseTo(.5,1);for(let i=0;i<1000;i++)expect(w.laserCharge()).toBe(charge);expect(w.time).toBe(time);expect(w.drainEffects()).toEqual([]);Object.assign(w,{phase:'boss-entry'});expect(w.laserCharge()).toBe(0);Object.assign(w,{phase:'recovery'});expect(w.laserCharge()).toBe(0);Object.assign(w,{phase:'running'});w.player.hp=0;expect(w.laserCharge()).toBe(0);
+});
+it('observing charge on every frame does not change combat or effect output',()=>{
+ const a=ready(2),b=ready(2);for(let frame=0;frame<10*60;frame++){for(let i=0;i<3;i++)a.laserCharge();a.step(C.step,360);b.step(C.step,360);expect(a.drainEffects()).toEqual(b.drainEffects());}expect({hp:a.player.hp,kills:a.kills,shots:a.shots,hits:a.hits,score:a.score,growth:a.growth,bodies:a.bodies}).toEqual({hp:b.player.hp,kills:b.kills,shots:b.shots,hits:b.hits,score:b.score,growth:b.growth,bodies:b.bodies});
+});
+it('uses upgraded real intervals and resets the capacitor only when a real beam fires',()=>{
+ const w=ready(2),times:number[]=[];let lastCharge=0;for(let frame=0;frame<5*60;frame++){w.step(C.step,360);const shot=w.drainEffects().some(e=>e.type==='laser');const charge=w.laserCharge();expect(charge).toBeGreaterThanOrEqual(0);expect(charge).toBeLessThanOrEqual(1);if(shot){times.push(w.time);expect(charge).toBeLessThan(.02);}else expect(charge).toBeGreaterThanOrEqual(lastCharge);lastCharge=charge;}expect(times.length).toBe(3);for(let i=1;i<times.length;i++)expect(times[i]-times[i-1]).toBeCloseTo(2.25,5);
+});
+it.each(['gate','crate','guard'] as const)('absorbs an overlapping %s beam at its muzzle without a backward trace or false damage exemption',kind=>{
+ const w=ready(),body=w.spawn(kind,360,900),hp=body.hp;body.timer=999;const energy=body.energy;w.step(C.step,360);const effects=w.drainEffects(),beams=effects.filter(e=>e.type==='laser'),contacts=effects.filter(e=>e.type==='laser-impact');expect(beams).toHaveLength(1);expect(beams[0].targetY).toBe(beams[0].y);expect(contacts).toHaveLength(1);expect(contacts[0].targetY).toBe(beams[0].y);expect(body.hp<hp||body.energy>energy).toBe(true);
+});
