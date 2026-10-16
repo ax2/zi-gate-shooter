@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/interceptor.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/interceptor.test.ts (10 tests | 1 failed) 294ms
+   × actually destroying a relay cancels pending core taps when it resets the attack phase 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/interceptor.test.ts > actually destroying a relay cancels pending core taps when it resets the attack phase
+AssertionError: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tests/interceptor.test.ts:51:155
+     49|  const relay=w.spawn('conduit',500,400);relay.speed=0;relay.hp=1;
+     50|  w.bullets.push({id:99999,x:500,y:440,px:500,py:440,vx:0,vy:-1200,dama…
+     51|  w.step(C.step,68);expect(relay.active).toBe(false);expect(b.empRemain…
+       |                                                                                                                                                           ^
+     52|  for(let i=0;i<120;i++){w.step(C.step,68);w.drainEffects();}expect(b.i…
+     53| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  13:26:11
+   Duration  901ms (transform 44%, tests 43%, import 11%, worker 1%)

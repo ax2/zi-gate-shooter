@@ -1,0 +1,68 @@
+[
+  {
+    "file": "actual-effect-desktop.jpg",
+    "format": "jpeg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "actual-effect-mobile-weak.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "actual-effect-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "first-target-box-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "goal-complete-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "recipes-desktop.jpg",
+    "format": "jpeg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "recipes-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "skill-goal-desktop.jpg",
+    "format": "jpeg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "skill-goal-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "target-box-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  },
+  {
+    "file": "target-drop-mobile.jpg",
+    "format": "jpeg",
+    "width": 390,
+    "height": 843
+  }
+]

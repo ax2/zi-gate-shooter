@@ -1,4 +1,4 @@
-import {LASER_CHAIN} from '../core/laser-chain';
+import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
 import {interceptorLight} from './interceptor-light';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,type BuildProof} from '../core/build-proof';
@@ -16,7 +16,6 @@ import { capacitorLight, capacitorMarks } from './capacitor-light';
 import { formationShield } from './formation-shield';
 import { burnLight } from './burn-light';
 import { fractureLight, fractureMarks } from './fracture-light';
-import { FRACTURE } from '../core/combos';
 import { mountedRig } from './mounted-rig';
 import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
 import { achievements, achievementGroups, achievementGroup, achievementProgress, trackAchievement, type AchievementGroup, awardAchievements, parseAchievements } from '../core/achievements';
@@ -82,6 +81,9 @@ export class CanvasRuntime {
   private contractReturn:'loadout'|'paused'='loadout';
   private treeReturn: 'loadout' | 'choice' = 'loadout';
   private dossierWeapon: WeaponKind = 'pulse';
+  private combosReturn:'loadout'|'menu'='loadout';
+  private goalWasReady=false;
+  private pendingRecipeCompletion:RecipeGoal|null=null;
   save: Save;
   private previousMode: 'menu' | 'paused' = 'menu';
   private ctx: CanvasRenderingContext2D;
@@ -213,6 +215,7 @@ export class CanvasRuntime {
             const previousBuildPoints=this.world.buildPoints;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             for (const e of this.world.drainEffects()) this.effect(e);
+            this.checkRecipeGoal();
             const reveal=this.world.bossRewardRound!==null&&this.world.phase==='recovery'&&this.world.phaseTime<C.bossLootReveal;
             if(this.world.player.hp>0&&!reveal&&this.world.bossRewardRound!==null){this.mode='boss-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
             else if(this.world.player.hp>0&&!reveal&&this.world.contractReward){this.mode='contract-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
@@ -261,6 +264,7 @@ export class CanvasRuntime {
     this.weaponGuideUntil = 0;
     this.drawCount = 0; this.callbackCount = 0;
     this.world = new World(1337); this.mode = 'playing'; this.target = 360;
+    this.goalWasReady=false;this.pendingRecipeCompletion=null;
     this.accumulator = 0; this.lastTime = this.platform.now(); this.pointer = null;
     this.frameTimes.clear();this.callbackWork.clear();this.maxCallbackWorkMs=0;this.previousCallbackWorkMs=0;this.interruptedFrames=[]; this.downAction = '';
     this.particles = []; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.notice = ''; this.shakeUntil = 0;this.shieldBreak=undefined; this.upgradeUntil = 0;
@@ -305,7 +309,7 @@ export class CanvasRuntime {
     const p = this.point(x, y), action = this.buttons.find(b => p.x >= b.x && p.x < b.x + b.w && p.y >= b.y && p.y < b.y + b.h)?.action;
     const pressed = this.downAction;
     this.cancelTouch();
-    if (action && action === pressed) this.action(action);
+    if (action && action === pressed) {this.action(action);this.checkRecipeGoal();}
   }
   cancelTouch(id?: number) {
     if (id !== undefined && id !== this.pointer) return;
@@ -319,7 +323,8 @@ export class CanvasRuntime {
     if (this.mode === 'choice'||this.mode==='contract-reward'||this.mode==='boss-reward') return 'stay';
     if (this.mode === 'armory') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = this.achievementReturn; return 'stay'; }
-    if (this.mode === 'rig'||this.mode==='combos') { this.mode='loadout';return 'stay'; }
+    if(this.mode==='combos'){this.mode=this.combosReturn;return 'stay';}
+    if (this.mode === 'rig') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'contracts') { this.mode=this.contractReturn;return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
@@ -334,6 +339,7 @@ export class CanvasRuntime {
     if (this.controlsMode !== this.mode || !this.buttons.some(button => button.action === action)) return false;
     this.cancelTouch();
     this.action(action);
+    this.checkRecipeGoal();
     this.render(0);
     return true;
   }
@@ -376,8 +382,13 @@ export class CanvasRuntime {
       if (dossierWeapons.includes(weapon)) this.dossierWeapon = weapon;
     }
     else if (action === 'armory-back') this.mode = 'menu';
-    else if(action==='combos'&&this.mode==='loadout')this.mode='combos';
-    else if(action==='combos-back')this.mode='loadout';
+    else if(action==='combos'&&this.mode==='loadout'){this.combosReturn='loadout';this.mode='combos';}
+    else if(action==='combos-menu'&&this.mode==='menu'){this.combosReturn='menu';this.mode='combos';}
+    else if(action==='combos-back')this.mode=this.combosReturn;
+    else if(action.startsWith('recipe-goal:')&&this.mode==='combos'){
+      const goal=parseRecipeGoal(action.slice(12));
+      if(goal){this.save.recipeGoal=this.save.recipeGoal===goal?null:goal;this.pendingRecipeCompletion=null;this.goalWasReady=this.save.recipeGoal?recipeStatus(this.world,this.save.recipeGoal).ready:false;this.platform.write(this.save);}
+    }
     else if(action==='rig-view'&&this.mode==='loadout')this.mode='rig';
     else if(action==='rig-back')this.mode='loadout';
     else if(action==='contracts-live'&&this.mode==='playing'){this.pause();this.contractReturn='paused';this.mode='contracts';}
@@ -420,6 +431,11 @@ export class CanvasRuntime {
     this.updateMusic();
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
+  private checkRecipeGoal(){
+    const goal=this.save.recipeGoal,status=goal?recipeStatus(this.world,goal):null;
+    if(status?.ready&&!this.goalWasReady&&this.world.time>0)this.pendingRecipeCompletion=status.id;
+    this.goalWasReady=status?.ready??false;
+  }
   private checkAchievements() {
     const beforeCertifications=this.save.achievements.certifiedBuilds.length;
     const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks});
@@ -628,6 +644,11 @@ export class CanvasRuntime {
     if (this.platform.now() < this.shakeUntil) c.translate(Math.sin(this.platform.now()) * 3, Math.cos(this.platform.now()) * 3);
     this.drawWorld(dt);
     c.restore();
+    if(this.mode==='playing'&&this.pendingRecipeCompletion&&this.save.recipeGoal===this.pendingRecipeCompletion){
+      const completed=recipeStatus(w,this.pendingRecipeCompletion);
+      if(completed.ready)this.buildFeedback={title:`目标成形 · ${completed.name}`,detail:completed.effect,until:w.time+4,combo:true};
+      this.pendingRecipeCompletion=null;
+    }
     const receiptThreat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     const activeBuild=this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until;
     const noticeVisible=this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil&&!activeBuild;
@@ -853,8 +874,10 @@ export class CanvasRuntime {
           const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '前方索敌 · 命中跳电' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
           const panelY = b.y - 158 >= this.hudTop + 172 ? b.y - 158 : Math.max(this.hudTop + 172, b.y + 70);
+          const goalSupply=recipeSupplyMatch(w,this.save.recipeGoal,b);
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
-          this.text(b.refit?`${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x, panelY + 23, 25, weaponColors[b.weaponKind], 'center', true);
+          this.text(b.refit?`${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x-(goalSupply?18:0), panelY + 23, goalSupply?23:25, weaponColors[b.weaponKind], 'center', true);
+          if(goalSupply){c.strokeStyle='#ffe19a';c.lineWidth=2;c.strokeRect(b.x-118,panelY,236,100);this.text('目标',b.x+108,panelY+23,18,'#ffe19a','right',true);}
           this.text(b.refit?refitLabel(w,b.weaponKind):role, b.x, panelY + 51, b.refit?21:24, '#cfdee9');
           this.text(`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, 23, '#fff0c8');
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
@@ -863,7 +886,7 @@ export class CanvasRuntime {
           this.text(`T${b.stage} ${w.weaponStage(w.weaponKind) >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
           this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
         }
-      } else if (b.kind === 'pickup') this.text(b.weaponKind ? `拾取${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`, b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
+      } else if (b.kind === 'pickup') this.text((recipeSupplyMatch(w,this.save.recipeGoal,b)?'目标·':'')+(b.weaponKind ? `拾取${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`), b.x, b.y - 50, b.weaponKind ? 26 : 28, '#ffe7b1', 'center', true);
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy, b.rewardKind), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
@@ -953,10 +976,21 @@ export class CanvasRuntime {
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.
     if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
+    if(this.world.bullets.some(b=>b.active&&b.hostile&&b.x+8>=44&&b.x-8<=676&&b.y+12>=1150&&b.y-7<=1256))return;
     let guide = contextGuide(this.world);
     if(this.world.phase==='boss'&&this.world.phaseTime<8&&this.world.bossFormation)guide={kind:'move',title:this.world.bossFormation.name,detail:this.world.bossFormation.hint};
     if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
       guide = weaponGuide(this.weaponGuideKind, this.world.weaponStage(this.weaponGuideKind));
+    const goal=this.save.recipeGoal;
+    if(goal&&this.world.phase==='running'){
+      const status=recipeStatus(this.world,goal);
+      const supplies=this.world.bodies.filter(b=>recipeSupplyMatch(this.world,goal,b)&&b.y>=160&&b.y<=C.playerY+(b.kind==='pickup'?52:0));
+      if(supplies.length&&(guide.kind==='crate'||guide.kind==='pickup')){
+        const drops=supplies.filter(b=>b.kind==='pickup'),shown=drops.length?drops:supplies;
+        const names=[...new Set(shown.map(b=>weaponNames[b.weaponKind!]))].join(' / ');
+        guide={kind:guide.kind,title:`目标补给 · ${status.name}`,detail:`${names} · ${drops.length?'靠近拾取':'打碎再拾取'} · 同排只领一件`};
+      }else if(guide.kind==='move')guide={kind:'move',title:`构筑目标 · ${status.name}${status.ready?' · 已成形':''}`,detail:status.ready?'按配方条件触发 · 暂停可选择新目标':status.need};
+    }
     if (guide.detail) {
       this.rect(44, 1150, 632, 106, '#081a25df');
       this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
@@ -969,6 +1003,9 @@ export class CanvasRuntime {
     this.text('G A T E  S H O O T E R', 360, 370, 27, '#72cde9');
     this.rect(280, 420, 160, 2, '#5bddff'); this.text('把奖励打高。把火力打满。', 360, 475, 29, '#c2dbe8');
     this.text(`最高分　${this.save.best}`, 360, 890, 26, '#e8c98d');
+    this.rect(176,754,368,70,'#173442');const goal=this.save.recipeGoal;
+    const goalLabel=goal?`构筑目标 · ${recipes[goal].name}`:'选择构筑目标　›';this.text(goalLabel,360,789,25,'#d3e9b7','center',true);
+    this.buttons.push({x:176,y:754,w:368,h:70,action:'combos-menu',label:goalLabel});
     this.button('开始突围　›', 932, 'start', true);
     this.button('武器档案', 1030, 'armory');
     for(const [i,label] of ['成就','设置'].entries()){const x=112+i*258;this.rect(x,1128,238,86,'#1a2d3c');this.text(label, x+119,1171,30,'#d8eaf5');this.buttons.push({x,y:1128,w:238,h:86,label,action:i?'settings':'achievements'});}
@@ -1054,34 +1091,25 @@ export class CanvasRuntime {
     this.button('返回暂停菜单', 1130, 'loadout-back');
   }
   private drawCombos(){
-    const w=this.world;
+    const w=this.world,goal=this.save.recipeGoal,tracked=goal?recipeStatus(w,goal):null;
     this.rect(35,90,650,1120,'#102330');
-    this.text('配件组合',360,150,42,'#effaff','center',true);
-    this.text('满足配方自动生效 · 旧武器与伤害保留',360,207,24,'#bdd8e7');
-    const rows=[
-      {name:'雷暴霰射',on:w.build.ranks.ballistic>=3&&w.build.ranks.electric>=1,
-        need:`弹道路线 ${w.build.ranks.ballistic}/3 ＋ 雷电路线 ${Math.min(1,w.build.ranks.electric)}/1`,
-        effect:'霰弹命中后追加一次跳电',hint:'适合近距聚弹与密集敌群',color:'#b4ffb5'},
-      {name:'棱镜激光',on:w.supportProfile().prism,
-        need:`光学路线 ${w.build.ranks.optical}/3 ＋ 弹道路线 ${Math.min(1,w.build.ranks.ballistic)}/1`,
-        effect:'主束保留 · 两侧各追加45%伤害',hint:'横移对齐侧束，扩大清场覆盖',color:'#d7b1ff'},
-      {name:'电光连锁',on:w.laserChainUnlocked(),
-        need:`光学 ${w.build.ranks.optical}/3 · 精调 ${Math.min(1,w.build.refinements.optical)}/1 · 电弧${w.activeWeapons.includes('arc')?'T'+w.weaponStage('arc'):'未持有'}/T2`,
-        effect:'全武器直击 · 群敌跳链 / 单体聚能',hint:`${LASER_CHAIN.hops}跳${LASER_CHAIN.range}范围80%/64% · 聚能80%`,color:'#a7e7ff'},
-      {name:'裂甲爆破',on:w.fractureUnlocked(),
-        need:`穿甲炮 ${w.activeWeapons.includes('pierce')?'T'+w.weaponStage('pierce'):'未持有'}/T2 ＋ 爆裂炮 ${w.activeWeapons.includes('blast')?'T'+w.weaponStage('blast'):'未持有'}/T2`,
-        effect:`同敌${FRACTURE.hits}次穿甲命中：额外${FRACTURE.direct*100}%爆破`,hint:`邻敌${FRACTURE.splash*100}%伤害 · 范围${FRACTURE.radius} · 冷却${FRACTURE.cooldown}秒`,color:'#ffca8b'},
-    ];
-    for(const [i,row] of rows.entries()){
-      const y=260+i*190;this.rect(65,y,590,175,'#203e50');this.rect(65,y,5,175,row.color);
-      this.text(row.name,90,y+29,30,row.color,'left',true);
-      this.text(row.on?'已生效':'待组合',625,y+29,23,row.on?'#a2ffbb':'#b9cad6','right');
-      this.text(row.need,90,y+69,22,'#effaff','left');
-      this.text(row.effect,90,y+109,23,'#dbeaf3','left');
-      this.text(row.hint,90,y+148,21,'#bdd8e7','left');
+    this.text('构筑目标与配方',360,150,40,'#effaff','center',true);
+    this.text(tracked?`已追踪 · ${tracked.name}`:'先选目标，再寻找需要的补给与升级',360,207,24,'#d4e7ad');
+    this.text(tracked?(tracked.ready?'已成形 · 按配方条件触发':tracked.need):'打碎后仍需拾取 · 同排只领一件',360,237,20,'#bdd8e7');
+    for(const [i,id] of recipeIds.entries()){
+      const row=recipeStatus(w,id),selected=goal===id,y=260+i*152;
+      this.rect(65,y,590,142,selected?'#294b4c':'#203e50');this.rect(65,y,5,142,row.color);
+      this.text(row.name,90,y+28,28,row.color,'left',true);
+      this.text(row.ready?'已生效':'待构筑',470,y+28,20,row.ready?'#a2ffbb':'#b9cad6','right');
+      this.rect(492,y+7,146,42,selected?'#46614c':'#112a39');
+      const label=selected?'取消目标':'设为目标';this.text(label,565,y+28,21,selected?'#ffdf93':'#c4e8f5','center',true);
+      this.buttons.push({x:492,y:y+7,w:146,h:42,action:`recipe-goal:${id}`,label:`${label} · ${row.name}`});
+      this.text(row.progress,90,y+64,id==='photon'?18:20,'#effaff','left');
+      this.text(row.effect,90,y+99,21,'#dbeaf3','left');
+      this.text(row.hint,90,y+126,19,'#bdd8e7','left');
     }
     this.text(`裂甲引爆 ${w.fractureBursts}次 · 跳伤 ${w.laserArcHits}次 · 聚能 ${w.laserFocusHits}次`,360,1055,23,'#ffca8b');
-    this.button('返回当前火力',1100,'combos-back',true);
+    this.button(this.combosReturn==='menu'?'返回主界面':'返回当前火力',1100,'combos-back',true);
   }
   private drawRigView() {
     const w=this.world,c=this.ctx;
@@ -1251,13 +1279,14 @@ export class CanvasRuntime {
     for(const [i,route] of routes.entries()){
       const rank=this.world.build.ranks[route],y=330+i*235,node=this.world.build.next(route);
       const enabled=available.includes(route);
-      const preview=buildPreview(this.world,route),color=['#ffd28a','#c6a1ff','#7fe4ff'][i];
+      const preview=buildPreview(this.world,route),color=['#ffd28a','#c6a1ff','#7fe4ff'][i],goalHint=recipeRouteHint(this.world,this.save.recipeGoal,route);
       this.rect(65,y,590,205,enabled?'#203e50':'#15232e');
       this.rect(65,y,4,205,enabled?color:'#435462');
       this.text(`${['弹道','雷电','光学'][i]}路线 · ${rank}/3 · 精调${this.world.build.refinements[route]}`,90,y+35,26,color,'left');
       this.text(node?.name??'路线已完成',90,y+83,30,enabled?'#effaff':'#8396a2','left',true);
       this.text(preview.gain,90,y+128,23,enabled?'#e1f7ff':'#8396a2','left');
-      this.text(preview.plan,90,y+174,21,enabled?'#c4dca9':'#8396a2','left');
+      this.text(goalHint?.text??preview.plan,90,y+174,21,enabled?'#c4dca9':'#8396a2','left');
+      if(goalHint?.advances)this.text('目标所需',625,y+35,20,'#ffe19a','right',true);
       if(enabled)this.text('›',625,y+80,32,color,'right',true);
       if(enabled)this.buttons.push({x:65,y,w:590,h:205,action:`build:${route}`,label:node!.name});
     }
@@ -1274,7 +1303,9 @@ export class CanvasRuntime {
     for(const [i,line] of r.routes.entries())this.text(line,78,450+i*36,23,['#ffd28a','#c6a1ff','#7fe4ff'][i],'left');
     this.text(r.combat,360,577,24,'#effaff');this.text(r.contracts,360,614,23,'#bdd8e7');
     for(const [i,line] of r.mechanics.entries())this.text(line,360,r.mechanics.length>2?644+i*28:655+i*34,22,'#cddfea');
-    this.text(r.fresh,360,737,23,'#ffdc8a');this.text('下一局目标',360,786,24,'#aee7ff','center',true);this.text(r.next,360,824,22,'#d6e7f0');
+    const goal=this.save.recipeGoal?recipeStatus(w,this.save.recipeGoal):null;
+    const next=goal?goal.ready?`${goal.name}已成形 · 下局可换目标或挑战构筑检验`:`继续${goal.name}：${goal.need}`:r.next;
+    this.text(r.fresh,360,737,23,'#ffdc8a');this.text('下一局目标',360,786,24,'#aee7ff','center',true);this.text(next,360,824,goal?20:22,'#d6e7f0');
     if(w.lastDamageCause)this.text({bullet:'敌弹击毁 · 留意已发射子弹的空隙',enemy:'碰撞敌机 · 留出横向避让空间',crate:'撞上箱体 · 先击碎再拾取'}[w.lastDamageCause],360,873,22,'#edbc98');
     this.button('再次突围　›',920,'start',true);this.button('查看成就',1020,'achievements');this.button('返回主界面',1120,'home');
   }
@@ -1324,7 +1355,7 @@ export class CanvasRuntime {
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
       conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
-      mobileSentries:this.world.bodies.filter(b=>b.active&&b.pattern==='relocate').map(b=>({x:b.x,y:b.y,lane:b.lane,age:b.age,warning:b.warning,volleys:b.sentryVolleys??0,direction:sentryDirection(b)})),
+      recipeGoal:this.save.recipeGoal?recipeStatus(this.world,this.save.recipeGoal):null,goalSupplies:this.world.bodies.filter(b=>recipeSupplyMatch(this.world,this.save.recipeGoal,b)).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,stage:b.stage,refit:!!b.refit})),mobileSentries:this.world.bodies.filter(b=>b.active&&b.pattern==='relocate').map(b=>({x:b.x,y:b.y,lane:b.lane,age:b.age,warning:b.warning,volleys:b.sentryVolleys??0,direction:sentryDirection(b)})),
       interceptorBreaks:this.world.interceptorBreaks,interceptors:this.world.bodies.filter(b=>b.active&&b.pattern==='intercept').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,beat:b.burst,wingShots:b.interceptWingShots??0,coreShots:b.interceptCoreShots??0})),
       refitsClaimed:this.world.refitsClaimed,
       enemyProjectileScale:enemyProjectileScale(this.world.round),
@@ -1354,6 +1385,7 @@ export function parseSave(value: unknown): Save {
   const data = value as Partial<Save>;
   if (data.version !== 1) return result;
   result.achievements = parseAchievements(data.achievements);
+  result.recipeGoal=parseRecipeGoal(data.recipeGoal);
   if (Number.isFinite(data.best) && data.best! >= 0) result.best = Math.floor(data.best!);
   if (data.settings?.effects === 'weak') result.settings.effects = 'weak';
   for (const key of ['shake', 'sound', 'music'] as const) if (typeof data.settings?.[key] === 'boolean') result.settings[key] = data.settings[key];

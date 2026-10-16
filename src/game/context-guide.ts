@@ -24,6 +24,8 @@ export function contextGuide(world: Context): Guide {
   if (blockade) return { kind: 'boss', title: '首领封锁：观察实际弹幕', detail: '留意仍在飞行的子弹 · 随弹幕移动' };
   if (world.phase !== 'running') return movement;
   const visible = world.bodies.filter(b => b.active && b.y >= 160 && b.y <= C.playerY + (b.kind === 'pickup' ? 52 : 0));
+  const interceptor=visible.find(b=>b.pattern==='intercept'&&(b.warning>0||(b.interceptCoreRemaining??0)>0));
+  if(interceptor)return {kind:'enemy',title:interceptor.burst?'截击核心：及时离开中路':'截击翼炮：留意两侧实弹',detail:'可抢先击毁或击破中继 · 已发弹仍危险'};
   if(visible.some(b=>b.pattern==='relocate'))return {kind:'enemy',title:'机动哨机：入场抢位，齐射再换位',detail:'停稳再蓄能 · 重新对齐目标'};
   if (visible.some(b => b.kind === 'sniper' && b.warning > 0))
     return { kind: 'enemy', title: '狙击蓄能：保持横向移动', detail: '也可抢先击毁 · 命中不会打断蓄能' };

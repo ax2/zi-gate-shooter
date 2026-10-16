@@ -43,6 +43,14 @@ it('EMP pauses remaining core taps and resumes them without inventing an extra v
  for(let i=0;i<30;i++){w.step(C.step,68);w.drainEffects();}expect(b.interceptCoreShots).toBe(1);
  for(let i=0;i<20;i++){w.step(C.step,68);w.drainEffects();}expect(b.interceptCoreShots).toBe(3);expect(b.interceptWingShots).toBe(2);
 });
+it('actually destroying a relay cancels pending core taps when it resets the attack phase',()=>{
+ const {w,b}=setup();b.speed=0;
+ for(let i=0;i<108;i++){w.step(C.step,68);w.drainEffects();}expect(b.interceptCoreShots).toBe(1);
+ const relay=w.spawn('conduit',500,400);relay.speed=0;relay.hp=1;
+ w.bullets.push({id:99999,x:500,y:440,px:500,py:440,vx:0,vy:-1200,damage:20,age:0,active:true,hostile:false});
+ w.step(C.step,68);expect(relay.active).toBe(false);expect(b.empRemaining).toBeGreaterThan(0);expect(b.burst).toBe(0);expect(b.interceptCoreRemaining??0).toBe(0);
+ for(let i=0;i<120;i++){w.step(C.step,68);w.drainEffects();}expect(b.interceptCoreShots).toBe(1);expect(b.interceptWingShots).toBe(2);
+});
 it('lets three starting lanes escape both beats at three projectile depths with 450ms reaction and no kills',()=>{
  for(const round of [2,4,12])for(const start of [68,360,652]){
   const {w,b}=setup(round,start);let path:number[]=[],planAt=0;

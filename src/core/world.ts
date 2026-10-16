@@ -79,6 +79,7 @@ export class World {
       if(b.warning>0)interrupted++;
       if((b.empRemaining??0)<CONDUIT.duration){affected++;this.empTargets++;}
       b.empRemaining=Math.max(b.empRemaining??0,CONDUIT.duration);b.warning=0;b.burst=0;b.timer=Math.max(b.timer,.6);
+      if(b.pattern==='intercept')b.interceptCoreRemaining=0;
     }
     if(interrupted>=2)this.conduitTacticalWins++;
     this.effects.push({type:'emp',x:source.x,y:source.y,size:CONDUIT.radius,text:`中继击破 · ${affected}台停火`,detail:interrupted?`中断${interrupted}台蓄能 · 已发敌弹仍危险`:'停火1.5秒 · 已发敌弹仍危险'});

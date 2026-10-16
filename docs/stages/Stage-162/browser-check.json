@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:5178/",
+  "scripts": [
+    "http://127.0.0.1:5178/assets/canvas-preview-XrmaY5Y7.js"
+  ],
+  "controls": [
+    "选择构筑目标　›",
+    "开始突围　›",
+    "武器档案",
+    "成就",
+    "设置"
+  ],
+  "logs": []
+}

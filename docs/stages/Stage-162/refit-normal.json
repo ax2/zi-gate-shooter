@@ -1,0 +1,470 @@
+[
+  {
+    "policy": "expand",
+    "time": 300.0000000000558,
+    "round": 4,
+    "hp": 3,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "blast",
+      "arc"
+    ],
+    "levels": {
+      "pulse": 3,
+      "scatter": 3,
+      "pierce": 3,
+      "blast": 3,
+      "arc": 3
+    },
+    "calibrations": {
+      "pulse": 0,
+      "scatter": 0,
+      "pierce": 0,
+      "blast": 0,
+      "arc": 1
+    },
+    "refits": 3,
+    "kills": 197,
+    "contract": {
+      "kind": "specialist",
+      "status": "failed",
+      "reason": "新增了武器种类"
+    },
+    "contractStats": {
+      "accepted": 1,
+      "won": 0,
+      "failed": 1,
+      "claimed": 0
+    },
+    "offers": [
+      {
+        "time": 99.21666666666232,
+        "round": 2,
+        "choices": [
+          {
+            "kind": "blast",
+            "refit": false,
+            "stage": 3
+          },
+          {
+            "kind": "pierce",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 131.2333333333299,
+        "round": 2,
+        "choices": [
+          {
+            "kind": "arc",
+            "refit": false,
+            "stage": 3
+          },
+          {
+            "kind": "blast",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 180.96666666670282,
+        "round": 3,
+        "choices": [
+          {
+            "kind": "arc",
+            "refit": true,
+            "stage": 3
+          },
+          {
+            "kind": "pulse",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 212.98333333339497,
+        "round": 3,
+        "choices": [
+          {
+            "kind": "arc",
+            "refit": true,
+            "stage": 3
+          },
+          {
+            "kind": "pulse",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 265.7666666667536,
+        "round": 4,
+        "choices": [
+          {
+            "kind": "arc",
+            "refit": true,
+            "stage": 3
+          },
+          {
+            "kind": "scatter",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 297.78333333339117,
+        "round": 4,
+        "choices": [
+          {
+            "kind": "arc",
+            "refit": true,
+            "stage": 3
+          },
+          {
+            "kind": "scatter",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "time": 185.61666666670652,
+        "round": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "blast",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "arc",
+            "stage": 3,
+            "calibration": 0
+          }
+        ],
+        "energy": 50
+      },
+      {
+        "time": 217.63333333339867,
+        "round": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "blast",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "arc",
+            "stage": 3,
+            "calibration": 1
+          }
+        ],
+        "energy": 85
+      },
+      {
+        "time": 270.4166666667494,
+        "round": 4,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "blast",
+            "stage": 3,
+            "calibration": 0
+          },
+          {
+            "kind": "arc",
+            "stage": 3,
+            "calibration": 1
+          }
+        ],
+        "energy": 85
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 62
+  },
+  {
+    "policy": "refit",
+    "time": 300.0000000000558,
+    "round": 4,
+    "hp": 3,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce"
+    ],
+    "levels": {
+      "pulse": 2,
+      "scatter": 2,
+      "pierce": 3
+    },
+    "calibrations": {
+      "pulse": 0,
+      "scatter": 0,
+      "pierce": 5
+    },
+    "refits": 5,
+    "kills": 189,
+    "contract": {
+      "kind": "specialist",
+      "status": "won",
+      "reason": "挑战完成"
+    },
+    "contractStats": {
+      "accepted": 1,
+      "won": 1,
+      "failed": 0,
+      "claimed": 1
+    },
+    "offers": [
+      {
+        "time": 99.21666666666232,
+        "round": 2,
+        "choices": [
+          {
+            "kind": "blast",
+            "refit": false,
+            "stage": 3
+          },
+          {
+            "kind": "pierce",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 131.2333333333299,
+        "round": 2,
+        "choices": [
+          {
+            "kind": "blast",
+            "refit": false,
+            "stage": 3
+          },
+          {
+            "kind": "pierce",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 182.43333333337065,
+        "round": 3,
+        "choices": [
+          {
+            "kind": "blast",
+            "refit": false,
+            "stage": 3
+          },
+          {
+            "kind": "pierce",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 214.4500000000628,
+        "round": 3,
+        "choices": [
+          {
+            "kind": "blast",
+            "refit": false,
+            "stage": 3
+          },
+          {
+            "kind": "pierce",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      },
+      {
+        "time": 269.0833333334173,
+        "round": 4,
+        "choices": [
+          {
+            "kind": "arc",
+            "refit": false,
+            "stage": 3
+          },
+          {
+            "kind": "pierce",
+            "refit": true,
+            "stage": 3
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "time": 104.16666666666204,
+        "round": 2,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 1
+          }
+        ],
+        "energy": 55
+      },
+      {
+        "time": 136.18333333333385,
+        "round": 2,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 2
+          }
+        ],
+        "energy": 25
+      },
+      {
+        "time": 187.08333333337436,
+        "round": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 3
+          }
+        ],
+        "energy": 25
+      },
+      {
+        "time": 219.1000000000665,
+        "round": 3,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 4
+          }
+        ],
+        "energy": 60
+      },
+      {
+        "time": 273.73333333341304,
+        "round": 4,
+        "weapons": [
+          {
+            "kind": "pulse",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "scatter",
+            "stage": 2,
+            "calibration": 0
+          },
+          {
+            "kind": "pierce",
+            "stage": 3,
+            "calibration": 5
+          }
+        ],
+        "energy": 60
+      }
+    ],
+    "peakBodies": 19,
+    "peakBullets": 51
+  }
+]

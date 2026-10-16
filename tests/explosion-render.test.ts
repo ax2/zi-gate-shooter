@@ -47,6 +47,48 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('retains a completed target receipt through several pending upgrades until combat resumes',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.activateControl('combos-menu');f.runtime.activateControl('recipe-goal:ion');f.runtime.activateControl('combos-back');f.runtime.start();
+ const w=f.runtime.world;w.growth.mastery=4;w.chooseBuild('electric');w.chooseBuild('electric');
+ const p=w.spawn('pickup',360,C.playerY,2);p.weaponKind='pulse';f.tick();expect(f.runtime.mode).toBe('choice');
+ expect(f.runtime.activateControl('build:electric')).toBe(true);expect(f.runtime.mode).toBe('choice');expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(true);
+ expect(f.runtime.activateControl('build:ballistic')).toBe(true);expect(f.runtime.activateControl('build:optical')).toBe(true);expect(f.runtime.mode).toBe('playing');
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='目标成形 · 离子风暴')).toBe(true);
+});
+
+it('target supply guidance yields to actual interceptor warnings and live projectiles in the help area',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.activateControl('combos-menu');f.runtime.activateControl('recipe-goal:fracture');f.runtime.activateControl('combos-back');f.runtime.start();
+ const b=f.runtime.world.spawn('crate',500,600,2);b.weaponKind='blast';f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='目标补给 · 裂甲爆破')).toBe(true);
+ const elite=f.runtime.world.spawn('elite',360,400);elite.pattern='intercept';elite.warning=.75;elite.timer=.75;f.tick();
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='截击翼炮：留意两侧实弹')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='目标补给 · 裂甲爆破')).toBe(false);
+ f.runtime.world.bullets.push({id:99999,x:360,y:1180,px:360,py:1180,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='截击翼炮：留意两侧实弹')).toBe(false);expect(f.calls.some(c=>c.kind==='fillRect'&&c.color==='#ffead7')).toBe(true);
+});
+
+it('selects/cancels a remembered goal from menu and pause without advancing or granting anything',async()=>{
+ const writes:Save[]=[];const f=fixture(false,undefined,save=>writes.push(JSON.parse(JSON.stringify(save))));await f.runtime.load();
+ const world=f.runtime.world,before=JSON.stringify(world);expect(f.runtime.activateControl('combos-menu')).toBe(true);
+ for(const id of ['storm','prism','photon','fracture','ion'])expect(f.runtime.activateControl('recipe-goal:'+id)).toBe(true);
+ expect(f.runtime.save.recipeGoal).toBe('ion');expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='离子风暴')).toBe(true);expect(JSON.stringify(world)).toBe(before);
+ expect(f.runtime.back()).toBe('stay');f.tick();expect(f.runtime.mode).toBe('menu');expect(parseSave(writes.at(-1)).recipeGoal).toBe('ion');
+ expect(f.runtime.activateControl('start')).toBe(true);f.tick();expect(f.runtime.activateControl('pause')).toBe(true);expect(f.runtime.activateControl('loadout')).toBe(true);expect(f.runtime.activateControl('combos')).toBe(true);
+ const current=f.runtime.world,time=current.time,snapshot=JSON.stringify(current);expect(f.runtime.activateControl('recipe-goal:ion')).toBe(true);expect(f.runtime.save.recipeGoal).toBeNull();expect(f.runtime.activateControl('recipe-goal:photon')).toBe(true);
+ for(let i=0;i<60;i++)f.tick();expect(current.time).toBe(time);expect(JSON.stringify(current)).toBe(snapshot);expect(f.runtime.activateControl('combos-back')).toBe(true);expect(f.runtime.mode).toBe('loadout');
+});
+it('marks the missing crate and pickup, keeps its original role, and reports completion only after real collection',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.activateControl('combos-menu');f.runtime.activateControl('recipe-goal:fracture');f.runtime.activateControl('combos-back');f.runtime.start();
+ const w=f.runtime.world;const a=w.spawn('pickup',360,C.playerY,2);a.weaponKind='pierce';f.tick();resolveResearch(f);expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(false);
+ const wanted=w.spawn('crate',500,600,2);wanted.weaponKind='blast';const other=w.spawn('crate',220,600,2);other.weaponKind='pierce';f.tick();
+ expect(f.calls.filter(c=>c.kind==='fillText'&&c.args[0]==='目标')).toHaveLength(1);expect(f.calls.some(c=>c.kind==='strokeRect'&&c.args[0]===382&&c.stroke==='#ffe19a')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='命中敌人 · 范围爆破')).toBe(true);expect(w.activeWeapons).not.toContain('blast');
+ const pickup=w.spawn('pickup',360,C.playerY-80,2);pickup.weaponKind='blast';f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('目标·拾取'))).toBe(true);expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(false);
+ pickup.y=C.playerY;f.tick();expect(w.fractureUnlocked()).toBe(true);expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='目标成形 · 裂甲爆破')).toBe(true);expect(w.activeWeapons).toContain('pulse');
+ f.runtime.start();expect(f.runtime.save.recipeGoal).toBe('fracture');expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(false);
+});
+it('shows the exact needed upgrade while preserving the original numerical comparison',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.activateControl('combos-menu');f.runtime.activateControl('recipe-goal:prism');f.runtime.activateControl('combos-back');f.runtime.start();
+ const p=f.runtime.world.spawn('pickup',360,C.playerY,2);p.weaponKind='pulse';f.tick();expect(f.runtime.mode).toBe('choice');
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('光学路线 0/3→1/3'))).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('新增激光'))).toBe(true);expect(f.calls.filter(c=>c.kind==='fillText'&&c.args[0]==='目标所需')).toHaveLength(2);
+});
+
 it.each([false,true])('interceptor wing/core cues follow actual guns, pause with the world and remain below real hostile bullets (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();f.runtime.touchStart(91,68,900);
  const b=f.runtime.world.spawn('elite',360,360);b.pattern='intercept';b.timer=.15;b.dropGrace=.45;
@@ -439,15 +481,18 @@ it('guides real crate and gate progression with matching earned research choices
   expect(seen).toContain('穿过才领取 · 同排只领一扇');
 });
 
-it.each([false, true])('keeps live danger and reward labels above context help and hides help on pause (weak=%s)', async weak => {
+it.each([false, true])('omits help beneath a live projectile and restores it when the text area clears (weak=%s)', async weak => {
   const f = fixture(weak); await f.runtime.load(); f.runtime.start();
   // Off-path target and danger layout intentionally supplied for rendering coverage.
   f.runtime.world.spawn('crate', 240, 600);
-  f.runtime.world.bullets.push({id:9999,x:360,y:1180,px:360,py:1180,vx:0,vy:0,damage:1,age:0,active:true,hostile:true});
+  const danger={id:9999,x:360,y:1180,px:360,py:1180,vx:0,vy:0,damage:1,age:0,active:true,hostile:true};f.runtime.world.bullets.push(danger);
   f.tick();
+  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='对准装备箱持续射击')).toBe(false);
+  expect(f.calls.some(c=>c.kind==='fillRect'&&c.color==='#ffead7')).toBe(true);
+  danger.active=false;f.tick();
   const help = f.calls.findIndex(c => c.kind === 'fillText' && c.args[0] === '对准装备箱持续射击');
   expect(help).toBeGreaterThan(0);
-  expect(f.calls.findIndex(c => c.kind === 'fillRect' && c.color === '#ffead7')).toBeGreaterThan(help);
+  expect(f.calls.some(c=>c.kind==='fillRect'&&c.color==='#ffead7')).toBe(false);
   expect(f.calls.findIndex(c => c.kind === 'fillText' && c.args[0].startsWith?.('T2 装备'))).toBeGreaterThan(help);
   expect(f.calls.filter(c => c.kind === 'fillText' && c.args[2] === 277)).toHaveLength(0);
   f.runtime.pause(); for (let i = 0; i < 30; i++) f.tick();

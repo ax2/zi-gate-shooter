@@ -1,0 +1,305 @@
+{
+  "aceWins": 0,
+  "activeEscorts": 0,
+  "activeWeapons": [
+    "pulse"
+  ],
+  "arcLinks": 0,
+  "arcs": 0,
+  "ballisticBranch": null,
+  "blasts": 0,
+  "bodies": 3,
+  "bossCounterVolleys": 0,
+  "bossCounterfire": false,
+  "bossDestructionAge": null,
+  "bossFormation": null,
+  "bossLootStats": {
+    "claimed": 0,
+    "equipment": 0,
+    "research": 0
+  },
+  "bossRewardRound": null,
+  "bossShield": false,
+  "bossWins": 0,
+  "bountyEnemies": [],
+  "bountyKills": 0,
+  "bountyShots": 0,
+  "bountyTargets": 0,
+  "buildPoints": 1,
+  "buildRanks": {
+    "ballistic": 0,
+    "electric": 0,
+    "optical": 1
+  },
+  "buildRefinements": {
+    "ballistic": 0,
+    "electric": 0,
+    "optical": 0
+  },
+  "bullets": 8,
+  "burnHits": 0,
+  "callbackCount": 1047,
+  "callbackWork": {
+    "frameSampleSeconds": 0,
+    "frameSamples": 1047,
+    "maxMs": 0,
+    "over33msPercent": 0,
+    "p95": 0,
+    "p99": 0,
+    "sampleLimit": 3600
+  },
+  "capacitorBursts": 0,
+  "certifiedBuilds": [],
+  "conduitBursts": 0,
+  "conduitTacticalWins": 0,
+  "contractKind": null,
+  "contractRewardPending": false,
+  "contractStats": {
+    "accepted": 0,
+    "claimed": 0,
+    "failed": 0,
+    "won": 0
+  },
+  "contractStatus": null,
+  "crateFragments": 0,
+  "drawCount": 1046,
+  "droneFragments": 0,
+  "dropKills": 4,
+  "dropSpawns": 5,
+  "electricBranch": null,
+  "empTargets": 0,
+  "empWaves": 0,
+  "enemyFragments": 0,
+  "enemyProjectileScale": 1,
+  "escortKills": 0,
+  "escortSpawns": 0,
+  "fixture": true,
+  "flawlessAceWins": 0,
+  "fractureBursts": 0,
+  "fractureUnlocked": false,
+  "frame": 1047,
+  "framePulses": 1047,
+  "frameSampleSeconds": 17.449999999999932,
+  "frameSamples": 1047,
+  "gateReceipts": 0,
+  "goalSupplies": [
+    {
+      "id": 147,
+      "kind": "crate",
+      "refit": false,
+      "stage": 2,
+      "weapon": "pierce"
+    }
+  ],
+  "growth": {
+    "bonus": 0,
+    "energy": 0,
+    "overload": 0,
+    "stage": 2
+  },
+  "history": [
+    {
+      "goal": {
+        "color": "#ffca8b",
+        "effect": "同敌3次穿甲命中：额外200%爆破",
+        "hint": "邻敌75% · 范围120 · 冷却0.35秒",
+        "id": "fracture",
+        "missing": [
+          {
+            "current": 0,
+            "kind": "weapon",
+            "label": "穿甲炮",
+            "target": 2,
+            "weapon": "pierce"
+          },
+          {
+            "current": 0,
+            "kind": "weapon",
+            "label": "爆裂炮",
+            "target": 2,
+            "weapon": "blast"
+          }
+        ],
+        "name": "裂甲爆破",
+        "need": "获得穿甲炮T2 ＋ 获得爆裂炮T2",
+        "progress": "穿甲炮 未持有/T2 ＋ 爆裂炮 未持有/T2",
+        "ready": false,
+        "requirements": [
+          {
+            "current": 0,
+            "kind": "weapon",
+            "label": "穿甲炮",
+            "target": 2,
+            "weapon": "pierce"
+          },
+          {
+            "current": 0,
+            "kind": "weapon",
+            "label": "爆裂炮",
+            "target": 2,
+            "weapon": "blast"
+          }
+        ]
+      },
+      "levels": {
+        "pulse": 2
+      },
+      "stage": "target-box",
+      "time": 17.45000000000029,
+      "weapons": [
+        "pulse"
+      ]
+    }
+  ],
+  "hp": 3,
+  "huntChoice": "staggered",
+  "huntKind": null,
+  "imageCount": 28,
+  "inputMode": "touch",
+  "interceptorBreaks": 0,
+  "interceptors": [],
+  "interruptedFrames": [],
+  "ionBursts": 0,
+  "ionCharge": 0,
+  "ionHits": 0,
+  "isolatedMemorySave": true,
+  "laserArcBeams": 0,
+  "laserArcHits": 0,
+  "laserBands": [],
+  "laserChainReady": false,
+  "laserChainUnlocked": false,
+  "laserFocusBeams": 0,
+  "laserFocusHits": 0,
+  "mobileSentries": [],
+  "mode": "playing",
+  "offlineEnemies": 0,
+  "opticalBand": 1,
+  "opticalBranch": null,
+  "opticalImpacts": 0,
+  "over33msPercent": 0,
+  "p95": 16.66666666666788,
+  "p99": 16.66666666666788,
+  "particles": 0,
+  "phase": "running",
+  "phaseTime": 0,
+  "playerX": 68.17635279226296,
+  "prismHits": 0,
+  "proofKind": null,
+  "proofProgress": 0,
+  "proofWins": 0,
+  "protectedDrops": 0,
+  "quality": "standard",
+  "recipeGoal": {
+    "color": "#ffca8b",
+    "effect": "同敌3次穿甲命中：额外200%爆破",
+    "hint": "邻敌75% · 范围120 · 冷却0.35秒",
+    "id": "fracture",
+    "missing": [
+      {
+        "current": 0,
+        "kind": "weapon",
+        "label": "穿甲炮",
+        "target": 2,
+        "weapon": "pierce"
+      },
+      {
+        "current": 0,
+        "kind": "weapon",
+        "label": "爆裂炮",
+        "target": 2,
+        "weapon": "blast"
+      }
+    ],
+    "name": "裂甲爆破",
+    "need": "获得穿甲炮T2 ＋ 获得爆裂炮T2",
+    "progress": "穿甲炮 未持有/T2 ＋ 爆裂炮 未持有/T2",
+    "ready": false,
+    "requirements": [
+      {
+        "current": 0,
+        "kind": "weapon",
+        "label": "穿甲炮",
+        "target": 2,
+        "weapon": "pierce"
+      },
+      {
+        "current": 0,
+        "kind": "weapon",
+        "label": "爆裂炮",
+        "target": 2,
+        "weapon": "blast"
+      }
+    ]
+  },
+  "refitsClaimed": 0,
+  "relayHits": 0,
+  "renderedMode": "playing",
+  "researchPoints": 1,
+  "round": 1,
+  "roundTime": 17.45000000000029,
+  "runAchievements": [],
+  "runNewBest": false,
+  "sampleLimit": 36000,
+  "savedCertifications": [],
+  "scatterBursts": 0,
+  "scatterPierces": 0,
+  "scatterSplashHits": 0,
+  "score": 40,
+  "stage": "target-box",
+  "stored": {
+    "achievements": {
+      "bosses": 0,
+      "certifiedBuilds": [],
+      "kills": 3,
+      "tracked": null,
+      "unlocked": []
+    },
+    "best": 0,
+    "recipeGoal": "fracture",
+    "settings": {
+      "effects": "standard",
+      "music": false,
+      "shake": false,
+      "sound": false
+    },
+    "version": 1
+  },
+  "stormLinks": 0,
+  "supportBeams": 0,
+  "tacticalWins": 0,
+  "targets": [
+    {
+      "hp": 36,
+      "id": 146,
+      "kind": "crate",
+      "marked": false,
+      "refit": false,
+      "stage": 2,
+      "weapon": "scatter",
+      "x": 222,
+      "y": 400
+    },
+    {
+      "hp": 44,
+      "id": 147,
+      "kind": "crate",
+      "marked": true,
+      "refit": false,
+      "stage": 2,
+      "weapon": "pierce",
+      "x": 498,
+      "y": 400
+    }
+  ],
+  "time": 17.45000000000029,
+  "trackedAchievement": null,
+  "unspentBuildPoints": 0,
+  "virtualClock": true,
+  "weaponCalibrations": {
+    "pulse": 0
+  },
+  "weaponKind": "pulse",
+  "weaponLevels": {
+    "pulse": 2
+  }
+}
