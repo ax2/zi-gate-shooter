@@ -1,0 +1,146 @@
+[
+  {
+    "route": "ballistic",
+    "round": 1,
+    "beforeDuration": 5.299999999999699,
+    "afterDuration": 5.299999999999699,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "ballistic",
+    "round": 2,
+    "beforeDuration": 3.9666666666698234,
+    "afterDuration": 3.9666666666698234,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "ballistic",
+    "round": 3,
+    "beforeDuration": 6.366666666671733,
+    "afterDuration": 6.366666666671733,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "ballistic",
+    "round": 4,
+    "beforeDuration": 4.099999999996271,
+    "afterDuration": 4.099999999996271,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "ballistic",
+    "round": 5,
+    "beforeDuration": 2.8666666666640594,
+    "afterDuration": 2.8666666666640594,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "ballistic",
+    "round": 6,
+    "beforeDuration": 2.366666666664514,
+    "afterDuration": 2.366666666664514,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "electric",
+    "round": 1,
+    "beforeDuration": 4.966666666666384,
+    "afterDuration": 4.966666666666384,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "electric",
+    "round": 2,
+    "beforeDuration": 4.016666666669863,
+    "afterDuration": 4.016666666669863,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "electric",
+    "round": 3,
+    "beforeDuration": 6.500000000005173,
+    "afterDuration": 6.500000000005173,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "electric",
+    "round": 4,
+    "beforeDuration": 4.116666666662923,
+    "afterDuration": 4.116666666662923,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "electric",
+    "round": 5,
+    "beforeDuration": 2.8666666666640594,
+    "afterDuration": 2.8666666666640594,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "electric",
+    "round": 6,
+    "beforeDuration": 2.366666666664514,
+    "afterDuration": 2.366666666664514,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "optical",
+    "round": 1,
+    "beforeDuration": 5.533333333333019,
+    "afterDuration": 5.533333333333019,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "optical",
+    "round": 2,
+    "beforeDuration": 3.850000000003064,
+    "afterDuration": 3.850000000003064,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "optical",
+    "round": 3,
+    "beforeDuration": 6.366666666671733,
+    "afterDuration": 6.366666666671733,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "optical",
+    "round": 4,
+    "beforeDuration": 3.8499999999964984,
+    "afterDuration": 3.8499999999964984,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "optical",
+    "round": 5,
+    "beforeDuration": 2.683333333330893,
+    "afterDuration": 2.683333333330893,
+    "sameDuration": true,
+    "sameSpawns": true
+  },
+  {
+    "route": "optical",
+    "round": 6,
+    "beforeDuration": 2.1166666666647416,
+    "afterDuration": 2.1166666666647416,
+    "sameDuration": true,
+    "sameSpawns": true
+  }
+]

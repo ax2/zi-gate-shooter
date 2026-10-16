@@ -10,7 +10,7 @@ function hit(w:World,b:Body,damage=10000){w.bullets=[];const y=b.y+b.height/2+6;
 it('keeps the first three rounds unchanged and schedules three authored, bounded late formations',()=>{
  for(let r=1;r<=3;r++){expect(bossFormationFor(r)).toBeUndefined();const {w}=battle(r);frames(w,180,68);expect(w.escortSpawns).toBe(0);}
  expect([4,5,6].map(r=>bossFormationFor(r)?.id)).toEqual(['bulwark','pincer','crossfire']);
- expect(bossFormationFor(7)).toBe(bossFormationFor(4));
+ expect([4,5,6,7,8,9,10,11,12].map(r=>bossFormationFor(r)?.id)).toEqual(['bulwark','pincer','crossfire','pincer','crossfire','bulwark','crossfire','bulwark','pincer']);expect(bossFormationFor(13)).toBe(bossFormationFor(4));
  for(let r=4;r<=6;r++)expect(bossFormationFor(r)!.groups.reduce((n,g)=>n+g.troops.length,0)).toBe(2);
 });
 it('never spawns escorts during boss entry and starts guard supply in live combat',()=>{

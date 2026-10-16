@@ -1,0 +1,12 @@
+{
+  "resourceCount": 46,
+  "allHashesMatch": true,
+  "frozenPath": "C:\\Users\\ax2\\Documents\\Codex\\2026-10-11\\game-design-handoff-md-agents-md\\zi-gate-shooter\\build\\playable\\Stage-171",
+  "frozenPort": 5252,
+  "frozenServerStarted": false,
+  "fixedUrl": "http://127.0.0.1:5178/",
+  "fixedHTTP": 200,
+  "scriptHTTP": 200,
+  "script": "canvas-preview-L8ut_iYB.js",
+  "note": "PowerShell default proxy returned503; direct localhost -NoProxy and CUA browser succeed."
+}

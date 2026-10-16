@@ -1,0 +1,1068 @@
+[
+  {
+    "preferred": "ballistic",
+    "time": 1259.9999999991828,
+    "round": 16,
+    "hp": 3,
+    "battles": [
+      {
+        "round": 1,
+        "variant": 0,
+        "formation": null,
+        "start": 74.03333333333042,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 5.299999999999699,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 2,
+        "variant": 1,
+        "formation": null,
+        "start": 157.38333333335072,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 3.9666666666698234,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 3,
+        "variant": 2,
+        "formation": null,
+        "start": 239.40000000008266,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 6.366666666671733,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 4,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 323.8166666667008,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 114,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 15998,
+            "kind": "guard",
+            "maxHp": 526.08
+          },
+          {
+            "id": 15999,
+            "kind": "guard",
+            "maxHp": 526.08
+          }
+        ],
+        "duration": 4.099999999996271,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 5,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 405.9666666666261,
+        "spawns": 2,
+        "kills": 2,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 21259,
+            "kind": "charger",
+            "maxHp": 47.04
+          },
+          {
+            "id": 21431,
+            "kind": "charger",
+            "maxHp": 47.04
+          }
+        ],
+        "duration": 2.8666666666640594,
+        "spawned": 2,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 6,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 486.8833333332192,
+        "spawns": 4,
+        "kills": 3,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 26398,
+            "kind": "sniper",
+            "maxHp": 198
+          }
+        ],
+        "duration": 2.366666666664514,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 7,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 567.2999999998127,
+        "spawns": 5,
+        "kills": 4,
+        "damage": 0,
+        "shieldFrames": 89,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 31537,
+            "kind": "guard",
+            "maxHp": 1067.52
+          },
+          {
+            "id": 31538,
+            "kind": "guard",
+            "maxHp": 1067.52
+          }
+        ],
+        "duration": 2.616666666664287,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 8,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 647.966666666406,
+        "spawns": 7,
+        "kills": 6,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 36694,
+            "kind": "charger",
+            "maxHp": 71.88
+          }
+        ],
+        "duration": 1.866666666664969,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 9,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 727.883333333,
+        "spawns": 8,
+        "kills": 7,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 41761,
+            "kind": "sniper",
+            "maxHp": 353.76
+          }
+        ],
+        "duration": 1.3666666666654237,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 10,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 807.2999999995944,
+        "spawns": 9,
+        "kills": 8,
+        "damage": 0,
+        "shieldFrames": 69,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 46834,
+            "kind": "guard",
+            "maxHp": 1816.3200000000002
+          },
+          {
+            "id": 46835,
+            "kind": "guard",
+            "maxHp": 1816.3200000000002
+          }
+        ],
+        "duration": 1.966666666664878,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 11,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 887.3166666661883,
+        "spawns": 11,
+        "kills": 10,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 51949,
+            "kind": "charger",
+            "maxHp": 103.19999999999999
+          }
+        ],
+        "duration": 1.3499999999987722,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 12,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 966.7166666661161,
+        "spawns": 12,
+        "kills": 11,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 56982,
+            "kind": "sniper",
+            "maxHp": 557.04
+          }
+        ],
+        "duration": 1.1999999999989086,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 13,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 1045.9666666660441,
+        "spawns": 13,
+        "kills": 12,
+        "damage": 0,
+        "shieldFrames": 54,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 62032,
+            "kind": "guard",
+            "maxHp": 2772.4800000000005
+          },
+          {
+            "id": 62033,
+            "kind": "guard",
+            "maxHp": 2772.4800000000005
+          }
+        ],
+        "duration": 1.3666666666654237,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 14,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 1125.3833333326386,
+        "spawns": 15,
+        "kills": 14,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 67098,
+            "kind": "charger",
+            "maxHp": 141
+          }
+        ],
+        "duration": 1.0333333333323935,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 15,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 1204.4666666659,
+        "spawns": 16,
+        "kills": 15,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 72107,
+            "kind": "sniper",
+            "maxHp": 807.8399999999999
+          }
+        ],
+        "duration": 1.016666666665742,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "kills": 890,
+    "tacticalWins": 4,
+    "peakBodies": 9,
+    "peakBullets": 62,
+    "fallbacks": 5
+  },
+  {
+    "preferred": "electric",
+    "time": 1259.9999999991828,
+    "round": 16,
+    "hp": 3,
+    "battles": [
+      {
+        "round": 1,
+        "variant": 0,
+        "formation": null,
+        "start": 74.03333333333042,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 4.966666666666384,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 2,
+        "variant": 1,
+        "formation": null,
+        "start": 157.05000000001712,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 4.016666666669863,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 3,
+        "variant": 2,
+        "formation": null,
+        "start": 239.1166666667491,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 6.500000000005173,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 4,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 323.66666666670096,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 114,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 15928,
+            "kind": "guard",
+            "maxHp": 526.08
+          },
+          {
+            "id": 15929,
+            "kind": "guard",
+            "maxHp": 526.08
+          }
+        ],
+        "duration": 4.116666666662923,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 5,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 405.8333333332929,
+        "spawns": 2,
+        "kills": 2,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 21037,
+            "kind": "charger",
+            "maxHp": 47.04
+          },
+          {
+            "id": 21205,
+            "kind": "charger",
+            "maxHp": 47.04
+          }
+        ],
+        "duration": 2.8666666666640594,
+        "spawned": 2,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 6,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 486.749999999886,
+        "spawns": 4,
+        "kills": 3,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 26026,
+            "kind": "sniper",
+            "maxHp": 198
+          }
+        ],
+        "duration": 2.366666666664514,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 7,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 567.1666666664795,
+        "spawns": 5,
+        "kills": 4,
+        "damage": 0,
+        "shieldFrames": 99,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 31017,
+            "kind": "guard",
+            "maxHp": 1067.52
+          },
+          {
+            "id": 31018,
+            "kind": "guard",
+            "maxHp": 1067.52
+          }
+        ],
+        "duration": 2.683333333330893,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 8,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 647.8999999997394,
+        "spawns": 7,
+        "kills": 6,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 36029,
+            "kind": "charger",
+            "maxHp": 71.88
+          }
+        ],
+        "duration": 1.866666666664969,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 9,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 727.8166666663334,
+        "spawns": 8,
+        "kills": 7,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 40953,
+            "kind": "sniper",
+            "maxHp": 353.76
+          }
+        ],
+        "duration": 1.3666666666654237,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 10,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 807.2333333329278,
+        "spawns": 9,
+        "kills": 8,
+        "damage": 0,
+        "shieldFrames": 69,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 45880,
+            "kind": "guard",
+            "maxHp": 1816.3200000000002
+          },
+          {
+            "id": 45881,
+            "kind": "guard",
+            "maxHp": 1816.3200000000002
+          }
+        ],
+        "duration": 2.0166666666648325,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 11,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 887.2999999995217,
+        "spawns": 11,
+        "kills": 10,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 50862,
+            "kind": "charger",
+            "maxHp": 103.19999999999999
+          }
+        ],
+        "duration": 1.3499999999987722,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 12,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 966.6999999994495,
+        "spawns": 12,
+        "kills": 11,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 55749,
+            "kind": "sniper",
+            "maxHp": 557.04
+          }
+        ],
+        "duration": 1.2999999999988177,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 13,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 1046.0499999993774,
+        "spawns": 13,
+        "kills": 12,
+        "damage": 0,
+        "shieldFrames": 54,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 60660,
+            "kind": "guard",
+            "maxHp": 2772.4800000000005
+          },
+          {
+            "id": 60661,
+            "kind": "guard",
+            "maxHp": 2772.4800000000005
+          }
+        ],
+        "duration": 1.3666666666654237,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 14,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 1125.4666666659718,
+        "spawns": 15,
+        "kills": 14,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 65581,
+            "kind": "charger",
+            "maxHp": 141
+          }
+        ],
+        "duration": 1.116666666665651,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 15,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 1204.6333333325665,
+        "spawns": 16,
+        "kills": 15,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 70444,
+            "kind": "sniper",
+            "maxHp": 807.8399999999999
+          }
+        ],
+        "duration": 1.016666666665742,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "kills": 891,
+    "tacticalWins": 4,
+    "peakBodies": 9,
+    "peakBullets": 62,
+    "fallbacks": 4
+  },
+  {
+    "preferred": "optical",
+    "time": 1259.9999999991828,
+    "round": 16,
+    "hp": 3,
+    "battles": [
+      {
+        "round": 1,
+        "variant": 0,
+        "formation": null,
+        "start": 74.03333333333042,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 5.533333333333019,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 2,
+        "variant": 1,
+        "formation": null,
+        "start": 157.61666666668424,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 3.850000000003064,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 3,
+        "variant": 2,
+        "formation": null,
+        "start": 239.51666666674942,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 0,
+        "escorts": [],
+        "duration": 6.366666666671733,
+        "spawned": 0,
+        "killed": 0,
+        "hurt": 0
+      },
+      {
+        "round": 4,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 323.9333333333674,
+        "spawns": 0,
+        "kills": 0,
+        "damage": 0,
+        "shieldFrames": 99,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 16207,
+            "kind": "guard",
+            "maxHp": 526.08
+          },
+          {
+            "id": 16208,
+            "kind": "guard",
+            "maxHp": 526.08
+          }
+        ],
+        "duration": 3.8499999999964984,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 5,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 405.8333333332929,
+        "spawns": 2,
+        "kills": 2,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 21301,
+            "kind": "charger",
+            "maxHp": 47.04
+          }
+        ],
+        "duration": 2.683333333330893,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 6,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 486.5666666665528,
+        "spawns": 3,
+        "kills": 3,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 26275,
+            "kind": "sniper",
+            "maxHp": 198
+          }
+        ],
+        "duration": 2.1166666666647416,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 7,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 566.7333333331466,
+        "spawns": 4,
+        "kills": 4,
+        "damage": 0,
+        "shieldFrames": 84,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 31248,
+            "kind": "guard",
+            "maxHp": 1067.52
+          },
+          {
+            "id": 31249,
+            "kind": "guard",
+            "maxHp": 1067.52
+          }
+        ],
+        "duration": 2.366666666664514,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 8,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 647.1499999997401,
+        "spawns": 6,
+        "kills": 6,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 36241,
+            "kind": "charger",
+            "maxHp": 71.88
+          }
+        ],
+        "duration": 1.6833333333318024,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 9,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 726.8833333330009,
+        "spawns": 7,
+        "kills": 7,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 41147,
+            "kind": "sniper",
+            "maxHp": 353.76
+          }
+        ],
+        "duration": 1.3666666666654237,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 10,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 806.2999999995953,
+        "spawns": 8,
+        "kills": 8,
+        "damage": 0,
+        "shieldFrames": 69,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 46074,
+            "kind": "guard",
+            "maxHp": 1816.3200000000002
+          },
+          {
+            "id": 46075,
+            "kind": "guard",
+            "maxHp": 1816.3200000000002
+          }
+        ],
+        "duration": 1.866666666664969,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 11,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 886.2166666661893,
+        "spawns": 10,
+        "kills": 10,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 51041,
+            "kind": "charger",
+            "maxHp": 103.19999999999999
+          }
+        ],
+        "duration": 1.3499999999987722,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 12,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 965.6166666661171,
+        "spawns": 11,
+        "kills": 11,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 55928,
+            "kind": "sniper",
+            "maxHp": 557.04
+          }
+        ],
+        "duration": 1.116666666665651,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 13,
+        "variant": 0,
+        "formation": "bulwark",
+        "start": 1044.783333332712,
+        "spawns": 12,
+        "kills": 12,
+        "damage": 0,
+        "shieldFrames": 54,
+        "peakEscorts": 2,
+        "escorts": [
+          {
+            "id": 60825,
+            "kind": "guard",
+            "maxHp": 2772.4800000000005
+          },
+          {
+            "id": 60826,
+            "kind": "guard",
+            "maxHp": 2772.4800000000005
+          }
+        ],
+        "duration": 1.3666666666654237,
+        "spawned": 2,
+        "killed": 2,
+        "hurt": 0
+      },
+      {
+        "round": 14,
+        "variant": 1,
+        "formation": "pincer",
+        "start": 1124.1999999993063,
+        "spawns": 14,
+        "kills": 14,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 65745,
+            "kind": "charger",
+            "maxHp": 141
+          }
+        ],
+        "duration": 1.0333333333323935,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      },
+      {
+        "round": 15,
+        "variant": 2,
+        "formation": "crossfire",
+        "start": 1203.2833333325677,
+        "spawns": 15,
+        "kills": 15,
+        "damage": 0,
+        "shieldFrames": 0,
+        "peakEscorts": 1,
+        "escorts": [
+          {
+            "id": 70611,
+            "kind": "sniper",
+            "maxHp": 807.8399999999999
+          }
+        ],
+        "duration": 0.8666666666658784,
+        "spawned": 1,
+        "killed": 1,
+        "hurt": 0
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "blast",
+      "arc"
+    ],
+    "kills": 887,
+    "tacticalWins": 4,
+    "peakBodies": 9,
+    "peakBullets": 67,
+    "fallbacks": 4
+  }
+]

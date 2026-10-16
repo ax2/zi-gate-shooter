@@ -1,0 +1,16 @@
+{
+  "round": 9,
+  "start": 68,
+  "half": true,
+  "time": 20.000000000000146,
+  "hp": 3,
+  "kills": 0,
+  "formation": "bulwark",
+  "spawns": 2,
+  "emitted": 83,
+  "arrived": 83,
+  "counterVolleys": 2,
+  "fallbacks": 0,
+  "peakBodies": 3,
+  "peakBullets": 31
+}

@@ -1,0 +1,16 @@
+{
+  "round": 12,
+  "start": 360,
+  "half": false,
+  "time": 20.000000000000146,
+  "hp": 3,
+  "kills": 0,
+  "formation": "pincer",
+  "spawns": 2,
+  "emitted": 59,
+  "arrived": 59,
+  "counterVolleys": 0,
+  "fallbacks": 0,
+  "peakBodies": 3,
+  "peakBullets": 25
+}

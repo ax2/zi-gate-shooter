@@ -1,0 +1,21 @@
+{
+  "url": "http://127.0.0.1:5178/",
+  "script": "./assets/canvas-preview-L8ut_iYB.js",
+  "controls": 5,
+  "fixtureWarnings": [],
+  "fixtureErrors": [],
+  "productionWarnings": [],
+  "productionErrors": [],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 900
+    }
+  ],
+  "virtualClock": true,
+  "performanceClaim": false
+}

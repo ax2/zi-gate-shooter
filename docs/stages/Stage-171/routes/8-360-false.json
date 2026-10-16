@@ -1,0 +1,16 @@
+{
+  "round": 8,
+  "start": 360,
+  "half": false,
+  "time": 20.000000000000146,
+  "hp": 3,
+  "kills": 0,
+  "formation": "crossfire",
+  "spawns": 2,
+  "emitted": 53,
+  "arrived": 45,
+  "counterVolleys": 0,
+  "fallbacks": 0,
+  "peakBodies": 3,
+  "peakBullets": 12
+}

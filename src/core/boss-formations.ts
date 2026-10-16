@@ -11,6 +11,10 @@ const formations:readonly BossFormation[]=[
   {id:'crossfire',name:'狙击交叉',hint:'左右哨机交错入场，可先击破侧翼',shieldReduction:0,
     groups:[{at:.2,troops:[{kind:'sniper',x:180}]},{at:2.6,troops:[{kind:'sniper',x:540}]}]},
 ];
-/** Fixed round content, never selected from the player's DPS or input. */
-export const bossFormationFor=(round:number)=>round<4?undefined:formations[(Math.max(1,Math.floor(round))-1)%3];
+/** Each authored three-boss circuit offsets its escort roster: nine pairings.
+ * R4–6 stay original; only the later fixed round index changes the formation. */
+export const bossFormationFor=(round:number)=>{
+ const r=Math.max(1,Math.floor(round));if(r<4)return undefined;
+ return formations[(r-1+Math.floor((r-4)/3))%3];
+};
 export const ESCORT={charge:15,guardDurability:3,hoverY:440,holdSeconds:12,retry:.5,deadline:3} as const;
