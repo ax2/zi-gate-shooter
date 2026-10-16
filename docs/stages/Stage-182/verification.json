@@ -1,0 +1,9 @@
+{
+  "commonSnapshotFields": 18,
+  "baselineMatch": true,
+  "weakSnapshotMatch": true,
+  "actualDesktopWidth": 1280,
+  "actualDesktopHeight": 900,
+  "humanAcceptance": false,
+  "lowEndPerformance": false
+}

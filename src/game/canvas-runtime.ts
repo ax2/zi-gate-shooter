@@ -1,6 +1,7 @@
 import {isPhotonAugment,photonAugments,laserChainProfile} from '../core/laser-chain';
 import {batteryHolding} from '../core/battery';
 import {batteryMount} from './battery-mount';
+import {equipmentPreview} from './equipment-preview';
 import {openingWeapons,isOpeningWeapon,parseOpeningWeapon,openingHints} from '../core/opening-plan';
 import {battleBrief,sideBattlePreview,nextBattlePlan,parseBattlePlan} from '../core/battle-plan';
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
@@ -1226,23 +1227,29 @@ export class CanvasRuntime {
     this.button('返回当前火力',1100,'rig-back',true);
   }
   private weaponUpgradeOptions(){
-    const w=this.world;
-    return w.activeWeapons.map(kind=>{const stage=w.weaponStage(kind),n=w.weaponCalibration(kind);return {kind,title:stage<3?`${weaponNames[kind]} T${stage} → T${stage+1}`:`${weaponNames[kind]} · 专属精校${n+1}`,detail:stage<3?'升一阶，其他配件等级保留':`该武器伤害系数 ${100+n*50}% → ${150+n*50}%`,color:weaponColors[kind]};});
+    return this.world.activeWeapons.map(kind=>equipmentPreview(this.world,kind)!);
+  }
+  private drawRewardOption(o:{kind:WeaponKind|'research'|'energy';title:string;detail:string;hint:string;color:string;toTier?:number},y:number,prefix:'boss-claim'|'contract-claim'){
+    this.rect(65,y,590,118,'#203e50');this.rect(65,y,4,118,o.color);this.rect(81,y+7,91,104,'#102733');
+    if(o.kind==='research'||o.kind==='energy'){
+      const c=this.ctx;c.save();c.strokeStyle=o.color;c.lineWidth=2;c.beginPath();c.moveTo(101,y+22);c.lineTo(140,y+22);c.lineTo(155,y+37);c.lineTo(155,y+92);c.lineTo(101,y+92);c.closePath();c.stroke();c.beginPath();c.moveTo(140,y+22);c.lineTo(140,y+37);c.lineTo(155,y+37);c.stroke();c.restore();
+      this.text(o.kind==='research'?'+1':'ϟ',128,y+61,30,o.color,'center',true);
+    }else{const entry=weaponDossier[o.kind];this.frameSprite(entry.asset,(o.toTier??this.world.weaponStage(o.kind))-1,o.kind==='pulse'?4:3,126,y+59,78,104,o.kind==='pulse'?2:1);}
+    this.text(o.title,190,y+29,27,o.color,'left',true);this.text(o.detail,190,y+64,22,'#e1f1f8','left');this.text(o.hint,190,y+96,20,'#bdd8e7','left');this.text('›',632,y+56,30,o.color,'right');
+    this.buttons.push({x:65,y,w:590,h:118,action:`${prefix}:${o.kind}`,label:o.title});
   }
   private drawBossReward(){
     const w=this.world;if(w.bossRewardRound===null)return;
     this.rect(35,120,650,1080,'#102330');
     this.text(`第${w.bossRewardRound}轮首领战利品`,360,184,38,'#ffdc8a','center',true);
-    this.text('任选一项 · 蓝图进技能树，配件强现有武器',360,237,23,'#bdd8e7');
+    this.text('全弹命中时的直伤 · 不含超载与派生',360,237,22,'#bdd8e7');
     this.text(`首领充能+50已结算 · 当前装甲 ${w.player.hp}/3`,360,271,21,'#9db8c8');
     const points=w.buildPoints-w.build.spent;
-    const options=[{kind:'research',title:'研发蓝图 · 技能点+1',detail:`可用技能点 ${points} → ${points+1} · 不改变充能`,color:'#9fe7ff'},...this.weaponUpgradeOptions()];
+    const options=[{kind:'research' as const,title:'研发蓝图 · 技能点+1',detail:`可用技能点 ${points} → ${points+1}`,hint:'领取后选择升级路线 · 不改变充能',color:'#9fe7ff'},...this.weaponUpgradeOptions()];
     for(const [i,o] of options.entries()){
-      const y=306+i*125;this.rect(65,y,590,110,'#203e50');this.text(o.title,90,y+34,28,o.color,'left',true);
-      this.text(o.detail,90,y+78,23,'#d6e7f0','left');this.text('›',625,y+50,32,o.color,'right');
-      this.buttons.push({x:65,y,w:590,h:110,action:`boss-claim:${o.kind}`,label:o.title});
+      this.drawRewardOption(o,300+i*130,'boss-claim');
     }
-    this.text('战斗已暂停 · 本轮仅领取一次',360,1135,24,'#bdd8e7');
+    this.text('仅领取一次 · 其他武器与已有能力保留',360,1135,23,'#bdd8e7');
   }
   private drawContractReward() {
     const w=this.world,reward=w.contractReward;if(!reward)return;
@@ -1252,15 +1259,12 @@ export class CanvasRuntime {
     this.text(proof?`${Math.min(w.contract!.proofProgress,proof.goal)}/${proof.goal}${proof.unit} · 任选一项，旧能力保留`:'任选一项 · 其他武器与能力全部保留',360,245,24,'#bdd8e7');
     if(w.contract?.proof?.kind==='magnetic'&&w.build.magneticAugment)this.text(`本局认证：${magneticAugments[w.build.magneticAugment].name} · 另一精研可跨局完成`,360,278,21,'#aee8ce');
     const total=w.growth.energy+reward.charge;
-    const options=[{kind:'energy',title:`充能 +${reward.charge}`,detail:`充能 ${Math.floor(w.growth.energy)} → ${Math.floor(total%100)} · 额外突破 ${Math.floor(total/100)}次`,color:'#7fe4ff'},
+    const options=[{kind:'energy' as const,title:`充能 +${reward.charge}`,detail:`充能 ${Math.floor(w.growth.energy)} → ${Math.floor(total%100)} · 突破${Math.floor(total/100)}次`,hint:'满100：本局火力+10% · 超载6秒',color:'#7fe4ff'},
       ...this.weaponUpgradeOptions()];
     for(const [i,option] of options.entries()){
-      const y=290+i*125;this.rect(65,y,590,110,'#203e50');
-      this.text(option.title,90,y+33,28,option.color,'left',true);
-      this.text(option.detail,90,y+78,23,'#d6e7f0','left');
-      this.text('›',625,y+50,32,option.color,'right');
-      this.buttons.push({x:65,y,w:590,h:110,action:`contract-claim:${option.kind}`,label:option.title});
+      this.drawRewardOption(option,300+i*130,'contract-claim');
     }
+    this.text('全弹命中时的直伤 · 不含超载与派生',360,1093,21,'#9db8c8');
     this.text(reward.research?'任选一项，额外研发+1同时领取':'战斗已暂停 · 选择后继续',360,1135,24,'#bdd8e7');
   }
   private drawContracts() {

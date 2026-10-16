@@ -1,0 +1,124 @@
+[
+  {
+    "policy": "charge",
+    "contractStats": {
+      "accepted": 8,
+      "won": 6,
+      "failed": 1,
+      "claimed": 6
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "claims": [
+      {
+        "time": 121.03333333332775,
+        "round": 2,
+        "selected": "energy"
+      },
+      {
+        "time": 202.45000000005325,
+        "round": 3,
+        "selected": "energy"
+      },
+      {
+        "time": 285.883333333402,
+        "round": 4,
+        "selected": "energy"
+      },
+      {
+        "time": 367.4499999999945,
+        "round": 5,
+        "selected": "energy"
+      },
+      {
+        "time": 447.61666666658823,
+        "round": 6,
+        "selected": "energy"
+      },
+      {
+        "time": 527.5333333331822,
+        "round": 7,
+        "selected": "energy"
+      }
+    ],
+    "mastery": 28,
+    "calibrations": {
+      "pulse": 2,
+      "scatter": 4,
+      "pierce": 0,
+      "arc": 1,
+      "blast": 2
+    },
+    "levels": {
+      "pulse": 3,
+      "scatter": 3,
+      "pierce": 2,
+      "arc": 3,
+      "blast": 3
+    },
+    "peakBodies": 13,
+    "peakBullets": 64
+  },
+  {
+    "policy": "equipment",
+    "contractStats": {
+      "accepted": 8,
+      "won": 6,
+      "failed": 1,
+      "claimed": 6
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "claims": [
+      {
+        "time": 121.03333333332775,
+        "round": 2,
+        "selected": "pulse"
+      },
+      {
+        "time": 202.6500000000534,
+        "round": 3,
+        "selected": "scatter"
+      },
+      {
+        "time": 286.5666666667347,
+        "round": 4,
+        "selected": "pierce"
+      },
+      {
+        "time": 368.2333333333271,
+        "round": 5,
+        "selected": "blast"
+      },
+      {
+        "time": 448.46666666658746,
+        "round": 6,
+        "selected": "blast"
+      },
+      {
+        "time": 528.5333333331813,
+        "round": 7,
+        "selected": "blast"
+      }
+    ],
+    "mastery": 22,
+    "calibrations": {
+      "pulse": 3,
+      "scatter": 6,
+      "pierce": 0,
+      "arc": 2,
+      "blast": 3
+    },
+    "levels": {
+      "pulse": 3,
+      "scatter": 3,
+      "pierce": 3,
+      "arc": 3,
+      "blast": 3
+    },
+    "peakBodies": 13,
+    "peakBullets": 70
+  }
+]

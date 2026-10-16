@@ -1,0 +1,222 @@
+[
+  {
+    "policy": "research",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "bossWins": 7,
+    "victories": 7,
+    "stats": {
+      "claimed": 7,
+      "research": 7,
+      "equipment": 0
+    },
+    "claims": [
+      {
+        "round": 1,
+        "kind": "research",
+        "time": 81.54999999999666,
+        "pointsBefore": 3,
+        "pointsAfter": 4,
+        "stageBefore": 0,
+        "stageAfter": 0,
+        "calibrationBefore": 0,
+        "calibrationAfter": 0
+      },
+      {
+        "round": 2,
+        "kind": "research",
+        "time": 163.16666666668866,
+        "pointsBefore": 7,
+        "pointsAfter": 8,
+        "stageBefore": 0,
+        "stageAfter": 0,
+        "calibrationBefore": 0,
+        "calibrationAfter": 0
+      },
+      {
+        "round": 3,
+        "kind": "research",
+        "time": 247.31666666675562,
+        "pointsBefore": 11,
+        "pointsAfter": 12,
+        "stageBefore": 0,
+        "stageAfter": 0,
+        "calibrationBefore": 0,
+        "calibrationAfter": 0
+      },
+      {
+        "round": 4,
+        "kind": "research",
+        "time": 329.23333333336257,
+        "pointsBefore": 16,
+        "pointsAfter": 17,
+        "stageBefore": 0,
+        "stageAfter": 0,
+        "calibrationBefore": 0,
+        "calibrationAfter": 0
+      },
+      {
+        "round": 5,
+        "kind": "research",
+        "time": 409.6499999999561,
+        "pointsBefore": 20,
+        "pointsAfter": 21,
+        "stageBefore": 0,
+        "stageAfter": 0,
+        "calibrationBefore": 0,
+        "calibrationAfter": 0
+      },
+      {
+        "round": 6,
+        "kind": "research",
+        "time": 489.8999999998831,
+        "pointsBefore": 25,
+        "pointsAfter": 26,
+        "stageBefore": 0,
+        "stageAfter": 0,
+        "calibrationBefore": 0,
+        "calibrationAfter": 0
+      },
+      {
+        "round": 7,
+        "kind": "research",
+        "time": 571.5666666664755,
+        "pointsBefore": 29,
+        "pointsAfter": 30,
+        "stageBefore": 0,
+        "stageAfter": 0,
+        "calibrationBefore": 0,
+        "calibrationAfter": 0
+      }
+    ],
+    "mastery": 22,
+    "research": 9,
+    "weaponLevels": {
+      "pulse": 3,
+      "scatter": 3,
+      "pierce": 2,
+      "arc": 3,
+      "blast": 3
+    },
+    "calibrations": {
+      "pulse": 3,
+      "scatter": 1,
+      "pierce": 0,
+      "arc": 2,
+      "blast": 3
+    },
+    "peakBodies": 9,
+    "peakBullets": 64
+  },
+  {
+    "policy": "equipment",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "bossWins": 7,
+    "victories": 7,
+    "stats": {
+      "claimed": 7,
+      "research": 0,
+      "equipment": 7
+    },
+    "claims": [
+      {
+        "round": 1,
+        "kind": "arc",
+        "time": 81.54999999999666,
+        "pointsBefore": 3,
+        "pointsAfter": 3,
+        "stageBefore": 3,
+        "stageAfter": 3,
+        "calibrationBefore": 0,
+        "calibrationAfter": 1
+      },
+      {
+        "round": 2,
+        "kind": "arc",
+        "time": 162.9666666666885,
+        "pointsBefore": 6,
+        "pointsAfter": 6,
+        "stageBefore": 3,
+        "stageAfter": 3,
+        "calibrationBefore": 1,
+        "calibrationAfter": 2
+      },
+      {
+        "round": 3,
+        "kind": "arc",
+        "time": 246.88333333342194,
+        "pointsBefore": 9,
+        "pointsAfter": 9,
+        "stageBefore": 3,
+        "stageAfter": 3,
+        "calibrationBefore": 2,
+        "calibrationAfter": 3
+      },
+      {
+        "round": 4,
+        "kind": "arc",
+        "time": 328.3000000000301,
+        "pointsBefore": 13,
+        "pointsAfter": 13,
+        "stageBefore": 3,
+        "stageAfter": 3,
+        "calibrationBefore": 4,
+        "calibrationAfter": 5
+      },
+      {
+        "round": 5,
+        "kind": "arc",
+        "time": 408.7166666666236,
+        "pointsBefore": 16,
+        "pointsAfter": 16,
+        "stageBefore": 3,
+        "stageAfter": 3,
+        "calibrationBefore": 5,
+        "calibrationAfter": 6
+      },
+      {
+        "round": 6,
+        "kind": "arc",
+        "time": 488.94999999988397,
+        "pointsBefore": 20,
+        "pointsAfter": 20,
+        "stageBefore": 3,
+        "stageAfter": 3,
+        "calibrationBefore": 6,
+        "calibrationAfter": 7
+      },
+      {
+        "round": 7,
+        "kind": "arc",
+        "time": 570.6999999998096,
+        "pointsBefore": 23,
+        "pointsAfter": 23,
+        "stageBefore": 3,
+        "stageAfter": 3,
+        "calibrationBefore": 8,
+        "calibrationAfter": 9
+      }
+    ],
+    "mastery": 22,
+    "research": 2,
+    "weaponLevels": {
+      "pulse": 3,
+      "scatter": 3,
+      "pierce": 2,
+      "arc": 3,
+      "blast": 3
+    },
+    "calibrations": {
+      "pulse": 2,
+      "scatter": 3,
+      "pierce": 0,
+      "arc": 9,
+      "blast": 2
+    },
+    "peakBodies": 9,
+    "peakBullets": 70
+  }
+]

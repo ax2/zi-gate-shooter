@@ -79,7 +79,8 @@ it('weaving, diagonal charge and fan fire execute different real movements and e
 it('later chapters introduce their distinct threat before the first upgrade crate', () => {
   const openings = [1, 2, 3].map(round => timeline(round, 77).filter(s => s.at < 8));
   expect(openings[0].every(s => s.kind === 'drone' && !s.pattern)).toBe(true);
-  expect(openings[1].some(s => s.kind === 'charger' && s.pattern === 'flank' && s.lane !== s.x)).toBe(true);
+  // The shipped first side-chapter charger now rebounds; keep asserting a real lateral threat.
+  expect(openings[1].some(s => s.kind === 'charger' && s.pattern === 'rebound' && s.lane !== s.x)).toBe(true);
   expect(openings[2].some(s => s.kind === 'armor' && s.pattern === 'fan')).toBe(true);
   expect(new Set(openings[2].map(s => s.x)).size).toBe(1);
 });

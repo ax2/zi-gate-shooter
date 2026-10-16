@@ -19,7 +19,7 @@ export function parseRecipeGoal(value:unknown):RecipeGoal|null{return typeof val
 interface Requirement {kind:'route'|'refinement'|'weapon';current:number;target:number;label:string;route?:Route;weapon?:WeaponKind}
 const routeNames={ballistic:'弹道',electric:'雷电',optical:'光学'} as const;
 /** Pure, current prerequisites; a marked box is never treated as collected. */
-export function recipeStatus(w:World,id:RecipeGoal){
+export function recipeStatus(w:Pick<World,'build'|'activeWeapons'|'weaponStage'>,id:RecipeGoal){
  const requirements:Requirement[]=[];
  const route=(r:Route,target:number)=>requirements.push({kind:'route',route:r,current:w.build.ranks[r],target,label:`${routeNames[r]}路线`});
  const weapon=(kind:WeaponKind)=>requirements.push({kind:'weapon',weapon:kind,current:w.activeWeapons.includes(kind)?w.weaponStage(kind):0,target:2,label:weaponNames[kind]});
