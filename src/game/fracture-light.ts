@@ -11,11 +11,20 @@ export function fractureMarks(c:CanvasRenderingContext2D,x:number,y:number,width
 
 /** Already emitted pressure wave, clipped to its actual collision endpoint. */
 export function fractureWaveLight(c:CanvasRenderingContext2D,x:number,y:number,tx:number,ty:number,life:number,weak:boolean){
-  const length=y-ty;if(length<=0||life<=0)return;
+  const length=y-ty;if(length<0||life<=0)return;
   const age=Math.min(1,1-life/.24);c.save();c.translate(x,y);
   c.globalAlpha=(1-age)*(weak?.65:.9);c.strokeStyle='#ffc078';c.lineWidth=weak?2:4;
+  // A real emission can hit overlapping side bodies at the origin (zero length).
+  // Show its local rupture without inventing travel beyond a blocking contact.
+  for(const side of [-1,1]){c.beginPath();c.moveTo(side*18,0);c.lineTo(side*40,-8);c.lineTo(side*68,0);if(!weak){c.lineTo(side*90,-8);c.lineTo(side*116,-2);}c.stroke();}
+  if(length===0){c.restore();return;}
   c.beginPath();c.moveTo(-9,0);c.lineTo(-18,-length*.32);c.lineTo(12,-length*.55);c.lineTo(-7,-length*.8);c.lineTo(tx-x,-length);c.stroke();
   c.strokeStyle='#fff0c9';c.lineWidth=2;
+  if(!weak){
+    // Two displaced rails and a forged tip distinguish pressure from electric arcs.
+    for(const side of [-1,1]){c.beginPath();c.moveTo(side*12,0);c.lineTo(side*30,-length*.25);c.lineTo(side*12,-length*.7);c.lineTo(side*4,-length);c.stroke();}
+    const tip=length*Math.min(1,age*2),h=Math.min(18,tip);c.fillStyle='#ffe4a6';c.beginPath();c.moveTo(0,-tip);c.lineTo(7,-tip+h*.55);c.lineTo(0,-tip+h);c.lineTo(-7,-tip+h*.55);c.closePath();c.fill();
+  }
   for(let i=0;i<(weak?1:3);i++){const t=(age+i/3)%1,d=length*t,w=30+90*(1-t);c.beginPath();c.moveTo(-w,-d+Math.min(12,d));c.lineTo(0,-d);c.lineTo(w,-d+Math.min(12,d));c.stroke();}
   c.restore();
 }

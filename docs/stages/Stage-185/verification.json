@@ -1,0 +1,31 @@
+{
+  "weakSameCurrent": true,
+  "realFinishHit": {
+    "time": 139.03333333333612,
+    "sourceId": 5726,
+    "targetId": 5728,
+    "fromKill": true,
+    "x": 360,
+    "y": 501.25,
+    "targetX": 420,
+    "targetY": 464.1250000000008,
+    "damage": 12
+  },
+  "finishWaves": 1,
+  "finishHits": 2,
+  "damage": 24,
+  "bursts": 0,
+  "actualTime": 139.03333333333612,
+  "choiceCost": 1,
+  "preservedWeapons": true,
+  "virtualClock": true,
+  "worldInjection": false,
+  "tests": 113,
+  "frozenResourceCount": 46,
+  "resultTime": 311.1166666667124,
+  "resultMode": "result",
+  "resultHits": 3,
+  "resultHp": 0,
+  "finalHash": "XDC6ps1R",
+  "intermediatePreserved": true
+}

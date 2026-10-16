@@ -257,6 +257,8 @@ export class World {
   canRefineFracture(){return this.fractureUnlocked()&&this.build.ranks.ballistic>=3&&!this.build.fractureAugment;}
   fractureProfile(){return fractureProfile(this.build.fractureAugment);}
   fractureWaves=0;fractureWaveHits=0;
+  fractureFinishWaves=0;fractureFinishHits=0;fractureWaveDamage=0;
+  lastFractureWaveHit?:{time:number;sourceId:number;targetId:number;fromKill:boolean;x:number;y:number;targetX:number;targetY:number;damage:number};
   private announceFracture(){
     this.announceMagnetic();
     if(!this.announcedFracture&&this.fractureUnlocked()){
@@ -280,9 +282,10 @@ export class World {
       }
     if(this.build.fractureAugment==='fracture-line'&&!this.bossVictory)this.fractureWave(body,damage);
   }
-  private fractureWave(source:Body,damage:number){
+  private fractureWave(source:Body,damage:number,fromKill=false){
+    if(this.bossVictory||this.player.hp<=0)return;
     const start=source.y,top=Math.max(C.playerShotTop,start-FRACTURE_LINE.range);if(top>=start)return;
-    const candidates=this.bodies.filter(b=>b.active&&b.id!==source.id&&b.kind!=='pickup'&&b.y<start&&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss'))
+    const candidates=this.bodies.filter(b=>b.active&&b.id!==source.id&&b.kind!=='pickup'&&b.y-b.height/2<=start&&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss'))
       .map(b=>({b,t:sweep(source.x,start,source.x,top,b.x,b.y,b.x,b.y,b.width/2+FRACTURE_LINE.width/2,b.height/2)}))
       .filter((h):h is {b:Body;t:number}=>h.t!==null).sort((a,b)=>a.t-b.t||a.b.id-b.b.id);
     let end:number=top,count=0;
@@ -290,10 +293,13 @@ export class World {
       if(this.bossVictory||this.player.hp<=0)break;if(!b.active)continue;
       const contact=Math.min(start,b.y+b.height/2),blocked=guardClosed(b)||(b.dropGrace??0)>0;
       if(b.kind==='gate'||b.kind==='crate'||(b.dropGrace??0)>0){end=contact;break;}
-      const before=b.hp;this.hit(b,damage*FRACTURE_LINE.damage,'blast');if(b.hp<before)this.fractureWaveHits++;
+      const before=b.hp;this.hit(b,damage*FRACTURE_LINE.damage,'blast');if(b.hp<before){
+        const applied=Math.min(before,before-b.hp);this.fractureWaveHits++;this.fractureWaveDamage+=applied;if(fromKill)this.fractureFinishHits++;
+        this.lastFractureWaveHit={time:this.time,sourceId:source.id,targetId:b.id,fromKill,x:source.x,y:start,targetX:b.x,targetY:b.y,damage:applied};
+      }
       if(blocked||++count>=FRACTURE_LINE.targets||this.bossVictory){end=contact;break;}
     }
-    this.fractureWaves++;this.effects.push({type:'fracture-wave',x:source.x,y:start,targetX:source.x,targetY:end});
+    this.fractureWaves++;if(fromKill)this.fractureFinishWaves++;this.effects.push({type:'fracture-wave',x:source.x,y:start,targetX:source.x,targetY:end});
   }
   private calibrations=new Map<WeaponKind,number>();
   weaponCalibration(kind:WeaponKind){return this.calibrations.get(kind)??0;}
@@ -733,7 +739,10 @@ export class World {
               if(target.hp<before){this.scatterRicochets++;if(target.proofRound===this.round&&target.proofGroup)this.contract?.recordRicochetGroup(target.proofGroup,this.round);this.effects.push({type:'ricochet',x:body.x,y:body.y,targetX:target.x,targetY:target.y,weaponKind:'scatter'});}
             }
           }
-          if(bullet.weaponKind==='pierce')this.fracture(body,bullet.damage);
+          if(bullet.weaponKind==='pierce'){
+            if(body.kind in C.enemies&&hpBefore>0&&body.hp<=0&&!body.active&&this.build.fractureAugment==='fracture-line')this.fractureWave(body,bullet.damage,true);
+            else this.fracture(body,bullet.damage);
+          }
           if(bullet.weaponKind==='arc')this.capacitor(body,bullet.damage);
           if(ionEligible&&body.hp<hpBefore)this.ionImpact(body,bullet.damage);
           const support=this.supportProfile();
