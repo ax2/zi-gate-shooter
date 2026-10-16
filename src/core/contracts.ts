@@ -1,5 +1,10 @@
 import {buildProofs,type ProofTarget} from './build-proof';
 export const HUNTER={targets:2,spacing:6,hoverY:500,holdSeconds:20,retry:.5} as const;
+export const hunts={
+ staggered:{name:'分批悬赏',detail:'两名精英分批入场 · 30秒全破',research:0,durability:1},
+ crossfire:{name:'双线王牌',detail:'30秒全破强化扇射双机 · 建议T3火力',research:1,durability:1.6},
+} as const;
+export type HuntKind=keyof typeof hunts;
 export const contracts={
  precision:{name:'无伤猎杀',detail:'30秒内击毁15敌，全程不受伤',charge:100},
  specialist:{name:'专精试炼',detail:'30秒内击毁15敌，不新增武器种类',charge:75},
@@ -18,7 +23,7 @@ export class Contract {
  targetEscaped(round:number){if(this.kind==='hunter'&&this.status==='active'&&round===this.round)this.lostTarget=true;}
  proofProgress=0;
  elapsed=0; status:'active'|'won'|'failed'='active';reason='';
- constructor(readonly kind:ContractKind,readonly round:number,readonly startKills:number,readonly weapons:number,readonly damage:number,readonly proof?:ProofTarget){}
+ constructor(readonly kind:ContractKind,readonly round:number,readonly startKills:number,readonly weapons:number,readonly damage:number,readonly proof?:ProofTarget,readonly hunt:HuntKind='staggered'){}
  update(dt:number,kills:number,weapons:number,damage:number,alive:boolean,proofTotal=0){
   if(this.status!=='active')return false;
   this.elapsed+=dt;

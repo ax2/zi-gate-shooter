@@ -4,7 +4,7 @@ import { bossFormationFor, ESCORT } from './boss-formations';
 import {ION_STORM} from './ion-storm';
 import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
-import { Contract, contracts, HUNTER, type ContractKind } from './contracts';
+import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
 import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone } from './support-profile';
@@ -30,7 +30,7 @@ export interface Body {
   active: boolean; age: number; timer: number; warning: number; hit: number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;proofTarget?:boolean;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;escort?:boolean;
   weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
 }
 export interface Bullet {
@@ -48,7 +48,8 @@ export class World {
   private firstEquipmentResearch=false;
   private firstArmoryResearch=false;
   private bossResearchPoints=0;
-  get researchPoints(){return Number(this.firstEquipmentResearch)+Number(this.firstArmoryResearch)+this.bossResearchPoints;}
+  private contractResearchPoints=0;
+  get researchPoints(){return Number(this.firstEquipmentResearch)+Number(this.firstArmoryResearch)+this.bossResearchPoints+this.contractResearchPoints;}
   get buildPoints(){return (this.growth.mastery??0)+this.researchPoints;}
   private equipmentResearch(exclusive:boolean){
     const before=this.researchPoints;
@@ -241,7 +242,7 @@ export class World {
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
   contract?: Contract;
-  contractReward?: {charge:number;round:number};
+  contractReward?: {charge:number;round:number;research?:number};
   claimContractReward(kind:WeaponKind|'energy'){
     if(!this.contractReward||this.player.hp<=0)return false;
     if(kind!=='energy'&&!this.activeWeapons.includes(kind))return false;
@@ -253,19 +254,31 @@ export class World {
     }else{
       this.upgradeOwnedWeapon(kind);
     }
+    if(reward.research){this.contractResearchPoints+=reward.research;this.effects.push({type:'research',x:this.player.x,y:C.playerY,text:`王牌悬赏 · 研发+${reward.research}点`,detail:'领取额外研发 · 选择升级路线'});}
     this.announceFracture();this.announceLaserChain();
     return true;
   }
+  bountyShots=0;
   damageTaken=0;
-  canAcceptContract(kind:ContractKind,proof?:BuildProof){
+  canAcceptContract(kind:ContractKind,proof?:BuildProof,hunt?:HuntKind){
     return kind in contracts&&!this.contractReward&&this.phase==='running'&&this.roundTime<=40&&this.player.hp>0&&this.contract?.status!=='active'&&this.contract?.round!==this.round
       &&(kind!=='hunter'||this.activeWeapons.some(k=>this.weaponStage(k)>=2))
-      &&(kind==='research'?this.availableProofs().includes(proof??this.availableProofs()[0]):proof===undefined);
+      &&(kind==='research'?this.availableProofs().includes(proof??this.availableProofs()[0]):proof===undefined)
+      &&(hunt===undefined||kind==='hunter'&&Object.hasOwn(hunts,hunt));
   }
-  acceptContract(kind:ContractKind,proof?:BuildProof){
-    if(!this.canAcceptContract(kind,proof))return false;
+  acceptContract(kind:ContractKind,proof?:BuildProof,hunt?:HuntKind){
+    if(!this.canAcceptContract(kind,proof,hunt))return false;
     const selected=kind==='research'?(proof??this.availableProofs()[0]):undefined;
-    this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken,selected?{kind:selected,start:this.proofCount(selected)}:undefined);this.contractStats.accepted++;return true;
+    this.contract=new Contract(kind,this.round,this.kills,this.activeWeapons.length,this.damageTaken,selected?{kind:selected,start:this.proofCount(selected)}:undefined,hunt);this.contractStats.accepted++;return true;
+  }
+  private spawnCrossfire(challenge:Contract){
+    if(challenge.reinforcements||challenge.elapsed<challenge.nextReinforcement)return;
+    if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+2>C.limits.enemies){challenge.nextReinforcement=challenge.elapsed+HUNTER.retry;return;}
+    const candidates=[220,500].map(x=>{const b=this.spawn('elite',x,180);b.hp*=hunts.crossfire.durability;b.maxHp=b.hp;b.pattern='fan';b.bountyRound=challenge.round;return b;});
+    if(!safeRoute(this.player.x,this.bodies,this.bullets,22,{phase:this.phase,phaseTime:this.phaseTime})){
+      for(const b of candidates){delete b.bountyRound;b.active=false;}this.fallbackCount++;challenge.nextReinforcement=challenge.elapsed+HUNTER.retry;return;
+    }
+    challenge.reinforcements=2;this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'双线王牌 · 同时出击',detail:'两侧强化扇射精英 · 全破额外研发1点'});
   }
   private spawnProofWave(challenge:Contract){
     if(!challenge.proof||challenge.reinforcements>=PROOF_WAVES.groups||challenge.elapsed<challenge.nextReinforcement)return;
@@ -528,8 +541,9 @@ export class World {
     this.director(dt);
     // Opt-in combat supplies its own targets; it must not depend on a sparse chapter tail.
     const challenge=this.contract;
+    if(challenge?.status==='active'&&challenge.kind==='hunter'&&challenge.hunt==='crossfire'&&this.phase==='running')this.spawnCrossfire(challenge);
     if(challenge?.status==='active'&&this.phase==='running'&&challenge.kind==='research')this.spawnProofWave(challenge);
-    if(challenge?.status==='active'&&challenge.kind!=='research'&&this.phase==='running'&&challenge.reinforcements<(challenge.kind==='hunter'?HUNTER.targets:22)&&challenge.elapsed>=challenge.nextReinforcement){
+    if(challenge?.status==='active'&&challenge.kind!=='research'&&!(challenge.kind==='hunter'&&challenge.hunt==='crossfire')&&this.phase==='running'&&challenge.reinforcements<(challenge.kind==='hunter'?HUNTER.targets:22)&&challenge.elapsed>=challenge.nextReinforcement){
       const count=this.bodies.filter(b=>b.active&&b.kind in C.enemies).length;
       if(count<C.limits.enemies){
         const hunter=challenge.kind==='hunter',x=hunter?[220,500][challenge.reinforcements]:[200,360,520,360][challenge.reinforcements%4];
@@ -545,7 +559,7 @@ export class World {
       b.px = b.x; b.py = b.y;
       const previousWarning = b.warning;
       const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0;
-      advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => this.hostile(x, y, vx, vy));
+      advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {const before=this.bullets.length;this.hostile(x,y,vx,vy);if(b.bountyRound!==undefined&&this.bullets.length>before){b.bountyShots=(b.bountyShots??0)+1;this.bountyShots++;}});
       if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · 双炮反击',detail:'双炮加入攻击循环 · 已发敌弹仍危险'});
       if(b.kind==='boss'&&(b.counterVolleys??0)>wasCounterVolleys)this.effects.push({type:'counter-fire',x:b.x,y:b.y});
       if (b.kind === 'boss' && previousWarning <= 0 && b.warning > 0
@@ -735,7 +749,7 @@ export class World {
     if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0,contract.proof?this.proofCount(contract.proof.kind):0)){
       if(contract.status==='won'){
         this.contractStats.won++;if(contract.kind==='research')this.proofWins++;
-        this.contractReward={charge:contracts[contract.kind].charge,round:this.round};
+        this.contractReward={charge:contracts[contract.kind].charge,round:this.round,...(contract.kind==='hunter'&&hunts[contract.hunt].research?{research:hunts[contract.hunt].research}:{})};
       }
       if(contract.status==='failed')this.contractStats.failed++;
       this.effects.push({type:'contract',x:this.player.x,y:C.playerY,text:contract.status==='won'?'契约完成 · 选择强化奖励':`契约失败 · ${contract.reason}`,detail:'每轮可接取一次 · 失败仅失去额外奖励'});

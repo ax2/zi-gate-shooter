@@ -1,0 +1,23 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/crossfire-hunt.test.ts tests/crossfire-hunt-progression.test.mjs tests/hunter-contract.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/crossfire-hunt-progression.test.mjs (1 test | 1 failed) 2327ms
+   × earns both hunter choices and both rewards through real early progression while recording actual hostile shots 2325ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/crossfire-hunt-progression.test.mjs > earns both hunter choices and both rewards through real early progression while recording actual hostile shots
+AssertionError: crossfire/energy: expected null not to be null
+ ❯ tests/crossfire-hunt-progression.test.mjs:18:68
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 12 passed (13)
+   Start at  11:39:51
+   Duration  3.05s (tests 67%, transform 24%, import 8%, worker 1%)

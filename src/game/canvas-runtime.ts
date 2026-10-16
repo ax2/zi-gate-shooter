@@ -17,7 +17,7 @@ import { burnLight } from './burn-light';
 import { fractureLight, fractureMarks } from './fracture-light';
 import { FRACTURE } from '../core/combos';
 import { mountedRig } from './mounted-rig';
-import { contracts, type ContractKind } from '../core/contracts';
+import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
 import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
 import { tree, routes, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
@@ -73,6 +73,7 @@ export class CanvasRuntime {
   world = new World();
   mode: 'loading' | 'menu' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private proofChoice:BuildProof='ion';
+  private huntChoice:HuntKind='staggered';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean};
   private achievementToast = '';
   private achievementUntil = 0;
@@ -390,8 +391,9 @@ export class CanvasRuntime {
       }
     }
     else if(action==='contracts-back')this.mode=this.contractReturn;
+    else if(action==='hunt-next'&&this.mode==='contracts'&&this.world.contract?.round!==this.world.round){this.huntChoice=this.huntChoice==='staggered'?'crossfire':'staggered';}
     else if(action==='proof-next'&&this.mode==='contracts'){const options=this.world.availableProofs();if(options.length){const at=options.indexOf(this.proofChoice);this.proofChoice=options[((at<0?0:at)+1)%options.length];}}
-    else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts){const options=this.world.availableProofs();this.world.acceptContract(kind,kind==='research'?(options.includes(this.proofChoice)?this.proofChoice:options[0]):undefined);}}
+    else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts){const options=this.world.availableProofs();this.world.acceptContract(kind,kind==='research'?(options.includes(this.proofChoice)?this.proofChoice:options[0]):undefined,kind==='hunter'?this.huntChoice:undefined);}}
     else if (action === 'tree' && (this.mode === 'choice' || this.mode === 'loadout')) { this.treeReturn = this.mode; this.mode = 'tree'; }
     else if (action === 'tree-back') this.mode = this.treeReturn;
     else if (action === 'loadout') this.mode = 'loadout';
@@ -610,11 +612,11 @@ export class CanvasRuntime {
     if (this.platform.now() < this.shakeUntil) c.translate(Math.sin(this.platform.now()) * 3, Math.cos(this.platform.now()) * 3);
     this.drawWorld(dt);
     c.restore();
-    const bossLive=w.bodies.some(b=>b.active&&b.kind==='boss');
+    const receiptThreat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     const activeBuild=this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until;
     const noticeVisible=this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil&&!activeBuild;
-    const bottomNotice=bossLive||this.noticeY===1195;
-    const bottomBusy=(activeBuild&&bossLive)||(noticeVisible&&bottomNotice);
+    const bottomNotice=receiptThreat||this.noticeY===1195;
+    const bottomBusy=(activeBuild&&receiptThreat)||(noticeVisible&&bottomNotice);
     // Preserve a newly earned achievement until the preceding combat receipt can be read.
     if(bottomBusy&&w.time<this.achievementUntil)this.achievementUntil=Math.max(this.achievementUntil,
       activeBuild?this.buildFeedback!.until+3:w.time+(this.noticeUntil-this.platform.now())/1000+3);
@@ -628,10 +630,10 @@ export class CanvasRuntime {
       }
     }
     if(activeBuild){
-      const f=this.buildFeedback!,top=bossLive?1180:240,height=bossLive?88:104;
+      const f=this.buildFeedback!,top=receiptThreat?1180:240,height=receiptThreat?88:104;
       this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.combo?'#d3a3ff':'#7fe4ff');
-      this.text(f.title,360,top+(bossLive?28:32),bossLive?28:30,f.combo?'#e1bfff':'#d2f2ff','center',true);
-      this.text(f.detail,360,top+(bossLive?63:76),bossLive?22:23,'#f2d598');
+      this.text(f.title,360,top+(receiptThreat?28:32),receiptThreat?28:30,f.combo?'#e1bfff':'#d2f2ff','center',true);
+      this.text(f.detail,360,top+(receiptThreat?63:76),receiptThreat?22:23,'#f2d598');
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;
@@ -871,7 +873,7 @@ export class CanvasRuntime {
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
         if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);
-        if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text('悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
+        if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text(w.contract.hunt==='crossfire'?'王牌 · 扇射':'悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
       }
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
@@ -925,10 +927,10 @@ export class CanvasRuntime {
   }
   private drawGuide() {
     if (this.mode !== 'playing') return;
-    const bossLive=this.world.bodies.some(b=>b.active&&b.kind==='boss');
+    const receiptThreat=this.world.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     if(this.world.time<this.achievementUntil)return;
-    if(bossLive&&this.buildFeedback&&this.world.time<this.buildFeedback.until)return;
-    if(this.notice&&(this.noticeY===1195||bossLive)&&this.platform.now()<this.noticeUntil)return;
+    if(receiptThreat&&this.buildFeedback&&this.world.time<this.buildFeedback.until)return;
+    if(this.notice&&(this.noticeY===1195||receiptThreat)&&this.platform.now()<this.noticeUntil)return;
     // Optional help is below all entities, effects, projectiles and native labels.
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.
@@ -1108,33 +1110,34 @@ export class CanvasRuntime {
       this.text('›',625,y+50,32,option.color,'right');
       this.buttons.push({x:65,y,w:590,h:110,action:`contract-claim:${option.kind}`,label:option.title});
     }
-    this.text('战斗已暂停 · 选择后继续',360,1135,24,'#bdd8e7');
+    this.text(reward.research?'任选一项，额外研发+1同时领取':'战斗已暂停 · 选择后继续',360,1135,24,'#bdd8e7');
   }
   private drawContracts() {
     const w=this.world,current=w.contract?.round===w.round?w.contract:undefined,proofs=w.availableProofs();
+    const hunt=hunts[current?.kind==='hunter'?current.hunt:this.huntChoice];
     const chosen=proofs.includes(this.proofChoice)?this.proofChoice:proofs[0],proof=chosen?buildProofs[chosen]:undefined;
     this.rect(35,120,650,1080,'#102330');
     this.text('挑战契约',360,180,42,'#effaff','center',true);
-    this.text('自选限制、狩猎或构筑检验 · 每轮一次',360,235,24,'#bdd8e7');
+    this.text('每轮前40秒可选 · 接取后目标锁定',360,235,24,'#bdd8e7');
     for(const [i,kind] of (Object.keys(contracts) as ContractKind[]).entries()){
       const entry=contracts[kind],y=285+i*160,can=w.canAcceptContract(kind,kind==='research'?chosen:undefined);
       const needTier=kind==='hunter'&&!w.activeWeapons.some(k=>w.weaponStage(k)>=2);
       this.rect(65,y,590,148,can?'#203e50':'#172c3b');
-      this.text(entry.name,90,y+26,28,'#ffdc8a','left',true);
-      this.text(kind==='research'?(proof?`${proof.name} · ${proof.detail}`:'先按组合配方完成一种构筑'):entry.detail,90,y+62,22,'#effaff','left');
-      this.text(`成功：充能+${entry.charge} 或强化已有配件`,90,y+96,21,'#bdd8e7','left');
+      this.text(kind==='hunter'?`${entry.name} · ${hunt.name}`:entry.name,90,y+26,28,'#ffdc8a','left',true);
+      this.text(kind==='research'?(proof?`${proof.name} · ${proof.detail}`:'先按组合配方完成一种构筑'):kind==='hunter'?hunt.detail:entry.detail,90,y+62,22,'#effaff','left');
+      this.text(`成功：充能+${entry.charge} 或强化已有配件${kind==='hunter'&&hunt.research?' ＋研发1点':''}`,90,y+96,21,'#bdd8e7','left');
       this.text(can?'接取契约　›':needTier?'需要任一T2配件':kind==='research'&&!proof?'尚无可检验组合':'本轮已接取或当前不可接取',625,y+127,21,can?'#80e4ff':'#97adbd','right');
       if(kind==='research'){
         if(can)this.buttons.push({x:65,y,w:590,h:148,label:`接取构筑检验：${proof!.name}`,action:'contract:research'});
-      }else if(can)this.buttons.push({x:65,y,w:590,h:148,label:entry.name,action:`contract:${kind}`});
+      }else if(can)this.buttons.push({x:65,y,w:590,h:148,label:kind==='hunter'?`${entry.name}：${hunt.name}`:entry.name,action:`contract:${kind}`});
     }
     const proofProgress=current?.proof?` ${buildProofs[current.proof.kind].name} ${Math.min(current.proofProgress,buildProofs[current.proof.kind].goal)}/${buildProofs[current.proof.kind].goal}`:'';
-    if(proofs.length>1&&!current){
-      this.rect(65,935,590,82,'#214a4e');this.text('切换检验目标 ↻',360,976,27,'#b9ffe1','center',true);
-      this.buttons.push({x:65,y:935,w:590,h:82,label:'切换检验目标',action:'proof-next'});
+    if(!current){
+      this.rect(65,935,282,82,'#214a4e');this.text('切换狩猎目标 ↻',206,976,24,'#ffdc8a','center',true);this.buttons.push({x:65,y:935,w:282,h:82,label:'切换狩猎目标',action:'hunt-next'});
+      if(proofs.length>1){this.rect(359,935,296,82,'#214a4e');this.text('切换检验目标 ↻',507,976,24,'#b9ffe1','center',true);this.buttons.push({x:359,y:935,w:296,h:82,label:'切换检验目标',action:'proof-next'});}else this.text('目标在接取后锁定',507,976,21,'#bdd8e7');
     }else{
     this.text(current?`${contracts[current.kind].name} · ${current.status==='active'?'进行中'+(current.kind==='hunter'?` ${current.targetKills}/2`:proofProgress):current.status==='won'?'已完成'+proofProgress:'失败：'+current.reason}`:'每轮前40秒可接取 · 构筑检验只计接取后触发',360,950,22,'#ffdc8a');
-    this.text(current?.kind==='hunter'?'追加2名驻留精英 · 全破立即选强化':current?.kind==='research'?'最多6组验证敌阵 · 效果达标立即选强化':'猎手追加精英 · 构筑检验追加对应敌阵',360,992,22,'#bdd8e7');
+    this.text(current?.kind==='hunter'?hunts[current.hunt].detail:current?.kind==='research'?'最多6组验证敌阵 · 效果达标立即选强化':'猎手追加精英 · 构筑检验追加对应敌阵',360,992,22,'#bdd8e7');
     }
     this.button(current?.status==='active'?'继续挑战':this.contractReturn==='paused'?'返回暂停菜单':'返回当前火力',1080,current?.status==='active'?'resume':'contracts-back',true);
   }
@@ -1289,7 +1292,7 @@ export class CanvasRuntime {
       playerX: this.world.player.x,
       inputMode: this.inputMode,
       proofKind:this.world.contract?.proof?.kind??null,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
-      contractKind:this.world.contract?.kind??null,bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
+      contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,

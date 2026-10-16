@@ -46,6 +46,19 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it('browses hunter risk without spending, freezes it on acceptance, and awards the extra point only through a visible claim',async()=>{
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;const pickup=w.spawn('pickup',360,C.playerY,2);pickup.weaponKind='pulse';f.tick();resolveResearch(f);const research=w.researchPoints;
+ expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.runtime.activateControl('hunt-next')).toBe(true);expect(w.contract).toBeUndefined();expect(w.researchPoints).toBe(research);
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('建议T3火力'))).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('＋研发1点'))).toBe(true);
+ expect(f.runtime.activateControl('contract:hunter')).toBe(true);expect(w.contract!.hunt).toBe('crossfire');expect(f.runtime.activateControl('hunt-next')).toBe(false);expect(f.runtime.activateControl('resume')).toBe(true);f.tick();
+ const targets=w.bodies.filter(b=>b.bountyRound===w.round);expect(targets).toHaveLength(2);
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('配件强化')&&c.args[2]===1208)).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('成就达成'))).toBe(false);
+ for(const [i,b] of targets.entries()){w.bullets=[{id:99990+i,x:b.x,y:250,px:b.x,py:250,vx:0,vy:0,damage:10000,age:0,active:true,hostile:false}];f.tick();}
+ expect(f.runtime.mode).toBe('contract-reward');expect(w.researchPoints).toBe(research);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('额外研发+1同时领取'))).toBe(true);
+ expect(f.runtime.activateControl('contract-claim:pulse')).toBe(true);expect(w.researchPoints).toBe(research+1);expect(f.runtime.mode).toBe('choice');expect(f.runtime.activateControl('contract-claim:pulse')).toBe(false);expect(w.researchPoints).toBe(research+1);
+});
+
 it.each([false,true])('real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;
  w.growth.mastery=4;for(let i=0;i<4;i++)w.chooseBuild('optical');w.phase='recovery';const pickup=w.spawn('pickup',360,C.playerY,2);pickup.weaponKind='arc';f.tick();resolveResearch(f);w.phase='boss';
