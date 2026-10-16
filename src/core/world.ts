@@ -3,7 +3,7 @@ import { FRACTURE } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, type ContractKind } from './contracts';
 import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
-import { armoryOffers } from './armory-offers';
+import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
 import { C, clamp } from './config';
@@ -27,7 +27,7 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number; capacitorHits?:number; bountyRound?:number;escort?:boolean;
-  weaponKind?: WeaponKind; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
+  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
@@ -174,6 +174,7 @@ export class World {
     this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
   }
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
+  refitsClaimed=0;
   contract?: Contract;
   contractReward?: {charge:number;round:number};
   claimContractReward(kind:WeaponKind|'energy'){
@@ -310,8 +311,9 @@ export class World {
           const row = this.nextRow++;
           const choices: WeaponKind[][] = this.round > 3 ? [['arc', 'scatter'], ['blast', 'pierce'], ['pulse', 'arc']] : [['scatter', 'pierce'], ['blast', 'arc'], ['pulse', 'blast']];
           const chapterChoices = choices[sectorIndex(this.round)];
-          const offered = armoryOffers(this.activeWeapons, chapterChoices);
-          const crates = [222, 498].map((x, i) => { const b = this.spawn('crate', x, 180, Math.max(2, s.stage ?? 2, this.growth.stage)); b.row = row; b.weaponKind = offered[i]; return b; });
+          const offered = armoryChoices(this.activeWeapons, chapterChoices,this.round>1?refitFocus(this.activeWeapons,this.weaponKind,this.build.ranks):undefined);
+          const crates = [222, 498].map((x, i) => { const offer=offered[i],stage=offer.refit?Math.min(3,this.weaponStage(offer.kind)+1):Math.max(2,s.stage??2,this.growth.stage);
+            const b = this.spawn('crate', x, 180, stage); b.row = row; b.weaponKind = offer.kind;b.refit=offer.refit; return b; });
           if (!this.admit(crates[0])) { for (const b of crates) b.active = false; this.scheduleIndex--; break; }
         } else if (s.kind === 'gates') {
           if (this.growth.overload > 0 && this.growth.energy >= 100) {
@@ -549,6 +551,13 @@ export class World {
           if (!b.active || this.player.hp <= 0) return;
           b.active = false; this.pickups++;
           const previousWeapon = this.weaponKind;
+          if(b.refit&&b.weaponKind&&this.activeWeapons.includes(b.weaponKind)){
+            if(b.row)for(const alternative of this.bodies)if(alternative.row===b.row)alternative.active=false;
+            this.upgradeOwnedWeapon(b.weaponKind);this.refitsClaimed++;
+            const research=this.equipmentResearch(b.row>0);
+            if(research)this.effects.push({type:'research',x:this.player.x,y:C.playerY,text:`装备研发 +${research}点`,detail:'可选择技能路线 · 已有火力保留'});
+            this.announceFracture();return;
+          }
           for (const kind of this.activeWeapons) if (!this.weaponStages.has(kind)) this.weaponStages.set(kind, this.weaponStage(kind));
           const addedWeapon = b.weaponKind && !this.activeWeapons.includes(b.weaponKind);
           if (b.weaponKind) {
@@ -665,7 +674,7 @@ export class World {
     b.active = false;
     if (b.kind === 'crate') {
       this.cratesBroken++;
-      const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;
+      const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;
       this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
       if(b.dropGrace!==undefined)this.dropKills++;

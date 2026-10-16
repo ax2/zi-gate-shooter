@@ -30,6 +30,8 @@ export function contextGuide(world: Context): Guide {
   if (visible.some(b => b.kind === 'guard' && b.warning > 0))
     return { kind: 'enemy', title: '盾卫开盾：避开扇形弹道', detail: '弱点已暴露 · 趁开盾集中火力' };
   const equipment = visible.filter(b => b.weaponKind && (b.kind === 'pickup' || b.kind === 'crate'));
+  if(equipment.some(b=>b.refit))return {kind:equipment.some(b=>b.refit&&b.kind==='pickup')?'pickup':'crate',
+    title:equipment.some(b=>!b.refit&&!world.activeWeapons.includes(b.weaponKind!))?'补给取舍：扩展火力或改装核心':'配件改装：选择强化已有配件',detail:'同排只领一件 · 直伤不计超载与派生'};
   if (equipment.length && equipment.every(b => world.activeWeapons.includes(b.weaponKind!)))
     return { kind: equipment.some(b => b.kind === 'pickup') ? 'pickup' : 'crate', title: '已有武器：领取升阶或充能', detail: '同阶装备充能+30 · 满100突破强化' };
   if (visible.some(b => b.weaponKind && b.kind === 'pickup'))

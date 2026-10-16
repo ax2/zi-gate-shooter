@@ -2,6 +2,8 @@
 
 固定试玩入口：**http://127.0.0.1:5178/** 。服务停止后双击项目中的“启动游戏.cmd”或运行 `npm run play`；首次需 `npm run build`，保持服务窗口运行。
 
+最新成长候选 **Stage-149 定向改装**：后续补给可选扩展新火力或升级已有核心，T3后专属精校，旧武器与普通重复充能规则保留。正常扩展/改装两策略及专精契约已对照，画面待实机复查。[试玩说明](docs/stages/Stage-149/PLAY.md) · [验证边界](docs/stages/Stage-149/TEST_REPORT.md)。
+
 最新机制候选 **Stage-148 机动哨机**：后续章节一台原哨机增加入场抢位/齐射后换位，侧推与倾斜反馈。规则/正常成长及400种子安全已验证，新动作实机画面待验，尚非视觉验收完成。[试玩说明](docs/stages/Stage-148/PLAY.md) · [验证边界](docs/stages/Stage-148/TEST_REPORT.md)。
 
 最新体验候选 **Stage-147**：http://127.0.0.1:5227/ 。升级卡显示当前→选后真实参数与组合缺口，选后回执核对收益；已有配件与战斗数值保留。[试玩](docs/stages/Stage-147/PLAY.md) · [验证边界](docs/stages/Stage-147/TEST_REPORT.md)。

@@ -17,7 +17,7 @@ export function nextRunGoal(w:World,unlocked:readonly string[]){
 export function runReport(w:World,fresh:readonly string[],unlocked:readonly string[]){
  const names=achievements.filter(a=>fresh.includes(a.id)).map(a=>a.name);
  return {
-  growth:`充能突破 ${w.growth.mastery??0}次 · 专属精校 ${w.activeWeapons.reduce((n,k)=>n+w.weaponCalibration(k),0)}次 · 研发 ${w.researchPoints}点`,
+  growth:`充能突破 ${w.growth.mastery??0}次 · 专属精校 ${w.activeWeapons.reduce((n,k)=>n+w.weaponCalibration(k),0)}次 · 研发 ${w.researchPoints}点${w.refitsClaimed?' · 改装'+w.refitsClaimed+'次':''}`,
   weapons:w.activeWeapons.map(k=>`${weaponNames[k]} T${w.weaponStage(k)}`),
   routes:routes.map((r,i)=>`${['弹道','雷电','光学'][i]} ${w.build.ranks[r]}/3 · ${w.build.ranks[r]?w.build.node(r,Math.min(1,w.build.ranks[r]-1)).name:'未投入'}${w.build.refinements[r]?' · 精调'+w.build.refinements[r]:''}`),
   combat:`首领 ${w.bossWins} · 战利品 ${w.bossLootStats.claimed} · 击破 ${w.kills} · 门 ${w.gatesTaken}`,

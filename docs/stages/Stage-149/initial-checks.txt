@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/refit-supply.test.ts tests/armory-offers.test.ts tests/weapon-choices.test.ts tests/equipment-research.test.ts tests/contracts.test.ts tests/run-report.test.ts tests/explosion-render.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/refit-supply.test.ts (5 tests | 1 failed) 192ms
+   × keeps specialist contracts valid when a refit increases power without adding a weapon kind 27ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/refit-supply.test.ts > keeps specialist contracts valid when a refit increases power without adding a weapon kind
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/refit-supply.test.ts:53:128
+     51| });
+     52| it('keeps specialist contracts valid when a refit increases power with…
+     53|  const w=new World(1337,2);w.phase='boss';w.growth.mastery=1;w.chooseB…
+       |                                                                                                                                ^
+     54|  const p=w.spawn('pickup',360,C.playerY,2);p.weaponKind='scatter';p.re…
+     55|  expect(w.contract?.status).toBe('active');expect(w.activeWeapons).toH…
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 132 passed (133)
+   Start at  08:55:49
+   Duration  18.64s (tests 66%, transform 24%, import 10%, worker 1%)

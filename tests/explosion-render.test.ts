@@ -46,6 +46,17 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it.each([false,true])('labels refit boxes distinctly and updates their live calibration after another earned pickup (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.phase='boss';w.weaponKind='scatter';w.growth.stage=3;w.growth.mastery=1;w.chooseBuild('electric');
+ const refit=w.spawn('crate',222,400,3);refit.weaponKind='scatter';refit.refit=true;refit.speed=0;
+ const expansion=w.spawn('crate',498,400,3);expansion.weaponKind='blast';expansion.speed=0;f.tick();
+ const text=(s:string)=>f.calls.some(c=>c.kind==='fillText'&&c.args[0]===s);
+ expect(text('精校 霰射炮')).toBe(true);expect(text('单轮直伤 31.9 → 47.9')).toBe(true);expect(text('叠加 爆裂炮 T3')).toBe(true);
+ const p=w.spawn('pickup',360,C.playerY,3);p.weaponKind='scatter';p.refit=true;p.speed=0;f.tick();
+ expect(w.refitsClaimed).toBe(1);expect(text('单轮直伤 47.9 → 63.8')).toBe(true);
+ expect(w.activeWeapons).toEqual(['scatter','arc']);
+});
+
 it.each([false,true])('renders real sentry relocation with local thrust and freezes it on pause (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();f.runtime.world.phase='boss';
  const b=f.runtime.world.spawn('sniper',220,360);b.pattern='relocate';

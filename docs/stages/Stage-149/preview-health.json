@@ -1,0 +1,17 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "path": "/assets/canvas-preview-BC9FHvmu.js",
+    "status": 200,
+    "bytes": 200215
+  },
+  {
+    "path": "/assets/crate-v1.png",
+    "status": 200,
+    "bytes": 534538
+  }
+]
