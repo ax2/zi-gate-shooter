@@ -1,3 +1,4 @@
+import {driftOffset} from './drift-supply';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {batteryHolding} from './battery';
 import {SWEEPER,sweeperDirection} from './sweeper';
@@ -52,6 +53,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(b.y>=C.shooterEntry.stationY)b.deploying=false;
     return;
   }
+  if(b.kind==='crate'&&b.pattern==='drift-supply'){b.x=b.lane+driftOffset(b.age);b.y+=b.speed*dt;return;}
   if (b.kind === 'boss') {
     if(!b.counterfire&&b.hp<=b.maxHp*BOSS_COUNTER.health){
       b.counterfire=true;b.counterReady=true;

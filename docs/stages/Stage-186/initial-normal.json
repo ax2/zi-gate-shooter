@@ -1,0 +1,635 @@
+[
+  {
+    "opening": "pulse",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "boxes": [
+      {
+        "id": 3290,
+        "row": 7,
+        "round": 2,
+        "kind": "blast",
+        "first": 99.58333333332897,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 3291,
+        "row": 7,
+        "round": 2,
+        "kind": "pierce",
+        "first": 99.58333333332897,
+        "minX": 498.159036351166,
+        "maxX": 541.6689814814815,
+        "maxDisplacement": 43.668981481481524,
+        "stage": 3,
+        "broken": {
+          "time": 99.93333333332895,
+          "x": 544.474622770919,
+          "y": 238.66666666666646,
+          "age": 0.36666666666666664,
+          "weapons": [
+            "pulse",
+            "scatter",
+            "pierce"
+          ]
+        },
+        "collected": 104.53333333332868
+      },
+      {
+        "id": 17031,
+        "row": 25,
+        "round": 5,
+        "kind": "scatter",
+        "first": 349.5666666666774,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 17032,
+        "row": 25,
+        "round": 5,
+        "kind": "blast",
+        "first": 349.5666666666774,
+        "minX": 498.159036351166,
+        "maxX": 499.37731481481484,
+        "maxDisplacement": 1.377314814814838,
+        "stage": 3,
+        "broken": {
+          "time": 349.61666666667736,
+          "x": 500.400548696845,
+          "y": 191.33333333333337,
+          "age": 0.06666666666666667,
+          "weapons": [
+            "pulse",
+            "scatter",
+            "pierce",
+            "blast",
+            "arc"
+          ]
+        },
+        "collected": 354.2166666666732
+      }
+    ],
+    "collected": [
+      {
+        "row": 7,
+        "time": 104.53333333332868,
+        "kind": "pierce",
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "row": 25,
+        "time": 354.2166666666732,
+        "kind": "blast",
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ]
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "opening": "scatter",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "boxes": [
+      {
+        "id": 3628,
+        "row": 7,
+        "round": 2,
+        "kind": "blast",
+        "first": 98.54999999999569,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 3629,
+        "row": 7,
+        "round": 2,
+        "kind": "arc",
+        "first": 98.54999999999569,
+        "minX": 498.159036351166,
+        "maxX": 535.9136659807956,
+        "maxDisplacement": 37.9136659807956,
+        "stage": 3,
+        "broken": {
+          "time": 98.86666666666234,
+          "x": 538.8093278463649,
+          "y": 233.33333333333314,
+          "age": 0.3333333333333333,
+          "weapons": [
+            "pulse",
+            "scatter",
+            "pierce",
+            "arc"
+          ]
+        },
+        "collected": 103.49999999999541
+      },
+      {
+        "id": 16001,
+        "row": 25,
+        "round": 5,
+        "kind": "scatter",
+        "first": 346.93333333334647,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 16002,
+        "row": 25,
+        "round": 5,
+        "kind": "blast",
+        "first": 346.93333333334647,
+        "minX": 498.159036351166,
+        "maxX": 506.83401920438956,
+        "maxDisplacement": 8.834019204389563,
+        "stage": 3,
+        "broken": {
+          "time": 347.0666666666797,
+          "x": 508.9375,
+          "y": 205.50000000000009,
+          "age": 0.15,
+          "weapons": [
+            "pulse",
+            "scatter",
+            "pierce",
+            "arc",
+            "blast"
+          ]
+        },
+        "collected": 351.58333333334224
+      },
+      {
+        "id": 31185,
+        "row": 43,
+        "round": 8,
+        "kind": "scatter",
+        "first": 598.8166666664507,
+        "minX": 221.99999999999991,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 31186,
+        "row": 43,
+        "round": 8,
+        "kind": "blast",
+        "first": 598.8166666664507,
+        "minX": 498.159036351166,
+        "maxX": 499.37731481481484,
+        "maxDisplacement": 1.377314814814838,
+        "stage": 3,
+        "broken": {
+          "time": 598.8666666664507,
+          "x": 500.400548696845,
+          "y": 191.33333333333337,
+          "age": 0.06666666666666667,
+          "weapons": [
+            "pulse",
+            "scatter",
+            "pierce",
+            "arc",
+            "blast"
+          ]
+        }
+      }
+    ],
+    "collected": [
+      {
+        "row": 7,
+        "time": 103.49999999999541,
+        "kind": "arc",
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "row": 25,
+        "time": 351.58333333334224,
+        "kind": "blast",
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "opening": "pierce",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "boxes": [
+      {
+        "id": 3508,
+        "row": 7,
+        "round": 2,
+        "kind": "blast",
+        "first": 98.54999999999569,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 3509,
+        "row": 7,
+        "round": 2,
+        "kind": "arc",
+        "first": 98.54999999999569,
+        "minX": 498.159036351166,
+        "maxX": 535.9136659807956,
+        "maxDisplacement": 37.9136659807956,
+        "stage": 3,
+        "broken": {
+          "time": 98.86666666666234,
+          "x": 538.8093278463649,
+          "y": 233.33333333333314,
+          "age": 0.3333333333333333,
+          "weapons": [
+            "pulse",
+            "pierce",
+            "scatter",
+            "arc"
+          ]
+        },
+        "collected": 103.49999999999541
+      },
+      {
+        "id": 15881,
+        "row": 25,
+        "round": 5,
+        "kind": "scatter",
+        "first": 346.93333333334647,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 15882,
+        "row": 25,
+        "round": 5,
+        "kind": "blast",
+        "first": 346.93333333334647,
+        "minX": 498.159036351166,
+        "maxX": 506.83401920438956,
+        "maxDisplacement": 8.834019204389563,
+        "stage": 3,
+        "broken": {
+          "time": 347.0666666666797,
+          "x": 508.9375,
+          "y": 205.50000000000009,
+          "age": 0.15,
+          "weapons": [
+            "pulse",
+            "pierce",
+            "scatter",
+            "arc",
+            "blast"
+          ]
+        },
+        "collected": 351.58333333334224
+      },
+      {
+        "id": 31065,
+        "row": 43,
+        "round": 8,
+        "kind": "scatter",
+        "first": 598.8166666664507,
+        "minX": 221.99999999999991,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 31066,
+        "row": 43,
+        "round": 8,
+        "kind": "blast",
+        "first": 598.8166666664507,
+        "minX": 498.159036351166,
+        "maxX": 499.37731481481484,
+        "maxDisplacement": 1.377314814814838,
+        "stage": 3,
+        "broken": {
+          "time": 598.8666666664507,
+          "x": 500.400548696845,
+          "y": 191.33333333333337,
+          "age": 0.06666666666666667,
+          "weapons": [
+            "pulse",
+            "pierce",
+            "scatter",
+            "arc",
+            "blast"
+          ]
+        }
+      }
+    ],
+    "collected": [
+      {
+        "row": 7,
+        "time": 103.49999999999541,
+        "kind": "arc",
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc"
+        ]
+      },
+      {
+        "row": 25,
+        "time": 351.58333333334224,
+        "kind": "blast",
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "opening": "blast",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "boxes": [
+      {
+        "id": 2912,
+        "row": 7,
+        "round": 2,
+        "kind": "pierce",
+        "first": 98.54999999999569,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 2913,
+        "row": 7,
+        "round": 2,
+        "kind": "arc",
+        "first": 98.54999999999569,
+        "minX": 498.159036351166,
+        "maxX": 508.9375,
+        "maxDisplacement": 10.9375,
+        "stage": 3,
+        "broken": {
+          "time": 98.69999999999568,
+          "x": 511.20301783264745,
+          "y": 206.66666666666657,
+          "age": 0.16666666666666666,
+          "weapons": [
+            "pulse",
+            "blast",
+            "scatter",
+            "arc"
+          ]
+        },
+        "collected": 103.49999999999541
+      },
+      {
+        "id": 15629,
+        "row": 25,
+        "round": 5,
+        "kind": "scatter",
+        "first": 347.7500000000124,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 15630,
+        "row": 25,
+        "round": 5,
+        "kind": "blast",
+        "first": 347.7500000000124,
+        "minX": 498.159036351166,
+        "maxX": 506.83401920438956,
+        "maxDisplacement": 8.834019204389563,
+        "stage": 3,
+        "broken": {
+          "time": 347.8833333333456,
+          "x": 508.9375,
+          "y": 205.50000000000009,
+          "age": 0.15,
+          "weapons": [
+            "pulse",
+            "blast",
+            "scatter",
+            "arc",
+            "pierce"
+          ]
+        },
+        "collected": 352.40000000000816
+      }
+    ],
+    "collected": [
+      {
+        "row": 7,
+        "time": 103.49999999999541,
+        "kind": "arc",
+        "weapons": [
+          "pulse",
+          "blast",
+          "scatter",
+          "arc"
+        ]
+      },
+      {
+        "row": 25,
+        "time": 352.40000000000816,
+        "kind": "blast",
+        "weapons": [
+          "pulse",
+          "blast",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 67
+  },
+  {
+    "opening": "arc",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "boxes": [
+      {
+        "id": 3127,
+        "row": 7,
+        "round": 2,
+        "kind": "blast",
+        "first": 98.61666666666235,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 3128,
+        "row": 7,
+        "round": 2,
+        "kind": "pierce",
+        "first": 98.61666666666235,
+        "minX": 498.159036351166,
+        "maxX": 530.0863340192044,
+        "maxDisplacement": 32.0863340192044,
+        "stage": 3,
+        "broken": {
+          "time": 98.89999999999567,
+          "x": 533,
+          "y": 227.99999999999983,
+          "age": 0.3,
+          "weapons": [
+            "pulse",
+            "arc",
+            "scatter",
+            "pierce"
+          ]
+        },
+        "collected": 103.56666666666207
+      },
+      {
+        "id": 16255,
+        "row": 25,
+        "round": 5,
+        "kind": "scatter",
+        "first": 347.6000000000125,
+        "minX": 152,
+        "maxX": 292,
+        "maxDisplacement": 70,
+        "stage": 3
+      },
+      {
+        "id": 16256,
+        "row": 25,
+        "round": 5,
+        "kind": "blast",
+        "first": 347.6000000000125,
+        "minX": 498.159036351166,
+        "maxX": 500.400548696845,
+        "maxDisplacement": 2.4005486968450214,
+        "stage": 3,
+        "broken": {
+          "time": 347.66666666667913,
+          "x": 501.6758401920439,
+          "y": 194.1666666666667,
+          "age": 0.08333333333333333,
+          "weapons": [
+            "pulse",
+            "arc",
+            "scatter",
+            "pierce",
+            "blast"
+          ]
+        },
+        "collected": 352.2500000000083
+      },
+      {
+        "id": 31939,
+        "row": 43,
+        "round": 8,
+        "kind": "scatter",
+        "first": 599.5999999997833,
+        "minX": 222.15903635116598,
+        "maxX": 276.3874314128944,
+        "maxDisplacement": 54.38743141289439,
+        "stage": 3
+      },
+      {
+        "id": 31940,
+        "row": 43,
+        "round": 8,
+        "kind": "blast",
+        "first": 599.5999999997833,
+        "minX": 498.159036351166,
+        "maxX": 499.37731481481484,
+        "maxDisplacement": 1.377314814814838,
+        "stage": 3,
+        "broken": {
+          "time": 599.6499999997833,
+          "x": 500.400548696845,
+          "y": 191.33333333333337,
+          "age": 0.06666666666666667,
+          "weapons": [
+            "pulse",
+            "arc",
+            "scatter",
+            "pierce",
+            "blast"
+          ]
+        }
+      }
+    ],
+    "collected": [
+      {
+        "row": 7,
+        "time": 103.56666666666207,
+        "kind": "pierce",
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "row": 25,
+        "time": 352.2500000000083,
+        "kind": "blast",
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "pierce",
+          "blast"
+        ]
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 67
+  }
+]

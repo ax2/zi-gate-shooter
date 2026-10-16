@@ -5,6 +5,7 @@ import type {OpeningWeapon} from './opening-plan';
 import {battleBrief,type BattlePlan} from './battle-plan';
 import {SWEEPER} from './sweeper';
 import {SUPPLY_CONVOY} from './supply-convoy';
+import {DRIFT_SUPPLY} from './drift-supply';
 import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
 import {canLaserChain,isPhotonAugment,photonAugments,laserChainProfile} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
@@ -42,7 +43,7 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery'; bossVariant?: number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply'; bossVariant?: number;
 }
 export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
@@ -397,6 +398,7 @@ export class World {
   phase: Phase = 'running';
   round = 1; time = 0; roundTime = 0; phaseTime = 0; score = 0;
   shots = 0; hits = 0; kills = 0; cratesBroken = 0; pickups = 0; gatesTaken = 0;
+  lastEquipmentPickup?:{id:number;row:number;kind?:WeaponKind;refit:boolean;time:number;x:number;y:number};
   maxStage = 1; peakBodies = 0; peakBullets = 0; fallbackCount = 0; attackDeferrals = 0;
   private nextId = 1;
   private nextRow = 1;
@@ -507,8 +509,9 @@ export class World {
           const chapterChoices = choices[sectorIndex(this.round)];
           const offered = armoryChoices(this.activeWeapons, chapterChoices,this.round>1?refitFocus(this.activeWeapons,this.weaponKind,this.build.ranks):undefined);
           const crates = (s.convoy?SUPPLY_CONVOY.lanes:[222,498]).map((x, i) => { const offer=offered[i],stage=offer.refit?Math.min(3,this.weaponStage(offer.kind)+1):Math.max(2,s.stage??2,this.growth.stage);
-            const b = this.spawn('crate', x, 180, stage); b.row = row; b.weaponKind = offer.kind;b.refit=offer.refit; return b; });
+            const b = this.spawn('crate', x, 180, stage); b.row = row; b.weaponKind = offer.kind;b.refit=offer.refit;if(s.pattern==='drift-supply'){b.pattern=s.pattern;b.dropGrace=DRIFT_SUPPLY.opening;} return b; });
           if (!this.admit(crates[0])) { for (const b of crates) b.active = false; this.scheduleIndex--; break; }
+          if(s.pattern==='drift-supply')this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'滑行军械箱',detail:'护盖0.45秒后开启 · 横移跟枪 · 碎后拾取'});
         } else if (s.kind === 'gates') {
           if (this.growth.overload > 0 && this.growth.energy >= 100) {
             if (!this.admit(this.spawn('drone', 360))) { this.scheduleIndex--; break; }
@@ -801,6 +804,7 @@ export class World {
         if (t >= 0 && t <= 1) add(t, 2, b.id, () => {
           if (!b.active || this.player.hp <= 0) return;
           b.active = false; this.pickups++;
+          this.lastEquipmentPickup={id:b.id,row:b.row,kind:b.weaponKind,refit:!!b.refit,time:this.time,x:b.x,y:b.y};
           const previousWeapon = this.weaponKind;
           if(b.refit&&b.weaponKind&&this.activeWeapons.includes(b.weaponKind)){
             if(b.row)for(const alternative of this.bodies)if(alternative.row===b.row)alternative.active=false;

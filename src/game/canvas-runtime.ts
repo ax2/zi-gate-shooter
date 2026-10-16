@@ -1,3 +1,5 @@
+import {DRIFT_SUPPLY} from '../core/drift-supply';
+import {driftCarrier} from './drift-carrier';
 import {isFractureAugment,fractureAugments} from '../core/combos';
 import {isPhotonAugment,photonAugments,laserChainProfile} from '../core/laser-chain';
 import {batteryHolding} from '../core/battery';
@@ -770,6 +772,7 @@ export class CanvasRuntime {
       c.fillStyle = '#0005'; c.beginPath(); c.ellipse(b.x + 5, b.y + b.height * 0.3, b.width * 0.45, b.height * 0.2, 0, 0, Math.PI * 2); c.fill();
       if (b.kind === 'crate') {
         const frame = crateFrame(b.hp, b.maxHp);
+        if(b.pattern==='drift-supply')driftCarrier(c,b.x,b.y,b.age,this.save.settings.effects==='weak');
         this.frameSprite('crate-v1.png', frame, 3, b.x, b.y, 148, 154, 3);
         this.hitSprite('crate-v1.png', frame, 3, b.x, b.y, 148, 154, b.hit, 0.07, 3);
       }
@@ -945,7 +948,7 @@ export class CanvasRuntime {
           this.text(b.refit?`${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x-(goalSupply?18:0), panelY + 23, goalSupply?23:25, weaponColors[b.weaponKind], 'center', true);
           if(goalSupply){c.strokeStyle='#ffe19a';c.lineWidth=2;c.strokeRect(b.x-118,panelY,236,100);this.text('目标',b.x+108,panelY+23,18,'#ffe19a','right',true);}
           this.text(b.refit?refitLabel(w,b.weaponKind):role, b.x, panelY + 51, b.refit?21:24, '#cfdee9');
-          this.text(`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, 23, '#fff0c8');
+          this.text(b.pattern==='drift-supply'?`${(b.dropGrace??0)>0?'护盖':b.age<DRIFT_SUPPLY.settle?'滑行':'停稳'} · 碎后拾取 ${Math.ceil(b.hp)}`:`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, b.pattern==='drift-supply'?21:23, '#fff0c8');
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
         } else {
           this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
@@ -1533,7 +1536,7 @@ export class CanvasRuntime {
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
-      bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
+      lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,

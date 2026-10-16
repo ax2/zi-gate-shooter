@@ -1,10 +1,11 @@
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
 import {BATTERY} from './battery';
+import {DRIFT_SUPPLY,hasDriftSupply} from './drift-supply';
 import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -204,5 +205,6 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     const relay=out.find(s=>s.at===BATTERY.at&&s.kind==='conduit');
     if(relay)Object.assign(relay,{x:360,at:BATTERY.at+BATTERY.relayDelay,dropY:BATTERY.relayY,pattern:'battery'});
   }
+  if(hasDriftSupply(round)){const supply=out.find(s=>s.kind==='armory'&&s.at===DRIFT_SUPPLY.at);if(supply)supply.pattern='drift-supply';}
   return out.sort((a, b) => a.at - b.at);
 }

@@ -1,0 +1,31 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/drift-supply-progression.test.mjs tests/swarm-routes.test.ts tests/drift-supply.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/drift-supply-progression.test.mjs (1 test | 1 failed) 7149ms
+   × observes real movement, breaking and exclusive collection from five normal openings 7148ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/drift-supply-progression.test.mjs > observes real movement, breaking and exclusive collection from five normal openings
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/drift-supply-progression.test.mjs:11:235
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 5 passed (6)
+   Start at  05:14:48
+   Duration  7.53s (tests 93%, transform 5%, import 2%)
+

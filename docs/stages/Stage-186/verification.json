@@ -1,0 +1,69 @@
+{
+  "weakSameCurrent": true,
+  "brokenBeforeCollection": true,
+  "collectionDelta": 1,
+  "weaponsBefore": [
+    {
+      "kind": "pulse",
+      "stage": 1,
+      "calibration": 0
+    },
+    {
+      "kind": "pierce",
+      "stage": 2,
+      "calibration": 0
+    },
+    {
+      "kind": "scatter",
+      "stage": 2,
+      "calibration": 0
+    },
+    {
+      "kind": "arc",
+      "stage": 3,
+      "calibration": 0
+    }
+  ],
+  "weaponsAfter": [
+    {
+      "kind": "pulse",
+      "stage": 1,
+      "calibration": 0
+    },
+    {
+      "kind": "pierce",
+      "stage": 2,
+      "calibration": 0
+    },
+    {
+      "kind": "scatter",
+      "stage": 2,
+      "calibration": 0
+    },
+    {
+      "kind": "arc",
+      "stage": 3,
+      "calibration": 0
+    },
+    {
+      "kind": "blast",
+      "stage": 3,
+      "calibration": 0
+    }
+  ],
+  "oldWeaponsKept": true,
+  "actualClaim": {
+    "id": 3547,
+    "row": 7,
+    "kind": "blast",
+    "refit": false,
+    "time": 103.49999999999541,
+    "x": 265.5939643347049,
+    "y": 974.6666666666616
+  },
+  "selectedRow": 7,
+  "remainingRowObjects": 0,
+  "motionOffsetDelta": 34.84096364883402,
+  "stoppedAlternative": true,
+  "frozenResources": 46
+}
