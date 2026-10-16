@@ -3,7 +3,9 @@ import {awardAchievements,emptyAchievements,parseAchievements} from '../src/core
 import {parseSave} from '../src/game/canvas-runtime';
 it('preserves old saves and filters corrupt achievement data',()=>{
  expect(parseSave({version:1,best:42}).achievements).toEqual(emptyAchievements());
- expect(parseAchievements({kills:-2,bosses:Infinity,unlocked:['boss','boss','fake']})).toEqual({kills:0,bosses:0,unlocked:['boss']});
+ const legacy=parseSave({version:1,best:230,achievements:{kills:123,bosses:2,unlocked:['boss','proof']},settings:{effects:'weak',shake:false,sound:false,music:true}});
+ expect(legacy.best).toBe(230);expect(legacy.settings).toEqual({effects:'weak',shake:false,sound:false,music:true});expect(legacy.achievements.unlocked).toEqual(['boss','proof']);expect(legacy.achievements.certifiedBuilds).toEqual([]);
+ expect(parseAchievements({kills:-2,bosses:Infinity,unlocked:['boss','boss','fake']})).toEqual({...emptyAchievements(),unlocked:['boss']});
 });
 it('records deliberate early specialization versus mixed choices without retroactive credit',()=>{
  const s=emptyAchievements();

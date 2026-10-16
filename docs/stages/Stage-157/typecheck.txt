@@ -1,0 +1,4 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 typecheck
+npm notice run tsc --noEmit
+tests/explosion-render.test.ts(65,197): error TS2304: Cannot find name 'parseSave'.

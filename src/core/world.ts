@@ -237,6 +237,7 @@ export class World {
     this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
   }
   stormLinks=0;prismHits=0;proofWins=0;
+  aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
   availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:this.laserChainUnlocked());}
   proofCount(kind:BuildProof){return kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:this.laserArcHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
@@ -748,7 +749,9 @@ export class World {
     const contract=this.contract;
     if(contract?.update(this.phase==='running'||this.phase==='boss'?dt:0,this.kills,this.activeWeapons.length,this.damageTaken,this.player.hp>0,contract.proof?this.proofCount(contract.proof.kind):0)){
       if(contract.status==='won'){
-        this.contractStats.won++;if(contract.kind==='research')this.proofWins++;
+        this.contractStats.won++;
+        if(contract.kind==='research'&&contract.proof){this.proofWins++;this.certifiedBuilds.add(contract.proof.kind);}
+        if(contract.kind==='hunter'&&contract.hunt==='crossfire'){this.aceWins++;if(this.damageTaken===contract.damage)this.flawlessAceWins++;}
         this.contractReward={charge:contracts[contract.kind].charge,round:this.round,...(contract.kind==='hunter'&&hunts[contract.hunt].research?{research:hunts[contract.hunt].research}:{})};
       }
       if(contract.status==='failed')this.contractStats.failed++;

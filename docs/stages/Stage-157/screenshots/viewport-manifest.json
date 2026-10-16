@@ -1,0 +1,65 @@
+[
+  {
+    "name": "before-desktop-viewport-mismatch.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "before-emulation-blank.png",
+    "pixels": [
+      333,
+      720
+    ]
+  },
+  {
+    "name": "before-footer-overlap.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "desktop-versatile-earned.png",
+    "pixels": [
+      1280,
+      720
+    ]
+  },
+  {
+    "name": "mobile-ace-achievements.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "mobile-first-certification.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "mobile-tracked-goal.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "mobile-two-certifications-reloaded.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "mobile-versatile-earned.png",
+    "pixels": [
+      390,
+      843
+    ]
+  }
+]

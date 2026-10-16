@@ -18,7 +18,7 @@ import { fractureLight, fractureMarks } from './fracture-light';
 import { FRACTURE } from '../core/combos';
 import { mountedRig } from './mounted-rig';
 import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
-import { achievements, awardAchievements, parseAchievements } from '../core/achievements';
+import { achievements, achievementGroups, achievementGroup, achievementProgress, trackAchievement, type AchievementGroup, awardAchievements, parseAchievements } from '../core/achievements';
 import { tree, routes, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
@@ -87,6 +87,7 @@ export class CanvasRuntime {
   private runNewBest=false;
   private runAchievements:string[]=[];
   private achievementReturn:'menu'|'result'='menu';
+  private achievementTab:AchievementGroup='growth';
   private buttons: CanvasControl[] = [];
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
@@ -362,7 +363,10 @@ export class CanvasRuntime {
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
-    else if (action === 'achievements'){this.achievementReturn=this.mode==='result'?'result':'menu';this.mode='achievements';}
+    else if (action === 'achievements'){this.achievementReturn=this.mode==='result'?'result':'menu';const focus=this.achievementReturn==='result'?this.runAchievements.at(-1):this.save.achievements.tracked;if(focus)this.achievementTab=achievementGroup(focus);this.mode='achievements';}
+    else if(action.startsWith('achievement-group:')&&this.mode==='achievements'){const group=action.slice(18);if(Object.hasOwn(achievementGroups,group))this.achievementTab=group as AchievementGroup;}
+    else if(action.startsWith('track:')&&this.mode==='achievements')trackAchievement(this.save.achievements,action.slice(6));
+    else if(action==='track-clear'&&this.mode==='achievements')this.save.achievements.tracked=null;
     else if(action==='achievements-back'&&this.mode==='achievements')this.mode=this.achievementReturn;
     else if (action === 'armory') { this.dossierWeapon = 'pulse'; this.mode = 'armory'; }
     else if (action.startsWith('dossier:')) {
@@ -415,8 +419,10 @@ export class CanvasRuntime {
   }
   private notify(text: string, y = 277, detail = '') { this.notice = text; this.noticeDetail=detail; this.noticeY = y; this.noticeUntil = this.platform.now() + 2200; }
   private checkAchievements() {
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins);
-    if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.platform.write(this.save);}
+    const beforeCertifications=this.save.achievements.certifiedBuilds.length;
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds]});
+    if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;}
+    if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length)this.platform.write(this.save);
   }
   private effect(e: EffectEvent) {
     if(e.type==='counter-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',1);return;}
@@ -954,22 +960,31 @@ export class CanvasRuntime {
     this.button('开始突围　›', 932, 'start', true);
     this.button('武器档案', 1030, 'armory');
     for(const [i,label] of ['成就','设置'].entries()){const x=112+i*258;this.rect(x,1128,238,86,'#1a2d3c');this.text(label, x+119,1171,30,'#d8eaf5');this.buttons.push({x,y:1128,w:238,h:86,label,action:i?'settings':'achievements'});}
-    this.text('射击装备，再走位领取强化', 360, 1230, 23, '#99b6c9');
+    const tracked=achievements.find(a=>a.id===this.save.achievements.tracked);
+    this.text(tracked?`${this.save.achievements.unlocked.includes(tracked.id)?'已达成':'下局目标'} · ${tracked.name} · 到成就页查看`:'射击装备，再走位领取强化', 360, 1230, 23, '#99b6c9');
   }
   private drawAchievements() {
-    this.rect(40,90,640,1120,'#102330');
-    this.text('突围成就',360,155,42,'#effaff','center',true);
+    this.rect(40,90,640,1120,'#102330');this.text('突围成就',360,155,42,'#effaff','center',true);
     const state=this.save.achievements;
-    this.text(`已达成 ${state.unlocked.length}/${achievements.length} · 选择留下战绩`,360,210,25,'#bdd8e7');
-    const rowStep=Math.min(94,Math.floor(770/achievements.length));
-    for(const [i,a] of achievements.entries()){const y=255+i*rowStep,done=state.unlocked.includes(a.id);
-      this.rect(65,y,590,rowStep-4,done?'#263d43':'#142b39');
-      this.text(a.name,85,y+(rowStep<82?26:30),27,done?'#ffdc8a':'#effaff','left',true);
-      this.text(done?this.achievementReturn==='result'&&this.runAchievements.includes(a.id)?'本局新达成':'已达成':a.id==='hunter'?`${Math.min(state.kills,100)}/100`:'未达成',635,y+(rowStep<82?26:30),23,done?'#ffdc8a':'#a5bac8','right');
-      this.text(a.detail,85,y+(rowStep<82?56:65),22,'#bdd8e7','left');
+    this.text(`已达成 ${state.unlocked.length}/${achievements.length} · 构筑认证 ${state.certifiedBuilds.length}/5`,360,210,25,'#bdd8e7');
+    for(const [i,group] of (Object.keys(achievementGroups) as AchievementGroup[]).entries()){
+      const x=65+i*198,selected=group===this.achievementTab;this.rect(x,245,186,66,selected?'#31556a':'#1a2d3c');this.text(achievementGroups[group].name,x+93,278,27,selected?'#bceeff':'#d1e0e8');
+      this.buttons.push({x,y:245,w:186,h:66,label:achievementGroups[group].name,action:`achievement-group:${group}`});
     }
-    this.text('成就保存在本机 · 不增加局外伤害',360,1040,23,'#bdd8e7');
-    this.button(this.achievementReturn==='result'?'返回本局战绩':'返回主界面',1100,'achievements-back',true);
+    const ids=achievementGroups[this.achievementTab].ids as readonly string[];
+    for(const [i,a] of achievements.filter(a=>ids.includes(a.id)).entries()){
+      const y=335+i*130,done=state.unlocked.includes(a.id),tracked=state.tracked===a.id;
+      this.rect(65,y,590,120,done?'#263d43':tracked?'#203f52':'#142b39');if(tracked)this.rect(65,y,4,120,'#7fe4ff');
+      this.text(a.name,85,y+29,29,done?'#ffdc8a':'#effaff','left',true);
+      this.text(done?this.achievementReturn==='result'&&this.runAchievements.includes(a.id)?'本局新达成':'已达成':tracked?'追踪中':'设为目标',635,y+29,22,done?'#ffdc8a':'#8bddf5','right');
+      this.text(a.detail,85,y+66,23,'#c6dce9','left');this.text(achievementProgress(a.id,state),85,y+100,20,'#9fbccf','left');
+      if(!done)this.buttons.push({x:65,y,w:590,h:120,label:`追踪${a.name}`,action:`track:${a.id}`});
+    }
+    const target=achievements.find(a=>a.id===state.tracked);
+    this.text(target?`已追踪：${target.name}`:'点选未达成成就，设为下局目标',target?85:360,1025,23,'#bceeff',target?'left':'center');
+    if(target){this.rect(480,995,170,58,'#21414b');this.text('取消追踪',565,1024,23,'#d1e8ee');this.buttons.push({x:480,y:995,w:170,h:58,label:'取消追踪',action:'track-clear'});}
+    this.button(this.achievementReturn==='result'?'返回本局战绩':'返回主界面',1070,'achievements-back',true);
+    this.text('记录保存在本机 · 不增加局外伤害',360,1184,21,'#9fbccf');
   }
   private drawArmory() {
     const kind = this.dossierWeapon, entry = weaponDossier[kind], color = weaponColors[kind];
@@ -1237,7 +1252,7 @@ export class CanvasRuntime {
     this.button('查看完整技能树',1050,'tree');
   }
   private drawRunReport(){
-    const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked);
+    const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked,this.save.achievements.tracked);
     this.buttons=[];this.rect(0,0,720,1280,'#050e18dd');this.rect(35,90,650,1140,'#102330');
     this.text('本局战绩',360,145,34,'#effaff','center',true);this.text(w.score.toString(),360,218,68,'#eff8ff','center',true);
     this.text(`${this.runNewBest?'刷新最高分':'最高分'} ${this.save.best}`,360,276,23,'#e8c88b');
@@ -1291,7 +1306,7 @@ export class CanvasRuntime {
       score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
-      proofKind:this.world.contract?.proof?.kind??null,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
+      proofKind:this.world.contract?.proof?.kind??null,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),

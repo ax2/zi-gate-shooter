@@ -1,0 +1,3 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 typecheck
+npm notice run tsc --noEmit

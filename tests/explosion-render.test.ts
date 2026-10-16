@@ -1,8 +1,9 @@
 import { expect, it } from 'vitest';
-import { CanvasRuntime } from '../src/game/canvas-runtime';
-import { defaults } from '../src/ui/storage';
+import { CanvasRuntime,parseSave } from '../src/game/canvas-runtime';
+import { defaults, type Save } from '../src/ui/storage';
 import { World } from '../src/core/world';
 import { C } from '../src/core/config';
+import {achievements,achievementGroups} from '../src/core/achievements';
 
 it.each([false,true])('support beam expires, freezes on pause, and clears on restart (weak=%s)', async weak => {
   const f=fixture(weak); await f.runtime.load(); f.runtime.start();
@@ -16,7 +17,7 @@ it.each([false,true])('support beam expires, freezes on pause, and clears on res
   expect(f.runtime.diagnostics().supportBeams).toBe(0);
 });
 
-function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boolean}) {
+function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boolean},captureWrite?:(save:Save)=>void) {
   let clock = 0, next: FrameRequestCallback = () => {};
   const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; stroke?: unknown; composite: string; font?: string }> = [];
   const state: Record<string, any> = { globalAlpha: 1, globalCompositeOperation: 'source-over' };
@@ -31,7 +32,7 @@ function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boole
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
     width: 720, height: 1280, dpr: 1, menuBottom: 0,
     image: async src => ({ src, width: (src.includes('scatter-player') || src.includes('pierce-player')) ? 576 : 768, height: (src.includes('scatter-player') || src.includes('pierce-player')) || src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') || src.includes('boss-flanker-v1') || src.includes('boss-bastion-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
-    read: () => save, write() {}, sound() {}, silence() {}, frameContext:contextProbe,now: () => clock,
+    read: () => save, write(value) {captureWrite?.(value);}, sound() {}, silence() {}, frameContext:contextProbe,now: () => clock,
     requestFrame: callback => { next = callback; } });
   return { runtime, calls, tick(ms = 1000 / 60) { calls.length = 0; clock += ms; next(clock); } };
 }
@@ -45,6 +46,35 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
  }
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it('shows every achievement once across readable groups and keeps the local-record footer clear of the return control',async()=>{
+ const f=fixture();await f.runtime.load();expect(f.runtime.activateControl('achievements')).toBe(true);const seen=new Set<string>();
+ for(const group of Object.keys(achievementGroups)){
+  expect(f.runtime.activateControl('achievement-group:'+group)).toBe(true);
+  for(const a of achievements){const row=f.calls.find(c=>c.kind==='fillText'&&c.args[0]===a.detail);if(row){seen.add(a.id);expect(row.args[2]-12).toBeGreaterThan(310);expect(row.args[2]+12).toBeLessThan(995);}}
+  const footer=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('记录保存在本机'))!,button=(f.runtime as any).buttons.find((b:any)=>b.action==='achievements-back');expect(footer.args[2]-11).toBeGreaterThan(button.y+button.h);
+ }
+ expect(seen.size).toBe(achievements.length);
+});
+
+it('tracks a visible tactical goal through the menu and a fresh run without changing combat, and can clear it',async()=>{
+ const f=fixture();await f.runtime.load();expect(f.runtime.activateControl('achievements')).toBe(true);expect(f.runtime.activateControl('track:ace')).toBe(false);expect(f.runtime.activateControl('achievement-group:tactics')).toBe(true);
+ const before=JSON.stringify(f.runtime.world);expect(f.runtime.activateControl('track:ace')).toBe(true);expect(f.runtime.save.achievements.tracked).toBe('ace');expect(JSON.stringify(f.runtime.world)).toBe(before);
+ expect(f.runtime.activateControl('achievements-back')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('下局目标 · 王牌猎手'))).toBe(true);
+ expect(f.runtime.activateControl('start')).toBe(true);expect(f.runtime.save.achievements.tracked).toBe('ace');expect(f.runtime.world.growth.bonus).toBe(0);expect(f.runtime.world.aceWins).toBe(0);
+ expect(f.runtime.activateControl('pause')).toBe(true);expect(f.runtime.activateControl('home')).toBe(true);expect(f.runtime.activateControl('achievements')).toBe(true);expect(f.runtime.activateControl('track-clear')).toBe(true);expect(f.runtime.save.achievements.tracked).toBeNull();
+});
+it('writes a second actual certification even when it earns no new badge, and reloads that record',async()=>{
+ const writes:Save[]=[];const f=fixture(false,undefined,save=>writes.push(JSON.parse(JSON.stringify(save))));await f.runtime.load();f.runtime.save.achievements.unlocked=['proof','specialist'];f.runtime.save.achievements.certifiedBuilds=['storm'];f.runtime.start();
+ const w=f.runtime.world;w.growth.mastery=3;for(let i=0;i<3;i++)w.chooseBuild('electric');expect(w.acceptContract('research','ion')).toBe(true);w.phase='boss';w.player.x=w.player.px=68;f.runtime.touchStart(731,68,900);
+ const a=w.spawn('armor',360,600),b=w.spawn('armor',460,600);for(const body of [a,b]){body.hp=body.maxHp=10000;body.speed=0;body.timer=999;}
+ writes.length=0;
+ for(let group=0;group<3&&w.contract!.status==='active';group++){
+  for(let i=0;i<6&&w.contract!.status==='active';i++){w.bullets=[{id:99990+i,x:a.x,y:a.y,px:a.x,py:a.y,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc'}];f.tick();}
+  if(w.contract!.status==='active')for(let i=0;i<50;i++)f.tick();
+ }
+ expect(w.contract!.status).toBe('won');expect([...w.certifiedBuilds]).toEqual(['ion']);expect(f.runtime.diagnostics().runAchievements).toEqual([]);expect(writes.length).toBeGreaterThan(0);expect(parseSave(writes.at(-1)).achievements.certifiedBuilds).toEqual(['storm','ion']);
+});
 
 it('browses hunter risk without spending, freezes it on acceptance, and awards the extra point only through a visible claim',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;const pickup=w.spawn('pickup',360,C.playerY,2);pickup.weaponKind='pulse';f.tick();resolveResearch(f);const research=w.researchPoints;
@@ -949,7 +979,7 @@ it('late boss shield remains below clear HUD labels and the expanded achievement
  expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('屏障45%'))).toBe(true);
  expect(f.runtime.activateControl('pause')).toBe(true);expect(f.runtime.activateControl('home')).toBe(true);
  expect(f.runtime.activateControl('achievements')).toBe(true);
- expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='战术拆解')).toBe(true);
+ expect(f.runtime.activateControl('achievement-group:tactics')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='战术拆解')).toBe(true);
 });
 it('locks the hunter before tier2 and enters a real immediate reward after both marked deaths',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();f.tick();
@@ -1051,9 +1081,9 @@ it.each([false,true])('renders earned EMP and open shields below hostile bullets
  f.runtime.pause();const frozen=JSON.stringify((f.runtime as any).empWaves),time=w.time;for(let i=0;i<30;i++)f.tick();expect(JSON.stringify((f.runtime as any).empWaves)).toBe(frozen);expect(w.time).toBe(time);f.runtime.start();expect(f.runtime.diagnostics().empWaves).toBe(0);
 });
 
-it('keeps all nine achievement descriptions above the footer and return control',async()=>{
+it('keeps tactical achievement descriptions above the footer and return control',async()=>{
  const f=fixture();await f.runtime.load();f.tick();f.calls.length=0;expect(f.runtime.activateControl('achievements')).toBe(true);
- const row=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='一次中继爆破中断两台正在蓄能的敌机');expect(row).toBeDefined();expect(row!.args[2]).toBeLessThan(1040);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='断电时机')).toBe(true);
+ expect(f.runtime.activateControl('achievement-group:tactics')).toBe(true);const row=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='一次中继爆破中断两台正在蓄能的敌机');expect(row).toBeDefined();expect(row!.args[2]).toBeLessThan(1040);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='断电时机')).toBe(true);
 });
 
 it.each([false,true])('actual ion discharge stays bounded, behind hazards and labels, freezes and resets (weak=%s)',async weak=>{
@@ -1089,9 +1119,9 @@ it('browses four contract cards and switches earned proof targets without spendi
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='雷暴霰射 · 检验通过')).toBe(true);
  expect(f.runtime.activateControl('contract-claim:scatter')).toBe(true);expect(w.contractStats.claimed).toBe(1);expect(w.proofWins).toBe(1);
 });
-it('keeps the tenth achievement readable above the footer',async()=>{
+it('keeps the proof achievement readable in its build group',async()=>{
  const f=fixture();await f.runtime.load();f.tick();expect(f.runtime.activateControl('achievements')).toBe(true);
- const line=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='主动接取并完成一次构筑检验');expect(line).toBeDefined();expect(line!.args[2]+11).toBeLessThan(1029);
+ expect(f.runtime.activateControl('achievement-group:build')).toBe(true);const line=f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='主动接取并完成一次构筑检验');expect(line).toBeDefined();expect(line!.args[2]+11).toBeLessThan(1029);
 });
 
 it('cycles from the displayed fallback when the previous proof preference is unavailable',async()=>{
