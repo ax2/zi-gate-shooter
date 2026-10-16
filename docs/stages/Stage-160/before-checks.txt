@@ -28,4 +28,3 @@ AssertionError: R2: expected 72 to be +0 // Object.is equality
       Tests  1 failed (1)
    Start at  12:48:13
    Duration  1.02s (tests 67%, transform 26%, import 6%, worker 1%)
-
