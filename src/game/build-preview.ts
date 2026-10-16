@@ -1,10 +1,14 @@
+import {canLaserChain} from '../core/laser-chain';
 import {BuildTree,type Route,type BuildBranch} from '../core/build-tree';
 import {builtWeapon,builtSupport} from '../core/build-profile';
 import {permanentPower} from '../core/rewards';
 import type {World} from '../core/world';
 
 const number=(value:number)=>String(+value.toFixed(1));
-function combinationPlan(build:BuildTree,route:Route,was:BuildTree){
+function combinationPlan(build:BuildTree,route:Route,was:BuildTree,arcStage:number){
+  const linked=canLaserChain(build,arcStage),wasLinked=canLaserChain(was,arcStage);
+  if(linked&&!wasLinked)return '本次组合：电光连锁 · 存1束光链，命中释出';
+  if(route==='optical'&&build.refinements.optical>=1)return linked?'电光连锁已生效 · 原光束与两次跳电保留':'电光还需：电弧炮T2';
   const r=build.ranks;
   if(r.optical>=3&&r.ballistic>=1&&!(was.ranks.optical>=3&&was.ranks.ballistic>=1))return '本次组合：棱镜激光 · 两侧各追加45%';
   if(r.ballistic>=3&&r.electric>=1&&was.ranks.ballistic<3)return '本次组合：雷暴霰射 · 霰弹追加跳电';
@@ -47,6 +51,6 @@ export function buildPreview(world:World,route:Route,branch?:BuildBranch){
       :rank===1?`激光间隔 ${laserBefore.laserInterval} → ${laserAfter.laserInterval}秒`
       :`激光贯穿 ${laserBefore.laserTargets} → ${laserAfter.laserTargets}敌`;
   }
-  return {gain,plan:valid?combinationPlan(projected,route,current):'先选导电线圈，再解锁雷暴霰射',
+  return {gain,plan:valid?combinationPlan(projected,route,current,world.activeWeapons.includes('arc')?world.weaponStage('arc'):0):'先选导电线圈，再解锁雷暴霰射',
     valid,stage,before,after,laserBefore,laserAfter};
 }

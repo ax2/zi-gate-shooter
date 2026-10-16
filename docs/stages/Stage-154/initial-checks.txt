@@ -1,0 +1,41 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/laser-chain.test.ts tests/laser-chain-progression.test.mjs tests/build-preview.test.ts tests/build-proof-progression.test.mjs tests/run-report.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/build-preview.test.ts (5 tests | 1 failed) 47ms
+   × shows only common fork gains and actionable missing combination nodes 8ms
+ ❯ tests/laser-chain-progression.test.mjs (1 test | 1 failed) 3647ms
+   × earns the blueprint and arc through two real reward strategies, then deals actual linked damage 3645ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/build-preview.test.ts > shows only common fork gains and actionable missing combination nodes
+AssertionError: expected '电光还需：电弧炮T2' to be '棱镜还需：弹道1点' // Object.is equality
+
+Expected: "棱镜还需：弹道1点"
+Received: "电光还需：电弧炮T2"
+
+ ❯ tests/build-preview.test.ts:54:45
+     52|   const pure=new World();pure.growth.mastery=5;for(let i=0;i<3;i++)pur…
+     53|   expect(buildPreview(pure,'ballistic').plan).toContain('本次组合：棱镜激光');
+     54|   expect(buildPreview(pure,'optical').plan).toBe('棱镜还需：弹道1点');
+       |                                             ^
+     55| });
+     56| it('includes existing calibration and does not round the accelerated l…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/laser-chain-progression.test.mjs > earns the blueprint and arc through two real reward strategies, then deals actual linked damage
+AssertionError: blueprint: expected null not to be null
+ ❯ tests/laser-chain-progression.test.mjs:17:97
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  2 failed | 19 passed (21)
+   Start at  11:06:24
+   Duration  4.23s (tests 78%, transform 15%, import 6%)

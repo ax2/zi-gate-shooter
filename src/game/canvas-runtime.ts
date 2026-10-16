@@ -1,3 +1,4 @@
+import {LASER_CHAIN} from '../core/laser-chain';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
@@ -89,7 +90,7 @@ export class CanvasRuntime {
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
   private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
-  private arcs: {x:number;y:number;tx:number;ty:number;life:number}[] = [];
+  private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
   private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean}[] = [];
   private destruction?: BossDestruction;
@@ -337,10 +338,12 @@ export class CanvasRuntime {
     const chosenNode=this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
+    const earnedEffects=this.world.drainEffects();
     this.checkAchievements();
     const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
     this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${chosenNode.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':preview.gain,until:this.world.time+4,combo:!!combo};
-    if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
+    if(this.save.settings.sound&&!earnedEffects.some(e=>e.type==='combination'))this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
+    for(const effect of earnedEffects)this.effect(effect);
     this.mode='choice';
     if(!this.world.build.available(this.world.buildPoints).length)this.action('resume');
   }
@@ -449,6 +452,11 @@ export class CanvasRuntime {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser',prism:e.prism});
       return;
+    }
+    if(e.type==='laser-arc'&&e.targetX!==undefined&&e.targetY!==undefined){
+      if(this.arcs.length>=12){const index=this.arcs.findIndex(a=>!a.photon);this.arcs.splice(index<0?0:index,1);}
+      this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.24,photon:true});
+      if(this.save.settings.sound)this.platform.sound('refract',1);return;
     }
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
     if (e.type === 'arc' && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16});
@@ -751,6 +759,7 @@ export class CanvasRuntime {
     }
     c.restore();
     if(w.build.ranks.electric>=3&&(this.mode==='playing'||this.mode==='paused'))ionChargeLight(c,w.player.x,C.playerY-117,w.ionCharge);
+    if(w.laserChainUnlocked()&&w.laserChainReady&&(this.mode==='playing'||this.mode==='paused')){c.save();c.strokeStyle='#a7e7ff';c.lineWidth=2;c.beginPath();c.moveTo(w.player.x,C.playerY-157);c.lineTo(w.player.x+7,C.playerY-148);c.lineTo(w.player.x,C.playerY-139);c.lineTo(w.player.x-7,C.playerY-148);c.closePath();c.stroke();c.restore();}
     const flash = this.weaponMotion.flash(w.weaponKind, w.weaponStage(w.weaponKind), w.time);
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0) {
       const discharge = this.weaponMotion.discharge(w.weaponKind, w.weaponStage(w.weaponKind), w.time);
@@ -781,7 +790,7 @@ export class CanvasRuntime {
     this.blasts = this.blasts.filter(e => e.life > 0);
     for(const e of this.empWaves){e.life-=dt;empWave(c,e.x,e.y,e.radius,1-e.life/.5,this.save.settings.effects==='weak');}
     this.empWaves=this.empWaves.filter(e=>e.life>0);
-    for (const arc of this.arcs) { arc.life -= dt; chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak'); }
+    for (const arc of this.arcs) { arc.life -= dt; chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon); }
     this.arcs = this.arcs.filter(arc=>arc.life>0);
     for (const hit of this.impacts) { hit.life -= dt; impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
     this.impacts = this.impacts.filter(hit => hit.life > 0);
@@ -1005,7 +1014,7 @@ export class CanvasRuntime {
     const support=w.supportProfile();
     this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
-    this.text(support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 24, '#c7deeb');
+    this.text(w.laserChainUnlocked()?(support.prism?'棱镜双束45% · 电光连锁80%→64%':`电光连锁：${w.laserChainReady?'光链待发':'待激光储备'} · 80%→64%`):support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 23, '#c7deeb');
     this.text(w.build.ranks.electric>=3?`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
     for(const [i,label] of ['技能树','组合配方','挑战契约'].entries()){const x=72+i*198;this.rect(x,1030,180,86,'#1a2d3c');this.text(label,x+90,1073,25,'#d8eaf5');this.buttons.push({x,y:1030,w:180,h:86,label,action:['tree','combos','contracts'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
@@ -1022,19 +1031,22 @@ export class CanvasRuntime {
       {name:'棱镜激光',on:w.supportProfile().prism,
         need:`光学路线 ${w.build.ranks.optical}/3 ＋ 弹道路线 ${Math.min(1,w.build.ranks.ballistic)}/1`,
         effect:'主束保留 · 两侧各追加45%伤害',hint:'横移对齐侧束，扩大清场覆盖',color:'#d7b1ff'},
+      {name:'电光连锁',on:w.laserChainUnlocked(),
+        need:`光学 ${w.build.ranks.optical}/3 · 精调 ${Math.min(1,w.build.refinements.optical)}/1 · 电弧${w.activeWeapons.includes('arc')?'T'+w.weaponStage('arc'):'未持有'}/T2`,
+        effect:'激光存光链 · 主束/电弧命中自动释放',hint:`最多1束 · ${LASER_CHAIN.hops}跳${LASER_CHAIN.range}范围 · 80%/64%`,color:'#a7e7ff'},
       {name:'裂甲爆破',on:w.fractureUnlocked(),
         need:`穿甲炮 ${w.activeWeapons.includes('pierce')?'T'+w.weaponStage('pierce'):'未持有'}/T2 ＋ 爆裂炮 ${w.activeWeapons.includes('blast')?'T'+w.weaponStage('blast'):'未持有'}/T2`,
         effect:`同敌${FRACTURE.hits}次穿甲命中：额外${FRACTURE.direct*100}%爆破`,hint:`邻敌${FRACTURE.splash*100}%伤害 · 范围${FRACTURE.radius} · 冷却${FRACTURE.cooldown}秒`,color:'#ffca8b'},
     ];
     for(const [i,row] of rows.entries()){
-      const y=260+i*250;this.rect(65,y,590,225,'#203e50');this.rect(65,y,5,225,row.color);
-      this.text(row.name,90,y+40,32,row.color,'left',true);
-      this.text(row.on?'已生效':'待组合',625,y+40,24,row.on?'#a2ffbb':'#b9cad6','right');
-      this.text(row.need,90,y+87,23,'#effaff','left');
-      this.text(row.effect,90,y+132,24,'#dbeaf3','left');
-      this.text(row.hint,90,y+178,22,'#bdd8e7','left');
+      const y=260+i*190;this.rect(65,y,590,175,'#203e50');this.rect(65,y,5,175,row.color);
+      this.text(row.name,90,y+29,30,row.color,'left',true);
+      this.text(row.on?'已生效':'待组合',625,y+29,23,row.on?'#a2ffbb':'#b9cad6','right');
+      this.text(row.need,90,y+69,22,'#effaff','left');
+      this.text(row.effect,90,y+109,23,'#dbeaf3','left');
+      this.text(row.hint,90,y+148,21,'#bdd8e7','left');
     }
-    this.text(`裂甲爆破已触发 ${w.fractureBursts} 次 · 闭合盾不积裂口`,360,1055,23,'#ffca8b');
+    this.text(`裂甲引爆 ${w.fractureBursts}次 · 电光跳伤 ${w.laserArcHits}次`,360,1055,23,'#ffca8b');
     this.button('返回当前火力',1100,'combos-back',true);
   }
   private drawRigView() {
@@ -1051,7 +1063,7 @@ export class CanvasRuntime {
     this.playerSprite(w.weaponStage(w.weaponKind)-1,w.player.x,C.playerY,pose,this.weaponMotion.sample(w.weaponKind,w.weaponStage(w.weaponKind),w.time));
     this.drawOpticalRig(C.playerY,pose);c.restore();
     this.text(w.activeWeapons.map(kind=>`${weaponNames[kind]}T${w.weaponStage(kind)}`).join(' · '),360,965,22,'#d6e7f0');
-    const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':''].filter(Boolean);
+    const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':'',w.laserChainUnlocked()?'电光连锁':''].filter(Boolean);
     this.text(combinations.length?`组合：${combinations.join(' · ')}`:'已有配件随真实射击独立回弹',360,1010,25,'#d6b5ff');
     this.text('检查挂载与等级 · 战斗时间已暂停',360,1054,22,'#a6c5d7');
     this.button('返回当前火力',1100,'rig-back',true);
@@ -1104,7 +1116,7 @@ export class CanvasRuntime {
       const needTier=kind==='hunter'&&!w.activeWeapons.some(k=>w.weaponStage(k)>=2);
       this.rect(65,y,590,148,can?'#203e50':'#172c3b');
       this.text(entry.name,90,y+26,28,'#ffdc8a','left',true);
-      this.text(kind==='research'?(proof?`${proof.name} · ${proof.detail}`:'先成型雷暴、棱镜、裂甲或离子风暴'):entry.detail,90,y+62,22,'#effaff','left');
+      this.text(kind==='research'?(proof?`${proof.name} · ${proof.detail}`:'先按组合配方完成一种构筑'):entry.detail,90,y+62,22,'#effaff','left');
       this.text(`成功：充能+${entry.charge} 或强化已有配件`,90,y+96,21,'#bdd8e7','left');
       this.text(can?'接取契约　›':needTier?'需要任一T2配件':kind==='research'&&!proof?'尚无可检验组合':'本轮已接取或当前不可接取',625,y+127,21,can?'#80e4ff':'#97adbd','right');
       if(kind==='research'){
@@ -1141,7 +1153,7 @@ export class CanvasRuntime {
         this.text(node.detail,110,y+29,21,'#bdd8e7','left');
       }
     }
-    this.text('路线点满后可持续精调 · 能力保留',360,1055,23,'#bdd8e7');
+    this.text('跨路线组合 · 精调也能解锁进化',360,1055,23,'#bdd8e7');
     this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
   private drawBuildBranch(){
@@ -1226,7 +1238,7 @@ export class CanvasRuntime {
     for(let i=0;i<2;i++)this.text(r.weapons.slice(i*3,i*3+3).join(' / '),360,374+i*34,23,'#c2edff');
     for(const [i,line] of r.routes.entries())this.text(line,78,450+i*36,23,['#ffd28a','#c6a1ff','#7fe4ff'][i],'left');
     this.text(r.combat,360,577,24,'#effaff');this.text(r.contracts,360,614,23,'#bdd8e7');
-    for(const [i,line] of r.mechanics.entries())this.text(line,360,655+i*34,22,'#cddfea');
+    for(const [i,line] of r.mechanics.entries())this.text(line,360,r.mechanics.length>2?644+i*28:655+i*34,22,'#cddfea');
     this.text(r.fresh,360,737,23,'#ffdc8a');this.text('下一局目标',360,786,24,'#aee7ff','center',true);this.text(r.next,360,824,22,'#d6e7f0');
     if(w.lastDamageCause)this.text({bullet:'敌弹击毁 · 留意已发射子弹的空隙',enemy:'碰撞敌机 · 留出横向避让空间',crate:'撞上箱体 · 先击碎再拾取'}[w.lastDamageCause],360,873,22,'#edbc98');
     this.button('再次突围　›',920,'start',true);this.button('查看成就',1020,'achievements');this.button('返回主界面',1120,'home');
@@ -1287,8 +1299,9 @@ export class CanvasRuntime {
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
       electricBranch:this.world.build.electricBranch??null,capacitorBursts:this.world.capacitorBursts,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
+      laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserArcBeams:this.arcs.filter(a=>a.photon).length,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
-      bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,
+      bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,

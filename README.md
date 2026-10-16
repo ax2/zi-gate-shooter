@@ -2,7 +2,9 @@
 
 固定试玩入口：**http://127.0.0.1:5178/** 。服务停止后双击项目中的“启动游戏.cmd”或运行 `npm run play`；首次需 `npm run build`，保持服务窗口运行。
 
-**最新候选Stage-153 首领过热反击**：三种首领半血后加入真实双炮高速斜射，旧蓄能/飞行弹保留，机体热效与血量提示同步。正常三路/24受控安全场景及三章实际回放已检查，真人难度仍待调。[试玩](docs/stages/Stage-153/PLAY.md) · [验证边界](docs/stages/Stage-153/TEST_REPORT.md)。
+**最新候选Stage-154 电光连锁**：首次光学精调蓝图＋T2电弧，激光储备一束光链，由有效命中释放；旧火力保留。新增配方/待发参数/实际跳伤检验。正常两策略、双视口/弱档已核对，触发频率与真人趣味仍待调。[试玩](docs/stages/Stage-154/PLAY.md) · [验证边界](docs/stages/Stage-154/TEST_REPORT.md)。
+
+**Stage-153 首领过热反击**：三种首领半血后加入真实双炮高速斜射，旧蓄能/飞行弹保留，机体热效与血量提示同步。正常三路/24受控安全场景及三章实际回放已检查，真人难度仍待调。[试玩](docs/stages/Stage-153/PLAY.md) · [验证边界](docs/stages/Stage-153/TEST_REPORT.md)。
 
 **Stage-152 构筑检验**：选择已成型组合的实战目标，面对对应敌阵，真实效果达标后领奖并获得成就；查看不花点、原能力保留。[试玩](docs/stages/Stage-152/PLAY.md) · [验证边界](docs/stages/Stage-152/TEST_REPORT.md)。
 

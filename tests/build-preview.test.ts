@@ -51,7 +51,7 @@ it('shows only common fork gains and actionable missing combination nodes',()=>{
   expect(buildPreview(w,'ballistic').plan).toContain('雷暴霰射');
   const pure=new World();pure.growth.mastery=5;for(let i=0;i<3;i++)pure.chooseBuild('optical');
   expect(buildPreview(pure,'ballistic').plan).toContain('本次组合：棱镜激光');
-  expect(buildPreview(pure,'optical').plan).toBe('棱镜还需：弹道1点');
+  expect(buildPreview(pure,'optical').plan).toBe('电光还需：电弧炮T2');
 });
 it('includes existing calibration and does not round the accelerated laser interval away',()=>{
   const w=new World();w.weaponKind='scatter';w.growth.stage=3;w.growth.mastery=1;w.growth.bonus=40;

@@ -1,0 +1,30 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/explosion-render.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (110 tests | 2 failed) 3567ms
+   × real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=false) 13ms
+   × real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=true) 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=false)
+ FAIL  tests/explosion-render.test.ts > real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=true)
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ tests/explosion-render.test.ts:53:133
+     51|  w.growth.mastery=4;for(let i=0;i<4;i++)w.chooseBuild('optical');w.pha…
+     52|  for(const x of [360,500,590]){const b=w.spawn('armor',x,700);b.hp=b.m…
+     53|  f.tick();expect(w.laserArcHits).toBe(2);expect(f.runtime.diagnostics(…
+       |                                                                                                                                     ^
+     54|  expect(f.calls.some(c=>c.kind==='stroke'&&c.composite==='lighter')).t…
+     55|  f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(f.runtime.diag…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 108 passed (110)
+   Start at  11:20:09
+   Duration  4.23s (tests 87%, transform 10%, import 2%)

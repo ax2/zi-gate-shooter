@@ -33,7 +33,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   optical: [
     {name:'聚焦镜组',detail:'立即解锁激光 · 激光伤害+15%'},
     {name:'循环冷却 · 选择分支',detail:'间隔-25% · 二选一：灼烧/分光'},
-    {name:'深穿光束',detail:'贯穿+2；搭配霰射机构追加棱镜双束'},
+    {name:'深穿光束',detail:'贯穿+2 · 还可组合棱镜/电光连锁'},
   ],
 };
 export class BuildTree {
@@ -51,6 +51,7 @@ export class BuildTree {
   get spent(){return this.baseSpent+Object.values(this.refinements).reduce((a,b)=>a+b,0);}
   next(route:Route){
     if(this.ranks[route]<3)return this.node(route,this.ranks[route]);
+    if(route==='optical'&&this.refinements.optical===0)return {name:'光学精调1 · 连锁蓝图',detail:'伤害系数100%→110% · 配T2电弧可组合'};
     const n=this.refinements[route],label={ballistic:'弹道武器',electric:'电弧炮',optical:'激光与棱镜'}[route];
     return {name:`${label}精调 ${n+1}`,detail:`伤害系数 ${100+n*10}% → ${110+n*10}%`};
   }

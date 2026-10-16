@@ -3,6 +3,7 @@ export const buildProofs={
  storm:{name:'雷暴霰射',goal:18,unit:'跳电',detail:'30秒跳电18次 · 瞄准紧群'},
  prism:{name:'棱镜激光',goal:6,unit:'侧束',detail:'30秒侧束命中6次 · 对齐侧翼'},
  fracture:{name:'裂甲爆破',goal:4,unit:'引爆',detail:'30秒引爆4次 · 集中穿甲'},
+ photon:{name:'电光连锁',goal:4,unit:'跳伤',detail:'30秒光链跳伤4次 · 瞄准阵心'},
  ion:{name:'离子风暴',goal:6,unit:'命中',detail:'30秒放电命中6次 · 瞄准阵心'},
 } as const;
 export type BuildProof=keyof typeof buildProofs;

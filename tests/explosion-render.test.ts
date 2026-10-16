@@ -46,6 +46,17 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
+it.each([false,true])('real photon damage has bounded visible light, freezes on pause, expires and clears on restart (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ w.growth.mastery=4;for(let i=0;i<4;i++)w.chooseBuild('optical');w.phase='recovery';const pickup=w.spawn('pickup',360,C.playerY,2);pickup.weaponKind='arc';f.tick();resolveResearch(f);w.phase='boss';
+ for(const x of [360,500,590]){const b=w.spawn('armor',x,700);b.hp=b.maxHp=10000;b.speed=0;b.timer=999;}
+ f.tick();expect(w.laserArcHits).toBe(2);expect(f.runtime.diagnostics().laserArcBeams).toBe(2);expect(f.runtime.diagnostics().arcs).toBeLessThanOrEqual(12);
+ expect(f.calls.some(c=>c.kind==='stroke'&&c.composite==='lighter')).toBe(true);
+ f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(f.runtime.diagnostics().laserArcBeams).toBe(2);
+ expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().laserArcBeams).toBe(0);
+ f.runtime.start();expect(f.runtime.diagnostics().laserArcBeams).toBe(0);expect(f.runtime.world.laserChainReady).toBe(false);
+});
+
 it('publishes the actual round projectile pressure in the bottom receipt',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
  w.phase='recovery';w.phaseTime=3.99;f.tick();expect(w.round).toBe(2);

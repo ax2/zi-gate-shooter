@@ -1,3 +1,4 @@
+import {canLaserChain,LASER_CHAIN} from './laser-chain';
 import {buildProofs,proofFormation,PROOF_WAVES,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {ION_STORM} from './ion-storm';
@@ -62,7 +63,7 @@ export class World {
       for(const owned of this.activeWeapons){this.weaponStages.set(owned,this.weaponStage(owned));this.acquiredWeapons.add(owned);}
       this.weaponStages.set(kind,1);this.acquiredWeapons.add(kind);
     }
-    return true;
+    this.announceLaserChain();return true;
   }
   dropSpawns=0;dropKills=0;arcLinks=0;
   conduitBursts=0;empTargets=0;conduitTacticalWins=0;
@@ -131,7 +132,38 @@ export class World {
     const hit=contacts[0];if(!hit)return;
     const endX=x+(target.x-x)*hit.t,endY=start+(target.y-start)*hit.t;
     this.relayHits++;this.effects.push({type:'refract',x,y:start,targetX:endX,targetY:endY});
-    this.hit(hit.body,damage*OPTICAL_FORK.relayDamage,'pulse');
+    this.hit(hit.body,damage*OPTICAL_FORK.relayDamage,'pulse');return hit.body.id;
+  }
+  laserArcHits=0;
+  private laserLinkEnergy=0;
+  private laserLinkTargets=new Set<number>();
+  get laserChainReady(){return this.laserLinkEnergy>0;}
+  private announcedLaserChain=false;
+  laserChainUnlocked(){return canLaserChain(this.build,this.activeWeapons.includes('arc')?this.weaponStage('arc'):0);}
+  private announceLaserChain(){
+    if(this.announcedLaserChain||!this.laserChainUnlocked())return;
+    this.announcedLaserChain=true;this.laserTimer=0;
+    this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'组合完成 · 电光连锁',detail:'激光存一束光链 · 主束/电弧命中自动释出'});
+  }
+  private laserChain(origin:{x:number;y:number},damage:number,visited:Set<number>){
+    if(!this.laserChainUnlocked()||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))return false;
+    const hits=this.laserArcHits;let from=origin;
+    for(let hop=0;hop<LASER_CHAIN.hops;hop++){
+      if(this.bossVictory)break;
+      const target=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&(!visited.has(b.id)||guardClosed(b)||(b.dropGrace??0)>0)
+        &&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&Math.hypot(b.x-from.x,b.y-from.y)<=LASER_CHAIN.range)
+        .sort((a,b)=>Math.hypot(a.x-from.x,a.y-from.y)-Math.hypot(b.x-from.x,b.y-from.y)||a.id-b.id)[0];
+      if(!target||guardClosed(target)||(target.dropGrace??0)>0)break;visited.add(target.id);damage*=LASER_CHAIN.decay;
+      const before=target.hp;this.hit(target,damage,'pulse');
+      if(target.hp<before){this.laserArcHits++;this.effects.push({type:'laser-arc',x:from.x,y:from.y,targetX:target.x,targetY:target.y});}
+      from=target;
+    }
+    return this.laserArcHits>hits;
+  }
+  private releaseLaserLink(source:{x:number;y:number;id:number}){
+    if(this.laserLinkEnergy<=0)return;
+    const visited=new Set(this.laserLinkTargets);visited.add(source.id);
+    if(this.laserChain(source,this.laserLinkEnergy,visited)){this.laserLinkEnergy=0;this.laserLinkTargets.clear();}
   }
   private advanceBurn(dt:number){
     if(this.phase!=='running'&&this.phase!=='boss')return;
@@ -185,7 +217,7 @@ export class World {
       this.bossResearchPoints++;this.bossLootStats.research++;
       this.effects.push({type:'research',x:this.player.x,y:C.playerY,text:'首领蓝图 · 研发+1点',detail:'可推进技能路线 · 已有火力保留'});
     }else{this.bossLootStats.equipment++;this.upgradeOwnedWeapon(kind);}
-    this.announceFracture();return true;
+    this.announceFracture();this.announceLaserChain();return true;
   }
   private upgradeOwnedWeapon(kind:WeaponKind){
     for(const owned of this.activeWeapons)if(!this.weaponStages.has(owned))this.weaponStages.set(owned,this.weaponStage(owned));
@@ -195,8 +227,8 @@ export class World {
     this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
   }
   stormLinks=0;prismHits=0;proofWins=0;
-  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():this.build.ranks.electric>=3);}
-  proofCount(kind:BuildProof){return kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:this.ionHits;}
+  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:this.laserChainUnlocked());}
+  proofCount(kind:BuildProof){return kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:this.laserArcHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
   contract?: Contract;
@@ -212,7 +244,7 @@ export class World {
     }else{
       this.upgradeOwnedWeapon(kind);
     }
-    this.announceFracture();
+    this.announceFracture();this.announceLaserChain();
     return true;
   }
   damageTaken=0;
@@ -446,7 +478,8 @@ export class World {
       this.laserTimer -= dt;
       if (this.laserTimer <= 0) {
         this.laserTimer += support.laserInterval;
-        const start=C.playerY-100;
+        const start=C.playerY-100,laserDamage=support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
+        const visited=new Set<number>();let origin:{x:number;y:number;id:number}|undefined,mainBlocked=false;
         for(const side of support.prism?[0,-1,1]:[0]) {
           const x=this.player.x+side*42, topX=this.player.x+side*180;
           const beamX=(y:number)=>x+(topX-x)*(start-y)/(start-C.playerShotTop);
@@ -456,13 +489,15 @@ export class World {
           for(const body of targets){
             const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
             const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
+            visited.add(body.id);if(side===0&&count===0){mainBlocked=blocked;if(!blocked&&body.kind in C.enemies)origin={x:body.x,y:body.y,id:body.id};}
             const before=body.hp;this.hit(body,damage,'pulse');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
             if(side===0&&count===0&&!blocked)this.opticalSecondary(body,damage);
             if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
           }
           this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0});
         }
-        if(this.build.opticalBranch==='relay')this.splitLaser(support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1));
+        if(this.build.opticalBranch==='relay'){const id=this.splitLaser(laserDamage);if(id!==undefined)visited.add(id);}
+        if(this.laserChainUnlocked()&&!mainBlocked){this.laserLinkEnergy=laserDamage;this.laserLinkTargets=visited;if(origin)this.releaseLaserLink(origin);}
       }
     }
   }
@@ -572,6 +607,7 @@ export class World {
               if(bullet.weaponKind==='scatter'&&next.hp<before)this.stormLinks++;origin = next;
             }
           }
+          if(ionEligible&&body.hp<hpBefore)this.releaseLaserLink(body);
           if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {
             // No secondary explosions, reward charging or off-screen farming.
             if(bullet.weaponKind==='scatter')this.scatterBursts++;
@@ -605,7 +641,7 @@ export class World {
             this.upgradeOwnedWeapon(b.weaponKind);this.refitsClaimed++;
             const research=this.equipmentResearch(b.row>0);
             if(research)this.effects.push({type:'research',x:this.player.x,y:C.playerY,text:`装备研发 +${research}点`,detail:'可选择技能路线 · 已有火力保留'});
-            this.announceFracture();return;
+            this.announceFracture();this.announceLaserChain();return;
           }
           for (const kind of this.activeWeapons) if (!this.weaponStages.has(kind)) this.weaponStages.set(kind, this.weaponStage(kind));
           const addedWeapon = b.weaponKind && !this.activeWeapons.includes(b.weaponKind);
@@ -628,7 +664,7 @@ export class World {
             result.activated ? this.chargeReceipt(true) : !result.upgraded ? `当前充能 ${this.growth.energy}/100` : ''].filter(Boolean).join(' · ');
           this.effects.push({type:result.upgraded?'upgrade':'pickup',x:this.player.x,y:C.playerY,text:title,detail,size:b.stage});
           if(research)this.effects.push({type:'research',x:this.player.x,y:C.playerY,text:`装备研发 +${research}点`,detail:'可选择技能路线 · 已有火力保留'});
-          this.announceFracture();
+          this.announceFracture();this.announceLaserChain();
           if (previousWeapon !== this.weaponKind) this.emit('weapon', this.player.x, C.playerY);
           if (result.activated) this.emit('overload', this.player.x, C.playerY);
         });

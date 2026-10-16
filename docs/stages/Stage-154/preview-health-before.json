@@ -1,0 +1,14 @@
+[
+  {
+    "path": "/",
+    "status": 200
+  },
+  {
+    "path": "./assets/canvas-preview-BdylmqJL.js",
+    "error": "nonnumeric port: '5178.'"
+  },
+  {
+    "path": "/assets/runtime/boss-v1.png",
+    "error": "HTTP Error 404: Not Found"
+  }
+]
