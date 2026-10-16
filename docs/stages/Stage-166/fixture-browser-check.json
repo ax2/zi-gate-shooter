@@ -1,0 +1,19 @@
+{
+  "url": "http://127.0.0.1:5250/tools/visual-fixtures/rebound-charger.html",
+  "title": "折返冲锋 · 正常局观察",
+  "dom": "- text: 正常成长 / 观察操作者 / 虚拟时钟\n- text: 敌人出现后远离其侧以观察动作 · 不证明真人难度/FPS\n- button \"正常局观察首蓄能\"\n- button \"观察内切冲刺\" [disabled]\n- button \"观察第二次蓄能\" [disabled]\n- button \"观察折返冲刺\" [disabled]\n- button \"切换弱特效\"\n- generic: 90.08秒 / HP3 / actual-return",
+  "logs": [],
+  "flow": "正常成长→观察首蓄能→内切冲刺→第二次蓄能→折返冲刺",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "observationOperator": true,
+  "virtualClock": true
+}

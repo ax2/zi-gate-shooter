@@ -1,0 +1,44 @@
+[
+  {
+    "file": "first-charge-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "inward-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "return-desktop.jpg",
+    "width": 1280,
+    "height": 720,
+    "format": "Jpeg"
+  },
+  {
+    "file": "return-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "turn-desktop-weak.jpg",
+    "width": 1280,
+    "height": 720,
+    "format": "Jpeg"
+  },
+  {
+    "file": "turn-mobile-weak.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  },
+  {
+    "file": "turn-mobile.jpg",
+    "width": 390,
+    "height": 843,
+    "format": "Jpeg"
+  }
+]

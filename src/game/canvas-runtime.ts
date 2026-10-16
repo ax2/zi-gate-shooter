@@ -1,3 +1,5 @@
+import {reboundState} from '../core/rebound-charger';
+import {reboundLight} from './rebound-light';
 import {buildReceiptPosition,type ReceiptPosition} from './build-receipt';
 import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipePerformance,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
 import {interceptorLight} from './interceptor-light';
@@ -738,8 +740,9 @@ export class CanvasRuntime {
           this.hitSprite('drone-v1.png', frame, 3, b.x, y, side, side, b.hit, 0.07, 1);
         } else if (b.kind === 'charger') {
           const frame = chargerFrame(b), side = b.height * 1.35;
-          this.frameSprite('charger-v1.png', frame, 3, b.x, y, side, side, 1);
-          this.hitSprite('charger-v1.png', frame, 3, b.x, y, side, side, b.hit, 0.07, 1);
+          const local=b.pattern==='rebound';c.save();if(local){c.translate(b.x,y);c.rotate(reboundState(b).direction*.14);}
+          this.frameSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, 1);
+          this.hitSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'armor') {
           const frame = armorFrame(b), width = b.width * 1.45, height = b.height * 1.38;
           this.frameSprite('armor-v1.png', frame, 3, b.x, y, width, height, 1);
@@ -867,6 +870,7 @@ export class CanvasRuntime {
     // Breaking is not collecting: keep the physical module visible above smoke.
     for (const b of w.bodies) if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
     for (const b of w.bodies) {
+      if(b.pattern==='rebound')reboundLight(c,b,this.save.settings.effects==='weak');
       if(b.pattern==='intercept')interceptorLight(c,b,this.save.settings.effects==='weak');
       if (b.warning > 0 && b.pattern!=='intercept' && !(b.kind==='boss'&&b.attack===4)) {
         // The enemy telegraphs its action locally; never preview future bullet paths.
@@ -919,6 +923,8 @@ export class CanvasRuntime {
         this.text(b.burst ? '弱点暴露' : b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
       } else if(b.kind==='conduit'){
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text('中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
+      } else if(b.pattern==='rebound'){
+        const state=reboundState(b);this.text(state.phase==='turn'?'折返·再蓄能':state.phase==='return'?'折返·冲刺':'折返冲锋',b.x,b.y-82,20,state.phase==='turn'?'#ffb59b':'#a7edff','center',true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
         if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);

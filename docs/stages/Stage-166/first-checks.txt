@@ -1,0 +1,30 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/rebound-charger.test.ts tests/explosion-render.test.ts tests/swarm-routes.test.ts tests/rules.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/rebound-charger.test.ts (3 tests | 1 failed) 31ms
+   × replaces exactly one already-visible charger per later chapter without changing roster stats or the first chapter 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/rebound-charger.test.ts > replaces exactly one already-visible charger per later chapter without changing roster stats or the first chapter
+AssertionError: expected 28.679999999999996 to be 24 // Object.is equality
+
+- Expected
++ Received
+
+- 24
++ 28.679999999999996
+
+ ❯ tests/rebound-charger.test.ts:7:26
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 148 passed (149)
+   Start at  22:08:58
+   Duration  4.47s (tests 89%, transform 8%, import 3%)

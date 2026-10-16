@@ -1,3 +1,4 @@
+import {REBOUND,reboundState} from './rebound-charger';
 import {BOSS_COUNTER,counterMuzzles,counterAttack} from './boss-counter';
 import { HUNTER } from './contracts';
 import { ESCORT } from './boss-formations';
@@ -125,6 +126,11 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(b.age<CONDUIT.holdSeconds){if(b.y<CONDUIT.hoverY)b.y=Math.min(CONDUIT.hoverY,b.y+b.speed*dt);}
     else b.y+=b.speed*dt;
   } else if (b.kind === 'charger') {
+    if(b.pattern==='rebound'){
+      b.reboundOrigin??=b.x;const state=reboundState(b);b.warning=state.warning;b.speed=state.speed;
+      if(state.dashing)b.x+=clamp(state.destination-b.x,-REBOUND.lateralSpeed*dt,REBOUND.lateralSpeed*dt);
+      b.y+=b.speed*dt;return;
+    }
     if (b.age > C.chargerBehavior.warningAge && b.age < C.chargerBehavior.dashAge) b.warning = C.chargerBehavior.dashAge - b.age;
     if (b.age >= C.chargerBehavior.dashAge) {
       b.warning = 0; b.speed = C.chargerBehavior.dashSpeed;

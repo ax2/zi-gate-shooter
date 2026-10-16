@@ -1276,3 +1276,12 @@ it('renders actual seeker hits in a real death report instead of silently mergin
  w.bullets=[{id:99999,x:150,y:750,px:150,py:750,vx:0,vy:0,damage:10,age:0,active:true,hostile:false,weaponKind:'arc',chainHops:1}];f.tick();expect(w.seekerLinks).toBe(1);
  w.player.hp=1;w.bullets=[{id:99998,x:w.player.x,y:C.playerY,px:w.player.x,py:C.playerY,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}];f.tick();expect(f.runtime.mode).toBe('result');expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('猎隼 1'))).toBe(true);
 });
+
+
+it.each([false,true])('rebound intent is local, uses original detailed charge pose, and freezes with the paused world (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const b=f.runtime.world.spawn('charger',220,600);b.pattern='rebound';b.lane=480;b.reboundOrigin=140;b.age=1.9;f.tick();
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返·再蓄能')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffb59b')).toBe(true);
+ const draw=f.calls.find(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('charger-v1.png'));expect(draw?.args[1]).toBe(256);
+ expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返冲锋：看清第二次转向')).toBe(true);
+ f.runtime.pause();f.tick();const age=b.age,x=b.x,y=b.y;for(let i=0;i<30;i++)f.tick();expect([b.age,b.x,b.y]).toEqual([age,x,y]);f.runtime.start();f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返·再蓄能')).toBe(false);
+});
