@@ -1,0 +1,37 @@
+[
+  {
+    "name": "desktop-danger-standard.png",
+    "pixels": [
+      1280,
+      720
+    ]
+  },
+  {
+    "name": "mobile-danger-standard.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "mobile-danger-weak.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "mobile-first-pulse.png",
+    "pixels": [
+      390,
+      843
+    ]
+  },
+  {
+    "name": "mobile-prism-standard.png",
+    "pixels": [
+      390,
+      843
+    ]
+  }
+]

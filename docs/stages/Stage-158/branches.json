@@ -1,0 +1,134 @@
+{
+  "comparisons": [
+    {
+      "branch": "burn",
+      "encounter": "heavy",
+      "damage": [
+        72.45000000000005,
+        0
+      ],
+      "kills": 0,
+      "burnHits": 3,
+      "relayHits": 0
+    },
+    {
+      "branch": "burn",
+      "encounter": "cluster",
+      "damage": [
+        12,
+        0
+      ],
+      "kills": 1,
+      "burnHits": 0,
+      "relayHits": 0
+    },
+    {
+      "branch": "relay",
+      "encounter": "heavy",
+      "damage": [
+        41.39999999999998,
+        26.909999999999968
+      ],
+      "kills": 0,
+      "burnHits": 0,
+      "relayHits": 1
+    },
+    {
+      "branch": "relay",
+      "encounter": "cluster",
+      "damage": [
+        12,
+        12
+      ],
+      "kills": 2,
+      "burnHits": 0,
+      "relayHits": 1
+    }
+  ],
+  "runs": [
+    {
+      "branch": "burn",
+      "selected": "burn",
+      "neighborSamples": [],
+      "time": 300.0000000000558,
+      "hp": 3,
+      "round": 4,
+      "burnHits": 11,
+      "relayHits": 0,
+      "kills": 191,
+      "mastery": 9,
+      "peakBodies": 10,
+      "peakBullets": 53
+    },
+    {
+      "branch": "relay",
+      "selected": "relay",
+      "neighborSamples": [
+        {
+          "time": 121.51666666666105,
+          "kind": "drone",
+          "nearest": 282.4043076855142
+        },
+        {
+          "time": 158.05000000001792,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 160.3000000000197,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 162.5500000000215,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 171.06666666669494,
+          "kind": "drone",
+          "nearest": null
+        },
+        {
+          "time": 209.31666666672538,
+          "kind": "drone",
+          "nearest": null
+        },
+        {
+          "time": 222.81666666673613,
+          "kind": "armor",
+          "nearest": 120
+        },
+        {
+          "time": 240.6000000000836,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 247.35000000008898,
+          "kind": "boss",
+          "nearest": null
+        },
+        {
+          "time": 285.7166666667355,
+          "kind": "drone",
+          "nearest": 20
+        },
+        {
+          "time": 287.06666666673425,
+          "kind": "drone",
+          "nearest": 60
+        }
+      ],
+      "time": 300.0000000000558,
+      "hp": 3,
+      "round": 4,
+      "burnHits": 0,
+      "relayHits": 21,
+      "kills": 188,
+      "mastery": 9,
+      "peakBodies": 10,
+      "peakBullets": 53
+    }
+  ]
+}

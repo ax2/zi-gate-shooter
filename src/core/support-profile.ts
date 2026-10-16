@@ -1,3 +1,5 @@
+/** Presentation band only; does not alter the beam's combat profile. */
+export function laserVisualBand(mastery=0,opticalRank=0):1|2|3{return mastery>=8||opticalRank>=3?3:opticalRank>=2?2:1;}
 /** Run-local milestone rewards. Shared by combat and the parameter panel. */
 export function supportProfile(mastery = 0) {
   return {

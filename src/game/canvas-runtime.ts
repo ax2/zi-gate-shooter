@@ -35,7 +35,8 @@ import { CrateDebris, crateFrame } from './crate-debris';
 import { GateFeedback } from './gate-feedback';
 import { contextGuide, weaponGuide } from './context-guide';
 import { dossierWeapons, weaponDossier } from './weapon-dossier';
-import { supportLight } from './support-light';
+import { supportLight,opticalImpactLight,opticalEmitterLight } from './support-light';
+import {laserVisualBand} from '../core/support-profile';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
 import { chargerFrame } from './charger-motion';
@@ -91,10 +92,10 @@ export class CanvasRuntime {
   private buttons: CanvasControl[] = [];
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
-  private impacts: { x: number; y: number; kind: WeaponKind; life: number }[] = [];
+  private impacts: { x: number; y: number; kind: WeaponKind; life: number;opticalBand?:number;prism?:boolean }[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
-  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean}[] = [];
+  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
@@ -458,7 +459,14 @@ export class CanvasRuntime {
     if(e.type==='laser')this.opticalFiredAt=this.world.time;
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
-      if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser',prism:e.prism});
+      if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser',prism:e.prism,opticalBand:e.opticalBand});
+      return;
+    }
+    if(e.type==='laser-impact'){
+      const marker={x:e.targetX??e.x,y:e.targetY??e.y,kind:'pulse' as const,life:.22,opticalBand:e.opticalBand??1,prism:e.prism};
+      const old=this.impacts.find(hit=>Math.hypot(hit.x-e.x,hit.y-e.y)<28);
+      if(old)Object.assign(old,marker);else if(this.impacts.length<(this.save.settings.effects==='weak'?4:12))this.impacts.push(marker);
+      else{const index=this.impacts.findIndex(hit=>!hit.opticalBand);if(index>=0)this.impacts[index]=marker;}
       return;
     }
     if(e.type==='laser-focus'){
@@ -548,11 +556,12 @@ export class CanvasRuntime {
   }
   private drawOpticalRig(y:number,pose:PlayerPose) {
     const w=this.world,support=w.supportProfile();if(!support.laserUnlocked)return;
-    const kick=Math.max(0,1-(w.time-this.opticalFiredAt)/.2)*3;
+    const band=laserVisualBand(w.growth.mastery,w.build.ranks.optical),pulse=Math.max(0,1-(w.time-this.opticalFiredAt)/.22),kick=pulse*(3+band);const size=50+band*6;
     for(const side of support.prism?[-1,0,1]:[0]){
       const c=this.ctx,x=w.player.x+side*42;
       c.save();c.lineWidth=4;c.strokeStyle='#9aaab4';c.beginPath();c.moveTo(w.player.x,y-72+pose.bob);c.lineTo(x,y-82+pose.bob+kick);c.stroke();c.restore();
-      this.frameSprite('mounted-modules-v1.png',5,3,w.player.x+side*42,y-100+pose.bob+kick,side===0?46:38,side===0?46:38,2);
+      this.frameSprite('mounted-modules-v1.png',5,3,w.player.x+side*42,y-100+pose.bob+kick,side===0?size:42,side===0?size:42,2);
+      opticalEmitterLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,pulse,side===0?band:1,this.save.settings.effects==='weak');
     }
   }
   private bar(x: number, y: number, width: number, ratio: number, color: string) {
@@ -746,7 +755,7 @@ export class CanvasRuntime {
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
-    for(const beam of this.supportBeams) if(this.mode!=='menu')supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism);
+    for(const beam of this.supportBeams) if(this.mode!=='menu')supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);
     for(const b of w.bullets) if(!b.hostile) projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
     const playerY = this.mode === 'menu' ? 750 : C.playerY;
     if ((this.mode === 'playing' || this.mode === 'paused') && w.player.hp > 0)
@@ -805,7 +814,7 @@ export class CanvasRuntime {
     this.empWaves=this.empWaves.filter(e=>e.life>0);
     for (const arc of this.arcs) { arc.life -= dt;if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon); }
     this.arcs = this.arcs.filter(arc=>arc.life>0);
-    for (const hit of this.impacts) { hit.life -= dt; impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
+    for (const hit of this.impacts) { hit.life -= dt;if(hit.opticalBand)opticalImpactLight(c,hit.x,hit.y,hit.life,hit.opticalBand,this.save.settings.effects==='weak',hit.prism);else impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
     this.impacts = this.impacts.filter(hit => hit.life > 0);
     for (const s of this.particles) {
       s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 70 * dt;
@@ -1299,7 +1308,7 @@ export class CanvasRuntime {
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
       mode: this.mode, time: this.world.time,roundTime:this.world.roundTime,phaseTime:this.world.phaseTime, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, buildRefinements:{...this.world.build.refinements}, activeWeapons:this.world.activeWeapons,
-      supportBeams:this.supportBeams.length,
+      supportBeams:this.supportBeams.length,opticalBand:laserVisualBand(this.world.growth.mastery,this.world.build.ranks.optical),laserBands:this.supportBeams.filter(b=>b.laser).map(b=>b.opticalBand??1),opticalImpacts:this.impacts.filter(i=>i.opticalBand).length,
       weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
       weaponCalibrations:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponCalibration(kind)])),
       contractStatus:this.world.contract?.status??null,contractRewardPending:!!this.world.contractReward,bossRewardRound:this.world.bossRewardRound,bossLootStats:{...this.world.bossLootStats},

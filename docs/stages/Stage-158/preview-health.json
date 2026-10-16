@@ -1,0 +1,17 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-C_o81Jsz.js",
+    "status": 200,
+    "bytes": 227270
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/mounted-modules-v1.png",
+    "status": 200,
+    "bytes": 415736
+  }
+]

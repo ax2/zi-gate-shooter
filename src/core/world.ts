@@ -7,7 +7,7 @@ import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
 import { BuildTree, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
-import { supportMilestone } from './support-profile';
+import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
 import { C, clamp } from './config';
 import {CONDUIT,canDisrupt} from './conduit';
@@ -38,7 +38,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -502,6 +502,7 @@ export class World {
       if (this.laserTimer <= 0) {
         this.laserTimer += support.laserInterval;
         const start=C.playerY-100,laserDamage=support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
+        const opticalBand=laserVisualBand(this.growth.mastery,this.build.ranks.optical);
         const visited=new Set<number>();let origin:{x:number;y:number;id:number}|undefined,mainBlocked=false;
         for(const side of support.prism?[0,-1,1]:[0]) {
           const x=this.player.x+side*42, topX=this.player.x+side*180;
@@ -513,11 +514,12 @@ export class World {
             const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
             const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
             visited.add(body.id);if(side===0&&count===0){mainBlocked=blocked;if(!blocked&&body.kind in C.enemies)origin={x:body.x,y:body.y,id:body.id};}
-            const before=body.hp;this.hit(body,damage,'pulse');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
+            const before=body.hp,beforeEnergy=body.energy;this.hit(body,damage,'pulse');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
+            if(body.hp<before||body.kind==='gate'&&body.energy>beforeEnergy){const contactY=blocked?body.y+body.height/2:body.y;this.effects.push({type:'laser-impact',x:body.x,y:body.y,targetX:beamX(contactY),targetY:contactY,opticalBand,prism:side!==0});}
             if(side===0&&count===0&&!blocked)this.opticalSecondary(body,damage);
             if(blocked || ++count>=support.laserTargets){end=body.y+body.height/2;break;}
           }
-          this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0});
+          this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0,opticalBand});
         }
         if(this.build.opticalBranch==='relay'){const id=this.splitLaser(laserDamage);if(id!==undefined)visited.add(id);}
         if(this.laserChainUnlocked()&&!mainBlocked){this.laserLinkEnergy=laserDamage;this.laserLinkTargets=visited;if(origin)this.releaseLaserLink(origin);}

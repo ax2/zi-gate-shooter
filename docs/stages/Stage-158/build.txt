@@ -1,0 +1,10 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 build
+npm notice run npm run typecheck && vite build
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 typecheck
+npm notice run tsc --noEmit
+tests/explosion-render.test.ts(56,22): error TS2550: Property 'findLastIndex' does not exist on type '{ kind: string; args: any[]; alpha: number; color: unknown; stroke?: unknown; composite: string; font?: string | undefined; lineWidth?: number | undefined; }[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+tests/explosion-render.test.ts(56,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+tests/explosion-render.test.ts(56,96): error TS2550: Property 'findLastIndex' does not exist on type '{ kind: string; args: any[]; alpha: number; color: unknown; stroke?: unknown; composite: string; font?: string | undefined; lineWidth?: number | undefined; }[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+tests/explosion-render.test.ts(56,110): error TS7006: Parameter 'c' implicitly has an 'any' type.

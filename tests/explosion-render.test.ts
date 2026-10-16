@@ -19,14 +19,14 @@ it.each([false,true])('support beam expires, freezes on pause, and clears on res
 
 function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boolean},captureWrite?:(save:Save)=>void) {
   let clock = 0, next: FrameRequestCallback = () => {};
-  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; stroke?: unknown; composite: string; font?: string }> = [];
+  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; stroke?: unknown; composite: string; font?: string; lineWidth?:number }> = [];
   const state: Record<string, any> = { globalAlpha: 1, globalCompositeOperation: 'source-over' };
   const stack: Record<string, any>[] = [];
   const context = new Proxy(state, { get(target, key: string) {
     if (key in target) return target[key];
     if (key === 'save') return () => stack.push({ ...state });
     if (key === 'restore') return () => Object.assign(state, stack.pop());
-    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, stroke:state.strokeStyle, composite: state.globalCompositeOperation, font: state.font });
+    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, stroke:state.strokeStyle, composite: state.globalCompositeOperation, font: state.font,lineWidth:state.lineWidth });
   } });
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
   const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
@@ -46,6 +46,16 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
  }
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+
+it.each([false,true])('evolved optical effects share impact budgets, stay beneath hazards, freeze, expire and reset (weak=%s)',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.growth.mastery=4;for(let i=0;i<3;i++)w.chooseBuild('optical');w.chooseBuild('ballistic');
+ for(const side of [-1,0,1])for(const y of [700,640,580,520,460,400]){const x=360+side*(42+138*(924-y)/684),b=w.spawn('armor',x,y);b.hp=b.maxHp=10000;b.speed=0;b.timer=999;}
+ w.bullets=[{id:99999,x:600,y:800,px:600,py:800,vx:0,vy:0,damage:1,age:0,active:true,hostile:true}];f.tick();
+ expect(f.runtime.diagnostics().laserBands).toEqual([3,3,3]);expect(f.runtime.diagnostics().opticalImpacts).toBeGreaterThan(0);expect(f.runtime.diagnostics().opticalImpacts).toBeLessThanOrEqual(weak?4:12);
+ expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#62dfff'&&c.lineWidth===11)).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#cb9dff'&&c.lineWidth===4)).toBe(true);
+ const crown=f.calls.reduce((last,c,i)=>c.kind==='stroke'&&c.stroke==='#85eaff'?i:last,-1),hostile=f.calls.reduce((last,c,i)=>c.kind==='fill'&&c.color==='#ff7756'?i:last,-1);expect(crown).toBeGreaterThan(0);expect(hostile).toBeGreaterThan(crown);
+ const count=f.runtime.diagnostics().opticalImpacts;f.runtime.pause();for(let i=0;i<30;i++)f.tick();expect(f.runtime.diagnostics().opticalImpacts).toBe(count);expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<24;i++)f.tick();expect(f.runtime.diagnostics().opticalImpacts).toBe(0);f.runtime.start();expect(f.runtime.diagnostics().opticalImpacts).toBe(0);
+});
 
 it('shows every achievement once across readable groups and keeps the local-record footer clear of the return control',async()=>{
  const f=fixture();await f.runtime.load();expect(f.runtime.activateControl('achievements')).toBe(true);const seen=new Set<string>();
