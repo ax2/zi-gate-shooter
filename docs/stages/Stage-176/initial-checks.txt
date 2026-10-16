@@ -1,0 +1,68 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/relay-screen.test.ts tests/relay-screen-progression.test.mjs tests/conduit.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/relay-screen.test.ts (12 tests | 8 failed) 2005ms
+   × has a no-kill side-chapter route R5 from 68 289ms
+   × has a no-kill side-chapter route R5 from 360 235ms
+   × has a no-kill side-chapter route R5 from 652 274ms
+   × has a no-kill side-chapter route R8 from 68 160ms
+   × has a no-kill side-chapter route R8 from 360 177ms
+   × has a no-kill side-chapter route R11 from 68 218ms
+   × has a no-kill side-chapter route R11 from 360 141ms
+   × has a no-kill side-chapter route R11 from 652 214ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R5 from 68
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R5 from 360
+AssertionError: t=56.94999999999805: expected 0 to be greater than 0
+ ❯ tests/relay-screen.test.ts:15:245
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R5 from 652
+AssertionError: t=64.49999999999763: expected 0 to be greater than 0
+ ❯ tests/relay-screen.test.ts:15:245
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R8 from 68
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R8 from 360
+AssertionError: t=50.29999999999843: expected 0 to be greater than 0
+ ❯ tests/relay-screen.test.ts:15:245
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R11 from 68
+AssertionError: t=46.299999999998654: expected 0 to be greater than 0
+ ❯ tests/relay-screen.test.ts:15:245
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R11 from 360
+AssertionError: t=36.016666666665905: expected 0 to be greater than 0
+ ❯ tests/relay-screen.test.ts:15:245
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  tests/relay-screen.test.ts > has a no-kill side-chapter route R11 from 652
+AssertionError: t=43.799999999998796: expected 0 to be greater than 0
+ ❯ tests/relay-screen.test.ts:15:245
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  8 failed | 11 passed (19)
+   Start at  02:17:58
+   Duration  7.43s (tests 94%, transform 4%, import 2%)
+

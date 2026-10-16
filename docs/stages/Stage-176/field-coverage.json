@@ -1,0 +1,29 @@
+[
+  {
+    "branch": "spread",
+    "time": 599.999999999783,
+    "hp": 3,
+    "fields": 68,
+    "hits": 75,
+    "hitsOnRelayScreen": 2,
+    "lateHits": 0
+  },
+  {
+    "branch": "capacitor",
+    "time": 599.999999999783,
+    "hp": 3,
+    "fields": 67,
+    "hits": 72,
+    "hitsOnRelayScreen": 2,
+    "lateHits": 0
+  },
+  {
+    "branch": "seeker",
+    "time": 599.999999999783,
+    "hp": 3,
+    "fields": 68,
+    "hits": 75,
+    "hitsOnRelayScreen": 2,
+    "lateHits": 0
+  }
+]

@@ -1,3 +1,4 @@
+import {RELAY_SCREEN} from './relay-screen';
 import {SWEEPER} from './sweeper';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
@@ -36,8 +37,8 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep'; bossVariant?: number;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
+  weaponKind?: WeaponKind;refit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen'; bossVariant?: number;
 }
 export interface Bullet {
   id: number; x: number; y: number; px: number; py: number;
@@ -484,6 +485,7 @@ export class World {
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
           if(s.pattern==='sweep'&&s.kind!=='drone')candidate.timer=SWEEPER.opening;
+          if(s.pattern==='relay-screen'){candidate.timer=s.kind==='guard'?RELAY_SCREEN.guardOpening:RELAY_SCREEN.sniperOpening;if(s.kind==='guard'||s.kind==='sniper'){candidate.hp*=RELAY_SCREEN.durability;candidate.maxHp=candidate.hp;}}
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
@@ -623,6 +625,7 @@ export class World {
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
+        if(b.pattern==='relay-screen'){b.formationShots=(b.formationShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
         if(b.proofTarget){b.proofShots=(b.proofShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
         if(b.pattern==='sweep'){b.sweeperShots=(b.sweeperShots??0)+1;this.bullets[this.bullets.length-1].sourceId=b.id;}
         if(b.pattern==='intercept'){

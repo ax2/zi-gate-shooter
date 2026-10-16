@@ -1,9 +1,10 @@
+import {hasRelayScreen,RELAY_SCREEN} from '../src/core/relay-screen';
 import {it,expect} from 'vitest';import {World,type Body} from '../src/core/world';import {C} from '../src/core/config';import {CONDUIT} from '../src/core/conduit';import {guardClosed,advanceBody} from '../src/core/behavior';import {timeline} from '../src/core/director';import {awardAchievements,emptyAchievements} from '../src/core/achievements';
 function setup(){const w=new World();Object.assign(w,{scheduled:[]});w.player.x=w.player.px=68;return w;}
 function shot(w:World,b:Body,damage=100){w.bullets.push({id:99999,x:b.x,y:b.y,px:b.x,py:b.y,vx:0,vy:0,damage,age:0,active:true,hostile:false});w.step(C.step,68);return w.drainEffects();}
 it('authors exactly one optional-target relay per later chapter without changing first-run or reward windows',()=>{
  expect(timeline(1,1337).some(s=>s.kind==='conduit')).toBe(false);
- for(const round of [2,3,4,8,12])for(const seed of [1,77,1337]){const list=timeline(round,seed),nodes=list.filter(s=>s.kind==='conduit');expect(nodes).toHaveLength(1);expect(nodes[0].at).toBe(44.5);expect(nodes[0].drop).toBe(true);expect(nodes[0].x).toBeGreaterThanOrEqual(180);expect(nodes[0].x).toBeLessThanOrEqual(540);expect(list.filter(s=>s.kind==='armory')).toHaveLength(2);expect(list.filter(s=>s.kind==='gates')).toHaveLength(4);}
+ for(const round of [2,3,4,8,12])for(const seed of [1,77,1337]){const list=timeline(round,seed),nodes=list.filter(s=>s.kind==='conduit');expect(nodes).toHaveLength(1);expect(nodes[0].at).toBe(hasRelayScreen(round)?RELAY_SCREEN.at+RELAY_SCREEN.relayDelay:44.5);expect(nodes[0].drop).toBe(true);expect(nodes[0].x).toBeGreaterThanOrEqual(180);expect(nodes[0].x).toBeLessThanOrEqual(540);expect(list.filter(s=>s.kind==='armory')).toHaveLength(2);expect(list.filter(s=>s.kind==='gates')).toHaveLength(4);}
  expect(new World(1,100).spawn('conduit',360,360).maxHp).toBe(48);
 });
 it('disables only real visible unprotected ranged enemies, opens the shield and counts actual charging interrupts',()=>{

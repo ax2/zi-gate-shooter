@@ -1,0 +1,43 @@
+{
+  "round": 11,
+  "start": 652,
+  "time": 71.9999999999972,
+  "hp": 3,
+  "kills": 0,
+  "formation": [
+    {
+      "id": 427,
+      "kind": "sniper",
+      "shots": 9,
+      "emp": false
+    },
+    {
+      "id": 428,
+      "kind": "sniper",
+      "shots": 9,
+      "emp": false
+    },
+    {
+      "id": 429,
+      "kind": "guard",
+      "shots": 6,
+      "emp": false
+    },
+    {
+      "id": 430,
+      "kind": "guard",
+      "shots": 6,
+      "emp": false
+    },
+    {
+      "id": 447,
+      "kind": "conduit",
+      "shots": 0,
+      "emp": false
+    }
+  ],
+  "emitted": 30,
+  "arrived": 30,
+  "peakBodies": 21,
+  "peakBullets": 18
+}

@@ -1,0 +1,12 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/relay-screen.test.ts tests/relay-screen-progression.test.mjs tests/conduit.test.ts tests/sweeper.test.ts tests/sweeper-progression.test.mjs tests/magnetic-field.test.ts tests/magnetic-proof.test.ts tests/magnetic-proof-progression.test.mjs tests/magnetic-proof-routes.test.ts tests/magnetic-refinement.test.ts tests/magnetic-refinement-progression.test.mjs tests/build-proof-contract.test.ts tests/build-proof-routes.test.ts tests/boss-roster-progression.test.mjs tests/boss-roster-routes.test.ts tests/native-flow.test.ts tests/rules.test.ts tests/projectile-pressure.test.ts tests/mobile-sentry.test.ts tests/rebound-charger.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+
+ Test Files  20 passed (20)
+      Tests  150 passed (150)
+   Start at  02:25:13
+   Duration  22.96s (tests 96%, import 2%, transform 2%)
+

@@ -954,13 +954,14 @@ export class CanvasRuntime {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#8bdce9');this.text('停火',b.x,b.y-b.height/2-34,22,'#b5f4ff','center',true);
       } else if (b.kind === 'guard') {
         this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
-        this.text(b.burst ? '弱点暴露' : b.pattern==='convoy'?'补给护卫':b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
+        this.text(b.burst ? '弱点暴露' : b.pattern==='convoy'?'补给护卫':b.pattern==='relay-screen'?'哨阵前盾':b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
       } else if(b.kind==='conduit'){
-        this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text('中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
+        this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text(b.pattern==='relay-screen'?'中继·停火开盾':'中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
       } else if(b.pattern==='rebound'){
         const state=reboundState(b);this.text(state.phase==='turn'?'折返·再蓄能':state.phase==='return'?'折返·冲刺':'折返冲锋',b.x,b.y-82,20,state.phase==='turn'?'#ffb59b':'#a7edff','center',true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
+        if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);
         if(b.pattern==='intercept')this.text(b.warning>0?(b.burst?'截击·核心蓄能':'截击·翼炮蓄能'):(b.interceptCoreRemaining??0)>0?'截击·核心连射':'截击精英',b.x,b.y-b.height*.68-20,21,b.burst?'#ffb19c':'#ffe1a7','center',true);
         if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text(w.contract.hunt==='crossfire'?'王牌 · 扇射':'悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
@@ -1432,7 +1433,7 @@ export class CanvasRuntime {
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
-      conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
+      relayScreen:this.world.bodies.filter(b=>b.active&&b.pattern==='relay-screen').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,empRemaining:b.empRemaining??0,shots:b.formationShots??0})),conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
       recipeGoal:this.save.recipeGoal?recipeStatus(this.world,this.save.recipeGoal):null,goalSupplies:this.world.bodies.filter(b=>recipeSupplyMatch(this.world,this.save.recipeGoal,b)).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,stage:b.stage,refit:!!b.refit})),mobileSentries:this.world.bodies.filter(b=>b.active&&b.pattern==='relocate').map(b=>({x:b.x,y:b.y,lane:b.lane,age:b.age,warning:b.warning,volleys:b.sentryVolleys??0,direction:sentryDirection(b)})),
       interceptorBreaks:this.world.interceptorBreaks,interceptors:this.world.bodies.filter(b=>b.active&&b.pattern==='intercept').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,beat:b.burst,wingShots:b.interceptWingShots??0,coreShots:b.interceptCoreShots??0})),
       refitsClaimed:this.world.refitsClaimed,

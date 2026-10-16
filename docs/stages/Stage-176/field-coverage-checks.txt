@@ -1,0 +1,32 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/sweeper-progression.test.mjs tests/magnetic-field.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/sweeper-progression.test.mjs (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/sweeper-progression.test.mjs [ tests/sweeper-progression.test.mjs ]
+Error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+  Plugin: vite:import-analysis
+  File: C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter/tests/sweeper-progression.test.mjs:1:0
+  1  |  import {it,expect} from 'vitest';import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';import {World} from '.....
+     |  ^
+  2  |  it('normally meets moving sweepers and records movement plus magnetic field value across three builds',()=>{
+  3  |   const runs=[],baseline=JSON.parse(readFileSync('docs/stages/Stage-172/normal.json','utf8'));
+ ❯ TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/node.js:8766:39
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/node.js:8763:14
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/node.js:26596:10
+ ❯ EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/node.js:8545:14
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/node.js:20184:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  7 passed (7)
+   Start at  02:24:10
+   Duration  449ms (transform 75%, import 15%, tests 7%, worker 2%)
+
