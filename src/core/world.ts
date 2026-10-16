@@ -1,4 +1,5 @@
 import {SUPPLY_CONVOY} from './supply-convoy';
+import {MAGNETIC,type MagneticField} from './magnetic-field';
 import {canLaserChain,LASER_CHAIN} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,type BuildProof} from './build-proof';
@@ -42,7 +43,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -69,7 +70,7 @@ export class World {
       for(const owned of this.activeWeapons){this.weaponStages.set(owned,this.weaponStage(owned));this.acquiredWeapons.add(owned);}
       this.weaponStages.set(kind,1);this.acquiredWeapons.add(kind);
     }
-    this.announceLaserChain();return true;
+    this.announceMagnetic();this.announceLaserChain();return true;
   }
   dropSpawns=0;dropKills=0;arcLinks=0;
   conduitBursts=0;empTargets=0;conduitTacticalWins=0;
@@ -195,9 +196,42 @@ export class World {
     }
   }
   fractureBursts=0;
+  magneticFields:MagneticField[]=[];
+  magneticBursts=0;magneticHits=0;
+  lastMagneticHit?:{fieldId:number;targetId:number;time:number;x:number;y:number};
+  private magneticReadyAt=0;private magneticId=0;private announcedMagnetic=false;
+  magneticUnlocked(){return this.activeWeapons.includes('blast')&&this.weaponStage('blast')>=2&&this.build.ranks.electric>=2;}
+  private announceMagnetic(){
+    if(this.announcedMagnetic||!this.magneticUnlocked())return;
+    this.announcedMagnetic=true;
+    this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'组合完成 · 磁暴榴弹',detail:'爆裂命中留下三拍电场 · 原火力保留'});
+  }
+  private leaveMagnetic(body:Body,damage:number){
+    if(!this.magneticUnlocked()||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss')||this.time+1e-9<this.magneticReadyAt||this.magneticFields.length>=MAGNETIC.limit)return;
+    this.magneticReadyAt=this.time+MAGNETIC.cooldown;this.magneticBursts++;
+    this.magneticFields.push({id:++this.magneticId,x:body.x,y:body.y,age:0,damage:damage*MAGNETIC.damage,pulses:0});
+  }
+  private advanceMagnetic(dt:number){
+    if(this.phase!=='running'&&this.phase!=='boss'){this.magneticFields=[];return;}
+    for(const field of this.magneticFields){
+      field.age+=dt;field.y+=C.scrollSpeed*dt;
+      while(field.pulses<MAGNETIC.pulses.length&&field.age+1e-9>=MAGNETIC.pulses[field.pulses]){
+        field.pulses++;
+        for(const target of this.bodies){
+          if(this.bossVictory||this.player.hp<=0)break;
+          if(!target.active||!(target.kind in C.enemies)||guardClosed(target)||(target.dropGrace??0)>0||target.y<C.playerShotTop||target.y>C.playerY||(target.kind==='boss'&&this.phase!=='boss')||Math.hypot(target.x-field.x,target.y-field.y)>MAGNETIC.radius)continue;
+          const before=target.hp;this.hit(target,field.damage,'blast');
+          if(target.hp<before){this.magneticHits++;this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y};this.effects.push({type:'magnetic-hit',x:target.x,y:target.y,weaponKind:'arc',fieldId:field.id,targetId:target.id});}
+        }
+      }
+    }
+    this.magneticFields=this.magneticFields.filter(f=>f.age<MAGNETIC.life&&f.y-MAGNETIC.radius<C.playerY);
+    if(this.bossVictory||this.player.hp<=0)this.magneticFields=[];
+  }
   private announcedFracture=false;
   fractureUnlocked(){return this.activeWeapons.includes('pierce')&&this.activeWeapons.includes('blast')&&this.weaponStage('pierce')>=2&&this.weaponStage('blast')>=2;}
   private announceFracture(){
+    this.announceMagnetic();
     if(!this.announcedFracture&&this.fractureUnlocked()){
       this.announcedFracture=true;
       this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'组合完成 · 裂甲爆破',detail:'穿甲连续命中3次引爆 · 原有火力保留'});
@@ -566,6 +600,7 @@ export class World {
     }
     const hadBossShield=this.bossShieldActive();
     this.advanceBurn(dt);
+    this.advanceMagnetic(dt);
     this.shoot(dt);
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;
@@ -624,6 +659,7 @@ export class World {
           const hpBefore=body.hp;
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(protectedEntry)return;
+          if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='blast')this.leaveMagnetic(body,bullet.damage);
           if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='ricochet'){
             const target=this.bodies.filter(other=>other!==body&&other.active&&other.kind in C.enemies
               &&!(other.dropGrace??0)&&!guardClosed(other)&&!(other.kind==='boss'&&this.phase!=='boss')
@@ -788,6 +824,7 @@ export class World {
       if(contract.status==='failed')this.contractStats.failed++;
       this.effects.push({type:'contract',x:this.player.x,y:C.playerY,text:contract.status==='won'?'契约完成 · 选择强化奖励':`契约失败 · ${contract.reason}`,detail:'每轮可接取一次 · 失败仅失去额外奖励'});
     }
+    if(this.phase!=='running'&&this.phase!=='boss')this.magneticFields=[];
     this.peakBodies = Math.max(this.peakBodies, this.bodies.length);
     this.peakBullets = Math.max(this.peakBullets, this.bullets.length);
   }

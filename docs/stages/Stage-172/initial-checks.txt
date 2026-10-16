@@ -1,0 +1,42 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/magnetic-field.test.ts tests/recipe-goal.test.ts --maxWorkers 2
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/magnetic-field.test.ts (6 tests | 2 failed) 25ms
+   × requires collected T2 blast and two real electric nodes, announces once in either acquisition order and keeps old guns 9ms
+   × pulses skip rewards, closed shields, protected and offstrip targets but can hit an opened shield later 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/magnetic-field.test.ts > requires collected T2 blast and two real electric nodes, announces once in either acquisition order and keeps old guns
+AssertionError: expected '目标·磁暴榴弹：雷电路线 1/2→2/2' to contain '本次完成'
+
+Expected: "本次完成"
+Received: "目标·磁暴榴弹：雷电路线 1/2→2/2"
+
+ ❯ tests/magnetic-field.test.ts:10:133
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/magnetic-field.test.ts > pulses skip rewards, closed shields, protected and offstrip targets but can hit an opened shield later
+AssertionError: expected 997.5 to be 999 // Object.is equality
+
+- Expected
++ Received
+
+- 999
++ 997.5
+
+ ❯ tests/magnetic-field.test.ts:20:218
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 11 passed (13)
+   Start at  00:48:40
+   Duration  581ms (transform 73%, import 19%, tests 6%, worker 1%)

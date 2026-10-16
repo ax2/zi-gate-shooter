@@ -9,7 +9,7 @@ it('matches authoritative unlock rules across node/refinement combinations witho
  for(let ballistic=0;ballistic<=3;ballistic++)for(let electric=0;electric<=3;electric++)for(let optical=0;optical<=3;optical++)for(const refined of [0,1]){
   Object.assign(w.build.ranks,{ballistic,electric,optical});w.build.refinements.optical=refined;
   const before=JSON.stringify(w),ready=Object.fromEntries(recipeIds.map(id=>[id,recipeStatus(w,id).ready]));
-  expect(ready).toEqual({storm:ballistic>=3&&electric>=1,prism:w.supportProfile().prism,photon:w.laserChainUnlocked(),fracture:w.fractureUnlocked(),ion:electric>=3});expect(JSON.stringify(w)).toBe(before);
+  expect(ready).toEqual({storm:ballistic>=3&&electric>=1,prism:w.supportProfile().prism,photon:w.laserChainUnlocked(),fracture:w.fractureUnlocked(),ion:electric>=3,magnetic:w.magneticUnlocked()});expect(JSON.stringify(w)).toBe(before);
  }
 });
 it('marks only actual missing equipment improvements, never assumes a broken box is collected',()=>{

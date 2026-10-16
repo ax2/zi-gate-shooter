@@ -1,0 +1,25 @@
+{
+  "productionUrl": "http://127.0.0.1:5178/",
+  "script": "./assets/canvas-preview-CmYhIHYV.js",
+  "productionControls": 5,
+  "recipeControls": 7,
+  "magneticGoalSetAndCancelled": true,
+  "originalGoalRestored": true,
+  "fixtureFinalWarnings": [],
+  "fixtureFinalErrors": [],
+  "productionWarnings": [],
+  "productionErrors": [],
+  "initialFixtureErrorRetained": true,
+  "virtualClock": true,
+  "performanceClaim": false,
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 900
+    }
+  ]
+}

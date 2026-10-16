@@ -3,6 +3,7 @@ import type {Route} from './build-tree';
 import type {WeaponKind} from './weapons';
 import {weaponNames} from './weapons';
 import {FRACTURE} from './combos';import {ION_STORM} from './ion-storm';import {LASER_CHAIN} from './laser-chain';
+import {MAGNETIC} from './magnetic-field';
 
 export const recipes={
  storm:{name:'雷暴霰射',effect:'霰弹命中后追加一次跳电',hint:'近距聚弹与密集敌群',color:'#b4ffb5'},
@@ -10,6 +11,7 @@ export const recipes={
  photon:{name:'电光连锁',effect:'全武器直击 · 群敌跳链 / 单体聚能',hint:`${LASER_CHAIN.hops}跳${LASER_CHAIN.range}范围 · 跳伤80%/64% · 聚能80%`,color:'#a7e7ff'},
  fracture:{name:'裂甲爆破',effect:`同敌${FRACTURE.hits}次穿甲命中：额外${FRACTURE.direct*100}%爆破`,hint:`邻敌${FRACTURE.splash*100}% · 范围${FRACTURE.radius} · 冷却${FRACTURE.cooldown}秒`,color:'#ffca8b'},
  ion:{name:'离子风暴',effect:`${ION_STORM.hits}次有效电击引发范围放电`,hint:`范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害 · 雷电第三节点`,color:'#96eaff'},
+ magnetic:{name:'磁暴榴弹',effect:'爆裂命中留下三拍电场，伤害后续来敌',hint:`${MAGNETIC.life}秒 · 范围${MAGNETIC.radius} · 每拍${MAGNETIC.damage*100}% · 最多3场`,color:'#b3f3ff'},
 } as const;
 export type RecipeGoal=keyof typeof recipes;
 export const recipeIds=Object.keys(recipes) as RecipeGoal[];
@@ -25,6 +27,7 @@ export function recipeStatus(w:World,id:RecipeGoal){
  else if(id==='prism'){route('optical',3);route('ballistic',1);}
  else if(id==='photon'){route('optical',3);requirements.push({kind:'refinement',route:'optical',current:w.build.refinements.optical,target:1,label:'光学精调'});weapon('arc');}
  else if(id==='fracture'){weapon('pierce');weapon('blast');}
+ else if(id==='magnetic'){weapon('blast');route('electric',2);}
  else route('electric',3);
  const missing=requirements.filter(r=>r.current<r.target);
  const need=missing.map(r=>r.kind==='weapon'?r.current?`${r.label}T${r.current}→T${r.target}`:`获得${r.label}T${r.target}`:r.kind==='refinement'?`${r.label}${r.target-r.current}次`:`${routeNames[r.route!]}还需${r.target-r.current}点`).join(' ＋ ');
@@ -53,8 +56,8 @@ export function recipeRouteHint(w:World,id:RecipeGoal|null|undefined,route:Route
 /** Actual simulation counters, not particle counts or projected damage. */
 export function recipePerformance(w:World,id:RecipeGoal){
  const ready=recipeStatus(w,id).ready;
- const count=id==='storm'?w.stormLinks:id==='prism'?w.prismHits:id==='photon'?w.laserArcHits+w.laserFocusHits:id==='fracture'?w.fractureBursts:w.ionBursts;
+ const count=id==='storm'?w.stormLinks:id==='prism'?w.prismHits:id==='photon'?w.laserArcHits+w.laserFocusHits:id==='fracture'?w.fractureBursts:id==='magnetic'?w.magneticHits:w.ionBursts;
  const n=(v:number)=>v>=1e8?`${+(v/1e8).toFixed(1)}亿`:v>=1e4?`${+(v/1e4).toFixed(1)}万`:`${v}`;
- const measured=id==='storm'?`跳伤${n(w.stormLinks)}次`:id==='prism'?`侧束命中${n(w.prismHits)}`:id==='photon'?`链${n(w.laserArcHits)}/聚${n(w.laserFocusHits)}`:id==='fracture'?`引爆${n(w.fractureBursts)}次`:`放电${n(w.ionBursts)}次`;
+ const measured=id==='storm'?`跳伤${n(w.stormLinks)}次`:id==='prism'?`侧束命中${n(w.prismHits)}`:id==='photon'?`链${n(w.laserArcHits)}/聚${n(w.laserFocusHits)}`:id==='fracture'?`引爆${n(w.fractureBursts)}次`:id==='magnetic'?`电场命中${n(w.magneticHits)}`:`放电${n(w.ionBursts)}次`;
  return {ready,count,label:!ready?'未成形':count===0?'已就绪 · 未触发':measured};
 }

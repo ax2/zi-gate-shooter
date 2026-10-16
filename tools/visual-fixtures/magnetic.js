@@ -1,0 +1,21 @@
+import {CanvasRuntime} from '../../src/game/canvas-runtime.ts';import {browserImage} from '../../src/game/browser-image.ts';import {defaults} from '../../src/ui/storage.ts';import {progressionTarget} from '../../tests/helpers/progression-driver.ts';import {MAGNETIC} from '../../src/core/magnetic-field.ts';import {C} from '../../src/core/config.ts';
+const canvas=document.querySelector('canvas'),status=document.querySelector('#status'),buttons=Object.fromEntries(['begin','late','combo','weak'].map(id=>[id,document.getElementById(id)]));let stored=defaults(),clock=0,next=()=>{},running=false,frame=0,stage='ready';const origins=new Map(),history=[];stored.settings.sound=false;stored.settings.shake=false;
+const runtime=new CanvasRuntime({canvas,width:canvas.clientWidth,height:canvas.clientHeight,dpr:devicePixelRatio,menuBottom:0,image:src=>browserImage('/'+src),read:()=>stored,write:s=>{stored=JSON.parse(JSON.stringify(s));},sound(){},silence(){},now:()=>clock,requestFrame:cb=>{next=cb;}});
+function action(name){if(!runtime.activateControl(name))throw Error('Visible action rejected: '+name);}
+function snapshot(){const w=runtime.world;return {time:w.time,round:w.round,mode:runtime.mode,hp:w.player.hp,fields:w.magneticFields.map(f=>({...f,origin:origins.get(f.id)})),hit:w.lastMagneticHit,targets:w.bodies.filter(b=>b.active&&b.kind in C.enemies).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,warning:b.warning}))};}
+function report(){const w=runtime.world;status.textContent=`${w.time.toFixed(2)}秒 / R${w.round} / ${runtime.mode} / ${stage} / 命中${w.magneticHits}`;}
+function enable(keys){for(const[k,b]of Object.entries(buttons))b.disabled=!keys.includes(k);}
+function freeze(name,keys){running=false;stage=name;history.push(snapshot());enable(keys);report();}
+function aim(x){const s=Math.min(canvas.clientWidth/720,canvas.clientHeight/1280),px=(canvas.clientWidth-720*s)/2,py=(canvas.clientHeight-1280*s)/2,point=v=>[px+v*s,py+900*s];if(runtime.pointer!==732)runtime.touchStart(732,...point(runtime.world.player.x));runtime.touchMove(732,...point(x));}
+function step(){const w=runtime.world;
+ if(runtime.mode==='choice'){const a=w.build.available(w.buildPoints),r=a.includes('electric')&&w.build.ranks.electric<2?'electric':a.find(r=>w.build.ranks[r]<3)??a[0];if(r){action('build:'+r);if(runtime.mode==='branch')action('branch:'+(r==='electric'?'spread':r==='ballistic'?'ricochet':'relay'));}}
+ else if(runtime.mode==='boss-reward')action('boss-claim:research');
+ if(frame%6===0&&runtime.mode==='playing')aim(progressionTarget(w));clock+=1000/60;next(clock);frame++;
+ for(const f of w.magneticFields)if(!origins.has(f.id))origins.set(f.id,{time:w.time,x:f.x,y:f.y,inside:w.bodies.filter(b=>b.active&&b.kind in C.enemies&&Math.hypot(b.x-f.x,b.y-f.y)<=MAGNETIC.radius).map(b=>b.id)});
+ if(stage==='to-first'&&w.magneticHits>0){freeze('actual-first-field-hit',['late','combo','weak']);return;}
+ const hit=w.lastMagneticHit,origin=hit&&origins.get(hit.fieldId);
+ if(stage==='to-late'&&hit&&hit.time===w.time&&origin&&!origin.inside.includes(hit.targetId)){freeze('actual-later-entrant-hit',['combo','weak']);return;}
+ if(w.time>600||['error','result','paused'].includes(runtime.mode))freeze('ended-without-capture',[]);report();}
+function pump(){if(!running)return;for(let i=0;i<240&&running;i++)step();if(running)requestAnimationFrame(pump);}
+function advance(name){stage=name;running=true;enable([]);requestAnimationFrame(pump);}
+buttons.begin.onclick=()=>{action('start');advance('to-first');};buttons.late.onclick=()=>advance('to-late');buttons.combo.onclick=()=>{action('pause');action('loadout');action('combos');freeze('actual-six-recipes',['weak']);};buttons.weak.onclick=()=>{runtime.save.settings.effects=runtime.save.settings.effects==='weak'?'standard':'weak';runtime.resize(canvas.clientWidth,canvas.clientHeight,devicePixelRatio);report();};window.addEventListener('resize',()=>runtime.resize(canvas.clientWidth,canvas.clientHeight,devicePixelRatio));Object.defineProperty(window,'__magneticEvidence',{value:()=>({fixture:true,virtualClock:true,isolatedMemorySave:true,worldInjection:false,stage,history,current:snapshot(),...runtime.diagnostics()})});await runtime.load();freeze('ready',['begin']);

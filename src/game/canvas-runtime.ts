@@ -1,4 +1,5 @@
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
+import {magneticLight} from './magnetic-light';
 import {ricochetLight} from './ricochet-light';
 import {reboundState} from '../core/rebound-charger';
 import {reboundLight} from './rebound-light';
@@ -728,6 +729,7 @@ export class CanvasRuntime {
       this.frameSprite('crate-v1.png', piece.frame, 3, 0, 0, piece.size, piece.size, 3); c.restore();
     }
     // Physical reward frames sit below enemy art; the number panel is later.
+    for(const field of w.magneticFields)magneticLight(c,field,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.kind==='gate'){
       const value=previewReward(w.growth,gateValue(b.energy,b.rewardKind),b.rewardKind),image=this.images.get('gate-frame-v1.png');
       if(image)gateMachine(c,image,b,value.power>0&&value.energy>0,this.gateFeedback.pulse(b.id,w.time),this.save.settings.effects==='weak',pairedGate(b,w.bodies));
@@ -1124,7 +1126,7 @@ export class CanvasRuntime {
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
-      this.text(kind === 'arc' ? `${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `爆炸范围${profile.splashRadius}`
+      this.text(kind === 'arc' ? `${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `范围${profile.splashRadius}${w.magneticUnlocked()?' · 三拍电场':''}`
         : kind === 'pierce' ? `贯穿${profile.targets}敌` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':w.build.ballisticBranch==='ricochet'?'280范围 · 55%侧跳':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
@@ -1144,16 +1146,16 @@ export class CanvasRuntime {
     this.text(tracked?`已追踪 · ${tracked.name}`:'先选目标，再寻找需要的补给与升级',360,207,24,'#d4e7ad');
     this.text(tracked?(tracked.ready?'已成形 · 按配方条件触发':tracked.need):'打碎后仍需拾取 · 同排只领一件',360,237,20,'#bdd8e7');
     for(const [i,id] of recipeIds.entries()){
-      const row=recipeStatus(w,id),performance=recipePerformance(w,id),selected=goal===id,y=260+i*152;
-      this.rect(65,y,590,142,selected?'#294b4c':'#203e50');this.rect(65,y,5,142,row.color);
+      const row=recipeStatus(w,id),performance=recipePerformance(w,id),selected=goal===id,y=260+i*128;
+      this.rect(65,y,590,120,selected?'#294b4c':'#203e50');this.rect(65,y,5,120,row.color);
       this.text(row.name,90,y+28,28,row.color,'left',true);
       this.text(performance.label,470,y+28,18,performance.ready?(performance.count?'#a2ffbb':'#f0d19a'):'#b9cad6','right');
       this.rect(492,y+7,146,42,selected?'#46614c':'#112a39');
       const label=selected?'取消目标':'设为目标';this.text(label,565,y+28,21,selected?'#ffdf93':'#c4e8f5','center',true);
       this.buttons.push({x:492,y:y+7,w:146,h:42,action:`recipe-goal:${id}`,label:`${label} · ${row.name}`});
-      this.text(row.progress,90,y+64,id==='photon'?18:20,'#effaff','left');
-      this.text(row.effect,90,y+99,21,'#dbeaf3','left');
-      this.text(row.hint,90,y+126,19,'#bdd8e7','left');
+      this.text(row.progress,90,y+58,id==='photon'?18:20,'#effaff','left');
+      this.text(row.effect,90,y+83,21,'#dbeaf3','left');
+      this.text(row.hint,90,y+107,19,'#bdd8e7','left');
     }
     this.text(`裂甲引爆 ${w.fractureBursts}次 · 跳伤 ${w.laserArcHits}次 · 聚能 ${w.laserFocusHits}次`,360,1055,23,'#ffca8b');
     this.button(this.combosReturn==='menu'?'返回主界面':'返回当前火力',1100,'combos-back',true);
@@ -1172,9 +1174,10 @@ export class CanvasRuntime {
     this.playerSprite(w.weaponStage(w.weaponKind)-1,w.player.x,C.playerY,pose,this.weaponMotion.sample(w.weaponKind,w.weaponStage(w.weaponKind),w.time));
     this.drawOpticalRig(C.playerY,pose);c.restore();
     this.text(w.activeWeapons.map(kind=>`${weaponNames[kind]}T${w.weaponStage(kind)}`).join(' · '),360,965,22,'#d6e7f0');
-    const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':'',w.laserChainUnlocked()?'电光连锁':''].filter(Boolean);
-    this.text(combinations.length?`组合：${combinations.join(' · ')}`:'已有配件随真实射击独立回弹',360,1010,25,'#d6b5ff');
-    this.text('检查挂载与等级 · 战斗时间已暂停',360,1054,22,'#a6c5d7');
+    const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':'',w.laserChainUnlocked()?'电光连锁':'',w.magneticUnlocked()?'磁暴榴弹':''].filter(Boolean);
+    this.text(combinations.length?`组合：${combinations.slice(0,3).join(' · ')}`:'已有配件随真实射击独立回弹',360,1000,25,'#d6b5ff');
+    if(combinations.length>3)this.text(combinations.slice(3).join(' · '),360,1031,25,'#d6b5ff');
+    this.text('检查挂载与等级 · 战斗时间已暂停',360,1065,22,'#a6c5d7');
     this.button('返回当前火力',1100,'rig-back',true);
   }
   private weaponUpgradeOptions(){
@@ -1415,6 +1418,7 @@ export class CanvasRuntime {
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
       laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
+      lastMagneticHit:this.world.lastMagneticHit,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
