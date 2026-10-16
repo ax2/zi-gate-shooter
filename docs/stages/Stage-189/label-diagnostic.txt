@@ -1,0 +1,33 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/explosion-render.test.ts -t shows actual fire-control
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (148 tests | 2 failed | 146 skipped) 98ms
+   × shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=false) 66ms
+   × shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=true) 30ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=false)
+ FAIL  tests/explosion-render.test.ts > shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=true)
+AssertionError: {"mode":"playing","units":[{"id":2,"kind":"armor","x":440,"y":500,"hp":480,"maxHp":480,"age":1.2500000000000004,"warning":0,"group":1,"emp":1.3833333333333337,"shots":0,"boosted":0},{"id":3,"kind":"armor","x":440,"y":360,"hp":480,"maxHp":480,"age":1.2500000000000004,"warning":0,"group":1,"emp":1.3833333333333337,"shots":0,"boosted":0}],"text":["T2 装备 · 48","停火","停火","分数","000035","◈ ◈ ◈ ","Ⅱ","T1 · 1种武器叠加","火力 +0%","1轮·突围走廊","充能 0/100 · 满100：本局火力+10% / 超载6秒","火控断供 · 2台停火","中断2台蓄能 · 恢复单线，旧弹仍危险"]}: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1378:589
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 146 skipped (148)
+   Start at  06:34:12
+   Duration  971ms (transform 72%, import 16%, tests 12%, worker 1%)
+

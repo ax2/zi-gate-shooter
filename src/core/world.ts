@@ -1,3 +1,4 @@
+import {FIRE_CONTROL} from './fire-control';
 import {LOCKSHOT} from './lockshot';
 import {RELAY_SCREEN} from './relay-screen';
 import {BATTERY} from './battery';
@@ -44,7 +45,8 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot'; bossVariant?: number;
+  controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; bossVariant?: number;
 }
 export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
@@ -89,6 +91,7 @@ export class World {
     this.announceMagnetic();this.announceLaserChain();return true;
   }
   dropSpawns=0;dropKills=0;arcLinks=0;
+  fireControlShots=0;fireControlBoostedShots=0;lastFireControlBreak?:{time:number;id:number;affected:number;interrupted:number};
   conduitBursts=0;empTargets=0;conduitTacticalWins=0;
   private dischargeConduit(source:Body){
     this.conduitBursts++;let affected=0,interrupted=0;
@@ -100,7 +103,8 @@ export class World {
       if(b.pattern==='intercept')b.interceptCoreRemaining=0;
     }
     if(interrupted>=2)this.conduitTacticalWins++;
-    this.effects.push({type:'emp',x:source.x,y:source.y,size:CONDUIT.radius,text:`中继击破 · ${affected}台停火`,detail:interrupted?`中断${interrupted}台蓄能 · 已发敌弹仍危险`:'停火1.5秒 · 已发敌弹仍危险'});
+    if(source.pattern==='fire-control')this.lastFireControlBreak={time:this.time,id:source.id,affected,interrupted};
+    this.effects.push({type:'emp',x:source.x,y:source.y,size:CONDUIT.radius,text:`${source.pattern==='fire-control'?'火控断供':'中继击破'} · ${affected}台停火`,detail:source.pattern==='fire-control'?`中断${interrupted}台蓄能 · 恢复单线，旧弹仍危险`:interrupted?`中断${interrupted}台蓄能 · 已发敌弹仍危险`:'停火1.5秒 · 已发敌弹仍危险'});
   }
   scatterPierces=0;scatterBursts=0;scatterSplashHits=0;scatterRicochets=0;
   ionCharge=0;ionBursts=0;ionHits=0;
@@ -486,7 +490,7 @@ export class World {
     }
   }
   private admit(candidate: Body) {
-    const arrival=candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
+    const arrival=candidate.pattern==='fire-control'?Math.max(0,FIRE_CONTROL.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
       :(C.playerY-candidate.y)/Math.max(1,candidate.speed);
     const horizon = Math.max(3,arrival+1);
     if (safeRoute(this.player.x, this.bodies, this.bullets, horizon)) return true;
@@ -505,6 +509,20 @@ export class World {
       }
       while (this.scheduleIndex < this.scheduled.length && this.scheduled[this.scheduleIndex].at <= this.roundTime && this.roundTime >= this.nextSpawnRetry) {
         const s = this.scheduled[this.scheduleIndex++];
+        if(s.pattern==='fire-control'){
+          const group=[s];while(this.scheduled[this.scheduleIndex+group.length-1]?.pattern==='fire-control'&&this.scheduled[this.scheduleIndex+group.length-1]?.at===s.at)group.push(this.scheduled[this.scheduleIndex+group.length-1]);
+          if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.length>C.limits.enemies){this.scheduleIndex--;break;}
+          const units=group.map(spawn=>{
+            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);b.pattern='fire-control';b.controlGroup=this.round;b.dropGrace=SWARM.grace;b.timer=FIRE_CONTROL.opening;
+            b.hp*=b.kind==='armor'?FIRE_CONTROL.durability:FIRE_CONTROL.relayDurability;b.maxHp=b.hp;
+            return b;
+          });
+          const longest=units.reduce((a,b)=>(C.playerY-a.y)/a.speed>(C.playerY-b.y)/b.speed?a:b);
+          if(!this.admit(longest)){for(const b of units)b.active=false;this.scheduleIndex--;break;}
+          this.scheduleIndex+=group.length-1;this.dropSpawns+=units.length;
+          this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'火控中继编队',detail:'中继增幅双炮 · 击破可停火断供'});
+          continue;
+        }
         if (s.kind === 'armory') {
           if (!this.rewardSlots(2)) { this.scheduleIndex--; break; }
           const row = this.nextRow++;
@@ -685,6 +703,7 @@ export class World {
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
         if(b.pattern==='lockshot'){b.lockAcceptedShots=(b.lockAcceptedShots??0)+1;b.lockFiredAt=b.age;this.lockshotShots++;}
         if(b.pattern==='battery')b.batteryShots=(b.batteryShots??0)+1;
+        if(b.pattern==='fire-control'){b.controlShots=(b.controlShots??0)+1;this.fireControlShots++;if(b.controlLinked){b.controlBoostedShots=(b.controlBoostedShots??0)+1;this.fireControlBoostedShots++;}}
         if(b.proofTarget)b.proofShots=(b.proofShots??0)+1;
         if(b.pattern==='sweep')b.sweeperShots=(b.sweeperShots??0)+1;
         if(b.pattern==='intercept'){
@@ -692,7 +711,7 @@ export class World {
           b.interceptFiredAt=b.age;b.interceptFireBeat=b.burst?1:0;
         }
         if(b.bountyRound!==undefined){b.bountyShots=(b.bountyShots??0)+1;this.bountyShots++;}
-      });
+      },this.bodies);
       if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · 双炮反击',detail:'双炮加入攻击循环 · 已发敌弹仍危险'});
       if(b.kind==='boss'&&(b.counterVolleys??0)>wasCounterVolleys)this.effects.push({type:'counter-fire',x:b.x,y:b.y});
       if (b.kind === 'boss' && previousWarning <= 0 && b.warning > 0

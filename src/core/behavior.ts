@@ -1,3 +1,4 @@
+import {FIRE_CONTROL,fireControlHolding,fireControlSource} from './fire-control';
 import {LOCKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
 import {driftOffset} from './drift-supply';
 import {SUPPLY_CONVOY} from './supply-convoy';
@@ -36,9 +37,10 @@ export function bossAttackForCycle(variant: number | undefined, cycle: number,co
 }
 
 /** Shared by the live simulation and conservative no-kill route forecast. */
-export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, emit: EnemyShot) {
+export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, emit: EnemyShot, formation:readonly Body[]=[]) {
   // Instant weapons resolve before movement: a killed emitter cannot launch a new volley.
   if(!b.active)return;
+  if(b.pattern==='fire-control'&&b.kind==='armor')b.controlLinked=!!fireControlSource(b,formation);
   const scale=b.shotScale??1;
   const shot:EnemyShot=scale===1?emit:(x,y,vx=0,vy=280)=>emit(x,y,vx*scale,vy*scale);
   if(b.dropGrace!==undefined)b.dropGrace=Math.max(0,b.dropGrace-dt);
@@ -139,6 +141,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       }
     }
   } else if(b.kind==='conduit'){
+    if(b.pattern==='fire-control'){if(!fireControlHolding(b))b.y+=b.speed*dt;return;}
     if(b.age<CONDUIT.holdSeconds){if(b.y<CONDUIT.hoverY)b.y=Math.min(CONDUIT.hoverY,b.y+b.speed*dt);}
     else b.y+=b.speed*dt;
   } else if (b.kind === 'charger') {
@@ -173,17 +176,17 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(b.pattern==='sweep')b.x+=sweeperDirection(b)*Math.min(Math.abs(b.lane-b.x),SWEEPER.speed*dt);
     if (b.kind === 'drone' && b.pattern === 'weave') b.x = clamp(b.lane + Math.sin(b.age * 2) * 70, C.minX, C.maxX);
     if(b.kind==='elite'&&b.bountyRound!==undefined&&b.age<HUNTER.holdSeconds){if(b.y<HUNTER.hoverY)b.y=Math.min(HUNTER.hoverY,b.y+b.speed*dt);}
-    else if(!batteryHolding(b))b.y += b.speed * dt;
+    else if(!batteryHolding(b)&&!fireControlHolding(b))b.y += b.speed * dt;
     if ((b.kind === 'armor' || b.kind === 'elite') && b.y > 0 && b.y < 600) {
       if (b.timer <= 1e-9 && !offline) {
-        if (b.warning <= 0) { b.warning = 0.6; b.timer = 0.6; }
+        if (b.warning <= 0) { b.warning = b.pattern==='fire-control'?FIRE_CONTROL.warning:.6; b.timer = b.warning; }
         else {
-          if (b.pattern === 'fan'||b.pattern==='sweep'||b.pattern==='battery') for (const vx of b.kind === 'elite' && b.burst ? [-50, 0, 50] : [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);
+          if (b.pattern === 'fan'||b.pattern==='sweep'||b.pattern==='battery'||(b.pattern==='fire-control'&&b.controlLinked)) for (const vx of b.kind === 'elite' && b.burst ? [-50, 0, 50] : [-100, 0, 100]) shot(b.x, b.y + b.height / 2, vx, 280);
           else shot(b.x, b.y + b.height / 2);
           if (b.kind === 'elite' && b.pattern === 'fan' && !b.burst) {
             b.burst = 1; b.warning = 0.6; b.timer = 0.6;
           } else {
-            b.burst = 0; b.warning = 0; b.timer = b.pattern === 'fan'||b.pattern==='battery' ? 3.2 : 2.4;
+            b.burst = 0; b.warning = 0; b.timer = b.pattern==='fire-control'?(b.controlLinked?FIRE_CONTROL.boostedRecovery:FIRE_CONTROL.recovery):b.pattern === 'fan'||b.pattern==='battery' ? 3.2 : 2.4;
           }
         }
       }

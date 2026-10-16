@@ -1,0 +1,254 @@
+[
+  {
+    "route": "optical",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "groups": [
+      {
+        "round": 3,
+        "units": [
+          {
+            "admitted": 219.88333333340046,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 524.6999999999994,
+            "age": 0.7000000000000005,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 219.88333333340046,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 408.73333333333267,
+            "age": 0.733333333333334,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 219.88333333340046,
+            "shots": 0,
+            "passed": 0,
+            "kind": "drone",
+            "x": 300,
+            "y": 447.2666666666669,
+            "age": 0.4666666666666666,
+            "hp": 0,
+            "pattern": null
+          }
+        ]
+      },
+      {
+        "round": 6,
+        "units": [
+          {
+            "admitted": 473.83333333323105,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 534.8750000000007,
+            "age": 0.7500000000000007,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 473.83333333323105,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 391.68333333333385,
+            "age": 0.5666666666666668,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 473.83333333323105,
+            "shots": 0,
+            "passed": 0,
+            "kind": "drone",
+            "x": 300,
+            "y": 464.2666666666664,
+            "age": 0.5333333333333333,
+            "hp": 0,
+            "pattern": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "route": "ballistic",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "groups": [
+      {
+        "round": 3,
+        "units": [
+          {
+            "admitted": 218.8500000000663,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 516.6333333333328,
+            "age": 0.6333333333333336,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 218.8500000000663,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 414.7833333333326,
+            "age": 0.7833333333333341,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 218.8500000000663,
+            "shots": 0,
+            "passed": 0,
+            "kind": "drone",
+            "x": 300,
+            "y": 469.0833333333336,
+            "age": 0.5833333333333335,
+            "hp": 0,
+            "pattern": null
+          }
+        ]
+      },
+      {
+        "round": 6,
+        "units": [
+          {
+            "admitted": 462.5833333332413,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 509.5750000000005,
+            "age": 0.55,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 462.5833333332413,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 395.90000000000055,
+            "age": 0.6000000000000002,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 462.5833333332413,
+            "shots": 0,
+            "passed": 0,
+            "kind": "drone",
+            "x": 300,
+            "y": 451.2333333333331,
+            "age": 0.4666666666666666,
+            "hp": 0,
+            "pattern": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "groups": [
+      {
+        "round": 3,
+        "units": [
+          {
+            "admitted": 220.1833333334007,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 508.56666666666615,
+            "age": 0.5666666666666668,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 220.1833333334007,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 388.56666666666615,
+            "age": 0.5666666666666668,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 220.1833333334007,
+            "shots": 0,
+            "passed": 0,
+            "kind": "drone",
+            "x": 300,
+            "y": 465.9666666666669,
+            "age": 0.5666666666666668,
+            "hp": 0,
+            "pattern": null
+          }
+        ]
+      },
+      {
+        "round": 6,
+        "units": [
+          {
+            "admitted": 467.5999999999034,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 511.68333333333385,
+            "age": 0.5666666666666668,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 467.5999999999034,
+            "shots": 0,
+            "passed": 0,
+            "kind": "armor",
+            "x": 420,
+            "y": 391.68333333333385,
+            "age": 0.5666666666666668,
+            "hp": 0,
+            "pattern": null
+          },
+          {
+            "admitted": 467.5999999999034,
+            "shots": 0,
+            "passed": 0,
+            "kind": "drone",
+            "x": 300,
+            "y": 451.2333333333331,
+            "age": 0.4666666666666666,
+            "hp": 0,
+            "pattern": null
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -27,7 +27,7 @@ export function dangerTimeline(bodies: readonly Body[], bullets: readonly Bullet
         advanceBody(b, C.step, phase, (options.phaseTime ?? 0) + time, (sx, sy, vx = 0, vy = 280) => {
           // Ignoring the live bullet budget is conservative, never less dangerous.
           forecastBullets.push({ id: nextId--, x: sx, y: sy, px: sx, py: sy, vx, vy, damage: 1, age: 0, active: true, hostile: true });
-        });
+        },forecastBodies);
         if (b.kind !== 'gate' && b.kind !== 'pickup' && b.kind !== 'boss')
           reserve(x, y, b.x, b.y, b.width / 2 + C.playerRadius + 12, b.height / 2 + C.playerRadius + 12);
       }

@@ -1,0 +1,18 @@
+import {it,expect} from 'vitest';import {writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {C,clamp} from '../src/core/config';import {safeRoute,dangerTimeline} from '../src/core/reachability';import {progressionTarget} from './helpers/progression-driver';
+function aimAt(w,goal){const x=w.player.x,next=x+clamp(goal-x,-C.moveSpeed*.1,C.moveSpeed*.1),opts={phase:w.phase,phaseTime:w.phaseTime,reaction:0};const blocked=dangerTimeline(w.bodies,w.bullets,1.5,opts).some(slabs=>slabs.some(([lo,hi])=>Math.max(x,next)>=lo&&Math.min(x,next)<=hi));return blocked?safeRoute(x,w.bodies,w.bullets,4,opts)?.[0]??x:next;}
+it('normal cumulative builds meet actual source-powered volleys and can choose to shut the source down first',()=>{
+ const runs=[];for(const route of ['optical','ballistic','electric'])for(const tactic of ['ordinary','relay-first','guns-first']){
+  const w=new World(1337,1,route==='electric'?'arc':route==='ballistic'?'pierce':'scatter'),groups=new Map(),shots=new Set(),passed=new Set();let aim=360;
+  for(let frame=0;frame<600*60&&w.phase!=='dead';frame++){
+   if(w.bossRewardRound!==null&&w.phase==='recovery'&&w.phaseTime>=C.bossLootReveal)w.claimBossReward('research');const a=w.build.available(w.buildPoints),r=a.includes(route)?route:a[0];if(r){const branch=w.build.ranks[r]===1?r==='optical'?'relay':r==='electric'?'seeker':'penetrator':r==='optical'&&w.canRefinePhoton()?'photon-focus':r==='electric'&&w.canRefineMagnetic()?'field-link':r==='ballistic'&&w.canRefineFracture()?'fracture-quick':undefined;w.chooseBuild(r,branch);}
+   const units=w.bodies.filter(b=>b.active&&b.pattern==='fire-control'),relay=units.find(b=>b.kind==='conduit'),guns=units.filter(b=>b.kind==='armor').sort((a,b)=>b.y-a.y);
+   if(frame%6===0){const priority=tactic==='relay-first'?relay??guns[0]:tactic==='guns-first'?guns[0]??relay:null;aim=priority?aimAt(w,priority.x):progressionTarget(w);}w.step(C.step,aim);w.drainEffects();
+   const admitted=w.bodies.filter(b=>b.active&&b.pattern==='fire-control');if(admitted.length===3&&!groups.has(w.round))groups.set(w.round,{round:w.round,admitted:w.time,admission:{x:w.player.x,growth:{...w.growth},weapons:w.activeWeapons.map(k=>[k,w.weaponStage(k),w.weaponCalibration(k)])},units:admitted.map(body=>({body,shots:0,passed:0,killedAt:null})),break:null});
+   for(const g of groups.values()){if(w.lastFireControlBreak?.id===g.units.find(u=>u.body.kind==='conduit')?.body.id)g.break={...w.lastFireControlBreak};for(const unit of g.units)if(unit.body.hp<=0&&unit.killedAt===null)unit.killedAt=w.time;}
+   for(const b of w.bullets)if(b.hostile){const unit=[...groups.values()].flatMap(g=>g.units).find(u=>u.body.id===b.sourceId);if(!unit)continue;if(!shots.has(b.id)){shots.add(b.id);unit.shots++;}if(b.py<C.playerY-50&&b.y>=C.playerY-50&&!passed.has(b.id)){passed.add(b.id);unit.passed++;}}
+  }
+  runs.push({route,tactic,time:w.time,hp:w.player.hp,round:w.round,score:w.score,shots:w.fireControlShots,boosted:w.fireControlBoostedShots,bossWins:w.bossWins,weapons:w.activeWeapons,groups:[...groups.values()].map(g=>({...g,units:g.units.map(({body,...u})=>({...u,id:body.id,kind:body.kind,hp:body.hp,age:body.age,x:body.x,y:body.y}))}))});
+ }
+ writeFileSync('docs/stages/Stage-189/normal-pressure.json',JSON.stringify(runs,null,2));for(const r of runs){expect(r.time,JSON.stringify(r)).toBeCloseTo(600);expect(r.groups.length).toBeGreaterThanOrEqual(2);expect(r.weapons).toHaveLength(5);}
+ for(const route of ['optical','ballistic','electric']){const r=runs.filter(r=>r.route===route),first=r.map(r=>r.groups[0].admission);expect(first[0]).toEqual(first[1]);expect(first[1]).toEqual(first[2]);}
+},60000);

@@ -1,0 +1,6203 @@
+[
+  {
+    "round": 1,
+    "seed": 1,
+    "plan": 0,
+    "count": 47,
+    "keepHash": "20014cec74885e0b688a63edb9d77a33ff4db8e420ea892532b60c95836c65ca",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 1,
+    "plan": 1,
+    "count": 47,
+    "keepHash": "20014cec74885e0b688a63edb9d77a33ff4db8e420ea892532b60c95836c65ca",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 1,
+    "plan": 2,
+    "count": 47,
+    "keepHash": "20014cec74885e0b688a63edb9d77a33ff4db8e420ea892532b60c95836c65ca",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 77,
+    "plan": 0,
+    "count": 47,
+    "keepHash": "57973328df63ceecc040c73f05c1a9f8d7fe4a4a55bc2cb9dc8eaec643ff6d93",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 77,
+    "plan": 1,
+    "count": 47,
+    "keepHash": "57973328df63ceecc040c73f05c1a9f8d7fe4a4a55bc2cb9dc8eaec643ff6d93",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 77,
+    "plan": 2,
+    "count": 47,
+    "keepHash": "57973328df63ceecc040c73f05c1a9f8d7fe4a4a55bc2cb9dc8eaec643ff6d93",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 1337,
+    "plan": 0,
+    "count": 47,
+    "keepHash": "0308fd192c33d95eba096f4021358530ca73d562b3948da65fc55a779786d9a2",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 1337,
+    "plan": 1,
+    "count": 47,
+    "keepHash": "0308fd192c33d95eba096f4021358530ca73d562b3948da65fc55a779786d9a2",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 1,
+    "seed": 1337,
+    "plan": 2,
+    "count": 47,
+    "keepHash": "0308fd192c33d95eba096f4021358530ca73d562b3948da65fc55a779786d9a2",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1,
+    "plan": 0,
+    "count": 71,
+    "keepHash": "f06a8e01ffa08bb66ab01aa7eae33599e5277c50518c3acfc15fcca1049d31e8",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1,
+    "plan": 1,
+    "count": 62,
+    "keepHash": "5673d51096c2d5b7b1c72f0c64fc37669c0afe8bda7c8e61b765157ef41c7be5",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1,
+    "plan": 2,
+    "count": 60,
+    "keepHash": "2b7f1d5a309447d4a3a5b90eb58ffb4a71b05d5f0791b6977822fba86da03243",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 77,
+    "plan": 0,
+    "count": 71,
+    "keepHash": "f06a8e01ffa08bb66ab01aa7eae33599e5277c50518c3acfc15fcca1049d31e8",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 77,
+    "plan": 1,
+    "count": 62,
+    "keepHash": "5673d51096c2d5b7b1c72f0c64fc37669c0afe8bda7c8e61b765157ef41c7be5",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 77,
+    "plan": 2,
+    "count": 60,
+    "keepHash": "2b7f1d5a309447d4a3a5b90eb58ffb4a71b05d5f0791b6977822fba86da03243",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1337,
+    "plan": 0,
+    "count": 71,
+    "keepHash": "f06a8e01ffa08bb66ab01aa7eae33599e5277c50518c3acfc15fcca1049d31e8",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1337,
+    "plan": 1,
+    "count": 62,
+    "keepHash": "5673d51096c2d5b7b1c72f0c64fc37669c0afe8bda7c8e61b765157ef41c7be5",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "seed": 1337,
+    "plan": 2,
+    "count": 60,
+    "keepHash": "2b7f1d5a309447d4a3a5b90eb58ffb4a71b05d5f0791b6977822fba86da03243",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1,
+    "plan": 0,
+    "count": 57,
+    "keepHash": "31ef344590d62910eb2cb50bb875432aa2e022f2d4fd18688721b1d51741b8b0",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "1edef769783ef0f1037f88a0f2f1eb355fb5bda595eb7ab828c8fb003b860962",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "8654a1dcf686e84cf7661199f3aea06b013f9c169bee3b18416cf142df790f2c",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 77,
+    "plan": 0,
+    "count": 57,
+    "keepHash": "31ef344590d62910eb2cb50bb875432aa2e022f2d4fd18688721b1d51741b8b0",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 77,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "1edef769783ef0f1037f88a0f2f1eb355fb5bda595eb7ab828c8fb003b860962",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 77,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "8654a1dcf686e84cf7661199f3aea06b013f9c169bee3b18416cf142df790f2c",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1337,
+    "plan": 0,
+    "count": 57,
+    "keepHash": "31ef344590d62910eb2cb50bb875432aa2e022f2d4fd18688721b1d51741b8b0",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1337,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "1edef769783ef0f1037f88a0f2f1eb355fb5bda595eb7ab828c8fb003b860962",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "seed": 1337,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "8654a1dcf686e84cf7661199f3aea06b013f9c169bee3b18416cf142df790f2c",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1,
+    "plan": 0,
+    "count": 73,
+    "keepHash": "d91a0028a479d46e80fb5bf7cb631f7e1ba49941f0166e40311e5358b088c58c",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1,
+    "plan": 1,
+    "count": 73,
+    "keepHash": "e9109add145a7955a409c9b75d7838f629d2a448128addbdac785beac60f191e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1,
+    "plan": 2,
+    "count": 81,
+    "keepHash": "896efb0122f3aecc706ec9f615f74405f26dfcc2dfa20cf44b21ec336eb65f66",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 77,
+    "plan": 0,
+    "count": 73,
+    "keepHash": "d91a0028a479d46e80fb5bf7cb631f7e1ba49941f0166e40311e5358b088c58c",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 77,
+    "plan": 1,
+    "count": 73,
+    "keepHash": "e9109add145a7955a409c9b75d7838f629d2a448128addbdac785beac60f191e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 77,
+    "plan": 2,
+    "count": 81,
+    "keepHash": "b193877c06e669c0d51c70041a7131205b17a0e22c2509acd1ab7fc32048b722",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1337,
+    "plan": 0,
+    "count": 73,
+    "keepHash": "d91a0028a479d46e80fb5bf7cb631f7e1ba49941f0166e40311e5358b088c58c",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1337,
+    "plan": 1,
+    "count": 73,
+    "keepHash": "e9109add145a7955a409c9b75d7838f629d2a448128addbdac785beac60f191e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 4,
+    "seed": 1337,
+    "plan": 2,
+    "count": 81,
+    "keepHash": "ee66c2d23aaccc46bdac9af5463ffd010b02fb93b151b3a4d9c432bca5f01fa8",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1,
+    "plan": 0,
+    "count": 62,
+    "keepHash": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1,
+    "plan": 1,
+    "count": 60,
+    "keepHash": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1,
+    "plan": 2,
+    "count": 71,
+    "keepHash": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 77,
+    "plan": 0,
+    "count": 62,
+    "keepHash": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 77,
+    "plan": 1,
+    "count": 60,
+    "keepHash": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 77,
+    "plan": 2,
+    "count": 71,
+    "keepHash": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1337,
+    "plan": 0,
+    "count": 62,
+    "keepHash": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1337,
+    "plan": 1,
+    "count": 60,
+    "keepHash": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 5,
+    "seed": 1337,
+    "plan": 2,
+    "count": 71,
+    "keepHash": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1,
+    "plan": 0,
+    "count": 51,
+    "keepHash": "167debaafac25d5f005f2169cf05ece2df07ad90af62f672dd7fd9278f5f9a15",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "bbaa30579c0659ba4b0eb4e995b18ce63beef0a0e9b177651f9701c71bce07a3",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1,
+    "plan": 2,
+    "count": 57,
+    "keepHash": "41c9dc920253e2af4b72c4f0dbccb30a77944301e6ee94e7ce934bc1172be76a",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 77,
+    "plan": 0,
+    "count": 51,
+    "keepHash": "167debaafac25d5f005f2169cf05ece2df07ad90af62f672dd7fd9278f5f9a15",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 77,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "bbaa30579c0659ba4b0eb4e995b18ce63beef0a0e9b177651f9701c71bce07a3",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 77,
+    "plan": 2,
+    "count": 57,
+    "keepHash": "41c9dc920253e2af4b72c4f0dbccb30a77944301e6ee94e7ce934bc1172be76a",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1337,
+    "plan": 0,
+    "count": 51,
+    "keepHash": "167debaafac25d5f005f2169cf05ece2df07ad90af62f672dd7fd9278f5f9a15",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1337,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "bbaa30579c0659ba4b0eb4e995b18ce63beef0a0e9b177651f9701c71bce07a3",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 6,
+    "seed": 1337,
+    "plan": 2,
+    "count": 57,
+    "keepHash": "41c9dc920253e2af4b72c4f0dbccb30a77944301e6ee94e7ce934bc1172be76a",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1,
+    "plan": 0,
+    "count": 73,
+    "keepHash": "b74eccfeb4e39dc272e35497fa68475973c91c50e5f4c34d169d329ccdec6b67",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1,
+    "plan": 1,
+    "count": 81,
+    "keepHash": "40fcd6fbd6f9ecd1636d4be83cd6095ac8d5dfd63c6e4cf030f323301280bb47",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1,
+    "plan": 2,
+    "count": 73,
+    "keepHash": "c7e1cff465be8ae40766472369c4019ba6e5be645a1e9be2531660a3bbc16ced",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 77,
+    "plan": 0,
+    "count": 73,
+    "keepHash": "b74eccfeb4e39dc272e35497fa68475973c91c50e5f4c34d169d329ccdec6b67",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 77,
+    "plan": 1,
+    "count": 81,
+    "keepHash": "975f5f8f8143a452e60aa7bd5b34091861fc328f21b874144e7bfacd5f39cce2",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 77,
+    "plan": 2,
+    "count": 73,
+    "keepHash": "c7e1cff465be8ae40766472369c4019ba6e5be645a1e9be2531660a3bbc16ced",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1337,
+    "plan": 0,
+    "count": 73,
+    "keepHash": "b74eccfeb4e39dc272e35497fa68475973c91c50e5f4c34d169d329ccdec6b67",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1337,
+    "plan": 1,
+    "count": 81,
+    "keepHash": "fae5539476bb6d98b46a7eea64dded44191fb16f67870b5261e241a20a2153b0",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 7,
+    "seed": 1337,
+    "plan": 2,
+    "count": 73,
+    "keepHash": "c7e1cff465be8ae40766472369c4019ba6e5be645a1e9be2531660a3bbc16ced",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1,
+    "plan": 0,
+    "count": 60,
+    "keepHash": "4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1,
+    "plan": 1,
+    "count": 71,
+    "keepHash": "11d5eed7b89b3b9e7631622ea095f30b42da164c97eae68405fc871809912c26",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1,
+    "plan": 2,
+    "count": 62,
+    "keepHash": "feeb60041ac4a146bda86b49fee2cf2019ac4684c228190fe2d70145f82caa60",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 77,
+    "plan": 0,
+    "count": 60,
+    "keepHash": "4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 77,
+    "plan": 1,
+    "count": 71,
+    "keepHash": "11d5eed7b89b3b9e7631622ea095f30b42da164c97eae68405fc871809912c26",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 77,
+    "plan": 2,
+    "count": 62,
+    "keepHash": "feeb60041ac4a146bda86b49fee2cf2019ac4684c228190fe2d70145f82caa60",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1337,
+    "plan": 0,
+    "count": 60,
+    "keepHash": "4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1337,
+    "plan": 1,
+    "count": 71,
+    "keepHash": "11d5eed7b89b3b9e7631622ea095f30b42da164c97eae68405fc871809912c26",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 8,
+    "seed": 1337,
+    "plan": 2,
+    "count": 62,
+    "keepHash": "feeb60041ac4a146bda86b49fee2cf2019ac4684c228190fe2d70145f82caa60",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1,
+    "plan": 0,
+    "count": 51,
+    "keepHash": "8654a1dcf686e84cf7661199f3aea06b013f9c169bee3b18416cf142df790f2c",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1,
+    "plan": 1,
+    "count": 57,
+    "keepHash": "31ef344590d62910eb2cb50bb875432aa2e022f2d4fd18688721b1d51741b8b0",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "1edef769783ef0f1037f88a0f2f1eb355fb5bda595eb7ab828c8fb003b860962",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 77,
+    "plan": 0,
+    "count": 51,
+    "keepHash": "8654a1dcf686e84cf7661199f3aea06b013f9c169bee3b18416cf142df790f2c",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 77,
+    "plan": 1,
+    "count": 57,
+    "keepHash": "31ef344590d62910eb2cb50bb875432aa2e022f2d4fd18688721b1d51741b8b0",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 77,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "1edef769783ef0f1037f88a0f2f1eb355fb5bda595eb7ab828c8fb003b860962",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1337,
+    "plan": 0,
+    "count": 51,
+    "keepHash": "8654a1dcf686e84cf7661199f3aea06b013f9c169bee3b18416cf142df790f2c",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1337,
+    "plan": 1,
+    "count": 57,
+    "keepHash": "31ef344590d62910eb2cb50bb875432aa2e022f2d4fd18688721b1d51741b8b0",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 9,
+    "seed": 1337,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "1edef769783ef0f1037f88a0f2f1eb355fb5bda595eb7ab828c8fb003b860962",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1,
+    "plan": 0,
+    "count": 81,
+    "keepHash": "896efb0122f3aecc706ec9f615f74405f26dfcc2dfa20cf44b21ec336eb65f66",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1,
+    "plan": 1,
+    "count": 73,
+    "keepHash": "d91a0028a479d46e80fb5bf7cb631f7e1ba49941f0166e40311e5358b088c58c",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1,
+    "plan": 2,
+    "count": 73,
+    "keepHash": "e9109add145a7955a409c9b75d7838f629d2a448128addbdac785beac60f191e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 77,
+    "plan": 0,
+    "count": 81,
+    "keepHash": "b193877c06e669c0d51c70041a7131205b17a0e22c2509acd1ab7fc32048b722",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 77,
+    "plan": 1,
+    "count": 73,
+    "keepHash": "d91a0028a479d46e80fb5bf7cb631f7e1ba49941f0166e40311e5358b088c58c",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 77,
+    "plan": 2,
+    "count": 73,
+    "keepHash": "e9109add145a7955a409c9b75d7838f629d2a448128addbdac785beac60f191e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1337,
+    "plan": 0,
+    "count": 81,
+    "keepHash": "ee66c2d23aaccc46bdac9af5463ffd010b02fb93b151b3a4d9c432bca5f01fa8",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1337,
+    "plan": 1,
+    "count": 73,
+    "keepHash": "d91a0028a479d46e80fb5bf7cb631f7e1ba49941f0166e40311e5358b088c58c",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 10,
+    "seed": 1337,
+    "plan": 2,
+    "count": 73,
+    "keepHash": "e9109add145a7955a409c9b75d7838f629d2a448128addbdac785beac60f191e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1,
+    "plan": 0,
+    "count": 71,
+    "keepHash": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1,
+    "plan": 1,
+    "count": 62,
+    "keepHash": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1,
+    "plan": 2,
+    "count": 60,
+    "keepHash": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 77,
+    "plan": 0,
+    "count": 71,
+    "keepHash": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 77,
+    "plan": 1,
+    "count": 62,
+    "keepHash": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 77,
+    "plan": 2,
+    "count": 60,
+    "keepHash": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1337,
+    "plan": 0,
+    "count": 71,
+    "keepHash": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1337,
+    "plan": 1,
+    "count": 62,
+    "keepHash": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 11,
+    "seed": 1337,
+    "plan": 2,
+    "count": 60,
+    "keepHash": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+    "oldGroup": [],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360,
+        "pattern": "drift-supply"
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1,
+    "plan": 0,
+    "count": 57,
+    "keepHash": "41c9dc920253e2af4b72c4f0dbccb30a77944301e6ee94e7ce934bc1172be76a",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "167debaafac25d5f005f2169cf05ece2df07ad90af62f672dd7fd9278f5f9a15",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "bbaa30579c0659ba4b0eb4e995b18ce63beef0a0e9b177651f9701c71bce07a3",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 77,
+    "plan": 0,
+    "count": 57,
+    "keepHash": "41c9dc920253e2af4b72c4f0dbccb30a77944301e6ee94e7ce934bc1172be76a",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 77,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "167debaafac25d5f005f2169cf05ece2df07ad90af62f672dd7fd9278f5f9a15",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 77,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "bbaa30579c0659ba4b0eb4e995b18ce63beef0a0e9b177651f9701c71bce07a3",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1337,
+    "plan": 0,
+    "count": 57,
+    "keepHash": "41c9dc920253e2af4b72c4f0dbccb30a77944301e6ee94e7ce934bc1172be76a",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1337,
+    "plan": 1,
+    "count": 51,
+    "keepHash": "167debaafac25d5f005f2169cf05ece2df07ad90af62f672dd7fd9278f5f9a15",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  },
+  {
+    "round": 12,
+    "seed": 1337,
+    "plan": 2,
+    "count": 51,
+    "keepHash": "bbaa30579c0659ba4b0eb4e995b18ce63beef0a0e9b177651f9701c71bce07a3",
+    "oldGroup": [
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 440,
+        "dropLabel": "穿甲纵列"
+      },
+      {
+        "at": 55.5,
+        "kind": "armor",
+        "x": 420,
+        "drop": true,
+        "dropY": 320
+      },
+      {
+        "at": 55.5,
+        "kind": "drone",
+        "x": 300,
+        "drop": true,
+        "dropY": 360
+      }
+    ],
+    "rewards": [
+      {
+        "at": 8,
+        "kind": "crate",
+        "x": 240,
+        "stage": 2
+      },
+      {
+        "at": 16,
+        "kind": "armory",
+        "x": 360
+      },
+      {
+        "at": 20,
+        "kind": "gates",
+        "x": 360
+      },
+      {
+        "at": 27,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      },
+      {
+        "at": 48,
+        "kind": "armory",
+        "x": 360,
+        "stage": 3,
+        "convoy": true
+      },
+      {
+        "at": 49.2,
+        "kind": "gates",
+        "x": 500
+      },
+      {
+        "at": 58,
+        "kind": "gates",
+        "x": 360,
+        "pair": true
+      }
+    ]
+  }
+]

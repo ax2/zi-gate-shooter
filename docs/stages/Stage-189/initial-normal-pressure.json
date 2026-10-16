@@ -1,0 +1,1658 @@
+[
+  {
+    "route": "optical",
+    "tactic": "ordinary",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15360,
+    "shots": 6,
+    "boosted": 6,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 219.88333333340046,
+        "admission": {
+          "x": 180,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "arc",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              1
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.61666666673437,
+            "id": 9531,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.733333333333334,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.78333333340117,
+            "id": 9532,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9166666666666679,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.3500000000675,
+            "id": 9533,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.4833333333333333,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 220.3500000000675,
+          "id": 9533,
+          "affected": 2,
+          "interrupted": 2
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 473.83333333323105,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 80,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              2
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              1
+            ],
+            [
+              "arc",
+              3,
+              1
+            ],
+            [
+              "blast",
+              3,
+              2
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 3,
+            "passed": 3,
+            "killedAt": 474.79999999989684,
+            "id": 24884,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9833333333333347,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 3,
+            "passed": 3,
+            "killedAt": 474.99999999989666,
+            "id": 24885,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.1666666666666674,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 481.5166666665574,
+            "id": 24886,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 7.699999999999978,
+            "x": 210,
+            "y": 786.4000000000055
+          }
+        ],
+        "break": {
+          "time": 481.5166666665574,
+          "id": 24886,
+          "affected": 1,
+          "interrupted": 0
+        }
+      }
+    ]
+  },
+  {
+    "route": "optical",
+    "tactic": "relay-first",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15380,
+    "shots": 0,
+    "boosted": 0,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 219.88333333340046,
+        "admission": {
+          "x": 180,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "arc",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              1
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 221.0833333334014,
+            "id": 9531,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.2166666666666672,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 221.38333333340165,
+            "id": 9532,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.5166666666666662,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.3500000000675,
+            "id": 9533,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.4833333333333333,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 220.3500000000675,
+          "id": 9533,
+          "affected": 2,
+          "interrupted": 2
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 473.83333333323105,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 80,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              2
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              1
+            ],
+            [
+              "arc",
+              3,
+              1
+            ],
+            [
+              "blast",
+              3,
+              2
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 474.99999999989666,
+            "id": 24884,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.1666666666666674,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 475.3999999998963,
+            "id": 24885,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.5833333333333326,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 474.69999999989693,
+            "id": 24886,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.8833333333333344,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 474.69999999989693,
+          "id": 24886,
+          "affected": 2,
+          "interrupted": 2
+        }
+      }
+    ]
+  },
+  {
+    "route": "optical",
+    "tactic": "guns-first",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15350,
+    "shots": 6,
+    "boosted": 6,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 219.88333333340046,
+        "admission": {
+          "x": 180,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "arc",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              1
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.61666666673437,
+            "id": 9531,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.733333333333334,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.78333333340117,
+            "id": 9532,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9166666666666679,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.3500000000675,
+            "id": 9533,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.4833333333333333,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 220.3500000000675,
+          "id": 9533,
+          "affected": 2,
+          "interrupted": 2
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 473.83333333323105,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 80,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              2
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              1
+            ],
+            [
+              "arc",
+              3,
+              1
+            ],
+            [
+              "blast",
+              3,
+              2
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 3,
+            "passed": 3,
+            "killedAt": 474.79999999989684,
+            "id": 24884,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9833333333333347,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 3,
+            "passed": 3,
+            "killedAt": 474.99999999989666,
+            "id": 24885,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.1666666666666674,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 477.2166666665613,
+            "id": 24886,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 3.399999999999993,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 477.2166666665613,
+          "id": 24886,
+          "affected": 0,
+          "interrupted": 0
+        }
+      }
+    ]
+  },
+  {
+    "route": "ballistic",
+    "tactic": "ordinary",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15805,
+    "shots": 0,
+    "boosted": 0,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "blast",
+      "arc"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 218.8500000000663,
+        "admission": {
+          "x": 180,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "scatter",
+              3,
+              1
+            ],
+            [
+              "blast",
+              3,
+              0
+            ],
+            [
+              "arc",
+              1,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 219.63333333340026,
+            "id": 9768,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.8000000000000008,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 219.83333333340042,
+            "id": 9769,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.0000000000000013,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 219.30000000006666,
+            "id": 9770,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.4666666666666666,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 219.30000000006666,
+          "id": 9770,
+          "affected": 2,
+          "interrupted": 2
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 462.5833333332413,
+        "admission": {
+          "x": 311.33333333333337,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 80,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              2
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "scatter",
+              3,
+              2
+            ],
+            [
+              "blast",
+              3,
+              2
+            ],
+            [
+              "arc",
+              2,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.2333333332407,
+            "id": 25361,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.6666666666666671,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.28333333324065,
+            "id": 25362,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.7166666666666672,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.5833333332404,
+            "id": 25363,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 1.016666666666668,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 463.5833333332404,
+          "id": 25363,
+          "affected": 0,
+          "interrupted": 0
+        }
+      }
+    ]
+  },
+  {
+    "route": "ballistic",
+    "tactic": "relay-first",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15805,
+    "shots": 0,
+    "boosted": 0,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "blast",
+      "arc"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 218.8500000000663,
+        "admission": {
+          "x": 180,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "scatter",
+              3,
+              1
+            ],
+            [
+              "blast",
+              3,
+              0
+            ],
+            [
+              "arc",
+              1,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.05000000006726,
+            "id": 9768,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.2166666666666672,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.25000000006742,
+            "id": 9769,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.4166666666666665,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 219.30000000006666,
+            "id": 9770,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.4666666666666666,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 219.30000000006666,
+          "id": 9770,
+          "affected": 2,
+          "interrupted": 2
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 462.5833333332413,
+        "admission": {
+          "x": 311.33333333333337,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 80,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              2
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "scatter",
+              3,
+              2
+            ],
+            [
+              "blast",
+              3,
+              2
+            ],
+            [
+              "arc",
+              2,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.73333333324024,
+            "id": 25361,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.1666666666666674,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.98333333324,
+            "id": 25362,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.4166666666666665,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.0499999999075,
+            "id": 25363,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.4833333333333333,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 463.0499999999075,
+          "id": 25363,
+          "affected": 2,
+          "interrupted": 2
+        }
+      }
+    ]
+  },
+  {
+    "route": "ballistic",
+    "tactic": "guns-first",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15805,
+    "shots": 0,
+    "boosted": 0,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "blast",
+      "arc"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 218.8500000000663,
+        "admission": {
+          "x": 180,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "scatter",
+              3,
+              1
+            ],
+            [
+              "blast",
+              3,
+              0
+            ],
+            [
+              "arc",
+              1,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 219.63333333340026,
+            "id": 9768,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.8000000000000008,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 219.83333333340042,
+            "id": 9769,
+            "kind": "armor",
+            "hp": 0,
+            "age": 1.0000000000000013,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 219.30000000006666,
+            "id": 9770,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.4666666666666666,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 219.30000000006666,
+          "id": 9770,
+          "affected": 2,
+          "interrupted": 2
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 462.5833333332413,
+        "admission": {
+          "x": 311.33333333333337,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 80,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              2
+            ],
+            [
+              "pierce",
+              2,
+              0
+            ],
+            [
+              "scatter",
+              3,
+              2
+            ],
+            [
+              "blast",
+              3,
+              2
+            ],
+            [
+              "arc",
+              2,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.2333333332407,
+            "id": 25361,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.6666666666666671,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.28333333324065,
+            "id": 25362,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.7166666666666672,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 463.5833333332404,
+            "id": 25363,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 1.016666666666668,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 463.5833333332404,
+          "id": 25363,
+          "affected": 0,
+          "interrupted": 0
+        }
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "tactic": "ordinary",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15800,
+    "shots": 0,
+    "boosted": 0,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 220.1833333334007,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              2,
+              0
+            ],
+            [
+              "arc",
+              3,
+              1
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.7500000000678,
+            "id": 8773,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.5833333333333335,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.7500000000678,
+            "id": 8774,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.5833333333333335,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 221.1666666667348,
+            "id": 8775,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 1.0000000000000013,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 221.1666666667348,
+          "id": 8775,
+          "affected": 0,
+          "interrupted": 0
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 467.5999999999034,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 95,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "arc",
+              3,
+              4
+            ],
+            [
+              "scatter",
+              3,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              1
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.2166666665695,
+            "id": 21681,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.6333333333333336,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.4833333332359,
+            "id": 21682,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9000000000000011,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.5999999999025,
+            "id": 21683,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 1.016666666666668,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 468.5999999999025,
+          "id": 21683,
+          "affected": 0,
+          "interrupted": 0
+        }
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "tactic": "relay-first",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15800,
+    "shots": 0,
+    "boosted": 0,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 220.1833333334007,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              2,
+              0
+            ],
+            [
+              "arc",
+              3,
+              1
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 221.15000000006813,
+            "id": 8773,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9833333333333347,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 221.15000000006813,
+            "id": 8774,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9833333333333347,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.7666666667345,
+            "id": 8775,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.6000000000000002,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 220.7666666667345,
+          "id": 8775,
+          "affected": 2,
+          "interrupted": 2
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 467.5999999999034,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 95,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "arc",
+              3,
+              4
+            ],
+            [
+              "scatter",
+              3,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              1
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.5666666665692,
+            "id": 21681,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9833333333333347,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.5666666665692,
+            "id": 21682,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9833333333333347,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.1833333332362,
+            "id": 21683,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 0.6000000000000002,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 468.1833333332362,
+          "id": 21683,
+          "affected": 2,
+          "interrupted": 2
+        }
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "tactic": "guns-first",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15800,
+    "shots": 0,
+    "boosted": 0,
+    "bossWins": 7,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "groups": [
+      {
+        "round": 3,
+        "admitted": 220.1833333334007,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 45,
+            "overload": 4.650000000000005,
+            "mastery": 6
+          },
+          "weapons": [
+            [
+              "pulse",
+              2,
+              0
+            ],
+            [
+              "arc",
+              3,
+              1
+            ],
+            [
+              "scatter",
+              2,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              0
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.7500000000678,
+            "id": 8773,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.5833333333333335,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 220.7500000000678,
+            "id": 8774,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.5833333333333335,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 221.1666666667348,
+            "id": 8775,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 1.0000000000000013,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 221.1666666667348,
+          "id": 8775,
+          "affected": 0,
+          "interrupted": 0
+        }
+      },
+      {
+        "round": 6,
+        "admitted": 467.5999999999034,
+        "admission": {
+          "x": 540,
+          "growth": {
+            "stage": 3,
+            "bonus": 100,
+            "energy": 95,
+            "overload": 0,
+            "mastery": 16
+          },
+          "weapons": [
+            [
+              "pulse",
+              3,
+              0
+            ],
+            [
+              "arc",
+              3,
+              4
+            ],
+            [
+              "scatter",
+              3,
+              0
+            ],
+            [
+              "pierce",
+              3,
+              0
+            ],
+            [
+              "blast",
+              3,
+              1
+            ]
+          ]
+        },
+        "units": [
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.2166666665695,
+            "id": 21681,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.6333333333333336,
+            "x": 440,
+            "y": 500
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.4833333332359,
+            "id": 21682,
+            "kind": "armor",
+            "hp": 0,
+            "age": 0.9000000000000011,
+            "x": 440,
+            "y": 360
+          },
+          {
+            "shots": 0,
+            "passed": 0,
+            "killedAt": 468.98333333323546,
+            "id": 21683,
+            "kind": "conduit",
+            "hp": 0,
+            "age": 1.4,
+            "x": 210,
+            "y": 400
+          }
+        ],
+        "break": {
+          "time": 468.98333333323546,
+          "id": 21683,
+          "affected": 0,
+          "interrupted": 0
+        }
+      }
+    ]
+  }
+]

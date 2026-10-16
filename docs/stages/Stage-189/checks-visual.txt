@@ -1,0 +1,37 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/fire-control.test.ts tests/explosion-render.test.ts tests/conduit.test.ts tests/lockshot-challenge.test.ts tests/achievements.test.ts tests/contracts.test.ts tests/context-guide.test.ts tests/kill-rewards.test.ts tests/reward-window.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/explosion-render.test.ts (148 tests | 2 failed) 4089ms
+   × shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=false) 38ms
+   × shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=true) 24ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/explosion-render.test.ts > shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=false)
+ FAIL  tests/explosion-render.test.ts > shows actual fire-control source count, lateral gun labels and truthful shutdown without a future trajectory (weak=true)
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/explosion-render.test.ts:1378:442
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  2 failed | 203 passed (205)
+   Start at  06:33:48
+   Duration  4.93s (tests 55%, transform 34%, import 11%, worker 1%)
+
+  Transform  transforming modules took 3.01s · 34% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

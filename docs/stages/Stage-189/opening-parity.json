@@ -1,0 +1,87 @@
+[
+  {
+    "opening": "pulse",
+    "seconds": 180.00000000003539,
+    "round": 3,
+    "hp": 3,
+    "frames": 10800,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "blast",
+      "arc"
+    ],
+    "score": 3930,
+    "physicalAndEffectHash": "ae5393c6f85f2641a710b7e784b197ccd9caf3f8d24460b7a1b06b09cf6cb367",
+    "comparison": "first 180 seconds fixed-step physical state and effect identical to 112ab91 before the new heavy tail"
+  },
+  {
+    "opening": "scatter",
+    "seconds": 180.00000000003539,
+    "round": 3,
+    "hp": 3,
+    "frames": 10800,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "score": 3985,
+    "physicalAndEffectHash": "37adf7577c0565d41148fea0914c65f5cbe557cec6bbc483144518d9472cab18",
+    "comparison": "first 180 seconds fixed-step physical state and effect identical to 112ab91 before the new heavy tail"
+  },
+  {
+    "opening": "pierce",
+    "seconds": 180.00000000003539,
+    "round": 3,
+    "hp": 3,
+    "frames": 10800,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "arc",
+      "blast"
+    ],
+    "score": 3975,
+    "physicalAndEffectHash": "bb7a5d2e626673130efbf06fba99a863895d06c6dfcf655ef42c6217a0be3c1e",
+    "comparison": "first 180 seconds fixed-step physical state and effect identical to 112ab91 before the new heavy tail"
+  },
+  {
+    "opening": "blast",
+    "seconds": 180.00000000003539,
+    "round": 3,
+    "hp": 3,
+    "frames": 10800,
+    "weapons": [
+      "pulse",
+      "blast",
+      "scatter",
+      "arc",
+      "pierce"
+    ],
+    "score": 3965,
+    "physicalAndEffectHash": "e717623fc13c645d9cb2e8706a86ae1c13e9d139a7b9b66ea81ac1c7a664e68a",
+    "comparison": "first 180 seconds fixed-step physical state and effect identical to 112ab91 before the new heavy tail"
+  },
+  {
+    "opening": "arc",
+    "seconds": 180.00000000003539,
+    "round": 3,
+    "hp": 3,
+    "frames": 10800,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "score": 3985,
+    "physicalAndEffectHash": "d6ed1051ae6105e921545268d85c56e28f4e0769124c695f846c82928a1216f0",
+    "comparison": "first 180 seconds fixed-step physical state and effect identical to 112ab91 before the new heavy tail"
+  }
+]

@@ -1,3 +1,4 @@
+import {FIRE_CONTROL} from './fire-control';
 import {LOCKSHOT} from './lockshot';
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
 import {BATTERY} from './battery';
@@ -6,7 +7,7 @@ import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; lane?: number; convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -208,5 +209,12 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
   }
   if(hasDriftSupply(round)){const supply=out.find(s=>s.kind==='armory'&&s.at===DRIFT_SUPPLY.at);if(supply)supply.pattern='drift-supply';}
   if(round>1&&sector===1){const gun=out.find(s=>s.kind==='sniper'&&s.at===LOCKSHOT.at);if(gun)Object.assign(gun,{pattern:'lockshot',drop:true,dropY:LOCKSHOT.y,dropLabel:'斜射哨机',dropDetail:'锁定入场位置 · 蓄能可打断 · 三连弹后撤离'});}
+  if(round%3===0){
+    const group=out.filter(s=>s.at===FIRE_CONTROL.at),guns=group.filter(s=>s.kind==='armor');
+    guns.forEach((s,i)=>Object.assign(s,{x:mirror?720-FIRE_CONTROL.gunX:FIRE_CONTROL.gunX,dropY:FIRE_CONTROL.gunYs[i],pattern:'fire-control',dropLabel:undefined,dropDetail:undefined}));
+    const relay=group.find(s=>s.kind==='drone');
+    if(relay)Object.assign(relay,{kind:'conduit',x:mirror?720-FIRE_CONTROL.relayX:FIRE_CONTROL.relayX,dropY:FIRE_CONTROL.relayY,pattern:'fire-control',dropLabel:'火控中继编队',dropDetail:'中继增幅双炮 · 击破可停火断供'});
+    const screen=out.find(s=>s.kind==='guard'&&s.at===56);if(screen)screen.x=mirror?720-FIRE_CONTROL.screenX:FIRE_CONTROL.screenX;
+  }
   return out.sort((a, b) => a.at - b.at);
 }
