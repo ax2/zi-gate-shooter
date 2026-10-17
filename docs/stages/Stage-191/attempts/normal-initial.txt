@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/equipment-receipt-progression.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/equipment-receipt-progression.test.mjs (1 test | 1 failed) 4711ms
+   × normal rendered progression keeps the original simulation exact and actually displays new, tier and calibrated gains 4710ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/equipment-receipt-progression.test.mjs > normal rendered progression keeps the original simulation exact and actually displays new, tier and calibrated gains
+TypeError: Cannot read properties of undefined (reading 'addColorStop')
+ ❯ magneticLight src/game/magnetic-light.ts:10:55
+      8|  c.save();c.beginPath();c.rect(0,C.playerShotTop,C.width,C.playerY-C.p…
+      9|  c.globalAlpha=fade*(weak?.42:.72);
+     10|  const glow=c.createRadialGradient(0,0,12,0,0,r);glow.addColorStop(0,'…
+       |                                                       ^
+     11|  c.lineWidth=weak?1.5:2;c.strokeStyle='#60b9cf';
+     12|  for(let i=0;i<6;i++){
+ ❯ CanvasRuntime.drawWorld src/game/canvas-runtime.ts:804:41
+ ❯ CanvasRuntime.renderFrame src/game/canvas-runtime.ts:725:10
+ ❯ CanvasRuntime.render src/game/canvas-runtime.ts:674:10
+ ❯ CanvasRuntime.frame src/game/canvas-runtime.ts:271:12
+ ❯ Object.next src/game/canvas-runtime.ts:278:45
+ ❯ tests/equipment-receipt-progression.test.mjs:33:52
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  07:46:50
+   Duration  8.54s (tests 56%, import 36%, transform 8%)
+

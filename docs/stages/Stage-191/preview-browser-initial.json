@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "buttons": 7,
+    "scripts": [
+      "./assets/canvas-preview-mdA_LUg3.js"
+    ],
+    "title": "火力突围 · Gate Shooter"
+  },
+  "logs": [],
+  "dom": "- generic \"游戏操作\":\n  - button \"首箱预定 · 霰射炮 T2 ›\"\n  - button \"选择构筑目标 ›\"\n  - button \"开始突围 ›\"\n  - button \"武器档案\"\n  - button \"成就\"\n  - button \"设置\""
+}

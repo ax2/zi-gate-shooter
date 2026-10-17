@@ -1,3 +1,4 @@
+import {captureEquipment,equipmentChanges,equipmentReceipt,EquipmentReceiptQueue,type EquipmentChange} from './equipment-receipt';
 import {ionEvolutionLight} from './ion-evolution-light';
 import {isIonAugment,ionAugments} from '../core/ion-storm';
 import {fireControlHolding,fireControlSource} from '../core/fire-control';
@@ -102,7 +103,8 @@ export class CanvasRuntime {
   mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
-  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;observedAt?:number;hidden?:boolean};
+  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
+  private equipmentFeedback=new EquipmentReceiptQueue();
   private achievementToast = '';
   private achievementUntil = 0;
   private contractReturn:'loadout'|'paused'='loadout';
@@ -241,8 +243,10 @@ export class CanvasRuntime {
             if (this.keys.active) this.target = clamp(this.world.player.x + this.keys.direction * C.moveSpeed * C.step, C.minX, C.maxX);
             this.groundDistance += C.step * this.world.scrollSpeed;
             const previousBuildPoints=this.world.buildPoints;
+            const equipmentBefore=this.world.bodies.some(b=>b.active&&b.kind==='pickup')?captureEquipment(this.world):undefined;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
-            for (const e of this.world.drainEffects()) this.effect(e);
+            const equipmentHandled=equipmentBefore?this.recordEquipment(equipmentBefore):false;
+            for (const e of this.world.drainEffects()) this.effect(e,equipmentHandled);
             this.checkRecipeGoal();
             const reveal=this.world.bossRewardRound!==null&&this.world.phase==='recovery'&&this.world.phaseTime<C.bossLootReveal;
             if(this.world.player.hp>0&&!reveal&&this.world.bossRewardRound!==null){this.mode='boss-reward';this.cancelTouch();this.accumulator=0;this.platform.silence();}
@@ -277,7 +281,7 @@ export class CanvasRuntime {
     this.buttons=[];
     for(const motion of this.mountedMotion.values())motion.reset();
     this.opticalFiredAt=-Infinity;
-    this.buildFeedback=undefined;
+    this.buildFeedback=undefined;this.equipmentFeedback.clear();
     this.runNewBest=false;this.runAchievements=[];this.achievementReturn='menu';
     this.achievementUntil=0;
     this.supportBeams=[];
@@ -378,11 +382,12 @@ export class CanvasRuntime {
     const chosenNode=isIonAugment(branch)?ionAugments[branch]:isFractureAugment(branch)?fractureAugments[branch]:isPhotonAugment(branch)?photonAugments[branch]:isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
+    this.upgradeUntil=this.world.time+.45;
     if(isMagneticAugment(branch)&&this.world.contract?.status!=='active')this.proofChoice='magnetic';
     const earnedEffects=this.world.drainEffects();
     this.checkAchievements();
     const combo=!hadPrism&&this.world.supportProfile().prism?'棱镜激光':!hadStorm&&this.world.build.ranks.ballistic>=3?'雷暴霰射':'';
-    this.buildFeedback={title:combo?`组合完成 · ${combo}`:`配件强化 · ${chosenNode.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':preview.gain,until:this.world.time+4,combo:!!combo};
+    this.setBuildFeedback({title:combo?`组合完成 · ${combo}`:`配件强化 · ${chosenNode.name}`,detail:combo==='棱镜激光'?'主束保留 · 两侧追加45%伤害':combo==='雷暴霰射'?'每颗霰弹命中后追加一次跳电':preview.gain,until:this.world.time+4,combo:!!combo});
     if(this.save.settings.sound&&!earnedEffects.some(e=>e.type==='combination'))this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
     for(const effect of earnedEffects)this.effect(effect);
     this.mode='choice';
@@ -435,12 +440,14 @@ export class CanvasRuntime {
     else if(action==='contracts'){this.contractReturn='loadout';this.mode='contracts';}
     else if(action.startsWith('contract-claim:')&&this.mode==='contract-reward'){
       const kind=action.slice(15) as WeaponKind|'energy';
-      if(this.world.claimContractReward(kind)){for(const e of this.world.drainEffects())this.effect(e);if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';else this.action('resume');}
+      const before=captureEquipment(this.world);
+      if(this.world.claimContractReward(kind)){const handled=this.recordEquipment(before);for(const e of this.world.drainEffects())this.effect(e,handled);if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';else this.action('resume');}
     }
     else if(action.startsWith('boss-claim:')&&this.mode==='boss-reward'){
       const kind=action.slice(11) as WeaponKind|'research';
+      const before=captureEquipment(this.world);
       if(this.world.claimBossReward(kind)){
-        for(const e of this.world.drainEffects())this.effect(e);
+        const handled=this.recordEquipment(before);for(const e of this.world.drainEffects())this.effect(e,handled);
         if(this.world.bossRewardRound!==null)this.mode='boss-reward';
         else if(this.world.contractReward)this.mode='contract-reward';
         else if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';
@@ -482,7 +489,23 @@ export class CanvasRuntime {
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;}
     if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length||beforeMagnetic!==this.save.achievements.magneticCertifications.length)this.platform.write(this.save);
   }
-  private effect(e: EffectEvent) {
+  private recordEquipment(before:ReturnType<typeof captureEquipment>){
+    const changes=equipmentChanges(before,this.world);
+    for(const change of changes){
+      const current=this.buildFeedback;
+      if(current?.equipment?.kind===change.kind&&this.world.time<current.until){
+        const equipment={...change,before:current.equipment.before};
+        this.buildFeedback={...equipmentReceipt(equipment),equipment,until:this.world.time+3.2,combo:false};
+      }else this.equipmentFeedback.push(change);
+    }
+    return changes.length>0;
+  }
+  private setBuildFeedback(feedback:NonNullable<CanvasRuntime['buildFeedback']>){
+    const current=this.buildFeedback;
+    if(current?.equipment&&this.world.time<current.until)this.equipmentFeedback.interrupt(current.equipment,Math.max(.1,current.until-this.world.time));
+    this.buildFeedback=feedback;
+  }
+  private effect(e: EffectEvent,equipmentHandled=false) {
     if(e.type==='fracture-wave'){if(this.supportBeams.length>=16)this.supportBeams.shift();this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX??e.x,ty:e.targetY??e.y,life:.24,laser:false,fractureWave:true});return;}
     if(e.type==='counter-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',1);return;}
     if(e.type==='boss-counter'){this.notify(e.text??'首领过热',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
@@ -506,7 +529,7 @@ export class CanvasRuntime {
     }
 
     if(e.type==='combination'){
-      this.buildFeedback={title:e.text??'组合完成',detail:e.detail??'',until:this.world.time+4,combo:true};
+      this.setBuildFeedback({title:e.text??'组合完成',detail:e.detail??'',until:this.world.time+4,combo:true});
       if(this.save.settings.sound)this.platform.sound('upgrade',this.world.weaponStage(this.world.weaponKind));
       return;
     }
@@ -545,10 +568,10 @@ export class CanvasRuntime {
     if ((e.type === 'arc'||e.type==='magnetic-link') && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16,seeker:e.seeker});
     if (e.type === 'fire') { const kind=e.weaponKind??this.world.weaponKind;this.mountedMotion.get(kind)?.fire(kind,this.world.weaponStage(kind),this.world.time);if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
     if (e.type === 'weapon' || e.type === 'upgrade') {this.weaponGuideUntil = this.world.time + 5;this.weaponGuideKind=e.weaponKind??this.world.weaponKind;}
-    if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.platform.now() + 450;
+    if (e.type === 'upgrade' || e.type === 'overload' || e.type === 'weapon') this.upgradeUntil = this.world.time + .45;
     if (e.type === 'gate-taken') this.gateFeedback.claim(e.x, e.y, e.text ?? '已领取', e.size);
-    if (e.text && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') {
-      if(e.type==='upgrade')this.buildFeedback={title:e.text,detail:e.detail??'',until:this.world.time+4,combo:false};
+    if (e.text && !(equipmentHandled&&(e.type==='upgrade'||e.type==='pickup'&&e.text.startsWith('新增'))) && !e.type.startsWith('impact') && e.type !== 'gate-level' && e.type !== 'gate-taken' && e.type !== 'crate-break') {
+      if(e.type==='upgrade')this.setBuildFeedback({title:e.text,detail:e.detail??'',until:this.world.time+4,combo:false});
       else this.notify(e.text,e.type==='victory'?820:277,e.detail);
     }
     if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
@@ -704,15 +727,19 @@ export class CanvasRuntime {
     c.restore();
     if(this.mode==='playing'&&this.pendingRecipeCompletion&&this.save.recipeGoal===this.pendingRecipeCompletion){
       const completed=recipeStatus(w,this.pendingRecipeCompletion);
-      if(completed.ready)this.buildFeedback={title:`目标成形 · ${completed.name}`,detail:completed.effect,until:w.time+4,combo:true};
+      if(completed.ready)this.setBuildFeedback({title:`目标成形 · ${completed.name}`,detail:completed.effect,until:w.time+4,combo:true});
       this.pendingRecipeCompletion=null;
     }
     const receiptThreat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
-    const f=this.buildFeedback;
+    let f=this.buildFeedback;
     if(f&&this.mode==='playing'){
       // Only time actually spent displaying the receipt consumes its reading window.
       if(f.hidden&&f.observedAt!==undefined)f.until+=Math.max(0,w.time-f.observedAt);
       f.observedAt=w.time;
+    }
+    if(this.mode==='playing'&&(!f||w.time>=f.until)){
+      const equipment=this.equipmentFeedback.take();
+      if(equipment){f={...equipmentReceipt(equipment),equipment,until:w.time+equipment.remaining,combo:false,observedAt:w.time};this.buildFeedback=f;}
     }
     const receiptPosition=f?this.buildReceiptLocation():null;
     if(f)f.hidden=w.time<f.until&&receiptPosition===null;
@@ -734,8 +761,8 @@ export class CanvasRuntime {
     }
     if(activeBuild&&receiptPosition!==null){
       const f=this.buildFeedback!,top=receiptPosition,bottom=top===1180,height=bottom?88:104;
-      this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.combo?'#d3a3ff':'#7fe4ff');
-      this.text(f.title,360,top+(bottom?28:32),bottom?28:30,f.combo?'#e1bfff':'#d2f2ff','center',true);
+      this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.equipment?weaponColors[f.equipment.kind]:f.combo?'#d3a3ff':'#7fe4ff');
+      this.text(f.title,360,top+(bottom?28:32),bottom?28:30,f.equipment?weaponColors[f.equipment.kind]:f.combo?'#e1bfff':'#d2f2ff','center',true);
       this.text(f.detail,360,top+(bottom?63:76),bottom?22:23,'#f2d598');
     }
     if(this.mode==='choice')this.drawBuildChoices();
@@ -901,8 +928,8 @@ export class CanvasRuntime {
         muzzleLight(c, x, y, w.weaponKind, flash, this.save.settings.effects === 'weak');
       }
     }
-    if (this.mode === 'playing' && this.platform.now() < this.upgradeUntil) {
-      const remaining = (this.upgradeUntil - this.platform.now()) / 450;
+    if (this.mode === 'playing' && w.time < this.upgradeUntil) {
+      const remaining = (this.upgradeUntil - w.time) / .45;
       c.save(); c.globalAlpha = remaining * 0.8; c.strokeStyle = '#80e4ff'; c.lineWidth = 3;
       c.beginPath(); c.arc(w.player.x, C.playerY, 48 + (1 - remaining) * 100, 0, Math.PI * 2); c.stroke(); c.restore();
     }
@@ -1071,6 +1098,7 @@ export class CanvasRuntime {
     }
   }
   private buildReceiptLocation(): ReceiptPosition | null {
+    if(this.buildFeedback?.equipment&&this.notice&&this.noticeY===1195&&this.platform.now()<this.noticeUntil)return null;
     const w=this.world,position=buildReceiptPosition(w);
     const combat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     // A current instruction (break, collect, cross, or dodge) wins the shared
@@ -1094,7 +1122,7 @@ export class CanvasRuntime {
     let guide = contextGuide(this.world);
     if(this.world.phase==='boss'&&this.world.phaseTime<8&&this.world.bossFormation)guide={kind:'move',title:this.world.bossFormation.name,detail:this.world.bossFormation.hint};
     if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
-      guide = weaponGuide(this.weaponGuideKind, this.world.weaponStage(this.weaponGuideKind));
+      guide = weaponGuide(this.weaponGuideKind, this.world.weaponStage(this.weaponGuideKind),this.world.profileFor(this.weaponGuideKind));
     const goal=this.save.recipeGoal;
     if(goal&&this.world.phase==='running'){
       const status=recipeStatus(this.world,goal);
@@ -1578,6 +1606,8 @@ export class CanvasRuntime {
       runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
+      upgradePulseRemaining:Math.max(0,this.upgradeUntil-this.world.time),
+      equipmentReceipts:this.equipmentFeedback.pending.map(r=>({...r})),equipmentReceipt:this.buildFeedback?.equipment?{...this.buildFeedback}:null,
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
       electricBranch:this.world.build.electricBranch??null,seekerLinks:this.world.seekerLinks,capacitorBursts:this.world.capacitorBursts,

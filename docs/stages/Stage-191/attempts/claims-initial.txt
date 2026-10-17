@@ -1,0 +1,28 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/equipment-receipt-runtime.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/equipment-receipt-runtime.test.ts (4 tests | 1 failed) 150ms
+   × a current equipment receipt merges a rapid second upgrade and survives pause, while restart clears it 42ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/equipment-receipt-runtime.test.ts > a current equipment receipt merges a rapid second upgrade and survives pause, while restart clears it
+AssertionError: expected '{"title":"速射炮 T1→T3 · 1→4发/轮","detail…' to be '{"title":"速射炮 T1→T3 · 1→4发/轮","detail…' // Object.is equality
+
+Expected: "{"title":"速射炮 T1→T3 · 1→4发/轮","detail":"常态全弹直伤/秒 32 → 72","equipment":{"kind":"pulse","before":{"stage":1,"calibration":0,"pellets":1,"targets":1,"radius":0,"hops":0,"rate":8,"direct":32},"after":{"stage":3,"calibration":0,"pellets":4,"targets":1,"radius":0,"hops":0,"rate":6,"direct":72}},"until":7.399999999999991,"combo":false,"observedAt":4.19999999999999,"hidden":true}"
+Received: "{"title":"速射炮 T1→T3 · 1→4发/轮","detail":"常态全弹直伤/秒 32 → 72","equipment":{"kind":"pulse","before":{"stage":1,"calibration":0,"pellets":1,"targets":1,"radius":0,"hops":0,"rate":8,"direct":32},"after":{"stage":3,"calibration":0,"pellets":4,"targets":1,"radius":0,"hops":0,"rate":6,"direct":72}},"until":7.399999999999991,"combo":false,"observedAt":4.19999999999999,"hidden":false}"
+
+ ❯ tests/equipment-receipt-runtime.test.ts:21:196
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  07:44:09
+   Duration  1.30s (transform 69%, import 17%, tests 13%)
+

@@ -8,13 +8,13 @@ type Context = Pick<World, 'round' | 'phase' | 'bodies' | 'pickups' | 'gatesTake
 export interface Guide { kind: 'move' | 'crate' | 'pickup' | 'gate' | 'pair' | 'boss' | 'enemy' | 'weapon'; title: string; detail: string }
 const movement: Guide = { kind: 'move', title: '左右拖动 · 自动开火', detail: '' };
 
-export function weaponGuide(kind: WeaponKind, stage: number): Guide {
+export function weaponGuide(kind: WeaponKind, stage: number, profile:Pick<ReturnType<typeof weaponProfile>,'targets'|'chainHops'>=weaponProfile(kind,stage)): Guide {
   const details: Record<WeaponKind, string> = {
     pulse: '对准目标持续输出 · 适合集中火力',
     scatter: '近距聚弹更强 · 留意碰撞与敌弹',
-    pierce: `对准纵列 · 最多贯穿${weaponProfile('pierce', stage).targets}个敌人`,
+    pierce: `对准纵列 · 最多贯穿${profile.targets}个敌人`,
     blast: '直击敌群中心 · 爆炸波及附近敌人',
-    arc: `前方索敌快弹 · 最多追加${weaponProfile('arc', stage).chainHops}次跳电`,
+    arc: `前方索敌快弹 · 最多追加${(profile.chainHops??0)}次跳电`,
   };
   return { kind: 'weapon', title: `${weaponNames[kind]} · T${stage}`, detail: details[kind] };
 }

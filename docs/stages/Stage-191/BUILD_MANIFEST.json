@@ -1,0 +1,241 @@
+{
+  "stage": "191-r2",
+  "root": "build\\playable\\Stage-191-r2",
+  "resources": 46,
+  "allMatchDist": true,
+  "frozenServerPort": 5274,
+  "frozenServerLaunched": false,
+  "initialSnapshotRetained": "build/playable/Stage-191",
+  "files": [
+    {
+      "path": "assets/arc-player-v1.png",
+      "bytes": 220808,
+      "sha256": "96c3114eaebb91d103a13540da47502019187c04376c74bef978469b66289de5"
+    },
+    {
+      "path": "assets/armor-v1.png",
+      "bytes": 258416,
+      "sha256": "d9a1ce06c0fe715b2a555d6bb2d52d995b7c7441ab0972a6505c52a1d5757379"
+    },
+    {
+      "path": "assets/armor-wreck-v1.png",
+      "bytes": 81924,
+      "sha256": "5f8505fa827f0e00e1b827eb20d061f4bc36bbec67ba1b540801f8ebb279583e"
+    },
+    {
+      "path": "assets/armored-corridor-v1.jpg",
+      "bytes": 149057,
+      "sha256": "18248ef3482f2c88978fcb0f0303e83a134358d73330870828e3459839173bcc"
+    },
+    {
+      "path": "assets/audio/blast.wav",
+      "bytes": 9746,
+      "sha256": "9858e8931398482b3a2d8d39d4678c10bd86e824e8058ff372e7ec5f1154426f"
+    },
+    {
+      "path": "assets/audio/hurt.wav",
+      "bytes": 13274,
+      "sha256": "0c96e875b5f37e69238a84315966f8d5b2d94ede504659fe24d8a33a09e6f8c2"
+    },
+    {
+      "path": "assets/audio/mechanical-pulse-v1.wav",
+      "bytes": 705644,
+      "sha256": "e6ab14b9db45c9738b20365969a61cafbe2225dbda14aae53a4f2963ba840efb"
+    },
+    {
+      "path": "assets/audio/reward.wav",
+      "bytes": 7100,
+      "sha256": "16dea0372d24e8872bcb2cae1489bf95e800c2808e89b8b3e456a4893cac51f4"
+    },
+    {
+      "path": "assets/audio/shot-pierce1.wav",
+      "bytes": 5336,
+      "sha256": "eae7ddfbf347ef4e7f00c118e904cca58da5379e7566a573b8657884259aed5a"
+    },
+    {
+      "path": "assets/audio/shot-pierce2.wav",
+      "bytes": 5336,
+      "sha256": "9268491d8b5acaf87e2ead02523f67935b5f3e28657b0a3f290d94e275561d75"
+    },
+    {
+      "path": "assets/audio/shot-pierce3.wav",
+      "bytes": 5336,
+      "sha256": "3058fabf0222ef9d31ac0db9e993b10c4271fb7dad74d81e7c282bab2bf3e9a7"
+    },
+    {
+      "path": "assets/audio/shot-scatter1.wav",
+      "bytes": 3572,
+      "sha256": "d8cbd3c3c20445c4cff9d9acac153318bd9bb49c3deb05bb8d4a206df899e264"
+    },
+    {
+      "path": "assets/audio/shot-scatter2.wav",
+      "bytes": 3572,
+      "sha256": "e59916462235691fb0d05268b9a2485dd620f8708d024d970d3b875a63be8262"
+    },
+    {
+      "path": "assets/audio/shot-scatter3.wav",
+      "bytes": 3572,
+      "sha256": "493a6fbf894e4a62053c5056577376773fb0f7dc86c9950fa41352e906a70bc9"
+    },
+    {
+      "path": "assets/audio/shot1.wav",
+      "bytes": 2912,
+      "sha256": "a758a03645e8231f302afa17f9e55f85169955b2a504afc6fc5f1912dca1f22f"
+    },
+    {
+      "path": "assets/audio/shot2.wav",
+      "bytes": 3352,
+      "sha256": "473f71e82eed224ab58bcb1f878f53db8802fb8e1865f3ffe0c6724c62370ca8"
+    },
+    {
+      "path": "assets/audio/shot3.wav",
+      "bytes": 4014,
+      "sha256": "e64c71084873cd51e5875a103f3845ec104bd62e32c9e716943bd72f133bef6f"
+    },
+    {
+      "path": "assets/audio/upgrade.wav",
+      "bytes": 17684,
+      "sha256": "cffa0adf762c4e04d42cfdf75c308238de6a52ba7fc8ed7c57ffc5a56aada09b"
+    },
+    {
+      "path": "assets/blast-player-v1.png",
+      "bytes": 231713,
+      "sha256": "f17810198625d8ec714ba64bdf82615bae608216900d46d31b951b56afc9c8b5"
+    },
+    {
+      "path": "assets/boss-bastion-v1.png",
+      "bytes": 245556,
+      "sha256": "1ef36e9dd5b3e659186c4db62212a611979609c4ded131a7d040601f90554ba7"
+    },
+    {
+      "path": "assets/boss-flanker-v1.png",
+      "bytes": 249823,
+      "sha256": "aa3f26043adda3748884d11a98dfdee814d903aa7187f864657fc8873cef48bf"
+    },
+    {
+      "path": "assets/boss-v1.png",
+      "bytes": 306317,
+      "sha256": "199af2dc41add6599fac73da9100dd691feaecd62503fe240fc061faf84fa245"
+    },
+    {
+      "path": "assets/canvas-preview-CjHdiuva.js",
+      "bytes": 312553,
+      "sha256": "d14b3059bdd60af395658f7eb73bf5932e84e111cc6c637963268309ee5b6f7e"
+    },
+    {
+      "path": "assets/charger-v1.png",
+      "bytes": 158309,
+      "sha256": "804474d21a2ceb8aed533f54652cdd3f4a812d566e30168fbb120704be8982e8"
+    },
+    {
+      "path": "assets/charger-wreck-v1.png",
+      "bytes": 71421,
+      "sha256": "f61bee91f2ad58c467663454db89ed0ba4809d97ac50980edb3bd647df6b6088"
+    },
+    {
+      "path": "assets/conduit-v1.png",
+      "bytes": 103790,
+      "sha256": "e4a3b8970ff7f7d7b68e8f7655a86f8d4388856857876dd11b95a84137c07fbf"
+    },
+    {
+      "path": "assets/cooling-corridor-v1.jpg",
+      "bytes": 184125,
+      "sha256": "782b1a3adc15b777e7f61a87f6a081cb4fab845dfb081db4932b0f2d1ad9a286"
+    },
+    {
+      "path": "assets/crate-v1.png",
+      "bytes": 534538,
+      "sha256": "e0d5fd4d1aa6fce1ca55b3a59f19c9c0b5b38ead9a99786d8dd0c54950b03153"
+    },
+    {
+      "path": "assets/drone-v1.png",
+      "bytes": 145507,
+      "sha256": "17d912779970bb171d178011222df52ea36ca87853fe723aa5167528f597cbdf"
+    },
+    {
+      "path": "assets/drone-wreck-v1.png",
+      "bytes": 60608,
+      "sha256": "af0786899c2551713e26c22d77c551d3b82b3741ef289b526c4c21d0d4400834"
+    },
+    {
+      "path": "assets/elite-v1.png",
+      "bytes": 254549,
+      "sha256": "cf17084ccc3d122e5e49433240292984a60d04d114d9bc729833679e8ddeccf5"
+    },
+    {
+      "path": "assets/elite-wreck-v1.png",
+      "bytes": 81684,
+      "sha256": "b4e4e49425014a6c4f4fbb77cbec8f503704474eb45f6aae3caa91eaec68d182"
+    },
+    {
+      "path": "assets/explosion-v1.png",
+      "bytes": 149698,
+      "sha256": "72cb1e9f61b259c007eac0517b1bae49a1c5b6db5d7cfda26b8771c2c21c3cae"
+    },
+    {
+      "path": "assets/gate-frame-v1.png",
+      "bytes": 262016,
+      "sha256": "fc500aef964c5270fd09241e29316e8cda0c161d79c09b5639e3faaf81438e22"
+    },
+    {
+      "path": "assets/guard-v1.png",
+      "bytes": 327836,
+      "sha256": "56943764a2c202b3cb2f405dfe34a2649ef200fe0fffe457aa0427b4f8b5bf36"
+    },
+    {
+      "path": "assets/guard-wreck-v1.png",
+      "bytes": 112023,
+      "sha256": "e6207defeb1f928e4362608e02e0c0bba2352d025d18b65372190a279ec25899"
+    },
+    {
+      "path": "assets/mounted-modules-v1.png",
+      "bytes": 415736,
+      "sha256": "5802d2c78f64d44e7f7807f04e3694ae55113e8b0ab464f8c096f197aabf52b8"
+    },
+    {
+      "path": "assets/pierce-player-v2.png",
+      "bytes": 159696,
+      "sha256": "cf84dc2124c92b500ff2859e2559737999a8d4ed483ebd19f91b68b69a26a272"
+    },
+    {
+      "path": "assets/props.png",
+      "bytes": 133863,
+      "sha256": "3636ff3cd79509c226a01934216679a89c19d77791d7fcb88ee3a6b2f864dee9"
+    },
+    {
+      "path": "assets/runway.jpg",
+      "bytes": 173070,
+      "sha256": "a15b4060f7a71aa5dd5dc29398399d225573598c7cea0dcdad71ca3bb6e40213"
+    },
+    {
+      "path": "assets/scatter-player-v1.png",
+      "bytes": 169813,
+      "sha256": "bef3123494e8b45a4c57bd139a96f90fa858834ee97d31bb9f11324d6c696b0c"
+    },
+    {
+      "path": "assets/sniper-v1.png",
+      "bytes": 195933,
+      "sha256": "5002120cf9cccd8e29217fc6efb04661937b95f379eb559cf362562dbd27ce0b"
+    },
+    {
+      "path": "assets/sniper-wreck-v1.png",
+      "bytes": 66140,
+      "sha256": "e1fedf821b39ca6fc2ecb178cab17c1c09490e00b2a150c4a713913495c201fc"
+    },
+    {
+      "path": "assets/units.png",
+      "bytes": 136391,
+      "sha256": "ecba214dfc1e6c86026f914f42da8b2c8ef46e7d3bfb85b6a5a5208bd33ca76e"
+    },
+    {
+      "path": "canvas.html",
+      "bytes": 314,
+      "sha256": "5a20295f501a5f0173bf8ac31e9d39ce67b8929e9676c79f407e967deb223d8f"
+    },
+    {
+      "path": "index.html",
+      "bytes": 547,
+      "sha256": "1dc2378d5358659f2e8856d406b6cba7ad6476dde24b76f7d78bed1612643f44"
+    }
+  ]
+}

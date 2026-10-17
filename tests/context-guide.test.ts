@@ -1,6 +1,6 @@
 import {C} from '../src/core/config';
 import { expect, it } from 'vitest';
-import { contextGuide } from '../src/game/context-guide';
+import { contextGuide,weaponGuide } from '../src/game/context-guide';
 import { World } from '../src/core/world';
 
 it('follows real target state rather than scheduled seconds and never mutates the world', () => {
@@ -79,3 +79,9 @@ it('prioritizes charging threats over rewards and clears stale enemy guidance', 
   guard.y = 320; guard.active = false; expect(contextGuide(w).kind).toBe('move');
 });
 
+
+it.each(['seeker','spread'] as const)('weapon brief uses the actual %s build rather than a lower base jump count',branch=>{
+ const w=new World();w.growth.mastery=3;for(let i=0;i<3;i++)w.chooseBuild('electric',i===1?branch:undefined);w.phase='recovery';const p=w.spawn('pickup',360,C.playerY,3);p.weaponKind='arc';w.step(C.step,360);w.drainEffects();
+ const json=JSON.stringify(w),profile=w.profileFor('arc'),stage=w.weaponStage('arc');expect(stage).toBe(3);expect(profile.chainHops).toBe(branch==='spread'?5:4);
+ expect(weaponGuide('arc',stage,profile).detail).toContain(`追加${profile.chainHops}次跳电`);expect(weaponGuide('arc',stage).detail).toContain('追加3次跳电');expect(JSON.stringify(w)).toBe(json);
+});

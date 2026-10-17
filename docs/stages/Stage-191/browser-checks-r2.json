@@ -1,0 +1,21 @@
+{
+  "identity": {
+    "scripts": [
+      "/@vite/client",
+      "./equipment-receipt.js"
+    ],
+    "title": "装备成长回执 · 正常输入验证"
+  },
+  "dom": "- text: 正常成长→装备回执 · 虚拟时钟/隔离存档\n- button \"推进下一阶段\"\n- button \"切换弱特效\" [active]\n- button \"时钟+1秒\"\n- button \"时钟+0.2秒\"\n- generic: 13.48秒 / first-research / playing\n- generic \"游戏操作\":\n  - button \"暂停\"\n  - button \"挑战契约\"",
+  "logs": [],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 900
+    }
+  ]
+}
