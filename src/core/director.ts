@@ -1,3 +1,4 @@
+import {continuityReserves} from './continuity-reserves';
 import {heavyCounterPush} from './heavy-counter-push';
 import {vanguardPatrol,introPursuit} from './vanguard-patrol';
 import{BOOSTER}from'./booster';
@@ -249,6 +250,7 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
   out.push(...pursuitWaves(round,mirror,encounter));
   out.push(...closingAssault(round,mirror));
   out.push(...heavyCounterPush(round,mirror,encounter));
+  out.push(...continuityReserves(round,mirror,encounter));
   // Replace only the original three patrol slots after legacy transformations.
   // Later encounters retain their original target selection and authored data.
   return [...out.filter(s=>!initialPatrol.includes(s)),...vanguardPatrol(round,mirror),...(round===1?introPursuit():[])].sort((a,b)=>a.at-b.at);
