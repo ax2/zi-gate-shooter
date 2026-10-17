@@ -1,0 +1,23 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/breach-group.test.mjs tests/control-shutter.test.ts tests/swarm-routes.test.ts tests/fire-control-routes.test.ts tests/chapter-assaults.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/fire-control-routes.test.ts (1 test | 1 failed) 2594ms
+   × retains no-kill mirror window paths with delayed reactions while all three source units remain dangerous 2593ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fire-control-routes.test.ts > retains no-kill mirror window paths with delayed reactions while all three source units remain dangerous
+AssertionError: R9/9001/x68/t7.216666666666646: expected null not to be null
+ ❯ tests/fire-control-routes.test.ts:4:734
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 15 passed (16)
+   Start at  16:03:41
+   Duration  6.68s (tests 76%, transform 19%, import 5%)

@@ -1,0 +1,80 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/control-shutter.test.ts tests/swarm-routes.test.ts tests/fairness.test.ts -t round 3 batch|linked shutter|post-volley|killing the real relay|leaving the source|replays all chapter packs|only authored
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/fairness.test.ts (27 tests | 5 failed | 22 skipped) 2927ms
+   × 20 seeds of round 3 batch 0 retain a no-kill escape through boss entry 746ms
+   × 20 seeds of round 3 batch 1 retain a no-kill escape through boss entry 594ms
+   × 20 seeds of round 3 batch 2 retain a no-kill escape through boss entry 499ms
+   × 20 seeds of round 3 batch 3 retain a no-kill escape through boss entry 552ms
+   × 20 seeds of round 3 batch 4 retain a no-kill escape through boss entry 533ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 3 batch 0 retain a no-kill escape through boss entry
+AssertionError: no route seed 1 round 3 at 57.99999999999799: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 3 batch 1 retain a no-kill escape through boss entry
+AssertionError: no route seed 21 round 3 at 57.99999999999799: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 3 batch 2 retain a no-kill escape through boss entry
+AssertionError: no route seed 41 round 3 at 57.99999999999799: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 3 batch 3 retain a no-kill escape through boss entry
+AssertionError: no route seed 61 round 3 at 57.99999999999799: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 3 batch 4 retain a no-kill escape through boss entry
+AssertionError: no route seed 81 round 3 at 57.99999999999799: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  5 failed | 6 passed | 27 skipped (38)
+   Start at  16:01:03
+   Duration  6.75s (tests 87%, transform 10%, import 3%)

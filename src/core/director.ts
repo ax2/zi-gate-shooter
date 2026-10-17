@@ -9,7 +9,7 @@ import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen,hasRotatingShields,ROTATING_SHIELD} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string; breach?:boolean }
 export const MID_GATE_AT=39;
 export const INTRO_ESCORT={originalAt:42,at:43.5,x:500,gunY:340,guardY:550,hold:2} as const;
 export const AMMO_TRIAL={at:24.5,troops:[{x:300,y:500},{x:300,y:330},{x:420,y:500}]} as const;

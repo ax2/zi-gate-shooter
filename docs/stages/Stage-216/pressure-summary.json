@@ -1,0 +1,23 @@
+[
+  {
+    "route": "ballistic",
+    "oldShots": 0.0,
+    "newShots": 15.0,
+    "oldGap": 20.649999999998826,
+    "newGap": 20.649999999998826
+  },
+  {
+    "route": "electric",
+    "oldShots": 0.0,
+    "newShots": 15.0,
+    "oldGap": 20.649999999998826,
+    "newGap": 20.649999999998826
+  },
+  {
+    "route": "optical",
+    "oldShots": 0.0,
+    "newShots": 15.0,
+    "oldGap": 20.649999999998826,
+    "newGap": 20.649999999998826
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "logs": {
+    "mobile": [],
+    "desktop": []
+  },
+  "mobileViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "desktopViewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "method": "Normal menu/touches/earned upgrades; virtual60Hz, in-memory isolated saves; not human or performance",
+  "after": {
+    "mobileHP": 3,
+    "desktopHP": 3
+  },
+  "nativeGunFocusAlsoKilledRelay": true
+}

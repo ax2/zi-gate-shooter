@@ -1,6 +1,6 @@
 import {hasControlShutter}from'./control-shutter';
 import {BANKSHOT,advanceProjectile,type FlightSegment} from './bankshot';
-import {FIRE_CONTROL,fireControlSource} from './fire-control';
+import {FIRE_CONTROL,BREACH_CONTROL,fireControlSource} from './fire-control';
 import {CombatLedger,type DamageSource} from './combat-ledger';
 import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
 import {LOCKSHOT,INTRO_LOCKSHOT} from './lockshot';
@@ -631,14 +631,14 @@ export class World {
           const group=[s];while(this.scheduled[this.scheduleIndex+group.length-1]?.pattern==='fire-control'&&this.scheduled[this.scheduleIndex+group.length-1]?.at===s.at)group.push(this.scheduled[this.scheduleIndex+group.length-1]);
           if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.length>C.limits.enemies){this.scheduleIndex--;break;}
           const units=group.map(spawn=>{
-            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);b.pattern='fire-control';b.controlGroup=this.round;if(spawn.kind==='armor'&&hasControlShutter(this.round))b.controlShutter=true;if(spawn.controlPatrol){b.controlPatrol=true;b.controlHomeX=spawn.x;}b.dropGrace=SWARM.grace;b.timer=FIRE_CONTROL.opening;
-            b.hp*=b.kind==='armor'?FIRE_CONTROL.durability:FIRE_CONTROL.relayDurability;b.maxHp=b.hp;
+            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);b.pattern='fire-control';b.controlGroup=spawn.breach?-this.round:this.round;if(spawn.kind==='armor'&&(spawn.breach||hasControlShutter(this.round)))b.controlShutter=true;if(spawn.controlPatrol){b.controlPatrol=true;b.controlHomeX=spawn.x;}b.dropGrace=SWARM.grace;b.timer=FIRE_CONTROL.opening;
+            b.hp*=b.kind==='armor'?(spawn.breach?BREACH_CONTROL.durability:FIRE_CONTROL.durability):FIRE_CONTROL.relayDurability;b.maxHp=b.hp;
             return b;
           });
           const longest=units.reduce((a,b)=>(C.playerY-a.y)/a.speed>(C.playerY-b.y)/b.speed?a:b);
           if(!this.admit(longest)){for(const b of units)b.active=false;this.scheduleIndex--;break;}
           this.scheduleIndex+=group.length-1;this.dropSpawns+=units.length;
-          this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:units.some(b=>b.controlShutter)?'联动闸甲':units.some(b=>b.controlPatrol)?'游弋火控':'火控中继编队',detail:units.some(b=>b.controlShutter)?'供能闭甲减伤80% · 发射后开甲 · 拆中继可强制开甲':units.some(b=>b.controlPatrol)?'后炮横移 · 越界失去增幅 · 中继可拆':'中继增幅双炮 · 击破可停火断供'});
+          this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:s.breach?'破阵重炮':units.some(b=>b.controlShutter)?'联动闸甲':units.some(b=>b.controlPatrol)?'游弋火控':'火控中继编队',detail:s.breach?'先拆侧方中继停炮开甲 · 或等开火后强拆':units.some(b=>b.controlShutter)?'供能闭甲减伤80% · 发射后开甲 · 拆中继可强制开甲':units.some(b=>b.controlPatrol)?'后炮横移 · 越界失去增幅 · 中继可拆':'中继增幅双炮 · 击破可停火断供'});
           continue;
         }
         if (s.kind === 'armory') {

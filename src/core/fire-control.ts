@@ -2,6 +2,8 @@ import type {Body} from './world';
 /** Fixed authored pressure phrase, independent of player DPS and equipment. */
 export const FIRE_CONTROL={at:55.5,hold:4.5,opening:.15,warning:1,boostedRecovery:1.1,recovery:3.2,durability:6,relayDurability:3,radius:320,gunX:440,gunYs:[550,350],relayX:210,relayY:450,screenX:620} as const;
 export const CONTROL_PATROL={amplitude:112,period:3.2,entry:0} as const;
+// The mid-chapter breach is lighter than the existing late battery.
+export const BREACH_CONTROL={durability:3} as const;
 export const hasControlPatrol=(round:number)=>round>=6&&round%6===0;
 /** Authored lateral movement shared by live bodies and the no-kill forecast. */
 export function patrolControl(b:Body,dt:number){
