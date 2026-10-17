@@ -4,7 +4,7 @@ import {driftOffset} from './drift-supply';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {batteryHolding} from './battery';
 import {SWEEPER,sweeperDirection} from './sweeper';
-import {RELAY_SCREEN} from './relay-screen';
+import {RELAY_SCREEN,ROTATING_SHIELD} from './relay-screen';
 import {REBOUND,reboundState} from './rebound-charger';
 import {BOSS_COUNTER,counterMuzzles,counterAttack} from './boss-counter';
 import { HUNTER } from './contracts';
@@ -16,6 +16,8 @@ import {MOBILE_SENTRY,sentryDestination} from './mobile-sentry';
 import {INTERCEPTOR,interceptorMuzzles} from './interceptor';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 export const guardClosed = (b: Pick<Body, 'kind' | 'burst' | 'empRemaining'>) => b.kind === 'guard' && b.burst === 0 && !(b.empRemaining??0);
+
+export const guardDamageScale=(b:Pick<Body,'kind'|'burst'|'empRemaining'|'shieldTurn'>)=>guardClosed(b) ? (b.shieldTurn===undefined ? .5 : ROTATING_SHIELD.closedScale) : 1;
 
 export function fanWarningVelocities(b: Body) {
   if (b.kind === 'guard') return [-70, 0, 70];

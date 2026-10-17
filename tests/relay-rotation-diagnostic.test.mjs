@@ -1,0 +1,8 @@
+import {it,expect} from 'vitest';import {writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {World as OldWorld} from '../build/qa/Stage-198/baseline.mjs';import {C} from '../src/core/config';import {progressionTarget} from './helpers/progression-driver';
+const serialize=w=>JSON.parse(JSON.stringify(w,(_k,v)=>v instanceof Map?[...v]:v instanceof Set?[...v]:v));
+function diff(a,b,p='',out=[]){if(JSON.stringify(a)===JSON.stringify(b))return out;if(a&&b&&typeof a==='object'&&typeof b==='object'){for(const k of new Set([...Object.keys(a),...Object.keys(b)]))diff(a[k],b[k],p+'.'+k,out);}else out.push({path:p,old:a,now:b});return out;}
+it('locates the first pre-encounter full-state difference rather than masking it',()=>{const pair=[new OldWorld(1337,1,'scatter'),new World(1337,1,'scatter')],aims=[360,360];let result;
+ for(let f=0;f<600*60;f++){for(const [i,w]of pair.entries()){if(w.bossRewardRound!==null&&w.phase==='recovery'&&w.phaseTime>=C.bossLootReveal)w.claimBossReward('research');const a=w.build.available(w.buildPoints),r=w.build.ranks.optical<3||w.build.refinements.optical<2?'optical':a.includes('electric')?'electric':a[0];if(r)w.chooseBuild(r,w.build.ranks[r]===1?r==='optical'?'relay':r==='electric'?'seeker':'ricochet':undefined);if(f%6===0)aims[i]=progressionTarget(w);w.step(C.step,aims[i]);w.drainEffects();}
+ const differences=diff(serialize(pair[0]),serialize(pair[1]));if(differences.length){result={time:pair[1].time,round:pair[1].round,differences};break;}}
+ writeFileSync('build/qa/Stage-198/first-difference.json',JSON.stringify(result,null,2));expect(result).toBeDefined();expect(result.differences.every(d=>d.path.startsWith('.scheduled.'))).toBe(true);
+},120000);

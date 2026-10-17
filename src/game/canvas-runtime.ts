@@ -1,3 +1,5 @@
+import {shieldLatch} from './shield-latch';
+import {guardClosed,guardDamageScale} from '../core/behavior';
 import {admitWeaponImpact,trimImpactBudget,type ImpactMarker} from './impact-admission';
 import {captureEquipment,equipmentChanges,equipmentReceipt,EquipmentReceiptQueue,type EquipmentChange} from './equipment-receipt';
 import {ionEvolutionLight} from './ion-evolution-light';
@@ -859,6 +861,7 @@ export class CanvasRuntime {
           const frame = b.burst > 0 || (b.empRemaining??0)>0 ? 1 : 0;
           this.frameSprite('guard-v1.png', frame, 3, b.x, y, 160, 160, 1);
           this.hitSprite('guard-v1.png', frame, 3, b.x, y, 160, 160, b.hit, 0.07, 1);
+          if(b.shieldTurn!==undefined){c.save();c.translate(b.x,y);shieldLatch(c,b);c.restore();}
         } else if (b.kind === 'sniper') {
           const frame = b.warning > 0 ? 1 : 0;
           const direction=sentryDirection(b);c.save();c.translate(b.x,y);c.rotate(direction*.07);
@@ -1041,8 +1044,8 @@ export class CanvasRuntime {
         if(b.pattern==='fire-control')this.text('火控·停火',b.x,b.y-b.height/2-36,21,'#b5f4ff','center',true);
         else this.text('停火',b.x,b.y-b.height/2-34,22,'#b5f4ff','center',true);
       } else if (b.kind === 'guard') {
-        this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, b.burst ? '#ffb45d' : '#87c7de');
-        this.text(b.burst ? '弱点暴露' : b.pattern==='convoy'?'补给护卫':b.pattern==='relay-screen'?'哨阵前盾':b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, b.burst ? '#ffd99b' : '#d0eaff', 'center', true);
+        this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, !guardClosed(b) ? '#ffb45d' : '#87c7de');
+        this.text(!guardClosed(b) ? (b.shieldTurn!==undefined?'轮换前盾 · 暴露':'弱点暴露') : b.shieldTurn!==undefined?`轮换重盾 · 减伤${Math.round((1-guardDamageScale(b))*100)}%`: b.pattern==='convoy'?'补给护卫':b.pattern==='relay-screen'?'哨阵前盾':b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, !guardClosed(b) ? '#ffd99b' : '#d0eaff', 'center', true);
       } else if(b.kind==='conduit'){
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text(b.pattern==='fire-control'?`火控中继 · 增幅${w.bodies.filter(g=>fireControlSource(g,w.bodies)?.id===b.id).length}台`:b.pattern==='relay-screen'?'中继·停火开盾':'中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
       } else if(b.pattern==='rebound'){
@@ -1630,7 +1633,7 @@ export class CanvasRuntime {
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
       fireControlShots:this.world.fireControlShots,fireControlBoostedShots:this.world.fireControlBoostedShots,lastFireControlBreak:this.world.lastFireControlBreak,fireControlUnits:this.world.bodies.filter(b=>b.active&&b.pattern==='fire-control').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.controlGroup,source:fireControlSource(b,this.world.bodies)?.id,emp:b.empRemaining??0,shots:b.controlShots??0,boosted:b.controlBoostedShots??0})),
-      relayScreen:this.world.bodies.filter(b=>b.active&&b.pattern==='relay-screen').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,empRemaining:b.empRemaining??0,shots:b.formationShots??0})),conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
+      relayScreen:this.world.bodies.filter(b=>b.active&&b.pattern==='relay-screen').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,closed:guardClosed(b),shieldTurn:b.shieldTurn,empRemaining:b.empRemaining??0,shots:b.formationShots??0})),conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
       recipeGoal:this.save.recipeGoal?recipeStatus(this.world,this.save.recipeGoal):null,goalSupplies:this.world.bodies.filter(b=>recipeSupplyMatch(this.world,this.save.recipeGoal,b)).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,stage:b.stage,refit:!!b.refit})),mobileSentries:this.world.bodies.filter(b=>b.active&&b.pattern==='relocate').map(b=>({x:b.x,y:b.y,lane:b.lane,age:b.age,warning:b.warning,volleys:b.sentryVolleys??0,direction:sentryDirection(b)})),
       interceptorBreaks:this.world.interceptorBreaks,interceptors:this.world.bodies.filter(b=>b.active&&b.pattern==='intercept').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,beat:b.burst,wingShots:b.interceptWingShots??0,coreShots:b.interceptCoreShots??0})),
       refitsClaimed:this.world.refitsClaimed,

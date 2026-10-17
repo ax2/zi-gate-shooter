@@ -1,3 +1,4 @@
+import {ROTATING_SHIELD} from '../core/relay-screen';
 import {lockshotLeaving} from '../core/lockshot';
 import { C } from '../core/config';
 import type { World } from '../core/world';
@@ -35,6 +36,7 @@ export function contextGuide(world: Context): Guide {
   if(visible.some(b=>b.pattern==='relocate'))return {kind:'enemy',title:'机动哨机：入场抢位，齐射再换位',detail:'停稳再蓄能 · 重新对齐目标'};
   if (visible.some(b => b.kind === 'sniper' && b.warning > 0))
     return { kind: 'enemy', title: '狙击蓄能：保持横向移动', detail: '也可抢先击毁 · 命中不会打断蓄能' };
+  const rotating=visible.find(b=>b.kind==='guard'&&b.shieldTurn!==undefined);if(rotating)return {kind:'enemy',title:'轮换重盾：追开盾窗口',detail:`闭盾减伤${Math.round((1-ROTATING_SHIELD.closedScale)*100)}% · 击破中继可同时开盾`};
   if (visible.some(b => b.kind === 'guard' && b.warning > 0))
     return { kind: 'enemy', title: '盾卫开盾：避开扇形弹道', detail: '弱点已暴露 · 趁开盾集中火力' };
   if(visible.some(b=>b.pattern==='convoy'))return {kind:'enemy',title:'补给护卫：尽早决定外侧路线',detail:'可集火击毁或等弱点暴露 · 留意实际扇形弹幕'};

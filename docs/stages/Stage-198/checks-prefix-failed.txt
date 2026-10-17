@@ -1,0 +1,28 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/relay-rotation.test.ts tests/relay-rotation-audit.test.mjs tests/gate-feedback.test.ts tests/gate-receipt-runtime.test.ts tests/build-receipt.test.ts tests/conduit.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/relay-rotation-audit.test.mjs (1 test | 1 failed) 38550ms
+   × normal earned builds encounter opposite shield windows and compare legal relay vs window targeting 38549ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/relay-rotation-audit.test.mjs > normal earned builds encounter opposite shield windows and compare legal relay vs window targeting
+AssertionError: expected '65f9f0c47c47866d29514b41d49e4df77d11c…' to be 'bf54675c581bd45bc57a528c746ef4fd6c692…' // Object.is equality
+
+Expected: "bf54675c581bd45bc57a528c746ef4fd6c692363d875b265a627b58f8de3c9aa"
+Received: "65f9f0c47c47866d29514b41d49e4df77d11cc1fcdbbc1a1b572efb89bbb3adf"
+
+ ❯ tests/relay-rotation-audit.test.mjs:15:157
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 45 passed (46)
+   Start at  09:54:08
+   Duration  39.25s (tests 95%, transform 4%, import 1%)
+

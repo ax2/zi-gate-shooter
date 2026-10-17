@@ -1,0 +1,31 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/relay-rotation-audit.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/relay-rotation-audit.test.mjs (1 test | 1 failed) 40743ms
+   × normal earned builds encounter opposite shield windows and compare legal relay vs window targeting 40741ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/relay-rotation-audit.test.mjs > normal earned builds encounter opposite shield windows and compare legal relay vs window targeting
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/relay-rotation-audit.test.mjs:16:103
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  09:58:48
+   Duration  42.31s (tests 97%, transform 2%, import 1%)
+

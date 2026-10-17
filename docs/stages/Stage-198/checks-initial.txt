@@ -1,0 +1,41 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/relay-rotation.test.ts tests/gate-feedback.test.ts tests/gate-receipt-runtime.test.ts tests/build-receipt.test.ts tests/conduit.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/relay-rotation.test.ts (31 tests | 2 failed) 13134ms
+   × real damage respects current shield state, and actual relay destruction opens both without deleting old bullets 8ms
+   × reads actual open/closed/EMP state in the existing mechanical overlay and guidance without mutation 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/relay-rotation.test.ts > real damage respects current shield state, and actual relay destruction opens both without deleting old bullets
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/relay-rotation.test.ts:22:195
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/relay-rotation.test.ts > reads actual open/closed/EMP state in the existing mechanical overlay and guidance without mutation
+AssertionError: expected 87 to be less than 85
+ ❯ Proxy.<anonymous> tests/relay-rotation.test.ts:25:307
+
+ ❯ shieldLatch src/game/shield-latch.ts:8:27
+ ❯ tests/relay-rotation.test.ts:25:424
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 43 passed (45)
+   Start at  09:53:25
+   Duration  13.80s (tests 85%, transform 12%, import 3%)
+

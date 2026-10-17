@@ -1,0 +1,31 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/relay-rotation.test.ts tests/relay-rotation-audit.test.mjs tests/gate-feedback.test.ts tests/gate-receipt-runtime.test.ts tests/build-receipt.test.ts tests/conduit.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/conduit.test.ts (6 tests | 1 failed) 28ms
+   × retains the original optional relay and adds exactly one heavy fire-control source without changing reward windows 13ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/conduit.test.ts > retains the original optional relay and adds exactly one heavy fire-control source without changing reward windows
+AssertionError: expected 47.2 to be 45.7 // Object.is equality
+
+- Expected
++ Received
+
+- 45.7
++ 47.2
+
+ ❯ tests/conduit.test.ts:8:202
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 45 passed (46)
+   Start at  10:00:18
+   Duration  38.39s (tests 94%, transform 5%, import 1%)
+

@@ -1,0 +1,24 @@
+{
+  "time": 581.0166666664669,
+  "round": 8,
+  "differences": [
+    {
+      "path": ".scheduled.34.dropLabel",
+      "old": "双盾哨阵",
+      "now": "轮换盾阵"
+    },
+    {
+      "path": ".scheduled.34.dropDetail",
+      "old": "前盾后哨 · 中路中继可击破停火开盾",
+      "now": "追开盾窗口转火 · 或击破中继同时开盾"
+    },
+    {
+      "path": ".scheduled.36.shieldTurn",
+      "now": 0
+    },
+    {
+      "path": ".scheduled.37.shieldTurn",
+      "now": 1
+    }
+  ]
+}

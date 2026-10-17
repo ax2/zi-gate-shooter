@@ -1,0 +1,1290 @@
+{
+  "baseline": {
+    "policy": "ordinary",
+    "time": 899.9999999995101,
+    "hp": 3,
+    "round": 11,
+    "prefixHash": "bf54675c581bd45bc57a528c746ef4fd6c692363d875b265a627b58f8de3c9aa",
+    "opposite": 0,
+    "events": [
+      {
+        "time": 627.2499999997582,
+        "round": 8,
+        "text": "中继击破 · 2台停火"
+      },
+      {
+        "time": 714.4166666663456,
+        "round": 9,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 724.4833333330031,
+        "round": 9,
+        "text": "火控断供 · 0台停火"
+      },
+      {
+        "time": 801.7999999995994,
+        "round": 10,
+        "text": "中继击破 · 2台停火"
+      },
+      {
+        "time": 892.9999999995165,
+        "round": 11,
+        "text": "中继击破 · 0台停火"
+      }
+    ],
+    "formations": [
+      {
+        "id": 19412,
+        "kind": "sniper",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.5499999999853,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19413,
+        "kind": "sniper",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.1999999999847,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19414,
+        "kind": "guard",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.3999999999854,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 19415,
+        "kind": "guard",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.59999999998433,
+        "closed": 0.11666666666666665,
+        "open": 1.8499999999999983,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          },
+          {
+            "time": 378.31666666665126,
+            "state": "closed"
+          },
+          {
+            "time": 378.34999999998456,
+            "state": "emp"
+          }
+        ]
+      },
+      {
+        "id": 19494,
+        "kind": "conduit",
+        "round": 5,
+        "x": 360,
+        "spawn": 377.83333333331836,
+        "lastAt": 378.34999999998456,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 35385,
+        "kind": "sniper",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35386,
+        "kind": "sniper",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 628.2999999997572,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35387,
+        "kind": "guard",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1725.44,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          },
+          {
+            "time": 625.6166666664263,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 35388,
+        "kind": "guard",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 628.2999999997572,
+        "closed": 0.11666666666666665,
+        "open": 2.6499999999999955,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 1725.44,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          },
+          {
+            "time": 625.6166666664263,
+            "state": "open"
+          },
+          {
+            "time": 627.2166666664249,
+            "state": "closed"
+          },
+          {
+            "time": 627.2499999997582,
+            "state": "emp"
+          }
+        ]
+      },
+      {
+        "id": 35467,
+        "kind": "conduit",
+        "round": 8,
+        "x": 360,
+        "spawn": 626.733333333092,
+        "lastAt": 627.2499999997582,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 52507,
+        "kind": "sniper",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.0499999995174,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52508,
+        "kind": "sniper",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.449999999517,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52509,
+        "kind": "guard",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.0499999995174,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 2816,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          },
+          {
+            "time": 891.3666666661846,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 52510,
+        "kind": "guard",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.449999999517,
+        "closed": 0.08333333333333333,
+        "open": 1.0833333333333344,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 2816,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          },
+          {
+            "time": 891.3666666661846,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 52590,
+        "kind": "conduit",
+        "round": 11,
+        "x": 360,
+        "spawn": 892.4833333328503,
+        "lastAt": 892.9999999995165,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "mastery": 35,
+    "peakBodies": 10,
+    "peakBullets": 67
+  },
+  "ordinary": {
+    "policy": "ordinary",
+    "time": 899.9999999995101,
+    "hp": 3,
+    "round": 11,
+    "prefixHash": "65f9f0c47c47866d29514b41d49e4df77d11cc1fcdbbc1a1b572efb89bbb3adf",
+    "opposite": 1.3666666666666667,
+    "events": [
+      {
+        "time": 627.2499999997582,
+        "round": 8,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 714.4166666663456,
+        "round": 9,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 724.4833333330031,
+        "round": 9,
+        "text": "火控断供 · 0台停火"
+      },
+      {
+        "time": 801.7999999995994,
+        "round": 10,
+        "text": "中继击破 · 2台停火"
+      },
+      {
+        "time": 892.9999999995165,
+        "round": 11,
+        "text": "中继击破 · 2台停火"
+      }
+    ],
+    "formations": [
+      {
+        "id": 19412,
+        "kind": "sniper",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.5499999999853,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19413,
+        "kind": "sniper",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.1999999999847,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19414,
+        "kind": "guard",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.3999999999854,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 19415,
+        "kind": "guard",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.59999999998433,
+        "closed": 0.11666666666666665,
+        "open": 1.8499999999999983,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          },
+          {
+            "time": 378.31666666665126,
+            "state": "closed"
+          },
+          {
+            "time": 378.34999999998456,
+            "state": "emp"
+          }
+        ]
+      },
+      {
+        "id": 19494,
+        "kind": "conduit",
+        "round": 5,
+        "x": 360,
+        "spawn": 377.83333333331836,
+        "lastAt": 378.34999999998456,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 35385,
+        "kind": "sniper",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35386,
+        "kind": "sniper",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 627.5499999997579,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35387,
+        "kind": "guard",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1725.44,
+        "shieldTurn": 0,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          },
+          {
+            "time": 625.6166666664263,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 35388,
+        "kind": "guard",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 627.0999999997583,
+        "closed": 1.566666666666666,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1725.44,
+        "shieldTurn": 1,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "id": 35464,
+        "kind": "conduit",
+        "round": 8,
+        "x": 360,
+        "spawn": 626.733333333092,
+        "lastAt": 627.2499999997582,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 52504,
+        "kind": "sniper",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.449999999517,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52505,
+        "kind": "sniper",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 894.0499999995155,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52506,
+        "kind": "guard",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.0499999995174,
+        "closed": 0.7666666666666674,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 2816,
+        "shieldTurn": 1,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "id": 52507,
+        "kind": "guard",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 894.0499999995155,
+        "closed": 0.11666666666666665,
+        "open": 2.6499999999999955,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 2816,
+        "shieldTurn": 0,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          },
+          {
+            "time": 891.3666666661846,
+            "state": "open"
+          },
+          {
+            "time": 892.9666666661832,
+            "state": "closed"
+          },
+          {
+            "time": 892.9999999995165,
+            "state": "emp"
+          }
+        ]
+      },
+      {
+        "id": 52587,
+        "kind": "conduit",
+        "round": 11,
+        "x": 360,
+        "spawn": 892.4833333328503,
+        "lastAt": 892.9999999995165,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "mastery": 35,
+    "peakBodies": 10,
+    "peakBullets": 67
+  },
+  "window": {
+    "policy": "window",
+    "time": 899.9999999995101,
+    "hp": 3,
+    "round": 11,
+    "prefixHash": "65f9f0c47c47866d29514b41d49e4df77d11cc1fcdbbc1a1b572efb89bbb3adf",
+    "opposite": 1.3666666666666667,
+    "events": [
+      {
+        "time": 627.2499999997582,
+        "round": 8,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 714.4166666663456,
+        "round": 9,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 724.4833333330031,
+        "round": 9,
+        "text": "火控断供 · 0台停火"
+      },
+      {
+        "time": 801.7999999995994,
+        "round": 10,
+        "text": "中继击破 · 2台停火"
+      },
+      {
+        "time": 892.9999999995165,
+        "round": 11,
+        "text": "中继击破 · 0台停火"
+      }
+    ],
+    "formations": [
+      {
+        "id": 19412,
+        "kind": "sniper",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.5499999999853,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19413,
+        "kind": "sniper",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.1999999999847,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19414,
+        "kind": "guard",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.3999999999854,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 19415,
+        "kind": "guard",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.59999999998433,
+        "closed": 0.11666666666666665,
+        "open": 1.8499999999999983,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          },
+          {
+            "time": 378.31666666665126,
+            "state": "closed"
+          },
+          {
+            "time": 378.34999999998456,
+            "state": "emp"
+          }
+        ]
+      },
+      {
+        "id": 19494,
+        "kind": "conduit",
+        "round": 5,
+        "x": 360,
+        "spawn": 377.83333333331836,
+        "lastAt": 378.34999999998456,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 35385,
+        "kind": "sniper",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35386,
+        "kind": "sniper",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 627.5499999997579,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35387,
+        "kind": "guard",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1725.44,
+        "shieldTurn": 0,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          },
+          {
+            "time": 625.6166666664263,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 35388,
+        "kind": "guard",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 627.0999999997583,
+        "closed": 1.566666666666666,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1725.44,
+        "shieldTurn": 1,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "id": 35464,
+        "kind": "conduit",
+        "round": 8,
+        "x": 360,
+        "spawn": 626.733333333092,
+        "lastAt": 627.2499999997582,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 52504,
+        "kind": "sniper",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.4666666661836,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52505,
+        "kind": "sniper",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.0499999995174,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52506,
+        "kind": "guard",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.8499999995166,
+        "closed": 1.566666666666666,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 2816,
+        "shieldTurn": 1,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "id": 52507,
+        "kind": "guard",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.0499999995174,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 2816,
+        "shieldTurn": 0,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          },
+          {
+            "time": 891.3666666661846,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 52584,
+        "kind": "conduit",
+        "round": 11,
+        "x": 360,
+        "spawn": 892.4833333328503,
+        "lastAt": 892.9999999995165,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "mastery": 35,
+    "peakBodies": 10,
+    "peakBullets": 67
+  },
+  "relay": {
+    "policy": "relay",
+    "time": 899.9999999995101,
+    "hp": 3,
+    "round": 11,
+    "prefixHash": "65f9f0c47c47866d29514b41d49e4df77d11cc1fcdbbc1a1b572efb89bbb3adf",
+    "opposite": 1.3666666666666667,
+    "events": [
+      {
+        "time": 627.2499999997582,
+        "round": 8,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 714.4166666663456,
+        "round": 9,
+        "text": "中继击破 · 1台停火"
+      },
+      {
+        "time": 724.4833333330031,
+        "round": 9,
+        "text": "火控断供 · 0台停火"
+      },
+      {
+        "time": 801.7999999995994,
+        "round": 10,
+        "text": "中继击破 · 2台停火"
+      },
+      {
+        "time": 892.9999999995165,
+        "round": 11,
+        "text": "中继击破 · 2台停火"
+      }
+    ],
+    "formations": [
+      {
+        "id": 19412,
+        "kind": "sniper",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.5499999999853,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19413,
+        "kind": "sniper",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.1999999999847,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 626.5600000000001,
+        "states": []
+      },
+      {
+        "id": 19414,
+        "kind": "guard",
+        "round": 5,
+        "x": 200,
+        "spawn": 376.63333333331946,
+        "lastAt": 377.3999999999854,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 19415,
+        "kind": "guard",
+        "round": 5,
+        "x": 520,
+        "spawn": 376.63333333331946,
+        "lastAt": 378.59999999998433,
+        "closed": 0.11666666666666665,
+        "open": 1.8499999999999983,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 911.36,
+        "states": [
+          {
+            "time": 376.63333333331946,
+            "state": "closed"
+          },
+          {
+            "time": 376.7166666666527,
+            "state": "open"
+          },
+          {
+            "time": 378.31666666665126,
+            "state": "closed"
+          },
+          {
+            "time": 378.34999999998456,
+            "state": "emp"
+          }
+        ]
+      },
+      {
+        "id": 19494,
+        "kind": "conduit",
+        "round": 5,
+        "x": 360,
+        "spawn": 377.83333333331836,
+        "lastAt": 378.34999999998456,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 35385,
+        "kind": "sniper",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35386,
+        "kind": "sniper",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 627.5499999997579,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 1186.24,
+        "states": []
+      },
+      {
+        "id": 35387,
+        "kind": "guard",
+        "round": 8,
+        "x": 200,
+        "spawn": 625.5333333330931,
+        "lastAt": 626.299999999759,
+        "closed": 0.08333333333333333,
+        "open": 0.6833333333333338,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1725.44,
+        "shieldTurn": 0,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          },
+          {
+            "time": 625.6166666664263,
+            "state": "open"
+          }
+        ]
+      },
+      {
+        "id": 35388,
+        "kind": "guard",
+        "round": 8,
+        "x": 520,
+        "spawn": 625.5333333330931,
+        "lastAt": 627.0999999997583,
+        "closed": 1.566666666666666,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1725.44,
+        "shieldTurn": 1,
+        "states": [
+          {
+            "time": 625.5333333330931,
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "id": 35464,
+        "kind": "conduit",
+        "round": 8,
+        "x": 360,
+        "spawn": 626.733333333092,
+        "lastAt": 627.2499999997582,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      },
+      {
+        "id": 52504,
+        "kind": "sniper",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.449999999517,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52505,
+        "kind": "sniper",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 894.0499999995155,
+        "closed": 0,
+        "open": 0,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 1936,
+        "states": []
+      },
+      {
+        "id": 52506,
+        "kind": "guard",
+        "round": 11,
+        "x": 520,
+        "spawn": 891.2833333328514,
+        "lastAt": 892.0499999995174,
+        "closed": 0.7666666666666674,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 2816,
+        "shieldTurn": 1,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          }
+        ]
+      },
+      {
+        "id": 52507,
+        "kind": "guard",
+        "round": 11,
+        "x": 200,
+        "spawn": 891.2833333328514,
+        "lastAt": 894.0499999995155,
+        "closed": 0.11666666666666665,
+        "open": 2.6499999999999955,
+        "shots": 3,
+        "killed": true,
+        "maxHp": 2816,
+        "shieldTurn": 0,
+        "states": [
+          {
+            "time": 891.2833333328514,
+            "state": "closed"
+          },
+          {
+            "time": 891.3666666661846,
+            "state": "open"
+          },
+          {
+            "time": 892.9666666661832,
+            "state": "closed"
+          },
+          {
+            "time": 892.9999999995165,
+            "state": "emp"
+          }
+        ]
+      },
+      {
+        "id": 52587,
+        "kind": "conduit",
+        "round": 11,
+        "x": 360,
+        "spawn": 892.4833333328503,
+        "lastAt": 892.9999999995165,
+        "closed": 0,
+        "open": 0,
+        "shots": 0,
+        "killed": true,
+        "maxHp": 48,
+        "states": []
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "mastery": 35,
+    "peakBodies": 10,
+    "peakBullets": 67
+  }
+}

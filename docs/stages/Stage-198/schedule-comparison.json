@@ -1,0 +1,380 @@
+[
+  {
+    "round": 1,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 47,
+    "rotating": false
+  },
+  {
+    "round": 1,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 47,
+    "rotating": false
+  },
+  {
+    "round": 1,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 47,
+    "rotating": false
+  },
+  {
+    "round": 1,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 47,
+    "rotating": false
+  },
+  {
+    "round": 1,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 47,
+    "rotating": false
+  },
+  {
+    "round": 1,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 47,
+    "rotating": false
+  },
+  {
+    "round": 2,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 71,
+    "rotating": false
+  },
+  {
+    "round": 2,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 62,
+    "rotating": false
+  },
+  {
+    "round": 2,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 60,
+    "rotating": false
+  },
+  {
+    "round": 2,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 71,
+    "rotating": false
+  },
+  {
+    "round": 2,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 62,
+    "rotating": false
+  },
+  {
+    "round": 2,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 60,
+    "rotating": false
+  },
+  {
+    "round": 3,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 57,
+    "rotating": false
+  },
+  {
+    "round": 3,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 3,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 3,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 57,
+    "rotating": false
+  },
+  {
+    "round": 3,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 3,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 5,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 62,
+    "rotating": false
+  },
+  {
+    "round": 5,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 60,
+    "rotating": false
+  },
+  {
+    "round": 5,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 71,
+    "rotating": false
+  },
+  {
+    "round": 5,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 62,
+    "rotating": false
+  },
+  {
+    "round": 5,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 60,
+    "rotating": false
+  },
+  {
+    "round": 5,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 71,
+    "rotating": false
+  },
+  {
+    "round": 6,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 6,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 6,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 57,
+    "rotating": false
+  },
+  {
+    "round": 6,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 6,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 6,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 57,
+    "rotating": false
+  },
+  {
+    "round": 8,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 60,
+    "rotating": true
+  },
+  {
+    "round": 8,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 71,
+    "rotating": true
+  },
+  {
+    "round": 8,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 62,
+    "rotating": true
+  },
+  {
+    "round": 8,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 60,
+    "rotating": true
+  },
+  {
+    "round": 8,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 71,
+    "rotating": true
+  },
+  {
+    "round": 8,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 62,
+    "rotating": true
+  },
+  {
+    "round": 9,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 9,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 57,
+    "rotating": false
+  },
+  {
+    "round": 9,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 9,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 9,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 57,
+    "rotating": false
+  },
+  {
+    "round": 9,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 51,
+    "rotating": false
+  },
+  {
+    "round": 11,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 71,
+    "rotating": true
+  },
+  {
+    "round": 11,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 62,
+    "rotating": true
+  },
+  {
+    "round": 11,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 60,
+    "rotating": true
+  },
+  {
+    "round": 11,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 71,
+    "rotating": true
+  },
+  {
+    "round": 11,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 62,
+    "rotating": true
+  },
+  {
+    "round": 11,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 60,
+    "rotating": true
+  },
+  {
+    "round": 14,
+    "seed": 1,
+    "plan": 0,
+    "spawns": 62,
+    "rotating": true
+  },
+  {
+    "round": 14,
+    "seed": 1,
+    "plan": 1,
+    "spawns": 60,
+    "rotating": true
+  },
+  {
+    "round": 14,
+    "seed": 1,
+    "plan": 2,
+    "spawns": 71,
+    "rotating": true
+  },
+  {
+    "round": 14,
+    "seed": 1337,
+    "plan": 0,
+    "spawns": 62,
+    "rotating": true
+  },
+  {
+    "round": 14,
+    "seed": 1337,
+    "plan": 1,
+    "spawns": 60,
+    "rotating": true
+  },
+  {
+    "round": 14,
+    "seed": 1337,
+    "plan": 2,
+    "spawns": 71,
+    "rotating": true
+  }
+]

@@ -4,10 +4,10 @@ import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
 import {BATTERY} from './battery';
 import {DRIFT_SUPPLY,hasDriftSupply} from './drift-supply';
 import {SWEEPER} from './sweeper';
-import {RELAY_SCREEN,hasRelayScreen} from './relay-screen';
+import {RELAY_SCREEN,hasRelayScreen,hasRotatingShields,ROTATING_SHIELD} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; lane?: number; forkshot?:boolean;convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const MID_GATE_AT=39;
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
@@ -197,11 +197,11 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
       dropLabel:center&&row===0?'斜掠护航':undefined,dropDetail:center&&row===0?'护航横穿扇射 · 轻机分层斜掠 · 击破精英得充能':undefined});
   }
   if(hasRelayScreen(round))for(const s of out)if(s.at===RELAY_SCREEN.at){
-    if(s.kind==='drone')Object.assign(s,{kind:'guard',x:s.x<360?200:520,dropY:RELAY_SCREEN.guardY});
+    if(s.kind==='drone'){Object.assign(s,{kind:'guard',x:s.x<360?200:520,dropY:RELAY_SCREEN.guardY});if(hasRotatingShields(round))s.shieldTurn=s.x<360?0:1;}
     else if(s.kind==='sniper')Object.assign(s,{x:s.x<360?200:520,dropY:RELAY_SCREEN.sniperY});
-    else if(s.kind==='conduit'){s.dropY=RELAY_SCREEN.conduitY;s.at+=RELAY_SCREEN.relayDelay;}
+    else if(s.kind==='conduit'){s.dropY=RELAY_SCREEN.conduitY;s.at+=hasRotatingShields(round)?ROTATING_SHIELD.relayDelay:RELAY_SCREEN.relayDelay;}
     s.pattern='relay-screen';
-    if(s.dropLabel){s.dropLabel='双盾哨阵';s.dropDetail='前盾后哨 · 中路中继可击破停火开盾';}
+    if(s.dropLabel){s.dropLabel=hasRotatingShields(round)?'轮换盾阵':'双盾哨阵';s.dropDetail=hasRotatingShields(round)?'追开盾窗口转火 · 或击破中继同时开盾':'前盾后哨 · 中路中继可击破停火开盾';}
   }
   if(round%3===0){
     const guns=out.filter(s=>s.at===BATTERY.at&&s.kind==='armor');

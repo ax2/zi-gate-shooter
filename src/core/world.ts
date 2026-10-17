@@ -31,7 +31,7 @@ import type { Growth } from './rewards';
 import { timeline, sectorIndex, sectorNames, SWARM } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
-import { advanceBody, guardClosed } from './behavior';
+import { advanceBody, guardClosed, guardDamageScale } from './behavior';
 import { weaponNames, ARC_SHOT } from './weapons';
 import type { WeaponKind } from './weapons';
 
@@ -40,7 +40,7 @@ export interface Body {
   id: number; kind: BodyKind; x: number; y: number; px: number; py: number;
   width: number; height: number; hp: number; maxHp: number; speed: number;
   active: boolean; age: number; timer: number; warning: number; hit: number;
-  deploying?: boolean;reboundOrigin?:number;
+  shieldTurn?:0|1;deploying?: boolean;reboundOrigin?:number;
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
@@ -637,7 +637,7 @@ export class World {
           if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;if(s.forkshot)candidate.forkshot=true;}
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
           if(s.pattern==='sweep'&&s.kind!=='drone')candidate.timer=SWEEPER.opening;
-          if(s.pattern==='relay-screen'){candidate.timer=s.kind==='guard'?RELAY_SCREEN.guardOpening:RELAY_SCREEN.sniperOpening;if(s.kind==='guard'||s.kind==='sniper'){candidate.hp*=RELAY_SCREEN.durability;candidate.maxHp=candidate.hp;}}
+          if(s.pattern==='relay-screen'){if(s.kind==='guard'&&s.shieldTurn!==undefined)candidate.shieldTurn=s.shieldTurn;candidate.timer=s.kind==='guard'?RELAY_SCREEN.guardOpening+(s.shieldTurn??0)*RELAY_SCREEN.stagger:RELAY_SCREEN.sniperOpening;if(s.kind==='guard'||s.kind==='sniper'){candidate.hp*=RELAY_SCREEN.durability;candidate.maxHp=candidate.hp;}}
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
@@ -1047,7 +1047,7 @@ export class World {
       this.emit('impact-gate', b.x, b.y); return;
     }
     const shield=b.kind==='boss'&&this.bossShieldActive()?1-(this.bossFormation?.shieldReduction??0):1;
-    b.hp = Math.max(0, b.hp - damage * (guardClosed(b) ? 0.5 : 1)*shield);
+    b.hp = Math.max(0, b.hp - damage * guardDamageScale(b)*shield);
     this.effects.push({ type: 'impact', x: b.x, y: b.y, size: b.width, weaponKind });
     if (b.hp > 0) return;
     b.active = false;
