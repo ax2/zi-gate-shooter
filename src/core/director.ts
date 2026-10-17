@@ -1,5 +1,6 @@
 import {BANKSHOT,hasBankshot} from './bankshot';
 import {chapterAssaults} from './chapter-assaults';
+import {pursuitWaves} from './pursuit-waves';
 import {FIRE_CONTROL,hasControlPatrol} from './fire-control';
 import {LOCKSHOT,INTRO_LOCKSHOT} from './lockshot';
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
@@ -235,5 +236,6 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     const gun=out.find(s=>s.kind==='sniper'&&s.at===INTRO_LOCKSHOT.at);if(gun)Object.assign(gun,{pattern:'lockshot',dropLabel:'锁位三连',dropDetail:'蓄能时抢先拆炮 · 或避过三连再反击'});
   }
   out.push(...chapterAssaults(round,mirror,encounter));
+  out.push(...pursuitWaves(round,mirror,encounter));
   return out.sort((a, b) => a.at - b.at);
 }

@@ -1,0 +1,450 @@
+[
+  {
+    "route": "ballistic",
+    "policy": "safe",
+    "oldTime": 300.0000000000558,
+    "time": 300.0000000000558,
+    "hp": 3,
+    "damage": 0,
+    "oldGates": 15,
+    "gates": 15,
+    "pickups": 12,
+    "openingShots": 5,
+    "chapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4296296296296296,
+        "peakVisible": 10,
+        "emptyFraction": 0.3037037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.922471650081,
+        "peakVisible": 11,
+        "emptyFraction": 0.19648229576486925,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.180976625781069,
+        "peakVisible": 9,
+        "emptyFraction": 0.2888220319370516,
+        "longestEmpty": 5.2
+      },
+      {
+        "round": 4,
+        "seconds": 55.03333333333333,
+        "meanVisible": 2.4427619624470016,
+        "peakVisible": 14,
+        "emptyFraction": 0.2528770442156269,
+        "longestEmpty": 4
+      }
+    ],
+    "oldChapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4296296296296296,
+        "peakVisible": 10,
+        "emptyFraction": 0.3037037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.453598704003703,
+        "peakVisible": 11,
+        "emptyFraction": 0.2585049757000694,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.944225873640361,
+        "peakVisible": 9,
+        "emptyFraction": 0.31705623698218005,
+        "longestEmpty": 5.2
+      },
+      {
+        "round": 4,
+        "seconds": 55.03333333333333,
+        "meanVisible": 1.9215626892792248,
+        "peakVisible": 14,
+        "emptyFraction": 0.3543307086614173,
+        "longestEmpty": 4.2
+      }
+    ]
+  },
+  {
+    "route": "ballistic",
+    "policy": "safe-then-aim",
+    "oldTime": 300.0000000000558,
+    "time": 300.0000000000558,
+    "hp": 1,
+    "damage": 4,
+    "oldGates": 15,
+    "gates": 15,
+    "pickups": 12,
+    "openingShots": 2,
+    "chapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4296296296296296,
+        "peakVisible": 10,
+        "emptyFraction": 0.3037037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.466790094885443,
+        "peakVisible": 10,
+        "emptyFraction": 0.22008794260587827,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.7681092339736173,
+        "peakVisible": 9,
+        "emptyFraction": 0.2927563064105531,
+        "longestEmpty": 4.783333333333333
+      },
+      {
+        "round": 4,
+        "seconds": 57.083333333333336,
+        "meanVisible": 2.448759124087591,
+        "peakVisible": 14,
+        "emptyFraction": 0.30773722627737227,
+        "longestEmpty": 4
+      }
+    ],
+    "oldChapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4296296296296296,
+        "peakVisible": 10,
+        "emptyFraction": 0.3037037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.1383938903031705,
+        "peakVisible": 10,
+        "emptyFraction": 0.2675306641981023,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.5811154825271927,
+        "peakVisible": 9,
+        "emptyFraction": 0.3158990974311502,
+        "longestEmpty": 4.8
+      },
+      {
+        "round": 4,
+        "seconds": 57.31666666666667,
+        "meanVisible": 1.769118929921489,
+        "peakVisible": 14,
+        "emptyFraction": 0.43937191043908114,
+        "longestEmpty": 4.016666666666667
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "policy": "safe",
+    "oldTime": 300.0000000000558,
+    "time": 300.0000000000558,
+    "hp": 3,
+    "damage": 0,
+    "oldGates": 15,
+    "gates": 14,
+    "pickups": 11,
+    "openingShots": 2,
+    "chapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.2604166666666665,
+        "peakVisible": 10,
+        "emptyFraction": 0.33287037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.541772737792178,
+        "peakVisible": 11,
+        "emptyFraction": 0.20018514232816478,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.1462624392501737,
+        "peakVisible": 10,
+        "emptyFraction": 0.32330479055774125,
+        "longestEmpty": 5.516666666666667
+      },
+      {
+        "round": 4,
+        "seconds": 52.666666666666664,
+        "meanVisible": 2.7281645569620254,
+        "peakVisible": 14,
+        "emptyFraction": 0.24620253164556963,
+        "longestEmpty": 4
+      }
+    ],
+    "oldChapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.2604166666666665,
+        "peakVisible": 10,
+        "emptyFraction": 0.33287037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.165933811617681,
+        "peakVisible": 11,
+        "emptyFraction": 0.23628789632029623,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.9736172182365193,
+        "peakVisible": 9,
+        "emptyFraction": 0.348993288590604,
+        "longestEmpty": 5.516666666666667
+      },
+      {
+        "round": 4,
+        "seconds": 52.666666666666664,
+        "meanVisible": 1.9132911392405063,
+        "peakVisible": 14,
+        "emptyFraction": 0.380379746835443,
+        "longestEmpty": 4
+      }
+    ]
+  },
+  {
+    "route": "electric",
+    "policy": "safe-then-aim",
+    "oldTime": 240.21666666674997,
+    "time": 240.21666666674997,
+    "hp": 0,
+    "damage": 4,
+    "oldGates": 12,
+    "gates": 12,
+    "pickups": 9,
+    "openingShots": 2,
+    "chapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.2604166666666665,
+        "peakVisible": 10,
+        "emptyFraction": 0.33287037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.2899791714880813,
+        "peakVisible": 10,
+        "emptyFraction": 0.21291367738949318,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.785697755149271,
+        "peakVisible": 9,
+        "emptyFraction": 0.3047905577412636,
+        "longestEmpty": 5.133333333333334
+      }
+    ],
+    "oldChapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.2604166666666665,
+        "peakVisible": 10,
+        "emptyFraction": 0.33287037037037037,
+        "longestEmpty": 6
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.028928488775746,
+        "peakVisible": 9,
+        "emptyFraction": 0.28974774357787547,
+        "longestEmpty": 4.7
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.6211525109928258,
+        "peakVisible": 9,
+        "emptyFraction": 0.33047905577412634,
+        "longestEmpty": 5.133333333333334
+      }
+    ]
+  },
+  {
+    "route": "optical",
+    "policy": "safe",
+    "oldTime": 300.0000000000558,
+    "time": 300.0000000000558,
+    "hp": 3,
+    "damage": 0,
+    "oldGates": 15,
+    "gates": 14,
+    "pickups": 11,
+    "openingShots": 5,
+    "chapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4618055555555554,
+        "peakVisible": 9,
+        "emptyFraction": 0.2599537037037037,
+        "longestEmpty": 5.083333333333333
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 3.0821569081231197,
+        "peakVisible": 12,
+        "emptyFraction": 0.11941680166628095,
+        "longestEmpty": 3.8
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.3617218236519326,
+        "peakVisible": 11,
+        "emptyFraction": 0.30386484610043973,
+        "longestEmpty": 5.133333333333334
+      },
+      {
+        "round": 4,
+        "seconds": 51.583333333333336,
+        "meanVisible": 2.667205169628433,
+        "peakVisible": 14,
+        "emptyFraction": 0.2827140549273021,
+        "longestEmpty": 3.9166666666666665
+      }
+    ],
+    "oldChapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4618055555555554,
+        "peakVisible": 9,
+        "emptyFraction": 0.2599537037037037,
+        "longestEmpty": 5.083333333333333
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.3068734089331175,
+        "peakVisible": 11,
+        "emptyFraction": 0.24461930108771118,
+        "longestEmpty": 4.416666666666667
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.0997454292987734,
+        "peakVisible": 9,
+        "emptyFraction": 0.325387641749595,
+        "longestEmpty": 5.133333333333334
+      },
+      {
+        "round": 4,
+        "seconds": 51.583333333333336,
+        "meanVisible": 1.9922455573505655,
+        "peakVisible": 14,
+        "emptyFraction": 0.389983844911147,
+        "longestEmpty": 3.9166666666666665
+      }
+    ]
+  },
+  {
+    "route": "optical",
+    "policy": "safe-then-aim",
+    "oldTime": 240.90000000008385,
+    "time": 240.90000000008385,
+    "hp": 0,
+    "damage": 4,
+    "oldGates": 12,
+    "gates": 12,
+    "pickups": 9,
+    "openingShots": 2,
+    "chapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4618055555555554,
+        "peakVisible": 9,
+        "emptyFraction": 0.2599537037037037,
+        "longestEmpty": 5.083333333333333
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.507984262902106,
+        "peakVisible": 10,
+        "emptyFraction": 0.21731080768340663,
+        "longestEmpty": 4.433333333333334
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.8678546632723907,
+        "peakVisible": 9,
+        "emptyFraction": 0.28859060402684567,
+        "longestEmpty": 5.133333333333334
+      }
+    ],
+    "oldChapters": [
+      {
+        "round": 1,
+        "seconds": 72,
+        "meanVisible": 2.4618055555555554,
+        "peakVisible": 9,
+        "emptyFraction": 0.2599537037037037,
+        "longestEmpty": 5.083333333333333
+      },
+      {
+        "round": 2,
+        "seconds": 72.01666666666667,
+        "meanVisible": 2.1073825503355703,
+        "peakVisible": 10,
+        "emptyFraction": 0.2522564221245082,
+        "longestEmpty": 4.416666666666667
+      },
+      {
+        "round": 3,
+        "seconds": 72.01666666666667,
+        "meanVisible": 1.6727609349687573,
+        "peakVisible": 9,
+        "emptyFraction": 0.309650543855589,
+        "longestEmpty": 5.133333333333334
+      }
+    ]
+  }
+]

@@ -1,3 +1,4 @@
+import{withoutPursuit}from'./helpers/without-pursuit';
 import {it,expect} from 'vitest';
 import {timeline,Random} from '../src/core/director';
 import {battleIndex} from '../src/core/battle-plan';
@@ -6,7 +7,7 @@ const old=await import('../build/qa/Stage-215/baseline.mjs');
 it('adds three distinct combat phrases and preserves every existing enemy, special encounter and reward in 108 schedules',()=>{
  for(let round=1;round<=12;round++)for(const seed of [1,29,1337])for(const plan of [0,1,2]){
   const mirror=round>1&&new Random(seed).next()>.5,extra=chapterAssaults(round,mirror,battleIndex(round,plan));
-  const remaining=[...timeline(round,seed,plan)];
+  const remaining=withoutPursuit(timeline(round,seed,plan),round,seed,plan);
   for(const spawn of extra){const at=remaining.findIndex(s=>JSON.stringify(s)===JSON.stringify(spawn));expect(at).toBeGreaterThanOrEqual(0);remaining.splice(at,1);}
   // Stage-217 separately audited the two first-chapter reward windows.
   const normalized=remaining.map(s=>round===1&&s.kind==='gates'&&s.at===35?{...s,at:39}:round===1&&s.kind==='armory'&&s.at===46.5?{...s,at:48}:s).sort((a,b)=>a.at-b.at);expect(normalized).toEqual(old.timeline(round,seed,plan));

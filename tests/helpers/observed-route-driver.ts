@@ -6,8 +6,8 @@ import type{BattlePlan}from'../../src/core/battle-plan';
 /** Isolated no-fire fixture, not normal earned progression. Each body remains
  * unknown for 27 frames after first appearance. Movement follows the existing
  * plan during perception; a new arrival never artificially stops the player. */
-export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,seed=1337,onFailure?:(w:World,known:ReadonlySet<number>)=>void){
- const w=new World(seed,round,undefined,plan);
+export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,seed=1337,onFailure?:(w:World,known:ReadonlySet<number>)=>void,Runtime:typeof World=World){
+ const w=new Runtime(seed,round,undefined,plan);
  (w as any).shoot=()=>{};
  w.player.x=w.player.px=start;
  const births=new Map<number,number>(),known=new Set<number>(),unknownBullets=new Set<number>();

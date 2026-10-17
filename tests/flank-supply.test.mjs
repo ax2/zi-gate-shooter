@@ -1,9 +1,10 @@
+import{withoutPursuit}from'./helpers/without-pursuit';
 import{it,expect}from'vitest';import{timeline}from'../src/core/director';import{FLANK_SUPPLY_AT}from'../src/core/chapter-assaults';import{World}from'../src/core/world';import{C}from'../src/core/config';
 const old=await import('../build/qa/Stage-218/baseline.mjs');
 const wave=(s,start)=>s.drop&&[0,1,2].some(row=>s.kind==='charger'&&s.pattern==='flank'&&s.dropY===330&&Math.abs(s.at-start-row*1.35)<1e-8||s.kind==='drone'&&s.pattern==='weave'&&s.dropY===390&&Math.abs(s.at-start-row*1.35-.45)<1e-8);
 it('changes only the nine-unit final flank phrase in 108 schedules, preserving all other enemies and rewards',()=>{
  for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]){
-  const before=old.timeline(round,seed,plan),after=timeline(round,seed,plan);expect(after.length).toBe(before.length);
+  const before=old.timeline(round,seed,plan),after=withoutPursuit(timeline(round,seed,plan),round,seed,plan);expect(after.length).toBe(before.length);
   if(round%3!==2){expect(after).toEqual(before);continue;}
   const a=before.filter(s=>wave(s,53.5)),b=after.filter(s=>wave(s,FLANK_SUPPLY_AT));expect(a).toHaveLength(9);expect(b).toHaveLength(9);
   expect(after.filter(s=>!wave(s,FLANK_SUPPLY_AT))).toEqual(before.filter(s=>!wave(s,53.5)));
