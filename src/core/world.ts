@@ -61,7 +61,7 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number;counterBeat?:number;counterShotBeat?:number;counterFiredAt?:number;counterFiredBeat?:number;counterShots?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number;counterBeat?:number;counterShotBeat?:number;counterFiredAt?:number;counterFiredBeat?:number;counterShots?:number;wingBeat?:number;wingShotBeat?:number;wingShotAge?:number;wingVolleys?:number;wingFiredAt?:number;wingFiredBeat?:number;wingShots?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster'; bossVariant?: number;
 }
@@ -903,11 +903,12 @@ export class World {
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;
       const previousWarning = b.warning;
-      const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0,wasCounterFiredAt=b.counterFiredAt,wasAceEnraged=b.aceEnraged;
+      const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0,wasCounterFiredAt=b.counterFiredAt,wasWingFiredAt=b.wingFiredAt,wasAceEnraged=b.aceEnraged;
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
         this.bullets[this.bullets.length-1].sourceId=b.id;
+        if(b.kind==='boss'&&b.attack===2&&b.bossVariant===1){b.wingShots=(b.wingShots??0)+1;b.wingFiredAt=b.age;b.wingFiredBeat=b.wingShotBeat??0;}
         if(b.kind==='boss'&&b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){b.counterShots=(b.counterShots??0)+1;b.counterFiredAt=b.age;b.counterFiredBeat=b.counterShotBeat??0;}
         if(b.pattern==='bankshot'){this.bullets[this.bullets.length-1].bankRemaining=1;b.bankShots=(b.bankShots??0)+1;b.bankFiredAt=b.age;this.bankShots=(this.bankShots??0)+1;}
         if(b.pattern==='booster'){const p=this.bullets[this.bullets.length-1];p.boostAfter=BOOSTER.delay;p.boostFactor=BOOSTER.factor;b.boosterShots=(b.boosterShots??0)+1;b.boosterFiredAt=b.age;b.boosterFiredSide=p.x<b.x?-1:1;}
@@ -925,6 +926,7 @@ export class World {
         if(b.bountyRound!==undefined){b.bountyShots=(b.bountyShots??0)+1;this.bountyShots++;}
         if(b.aceRole){b.aceFiredAt=b.age;if(b.aceEnraged)b.aceRageShots=(b.aceRageShots??0)+1;}
       },this.bodies);
+      if(b.wingFiredAt!==wasWingFiredAt)this.effects.push({type:'wing-fire',x:b.x,y:b.y,gain:.45});
       if(b.aceEnraged&&!wasAceEnraged)this.effects.push({type:'drop-wave',x:b.x,y:C.playerY,text:(b.aceRole==='fan'?'扇炮':'针炮')+'王牌 · 暴走',detail:'搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险'});
       if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · '+counterTitle(b.bossVariant),detail:b.bossVariant===1?'双翼错时开火 · 已发敌弹仍危险':b.bossVariant===2?'交剪、直射、外扩三拍 · 已发敌弹仍危险':'双炮加入攻击循环 · 已发敌弹仍危险'});
       if(b.kind==='boss'&&((b.bossVariant===1||b.bossVariant===2)?b.counterFiredAt!==wasCounterFiredAt:(b.counterVolleys??0)>wasCounterVolleys))this.effects.push({type:'counter-fire',x:b.x,y:b.y,...(b.bossVariant===1||b.bossVariant===2?{gain:.65}:{})});

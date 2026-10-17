@@ -1,3 +1,4 @@
+import{WING_SHEAR,wingShearVolley}from'./wing-shear';
 import {CONTROL_SHUTTER,shutterClosed,type ShutterState}from'./control-shutter';
 import {BANKSHOT} from './bankshot';
 import {BOOSTER} from './booster';
@@ -74,7 +75,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if (b.timer <= 1e-9) {
       const finish = (elapsed=0) => {
         b.warning = 0; b.burst = 0; b.attackCycle++;
-        b.timer = b.counterReady?BOSS_COUNTER.lead:b.counterfire?BOSS_COUNTER.recovery-elapsed:phaseTime > 35 ? 3.5 : 2.8;
+        b.timer = b.counterReady?BOSS_COUNTER.lead:b.counterfire?BOSS_COUNTER.recovery-elapsed:Math.max(.1,(phaseTime-elapsed > 35 ? 3.5 : 2.8)-elapsed);
       };
       const sequencedCounter=()=>{
         const beat=b.counterBeat??0,p=counterSequence(b.bossVariant);
@@ -84,7 +85,15 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         if(beat+1<p.beats){b.counterBeat=beat+1;b.burst=1;b.timer=p.spacing;}
         else{b.counterBeat=0;b.counterVolleys=(b.counterVolleys??0)+1;finish(p.spacing*(p.beats-1));}
       };
+      const wingShear=()=>{
+        const beat=b.wingBeat??0;b.wingShotBeat=beat;b.wingShotAge=b.age;
+        for(const s of wingShearVolley(b,beat))shot(s.x,s.y,s.vx,s.vy);
+        b.warning=0;
+        if(beat+1<WING_SHEAR.beats){b.wingBeat=beat+1;b.burst=1;b.timer=WING_SHEAR.spacing;}
+        else{b.wingBeat=0;b.wingVolleys=(b.wingVolleys??0)+1;finish(WING_SHEAR.spacing*(WING_SHEAR.beats-1));}
+      };
       if (b.burst) {
+        if(b.attack===2&&b.bossVariant===1){wingShear();return;}
         if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){sequencedCounter();return;}
         if (b.attack === 3) {
           for (const x of bossWarningLanes(b)) for (let i = 0; i < 2; i++) shot(x, b.y + 90 - i * 75, 0, 280);
@@ -93,6 +102,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
       } else if (b.warning <= 0) {
         b.attack=b.counterReady?4:bossAttackForCycle(b.bossVariant,b.attackCycle,!!b.counterfire);b.counterReady=false;
         if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2))b.counterBeat=0;
+        if(b.attack===2&&b.bossVariant===1)b.wingBeat=0;
         b.warning = b.attack===4?BOSS_COUNTER.warning:1.35; b.timer = b.warning;
         // Advance only after an attack finishes, so delayed warnings cannot
         // accidentally repeat/skip a pattern. B alternates left/right sweep.
@@ -111,6 +121,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
           b.lane = b.lane === 360 ? 580 : 360;
           b.burst = 1; b.warning = 1.8; b.timer = 1.8;
         } else if (b.attack === 2) {
+          if(b.bossVariant===1){wingShear();return;}
           for (const x of [200, 520]) for (let i = 0; i < 4; i++) shot(x, b.y + 90 - i * 50, 0, 300);
           finish();
         } else if (!b.attack) {
