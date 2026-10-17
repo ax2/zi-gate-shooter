@@ -97,3 +97,8 @@ it.each(['seeker','spread'] as const)('weapon brief uses the actual %s build rat
  const json=JSON.stringify(w),profile=w.profileFor('arc'),stage=w.weaponStage('arc');expect(stage).toBe(3);expect(profile.chainHops).toBe(branch==='spread'?5:4);
  expect(weaponGuide('arc',stage,profile).detail).toContain(`追加${profile.chainHops}次跳电`);expect(weaponGuide('arc',stage).detail).toContain('追加3次跳电');expect(JSON.stringify(w)).toBe(json);
 });
+it('explains clearing the intro escort before an intact T3 supply without mutating gameplay',()=>{
+ const w=new World(),gun=w.spawn('elite',500,720),crate=w.spawn('crate',498,500,3);gun.introEscort=true;crate.weaponKind='arc';
+ const before=JSON.stringify(w);expect(contextGuide(w).title).toBe('先清护炮，再选补给');expect(JSON.stringify(w)).toBe(before);
+ gun.active=false;expect(contextGuide(w).kind).toBe('crate');
+});

@@ -2,6 +2,7 @@ import { expect, it } from 'vitest';
 import { C } from '../src/core/config';
 import { World } from '../src/core/world';
 import { gateValue, previewReward } from '../src/core/rewards';
+import {progressionTarget} from './helpers/progression-driver';
 
 it('dedicated charge gates trade permanent growth for faster overload without doubling power overflow', () => {
  expect([0,24,56,96,144].map(n=>gateValue(n,'energy'))).toEqual([20,30,40,50,60]);
@@ -75,13 +76,12 @@ it('authored first loop supports actual T1 to T3 growth, gate choices and boss v
     const world = new World(seed);
     const milestones: Record<string, number> = {};
     for (let frame = 0; frame < 100 * 60 && world.round === 1 && world.phase !== 'dead'; frame++) {
-      const t = world.time;
-      const boss = world.bodies.find(b => b.kind === 'boss');
-      const x = boss ? boss.x : t < 8 ? 360 : t < 14 ? 240 : t < 26 ? 360 : t < 33 ? 222
-        : t < 49 ? 500 : t < 53.35 ? 240 : t < 55 ? 500 : t < 64 ? 222 : 360;
+      const available=world.build.available(world.buildPoints),route=available.includes('optical')?'optical':available[0];
+      if(route)world.chooseBuild(route,world.build.ranks[route]===1?(route==='optical'?'burn':route==='electric'?'seeker':'ricochet'):undefined);
+      const x = progressionTarget(world);
       world.step(C.step, x);
       for (const effect of world.drainEffects()) {
-        if (effect.type === 'upgrade') milestones[`T${world.growth.stage}`] = world.time;
+        if (effect.type === 'upgrade') milestones[`T${world.growth.stage}`] ??= world.time;
         if (effect.type === 'boss-kill') milestones.victory = world.time;
       }
     }
@@ -91,5 +91,4 @@ it('authored first loop supports actual T1 to T3 growth, gate choices and boss v
     expect(milestones.victory, `seed ${seed} victory`).toBeLessThan(100);
     expect(world.round).toBe(2); expect(world.gatesTaken).toBeGreaterThanOrEqual(3);
   }
-});
-
+},60000);

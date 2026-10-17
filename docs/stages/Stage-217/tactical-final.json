@@ -1,0 +1,374 @@
+[
+  {
+    "goal": "preempt",
+    "opening": "pulse",
+    "damage": [],
+    "time": 51.549999999998356,
+    "hp": 3,
+    "round": 1,
+    "preempt": 1,
+    "bait": 0,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 0.5333333333333333,
+        "warning": 1.55,
+        "accepted": 0,
+        "passed": 0
+      }
+    ]
+  },
+  {
+    "goal": "preempt",
+    "opening": "scatter",
+    "damage": [],
+    "time": 51.549999999998356,
+    "hp": 3,
+    "round": 1,
+    "preempt": 1,
+    "bait": 0,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      },
+      {
+        "kind": "pierce",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 0.5333333333333333,
+        "warning": 1.55,
+        "accepted": 0,
+        "passed": 0
+      }
+    ]
+  },
+  {
+    "goal": "preempt",
+    "opening": "pierce",
+    "damage": [],
+    "time": 51.549999999998356,
+    "hp": 3,
+    "round": 1,
+    "preempt": 1,
+    "bait": 0,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "pierce",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 0.5333333333333333,
+        "warning": 1.55,
+        "accepted": 0,
+        "passed": 0
+      }
+    ]
+  },
+  {
+    "goal": "preempt",
+    "opening": "blast",
+    "damage": [],
+    "time": 51.56666666666502,
+    "hp": 3,
+    "round": 1,
+    "preempt": 1,
+    "bait": 0,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "blast",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 0.5666666666666668,
+        "warning": 1.55,
+        "accepted": 0,
+        "passed": 0
+      }
+    ]
+  },
+  {
+    "goal": "preempt",
+    "opening": "arc",
+    "damage": [],
+    "time": 51.56666666666502,
+    "hp": 3,
+    "round": 1,
+    "preempt": 1,
+    "bait": 0,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "arc",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 0.5666666666666668,
+        "warning": 1.55,
+        "accepted": 0,
+        "passed": 0
+      }
+    ]
+  },
+  {
+    "goal": "bait",
+    "opening": "pulse",
+    "damage": [],
+    "time": 54.9333333333315,
+    "hp": 3,
+    "round": 1,
+    "preempt": 0,
+    "bait": 1,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 3.9333333333333242,
+        "warning": 0,
+        "accepted": 3,
+        "passed": 3
+      }
+    ]
+  },
+  {
+    "goal": "bait",
+    "opening": "scatter",
+    "damage": [],
+    "time": 54.783333333331505,
+    "hp": 3,
+    "round": 1,
+    "preempt": 0,
+    "bait": 1,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      },
+      {
+        "kind": "pierce",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 3.7833333333333248,
+        "warning": 0,
+        "accepted": 3,
+        "passed": 3
+      }
+    ]
+  },
+  {
+    "goal": "bait",
+    "opening": "pierce",
+    "damage": [],
+    "time": 54.783333333331505,
+    "hp": 3,
+    "round": 1,
+    "preempt": 0,
+    "bait": 1,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "pierce",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 3.7833333333333248,
+        "warning": 0,
+        "accepted": 3,
+        "passed": 3
+      }
+    ]
+  },
+  {
+    "goal": "bait",
+    "opening": "blast",
+    "damage": [],
+    "time": 55.28333333333148,
+    "hp": 3,
+    "round": 1,
+    "preempt": 0,
+    "bait": 1,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "blast",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 4.2833333333333234,
+        "warning": 0,
+        "accepted": 3,
+        "passed": 3
+      }
+    ]
+  },
+  {
+    "goal": "bait",
+    "opening": "arc",
+    "damage": [],
+    "time": 55.28333333333148,
+    "hp": 3,
+    "round": 1,
+    "preempt": 0,
+    "bait": 1,
+    "weapons": [
+      {
+        "kind": "pulse",
+        "tier": 1
+      },
+      {
+        "kind": "arc",
+        "tier": 2
+      },
+      {
+        "kind": "scatter",
+        "tier": 2
+      }
+    ],
+    "guns": [
+      {
+        "round": 1,
+        "time": 51.01666666666505,
+        "damageAtAdmission": 0,
+        "hp": 0,
+        "maxHp": 88,
+        "active": false,
+        "age": 4.2833333333333234,
+        "warning": 0,
+        "accepted": 3,
+        "passed": 3
+      }
+    ]
+  }
+]

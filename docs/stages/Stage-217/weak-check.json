@@ -1,0 +1,19 @@
+{
+  "sameWorld": true,
+  "newProgression": {
+    "stage": 2,
+    "bonus": 90,
+    "energy": 0,
+    "overload": 0,
+    "gatesTaken": 3,
+    "pickups": 2
+  },
+  "oldProgression": {
+    "stage": 2,
+    "bonus": 60,
+    "energy": 0,
+    "overload": 0,
+    "gatesTaken": 2,
+    "pickups": 2
+  }
+}

@@ -11,6 +11,8 @@ import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
 export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string; breach?:boolean }
 export const MID_GATE_AT=39;
+export const INTRO_MID_GATE_AT=35;
+export const INTRO_ARMORY_AT=46.5;
 export const INTRO_ESCORT={originalAt:42,at:43.5,x:500,gunY:340,guardY:550,hold:2} as const;
 export const AMMO_TRIAL={at:24.5,troops:[{x:300,y:500},{x:300,y:330},{x:420,y:500}]} as const;
 export const SWARM={arrivalY:360,grace:.45} as const;
@@ -101,7 +103,7 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     }
   }
   // Separate the middle combat reward from the late equipment pickup.
-  add(MID_GATE_AT, 'gates', 500);add(48, 'armory', 360, 3);
+  add(round===1?INTRO_MID_GATE_AT:MID_GATE_AT, 'gates', 500);add(round===1?INTRO_ARMORY_AT:48, 'armory', 360, 3);
   add(58, 'gates', 360, undefined, true);
   if (sector === 0) for (let t = 62; t < 68; t += 1.2) {
     for (const x of [200, 360, 520]) add(t + Math.abs(360 - x) / 800, 'drone', x);

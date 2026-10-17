@@ -1,0 +1,26 @@
+[
+  {
+    "route": "ballistic",
+    "beforeGap": 20.649999999998826,
+    "afterGap": 14.749999999999162,
+    "gates": 15,
+    "pickups": 12,
+    "hp": 3
+  },
+  {
+    "route": "electric",
+    "beforeGap": 20.649999999998826,
+    "afterGap": 17.566666666680646,
+    "gates": 15,
+    "pickups": 11,
+    "hp": 3
+  },
+  {
+    "route": "optical",
+    "beforeGap": 20.649999999998826,
+    "afterGap": 17.966666666680965,
+    "gates": 15,
+    "pickups": 11,
+    "hp": 3
+  }
+]

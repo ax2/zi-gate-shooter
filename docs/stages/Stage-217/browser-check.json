@@ -1,0 +1,54 @@
+{
+  "logs": {
+    "current": [],
+    "baseline": []
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844
+  },
+  "desktop": {
+    "width": 1280,
+    "height": 800
+  },
+  "beforeCrossing": {
+    "stage": 2,
+    "bonus": 60,
+    "energy": 0,
+    "overload": 0,
+    "gatesTaken": 2,
+    "pickups": 2
+  },
+  "afterCrossing": {
+    "stage": 2,
+    "bonus": 90,
+    "energy": 0,
+    "overload": 0,
+    "gatesTaken": 3,
+    "pickups": 2
+  },
+  "oldAtSameTime": {
+    "stage": 2,
+    "bonus": 60,
+    "energy": 0,
+    "overload": 0,
+    "gatesTaken": 2,
+    "pickups": 2
+  },
+  "final": {
+    "currentHP": 3,
+    "oldHP": 3,
+    "currentWeapons": [
+      "pulse",
+      "scatter",
+      "pierce"
+    ],
+    "oldWeapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "blast"
+    ]
+  },
+  "method": "Actual Canvas, normal menu/touches/earned choices; virtual60Hz isolated saves, not human/performance"
+}

@@ -1,0 +1,83 @@
+[
+  {
+    "round": 1,
+    "plan": 0,
+    "start": 68,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 0,
+    "start": 360,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 0,
+    "start": 652,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 1,
+    "start": 68,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 1,
+    "start": 360,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 1,
+    "start": 652,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 2,
+    "start": 68,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 2,
+    "start": 360,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  },
+  {
+    "round": 1,
+    "plan": 2,
+    "start": 652,
+    "time": 72.81666666666382,
+    "hp": 3,
+    "phase": "boss-entry",
+    "method": "controlled no-kill with friendly shots removed after each step; not normal gameplay"
+  }
+]

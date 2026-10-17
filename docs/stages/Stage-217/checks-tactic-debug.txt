@@ -1,0 +1,23 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/intro-lockshot-progression.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/intro-lockshot-progression.test.mjs (1 test | 1 failed) 3471ms
+   × both opposite tactics can be earned in round one with all four selectable openings and the legacy default 3470ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/intro-lockshot-progression.test.mjs > both opposite tactics can be earned in round one with all four selectable openings and the legacy default
+AssertionError: {"goal":"bait","opening":"blast","damage":[{"time":54.13333333333154,"x":561.333333333333,"cause":"crate","near":[{"kind":"pickup","x":222,"y":1100}],"bullets":[{"x":232.88764561618828,"y":1190.943899448222,"source":1299}]}],"time":69.99999999999731,"hp":2,"round":1,"preempt":0,"bait":0,"weapons":[{"kind":"pulse","tier":1},{"kind":"blast","tier":2},{"kind":"scatter","tier":2}],"guns":[{"round":1,"time":51.01666666666505,"damageAtAdmission":0,"hp":0,"maxHp":88,"active":false,"age":3.9333333333333242,"warning":0,"accepted":3,"passed":3}]}: expected 0 to be greater than 0
+ ❯ tests/intro-lockshot-progression.test.mjs:14:214
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  16:32:31
+   Duration  4.00s (tests 90%, transform 8%, import 2%)

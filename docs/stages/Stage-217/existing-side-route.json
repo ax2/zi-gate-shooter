@@ -1,0 +1,14 @@
+{
+  "method": "Isolated R2/P1/1337/x68 no-kill route, unchanged 450ms new-drop reaction. This is an open defect, not normal-play proof.",
+  "previous": {
+    "failedAt": 23.7166666666666,
+    "hp": 3,
+    "hash": "5722b26022511a9e34ed86bcf28a82b293149cb3cd3c1df38cfcf5b5a54fb681"
+  },
+  "current": {
+    "failedAt": 23.7166666666666,
+    "hp": 3,
+    "hash": "5722b26022511a9e34ed86bcf28a82b293149cb3cd3c1df38cfcf5b5a54fb681"
+  },
+  "identical": true
+}

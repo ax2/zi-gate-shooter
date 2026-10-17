@@ -1,0 +1,23 @@
+[
+  {
+    "route": "ballistic",
+    "gap": 14.749999999999162,
+    "gates": 15,
+    "hp": 3,
+    "R1gates": 4
+  },
+  {
+    "route": "electric",
+    "gap": 17.566666666680646,
+    "gates": 15,
+    "hp": 3,
+    "R1gates": 4
+  },
+  {
+    "route": "optical",
+    "gap": 17.966666666680965,
+    "gates": 15,
+    "hp": 3,
+    "R1gates": 4
+  }
+]

@@ -1,0 +1,29 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/reward-window.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/reward-window.test.ts (7 tests | 1 failed) 5444ms
+   × authored first loop supports actual T1 to T3 growth, gate choices and boss victory 5249ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/reward-window.test.ts > authored first loop supports actual T1 to T3 growth, gate choices and boss victory
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/reward-window.test.ts:74:1
+     72| });
+     73|
+     74| it('authored first loop supports actual T1 to T3 growth, gate choices …
+       | ^
+     75|   for (const seed of [1, 17, 77]) {
+     76|     const world = new World(seed);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  16:39:12
+   Duration  5.99s (tests 93%, transform 5%, import 1%)

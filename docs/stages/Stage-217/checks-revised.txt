@@ -1,0 +1,28 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/growth-window.test.mjs tests/intro-lockshot-progression.test.mjs tests/reward-window.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/reward-window.test.ts (7 tests | 1 failed) 383ms
+   × authored first loop supports actual T1 to T3 growth, gate choices and boss victory 141ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/reward-window.test.ts > authored first loop supports actual T1 to T3 growth, gate choices and boss victory
+AssertionError: seed 1: expected 'dead' not to be 'dead' // Object.is equality
+ ❯ tests/reward-window.test.ts:88:45
+     86|       }
+     87|     }
+     88|     expect(world.phase, `seed ${seed}`).not.toBe('dead');
+       |                                             ^
+     89|     expect(milestones.T2, `seed ${seed} T2`).toBeLessThan(15);
+     90|     expect(milestones.T3, `seed ${seed} T3`).toBeLessThan(54);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 11 passed (12)
+   Start at  16:33:23
+   Duration  15.34s (tests 93%, transform 5%, import 2%)
