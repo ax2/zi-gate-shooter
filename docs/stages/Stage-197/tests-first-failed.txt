@@ -1,0 +1,51 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/gate-feedback.test.ts tests/gate-reading-audit.test.mjs tests/build-receipt.test.ts tests/equipment-receipt.test.ts tests/queued-receipt.test.ts tests/pickup-receipt.test.ts tests/equipment-receipt-runtime.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/gate-feedback.test.ts (2 tests | 1 failed) 11ms
+   × coalesces skipped tiers, expires by simulation time and releases removed gate IDs 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/gate-feedback.test.ts > coalesces skipped tiers, expires by simulation time and releases removed gate IDs
+AssertionError: expected [ { x: 360, y: 844, …(5) }, …(1) ] to deeply equal [ { x: 360, y: 844, …(5) }, …(1) ]
+
+- Expected
++ Received
+
+@@ -4,11 +4,11 @@
+      "elapsed": 0,
+      "lines": [
+        "火力 +5%",
+        "充能 +25",
+      ],
+-     "visible": false,
++     "visible": true,
+      "width": 240,
+      "x": 360,
+      "y": 844,
+    },
+    {
+
+ ❯ tests/gate-feedback.test.ts:23:80
+     21|   for (let i = 0; i < 8; i++) f.claim(360, 1024, '火力 +5% · 充能 +25');
+     22|   expect(f.receipts).toHaveLength(2); expect(f.receipts[0].lines).toEq…
+     23|   const before = structuredClone(f.receipts); f.advance(0); expect(f.r…
+       |                                                                                ^
+     24|   f.advance(0.8); expect(f.receipts).toHaveLength(0); f.claim(360, 102…
+     25| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 22 passed (23)
+   Start at  09:45:15
+   Duration  6.95s (tests 62%, transform 31%, import 7%)
+
+  Transform  transforming modules took 3.24s · 31% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

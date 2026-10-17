@@ -61,7 +61,7 @@ import { PlayerMotion } from './player-motion';
 import { WeaponMotion } from './weapon-motion';
 import type { PlayerPose } from './player-motion';
 import { CrateDebris, crateFrame } from './crate-debris';
-import { GateFeedback } from './gate-feedback';
+import { GateFeedback,GATE_RECEIPT,gateReceiptBounds,gateReceiptReadable } from './gate-feedback';
 import { contextGuide, weaponGuide } from './context-guide';
 import { dossierWeapons, weaponDossier } from './weapon-dossier';
 import { supportLight,opticalImpactLight,opticalEmitterLight,opticalChargeLight } from './support-light';
@@ -791,7 +791,8 @@ export class CanvasRuntime {
     for(const beam of this.supportBeams)beam.life-=dt;
     this.supportBeams=this.supportBeams.filter(beam=>beam.life>0);
     this.gateFeedback.sync(w.bodies, w.time);
-    this.gateFeedback.advance(dt);
+    const noticeBlocking=this.notice&&this.platform.now()<this.noticeUntil?{top:this.noticeY-31,bottom:this.noticeY+(this.noticeDetail?73:31)}:undefined;
+    this.gateFeedback.advance(this.mode==='playing'?dt:0,r=>this.mode==='playing'&&gateReceiptReadable(r,w.bodies,w.bullets,noticeBlocking));
     this.drawGuide();
     this.drawDestruction(dt);
     this.enemyWreck.trim(Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length));
@@ -968,14 +969,11 @@ export class CanvasRuntime {
     this.impacts = this.impacts.filter(hit => hit.life > 0);
 
     for (const receipt of this.gateFeedback.receipts) {
-      const y = receipt.y - receipt.age * 18, height = receipt.lines.length > 1 ? 116 : 84;
-      // Omit this optional feedback while it overlaps a live entity or its label.
-      // Enemy bodies and other reward panels must remain identifiable too.
-      if (w.bodies.some(b => Math.abs(receipt.x - b.x) < (receipt.width + b.width * 1.4 + 40) / 2
-        && Math.abs(y - b.y - (b.kind === 'boss' ? BOSS_VISUAL.offsetY : 0)) < (height + b.height * 1.55 + 140) / 2)) continue;
-      c.save(); c.globalAlpha = Math.min(1, (0.8 - receipt.age) / 0.25);
+      if(!receipt.visible)continue;
+      const {y,height}=gateReceiptBounds(receipt);
+      c.save(); c.globalAlpha = Math.min(1, (GATE_RECEIPT.reading - receipt.age) / GATE_RECEIPT.fade);
       this.rect(receipt.x - receipt.width / 2 + 8, y - height / 2, receipt.width - 16, height, '#102d3bf0');
-      this.text('已领取', receipt.x, y - height / 2 + 20, 28, '#b1e8f7');
+      this.text('穿门已领取', receipt.x, y - height / 2 + 20, 28, '#b1e8f7');
       receipt.lines.forEach((line, i) => this.text(line, receipt.x, y - height / 2 + 52 + i * 32, 30, '#effaff', 'center', true));
       c.restore();
     }
@@ -1657,7 +1655,7 @@ export class CanvasRuntime {
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
       enemyFragments: this.enemyWreck.pieces.length,
-      gateReceipts: this.gateFeedback.receipts.length,
+      gateReceipts: this.gateFeedback.receipts.length,gateReceiptDetails:this.gateFeedback.receipts.map(r=>({...r,lines:[...r.lines]})),
       callbackWork:{...this.callbackWork.snapshot(),maxMs:this.maxCallbackWorkMs},interruptedFrames:this.interruptedFrames.map(frame=>({...frame})),
       ...this.frameTimes.snapshot() };
   }
