@@ -1,0 +1,2042 @@
+[
+  {
+    "first": "ballistic",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "choices": [
+      {
+        "time": 13.283333333333573,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 1,
+          "electric": 0,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter"
+        ]
+      },
+      {
+        "time": 21.26666666666674,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "time": 78.14999999999685,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 2,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 80.36666666666339,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 114.44999999999479,
+        "route": "ballistic",
+        "branch": "fracture-line",
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 1,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 127.89999999999402,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 159.2166666666855,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 3,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 161.43333333335394,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 4,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 188.18333333337523,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 5,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 207.20000000005703,
+        "route": "ballistic",
+        "branch": "storm-relay",
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 6,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 226.20000000007215,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 7,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 243.1000000000856,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 8,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 269.85000000008324,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 9,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 276.8666666667435,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 10,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 307.86666666671533,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 11,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 323.46666666670114,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 12,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 325.6833333333658,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 13,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 352.43333333334147,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 14,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 371.44999999999084,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 15,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 403.866666666628,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 16,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 406.08333333329267,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 17,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 432.83333333326834,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 18,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 451.8499999999177,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 19,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 470.84999999990043,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 20,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 486.1499999998865,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 21,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 500.61666666654,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 22,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 519.9166666665225,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 23,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 547.199999999831,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 24,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 565.3499999998145,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 25,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 567.5666666664791,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 26,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 594.3166666664548,
+        "route": "ballistic",
+        "branch": null,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 27,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc",
+          "blast"
+        ]
+      }
+    ],
+    "totals": {
+      "pierces": 97,
+      "ricochets": 0,
+      "splashHits": 11
+    }
+  },
+  {
+    "first": "electric",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "choices": [
+      {
+        "time": 13.283333333333573,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc"
+        ]
+      },
+      {
+        "time": 21.26666666666674,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter"
+        ]
+      },
+      {
+        "time": 79.93333333333008,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast"
+        ]
+      },
+      {
+        "time": 94.69999999999591,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 1,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast"
+        ]
+      },
+      {
+        "time": 114.01666666666148,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast"
+        ]
+      },
+      {
+        "time": 127.48333333332738,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast"
+        ]
+      },
+      {
+        "time": 159.36666666668563,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 4,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 161.58333333335406,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 5,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 188.33333333337535,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 6,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 207.35000000005715,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 7,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 226.35000000007227,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 8,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 246.13333333342135,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 9,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 272.8833333334138,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 10,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 279.9000000000741,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 11,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 310.9000000000459,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 12,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 327.6500000000307,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 13,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 329.8666666666953,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 14,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 356.616666666671,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 15,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 375.63333333332037,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 16,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 394.6333333333031,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 17,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 411.51666666662106,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 18,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 425.9833333332746,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 19,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 445.283333333257,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 20,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 476.2833333332288,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 21,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 493.04999999988024,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 22,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 495.2666666665449,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 23,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 522.0166666665206,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 24,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 541.0333333331699,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 25,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 560.0333333331527,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 26,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 579.4166666664684,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 27,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      },
+      {
+        "time": 593.8833333331219,
+        "route": "electric",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 28,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "arc",
+          "scatter",
+          "blast",
+          "pierce"
+        ]
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 0,
+      "splashHits": 14
+    }
+  },
+  {
+    "first": "optical",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "choices": [
+      {
+        "time": 13.283333333333573,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 1
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "pierce"
+        ]
+      },
+      {
+        "time": 21.26666666666674,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 2
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter"
+        ]
+      },
+      {
+        "time": 78.53333333333016,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc"
+        ]
+      },
+      {
+        "time": 80.7499999999967,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 1
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc"
+        ]
+      },
+      {
+        "time": 114.8333333333281,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 2
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 128.48333333332772,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 160.26666666668635,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 4
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 162.48333333335478,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 5
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 189.23333333337607,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 6
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 208.25000000005787,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 7
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 227.250000000073,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 8
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 247.30000000008894,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 9
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 274.0500000000794,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 10
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 281.0666666667397,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 11
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 312.0666666667115,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 12
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 331.4833333333605,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 13
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 333.70000000002517,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 14
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 360.45000000000084,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 15
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 379.4666666666502,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 16
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 413.06666666661965,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 17
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 415.84999999995046,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 18
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 442.5999999999261,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 19
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 449.6166666665864,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 20
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 480.6166666665582,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 21
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 499.0499999998748,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 22
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 501.26666666653944,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 23
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 535.0333333331754,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 24
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 547.0333333331645,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 25
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 581.966666666466,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 26
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      },
+      {
+        "time": 588.2499999997937,
+        "route": "optical",
+        "branch": null,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 27
+        },
+        "weapons": [
+          "pulse",
+          "pierce",
+          "scatter",
+          "arc",
+          "blast"
+        ]
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 0,
+      "splashHits": 14
+    }
+  }
+]

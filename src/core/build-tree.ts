@@ -9,6 +9,12 @@ export const ballisticBranches={
  fragment:{name:'爆破弹芯',detail:'弹道伤害系数130% · 140范围50%溅射',role:'速射微爆 / 穿甲扩散 · 原爆炸保留'},
  ricochet:{name:'跳弹弹芯',detail:'弹道伤害系数130% · 280范围55%跳弹',role:'借前排命中，将各武器火力送往侧翼'},
 } as const;
+export type AmmoFusion=`fuse-${BallisticBranch}`;
+export const AMMO_FUSION={refinements:10} as const;
+export const isAmmoFusion=(value:unknown):value is AmmoFusion=>value==='fuse-penetrator'||value==='fuse-fragment'||value==='fuse-ricochet';
+export const fusionBranch=(value:AmmoFusion):BallisticBranch=>value.slice(5) as BallisticBranch;
+export const hasAmmo=(build:{ballisticBranch?:BallisticBranch;ammoFusion?:BallisticBranch},kind:BallisticBranch)=>build.ballisticBranch===kind||build.ammoFusion===kind;
+export const ammoName=(build:{ballisticBranch?:BallisticBranch;ammoFusion?:BallisticBranch})=>[build.ballisticBranch,build.ammoFusion].filter((v):v is BallisticBranch=>!!v).map(v=>({penetrator:'贯穿',fragment:'爆破',ricochet:'跳弹'})[v]).join('＋');
 export const BALLISTIC_FORK={targets:2,radius:140,splash:.5} as const;
 export const RICOCHET={range:280,minSide:80,damage:.55} as const;
 export type ElectricBranch='spread'|'capacitor'|'seeker';
@@ -18,7 +24,7 @@ export const magneticAugments={
  'field-link':{name:'分流电桥',detail:'原三拍保留 · 每拍追加一次场外跳击',role:`${MAGNETIC.radius}外至${MAGNETIC_REFINEMENT.linkRange}内，优先当前蓄能射手`},
 } as const;
 export const isMagneticAugment=(value:unknown):value is MagneticAugment=>value==='field-wide'||value==='field-link';
-export type BuildBranch=StormAugment|IonAugment|OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment|PhotonAugment|FractureAugment;
+export type BuildBranch=AmmoFusion|StormAugment|IonAugment|OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment|PhotonAugment|FractureAugment;
 export const SEEKER_BRIDGE={range:340} as const;
 export const electricBranches={
  seeker:{name:'猎隼电桥',detail:'首跳范围340 · 优先蓄能射手',role:'借前排目标，跳击后排火力点'},
@@ -52,6 +58,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
 };
 export class BuildTree {
+  ammoFusion?:BallisticBranch;
   stormAugment?:StormAugment;
   ionAugment?:IonAugment;
   fractureAugment?:FractureAugment;
@@ -81,7 +88,10 @@ export class BuildTree {
   }
   choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(isStormAugment(branch)){
+    if(isAmmoFusion(branch)){
+      const kind=fusionBranch(branch);if(route!=='ballistic'||this.ranks.ballistic<3||this.refinements.ballistic<AMMO_FUSION.refinements||!this.ballisticBranch||this.ammoFusion||kind===this.ballisticBranch)return false;
+      this.ammoFusion=kind;
+    }else if(isStormAugment(branch)){
       if(route!=='ballistic'||this.ranks.ballistic<3||this.ranks.electric<1||this.refinements.ballistic<STORM_REFINEMENT.refinements||this.stormAugment)return false;
       this.stormAugment=branch;
     }else if(isIonAugment(branch)){

@@ -1,0 +1,18 @@
+{
+  "rows": [
+    {
+      "port": 5178,
+      "root": 200,
+      "bundle": "./assets/canvas-preview-t1gA-F-E.js",
+      "script": 200
+    },
+    {
+      "port": 5292,
+      "root": 200,
+      "bundle": "./assets/canvas-preview-t1gA-F-E.js",
+      "script": 200
+    }
+  ],
+  "userPageReloaded": false,
+  "backupStartedAndSmokeTested": true
+}

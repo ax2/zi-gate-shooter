@@ -1,0 +1,51 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/ammo-fusion.test.ts tests/ammo-fusion-progression.test.ts tests/universal-ammo.test.ts tests/universal-ammo-boundaries.test.ts tests/universal-ammo-runtime.test.ts tests/build-preview.test.ts tests/run-report.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/ammo-fusion.test.ts (18 tests | 5 failed) 74ms
+   × rejects premature, wrong-route, unearned, duplicate primary and missing T3 choices without partial changes 10ms
+   × penetrator + fragment produces both original and additional physical reactions without recursive secondary damage 15ms
+   × penetrator + ricochet produces both original and additional physical reactions without recursive secondary damage 6ms
+   × fragment + penetrator produces both original and additional physical reactions without recursive secondary damage 5ms
+   × ricochet + penetrator produces both original and additional physical reactions without recursive secondary damage 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/ammo-fusion.test.ts > rejects premature, wrong-route, unearned, duplicate primary and missing T3 choices without partial changes
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/ammo-fusion.test.ts:6:359
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/ammo-fusion.test.ts > penetrator + fragment produces both original and additional physical reactions without recursive secondary damage
+ FAIL  tests/ammo-fusion.test.ts > penetrator + ricochet produces both original and additional physical reactions without recursive secondary damage
+ FAIL  tests/ammo-fusion.test.ts > fragment + penetrator produces both original and additional physical reactions without recursive secondary damage
+ FAIL  tests/ammo-fusion.test.ts > ricochet + penetrator produces both original and additional physical reactions without recursive secondary damage
+AssertionError: expected 984 to be 990 // Object.is equality
+
+- Expected
++ Received
+
+- 990
++ 984
+
+ ❯ tests/ammo-fusion.test.ts:7:682
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  5 failed | 47 passed (52)
+   Start at  12:52:28
+   Duration  17.53s (tests 81%, transform 14%, import 5%)

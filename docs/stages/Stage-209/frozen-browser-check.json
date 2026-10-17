@@ -1,0 +1,6 @@
+{
+  "logs": [],
+  "flow": "menu -> native start -> real playing -> native pause",
+  "virtualClock": false,
+  "worldInjection": false
+}

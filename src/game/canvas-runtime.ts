@@ -11,6 +11,7 @@ import {admitWeaponImpact,trimImpactBudget,type ImpactMarker} from './impact-adm
 import {captureEquipment,equipmentChanges,equipmentReceipt,EquipmentReceiptQueue,type EquipmentChange} from './equipment-receipt';
 import {ionEvolutionLight} from './ion-evolution-light';
 import {stormMarks} from './storm-marks';
+import {ammoRack}from'./ammo-rack';
 import {isStormAugment,stormAugments} from '../core/storm-refinement';
 import {isIonAugment,ionAugments} from '../core/ion-storm';
 import {fireControlHolding,fireControlSource} from '../core/fire-control';
@@ -59,7 +60,7 @@ import { fractureLight, fractureMarks, fractureWaveLight } from './fracture-ligh
 import { mountedRig } from './mounted-rig';
 import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
 import { achievements, achievementGroups, achievementGroup, achievementProgress, trackAchievement, type AchievementGroup, awardAchievements, parseAchievements } from '../core/achievements';
-import { tree, routes, magneticAugments, isMagneticAugment, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
+import { isAmmoFusion,fusionBranch,ammoName,tree, routes, magneticAugments, isMagneticAugment, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, detonationSpriteAlpha, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -398,7 +399,7 @@ export class CanvasRuntime {
   }
   private selectBuild(route:Route,branch?:BuildBranch){
     const preview=buildPreview(this.world,route,branch);
-    const chosenNode=isStormAugment(branch)?stormAugments[branch]:isIonAugment(branch)?ionAugments[branch]:isFractureAugment(branch)?fractureAugments[branch]:isPhotonAugment(branch)?photonAugments[branch]:isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
+    const chosenNode=isAmmoFusion(branch)?{name:'复合弹芯 · '+ballisticBranches[fusionBranch(branch)].name}:isStormAugment(branch)?stormAugments[branch]:isIonAugment(branch)?ionAugments[branch]:isFractureAugment(branch)?fractureAugments[branch]:isPhotonAugment(branch)?photonAugments[branch]:isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
     this.upgradeUntil=this.world.time+.45;
@@ -417,13 +418,15 @@ export class CanvasRuntime {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
       if(!routes.includes(route))return;
-      if((this.world.build.ranks[route]===1||route==='ballistic'&&(this.world.canRefineFracture()||this.world.canRefineStorm())||route==='electric'&&(this.world.canRefineMagnetic()||this.world.canRefineIon())||route==='optical'&&this.world.canRefinePhoton())&&this.world.build.available(this.world.buildPoints).includes(route)){this.branchRoute=route;this.mode='branch';}
+      if((this.world.build.ranks[route]===1||route==='ballistic'&&(this.world.canRefineFracture()||this.world.canRefineStorm()||this.world.canFuseAmmo())||route==='electric'&&(this.world.canRefineMagnetic()||this.world.canRefineIon())||route==='optical'&&this.world.canRefinePhoton())&&this.world.build.available(this.world.buildPoints).includes(route)){this.branchRoute=route;this.mode='branch';}
       else this.selectBuild(route);
     }
+    else if(action==='fusion-defer'&&this.mode==='branch'&&this.branchRoute==='ballistic'&&this.world.canFuseAmmo())this.selectBuild('ballistic');
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
       const branch=action.slice(7) as BuildBranch,route=this.branchRoute;
       if(isIonAugment(branch)&&route==='electric'&&this.world.canRefineIon())this.selectBuild(route,branch);
+      else if(isAmmoFusion(branch)&&route==='ballistic'&&this.world.canFuseAmmo())this.selectBuild(route,branch);
       else if(isStormAugment(branch)&&route==='ballistic'&&this.world.canRefineStorm())this.selectBuild(route,branch);
       else if(isFractureAugment(branch)&&route==='ballistic'&&this.world.canRefineFracture())this.selectBuild(route,branch);
       else if(isPhotonAugment(branch)&&route==='optical'&&this.world.canRefinePhoton())this.selectBuild(route,branch);
@@ -960,6 +963,7 @@ export class CanvasRuntime {
         this.drawMountedRig(playerY,pose);
         this.playerSprite(w.weaponStage(w.weaponKind) - 1, w.player.x, playerY, pose, recoil);
         this.drawCalibrationRig(playerY,pose,recoil);
+        if(w.build.ammoFusion&&w.build.ballisticBranch)ammoRack(c,w.player.x+51,playerY+23+pose.bob,w.build.ballisticBranch,w.build.ammoFusion,Math.max(...[...this.mountedMotion].map(([k,m])=>m.flash(k,w.weaponStage(k),w.time))));
         this.drawOpticalRig(playerY,pose);
         const remaining = w.player.invulnerable - (C.invulnerability - 0.12);
         if (remaining > 0) {
@@ -1336,16 +1340,16 @@ export class CanvasRuntime {
       const profile = w.profileFor(kind), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
-      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
-      this.text(kind==='arc'?`${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%`:ballisticMechanics(w,kind),628,y+28,kind==='arc'?23:20,'#a9c9d9','right');
+      this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 22, 25, weaponColors[kind], 'left', true);
+      this.text(kind==='arc'?`${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%`:ballisticMechanics(w,kind),92,y+49,20,'#a9c9d9','left');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
-      this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
+      this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 77, 22, '#d6e7f0', 'left');
     }
     const support=w.supportProfile();
     this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 23, '#c7deeb');
-    this.text(w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
+    this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
     for(const [i,label] of ['技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
   }
@@ -1506,11 +1510,12 @@ export class CanvasRuntime {
         this.text(node.detail,110,y+29,21,'#bdd8e7','left');
       }
     }
-    this.text(this.world.build.stormAugment?'雷暴精研 · '+stormAugments[this.world.build.stormAugment].name+'已生效':'雷暴精研：弹道3 + 精调5 + T3霰射',360,1025,22,'#bdd8e7');
+    this.text(this.world.build.ammoFusion?'复合弹芯 · '+ammoName(this.world.build):this.world.canFuseAmmo()?'复合弹芯可选 · 保留原弹芯，追加一种':this.world.build.refinements.ballistic>=5?'复合弹芯：弹道3＋精调10＋任一T3弹道':this.world.build.stormAugment?'雷暴精研 · '+stormAugments[this.world.build.stormAugment].name+'已生效':'雷暴精研：弹道3 + 精调5 + T3霰射',360,1025,22,'#bdd8e7');
     this.text(this.world.build.ionAugment?'离子精研已生效 · 原放电与常规精调保留':'离子精研：雷电3 + 精调2 + T3电弧',360,1055,23,'#bdd8e7');
     this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
   private drawBuildBranch(){
+    if(this.branchRoute==='ballistic'&&this.world.canFuseAmmo()){this.drawAmmoFusion();return;}
     if(this.branchRoute==='ballistic'&&this.world.canRefineStorm()){this.drawStormBranch();return;}
     if(this.branchRoute==='ballistic'&&this.world.canRefineFracture()){this.drawFractureBranch();return;}
     if(this.branchRoute==='optical'&&this.world.canRefinePhoton()){this.drawPhotonBranch();return;}
@@ -1530,6 +1535,21 @@ export class CanvasRuntime {
     }
     this.text('本局选定不可切换 · 三阶棱镜与旧武器保留',360,965,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
+  }
+  private drawAmmoFusion(){
+    const w=this.world;this.rect(35,120,650,1080,'#102330');
+    this.text('复合弹芯 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('已装 '+ammoName(w.build)+' · 保留原能力，再追加一种',360,250,25,'#bdd8e7');
+    const choices=(['penetrator','fragment','ricochet'] as const).filter(b=>b!==w.build.ballisticBranch);
+    for(const [i,kind]of choices.entries()){
+      const branch=`fuse-${kind}` as const,node=ballisticBranches[kind],preview=buildPreview(w,'ballistic',branch),y=315+i*290,color=kind==='ricochet'?'#ffe3a4':kind==='fragment'?'#ffd092':'#aee6ff';
+      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
+      this.text('追加 '+node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,23,'#effaff','left');
+      this.text(kind==='penetrator'?'至少贯穿2敌 · 原较高上限保留':kind==='fragment'?'范围至少140 · 50%邻伤 · 原爆炸取大':'直击后侧跳280 · 55%伤害 · 不递归',90,y+130,22,'#bdd8e7','left');
+      this.text(preview.gain.replace(' · 追加'+node.name,''),90,y+173,22,'#d4e7ad','left');
+      this.text('选择复合　›',625,y+219,25,color,'right');this.buttons.push({x:65,y,w:590,h:250,label:'追加'+node.name,action:'branch:'+branch});
+    }
+    this.text('消耗1点 · 含本次常规精调 · 本局仅复合一次',360,945,23,'#f0d19a');this.button('仅做常规精调，稍后复合',1015,'fusion-defer');this.button('返回升级选择',1130,'branch-back');
   }
   private drawBallisticBranch(){
     this.rect(35,120,650,1080,'#102330');
@@ -1645,7 +1665,7 @@ export class CanvasRuntime {
     this.text('直伤含常驻火力 · 不计超载、命中率与派生',360,305,20,'#bdd8e7');
     const available=this.world.build.available(this.world.buildPoints);
     for(const [i,route] of routes.entries()){
-      const rank=this.world.build.ranks[route],y=330+i*235,node=route==='ballistic'&&this.world.canRefineStorm()?{name:'雷暴精研 · 二选一'}:route==='ballistic'&&this.world.canRefineFracture()?{name:'裂甲精研 · 二选一'}:route==='optical'&&this.world.canRefinePhoton()?{name:'光链精研 · 二选一'}:route==='electric'&&this.world.canRefineMagnetic()?{name:'磁暴精研 · 二选一'}:route==='electric'&&this.world.canRefineIon()?{name:'离子精研 · 二选一'}:this.world.build.next(route);
+      const rank=this.world.build.ranks[route],y=330+i*235,node=route==='ballistic'&&this.world.canFuseAmmo()?{name:'复合弹芯 · 二选一'}:route==='ballistic'&&this.world.canRefineStorm()?{name:'雷暴精研 · 二选一'}:route==='ballistic'&&this.world.canRefineFracture()?{name:'裂甲精研 · 二选一'}:route==='optical'&&this.world.canRefinePhoton()?{name:'光链精研 · 二选一'}:route==='electric'&&this.world.canRefineMagnetic()?{name:'磁暴精研 · 二选一'}:route==='electric'&&this.world.canRefineIon()?{name:'离子精研 · 二选一'}:this.world.build.next(route);
       const enabled=available.includes(route);
       const preview=buildPreview(this.world,route),color=['#ffd28a','#c6a1ff','#7fe4ff'][i],goalHint=recipeRouteHint(this.world,this.save.recipeGoal,route);
       this.rect(65,y,590,205,enabled?'#203e50':'#15232e');

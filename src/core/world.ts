@@ -20,7 +20,7 @@ import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type Io
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
-import { BuildTree, isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BallisticBranch,type BuildBranch, type Route } from './build-tree';
+import { BuildTree, hasAmmo,isAmmoFusion,AMMO_FUSION,ammoName,isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BallisticBranch,type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
@@ -55,7 +55,7 @@ export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
-  readonly ammoBranch?:BallisticBranch|null;bankRemaining?:number;sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
+  readonly ammoFusion?:BallisticBranch|null;readonly ammoBranch?:BallisticBranch|null;bankRemaining?:number;sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
 export interface EffectEvent { fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
@@ -81,12 +81,14 @@ export class World {
     return this.researchPoints-before;
   }
   chooseBuild(route: Route,branch?:BuildBranch) {
+    if(isAmmoFusion(branch)&&!this.canFuseAmmo())return false;
     if(isStormAugment(branch)&&!this.canRefineStorm())return false;
     if(isIonAugment(branch)&&!this.canRefineIon())return false;
     if(isFractureAugment(branch)&&!this.canRefineFracture())return false;
     if(isPhotonAugment(branch)&&!this.canRefinePhoton())return false;
     if(isMagneticAugment(branch)&&!this.canRefineMagnetic())return false;
     if(!this.build.choose(route,this.buildPoints,branch))return false;
+    if(isAmmoFusion(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'复合弹芯 · '+ammoName(this.build),detail:'两种弹芯共同生效 · 旧火力与本次常规精调保留'});
     if(isStormAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'雷暴精研 · '+stormAugments[branch].name,detail:stormAugments[branch].detail+' · 常规增伤保留'});
     if(isFractureAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'裂甲精研 · '+fractureAugments[branch].name,detail:fractureAugments[branch].detail+' · 常规精调保留'});
     if(isPhotonAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'光链精研 · '+photonAugments[branch].name,detail:photonAugments[branch].detail+' · 常规精调保留'});
@@ -430,6 +432,7 @@ export class World {
     this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
   }
   stormLinks=0;stormRelayLinks=0;stormFocusBursts=0;stormFocusDamage=0;prismHits=0;proofWins=0;
+  canFuseAmmo(){return this.build.ranks.ballistic>=3&&this.build.refinements.ballistic>=AMMO_FUSION.refinements&&!!this.build.ballisticBranch&&!this.build.ammoFusion&&this.activeWeapons.some(k=>isBallisticWeapon(k)&&this.weaponStage(k)>=3)&&!this.canRefineFracture()&&!this.canRefineStorm();}
   canRefineStorm(){return this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1&&this.build.refinements.ballistic>=STORM_REFINEMENT.refinements
     &&this.weaponStage('scatter')>=3&&this.activeWeapons.includes('scatter')&&!this.build.stormAugment&&!this.canRefineFracture();}
   private stormProofHits?:Partial<Record<StormAugment,number>>;
@@ -448,7 +451,7 @@ export class World {
     if(body.hp<before){this.stormFocusBursts++;this.recordStormProof('storm-focus',body);this.stormFocusDamage+=before-body.hp;this.effects.push({type:'capacitor',x:body.x,y:body.y,size:70,weaponKind:'scatter'});}
   }
   aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
-  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>isStormAugment(kind)?this.build.stormAugment===kind&&this.activeWeapons.includes('scatter')&&this.weaponStage('scatter')>=3:kind==='magnetic'?this.magneticUnlocked()&&!!this.build.magneticAugment:kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
+  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>isStormAugment(kind)?this.build.stormAugment===kind&&this.activeWeapons.includes('scatter')&&this.weaponStage('scatter')>=3:kind==='magnetic'?this.magneticUnlocked()&&!!this.build.magneticAugment:kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?hasAmmo(this.build,'ricochet')&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
   proofCount(kind:BuildProof){return isStormAugment(kind)?this.stormProofHits?.[kind]??0:kind==='magnetic'?this.magneticProofHits:kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.ballisticTotals().ricochets:this.laserArcHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
@@ -730,7 +733,7 @@ export class World {
         const velocity=kind==='arc'?this.arcVelocity(x,y):{vx:w.vx[i],vy:-C.bulletSpeed};
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, ...velocity,
           damage: w.damage[i] * (1 + permanentPower(this.growth) / 100) * (this.growth.overload > 0 ? 1.35 : 1),
-          age: 0, active: true, hostile: false, weaponKind: kind,ammoBranch:isBallisticWeapon(kind)?this.build.ballisticBranch??null:undefined, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops,
+          age: 0, active: true, hostile: false, weaponKind: kind,ammoBranch:isBallisticWeapon(kind)?this.build.ballisticBranch??null:undefined,...(this.build.ammoFusion&&isBallisticWeapon(kind)?{ammoFusion:this.build.ammoFusion}:{}), remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops,
           ...(calibrationBand?{calibrationBand}:{}) });
         this.shots++;
       }
@@ -874,8 +877,9 @@ export class World {
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body) || (body.dropGrace??0)>0) bullet.active = false;
           const ammo=bullet.ammoBranch===undefined?this.build.ballisticBranch:bullet.ammoBranch;
+          const fusion=bullet.ammoBranch===undefined?this.build.ammoFusion:bullet.ammoFusion;
           const protectedEntry=(body.dropGrace??0)>0;
-          if(!protectedEntry&&isBallisticWeapon(bullet.weaponKind)&&ammo==='penetrator'&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
+          if(!protectedEntry&&isBallisticWeapon(bullet.weaponKind)&&(ammo==='penetrator'||fusion==='penetrator')&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
             if(bullet.weaponKind==='scatter')this.scatterPierces++;else this.attachmentHit(bullet.weaponKind,'pierces');this.effects.push({type:'scatter-pierce',x:body.x,y:body.y,weaponKind:bullet.weaponKind});
           }
           const ionEligible=bullet.weaponKind==='arc'&&body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
@@ -884,7 +888,7 @@ export class World {
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(protectedEntry)return;
           if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='blast')this.leaveMagnetic(body,bullet.damage);
-          if(linkEligible&&body.hp<hpBefore&&isBallisticWeapon(bullet.weaponKind)&&ammo==='ricochet'){
+          if(linkEligible&&body.hp<hpBefore&&isBallisticWeapon(bullet.weaponKind)&&(ammo==='ricochet'||fusion==='ricochet')){
             const target=this.bodies.filter(other=>other!==body&&other.active&&other.kind in C.enemies
               &&!(other.dropGrace??0)&&!guardClosed(other)&&!(other.kind==='boss'&&this.phase!=='boss')
               &&other.y>=C.playerShotTop&&other.y<=C.playerY&&Math.abs(other.x-body.x)>=RICOCHET.minSide

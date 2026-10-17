@@ -1,0 +1,18 @@
+{
+  "path": "CUA isolated pages",
+  "plugin": "Browser plugin not available",
+  "logs": [
+    {
+      "name": "mobile",
+      "logs": []
+    },
+    {
+      "name": "desktop",
+      "logs": []
+    },
+    {
+      "name": "side",
+      "logs": []
+    }
+  ]
+}
