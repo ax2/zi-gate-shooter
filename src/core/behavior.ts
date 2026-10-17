@@ -113,7 +113,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     }
   } else if (b.kind === 'guard') {
     if(b.pattern==='relay-screen'&&b.age<RELAY_SCREEN.hold){if(b.y<RELAY_SCREEN.guardY)b.y=Math.min(RELAY_SCREEN.guardY,b.y+b.speed*dt);}
-    else if(b.pattern==='convoy'&&b.age<SUPPLY_CONVOY.hold){if(b.y<SUPPLY_CONVOY.y)b.y=Math.min(SUPPLY_CONVOY.y,b.y+b.speed*dt);}
+    else if(b.pattern==='convoy'&&b.age<(b.convoyHold??SUPPLY_CONVOY.hold)){if(b.y<SUPPLY_CONVOY.y)b.y=Math.min(SUPPLY_CONVOY.y,b.y+b.speed*dt);}
     else if(b.escort&&b.age<ESCORT.holdSeconds){if(b.y<ESCORT.hoverY)b.y=Math.min(ESCORT.hoverY,b.y+b.speed*dt);}
     else b.y += b.speed * dt;
     if (b.y >= 650) { b.warning = 0; b.burst = 0; }

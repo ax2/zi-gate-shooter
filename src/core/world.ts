@@ -33,7 +33,7 @@ import type { EnemyKind } from './config';
 import { sweep } from './collision';
 import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate, permanentPower } from './rewards';
 import type { Growth } from './rewards';
-import { timeline, sectorIndex, sectorNames, SWARM } from './director';
+import { timeline, sectorIndex, sectorNames, SWARM,INTRO_ESCORT } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
 import { advanceBody, guardClosed, guardDamageScale } from './behavior';
@@ -42,6 +42,8 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  introEscort?:boolean;
+  convoyHold?:number;
   aceRole?:AceRole;aceRagePending?:boolean;aceEnraged?:boolean;aceRageShots?:number;aceFiredAt?:number;
   id: number; kind: BodyKind; x: number; y: number; px: number; py: number;
   width: number; height: number; hp: number; maxHp: number; speed: number;
@@ -608,7 +610,7 @@ export class World {
   private admit(candidate: Body) {
     const arrival=candidate.pattern==='bankshot'?Math.max(0,BANKSHOT.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.pattern==='fire-control'?Math.max(0,FIRE_CONTROL.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
       :(C.playerY-candidate.y)/Math.max(1,candidate.speed);
-    const horizon = Math.max(3,arrival+1);
+    const horizon = Math.max(3,arrival+1+(candidate.convoyHold===undefined?0:Math.max(0,candidate.convoyHold-candidate.age)));
     if (safeRoute(this.player.x, this.bodies, this.bullets, horizon,{reaction:C.spawnSafetyReaction})) return true;
     candidate.active = false; this.fallbackCount++;
     this.nextSpawnRetry = this.roundTime + 0.5;
@@ -669,6 +671,8 @@ export class World {
           const candidate = this.spawn(s.kind,s.x,s.drop?(s.dropY??SWARM.arrivalY):undefined);
           if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
+          if(this.round===1&&s.at===INTRO_ESCORT.at&&(s.kind==='elite'||s.kind==='guard'))candidate.introEscort=true;
+          if(this.round===1&&s.kind==='guard'&&s.pattern==='convoy')candidate.convoyHold=INTRO_ESCORT.hold;
           if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;if(this.round===1){candidate.lockWarning=INTRO_LOCKSHOT.warning;candidate.hp*=INTRO_LOCKSHOT.durability;candidate.maxHp=candidate.hp;}if(s.forkshot)candidate.forkshot=true;}

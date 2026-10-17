@@ -6,7 +6,7 @@ it('both opposite tactics can be earned in round one with all four selectable op
    if(w.bossRewardRound!==null&&w.phase==='recovery'&&w.phaseTime>=C.bossLootReveal)w.claimBossReward('research');
    const a=w.build.available(w.buildPoints),r=w.build.ranks.optical<3||w.build.refinements.optical<2?'optical':a.find(r=>w.build.ranks[r]<3)??'optical';if(a.includes(r))w.chooseBuild(r,w.build.ranks[r]===1?r==='optical'?'relay':r==='electric'?'seeker':'ricochet':undefined);
    const b=w.bodies.find(b=>b.active&&b.pattern==='lockshot');
-   if(f%6===0)aim=b?(goal==='preempt'||(b.lockPassed??0)>=3?b.x:b.x<360?652:68):progressionTarget(w);
+   if(f%6===0){const escort=w.bodies.find(e=>e.active&&(e.kind==='elite'&&e.pattern==='fan'||e.kind==='guard'&&e.pattern==='convoy'));if(!b)aim=escort?.x??progressionTarget(w);else if(goal==='preempt'||(b.lockPassed??0)>=3)aim=b.x;else{const side=b.x<360?652:68;aim=Math.abs(side-(b.lockX??360))<80?side+(side<360?64:-64):side;}}
    w.step(C.step,aim);w.drainEffects();for(const b of w.bodies)if(b.active&&b.pattern==='lockshot'&&!guns.has(b.id))guns.set(b.id,{body:b,round:w.round,time:w.time,damageAtAdmission:b.lockDamageStart});
   }
   runs.push({goal,opening,time:w.time,hp:w.player.hp,round:w.round,preempt:w.lockPreemptWins,bait:w.lockBaitWins,weapons:w.activeWeapons.map(k=>({kind:k,tier:w.weaponStage(k)})),guns:[...guns.values()].map(({body,...g})=>({...g,hp:body.hp,maxHp:body.maxHp,active:body.active,age:body.age,warning:body.warning,accepted:body.lockAcceptedShots??0,passed:body.lockPassed??0}))});

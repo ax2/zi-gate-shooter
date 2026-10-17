@@ -1,0 +1,77 @@
+[
+  {
+    "opening": "pulse",
+    "baseline": {
+      "time": 40.999999999998956,
+      "score": 280,
+      "hp": 3,
+      "hash": "b9ac9c6425a0dfa7fa4bbe2e55b3b8bb0d94c0fe26c61fbf59dc574da79b10a9"
+    },
+    "current": {
+      "time": 40.999999999998956,
+      "score": 280,
+      "hp": 3,
+      "hash": "b9ac9c6425a0dfa7fa4bbe2e55b3b8bb0d94c0fe26c61fbf59dc574da79b10a9"
+    }
+  },
+  {
+    "opening": "scatter",
+    "baseline": {
+      "time": 40.999999999998956,
+      "score": 340,
+      "hp": 3,
+      "hash": "8b6fb5a35c3cb7114e7b033ed9e931b8daec55c5d64d94469f8ed9eab9e93d55"
+    },
+    "current": {
+      "time": 40.999999999998956,
+      "score": 340,
+      "hp": 3,
+      "hash": "8b6fb5a35c3cb7114e7b033ed9e931b8daec55c5d64d94469f8ed9eab9e93d55"
+    }
+  },
+  {
+    "opening": "pierce",
+    "baseline": {
+      "time": 40.999999999998956,
+      "score": 330,
+      "hp": 3,
+      "hash": "0049a4bcb1af7148e888f7d38d204c427c5fc806f4ec8e2aa6b63880bb1fe58c"
+    },
+    "current": {
+      "time": 40.999999999998956,
+      "score": 330,
+      "hp": 3,
+      "hash": "0049a4bcb1af7148e888f7d38d204c427c5fc806f4ec8e2aa6b63880bb1fe58c"
+    }
+  },
+  {
+    "opening": "blast",
+    "baseline": {
+      "time": 40.999999999998956,
+      "score": 270,
+      "hp": 3,
+      "hash": "67d7e1734e6449e628d2271c0d05184c383b1d53f4c42a2a2687877f7115ee61"
+    },
+    "current": {
+      "time": 40.999999999998956,
+      "score": 270,
+      "hp": 3,
+      "hash": "67d7e1734e6449e628d2271c0d05184c383b1d53f4c42a2a2687877f7115ee61"
+    }
+  },
+  {
+    "opening": "arc",
+    "baseline": {
+      "time": 40.999999999998956,
+      "score": 360,
+      "hp": 3,
+      "hash": "b6b369e4db930b35e793b3a102e6618a69e89de990217d543ce96435c71de350"
+    },
+    "current": {
+      "time": 40.999999999998956,
+      "score": 360,
+      "hp": 3,
+      "hash": "b6b369e4db930b35e793b3a102e6618a69e89de990217d543ce96435c71de350"
+    }
+  }
+]

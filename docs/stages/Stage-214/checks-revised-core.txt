@@ -1,0 +1,32 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/intro-escort-progression.test.mjs tests/intro-escort-baseline.test.mjs tests/intro-lockshot-progression.test.mjs tests/intro-lockshot-routes.test.ts tests/context-guide.test.ts tests/stacked-growth.test.ts tests/kill-rewards.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/intro-lockshot-progression.test.mjs (1 test | 1 failed) 2541ms
+   × both opposite tactics can be earned in round one with all four selectable openings and the legacy default 2540ms
+ ❯ tests/intro-escort-progression.test.mjs (1 test | 1 failed) 2374ms
+   × turns the default mid-gate window into actual shield and fan pressure with normal earned growth 2373ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/intro-escort-progression.test.mjs > turns the default mid-gate window into actual shield and fan pressure with normal earned growth
+AssertionError: expected 2 to be less than or equal to 1
+ ❯ tests/intro-escort-progression.test.mjs:5:687
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/intro-lockshot-progression.test.mjs > both opposite tactics can be earned in round one with all four selectable openings and the legacy default
+AssertionError: {"goal":"bait","opening":"pulse","time":69.99999999999731,"hp":1,"round":1,"preempt":0,"bait":0,"weapons":[{"kind":"pulse","tier":2},{"kind":"scatter","tier":2}],"guns":[{"round":1,"time":51.01666666666505,"damageAtAdmission":0,"hp":0,"maxHp":88,"active":false,"age":3.9333333333333242,"warning":0,"accepted":3,"passed":3}]}: expected 0 to be greater than 0
+ ❯ tests/intro-lockshot-progression.test.mjs:14:214
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 5 passed (7)
+      Tests  2 failed | 29 passed (31)
+   Start at  15:05:36
+   Duration  4.57s (tests 80%, transform 14%, import 6%)

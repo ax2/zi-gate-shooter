@@ -1,0 +1,125 @@
+{
+  "derivedFrom": "pressure-final.json",
+  "runs": [
+    {
+      "route": "ballistic",
+      "policy": "safe",
+      "time": 300.0000000000558,
+      "hp": 3,
+      "damage": 0,
+      "gates": 14,
+      "pickups": 12,
+      "maxGrowthGap": 20.649999999998826,
+      "sources": [
+        {
+          "kind": "elite",
+          "shots": 6
+        },
+        {
+          "kind": "guard",
+          "shots": 3
+        }
+      ]
+    },
+    {
+      "route": "ballistic",
+      "policy": "aim",
+      "time": 126.93333333332741,
+      "hp": 0,
+      "damage": 4,
+      "gates": 7,
+      "pickups": 5,
+      "maxGrowthGap": 14.749999999999162,
+      "sources": [
+        {
+          "kind": "elite",
+          "shots": 6
+        },
+        {
+          "kind": "guard",
+          "shots": 3
+        }
+      ]
+    },
+    {
+      "route": "electric",
+      "policy": "safe",
+      "time": 300.0000000000558,
+      "hp": 3,
+      "damage": 0,
+      "gates": 14,
+      "pickups": 11,
+      "maxGrowthGap": 20.649999999998826,
+      "sources": [
+        {
+          "kind": "elite",
+          "shots": 6
+        },
+        {
+          "kind": "guard",
+          "shots": 3
+        }
+      ]
+    },
+    {
+      "route": "electric",
+      "policy": "aim",
+      "time": 242.11666666675148,
+      "hp": 0,
+      "damage": 5,
+      "gates": 12,
+      "pickups": 9,
+      "maxGrowthGap": 15.299999999999137,
+      "sources": [
+        {
+          "kind": "elite",
+          "shots": 6
+        },
+        {
+          "kind": "guard",
+          "shots": 3
+        }
+      ]
+    },
+    {
+      "route": "optical",
+      "policy": "safe",
+      "time": 300.0000000000558,
+      "hp": 3,
+      "damage": 0,
+      "gates": 14,
+      "pickups": 11,
+      "maxGrowthGap": 20.649999999998826,
+      "sources": [
+        {
+          "kind": "elite",
+          "shots": 6
+        },
+        {
+          "kind": "guard",
+          "shots": 3
+        }
+      ]
+    },
+    {
+      "route": "optical",
+      "policy": "aim",
+      "time": 300.0000000000558,
+      "hp": 1,
+      "damage": 5,
+      "gates": 15,
+      "pickups": 12,
+      "maxGrowthGap": 15.416666666678935,
+      "sources": [
+        {
+          "kind": "elite",
+          "shots": 6
+        },
+        {
+          "kind": "guard",
+          "shots": 3
+        }
+      ]
+    }
+  ]
+}

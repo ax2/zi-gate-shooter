@@ -1,0 +1,56 @@
+{
+  "sameWeakWorld": true,
+  "mobile": {
+    "time": 46.11666666666533,
+    "hp": 3,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "blast"
+    ],
+    "stages": {
+      "pulse": 1,
+      "scatter": 2,
+      "pierce": 2,
+      "blast": 3
+    },
+    "shots": [
+      {
+        "kind": "elite",
+        "shots": 6
+      },
+      {
+        "kind": "guard",
+        "shots": 3
+      }
+    ]
+  },
+  "desktop": {
+    "time": 46.11666666666533,
+    "hp": 1,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "stages": {
+      "pulse": 1,
+      "scatter": 2,
+      "pierce": 2,
+      "arc": 3
+    },
+    "shots": [
+      {
+        "kind": "elite",
+        "shots": 6
+      },
+      {
+        "kind": "guard",
+        "shots": 3
+      }
+    ],
+    "gates": 3
+  }
+}

@@ -1102,14 +1102,17 @@ export class CanvasRuntime {
         if(b.pattern==='fire-control')this.text('火控·停火',b.x,b.y-b.height/2-36,21,'#b5f4ff','center',true);
         else this.text('停火',b.x,b.y-b.height/2-34,22,'#b5f4ff','center',true);
       } else if (b.kind === 'guard') {
-        this.bar(b.x, b.y - 88, b.width, b.hp / b.maxHp, !guardClosed(b) ? '#ffb45d' : '#87c7de');
-        this.text(!guardClosed(b) ? (b.shieldTurn!==undefined?'轮换前盾 · 暴露':'弱点暴露') : b.shieldTurn!==undefined?`轮换重盾 · 减伤${Math.round((1-guardDamageScale(b))*100)}%`: b.pattern==='convoy'?'补给护卫':b.pattern==='relay-screen'?'哨阵前盾':b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, !guardClosed(b) ? '#ffd99b' : '#d0eaff', 'center', true);
+        this.bar(b.introEscort?650:b.x, b.introEscort?b.y+35:b.y-88, b.introEscort?68:b.width, b.hp / b.maxHp, !guardClosed(b) ? '#ffb45d' : '#87c7de');
+        if(b.introEscort){this.gateText('前盾',650,b.y-12,21,'#c2eaf2',true);this.gateText(!guardClosed(b)?'开盾':'闭盾',650,b.y+14,19,!guardClosed(b)?'#ffd99b':'#c2eaf2',true);}
+        else
+        this.text(!guardClosed(b) ? (b.shieldTurn!==undefined?'轮换前盾 · 暴露':'弱点暴露') : b.shieldTurn!==undefined?`轮换重盾 · 减伤${Math.round((1-guardDamageScale(b))*100)}%`: b.pattern==='convoy'?(w.round===1?'护炮前盾':'补给护卫'):b.pattern==='relay-screen'?'哨阵前盾':b.escort&&w.bossFormation?.id==='bulwark'?'供能护卫':'装甲减伤', b.x, b.y - 106, 23, !guardClosed(b) ? '#ffd99b' : '#d0eaff', 'center', true);
       } else if(b.kind==='conduit'){
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#7de4ed');this.text(b.pattern==='fire-control'?`火控中继 · 增幅${w.bodies.filter(g=>fireControlSource(g,w.bodies)?.id===b.id).length}台`:b.pattern==='relay-screen'?'中继·停火开盾':'中继·击破停火',b.x,b.y+92,21,'#a5f2fb','center',true);
       } else if(b.pattern==='rebound'){
         const state=reboundState(b);this.text(state.phase==='turn'?'折返·再蓄能':state.phase==='return'?'折返·冲刺':'折返冲锋',b.x,b.y-82,20,state.phase==='turn'?'#ffb59b':'#a7edff','center',true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
-        this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
+        this.bar(b.introEscort?350:b.x,b.introEscort?b.y+35:b.y-b.height/2-14,b.introEscort?68:b.width,b.hp/b.maxHp,'#f39b69');
+        if(b.introEscort){this.gateText('后炮',350,b.y-12,21,'#ffcf93',true);this.gateText(b.warning>0?'蓄能':'扇射',350,b.y+14,19,'#ffcf93',true);}
         if(b.controlShutter)this.text(shutterClosed(b)?'闭甲 · 减伤80%':'开甲 · 集火',b.x+(b.x>360?72:-72),b.y-b.height/2-36,19,shutterClosed(b)?'#a5d6e3':'#ffcd83',b.x>360?'left':'right',true);
         else if(b.pattern==='fire-control')this.text((b.controlPatrol?'游弋·':'')+((b.empRemaining??0)>0?'火控·停火':fireControlSource(b,w.bodies)?b.warning>0?'增幅·蓄能':'增幅·扇射':'断供·单线'),b.x,b.y-b.height/2-36,21,(b.empRemaining??0)>0?'#adf0ff':'#ffd49a','center',true);
         if(b.pattern==='bankshot')this.text((b.empRemaining??0)>0?'折返炮·停火':b.warning>0?'折返炮·蓄能':'折返炮·反弹一次',b.x,b.y-b.height/2-36,21,'#ffc7a1','center',true);

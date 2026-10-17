@@ -2,6 +2,9 @@ import {C} from '../src/core/config';
 import { expect, it } from 'vitest';
 import { contextGuide,weaponGuide } from '../src/game/context-guide';
 import { World } from '../src/core/world';
+it('explains the first gate escort without directing the player to non-existent outer supplies',()=>{
+ const w=new World(),b=w.spawn('guard',500,550);b.pattern='convoy';const before=JSON.stringify(w);expect(contextGuide(w).title).toContain('门后护炮');expect(contextGuide(w).detail).toContain('打门');expect(JSON.stringify(w)).toBe(before);w.round=4;expect(contextGuide(w).title).toContain('外侧路线');
+});
 
 it('explains actual ace roles, survivor attacks and retreat without mutating the encounter',()=>{
  const w=new World(),b=w.spawn('elite',220,500);b.aceRole='fan';

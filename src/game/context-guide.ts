@@ -43,7 +43,8 @@ export function contextGuide(world: Context): Guide {
   const rotating=visible.find(b=>b.kind==='guard'&&b.shieldTurn!==undefined);if(rotating)return {kind:'enemy',title:'轮换重盾：追开盾窗口',detail:`闭盾减伤${Math.round((1-ROTATING_SHIELD.closedScale)*100)}% · 击破中继可同时开盾`};
   if (visible.some(b => b.kind === 'guard' && b.warning > 0))
     return { kind: 'enemy', title: '盾卫开盾：避开扇形弹道', detail: '弱点已暴露 · 趁开盾集中火力' };
-  if(visible.some(b=>b.pattern==='convoy'))return {kind:'enemy',title:'补给护卫：尽早决定外侧路线',detail:'可集火击毁或等弱点暴露 · 留意实际扇形弹幕'};
+  if(visible.some(b=>b.pattern==='convoy'))return world.round===1?{kind:'enemy',title:'门后护炮：先拆前盾，再压后炮',detail:'打门后换位领取 · 保留横移空间躲实弹'}:{kind:'enemy',title:'补给护卫：尽早决定外侧路线',detail:'可集火击毁或等弱点暴露 · 留意实际扇形弹幕'};
+  if(visible.some(b=>b.introEscort&&b.kind==='elite'))return {kind:'enemy',title:'后排扇炮：先避弹再转火',detail:'已发子弹不会消失 · 侧移后继续集火'};
   const equipment = visible.filter(b => b.weaponKind && (b.kind === 'pickup' || b.kind === 'crate'));
   if(equipment.some(b=>b.refit))return {kind:equipment.some(b=>b.refit&&b.kind==='pickup')?'pickup':'crate',
     title:equipment.some(b=>!b.refit&&!world.activeWeapons.includes(b.weaponKind!))?'补给取舍：扩展火力或改装核心':'配件改装：选择强化已有配件',detail:world.refitTarget?'同排只领一件 · 打碎后拾取才升级':'同排只领一件 · 暂停→当前火力可定向'};

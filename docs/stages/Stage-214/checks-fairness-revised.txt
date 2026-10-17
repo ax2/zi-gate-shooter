@@ -1,0 +1,67 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/fairness.test.ts -t 20 seeds of round 1
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/fairness.test.ts (27 tests | 4 failed | 22 skipped) 16749ms
+   × 20 seeds of round 1 batch 0 retain a no-kill escape through boss entry 4144ms
+   × 20 seeds of round 1 batch 1 retain a no-kill escape through boss entry 2375ms
+   × 20 seeds of round 1 batch 2 retain a no-kill escape through boss entry 3937ms
+   × 20 seeds of round 1 batch 3 retain a no-kill escape through boss entry 520ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 1 batch 0 retain a no-kill escape through boss entry
+AssertionError: no route seed 14 round 1 at 42.99999999999884: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 1 batch 1 retain a no-kill escape through boss entry
+AssertionError: no route seed 29 round 1 at 42.99999999999884: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 1 batch 2 retain a no-kill escape through boss entry
+AssertionError: no route seed 53 round 1 at 42.99999999999884: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/fairness.test.ts > 20 seeds of round 1 batch 3 retain a no-kill escape through boss entry
+AssertionError: no route seed 62 round 1 at 42.99999999999884: expected null not to be null
+ ❯ tests/fairness.test.ts:131:84
+    129|         // separately reserves 450ms reaction for each new object.
+    130|         const route = safeRoute(world.player.x, world.bodies, world.bu…
+    131|         expect(route, `no route seed ${seed} round ${round} at ${world…
+       |                                                                                    ^
+    132|         path = route ?? [];
+    133|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed | 22 skipped (27)
+   Start at  15:02:51
+   Duration  17.31s (tests 98%, transform 2%)

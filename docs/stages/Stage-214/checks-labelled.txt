@@ -1,0 +1,30 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/intro-escort-baseline.test.mjs tests/context-guide.test.ts tests/supply-convoy.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/supply-convoy.test.ts (3 tests | 1 failed) 24ms
+   × adds an alternating later-chapter encounter by replacing one gun and widening only its supply row 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/supply-convoy.test.ts > adds an alternating later-chapter encounter by replacing one gun and widening only its supply row
+AssertionError: expected [ { at: 43.5, kind: 'guard', …(4) } ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ tests/supply-convoy.test.ts:3:189
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 14 passed (15)
+   Start at  15:21:59
+   Duration  4.67s (tests 73%, transform 20%, import 7%)

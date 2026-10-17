@@ -1,0 +1,10 @@
+import{it,expect}from'vitest';import{createHash}from'node:crypto';import{writeFileSync}from'node:fs';import{World}from'../src/core/world';import{C}from'../src/core/config';import{timeline,INTRO_ESCORT}from'../src/core/director';import{progressionTarget}from'./helpers/progression-driver';const old=await import('../build/qa/Stage-214/baseline.mjs');
+const phrase=s=>[42,43.5].includes(s.at)&&['elite','guard'].includes(s.kind);
+it('changes exactly the original first elite metadata and one new guard in 108 schedules, preserving all rewards and later chapters',()=>{
+ for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]){
+  const a=old.timeline(round,seed,plan),b=timeline(round,seed,plan);if(round>1){expect(b).toEqual(a);continue;}
+  expect(b.filter(s=>!phrase(s))).toEqual(a.filter(s=>!phrase(s)));expect(b.filter(phrase)).toEqual([{...a.find(phrase),at:43.5,pattern:'fan',drop:true,dropY:340,dropLabel:'门后护炮',dropDetail:'前盾挡枪 · 后炮扇射 · 打门后换位领取'},{at:43.5,kind:'guard',x:500,pattern:'convoy',drop:true,dropY:550}]);expect(b.length).toBe(a.length+1);
+ }
+});
+function prefix(Runtime,opening){const w=new Runtime(1337,1,opening),hash=createHash('sha256');let aim=360;for(let f=0;f<41*60;f++){const a=w.build.available(w.buildPoints),r=a.includes('optical')?'optical':a[0];if(r)w.chooseBuild(r);if(f%6===0)aim=progressionTarget(w);w.step(C.step,aim);hash.update(JSON.stringify(w.drainEffects()));hash.update(JSON.stringify(w,(k,v)=>k==='scheduled'?v.filter(s=>!phrase(s)):v instanceof Map?[...v]:v instanceof Set?[...v]:v));}return{time:w.time,score:w.score,hp:w.player.hp,hash:hash.digest('hex')};}
+it('preserves the first 41 seconds of all five openings except the explicitly audited future formation entries',()=>{const rows=[];for(const opening of[undefined,'scatter','pierce','blast','arc']){const baseline=prefix(old.World,opening),current=prefix(World,opening);expect(current).toEqual(baseline);rows.push({opening:opening??'pulse',baseline,current});}writeFileSync('build/qa/Stage-214/prefix-comparison.json',JSON.stringify(rows,null,2));},60000);
