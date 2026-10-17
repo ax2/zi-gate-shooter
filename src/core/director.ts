@@ -1,3 +1,4 @@
+import {vanguardPatrol,introPursuit} from './vanguard-patrol';
 import{BOOSTER}from'./booster';
 import {closingAssault} from './closing-assault';
 import {openingAssaults} from './opening-assaults';
@@ -50,6 +51,7 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     add(1, 'armor', 360, undefined, undefined, 'fan');
     add(4, 'drone', 360); add(5.5, 'drone', 360);
   }
+  const initialPatrol=out.slice();
   add(8, 'crate', 240, 2);
   add(16, 'armory', 360);
   add(15.5, 'drone', 500, undefined, undefined, sector === 1 ? 'weave' : undefined);
@@ -245,5 +247,7 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
   out.push(...earlyReinforcements(round,mirror,encounter));
   out.push(...pursuitWaves(round,mirror,encounter));
   out.push(...closingAssault(round,mirror));
-  return out.sort((a, b) => a.at - b.at);
+  // Replace only the original three patrol slots after legacy transformations.
+  // Later encounters retain their original target selection and authored data.
+  return [...out.filter(s=>!initialPatrol.includes(s)),...vanguardPatrol(round,mirror),...(round===1?introPursuit():[])].sort((a,b)=>a.at-b.at);
 }

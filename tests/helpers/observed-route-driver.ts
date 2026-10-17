@@ -6,7 +6,7 @@ import type{BattlePlan}from'../../src/core/battle-plan';
 /** Isolated no-fire fixture, not normal earned progression. Each body remains
  * unknown for 27 frames after first appearance. Movement follows the existing
  * plan during perception; a new arrival never artificially stops the player. */
-export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,seed=1337,onFailure?:(w:World,known:ReadonlySet<number>)=>void,Runtime:typeof World=World){
+export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,seed=1337,onFailure?:(w:World,known:ReadonlySet<number>)=>void,Runtime:typeof World=World,extraGridPoints?:number){
  const w=new Runtime(seed,round,undefined,plan);
  (w as any).shoot=()=>{};
  w.player.x=w.player.px=start;
@@ -29,6 +29,7 @@ export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,se
    // Same hazards/reaction and actual collision oracle, finer x resolution only.
    // A null 24px grid is not proof that a continuous-space route is impossible.
    if(!route){route=safeRoute(w.player.x,bodies,w.bullets,8,{...options,gridPoints:49});if(route)fineGridPlans++;}
+   if(!route&&extraGridPoints){route=safeRoute(w.player.x,bodies,w.bullets,8,{...options,gridPoints:extraGridPoints});if(route)fineGridPlans++;}
    if(!route){failureTime=w.time;onFailure?.(w,known);break;}
    path=route;planned=f;
   }
@@ -37,5 +38,5 @@ export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,se
  }
  return{round,plan,start,seed,time:w.time,phase:w.phase,hp:w.player.hp,damage:w.damageTaken,kills:w.kills,cratesBroken:w.cratesBroken,
   failureTime,fineGridPlans,minObservationSeconds:minLag,unknownEmitterBullets:unknownBullets.size,observedBodies:known.size,maxBodies,maxBullets,
-  method:'Isolated no-fire fixture; per-body >=450ms delayed observation; continue existing movement, no immunity or kills'};
+  method:'Isolated no-fire fixture; per-body >=450ms delayed observation; continue existing movement, no immunity or kills'+(extraGridPoints?'; optional fallback gridPoints='+extraGridPoints:'')};
 }
