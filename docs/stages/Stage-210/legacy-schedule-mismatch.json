@@ -1,0 +1,9 @@
+{
+  "base": "5d15f4f",
+  "round": 1,
+  "seed": 1,
+  "plan": 0,
+  "expected189": "20014cec74885e0b688a63edb9d77a33ff4db8e420ea892532b60c95836c65ca",
+  "actualBeforeShutters": "9c2488dccb05c2239e64ad5fe7372d42a445b16d3a6a6f98b3a8f5f0c92b2265",
+  "mismatchAlreadyInBaseline": true
+}

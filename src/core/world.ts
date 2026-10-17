@@ -1,5 +1,6 @@
+import {hasControlShutter}from'./control-shutter';
 import {BANKSHOT,advanceProjectile,type FlightSegment} from './bankshot';
-import {FIRE_CONTROL} from './fire-control';
+import {FIRE_CONTROL,fireControlSource} from './fire-control';
 import {CombatLedger,type DamageSource} from './combat-ledger';
 import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
 import {LOCKSHOT} from './lockshot';
@@ -48,7 +49,7 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  bankShots?:number;bankFiredAt?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
+  bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; bossVariant?: number;
 }
 export interface Bullet {
@@ -107,6 +108,7 @@ export class World {
   conduitBursts=0;empTargets=0;conduitTacticalWins=0;
   private dischargeConduit(source:Body){
     this.conduitBursts++;let affected=0,interrupted=0;
+    for(const b of this.bodies)if(b.controlShutter)b.controlLinked=!!fireControlSource(b,this.bodies);
     for(const b of this.bodies)if(b.active&&canDisrupt(b.kind)&&!(b.dropGrace??0)&&b.y>=C.playerShotTop&&b.y<=C.playerY
       &&Math.hypot(b.x-source.x,b.y-source.y)<=CONDUIT.radius){
       if(b.warning>0)interrupted++;
@@ -625,14 +627,14 @@ export class World {
           const group=[s];while(this.scheduled[this.scheduleIndex+group.length-1]?.pattern==='fire-control'&&this.scheduled[this.scheduleIndex+group.length-1]?.at===s.at)group.push(this.scheduled[this.scheduleIndex+group.length-1]);
           if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.length>C.limits.enemies){this.scheduleIndex--;break;}
           const units=group.map(spawn=>{
-            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);b.pattern='fire-control';b.controlGroup=this.round;if(spawn.controlPatrol){b.controlPatrol=true;b.controlHomeX=spawn.x;}b.dropGrace=SWARM.grace;b.timer=FIRE_CONTROL.opening;
+            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);b.pattern='fire-control';b.controlGroup=this.round;if(spawn.kind==='armor'&&hasControlShutter(this.round))b.controlShutter=true;if(spawn.controlPatrol){b.controlPatrol=true;b.controlHomeX=spawn.x;}b.dropGrace=SWARM.grace;b.timer=FIRE_CONTROL.opening;
             b.hp*=b.kind==='armor'?FIRE_CONTROL.durability:FIRE_CONTROL.relayDurability;b.maxHp=b.hp;
             return b;
           });
           const longest=units.reduce((a,b)=>(C.playerY-a.y)/a.speed>(C.playerY-b.y)/b.speed?a:b);
           if(!this.admit(longest)){for(const b of units)b.active=false;this.scheduleIndex--;break;}
           this.scheduleIndex+=group.length-1;this.dropSpawns+=units.length;
-          this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:units.some(b=>b.controlPatrol)?'游弋火控':'火控中继编队',detail:units.some(b=>b.controlPatrol)?'后炮横移 · 越界失去增幅 · 中继可拆':'中继增幅双炮 · 击破可停火断供'});
+          this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:units.some(b=>b.controlShutter)?'联动闸甲':units.some(b=>b.controlPatrol)?'游弋火控':'火控中继编队',detail:units.some(b=>b.controlShutter)?'供能闭甲减伤80% · 发射后开甲 · 拆中继可强制开甲':units.some(b=>b.controlPatrol)?'后炮横移 · 越界失去增幅 · 中继可拆':'中继增幅双炮 · 击破可停火断供'});
           continue;
         }
         if (s.kind === 'armory') {
@@ -804,6 +806,7 @@ export class World {
     const hadBossShield=this.bossShieldActive();
     this.advanceBurn(dt);
     this.advanceMagnetic(dt);
+    for(const b of this.bodies)if(b.controlShutter)b.controlLinked=!!fireControlSource(b,this.bodies);
     this.shoot(dt);
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;

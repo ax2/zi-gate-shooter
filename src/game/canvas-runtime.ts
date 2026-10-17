@@ -11,6 +11,8 @@ import {admitWeaponImpact,trimImpactBudget,type ImpactMarker} from './impact-adm
 import {captureEquipment,equipmentChanges,equipmentReceipt,EquipmentReceiptQueue,type EquipmentChange} from './equipment-receipt';
 import {ionEvolutionLight} from './ion-evolution-light';
 import {stormMarks} from './storm-marks';
+import {controlShutter}from'./control-shutter';
+import{shutterClosed}from'../core/control-shutter';
 import {ammoRack}from'./ammo-rack';
 import {isStormAugment,stormAugments} from '../core/storm-refinement';
 import {isIonAugment,ionAugments} from '../core/ion-storm';
@@ -895,7 +897,7 @@ export class CanvasRuntime {
           if(braced&&!b.controlPatrol)batteryMount(c,b.warning,(b.empRemaining??0)>0,this.save.settings.effects==='weak');
           if(b.pattern==='fire-control')controlReceiver(c,b.age,!!fireControlSource(b,w.bodies),(b.empRemaining??0)>0,this.save.settings.effects==='weak');
           this.frameSprite('armor-v1.png', frame, 3, 0, 0, width, height, 1);
-          this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);if(b.pattern==='bankshot')bankshotMount(c,b,this.save.settings.effects==='weak');c.restore();
+          this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);if(b.pattern==='bankshot')bankshotMount(c,b,this.save.settings.effects==='weak');controlShutter(c,b);c.restore();
         } else if(b.kind==='conduit'){
           const bob=Math.sin(b.age*3)*2;
           if(b.pattern==='fire-control'){c.save();c.translate(b.x,y+bob);controlTransmitter(c,b.age,w.bodies.filter(g=>fireControlSource(g,w.bodies)?.id===b.id).length,this.save.settings.effects==='weak');c.restore();}
@@ -1104,7 +1106,8 @@ export class CanvasRuntime {
         const state=reboundState(b);this.text(state.phase==='turn'?'折返·再蓄能':state.phase==='return'?'折返·冲刺':'折返冲锋',b.x,b.y-82,20,state.phase==='turn'?'#ffb59b':'#a7edff','center',true);
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
-        if(b.pattern==='fire-control')this.text((b.controlPatrol?'游弋·':'')+((b.empRemaining??0)>0?'火控·停火':fireControlSource(b,w.bodies)?b.warning>0?'增幅·蓄能':'增幅·扇射':'断供·单线'),b.x,b.y-b.height/2-36,21,(b.empRemaining??0)>0?'#adf0ff':'#ffd49a','center',true);
+        if(b.controlShutter)this.text(shutterClosed(b)?'闭甲 · 减伤80%':'开甲 · 集火',b.x+(b.x>360?72:-72),b.y-b.height/2-36,19,shutterClosed(b)?'#a5d6e3':'#ffcd83',b.x>360?'left':'right',true);
+        else if(b.pattern==='fire-control')this.text((b.controlPatrol?'游弋·':'')+((b.empRemaining??0)>0?'火控·停火':fireControlSource(b,w.bodies)?b.warning>0?'增幅·蓄能':'增幅·扇射':'断供·单线'),b.x,b.y-b.height/2-36,21,(b.empRemaining??0)>0?'#adf0ff':'#ffd49a','center',true);
         if(b.pattern==='bankshot')this.text((b.empRemaining??0)>0?'折返炮·停火':b.warning>0?'折返炮·蓄能':'折返炮·反弹一次',b.x,b.y-b.height/2-36,21,'#ffc7a1','center',true);
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='lockshot'){
@@ -1746,7 +1749,7 @@ export class CanvasRuntime {
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
-      fireControlShots:this.world.fireControlShots,fireControlBoostedShots:this.world.fireControlBoostedShots,lastFireControlBreak:this.world.lastFireControlBreak,fireControlUnits:this.world.bodies.filter(b=>b.active&&b.pattern==='fire-control').map(b=>({id:b.id,kind:b.kind,patrol:!!b.controlPatrol,home:b.controlHomeX,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.controlGroup,source:fireControlSource(b,this.world.bodies)?.id,emp:b.empRemaining??0,shots:b.controlShots??0,boosted:b.controlBoostedShots??0})),
+      fireControlShots:this.world.fireControlShots,fireControlBoostedShots:this.world.fireControlBoostedShots,lastFireControlBreak:this.world.lastFireControlBreak,fireControlUnits:this.world.bodies.filter(b=>b.active&&b.pattern==='fire-control').map(b=>({id:b.id,kind:b.kind,shutter:!!b.controlShutter,closed:shutterClosed(b),patrol:!!b.controlPatrol,home:b.controlHomeX,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.controlGroup,source:fireControlSource(b,this.world.bodies)?.id,emp:b.empRemaining??0,shots:b.controlShots??0,boosted:b.controlBoostedShots??0})),
       relayScreen:this.world.bodies.filter(b=>b.active&&b.pattern==='relay-screen').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,closed:guardClosed(b),shieldTurn:b.shieldTurn,empRemaining:b.empRemaining??0,shots:b.formationShots??0})),conduitBursts:this.world.conduitBursts,empTargets:this.world.empTargets,conduitTacticalWins:this.world.conduitTacticalWins,offlineEnemies:this.world.bodies.filter(b=>b.active&&(b.empRemaining??0)>0).length,empWaves:this.empWaves.length,
       recipeGoal:this.save.recipeGoal?recipeStatus(this.world,this.save.recipeGoal):null,goalSupplies:this.world.bodies.filter(b=>recipeSupplyMatch(this.world,this.save.recipeGoal,b)).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,stage:b.stage,refit:!!b.refit})),mobileSentries:this.world.bodies.filter(b=>b.active&&b.pattern==='relocate').map(b=>({x:b.x,y:b.y,lane:b.lane,age:b.age,warning:b.warning,volleys:b.sentryVolleys??0,direction:sentryDirection(b)})),
       interceptorBreaks:this.world.interceptorBreaks,interceptors:this.world.bodies.filter(b=>b.active&&b.pattern==='intercept').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,beat:b.burst,wingShots:b.interceptWingShots??0,coreShots:b.interceptCoreShots??0})),

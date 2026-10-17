@@ -1,3 +1,4 @@
+import {CONTROL_SHUTTER,shutterClosed,type ShutterState}from'./control-shutter';
 import {BANKSHOT} from './bankshot';
 import {FIRE_CONTROL,fireControlHolding,fireControlSource,patrolControl} from './fire-control';
 import {LOCKSHOT,FORKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
@@ -16,9 +17,9 @@ import {CONDUIT} from './conduit';
 import {MOBILE_SENTRY,sentryDestination} from './mobile-sentry';
 import {INTERCEPTOR,interceptorMuzzles} from './interceptor';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
-export const guardClosed = (b: Pick<Body, 'kind' | 'burst' | 'empRemaining'>) => b.kind === 'guard' && b.burst === 0 && !(b.empRemaining??0);
+export const guardClosed = (b: Pick<Body, 'kind' | 'burst' | 'empRemaining'> & ShutterState) => shutterClosed(b)||(b.kind === 'guard' && b.burst === 0 && !(b.empRemaining??0));
 
-export const guardDamageScale=(b:Pick<Body,'kind'|'burst'|'empRemaining'|'shieldTurn'>)=>guardClosed(b) ? (b.shieldTurn===undefined ? .5 : ROTATING_SHIELD.closedScale) : 1;
+export const guardDamageScale=(b:Pick<Body,'kind'|'burst'|'empRemaining'|'shieldTurn'> & ShutterState)=>shutterClosed(b)?CONTROL_SHUTTER.closedScale:guardClosed(b) ? (b.shieldTurn===undefined ? .5 : ROTATING_SHIELD.closedScale) : 1;
 
 export function fanWarningVelocities(b: Body) {
   if (b.kind === 'guard') return [-70, 0, 70];
@@ -194,6 +195,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
           if (b.kind === 'elite' && b.pattern === 'fan' && !b.burst) {
             b.burst = 1; b.warning = 0.6; b.timer = 0.6;
           } else {
+            if(b.controlShutter)b.controlOpenUntil=b.age+CONTROL_SHUTTER.openSeconds;
             b.burst = 0; b.warning = 0; b.timer = b.pattern==='fire-control'?(b.controlLinked?FIRE_CONTROL.boostedRecovery:FIRE_CONTROL.recovery):b.pattern === 'fan'||b.pattern==='battery' ? 3.2 : 2.4;
           }
         }
