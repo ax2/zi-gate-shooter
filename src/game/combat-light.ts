@@ -135,25 +135,37 @@ export function muzzleLight(c: CanvasRenderingContext2D, x: number, y: number, k
   if (!weak && kind !== 'scatter') { line(c, `${color}99`, 2, [-16, -5, 16, -5]); line(c, '#fff3cc', 1, [-7, -5, 7, -5]); }
   c.restore();
 }
+/** A brief hot core gives way to the existing textured fire sheet; never a persistent white disc. */
+export function detonationSpriteAlpha(age:number,weak:boolean){
+  if(age<0||age>=1)return 0;
+  return (.24*(1-age)**2+.6*Math.max(0,1-age/.22))*(weak?.6:1);
+}
 export function detonationLight(c: CanvasRenderingContext2D, x: number, y: number, size: number, age: number, weak: boolean) {
-  const p = Math.min(1, Math.max(0, age)), fade = (1 - p) ** 1.5, radius = size * (.22 + Math.sqrt(p) * 1.1);
-  if (fade <= 0) return;
-  c.save(); c.translate(x, y); c.globalCompositeOperation = 'lighter';
-  if (p < .32) {
-    glow(c, 0, 0, size * (1 - p) * .3, size * (1 - p) * .25, '#ffad42', weak);
-    c.globalAlpha = (1 - p / .32) * (weak ? .35 : .8); c.fillStyle = '#fff3ce';
-    c.beginPath(); c.ellipse(0, 0, size * .2, size * .13, 0, 0, Math.PI * 2); c.fill();
-    line(c, '#ffd788', 2, [-size * .8, 0, size * .8, 0]);
+  if(age<0||age>=1||size<=0)return;
+  const p=age,fade=(1-p)**1.5,radius=size*(.22+Math.sqrt(p)*1.1);
+  c.save();c.beginPath();c.rect(0,C.playerShotTop,C.width,C.height-C.playerShotTop);c.clip();c.translate(x,y);c.globalCompositeOperation='lighter';
+  // Heat is restricted to the first 54 ms of a normal burst. The expanding edge carries the rest.
+  const hot=Math.max(0,1-p/.12);
+  if(hot>0){
+    c.globalAlpha=hot*(weak?.35:.65);c.strokeStyle='#ffdd9b';c.lineWidth=weak?2:3;
+    c.beginPath();c.ellipse(0,0,size*(.08+p*.35),size*(.06+p*.25),0,0,Math.PI*2);c.stroke();
+    line(c,'#fff0cf',weak?1:2,[-size*.24*hot,0,size*.24*hot,0]);
   }
-  c.globalAlpha = fade * (weak ? .4 : .8); c.strokeStyle = '#ffb84c'; c.lineWidth = 2.5;
-  c.beginPath(); c.ellipse(0, 0, radius, radius * .64, 0, 0, Math.PI * 2); c.stroke();
-  if (!weak) {
-    c.globalAlpha = fade * .6;
-    for (let i = 0; i < 5; i++) {
-      const a = i * Math.PI * 2 / 5 + .21, pts: number[] = [];
-      for (let j = 0; j < 5; j++) { const t = a + j * .13, r = radius * (.75 + (j % 2) * .18); pts.push(Math.cos(t) * r, Math.sin(t) * r); }
-      line(c, i % 2 ? '#ffcf85' : '#bcecff', 1.6, pts);
+  const segments=weak?4:7;
+  c.globalAlpha=fade*(weak?.45:.78);c.strokeStyle='#ffb45b';c.lineWidth=weak?1.5:2.5;
+  for(let i=0;i<segments;i++){
+    const a=i*Math.PI*2/segments+.18;
+    c.beginPath();c.ellipse(0,0,radius,radius*.64,0,a,a+(i%2?.46:.62));c.stroke();
+    if(!weak){
+      c.globalAlpha=fade*.55;
+      line(c,i%2?'#ffd68a':'#a3dcf2',1.3,[Math.cos(a)*radius*.86,Math.sin(a)*radius*.64*.86,Math.cos(a)*radius*1.03,Math.sin(a)*radius*.64*1.03]);
+      c.globalAlpha=fade*.78;
     }
+  }
+  // Forged, cooling fragments keep a dark face rather than adding more white light at the centre.
+  for(let i=0;i<(weak?2:5);i++){
+    const a=i*Math.PI*2/(weak?2:5)+.4,d=size*(.22+(1-(1-p)**2)*.72);
+    impactChip(c,Math.cos(a)*d,Math.sin(a)*d*.7,a+p*(i%2?2:-2),'#e3a268',Math.min(weak?3:5,size*.055),fade*(weak?.55:.8));
   }
   c.restore();
 }

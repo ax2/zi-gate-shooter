@@ -1,0 +1,74 @@
+[
+  {
+    "phase": "hot",
+    "time": 16.266666666667025,
+    "physicalEqual": true,
+    "blast": [
+      {
+        "ion": false,
+        "electric": false,
+        "fracture": false,
+        "x": 500,
+        "y": 453.1666666666658,
+        "size": 78.39999999999999,
+        "life": 0.43333333333333396,
+        "total": 0.45,
+        "age": 0.03703703703703565
+      }
+    ],
+    "battleDiffBounds": [
+      223,
+      215,
+      321,
+      281
+    ]
+  },
+  {
+    "phase": "edge",
+    "time": 16.36666666666702,
+    "physicalEqual": true,
+    "blast": [
+      {
+        "ion": false,
+        "electric": false,
+        "fracture": false,
+        "x": 500,
+        "y": 453.1666666666658,
+        "size": 78.39999999999999,
+        "life": 0.33333333333333764,
+        "total": 0.45,
+        "age": 0.25925925925924964
+      }
+    ],
+    "battleDiffBounds": [
+      223,
+      215,
+      321,
+      296
+    ]
+  },
+  {
+    "phase": "embers",
+    "time": 16.55000000000034,
+    "physicalEqual": true,
+    "blast": [
+      {
+        "ion": false,
+        "electric": false,
+        "fracture": false,
+        "x": 500,
+        "y": 453.1666666666658,
+        "size": 78.39999999999999,
+        "life": 0.14999999999999275,
+        "total": 0.45,
+        "age": 0.6666666666666827
+      }
+    ],
+    "battleDiffBounds": [
+      207,
+      208,
+      321,
+      297
+    ]
+  }
+]

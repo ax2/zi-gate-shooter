@@ -1,0 +1,15 @@
+{
+  "scripts": [
+    "http://127.0.0.1:5178/assets/canvas-preview-CPakPm_3.js"
+  ],
+  "title": "火力突围 · Gate Shooter",
+  "visibleButtons": [
+    "首箱预定 · 霰射炮 T2　›",
+    "选择构筑目标　›",
+    "开始突围　›",
+    "武器档案",
+    "成就",
+    "设置"
+  ],
+  "logs": []
+}

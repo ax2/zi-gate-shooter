@@ -49,7 +49,7 @@ import { mountedRig } from './mounted-rig';
 import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
 import { achievements, achievementGroups, achievementGroup, achievementProgress, trackAchievement, type AchievementGroup, awardAchievements, parseAchievements } from '../core/achievements';
 import { tree, routes, magneticAugments, isMagneticAugment, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
-import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, sparkLight, impactLight } from './combat-light';
+import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, detonationSpriteAlpha, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { EffectEvent } from '../core/world';
@@ -938,12 +938,18 @@ export class CanvasRuntime {
       e.life -= dt; const age = 1 - e.life / e.total;
       if(e.ion){ionStormLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');continue;}
       if(e.electric){capacitorLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');continue;}
-      c.save(); c.globalAlpha = Math.pow(Math.max(0, 1 - age), 0.65) * (this.save.settings.effects === 'weak' ? 0.5 : 0.9);
+      c.save(); c.globalAlpha = detonationSpriteAlpha(age,this.save.settings.effects==='weak');
       this.frameSprite('explosion-v1.png', Math.min(8, Math.floor(age * 9)), 3, e.x, e.y, e.size * 2, e.size * 2, 3); c.restore();
       detonationLight(c, e.x, e.y, e.size, age, this.save.settings.effects === 'weak');
       if(e.fracture)fractureLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');
     }
     this.blasts = this.blasts.filter(e => e.life > 0);
+    // Embers sit behind settled hit materials so additive sparks cannot bleach steel faces.
+    for (const s of this.particles) {
+      s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 70 * dt;
+      sparkLight(c, s.x, s.y, s.vx, s.vy, s.color, s.life / s.total, this.save.settings.effects === 'weak');
+    }
+    this.particles = this.particles.filter(s => s.life > 0);
     for(const e of this.empWaves){e.life-=dt;empWave(c,e.x,e.y,e.radius,1-e.life/.5,this.save.settings.effects==='weak');}
     this.empWaves=this.empWaves.filter(e=>e.life>0);
     for (const arc of this.arcs) { arc.life -= dt;if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon,arc.seeker); }
@@ -951,11 +957,7 @@ export class CanvasRuntime {
     trimImpactBudget(this.impacts,this.save.settings.effects==='weak');
     for (const hit of this.impacts) { hit.life -= dt;if(hit.opticalBand)opticalImpactLight(c,hit.x,hit.y,hit.life,hit.opticalBand,this.save.settings.effects==='weak',hit.prism);else impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / (hit.total??0.14), this.save.settings.effects === 'weak'); }
     this.impacts = this.impacts.filter(hit => hit.life > 0);
-    for (const s of this.particles) {
-      s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 70 * dt;
-      sparkLight(c, s.x, s.y, s.vx, s.vy, s.color, s.life / s.total, this.save.settings.effects === 'weak');
-    }
-    this.particles = this.particles.filter(s => s.life > 0);
+
     for (const receipt of this.gateFeedback.receipts) {
       const y = receipt.y - receipt.age * 18, height = receipt.lines.length > 1 ? 116 : 84;
       // Omit this optional feedback while it overlaps a live entity or its label.
