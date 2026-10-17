@@ -1,0 +1,17 @@
+{
+  "physicalEqual": true,
+  "rows": [
+    {
+      "version": "baseline",
+      "white": 413,
+      "total": 2809,
+      "time": 159.51666666668575
+    },
+    {
+      "version": "current",
+      "white": 201,
+      "total": 2809,
+      "time": 159.51666666668575
+    }
+  ]
+}
