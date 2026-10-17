@@ -1,0 +1,2 @@
+import{build}from'esbuild';const suffix=['routes','gaps','refine'].includes(process.env.COUNTER_PUSH_MODE)?process.env.COUNTER_PUSH_MODE:(process.env.COUNTER_PUSH_SECONDS??'300')+'-plan'+(process.env.COUNTER_PUSH_PLAN??'0');await build({entryPoints:['tools/audit-flank-hunters.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-246/audit-${suffix}.mjs`});await import(`../build/qa/Stage-246/audit-${suffix}.mjs`);
+

@@ -1,0 +1,4 @@
+const baseline='./baseline.mjs',World=(await import(baseline)).World;import{runDefaultPressure}from'../tests/helpers/default-pressure-driver';import{writeFileSync}from'node:fs';
+const intervals:any[]=[];let empty:any=null;
+class Observe extends World{step(dt:number,target:number){super.step(dt,target);if(this.phase!=='running'){empty=null;return;}if(this.round%3!==2||this.round<5)return;const n=this.bodies.filter(b=>b.active&&['drone','charger','armor','elite','sniper','guard','conduit'].includes(b.kind)&&b.y>=0&&b.y<=1280).length;if(!n&&!empty)empty={round:this.round,start:this.roundTime};if(n&&empty){intervals.push({...empty,end:this.roundTime,duration:this.roundTime-empty.start});empty=null;}}}
+const run=runDefaultPressure(Observe,'electric','safe',1000);writeFileSync('build/qa/Stage-246/gaps-before.json',JSON.stringify({chapters:run.chapters,intervals},null,2));console.log(JSON.stringify(intervals.sort((a,b)=>b.duration-a.duration).slice(0,20)));
