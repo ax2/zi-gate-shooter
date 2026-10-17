@@ -1,0 +1,705 @@
+{
+  "seed": 1337,
+  "opening": "scatter",
+  "seconds": 599.999999999783,
+  "hp": 3,
+  "round": 8,
+  "callbackFrames": 36005,
+  "simulationSteps": 36000,
+  "rendering": "mock Canvas; not pixel or performance evidence",
+  "physicalParity": true,
+  "impactKinds": [
+    "pulse",
+    "scatter",
+    "pierce",
+    "arc",
+    "blast"
+  ],
+  "oldImpactKinds": [
+    "pulse",
+    "scatter",
+    "pierce",
+    "arc",
+    "blast"
+  ],
+  "multiNew": 421,
+  "multiOld": 0,
+  "maxImpacts": 12,
+  "maxPending": 2,
+  "maxDisplayDelay": 12.449999999999296,
+  "receipts": [
+    {
+      "time": 19.916666666666817,
+      "title": "新增霰射炮 T2 · 5发/轮",
+      "detail": "领取时常态全弹直伤/秒 0 → 95",
+      "kind": "scatter",
+      "after": {
+        "stage": 2,
+        "calibration": 0,
+        "pellets": 5,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 5,
+        "direct": 95
+      }
+    },
+    {
+      "time": 33.716666666666036,
+      "title": "新增穿甲炮 T2 · 2发/轮",
+      "detail": "领取时常态全弹直伤/秒 0 → 50",
+      "kind": "pierce",
+      "after": {
+        "stage": 2,
+        "calibration": 0,
+        "pellets": 2,
+        "targets": 2,
+        "radius": 0,
+        "hops": 0,
+        "rate": 5,
+        "direct": 50
+      }
+    },
+    {
+      "time": 55.81666666666478,
+      "title": "新增电弧炮 T3 · 跳电3次",
+      "detail": "领取时常态全弹直伤/秒 0 → 91",
+      "kind": "arc",
+      "after": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 0,
+        "hops": 3,
+        "rate": 2.5,
+        "direct": 91
+      }
+    },
+    {
+      "time": 86.0999999999964,
+      "title": "霰射炮 T2→T3 · 5→7发/轮",
+      "detail": "领取时常态全弹直伤/秒 190 → 232",
+      "kind": "scatter",
+      "before": {
+        "stage": 2,
+        "calibration": 0,
+        "pellets": 5,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 5,
+        "direct": 190
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 4,
+        "direct": 232
+      }
+    },
+    {
+      "time": 111.59999999999495,
+      "title": "新增爆裂炮 T3 · 范围130",
+      "detail": "领取时常态全弹直伤/秒 0 → 192",
+      "kind": "blast",
+      "after": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 192
+      }
+    },
+    {
+      "time": 143.10000000000602,
+      "title": "爆裂炮 精校0→1",
+      "detail": "领取时常态全弹直伤/秒 211.2 → 316.8",
+      "kind": "blast",
+      "before": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 211.20000000000002
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 1,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 316.8
+      }
+    },
+    {
+      "time": 166.88333333335828,
+      "title": "霰射炮 精校0→1",
+      "detail": "领取时常态全弹直伤/秒 278.4 → 417.6",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 4,
+        "direct": 278.4
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 1,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 4,
+        "direct": 417.59999999999997
+      }
+    },
+    {
+      "time": 185.98333333337348,
+      "title": "速射炮 T1→T2 · 1→2发/轮",
+      "detail": "领取时常态全弹直伤/秒 76.8 → 115.2",
+      "kind": "pulse",
+      "before": {
+        "stage": 1,
+        "calibration": 0,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 8,
+        "direct": 76.8
+      },
+      "after": {
+        "stage": 2,
+        "calibration": 0,
+        "pellets": 2,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 6,
+        "direct": 115.19999999999999
+      }
+    },
+    {
+      "time": 226.4833333334057,
+      "title": "速射炮 T2→T3 · 2→4发/轮",
+      "detail": "领取时常态全弹直伤/秒 120 → 180",
+      "kind": "pulse",
+      "before": {
+        "stage": 2,
+        "calibration": 0,
+        "pellets": 2,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 6,
+        "direct": 120
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 4,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 6,
+        "direct": 180
+      }
+    },
+    {
+      "time": 245.98333333342123,
+      "title": "霰射炮 精校1→2",
+      "detail": "领取时常态全弹直伤/秒 516.8 → 689",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 1,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 4,
+        "direct": 516.7800000000001
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 2,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 4,
+        "direct": 689.0400000000002
+      }
+    },
+    {
+      "time": 269.78333333341664,
+      "title": "霰射炮 精校2→3",
+      "detail": "领取时常态全弹直伤/秒 689 → 861.3",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 2,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 4,
+        "direct": 689.0400000000002
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 3,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 4,
+        "direct": 861.3000000000001
+      }
+    },
+    {
+      "time": 300.4833333333887,
+      "title": "霰射炮 精校3→4",
+      "detail": "领取时常态全弹直伤/秒 1093.3 → 1312",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 3,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 1093.3
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 4,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 1311.96
+      }
+    },
+    {
+      "time": 332.46666666669296,
+      "title": "霰射炮 精校4→5",
+      "detail": "领取时常态全弹直伤/秒 1542.7 → 1799.8",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 4,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 1542.6840000000002
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 5,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 1799.7979999999998
+      }
+    },
+    {
+      "time": 351.26666666667586,
+      "title": "爆裂炮 精校1→2",
+      "detail": "领取时常态全弹直伤/秒 535.7 → 714.2",
+      "kind": "blast",
+      "before": {
+        "stage": 3,
+        "calibration": 1,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 535.68
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 2,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 714.2399999999999
+      }
+    },
+    {
+      "time": 389.4666666666411,
+      "title": "爆裂炮 精校2→3",
+      "detail": "领取时常态全弹直伤/秒 798.7 → 998.4",
+      "kind": "blast",
+      "before": {
+        "stage": 3,
+        "calibration": 2,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 798.7200000000001
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 3,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 998.4000000000001
+      }
+    },
+    {
+      "time": 407.56666666662466,
+      "title": "霰射炮 精校5→6",
+      "detail": "领取时常态全弹直伤/秒 2691.8 → 3076.3",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 5,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 2691.7799999999997
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 6,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 3076.32
+      }
+    },
+    {
+      "time": 431.366666666603,
+      "title": "速射炮 精校0→1",
+      "detail": "领取时常态全弹直伤/秒 403.2 → 604.8",
+      "kind": "pulse",
+      "before": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 4,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 6,
+        "direct": 403.19999999999993
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 1,
+        "pellets": 4,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 6,
+        "direct": 604.8000000000001
+      }
+    },
+    {
+      "time": 464.06666666657327,
+      "title": "速射炮 精校1→2",
+      "detail": "领取时常态全弹直伤/秒 661 → 881.3",
+      "kind": "pulse",
+      "before": {
+        "stage": 3,
+        "calibration": 1,
+        "pellets": 4,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 6,
+        "direct": 660.9600000000002
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 2,
+        "pellets": 4,
+        "targets": 1,
+        "radius": 0,
+        "hops": 0,
+        "rate": 6,
+        "direct": 881.28
+      }
+    },
+    {
+      "time": 492.04999999988115,
+      "title": "霰射炮 精校6→7",
+      "detail": "领取时常态全弹直伤/秒 4125.9 → 4641.6",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 6,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 4125.888000000001
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 7,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 4641.624
+      }
+    },
+    {
+      "time": 511.3499999998636,
+      "title": "电弧炮 精校0→1",
+      "detail": "领取时常态全弹直伤/秒 319.2 → 478.8",
+      "kind": "arc",
+      "before": {
+        "stage": 3,
+        "calibration": 0,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 0,
+        "hops": 4,
+        "rate": 2.5,
+        "direct": 319.2
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 1,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 0,
+        "hops": 4,
+        "rate": 2.5,
+        "direct": 478.79999999999995
+      }
+    },
+    {
+      "time": 542.0499999998357,
+      "title": "霰射炮 精校7→8",
+      "detail": "领取时常态全弹直伤/秒 5293.1 → 5881.2",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 7,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 5293.080000000001
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 8,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 5881.2
+      }
+    },
+    {
+      "time": 573.6333333331403,
+      "title": "霰射炮 精校8→9",
+      "detail": "领取时常态全弹直伤/秒 6967 → 7663.7",
+      "kind": "scatter",
+      "before": {
+        "stage": 3,
+        "calibration": 8,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 6966.96
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 9,
+        "pellets": 7,
+        "targets": 1,
+        "radius": 0,
+        "hops": 1,
+        "rate": 4,
+        "direct": 7663.656000000002
+      }
+    },
+    {
+      "time": 592.4333333331232,
+      "title": "爆裂炮 精校3→4",
+      "detail": "领取时常态全弹直伤/秒 2318.4 → 2782.1",
+      "kind": "blast",
+      "before": {
+        "stage": 3,
+        "calibration": 3,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 2318.4
+      },
+      "after": {
+        "stage": 3,
+        "calibration": 4,
+        "pellets": 1,
+        "targets": 1,
+        "radius": 130,
+        "hops": 0,
+        "rate": 3,
+        "direct": 2782.08
+      }
+    }
+  ],
+  "changes": [
+    {
+      "kind": "scatter",
+      "tier": 2,
+      "calibration": 0,
+      "time": 13.283333333333573,
+      "displayedAt": 19.916666666666817
+    },
+    {
+      "kind": "pierce",
+      "tier": 2,
+      "calibration": 0,
+      "time": 21.26666666666674,
+      "displayedAt": 33.716666666666036
+    },
+    {
+      "kind": "arc",
+      "tier": 3,
+      "calibration": 0,
+      "time": 53.28333333333159,
+      "displayedAt": 55.81666666666478
+    },
+    {
+      "kind": "blast",
+      "tier": 3,
+      "calibration": 0,
+      "time": 103.49999999999541,
+      "displayedAt": 111.59999999999495
+    },
+    {
+      "kind": "blast",
+      "tier": 3,
+      "calibration": 1,
+      "time": 135.51666666666665,
+      "displayedAt": 143.10000000000602
+    },
+    {
+      "kind": "pulse",
+      "tier": 2,
+      "calibration": 0,
+      "time": 184.60000000003905,
+      "displayedAt": 185.98333333337348
+    },
+    {
+      "kind": "pulse",
+      "tier": 3,
+      "calibration": 0,
+      "time": 216.6166666667312,
+      "displayedAt": 226.4833333334057
+    },
+    {
+      "kind": "scatter",
+      "tier": 3,
+      "calibration": 3,
+      "time": 268.4166666667512,
+      "displayedAt": 269.78333333341664
+    },
+    {
+      "kind": "scatter",
+      "tier": 3,
+      "calibration": 4,
+      "time": 300.43333333338876,
+      "displayedAt": 300.4833333333887
+    },
+    {
+      "kind": "blast",
+      "tier": 3,
+      "calibration": 2,
+      "time": 349.83333333334383,
+      "displayedAt": 351.26666666667586
+    },
+    {
+      "kind": "blast",
+      "tier": 3,
+      "calibration": 3,
+      "time": 381.8499999999814,
+      "displayedAt": 389.4666666666411
+    },
+    {
+      "kind": "pulse",
+      "tier": 3,
+      "calibration": 1,
+      "time": 429.9999999999376,
+      "displayedAt": 431.366666666603
+    },
+    {
+      "kind": "pulse",
+      "tier": 3,
+      "calibration": 2,
+      "time": 462.01666666657513,
+      "displayedAt": 464.06666666657327
+    },
+    {
+      "kind": "arc",
+      "tier": 3,
+      "calibration": 1,
+      "time": 509.91666666653157,
+      "displayedAt": 511.3499999998636
+    },
+    {
+      "kind": "scatter",
+      "tier": 3,
+      "calibration": 8,
+      "time": 541.9333333331691,
+      "displayedAt": 542.0499999998357
+    },
+    {
+      "kind": "blast",
+      "tier": 3,
+      "calibration": 4,
+      "time": 590.9833333331245,
+      "displayedAt": 592.4333333331232
+    }
+  ],
+  "unresolved": []
+}

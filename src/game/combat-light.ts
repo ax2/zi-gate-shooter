@@ -1,3 +1,4 @@
+import {C} from '../core/config';
 import type { WeaponKind } from '../core/weapons';
 import { weaponColors } from '../core/weapons';
 
@@ -164,19 +165,59 @@ export function sparkLight(c: CanvasRenderingContext2D, x: number, y: number, vx
   c.restore();
 }
 
-/** Brief localized impact: scatter spreads sideways, piercing exits along its axis. */
-export function impactLight(c: CanvasRenderingContext2D, x: number, y: number, kind: WeaponKind, age: number, weak: boolean) {
-  const p = Math.max(0, Math.min(1, age)), fade = (1 - p) ** 2;
-  c.save(); c.translate(x, y); c.globalCompositeOperation = 'lighter'; c.globalAlpha = fade * (weak ? .45 : .85);
-  const color = weaponColors[kind], reach = 12 + p * (kind === 'scatter' ? 44 : 28);
-  if (kind === 'pierce') {
-    line(c, color, 4, [0, 22 * (1-p), 0, -reach * 1.6]);
-    line(c, '#fff2ff', 1.5, [-12, -5, 0, 1, 12, -5]);
-  } else {
-    for (const side of [-1, 1]) {
-      line(c, color, 2.5, [side * 6, 0, side * reach, -reach * .4]);
-      if (!weak) line(c, '#fff4d4', 1.2, [side * 7, 3, side * reach * .75, reach * .45]);
+/** Local material response to settled damage; never a new hit, AOE or projected trajectory. */
+export function impactLight(c:CanvasRenderingContext2D,x:number,y:number,kind:WeaponKind,age:number,weak:boolean){
+  if(age<0||age>=1)return;
+  const p=age,fade=(1-p)**1.6,color=weaponColors[kind];
+  c.save();c.beginPath();c.rect(0,C.playerShotTop,C.width,C.playerY-C.playerShotTop);c.clip();c.translate(x,y);
+  c.globalAlpha=fade*(weak?.65:.9);c.lineCap='round';
+  if(kind==='scatter'){
+    // Hot spall: dark forged faces keep each chip visible inside overlapping light.
+    for(let i=0;i<(weak?3:5);i++){
+      const a=-Math.PI*.88+i*Math.PI*.19,d=8+(1-(1-p)**2)*(30+i%2*14);
+      impactChip(c,Math.cos(a)*d,Math.sin(a)*d*.7,a+p*(i%2?3:-3),color,weak?3.5:6,Math.sqrt(fade)*(weak?.7:.95));
+    }
+    c.globalCompositeOperation='lighter';
+    line(c,'#fff1c3',weak?1.5:2.5,[-7,-2,0,-7,7,-2]);
+    if(!weak)for(const side of [-1,1])line(c,color,1.5,[side*9,4,side*(18+p*26),9+p*12]);
+  }else if(kind==='pierce'){
+    c.globalCompositeOperation='lighter';
+    const end=18+p*38;
+    line(c,color,weak?2:3,[0,14*(1-p),0,-end]);
+    line(c,'#fff0ff',1.2,[-3,5,2,-10,0,-end*.78]);
+    for(const side of [-1,1]){
+      line(c,color,weak?1:1.5,[side*5,1,side*(12+p*17),-10-p*12]);
+      if(!weak)impactChip(c,side*(10+p*18),-p*14,side*p*2,'#d5b4ff',4.5,Math.sqrt(fade)*.85);
+    }
+  }else if(kind==='arc'){
+    c.globalCompositeOperation='lighter';
+    for(let i=0;i<(weak?2:3);i++){
+      const a=i*Math.PI*2/3+.25,r=15+p*23;
+      const path=[0,0,Math.cos(a-.2)*r*.42,Math.sin(a-.2)*r*.42,Math.cos(a+.16)*r*.7,Math.sin(a+.16)*r*.7,Math.cos(a)*r,Math.sin(a)*r];
+      if(!weak)line(c,'#90ffbd2c',5,path);
+      line(c,color,weak?1.5:2,path);line(c,'#efffe3',.8,path.slice(0,6));
+    }
+    c.strokeStyle='#d3ffdc';c.lineWidth=1.5;c.beginPath();c.ellipse(0,0,4,7,.4,0,Math.PI*2);c.stroke();
+  }else if(kind==='blast'){
+    const r=10+p*35;
+    c.globalCompositeOperation='lighter';c.strokeStyle=color;c.lineWidth=weak?1.5:2.5;
+    for(let i=0;i<(weak?3:6);i++){const a=i*Math.PI*2/(weak?3:6);c.beginPath();c.ellipse(0,0,r,r*.62,0,a,a+.65);c.stroke();}
+    if(!weak)for(let i=0;i<3;i++){const a=i*Math.PI*2/3+.5;impactChip(c,Math.cos(a)*r*.7,Math.sin(a)*r*.55,a+p*2,'#ffc382',4.5,Math.sqrt(fade)*.9);}
+    line(c,'#fff3c5',weak?2:3,[-5,0,0,-5,5,0]);
+  }else{
+    c.globalCompositeOperation='lighter';
+    line(c,'#ecfcff',weak?2:3,[0,5,0,-10*(1-p)]);
+    for(const side of [-1,1]){
+      const r=9+p*23;line(c,color,1.5,[side*4,0,side*r,-r*.6]);
+      if(!weak)line(c,'#ffdd9d',1,[side*(r*.6),5,side*(r+7),12+p*9]);
     }
   }
+  c.restore();
+}
+function impactChip(c:CanvasRenderingContext2D,x:number,y:number,angle:number,color:string,size:number,opacity:number){
+  c.save();c.translate(x,y);c.rotate(angle);c.globalCompositeOperation='source-over';c.globalAlpha=opacity;
+  c.fillStyle='#334854';c.strokeStyle=color;c.lineWidth=1;
+  c.beginPath();c.moveTo(-size,-size*.45);c.lineTo(size*.6,-size*.7);c.lineTo(size*1.4,size*.25);c.lineTo(-size*.4,size*.65);c.closePath();c.fill();c.stroke();
+  line(c,'#b9c8ce',.8,[-size*.6,-size*.25,size*.6,size*.1]);
   c.restore();
 }

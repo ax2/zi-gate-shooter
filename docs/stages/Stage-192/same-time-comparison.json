@@ -1,0 +1,13 @@
+{
+  "time": 16.1333333333337,
+  "physicalEqual": true,
+  "newKinds": [
+    "scatter",
+    "pulse",
+    "scatter"
+  ],
+  "oldKinds": [
+    "scatter",
+    "scatter"
+  ]
+}

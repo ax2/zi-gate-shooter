@@ -1,3 +1,4 @@
+import {admitWeaponImpact,trimImpactBudget,type ImpactMarker} from './impact-admission';
 import {captureEquipment,equipmentChanges,equipmentReceipt,EquipmentReceiptQueue,type EquipmentChange} from './equipment-receipt';
 import {ionEvolutionLight} from './ion-evolution-light';
 import {isIonAugment,ionAugments} from '../core/ion-storm';
@@ -125,7 +126,7 @@ export class CanvasRuntime {
   private buttons: CanvasControl[] = [];
   private particles: Particle[] = [];
   private blasts: Blast[] = [];
-  private impacts: { x: number; y: number; kind: WeaponKind; life: number;opticalBand?:number;prism?:boolean }[] = [];
+  private impacts: ImpactMarker[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean;seeker?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
   private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number;ricochet?:boolean;fractureWave?:boolean}[] = [];
@@ -574,7 +575,7 @@ export class CanvasRuntime {
       if(e.type==='upgrade')this.setBuildFeedback({title:e.text,detail:e.detail??'',until:this.world.time+4,combo:false});
       else this.notify(e.text,e.type==='victory'?820:277,e.detail);
     }
-    if (e.type === 'impact' && !this.impacts.some(hit => Math.hypot(hit.x - e.x, hit.y - e.y) < 28) && this.impacts.length < (this.save.settings.effects === 'weak' ? 4 : 12)) this.impacts.push({ x: e.x, y: e.y, kind: e.weaponKind ?? this.world.weaponKind, life: 0.14 });
+    if(e.type==='impact')admitWeaponImpact(this.impacts,e.x,e.y,e.weaponKind??this.world.weaponKind,this.save.settings.effects==='weak');
     const explosion = ['ion-storm','scatter-burst', 'capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
@@ -947,7 +948,8 @@ export class CanvasRuntime {
     this.empWaves=this.empWaves.filter(e=>e.life>0);
     for (const arc of this.arcs) { arc.life -= dt;if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon,arc.seeker); }
     this.arcs = this.arcs.filter(arc=>arc.life>0);
-    for (const hit of this.impacts) { hit.life -= dt;if(hit.opticalBand)opticalImpactLight(c,hit.x,hit.y,hit.life,hit.opticalBand,this.save.settings.effects==='weak',hit.prism);else impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / 0.14, this.save.settings.effects === 'weak'); }
+    trimImpactBudget(this.impacts,this.save.settings.effects==='weak');
+    for (const hit of this.impacts) { hit.life -= dt;if(hit.opticalBand)opticalImpactLight(c,hit.x,hit.y,hit.life,hit.opticalBand,this.save.settings.effects==='weak',hit.prism);else impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / (hit.total??0.14), this.save.settings.effects === 'weak'); }
     this.impacts = this.impacts.filter(hit => hit.life > 0);
     for (const s of this.particles) {
       s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 70 * dt;
@@ -1606,6 +1608,7 @@ export class CanvasRuntime {
       runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
+      weaponImpacts:this.impacts.filter(h=>!h.opticalBand).map(h=>({...h})),
       upgradePulseRemaining:Math.max(0,this.upgradeUntil-this.world.time),
       equipmentReceipts:this.equipmentFeedback.pending.map(r=>({...r})),equipmentReceipt:this.buildFeedback?.equipment?{...this.buildFeedback}:null,
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,
