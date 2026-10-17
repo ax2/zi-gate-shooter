@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.BOOSTER_MODE==='routes'?'routes':(process.env.BOOSTER_SECONDS??'300')+'-plan'+(process.env.BOOSTER_PLAN??'0');await build({entryPoints:['tools/audit-booster.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-237/audit-${suffix}.mjs`});await import(`../build/qa/Stage-237/audit-${suffix}.mjs`);

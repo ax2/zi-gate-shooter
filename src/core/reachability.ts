@@ -1,3 +1,4 @@
+import{BOOSTER}from'./booster';
 import {advanceProjectile} from './bankshot';
 import { C, clamp } from './config';
 import { advanceBody } from './behavior';
@@ -27,7 +28,7 @@ export function dangerTimeline(bodies: readonly Body[], bullets: readonly Bullet
         const x = b.x, y = b.y;
         advanceBody(b, C.step, phase, (options.phaseTime ?? 0) + time, (sx, sy, vx = 0, vy = 280) => {
           // Ignoring the live bullet budget is conservative, never less dangerous.
-          forecastBullets.push({ id: nextId--, x: sx, y: sy, px: sx, py: sy, vx, vy, damage: 1, age: 0, active: true, hostile: true,...(b.pattern==='bankshot'?{bankRemaining:1}:{}) });
+          forecastBullets.push({ id: nextId--, x: sx, y: sy, px: sx, py: sy, vx, vy, damage: 1, age: 0, active: true, hostile: true,...(b.pattern==='bankshot'?{bankRemaining:1}:b.pattern==='booster'?{boostAfter:BOOSTER.delay,boostFactor:BOOSTER.factor}:{}) });
         },forecastBodies);
         if (b.kind !== 'gate' && b.kind !== 'pickup' && b.kind !== 'boss')
           reserve(x, y, b.x, b.y, b.width / 2 + C.playerRadius + 12, b.height / 2 + C.playerRadius + 12);

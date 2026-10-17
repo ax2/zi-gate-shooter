@@ -1,12 +1,14 @@
 import type {Bullet} from './world';
+import {advanceBooster} from './booster';
 /** Authored corridor phrase; no player-damage-based tuning. */
 export const BANKSHOT={at:35,xs:[210,510],y:380,hold:3.2,opening:.1,warning:.65,recovery:1.4,durability:4,vx:220,vy:260,left:36,right:684} as const;
 export const hasBankshot=(round:number)=>round>=4&&round%3===1;
 export interface FlightSegment {x0:number;y0:number;x1:number;y1:number;from:number;to:number}
 
-/** One physical reflection. Returned segments retain the original step's time. */
-export function advanceProjectile(b:Pick<Bullet,'x'|'y'|'vx'|'vy'|'age'|'hostile'|'bankRemaining'>,dt:number):FlightSegment[]|undefined {
+/** Straight/reflected flight and authored ignition share collision-time segments. */
+export function advanceProjectile(b:Pick<Bullet,'x'|'y'|'vx'|'vy'|'age'|'hostile'|'bankRemaining'|'boostAfter'|'boostFactor'>,dt:number):FlightSegment[]|undefined {
  const x=b.x,y=b.y;
+ if(b.hostile&&b.boostAfter!==undefined)return advanceBooster(b,dt);
  if(b.hostile&&b.bankRemaining&&b.vx!==0&&dt>0){
   const wall=b.vx<0?BANKSHOT.left:BANKSHOT.right,end=x+b.vx*dt;
   if(b.vx<0?end<=wall:end>=wall){

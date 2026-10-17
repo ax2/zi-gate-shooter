@@ -1,3 +1,4 @@
+import{boosterMount}from'./booster-mount';
 import {OVERLOAD} from '../core/overload';
 import {combatNoticePosition} from './combat-notice';
 import {pickupBeacon,pickupSignal} from './pickup-signal';
@@ -923,7 +924,7 @@ export class CanvasRuntime {
           if(braced&&!b.controlPatrol)batteryMount(c,b.warning,(b.empRemaining??0)>0,this.save.settings.effects==='weak');
           if(b.pattern==='fire-control')controlReceiver(c,b.age,!!fireControlSource(b,w.bodies),(b.empRemaining??0)>0,this.save.settings.effects==='weak');
           this.frameSprite('armor-v1.png', frame, 3, 0, 0, width, height, 1);
-          this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);if(b.pattern==='bankshot')bankshotMount(c,b,this.save.settings.effects==='weak');if(b.pattern==='rake')rakeMount(c,b,this.save.settings.effects==='weak');controlShutter(c,b);c.restore();
+          this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);if(b.pattern==='bankshot')bankshotMount(c,b,this.save.settings.effects==='weak');if(b.pattern==='rake')rakeMount(c,b,this.save.settings.effects==='weak');if(b.pattern==='booster')boosterMount(c,b,this.save.settings.effects==='weak');controlShutter(c,b);c.restore();
         } else if(b.kind==='conduit'){
           const bob=Math.sin(b.age*3)*2;
           if(b.pattern==='fire-control'){c.save();c.translate(b.x,y+bob);controlTransmitter(c,b.age,w.bodies.filter(g=>fireControlSource(g,w.bodies)?.id===b.id).length,this.save.settings.effects==='weak');c.restore();}
@@ -1065,7 +1066,7 @@ export class CanvasRuntime {
     for (const b of w.bodies) {
       if(b.pattern==='rebound')reboundLight(c,b,this.save.settings.effects==='weak');
       if(b.pattern==='intercept')interceptorLight(c,b,this.save.settings.effects==='weak');
-      if (b.warning > 0 && b.pattern!=='lockshot' && b.pattern!=='intercept' && b.pattern!=='rake' && !(b.kind==='boss'&&b.attack===4)) {
+      if (b.warning > 0 && b.pattern!=='lockshot' && b.pattern!=='intercept' && b.pattern!=='rake' && b.pattern!=='booster' && !(b.kind==='boss'&&b.attack===4)) {
         // The enemy telegraphs its action locally; never preview future bullet paths.
         const charge = .65 + Math.sin(w.time * 22) * .2;
         const muzzleY = b.y + b.height * .32;
@@ -1144,6 +1145,7 @@ export class CanvasRuntime {
         if(b.controlShutter)this.text(shutterClosed(b)?'闭甲 · 减伤80%':'开甲 · 集火',b.x+(b.x>360?72:-72),b.y-b.height/2-36,19,shutterClosed(b)?'#a5d6e3':'#ffcd83',b.x>360?'left':'right',true);
         else if(b.pattern==='fire-control')this.text((b.controlPatrol?'游弋·':'')+((b.empRemaining??0)>0?'火控·停火':fireControlSource(b,w.bodies)?b.warning>0?'增幅·蓄能':'增幅·扇射':'断供·单线'),b.x,b.y-b.height/2-36,21,(b.empRemaining??0)>0?'#adf0ff':'#ffd49a','center',true);
         if(b.pattern==='bankshot')this.text((b.empRemaining??0)>0?'折返炮·停火':b.warning>0?'折返炮·蓄能':'折返炮·反弹一次',b.x,b.y-b.height/2-36,21,'#ffc7a1','center',true);
+        if(b.pattern==='booster')this.text((b.empRemaining??0)>0?'火箭·停火':b.warning>0?'火箭·蓄能':b.burst?'火箭·续发':b.boosterSpent?'火箭·撤离':'火箭·缓行→加速',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
         if(b.pattern==='rake')this.text((b.empRemaining??0)>0?'旋扫·停火':b.warning>0?'旋扫·蓄能':b.rakeFiring?`旋扫·${(b.rakeVolley??0)+1}/3`:'三拍旋扫',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='lockshot'){
@@ -1835,6 +1837,7 @@ export class CanvasRuntime {
       photonAugment:this.world.build.photonAugment??null,laserChainProfile:laserChainProfile(this.world.build.photonAugment),laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
+      boosterGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='booster').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.boosterShots??0,firedAt:b.boosterFiredAt,spent:!!b.boosterSpent})),boosterProjectiles:this.world.bullets.filter(b=>b.boostFactor!==undefined).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy,age:b.age,boostAfter:b.boostAfter??null,factor:b.boostFactor})),
       rakeGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='rake').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,warning:b.warning,volley:b.rakeVolley??0,shots:b.rakeShots??0,firedVolley:b.rakeFiredVolley,firedAt:b.rakeFiredAt})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
       lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,hotParticles:this.particles.filter(p=>p.hot!==false).length, ammoFragments:this.blasts.filter(b=>b.ammo).length,blasts: this.blasts.length,arcs:this.arcs.length,

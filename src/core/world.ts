@@ -1,3 +1,4 @@
+import{BOOSTER}from'./booster';
 import{counterTitle}from'./boss-counter';
 import {hasControlShutter}from'./control-shutter';
 import {BANKSHOT,advanceProjectile,type FlightSegment} from './bankshot';
@@ -47,6 +48,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  boosterSpent?:boolean;boosterShots?:number;boosterFiredAt?:number;boosterFiredSide?:-1|1;
   rakeVolley?:number;rakeFiring?:boolean;rakeShots?:number;rakeFiredAt?:number;rakeFiredVolley?:number;
   introEscort?:boolean;
   convoyHold?:number;
@@ -60,12 +62,13 @@ export interface Body {
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number;counterBeat?:number;counterShotBeat?:number;counterFiredAt?:number;counterFiredBeat?:number;counterShots?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake'; bossVariant?: number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster'; bossVariant?: number;
 }
 export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
+  boostAfter?:number;boostFactor?:number;
   readonly ammoFusion?:BallisticBranch|null;readonly ammoBranch?:BallisticBranch|null;bankRemaining?:number;sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
 export interface EffectEvent {gain?:number; segments?:MirrorSegment[];bounced?:boolean; fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
@@ -659,7 +662,7 @@ export class World {
     }
   }
   private admit(candidate: Body) {
-    const arrival=candidate.pattern==='bankshot'?Math.max(0,BANKSHOT.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.pattern==='fire-control'?Math.max(0,FIRE_CONTROL.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
+    const arrival=(candidate.pattern==='bankshot'||candidate.pattern==='booster')?Math.max(0,(candidate.pattern==='booster'?BOOSTER.hold:BANKSHOT.hold)-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.pattern==='fire-control'?Math.max(0,FIRE_CONTROL.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
       :(C.playerY-candidate.y)/Math.max(1,candidate.speed);
     const horizon = Math.max(3,arrival+1+(candidate.convoyHold===undefined?0:Math.max(0,candidate.convoyHold-candidate.age)));
     if (safeRoute(this.player.x, this.bodies, this.bullets, horizon,{reaction:C.spawnSafetyReaction})) return true;
@@ -742,6 +745,7 @@ export class World {
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
           if(this.round===1&&s.at===INTRO_ESCORT.at&&(s.kind==='elite'||s.kind==='guard'))candidate.introEscort=true;
           if(this.round===1&&s.kind==='guard'&&s.pattern==='convoy')candidate.convoyHold=INTRO_ESCORT.hold;
+          if(s.pattern==='booster')candidate.timer=BOOSTER.opening;
           if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;if(this.round===1){candidate.lockWarning=INTRO_LOCKSHOT.warning;candidate.hp*=INTRO_LOCKSHOT.durability;candidate.maxHp=candidate.hp;}if(s.forkshot)candidate.forkshot=true;}
@@ -904,6 +908,7 @@ export class World {
         this.bullets[this.bullets.length-1].sourceId=b.id;
         if(b.kind==='boss'&&b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){b.counterShots=(b.counterShots??0)+1;b.counterFiredAt=b.age;b.counterFiredBeat=b.counterShotBeat??0;}
         if(b.pattern==='bankshot'){this.bullets[this.bullets.length-1].bankRemaining=1;b.bankShots=(b.bankShots??0)+1;b.bankFiredAt=b.age;this.bankShots=(this.bankShots??0)+1;}
+        if(b.pattern==='booster'){const p=this.bullets[this.bullets.length-1];p.boostAfter=BOOSTER.delay;p.boostFactor=BOOSTER.factor;b.boosterShots=(b.boosterShots??0)+1;b.boosterFiredAt=b.age;b.boosterFiredSide=p.x<b.x?-1:1;}
         if(b.pattern==='rake'){b.rakeShots=(b.rakeShots??0)+1;b.rakeFiredAt=b.age;b.rakeFiredVolley=b.rakeVolley??0;}
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
         if(b.pattern==='lockshot'){b.lockAcceptedShots=(b.lockAcceptedShots??0)+1;b.lockFiredAt=b.age;if(b.forkshot)b.lockFiredAngle=Math.atan2(vx??0,vy??280);this.lockshotShots++;}
@@ -929,14 +934,14 @@ export class World {
         b.warning = 0; b.timer = 0.3; this.attackDeferrals++;
       }
     }
-    const reflected=new Map<number,FlightSegment[]>();
-    for (const b of this.bullets) { b.px=b.x;b.py=b.y;const segments=advanceProjectile(b,dt);if(segments){reflected.set(b.id,segments);this.bankReflections=(this.bankReflections??0)+1;this.lastBankReflection={time:this.time,x:segments[0].x1,y:segments[0].y1,id:b.id};this.effects.push({type:'bank-bounce',x:segments[0].x1,y:segments[0].y1});} }
+    const sweptSegments=new Map<number,FlightSegment[]>();
+    for (const b of this.bullets) { b.px=b.x;b.py=b.y;const priorBank=b.bankRemaining,segments=advanceProjectile(b,dt);if(segments){sweptSegments.set(b.id,segments);if(priorBank&&b.bankRemaining!==priorBank){this.bankReflections=(this.bankReflections??0)+1;this.lastBankReflection={time:this.time,x:segments[0].x1,y:segments[0].y1,id:b.id};this.effects.push({type:'bank-bounce',x:segments[0].x1,y:segments[0].y1});}} }
     const contacts: Contact[] = [];
     const add = (t: number | null, rank: number, id: number, apply: () => void) => { if (t !== null) contacts.push({ t, rank, id, apply }); };
     this.advanceIon(dt,add);
     for (const bullet of this.bullets) {
       if (bullet.hostile) {
-        const segments=reflected.get(bullet.id)??[{x0:bullet.px,y0:bullet.py,x1:bullet.x,y1:bullet.y,from:0,to:1}];
+        const segments=sweptSegments.get(bullet.id)??[{x0:bullet.px,y0:bullet.py,x1:bullet.x,y1:bullet.y,from:0,to:1}];
         for(const segment of segments){const dx=this.player.x-this.player.px,t=sweep(segment.x0,segment.y0,segment.x1,segment.y1,segment.from===0?this.player.px:this.player.px+dx*segment.from,C.playerY,segment.to===1?this.player.x:this.player.px+dx*segment.to,C.playerY,27,31);
         add(t===null?null:segment.from+t*(segment.to-segment.from), 1, bullet.id, () => {
           if (!bullet.active || this.player.hp <= 0) return;

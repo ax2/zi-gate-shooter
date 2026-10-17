@@ -1,3 +1,4 @@
+import{BOOSTER}from'./booster';
 import {closingAssault} from './closing-assault';
 import {openingAssaults} from './opening-assaults';
 import {earlyReinforcements} from './early-reinforcements';
@@ -13,7 +14,7 @@ import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen,hasRotatingShields,ROTATING_SHIELD} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake'; lane?: number; opening?:number; openingAssault?:boolean; earlyReserve?:boolean; closing?:boolean; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string; breach?:boolean }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster'; lane?: number; opening?:number; openingAssault?:boolean; earlyReserve?:boolean; closing?:boolean; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string; breach?:boolean }
 export const MID_GATE_AT=39;
 export const INTRO_MID_GATE_AT=35;
 export const INTRO_ARMORY_AT=46.5;
@@ -238,6 +239,7 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     if(elite){Object.assign(elite,{at:INTRO_ESCORT.at,pattern:'fan',drop:true,dropY:INTRO_ESCORT.gunY,dropLabel:'门后护炮',dropDetail:'前盾挡枪 · 后炮扇射 · 打门后换位领取'});out.push({at:INTRO_ESCORT.at,kind:'guard',x:INTRO_ESCORT.x,pattern:'convoy',drop:true,dropY:INTRO_ESCORT.guardY});}
     const gun=out.find(s=>s.kind==='sniper'&&s.at===INTRO_LOCKSHOT.at);if(gun)Object.assign(gun,{pattern:'lockshot',dropLabel:'锁位三连',dropDetail:'蓄能时抢先拆炮 · 或避过三连再反击'});
   }
+  if(sector===0){const gun=out.find(s=>s.kind==='armor'&&[38,39,55].includes(s.at)&&!s.pattern);if(gun)Object.assign(gun,{pattern:'booster',drop:true,dropY:round===1?500:350,opening:BOOSTER.opening,dropLabel:'脉冲火箭炮',dropDetail:'火箭先缓行再加速 · 抢拆炮机或看实弹换位'});}
   out.push(...chapterAssaults(round,mirror,encounter));
   out.push(...openingAssaults(round,mirror,encounter));
   out.push(...earlyReinforcements(round,mirror,encounter));
