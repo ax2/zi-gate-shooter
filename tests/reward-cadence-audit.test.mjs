@@ -1,7 +1,7 @@
-import {it,expect} from 'vitest';import {writeFileSync} from 'node:fs';import {existsSync} from 'node:fs';import {execFileSync} from 'node:child_process';
+import {it,expect} from 'vitest';import {writeFileSync,mkdirSync} from 'node:fs';import {existsSync} from 'node:fs';import {execFileSync} from 'node:child_process';
 if(!existsSync('build/qa/Stage-195/baseline-world.mjs'))execFileSync(process.execPath,['tools/capture-stage195-baseline.mjs']);
 const {World}=await import('../build/qa/Stage-195/baseline-world.mjs');import {C} from '../src/core/config';import {progressionTarget} from './helpers/progression-driver';
-it('records reward cadence and real charging kills under fixed and normal aiming inputs',()=>{
+it('records selected legacy events (excluding gate-taken) and real charging kills under fixed and normal aiming inputs',()=>{
  const results=[];for(const policy of ['idle','aim','safe']){
   const w=new World(1337,1,'scatter');let aim=360;const rewards=[],candidateKills=[],damage=[],gunSpawns=[],lockGuns=[];const shots=new Set(),seen=new Set();let lastDamage=0;
   for(let frame=0;frame<300*60&&w.phase!=='dead';frame++){
@@ -15,7 +15,7 @@ it('records reward cadence and real charging kills under fixed and normal aiming
    if(w.damageTaken>lastDamage){damage.push(w.time);lastDamage=w.damageTaken;}
   }
   let last=0,maxGap=0;for(const r of rewards){maxGap=Math.max(maxGap,r.time-last);last=r.time;}maxGap=Math.max(maxGap,w.time-last);
-  results.push({policy,time:w.time,round:w.round,hp:w.player.hp,kills:w.kills,damage,maxRewardGap:maxGap,rewards,candidateKills,gunSpawns:gunSpawns.map(t=>({kind:t.b.kind,pattern:t.b.pattern,round:t.round,spawnedAt:t.at,fired:shots.has(t.b.id),age:t.b.age,hp:t.b.hp,lockShots:t.b.lockAcceptedShots??0})),method:'normal World inputs; aim/safe operators are scripted, not human difficulty evidence'});
+  results.push({policy,time:w.time,round:w.round,hp:w.player.hp,kills:w.kills,damage,maxSelectedEventGap:maxGap,omittedEvents:['gate-taken'],rewards,candidateKills,gunSpawns:gunSpawns.map(t=>({kind:t.b.kind,pattern:t.b.pattern,round:t.round,spawnedAt:t.at,fired:shots.has(t.b.id),age:t.b.age,hp:t.b.hp,lockShots:t.b.lockAcceptedShots??0})),method:'normal World inputs; aim/safe operators are scripted, not human difficulty evidence'});
  }
- writeFileSync('build/qa/Stage-195/cadence-baseline.json',JSON.stringify(results,null,2));expect(results.every(r=>r.kills>0)).toBe(true);
+ mkdirSync('build/qa/Stage-196',{recursive:true});writeFileSync('build/qa/Stage-196/legacy-selected-events.json',JSON.stringify(results,null,2));expect(results.every(r=>r.kills>0)).toBe(true);
 },60000);

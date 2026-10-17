@@ -573,7 +573,7 @@ export class World {
     const arrival=candidate.pattern==='fire-control'?Math.max(0,FIRE_CONTROL.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
       :(C.playerY-candidate.y)/Math.max(1,candidate.speed);
     const horizon = Math.max(3,arrival+1);
-    if (safeRoute(this.player.x, this.bodies, this.bullets, horizon)) return true;
+    if (safeRoute(this.player.x, this.bodies, this.bullets, horizon,{reaction:C.spawnSafetyReaction})) return true;
     candidate.active = false; this.fallbackCount++;
     this.nextSpawnRetry = this.roundTime + 0.5;
     return false;

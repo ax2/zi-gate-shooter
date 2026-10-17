@@ -8,6 +8,7 @@ import {RELAY_SCREEN,hasRelayScreen} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
 export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; lane?: number; forkshot?:boolean;convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export const MID_GATE_AT=39;
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -95,7 +96,8 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
       add(42, 'sniper', 360);
     }
   }
-  add(48, 'armory', 360, 3); add(49.2, 'gates', 500);
+  // Separate the middle combat reward from the late equipment pickup.
+  add(MID_GATE_AT, 'gates', 500);add(48, 'armory', 360, 3);
   add(58, 'gates', 360, undefined, true);
   if (sector === 0) for (let t = 62; t < 68; t += 1.2) {
     for (const x of [200, 360, 520]) add(t + Math.abs(360 - x) / 800, 'drone', x);

@@ -3,7 +3,7 @@ it('preserves the first equipment windows and simple opening while authoring one
  for(const seed of [1,77,1337]){const list=timeline(1,seed),opening=list.filter(s=>s.at<8);
   expect(opening.map(s=>[s.at,s.kind,s.x,s.dropY])).toEqual([[1,'drone',360,320],[3.5,'drone',210,320],[5.5,'drone',510,320]]);
   const group=list.filter(s=>s.at===24.5);expect(group.map(s=>[s.kind,s.x,s.drop,s.dropY])).toEqual([240,300,360].map(x=>['drone',x,true,360]));expect(group.filter(s=>s.dropLabel)).toHaveLength(1);
-  expect(list.filter(s=>['crate','armory','gates'].includes(s.kind)).map(s=>[s.at,s.kind,s.x,s.stage,s.pair])).toEqual([[8,'crate',240,2,undefined],[16,'armory',360,undefined,undefined],[20,'gates',360,undefined,undefined],[27,'gates',360,undefined,true],[48,'armory',360,3,undefined],[49.2,'gates',500,undefined,undefined],[58,'gates',360,undefined,true]]);
+  expect(list.filter(s=>['crate','armory','gates'].includes(s.kind)).map(s=>[s.at,s.kind,s.x,s.stage,s.pair])).toEqual([[8,'crate',240,2,undefined],[16,'armory',360,undefined,undefined],[20,'gates',360,undefined,undefined],[27,'gates',360,undefined,true],[39,'gates',500,undefined,undefined],[48,'armory',360,3,undefined],[58,'gates',360,undefined,true]]);
   expect(list.find(s=>s.kind==='armor'&&s.at===38)?.dropY).toBe(500);
  }
 });

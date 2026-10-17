@@ -1,6 +1,8 @@
 export const C = {
   width: 720, height: 1280, playerY: 1024, bossY: 360, bossLootReveal:2.2, minX: 68, maxX: 652,
   playerRadius: 20, moveSpeed: 680, scrollSpeed: 150, pickupRadius: 52,
+  // Keep 0.45s reaction after the first rendered frame plus one 0.1s forecast bucket.
+  spawnSafetyReaction: .55,
   step: 1 / 60, bulletSpeed: 1200, bulletLife: 1.2, playerShotTop: 240, invulnerability: 1,
   thresholds: [0, 24, 56, 96, 144], rewards: [10, 15, 20, 25, 30],
   energyGateMultiplier: 2,

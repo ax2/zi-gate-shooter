@@ -1,8 +1,8 @@
-import {it,expect} from 'vitest';import {existsSync,writeFileSync} from 'node:fs';import {execFileSync} from 'node:child_process';import {World} from '../src/core/world';import {C} from '../src/core/config';import {safeRoute} from '../src/core/reachability';
+import {it,expect} from 'vitest';import {existsSync,writeFileSync} from 'node:fs';import {execFileSync} from 'node:child_process';import {World} from '../src/core/world';import {MID_GATE_AT} from '../src/core/director';import {C} from '../src/core/config';import {safeRoute} from '../src/core/reachability';
 if(!existsSync('build/qa/Stage-195/baseline-world.mjs'))execFileSync(process.execPath,['tools/capture-stage195-baseline.mjs']);const {World:OldWorld}=await import('../build/qa/Stage-195/baseline-world.mjs');
-it('all authored rosters, equipment times and fixed enemy health stay unchanged apart from fork metadata',()=>{
+it('authored rosters and health stay unchanged apart from fork metadata and the later explicit mid-gate retime',()=>{
  for(const plan of [0,1,2])for(let round=1;round<=18;round++){
-  const a=new World(1337,round,undefined,plan),b=new OldWorld(1337,round,undefined,plan);const roster=w=>w.scheduled.map(({forkshot,dropLabel,dropDetail,...rest})=>rest);expect(roster(a)).toEqual(roster(b));for(const kind of Object.keys(C.enemies))expect(a.spawn(kind,360).maxHp).toBe(b.spawn(kind,360).maxHp);
+  const a=new World(1337,round,undefined,plan),b=new OldWorld(1337,round,undefined,plan);const roster=w=>w.scheduled.map(({forkshot,dropLabel,dropDetail,...rest})=>rest.kind==='gates'&&rest.at===MID_GATE_AT?{...rest,at:49.2}:rest).sort((a,b)=>a.at-b.at);expect(roster(a)).toEqual(roster(b));for(const kind of Object.keys(C.enemies))expect(a.spawn(kind,360).maxHp).toBe(b.spawn(kind,360).maxHp);
  }
 });
 it('side chapters retain no-kill safe paths from three starting lanes across the three battle orders',()=>{

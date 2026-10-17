@@ -1,0 +1,136 @@
+[
+  {
+    "version": "old",
+    "time": 40.01666666666568,
+    "latest": [
+      {
+        "id": 334,
+        "kind": "armor",
+        "x": 220,
+        "y": 677.1166666666691,
+        "age": 3.516666666666659,
+        "warning": 0,
+        "timer": 0.9833333333333382
+      },
+      {
+        "id": 351,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 125.52836778581438,
+        "y": 314.2583333333327,
+        "age": 2.0166666666666644,
+        "warning": 0,
+        "timer": 0.3833333333333367
+      },
+      {
+        "id": 352,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 485.5283677858144,
+        "y": 314.2583333333327,
+        "age": 2.0166666666666644,
+        "warning": 0,
+        "timer": 0.3833333333333367
+      },
+      {
+        "id": 373,
+        "kind": "elite",
+        "pattern": "intercept",
+        "x": 360,
+        "y": 361.725,
+        "age": 0.016666666666666666,
+        "warning": 0,
+        "timer": 0.13333333333333333
+      }
+    ],
+    "routes": [
+      {
+        "reaction": 0.45,
+        "safe": false
+      },
+      {
+        "reaction": 0.43333333333333335,
+        "safe": false
+      },
+      {
+        "reaction": 0.4,
+        "safe": true
+      },
+      {
+        "reaction": 0.3,
+        "safe": true
+      },
+      {
+        "reaction": 0,
+        "safe": true
+      }
+    ]
+  },
+  {
+    "version": "current",
+    "time": 40.01666666666568,
+    "latest": [
+      {
+        "id": 351,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 125.52836778581438,
+        "y": 314.2583333333327,
+        "age": 2.0166666666666644,
+        "warning": 0,
+        "timer": 0.3833333333333367
+      },
+      {
+        "id": 352,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 485.5283677858144,
+        "y": 314.2583333333327,
+        "age": 2.0166666666666644,
+        "warning": 0,
+        "timer": 0.3833333333333367
+      },
+      {
+        "id": 365,
+        "kind": "gate",
+        "x": 500,
+        "y": 352.8333333333329,
+        "age": 1.016666666666668,
+        "warning": 0,
+        "timer": 1.3833333333333369
+      },
+      {
+        "id": 374,
+        "kind": "elite",
+        "pattern": "intercept",
+        "x": 360,
+        "y": 361.725,
+        "age": 0.016666666666666666,
+        "warning": 0,
+        "timer": 0.13333333333333333
+      }
+    ],
+    "routes": [
+      {
+        "reaction": 0.45,
+        "safe": false
+      },
+      {
+        "reaction": 0.43333333333333335,
+        "safe": false
+      },
+      {
+        "reaction": 0.4,
+        "safe": true
+      },
+      {
+        "reaction": 0.3,
+        "safe": true
+      },
+      {
+        "reaction": 0,
+        "safe": true
+      }
+    ]
+  }
+]
