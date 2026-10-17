@@ -1,0 +1,55 @@
+{
+  "baseline": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "worldHash": "7a0319743c62eef1870109e3db2b3ec177b3df56183d18712022d31fd9d756ad",
+    "comboRead": 0,
+    "firstFracture": {
+      "time": 21.26666666666674,
+      "pickups": 2,
+      "weapons": [
+        "pulse",
+        "pierce",
+        "blast"
+      ]
+    },
+    "printed": []
+  },
+  "candidate": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "worldHash": "7a0319743c62eef1870109e3db2b3ec177b3df56183d18712022d31fd9d756ad",
+    "comboRead": 4.016666666666658,
+    "firstFracture": {
+      "time": 21.26666666666674,
+      "pickups": 2,
+      "weapons": [
+        "pulse",
+        "pierce",
+        "blast"
+      ]
+    },
+    "printed": [
+      {
+        "time": 16.000000000000373,
+        "id": 164,
+        "kind": "crate",
+        "weapon": "blast",
+        "combinations": [
+          "fracture"
+        ]
+      },
+      {
+        "time": 16.933333333333653,
+        "id": 183,
+        "kind": "pickup",
+        "weapon": "blast",
+        "combinations": [
+          "fracture"
+        ]
+      }
+    ]
+  }
+}

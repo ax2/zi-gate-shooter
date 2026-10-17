@@ -1,3 +1,4 @@
+import {supplyCombinations,supplyCombinationLabel,supplyCombinationClear} from './supply-combinations';
 import {shieldLatch} from './shield-latch';
 import {guardClosed,guardDamageScale} from '../core/behavior';
 import {admitWeaponImpact,trimImpactBudget,type ImpactMarker} from './impact-admission';
@@ -107,6 +108,7 @@ export class CanvasRuntime {
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
+  private pendingBuildFeedback:Array<NonNullable<CanvasRuntime['buildFeedback']>&{remaining:number}>=[];
   private equipmentFeedback=new EquipmentReceiptQueue();
   private achievementToast = '';
   private achievementUntil = 0;
@@ -284,7 +286,7 @@ export class CanvasRuntime {
     this.buttons=[];
     for(const motion of this.mountedMotion.values())motion.reset();
     this.opticalFiredAt=-Infinity;
-    this.buildFeedback=undefined;this.equipmentFeedback.clear();
+    this.buildFeedback=undefined;this.pendingBuildFeedback.length=0;this.equipmentFeedback.clear();
     this.runNewBest=false;this.runAchievements=[];this.achievementReturn='menu';
     this.achievementUntil=0;
     this.supportBeams=[];
@@ -513,6 +515,18 @@ export class CanvasRuntime {
   }
   private setBuildFeedback(feedback:NonNullable<CanvasRuntime['buildFeedback']>){
     const current=this.buildFeedback;
+    if(current?.combo&&this.world.time<current.until){
+      if(feedback.combo&&current.title.replace(/^目标成形 /,'组合完成 ')===feedback.title.replace(/^目标成形 /,'组合完成 ')){
+        this.buildFeedback={...feedback,until:current.until,observedAt:current.observedAt,hidden:current.hidden};return;
+      }
+      const queued={...feedback,remaining:Math.max(.1,feedback.until-this.world.time)};
+      const duplicate=this.pendingBuildFeedback.findIndex(f=>f.title===queued.title);
+      if(duplicate>=0)this.pendingBuildFeedback[duplicate]=queued;else{
+        if(this.pendingBuildFeedback.length>=2){const ordinary=this.pendingBuildFeedback.findIndex(f=>!f.combo);this.pendingBuildFeedback.splice(ordinary<0?0:ordinary,1);}
+        this.pendingBuildFeedback.push(queued);
+      }
+      return;
+    }
     if(current?.equipment&&this.world.time<current.until)this.equipmentFeedback.interrupt(current.equipment,Math.max(.1,current.until-this.world.time));
     this.buildFeedback=feedback;
   }
@@ -748,6 +762,9 @@ export class CanvasRuntime {
       // Only time actually spent displaying the receipt consumes its reading window.
       if(f.hidden&&f.observedAt!==undefined)f.until+=Math.max(0,w.time-f.observedAt);
       f.observedAt=w.time;
+    }
+    if(this.mode==='playing'&&(!f||w.time>=f.until)&&this.pendingBuildFeedback.length){
+      const {remaining,...queued}=this.pendingBuildFeedback.shift()!;f={...queued,until:w.time+remaining,observedAt:w.time};this.buildFeedback=f;
     }
     if(this.mode==='playing'&&(!f||w.time>=f.until)){
       const equipment=this.equipmentFeedback.take();
@@ -1004,7 +1021,8 @@ export class CanvasRuntime {
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
           this.text(b.refit?`${b.directedRefit?'定向':''}${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x-(goalSupply?18:0), panelY + 23, goalSupply?23:25, weaponColors[b.weaponKind], 'center', true);
           if(goalSupply){c.strokeStyle='#ffe19a';c.lineWidth=2;c.strokeRect(b.x-118,panelY,236,100);this.text('目标',b.x+108,panelY+23,18,'#ffe19a','right',true);}
-          this.text(b.refit?refitLabel(w,b.weaponKind):role, b.x, panelY + 51, b.refit?21:24, '#cfdee9');
+          const combination=supplyCombinationLabel(supplyCombinations(w,b,this.save.recipeGoal));
+          this.text(combination??(b.refit?refitLabel(w,b.weaponKind):role), b.x, panelY + 51, combination?21:b.refit?21:24, combination?'#ffe2a1':'#cfdee9');
           this.text(b.pattern==='drift-supply'?`${(b.dropGrace??0)>0?'护盖':b.age<DRIFT_SUPPLY.settle?'滑行':'停稳'} · 碎后拾取 ${Math.ceil(b.hp)}`:`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, b.pattern==='drift-supply'?21:23, '#fff0c8');
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
         } else {
@@ -1019,8 +1037,11 @@ export class CanvasRuntime {
         const behindEnemy=w.bodies.some(other=>other.active&&other.kind in C.enemies
           &&Math.abs(x-other.x)<width/2+Math.max(80,other.width*.85)
           &&Math.abs(b.y-54-other.y)<20+Math.max(84,other.height*.8)+40);
-        if(!behindEnemy)this.rect(x-width/2,b.y-74,width,40,'#0b1723f7');
+        const combination=supplyCombinationLabel(supplyCombinations(w,b,this.save.recipeGoal));
+        const showCombination=!!combination&&supplyCombinationClear(w,x,b.y,width,noticeBlocking);
+        if(!behindEnemy)this.rect(x-width/2,b.y-74,width,showCombination?70:40,'#0b1723f7');
         this.text((target?'目标·':'')+(b.weaponKind ? `拾取${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`),x,b.y-54,24,'#ffe7b1','center',true);
+        if(showCombination)this.text(combination!,x,b.y-24,21,'#ffe2a1','center',true);
       }
       else if (b.kind === 'gate') {
         const value = previewReward(w.growth, gateValue(b.energy, b.rewardKind), b.rewardKind);
@@ -1643,7 +1664,7 @@ export class CanvasRuntime {
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       weaponImpacts:this.impacts.filter(h=>!h.opticalBand).map(h=>({...h})),
-      upgradePulseRemaining:Math.max(0,this.upgradeUntil-this.world.time),
+      upgradePulseRemaining:Math.max(0,this.upgradeUntil-this.world.time),combatFeedback:this.buildFeedback?{title:this.buildFeedback.title,combo:this.buildFeedback.combo,remaining:Math.max(0,this.buildFeedback.until-this.world.time),hidden:this.buildFeedback.hidden}:null,pendingCombatFeedback:this.pendingBuildFeedback.map(f=>({title:f.title,combo:f.combo,remaining:f.remaining})),
       equipmentReceipts:this.equipmentFeedback.pending.map(r=>({...r})),equipmentReceipt:this.buildFeedback?.equipment?{...this.buildFeedback}:null,
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
@@ -1658,7 +1679,7 @@ export class CanvasRuntime {
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
       enemyFragments: this.enemyWreck.pieces.length,
-      gateReceipts: this.gateFeedback.receipts.length,gateReceiptDetails:this.gateFeedback.receipts.map(r=>({...r,lines:[...r.lines]})),
+      supplyCombinations:this.world.bodies.filter(b=>b.active&&(b.kind==='crate'||b.kind==='pickup')).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind??this.world.weaponKind,row:b.row,x:b.x,y:b.y,combinations:supplyCombinations(this.world,b,this.save.recipeGoal)})),gateReceipts: this.gateFeedback.receipts.length,gateReceiptDetails:this.gateFeedback.receipts.map(r=>({...r,lines:[...r.lines]})),
       callbackWork:{...this.callbackWork.snapshot(),maxMs:this.maxCallbackWorkMs},interruptedFrames:this.interruptedFrames.map(frame=>({...frame})),
       ...this.frameTimes.snapshot() };
   }

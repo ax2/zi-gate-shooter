@@ -1,0 +1,9 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 build
+npm notice run npm run typecheck && vite build
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 typecheck
+npm notice run tsc --noEmit
+tests/supply-combinations.test.ts(11,136): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ kind: WeaponKind; owned: number; stage: number; refit: boolean; layout: number; }' is not assignable to parameter of type 'string'.
