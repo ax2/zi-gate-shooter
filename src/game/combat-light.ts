@@ -169,11 +169,12 @@ export function detonationLight(c: CanvasRenderingContext2D, x: number, y: numbe
   }
   c.restore();
 }
-export function sparkLight(c: CanvasRenderingContext2D, x: number, y: number, vx: number, vy: number, color: string, fade: number, weak: boolean) {
-  c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = Math.max(0, fade); c.lineCap = 'round';
+export function sparkLight(c: CanvasRenderingContext2D, x: number, y: number, vx: number, vy: number, color: string, fade: number, weak: boolean, hot = true) {
+  c.save(); c.globalCompositeOperation = hot ? 'lighter' : 'source-over'; c.globalAlpha = Math.max(0, fade) * (hot ? 1 : .85); c.lineCap = 'round';
   const pts = [x, y, x - vx * .045, y - vy * .045];
-  if (!weak) line(c, `${color}30`, 7, pts);
-  line(c, color, 2.5, pts); line(c, '#fff3d6', 1, [x, y, x - vx * .016, y - vy * .016]);
+  if (!weak && hot) line(c, `${color}30`, 7, pts);
+  line(c, color, hot ? 2.5 : 1.8, pts);
+  line(c, hot ? '#fff3d6' : '#9eabb4', hot ? 1 : .7, [x, y, x - vx * .016, y - vy * .016]);
   c.restore();
 }
 

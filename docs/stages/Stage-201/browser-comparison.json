@@ -1,0 +1,171 @@
+{
+  "physicalEqual": true,
+  "metric": "RGB channels >=235 in boss-centered logical 96x96 box; static proxy only",
+  "rows": [
+    {
+      "stage": "healthy-hull",
+      "version": "baseline",
+      "time": 156.58333333335008,
+      "particles": 4,
+      "white": 209,
+      "total": 2809,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "healthy-hull",
+      "version": "initial-coalesced",
+      "time": 156.58333333335008,
+      "particles": 4,
+      "white": 214,
+      "total": 2809,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "healthy-hull",
+      "version": "current",
+      "time": 156.58333333335008,
+      "particles": 4,
+      "hotParticles": 1,
+      "white": 202,
+      "total": 2809,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "worn-hull",
+      "version": "baseline",
+      "time": 158.25000000001808,
+      "particles": 141,
+      "white": 216,
+      "total": 2862,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "worn-hull",
+      "version": "initial-coalesced",
+      "time": 158.25000000001808,
+      "particles": 98,
+      "white": 139,
+      "total": 2862,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "worn-hull",
+      "version": "current",
+      "time": 158.25000000001808,
+      "particles": 98,
+      "hotParticles": 24,
+      "white": 25,
+      "total": 2862,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "critical-hull",
+      "version": "baseline",
+      "time": 159.51666666668575,
+      "particles": 149,
+      "white": 589,
+      "total": 2809,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "critical-hull",
+      "version": "initial-coalesced",
+      "time": 159.51666666668575,
+      "particles": 137,
+      "white": 581,
+      "total": 2809,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "stage": "critical-hull",
+      "version": "current",
+      "time": 159.51666666668575,
+      "particles": 137,
+      "hotParticles": 36,
+      "white": 213,
+      "total": 2809,
+      "viewport": {
+        "canvas": {
+          "height": 768,
+          "width": 390.3999938964844,
+          "x": 0,
+          "y": 76
+        },
+        "height": 844,
+        "width": 390
+      }
+    }
+  ]
+}
