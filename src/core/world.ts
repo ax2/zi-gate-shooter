@@ -1,3 +1,4 @@
+import{pullPickup}from'./pickup-recovery';
 import {RapidBreak} from './rapid-break';
 import{BOOSTER}from'./booster';
 import{counterTitle}from'./boss-counter';
@@ -926,6 +927,7 @@ export class World {
         if(b.bountyRound!==undefined){b.bountyShots=(b.bountyShots??0)+1;this.bountyShots++;}
         if(b.aceRole){b.aceFiredAt=b.age;if(b.aceEnraged)b.aceRageShots=(b.aceRageShots??0)+1;}
       },this.bodies);
+      pullPickup(b,this.player.x,dt,this.bodies);
       if(b.wingFiredAt!==wasWingFiredAt)this.effects.push({type:'wing-fire',x:b.x,y:b.y,gain:.45});
       if(b.aceEnraged&&!wasAceEnraged)this.effects.push({type:'drop-wave',x:b.x,y:C.playerY,text:(b.aceRole==='fan'?'扇炮':'针炮')+'王牌 · 暴走',detail:'搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险'});
       if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · '+counterTitle(b.bossVariant),detail:b.bossVariant===1?'双翼错时开火 · 已发敌弹仍危险':b.bossVariant===2?'交剪、直射、外扩三拍 · 已发敌弹仍危险':'双炮加入攻击循环 · 已发敌弹仍危险'});

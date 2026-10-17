@@ -1128,7 +1128,7 @@ export class CanvasRuntime {
         const combination=supplyCombinationLabel(supplyCombinations(w,b,this.save.recipeGoal));
         const showCombination=!!combination&&supplyCombinationClear(w,x,b.y,width,noticeBlocking);
         if(!behindEnemy)this.rect(x-width/2,b.y-74,width,showCombination?70:40,'#0b1723f7');
-        const verb=signal.urgent?'快拾取':'拾取';
+        const verb=signal.pulling?'回收中':signal.urgent?'快拾取':'拾取';
         this.text((target?'目标·':'')+(b.weaponKind ? `${verb}${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `${verb} T${b.stage}`),x,b.y-54,24,signal.urgent?'#ffd186':'#ffe7b1','center',true);
         if(showCombination)this.text(combination!,x,b.y-24,21,'#ffe2a1','center',true);
       }

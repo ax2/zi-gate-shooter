@@ -1,0 +1,1 @@
+import{build}from'esbuild';await build({entryPoints:['tools/audit-pickup-offset.ts'],bundle:true,platform:'node',format:'esm',outfile:'build/qa/Stage-244/offset.mjs'});await import('../build/qa/Stage-244/offset.mjs');
