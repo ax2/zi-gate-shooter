@@ -9,4 +9,3 @@ npm notice run vitest run tests/bankshot-baseline.test.mjs -t holding the centre
       Tests  1 passed | 2 skipped (3)
    Start at  12:13:14
    Duration  10.72s (tests 94%, transform 5%, import 1%)
-
