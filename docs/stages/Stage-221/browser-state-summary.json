@@ -1,0 +1,344 @@
+[
+  {
+    "source": "mobile-hot.json",
+    "sha256": "B8905A4CF5AFBA0D97BB0576AFABCE7299DC969F4D97AD1CF4234C87DDC7C4AB",
+    "time": 64.44999999999763,
+    "hotAt": 63.633333333331,
+    "offAt": null,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 60,
+      "energy": 20,
+      "overload": 5.183333333333336,
+      "mastery": 1
+    },
+    "normalProfiles": [
+      {
+        "kind": "pulse",
+        "stage": 1,
+        "rate": 8
+      },
+      {
+        "kind": "scatter",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "pierce",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "blast",
+        "stage": 3,
+        "rate": 3
+      },
+      {
+        "kind": "arc",
+        "stage": 1,
+        "rate": 2.5
+      }
+    ],
+    "currentRateScale": 1.25,
+    "gatePolicy": "energy",
+    "charges": [
+      {
+        "time": 63.633333333331,
+        "gatesBefore": 3,
+        "gatesAfter": 4,
+        "pickupsBefore": 3,
+        "pickupsAfter": 3,
+        "mastery": 1
+      }
+    ],
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard"
+  },
+  {
+    "source": "desktop-hot.json",
+    "sha256": "A0034A3FA717210892A6AF3566F8CA5D28BE7D05161EFCEA9641DACDF278F2CF",
+    "time": 64.44999999999763,
+    "hotAt": 63.633333333331,
+    "offAt": null,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 60,
+      "energy": 20,
+      "overload": 5.183333333333336,
+      "mastery": 1
+    },
+    "normalProfiles": [
+      {
+        "kind": "pulse",
+        "stage": 1,
+        "rate": 8
+      },
+      {
+        "kind": "scatter",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "pierce",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "blast",
+        "stage": 3,
+        "rate": 3
+      },
+      {
+        "kind": "arc",
+        "stage": 1,
+        "rate": 2.5
+      }
+    ],
+    "currentRateScale": 1.25,
+    "gatePolicy": "energy",
+    "charges": [
+      {
+        "time": 63.633333333331,
+        "gatesBefore": 3,
+        "gatesAfter": 4,
+        "pickupsBefore": 3,
+        "pickupsAfter": 3,
+        "mastery": 1
+      }
+    ],
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard"
+  },
+  {
+    "source": "desktop-old-hot.json",
+    "sha256": "A7D6BBADAA1B1754537E31E4D66E64991A0671F1D85C13F15D5C9195ED4275C8",
+    "time": 64.44999999999763,
+    "hotAt": 63.633333333331,
+    "offAt": null,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 60,
+      "energy": 20,
+      "overload": 5.183333333333336,
+      "mastery": 1
+    },
+    "normalProfiles": [
+      {
+        "kind": "pulse",
+        "stage": 1,
+        "rate": 8
+      },
+      {
+        "kind": "scatter",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "pierce",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "blast",
+        "stage": 3,
+        "rate": 3
+      },
+      {
+        "kind": "arc",
+        "stage": 1,
+        "rate": 2.5
+      }
+    ],
+    "currentRateScale": 1,
+    "gatePolicy": "energy",
+    "charges": [
+      {
+        "time": 63.633333333331,
+        "gatesBefore": 3,
+        "gatesAfter": 4,
+        "pickupsBefore": 3,
+        "pickupsAfter": 3,
+        "mastery": 1
+      }
+    ],
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard"
+  },
+  {
+    "source": "desktop-off.json",
+    "sha256": "B17C5680AB4D7AD064FC77C6111D0C74B35215687BBBCC322E7F7DADEC42346D",
+    "time": 70.46666666666395,
+    "hotAt": 63.633333333331,
+    "offAt": 69.64999999999733,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 60,
+      "energy": 20,
+      "overload": 0,
+      "mastery": 1
+    },
+    "normalProfiles": [
+      {
+        "kind": "pulse",
+        "stage": 1,
+        "rate": 8
+      },
+      {
+        "kind": "scatter",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "pierce",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "blast",
+        "stage": 3,
+        "rate": 3
+      },
+      {
+        "kind": "arc",
+        "stage": 1,
+        "rate": 2.5
+      }
+    ],
+    "currentRateScale": 1,
+    "gatePolicy": "energy",
+    "charges": [
+      {
+        "time": 63.633333333331,
+        "gatesBefore": 3,
+        "gatesAfter": 4,
+        "pickupsBefore": 3,
+        "pickupsAfter": 3,
+        "mastery": 1
+      }
+    ],
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard"
+  },
+  {
+    "source": "desktop-old-off.json",
+    "sha256": "C098DF8E2B520C6EC7DFDA1A8626C7D3272B536AFCEA559584B6BBB75A39BE04",
+    "time": 70.46666666666395,
+    "hotAt": 63.633333333331,
+    "offAt": 69.64999999999733,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 60,
+      "energy": 20,
+      "overload": 0,
+      "mastery": 1
+    },
+    "normalProfiles": [
+      {
+        "kind": "pulse",
+        "stage": 1,
+        "rate": 8
+      },
+      {
+        "kind": "scatter",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "pierce",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "blast",
+        "stage": 3,
+        "rate": 3
+      },
+      {
+        "kind": "arc",
+        "stage": 1,
+        "rate": 2.5
+      }
+    ],
+    "currentRateScale": 1,
+    "gatePolicy": "energy",
+    "charges": [
+      {
+        "time": 63.633333333331,
+        "gatesBefore": 3,
+        "gatesAfter": 4,
+        "pickupsBefore": 3,
+        "pickupsAfter": 3,
+        "mastery": 1
+      }
+    ],
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard"
+  },
+  {
+    "source": "default-hot.json",
+    "sha256": "A23D517FD4790E77B73F1742A5D0D6D90D9DCFE0BB3E3B2C8B9E1480157B2F76",
+    "time": 95.08333333332922,
+    "hotAt": 94.2666666666626,
+    "offAt": null,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 100,
+      "energy": 0,
+      "overload": 5.183333333333336,
+      "mastery": 1
+    },
+    "normalProfiles": [
+      {
+        "kind": "pulse",
+        "stage": 1,
+        "rate": 8
+      },
+      {
+        "kind": "scatter",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "pierce",
+        "stage": 2,
+        "rate": 5
+      },
+      {
+        "kind": "blast",
+        "stage": 3,
+        "rate": 3
+      },
+      {
+        "kind": "arc",
+        "stage": 1,
+        "rate": 2.5
+      }
+    ],
+    "currentRateScale": 1.25,
+    "gatePolicy": null,
+    "charges": [
+      {
+        "time": 94.2666666666626,
+        "gatesBefore": 4,
+        "gatesAfter": 4,
+        "pickupsBefore": 3,
+        "pickupsAfter": 4,
+        "mastery": 1
+      }
+    ],
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard"
+  }
+]

@@ -1,0 +1,1 @@
+{"sameWorld":true,"profiles":[{"kind":"pulse","stage":1,"rate":8},{"kind":"scatter","stage":2,"rate":5},{"kind":"pierce","stage":2,"rate":5},{"kind":"blast","stage":3,"rate":3},{"kind":"arc","stage":1,"rate":2.5}],"rate":1.25}

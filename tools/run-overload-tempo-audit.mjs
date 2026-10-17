@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.BOSS_TEAM_SECONDS??'600',output=`build/qa/Stage-221/boss-audit-${suffix}.mjs`;await build({entryPoints:['tools/audit-overload-tempo.ts'],bundle:true,platform:'node',format:'esm',outfile:output});await import('../'+output);

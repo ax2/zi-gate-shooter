@@ -66,7 +66,7 @@ export function contextGuide(world: Context): Guide {
   }
   const gates = visible.filter(b => b.kind === 'gate');
   if (gates.some(g => gates.some(other => other.id !== g.id && other.row === g.row)) && world.gatesTaken < 2)
-    return { kind: 'pair', title: '先射击，把门的奖励打高', detail: '穿过才领取 · 同排只领一扇' };
+    return { kind: 'pair', title: '先射击，把门的奖励打高', detail: '穿过才领取 · 同排只领一扇 · 满充能可提速' };
   if (gates.length && world.gatesTaken === 0)
     return { kind: 'gate', title: '持续射击，把门的奖励打高', detail: '移到门内，穿过时才领取' };
   return movement;

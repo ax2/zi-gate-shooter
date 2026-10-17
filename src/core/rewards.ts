@@ -1,4 +1,5 @@
 import { C, clamp } from './config';
+import {OVERLOAD} from './overload';
 export interface Growth { stage: number; bonus: number; energy: number; overload: number; mastery?: number }
 export const permanentPower = (g: Growth) => g.bonus + (g.mastery ?? 0) * 10;
 export function gateValue(energy: number, kind: 'power' | 'energy' = 'power'): number {
@@ -18,7 +19,7 @@ export function activateOverload(g: Growth) {
   if (g.energy >= 100) {
     const levels = Math.floor(g.energy / 100);
     g.mastery = (g.mastery ?? 0) + levels;
-    g.energy %= 100; g.overload = 6; return true;
+    g.energy %= 100; g.overload = OVERLOAD.duration; return true;
   }
   return false;
 }

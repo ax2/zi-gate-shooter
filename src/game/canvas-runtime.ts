@@ -1,3 +1,4 @@
+import {OVERLOAD} from '../core/overload';
 import {ammoFragmentLight} from './ammo-fragment';
 import {ballisticMechanics} from './ballistic-mechanics';
 import {BANKSHOT} from '../core/bankshot';
@@ -1165,9 +1166,9 @@ export class CanvasRuntime {
     this.text(`T${w.weaponStage(w.weaponKind)} · ${w.activeWeapons.length}种武器叠加`, 30, y + 88, 25, weaponColors[w.weaponKind], 'left', true);
     this.text(`火力 +${permanentPower(w.growth)}%`, 300, y + 88, 24, '#74dcff', 'left', true);
     this.text(`${w.round}轮·${boss&&w.bossFormation?w.bossFormation.name:w.round>1?battleBrief(w.round,w.battlePlan):sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
-    this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / 6 : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
-    this.text(w.growth.overload > 0 ? `超载×1.35 · ${w.growth.overload.toFixed(1)}秒  |  再充能 ${Math.floor(w.growth.energy)}/100`
-      : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：本局火力+10% / 超载6秒`, 360, y + 144, 22, '#d4e8ee');
+    this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / OVERLOAD.duration : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
+    this.text(w.growth.overload > 0 ? `超载 伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate} · ${w.growth.overload.toFixed(1)}秒 · 储能${Math.floor(w.growth.energy)}/100`
+      : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：火力+10% · 增伤提速${OVERLOAD.duration}秒`, 360, y + 144, 22, '#d4e8ee');
     if(this.mode==='playing'&&w.phase==='running'&&w.roundTime<=40&&!w.contractReward&&w.contract?.status!=='active'&&w.contract?.round!==w.round&&!w.bodies.some(b=>b.active&&Math.abs(b.x-585)<b.width/2+125&&Math.abs(b.y-(y+200))<b.height/2+48)){
       this.rect(480,y+170,210,44,'#213d4d');this.text('挑战契约　›',585,y+192,24,'#ffd598');
       this.buttons.push({x:480,y:y+170,w:210,h:44,action:'contracts-live',label:'挑战契约'});
@@ -1350,7 +1351,7 @@ export class CanvasRuntime {
     this.text(`已叠加 ${w.activeWeapons.length} 种武器`,82,228,25,'#a5d9ed','left');
     this.rect(300,202,348,54,'#203e50');this.text(`改装目标 · ${w.refitTarget?weaponNames[w.refitTarget]:'自动'}　›`,474,229,24,'#ffe19a');
     this.buttons.push({x:300,y:202,w:348,h:54,action:'refit-plan',label:'选择改装目标'});
-    this.text(`本局火力 +${power}% · 充能突破 ${w.growth.mastery ?? 0} 次`, 360, 278, 27, '#f0d19a');
+    this.text(`常态火力 +${power}% · 超载：伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, 278, 22, '#f0d19a');
     this.text(`技能点：可用${w.buildPoints-w.build.spent} · 研发${w.researchPoints} ＋ 充能突破${w.growth.mastery??0}`,360,310,21,'#bdd8e7');
     for (const [index, kind] of w.activeWeapons.entries()) {
       const profile = w.profileFor(kind), y = 342 + index * 102;
@@ -1359,12 +1360,12 @@ export class CanvasRuntime {
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 22, 25, weaponColors[kind], 'left', true);
       this.text(kind==='arc'?`${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%`:ballisticMechanics(w,kind),92,y+49,20,'#a9c9d9','left');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
-      this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 77, 22, '#d6e7f0', 'left');
+      this.text(`常态 ${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 77, 22, '#d6e7f0', 'left');
     }
     const support=w.supportProfile();
     this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
-    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 23, '#c7deeb');
+    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, 970, 23, '#c7deeb');
     this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
     for(const [i,label] of ['技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');

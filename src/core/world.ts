@@ -18,6 +18,7 @@ import {canLaserChain,isPhotonAugment,photonAugments,laserChainProfile} from './
 import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,STORM_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
+import {OVERLOAD} from './overload';
 import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type IonSpear} from './ion-storm';
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
@@ -528,6 +529,8 @@ export class World {
   private nextId = 1;
   private nextRow = 1;
   private fireTimers = new Map<WeaponKind, number>();
+  private firingScale=1;
+  fireRateScale(){return this.growth.overload>0?OVERLOAD.rate:1;}
   private laserTimer = 0;
   laserCharge(){
     const support=this.supportProfile();
@@ -734,6 +737,13 @@ export class World {
   }
   private shoot(dt: number) {
     if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0; return; }
+    const scale=this.fireRateScale();
+    if(scale!==this.firingScale){
+      // Keep cooldown progress at both edges; no free salvo or stored shots.
+      const ratio=this.firingScale/scale;
+      for(const [kind,timer]of this.fireTimers)this.fireTimers.set(kind,timer*ratio);
+      this.laserTimer*=ratio;this.firingScale=scale;
+    }
     for (const kind of this.activeWeapons) {
     let timer = (this.fireTimers.get(kind) ?? 0) - dt;
     const w = this.profileFor(kind),calibrationBand=calibrationVisualBand(this.weaponCalibration(kind));
@@ -743,13 +753,13 @@ export class World {
         const x = this.player.x + w.offsets[i], y = C.playerY - (w.muzzleY ?? 72);
         const velocity=kind==='arc'?this.arcVelocity(x,y):{vx:w.vx[i],vy:-C.bulletSpeed};
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, ...velocity,
-          damage: w.damage[i] * (1 + permanentPower(this.growth) / 100) * (this.growth.overload > 0 ? 1.35 : 1),
+          damage: w.damage[i] * (1 + permanentPower(this.growth) / 100) * (this.growth.overload > 0 ? OVERLOAD.damage : 1),
           age: 0, active: true, hostile: false, weaponKind: kind,ammoBranch:isBallisticWeapon(kind)?this.build.ballisticBranch??null:undefined,...(this.build.ammoFusion&&isBallisticWeapon(kind)?{ammoFusion:this.build.ammoFusion}:{}), remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops,
           ...(calibrationBand?{calibrationBand}:{}) });
         this.shots++;
       }
       this.effects.push({type:'fire',x:this.player.x,y:C.playerY-70,size:this.weaponStage(kind),weaponKind:kind});
-      timer += 1 / w.rate;
+      timer += 1 / (w.rate*scale);
     }
     this.fireTimers.set(kind, timer);
     }
@@ -757,8 +767,8 @@ export class World {
     if (support.laserUnlocked) {
       this.laserTimer -= dt;
       if (this.laserTimer <= 0) {
-        this.laserTimer += support.laserInterval;
-        const start=C.playerY-100,laserDamage=support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
+        this.laserTimer += support.laserInterval/scale;
+        const start=C.playerY-100,laserDamage=support.laserDamage*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?OVERLOAD.damage:1);
         const opticalBand=laserVisualBand(this.growth.mastery,this.build.ranks.optical);
         const visited=new Set<number>();let origin:{x:number;y:number;id:number}|undefined,mainBlocked=false;
         for(const side of support.prism?[0,-1,1]:[0]) {
@@ -769,7 +779,7 @@ export class World {
           let end:number=C.playerShotTop, count=0;
           for(const body of targets){
             const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
-            const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
+            const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?OVERLOAD.damage:1);
             visited.add(body.id);if(side===0&&count===0){mainBlocked=blocked;if(!blocked&&body.kind in C.enemies)origin={x:body.x,y:body.y,id:body.id};}
             const before=body.hp,beforeEnergy=body.energy;this.hit(body,damage,'pulse','laser');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
             if(body.hp<before||body.kind==='gate'&&body.energy>beforeEnergy){const contactY=blocked?Math.min(start,body.y+body.height/2):body.y;this.effects.push({type:'laser-impact',x:body.x,y:body.y,targetX:beamX(contactY),targetY:contactY,opticalBand,prism:side!==0});}

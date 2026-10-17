@@ -2,28 +2,32 @@ import {C} from '../core/config';
 import type { WeaponKind } from '../core/weapons';
 import { weaponColors } from '../core/weapons';
 
-/** Draw behind the player: finite overload energy, never a hitbox or projectile. */
+/** Temporary rear vent doors and exhaust, behind the existing mechanical rig.
+ * Edge retraction keeps the metal cases visible without painting the danger lane. */
 export function overloadWake(c: CanvasRenderingContext2D, x: number, y: number, time: number, remaining: number, weak: boolean) {
-  if (remaining <= 0) return;
-  const fade = Math.min(1, remaining / 0.6);
-  c.save(); c.translate(x, y); c.globalCompositeOperation = 'lighter';
-  c.globalAlpha = fade * (weak ? 0.45 : 0.7);
-  for (const side of [-1, 1]) {
-    const length = 38 + Math.sin(time * 18 + side) * 8;
-    const points = [side * 72, -12, side * 78, 24, side * 66, 24 + length];
-    if (!weak) line(c, '#ffbd4e28', 16, points);
-    line(c, '#ffcc76', weak ? 2 : 4, points);
-    if (!weak) {
-      line(c, '#fff7d6', 1.5, [side * 72, -10, side * 77, 20, side * 70, 41]);
-      const flow = (time * 2.8 + (side + 1) * 0.25) % 1;
-      c.globalAlpha = fade * (1 - flow) * 0.6;
-      line(c, '#ffd58c', 2, [side * (87 + flow * 5), 10 + flow * 45, side * (87 + flow * 5), 22 + flow * 45]);
-      c.globalAlpha = fade * 0.7;
+  if(remaining<=0)return;
+  const fade=Math.min(1,remaining/.6);
+  c.save();c.globalAlpha=fade;c.globalCompositeOperation='source-over';
+  for(const side of[-1,1]){
+    const reach=Math.min(76,side<0?x-20:C.width-x-20),pulse=.5+.5*Math.sin(time*25+side);
+    c.save();c.translate(x+side*reach,y+28);
+    c.fillStyle='#0c151b';c.strokeStyle='#6d8590';c.lineWidth=1.5;
+    c.beginPath();c.moveTo(-10,-13);c.lineTo(6,-17);c.lineTo(11,27);c.lineTo(6,38);c.lineTo(-9,32);c.closePath();c.fill();c.stroke();
+    line(c,'#c5ced0',1,[-7,-9,-5,25]);line(c,'#354b57',3,[7,-8,8,23]);
+    for(let i=0;i<(weak?2:3);i++){
+      const yy=-3+i*11;c.fillStyle='#2a3a42';c.fillRect(-6,yy,11,6);
+      c.fillStyle=i===1&&pulse>.5?'#ffdb9a':'#c86c2b';c.fillRect(-5,yy+1,9,2);
+      line(c,'#15232b',1,[-7,yy+6,7,yy+6]);
     }
+    c.globalCompositeOperation='lighter';
+    const length=42+pulse*15;c.globalAlpha=fade*(weak?.45:.65);
+    c.fillStyle='#dd6a2433';c.beginPath();c.moveTo(-5,33);c.lineTo(8,33);c.lineTo(5,40+length);c.lineTo(-3,40+length-9);c.closePath();c.fill();
+    line(c,'#ffc478',weak?2:3,[-2,34,2,50,0,34+length]);
+    if(!weak){line(c,'#fff1ca',1,[-2,34,2,46]);for(let i=0;i<3;i++){const flow=(time*3.2+i/3)%1;c.globalAlpha=fade*(1-flow)*.5;line(c,'#dc9259',1.2,[side*(8+flow*5),40+flow*48,side*(9+flow*5),47+flow*48]);}}
+    c.restore();
   }
   c.restore();
 }
-
 /** Finite shot-driven coil discharge, localized to the mechanical muzzle. */
 export function coilDischarge(c: CanvasRenderingContext2D, x: number, y: number, life: number, stage: number, weak: boolean) {
   if (life <= 0) return;

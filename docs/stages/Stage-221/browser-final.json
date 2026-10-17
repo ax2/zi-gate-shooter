@@ -1,0 +1,17 @@
+{
+  "normalEarnedFlow": true,
+  "worldInjection": false,
+  "virtual60Hz": true,
+  "newHotAt": 63.633333333331,
+  "oldHotAt": 63.633333333331,
+  "windowSeconds": 0.8166666666666273,
+  "newHotVolleys": 25,
+  "oldHotVolleys": 21,
+  "afterRate": 1,
+  "afterHP": 3,
+  "normalProfilesPreserved": true,
+  "logs": {
+    "current": [],
+    "baseline": []
+  }
+}
