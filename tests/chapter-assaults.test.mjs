@@ -7,7 +7,7 @@ it('adds three distinct combat phrases and preserves every existing enemy, speci
  for(let round=1;round<=12;round++)for(const seed of [1,29,1337])for(const plan of [0,1,2]){
   const mirror=round>1&&new Random(seed).next()>.5,extra=chapterAssaults(round,mirror,battleIndex(round,plan));
   const remove=(list,own)=>{const rest=[...list];for(const s of own){const i=rest.findIndex(t=>JSON.stringify(t)===JSON.stringify(s));expect(i).toBeGreaterThanOrEqual(0);rest.splice(i,1);}return rest;};
-  expect(remove(timeline(round,seed,plan),extra)).toEqual(remove(old.timeline(round,seed,plan),old.chapterAssaults(round,mirror,battleIndex(round,plan))));
+  expect(remove(timeline(round,seed,plan).filter(s=>!s.earlyReserve),extra)).toEqual(remove(old.timeline(round,seed,plan),old.chapterAssaults(round,mirror,battleIndex(round,plan))));
   expect(extra.filter(s=>s.dropLabel)).toHaveLength(3);
   expect(extra.every(s=>s.at>=10&&s.at<58&&s.drop&&s.x>=150&&s.x<=570)).toBe(true);
  }

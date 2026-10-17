@@ -7,7 +7,7 @@ it('preserves every other enemy and every reward in 108 authored schedules',()=>
  for(let r=1;r<=12;r++)for(const seed of [1,29,1337])for(const plan of [0,1,2] as const){
   const mirror=r>1&&new Random(seed).next()>.5,v=battleIndex(r,plan);
   const rest=(list:any[],own:any[])=>{const a=[...list];for(const s of own){const i=a.findIndex(t=>JSON.stringify(t)===JSON.stringify(s));expect(i).toBeGreaterThanOrEqual(0);a.splice(i,1);}return a;};
-  expect(rest(timeline(r,seed,plan),chapterAssaults(r,mirror,v))).toEqual(rest(old.timeline(r,seed,plan),old.chapterAssaults(r,mirror,v)));
+  expect(rest(timeline(r,seed,plan).filter(s=>!s.earlyReserve),chapterAssaults(r,mirror,v))).toEqual(rest(old.timeline(r,seed,plan),old.chapterAssaults(r,mirror,v)));
  }
 });
 it.each([0,1,2])('adds fixed reinforcements without changing health or the three supply windows, variation %s',v=>{

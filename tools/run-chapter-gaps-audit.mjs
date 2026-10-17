@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.ASSAULT_BASELINE_ONLY==='1'?'before':process.env.ASSAULT_SECONDS??'300';await build({entryPoints:['tools/audit-chapter-gaps.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-233/gaps-${suffix}.mjs`});await import(`../build/qa/Stage-233/gaps-${suffix}.mjs`);

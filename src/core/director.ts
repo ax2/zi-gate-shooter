@@ -1,5 +1,6 @@
 import {closingAssault} from './closing-assault';
 import {openingAssaults} from './opening-assaults';
+import {earlyReinforcements} from './early-reinforcements';
 import {BANKSHOT,hasBankshot} from './bankshot';
 import {chapterAssaults} from './chapter-assaults';
 import {pursuitWaves} from './pursuit-waves';
@@ -12,7 +13,7 @@ import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen,hasRotatingShields,ROTATING_SHIELD} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake'; lane?: number; opening?:number; openingAssault?:boolean; closing?:boolean; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string; breach?:boolean }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake'; lane?: number; opening?:number; openingAssault?:boolean; earlyReserve?:boolean; closing?:boolean; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string; breach?:boolean }
 export const MID_GATE_AT=39;
 export const INTRO_MID_GATE_AT=35;
 export const INTRO_ARMORY_AT=46.5;
@@ -239,6 +240,7 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
   }
   out.push(...chapterAssaults(round,mirror,encounter));
   out.push(...openingAssaults(round,mirror,encounter));
+  out.push(...earlyReinforcements(round,mirror,encounter));
   out.push(...pursuitWaves(round,mirror,encounter));
   out.push(...closingAssault(round,mirror));
   return out.sort((a, b) => a.at - b.at);
