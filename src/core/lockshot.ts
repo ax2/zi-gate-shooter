@@ -1,5 +1,6 @@
 import {C} from './config';
 import type {Body} from './world';
+export const INTRO_LOCKSHOT={at:51,durability:2,warning:1.55} as const;
 export const LOCKSHOT={at:23,y:360,opening:.1,warning:1,spacing:.12,shots:3,speed:620,pivot:20,barrel:48,hold:10,exitSpeed:220} as const;
 export const FORKSHOT={spread:160,warning:.55,recovery:.1} as const;
 export function forkshotTargets(lockX:number){

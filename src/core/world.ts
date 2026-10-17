@@ -3,7 +3,7 @@ import {BANKSHOT,advanceProjectile,type FlightSegment} from './bankshot';
 import {FIRE_CONTROL,fireControlSource} from './fire-control';
 import {CombatLedger,type DamageSource} from './combat-ledger';
 import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
-import {LOCKSHOT} from './lockshot';
+import {LOCKSHOT,INTRO_LOCKSHOT} from './lockshot';
 import {RELAY_SCREEN} from './relay-screen';
 import {BATTERY} from './battery';
 import {calibrationVisualBand,type CalibrationBand} from './calibration-visual';
@@ -48,7 +48,7 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; bossVariant?: number;
 }
@@ -669,7 +669,7 @@ export class World {
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
           if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
-          if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;if(s.forkshot)candidate.forkshot=true;}
+          if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;if(this.round===1){candidate.lockWarning=INTRO_LOCKSHOT.warning;candidate.hp*=INTRO_LOCKSHOT.durability;candidate.maxHp=candidate.hp;}if(s.forkshot)candidate.forkshot=true;}
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
           if(s.pattern==='sweep'&&s.kind!=='drone')candidate.timer=SWEEPER.opening;
           if(s.pattern==='relay-screen'){if(s.kind==='guard'&&s.shieldTurn!==undefined)candidate.shieldTurn=s.shieldTurn;candidate.timer=s.kind==='guard'?RELAY_SCREEN.guardOpening+(s.shieldTurn??0)*RELAY_SCREEN.stagger:RELAY_SCREEN.sniperOpening;if(s.kind==='guard'||s.kind==='sniper'){candidate.hp*=RELAY_SCREEN.durability;candidate.maxHp=candidate.hp;}}

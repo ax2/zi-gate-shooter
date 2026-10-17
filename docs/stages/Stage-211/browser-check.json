@@ -1,0 +1,14 @@
+{
+  "plugin": "Browser plugin not available",
+  "logs": [
+    {
+      "name": "mobile-two-runs",
+      "logs": []
+    },
+    {
+      "name": "desktop",
+      "logs": []
+    }
+  ],
+  "isolatedLocalStorage": true
+}

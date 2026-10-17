@@ -1,0 +1,356 @@
+[
+  {
+    "base": "penetrator",
+    "extra": "fragment",
+    "selected": {
+      "time": 308.65000000004795,
+      "round": 4,
+      "before": {
+        "pierces": 47,
+        "ricochets": 0,
+        "splashHits": 4
+      },
+      "spentBefore": 14,
+      "spentAfter": 15,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc",
+        "blast"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15455,
+    "totals": {
+      "pierces": 85,
+      "ricochets": 0,
+      "splashHits": 29
+    },
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 53,
+        "ricochets": 0,
+        "splashHits": 9
+      },
+      {
+        "kind": "pierce",
+        "pierces": 17,
+        "ricochets": 0,
+        "splashHits": 3
+      },
+      {
+        "kind": "pulse",
+        "pierces": 13,
+        "ricochets": 0,
+        "splashHits": 8
+      },
+      {
+        "kind": "blast",
+        "pierces": 2,
+        "ricochets": 0,
+        "splashHits": 9
+      }
+    ],
+    "peakBullets": 55,
+    "peakBodies": 10
+  },
+  {
+    "base": "penetrator",
+    "extra": "ricochet",
+    "selected": {
+      "time": 308.65000000004795,
+      "round": 4,
+      "before": {
+        "pierces": 47,
+        "ricochets": 0,
+        "splashHits": 4
+      },
+      "spentBefore": 14,
+      "spentAfter": 15,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc",
+        "blast"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15405,
+    "totals": {
+      "pierces": 79,
+      "ricochets": 80,
+      "splashHits": 5
+    },
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 48,
+        "ricochets": 34,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 16,
+        "ricochets": 9,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 13,
+        "ricochets": 34,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 2,
+        "ricochets": 3,
+        "splashHits": 5
+      }
+    ],
+    "peakBullets": 55,
+    "peakBodies": 10
+  },
+  {
+    "base": "fragment",
+    "extra": "penetrator",
+    "selected": {
+      "time": 310.65000000004613,
+      "round": 4,
+      "before": {
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 56
+      },
+      "spentBefore": 14,
+      "spentAfter": 15,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc",
+        "blast"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15315,
+    "totals": {
+      "pierces": 44,
+      "ricochets": 0,
+      "splashHits": 85
+    },
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 42,
+        "ricochets": 0,
+        "splashHits": 29
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 15
+      },
+      {
+        "kind": "pulse",
+        "pierces": 1,
+        "ricochets": 0,
+        "splashHits": 34
+      },
+      {
+        "kind": "blast",
+        "pierces": 1,
+        "ricochets": 0,
+        "splashHits": 7
+      }
+    ],
+    "peakBullets": 67,
+    "peakBodies": 10
+  },
+  {
+    "base": "fragment",
+    "extra": "ricochet",
+    "selected": {
+      "time": 310.65000000004613,
+      "round": 4,
+      "before": {
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 56
+      },
+      "spentBefore": 14,
+      "spentAfter": 15,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc",
+        "blast"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15415,
+    "totals": {
+      "pierces": 0,
+      "ricochets": 89,
+      "splashHits": 86
+    },
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 35,
+        "splashHits": 27
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 13,
+        "splashHits": 17
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 35,
+        "splashHits": 35
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 6,
+        "splashHits": 7
+      }
+    ],
+    "peakBullets": 67,
+    "peakBodies": 10
+  },
+  {
+    "base": "ricochet",
+    "extra": "penetrator",
+    "selected": {
+      "time": 310.4500000000463,
+      "round": 4,
+      "before": {
+        "pierces": 0,
+        "ricochets": 86,
+        "splashHits": 2
+      },
+      "spentBefore": 14,
+      "spentAfter": 15,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc",
+        "blast"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15525,
+    "totals": {
+      "pierces": 33,
+      "ricochets": 175,
+      "splashHits": 6
+    },
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 31,
+        "ricochets": 72,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 31,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 1,
+        "ricochets": 63,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 1,
+        "ricochets": 9,
+        "splashHits": 6
+      }
+    ],
+    "peakBullets": 67,
+    "peakBodies": 10
+  },
+  {
+    "base": "ricochet",
+    "extra": "fragment",
+    "selected": {
+      "time": 310.4500000000463,
+      "round": 4,
+      "before": {
+        "pierces": 0,
+        "ricochets": 86,
+        "splashHits": 2
+      },
+      "spentBefore": 14,
+      "spentAfter": 15,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "arc",
+        "blast"
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15525,
+    "totals": {
+      "pierces": 0,
+      "ricochets": 175,
+      "splashHits": 32
+    },
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 71,
+        "splashHits": 9
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 32,
+        "splashHits": 4
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 63,
+        "splashHits": 14
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 9,
+        "splashHits": 5
+      }
+    ],
+    "peakBullets": 67,
+    "peakBodies": 10
+  }
+]

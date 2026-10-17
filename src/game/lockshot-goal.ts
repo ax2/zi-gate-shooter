@@ -7,7 +7,7 @@ export function lockshotGoal(w:World,id:string|null){
   if(id!=='preempt-gun'&&id!=='bait-counter')return null;
   const bait=id==='bait-counter',title=bait?'技巧目标 · 诱射反击':'技巧目标 · 先制拆炮';
   const b=w.bodies.find(b=>b.active&&b.pattern==='lockshot'&&b.y<C.playerY-b.height/2);
-  if(!b)return {kind:'move' as const,title,detail:'第二轮起侧翼章 · 留意斜射哨机'};
+  if(!b)return {kind:'move' as const,title,detail:w.round===1?'首轮后段 · 留意锁位哨机':'侧翼章 · 留意斜射哨机'};
   let detail:string;
   if(!bait)detail=(b.lockAcceptedShots??0)>0?'已发射 · 下个哨机再试':(b.dropGrace??0)>0?'等待护盖打开，再蓄能抢先拆炮':b.warning>0?'正在蓄能 · 对准炮机抢先击毁':'等待蓄能 · 首发前对准击毁';
   else if(b.lockDamageStart!==w.damageTaken)detail='本次已受伤 · 下个哨机再试';

@@ -11,6 +11,7 @@ import {admitWeaponImpact,trimImpactBudget,type ImpactMarker} from './impact-adm
 import {captureEquipment,equipmentChanges,equipmentReceipt,EquipmentReceiptQueue,type EquipmentChange} from './equipment-receipt';
 import {ionEvolutionLight} from './ion-evolution-light';
 import {stormMarks} from './storm-marks';
+import {achievementBadge}from'./achievement-badge';
 import {controlShutter}from'./control-shutter';
 import{shutterClosed}from'../core/control-shutter';
 import {ammoRack}from'./ammo-rack';
@@ -125,6 +126,7 @@ export class CanvasRuntime {
   private equipmentFeedback=new EquipmentReceiptQueue();
   private achievementToast = '';
   private achievementUntil = 0;
+  private achievementShownAt?:number;
   private contractReturn:'loadout'|'paused'='loadout';
   private treeReturn: 'loadout' | 'choice' = 'loadout';
   private dossierWeapon: WeaponKind = 'pulse';
@@ -303,7 +305,7 @@ export class CanvasRuntime {
     this.opticalFiredAt=-Infinity;
     this.buildFeedback=undefined;this.pendingBuildFeedback.length=0;this.equipmentFeedback.clear();
     this.runNewBest=false;this.runAchievements=[];this.achievementReturn='menu';
-    this.achievementUntil=0;
+    this.achievementUntil=0;this.achievementShownAt=undefined;
     this.supportBeams=[];
     this.pausePreview = false;
     this.groundDistance = 0;
@@ -523,7 +525,7 @@ export class CanvasRuntime {
   private checkAchievements() {
     const beforeCertifications=this.save.achievements.certifiedBuilds.length,beforeMagnetic=this.save.achievements.magneticCertifications.length;
     const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,magneticCertifications:[...this.world.magneticCertifications]});
-    if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;}
+    if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.achievementShownAt=undefined;}
     if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length||beforeMagnetic!==this.save.achievements.magneticCertifications.length)this.platform.write(this.save);
   }
   private recordEquipment(before:ReturnType<typeof captureEquipment>){
@@ -829,7 +831,7 @@ export class CanvasRuntime {
       const progress=contract.kind==='research'&&contract.proof?`${buildProofs[contract.proof.kind].name} ${Math.min(contract.proofProgress,buildProofs[contract.proof.kind].goal)}/${buildProofs[contract.proof.kind].goal}${requiredProofGroups(contract.proof.kind)?' · 批次'+Math.min(contract.proofGroupCount,requiredProofGroups(contract.proof.kind))+'/'+requiredProofGroups(contract.proof.kind):''}`:contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
       this.rect(40,y,640,44,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${progress}`,360,y+22,24,'#ffdc8a');
     }
-    if(this.mode==='playing' && w.time<this.achievementUntil&&!bottomBusy){this.rect(40,1190,640,55,'#102330');this.text(`成就达成 · ${this.achievementToast}`,360,1218,24,'#ffdc8a');}
+    if(this.mode==='playing' && w.time<this.achievementUntil&&!bottomBusy){this.achievementShownAt??=w.time;achievementBadge(c,this.achievementToast,w.time-this.achievementShownAt,this.save.settings.effects==='weak');}
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
     c.restore();
   }

@@ -127,7 +127,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(lockshotLeaving(b)){b.warning=0;b.burst=0;b.y+=LOCKSHOT.exitSpeed*dt;return;}
     if(b.y<320){b.y=Math.min(320,b.y+b.speed*dt);b.timer=LOCKSHOT.opening;return;}
     if(b.timer<=1e-9&&!offline){
-      if(b.warning<=0&&(!b.burst||b.forkshot)){b.warning=b.forkshot&&(b.lockShots??0)>0?FORKSHOT.warning:LOCKSHOT.warning;b.timer=b.warning;}
+      if(b.warning<=0&&(!b.burst||b.forkshot)){b.warning=b.forkshot&&(b.lockShots??0)>0?FORKSHOT.warning:(b.lockWarning??LOCKSHOT.warning);b.timer=b.warning;}
       else {const p=lockshotProfile(b);b.warning=0;b.burst=1;shot(p.x,p.y,p.vx,p.vy);b.lockShots=(b.lockShots??0)+1;b.timer=b.forkshot?FORKSHOT.recovery:LOCKSHOT.spacing;}
     }
   } else if (b.kind === 'sniper') {

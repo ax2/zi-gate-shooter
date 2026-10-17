@@ -1,6 +1,6 @@
 import {BANKSHOT,hasBankshot} from './bankshot';
 import {FIRE_CONTROL,hasControlPatrol} from './fire-control';
-import {LOCKSHOT} from './lockshot';
+import {LOCKSHOT,INTRO_LOCKSHOT} from './lockshot';
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
 import {BATTERY} from './battery';
 import {DRIFT_SUPPLY,hasDriftSupply} from './drift-supply';
@@ -225,5 +225,6 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     const screen=out.find(s=>s.kind==='guard'&&s.at===56);if(screen)screen.x=mirror?720-FIRE_CONTROL.screenX:FIRE_CONTROL.screenX;
   }
   if(hasBankshot(round)){const guns=out.filter(s=>s.kind==='armor'&&s.at===BANKSHOT.at);guns.forEach((s,i)=>Object.assign(s,{x:mirror?720-BANKSHOT.xs[i]:BANKSHOT.xs[i],pattern:'bankshot',drop:true,dropY:BANKSHOT.y,dropLabel:i===0?'折返炮阵':undefined,dropDetail:'外射弹沿场边反弹一次 · 抢拆炮台或看实弹换位'}));}
+  if(round===1){const gun=out.find(s=>s.kind==='sniper'&&s.at===INTRO_LOCKSHOT.at);if(gun)Object.assign(gun,{pattern:'lockshot',dropLabel:'锁位三连',dropDetail:'蓄能时抢先拆炮 · 或避过三连再反击'});}
   return out.sort((a, b) => a.at - b.at);
 }
