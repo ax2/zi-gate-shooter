@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.OPTIC_MODE==='legacy'?'legacy':process.env.OPTIC_SECONDS??'600';await build({entryPoints:['tools/audit-optical-fusion.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-229/audit-${suffix}.mjs`});await import(`../build/qa/Stage-229/audit-${suffix}.mjs`);

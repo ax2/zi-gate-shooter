@@ -65,7 +65,7 @@ import { fractureLight, fractureMarks, fractureWaveLight } from './fracture-ligh
 import { mountedRig,mountedCenter,mountedPose } from './mounted-rig';
 import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
 import { achievements, achievementGroups, achievementGroup, achievementProgress, trackAchievement, type AchievementGroup, awardAchievements, parseAchievements } from '../core/achievements';
-import { isAmmoFusion,fusionBranch,ammoName,tree, routes, magneticAugments, isMagneticAugment, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
+import { OPTICAL_FUSION,hasOptical,isOpticalFusion,opticalFusionBranch,opticalName,isAmmoFusion,fusionBranch,ammoName,tree, routes, magneticAugments, isMagneticAugment, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
 import { overloadWake, coilDischarge, chainArc, focusDischarge, energyShot, projectileBody, muzzleLight, detonationLight, detonationSpriteAlpha, sparkLight, impactLight } from './combat-light';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
@@ -83,7 +83,7 @@ import { contextGuide, weaponGuide } from './context-guide';
 import { dossierWeapons, weaponDossier } from './weapon-dossier';
 import { supportLight,opticalImpactLight,opticalEmitterLight,opticalChargeLight } from './support-light';
 import{MIRROR_LASER,type MirrorSegment}from'../core/mirror-laser';
-import{mirrorLight,mirrorMount}from'./mirror-light';
+import{mirrorLight,mirrorMount,dualLensMount}from'./mirror-light';
 import {laserVisualBand} from '../core/support-profile';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
@@ -408,7 +408,7 @@ export class CanvasRuntime {
   }
   private selectBuild(route:Route,branch?:BuildBranch){
     const preview=buildPreview(this.world,route,branch);
-    const chosenNode=isAmmoFusion(branch)?{name:'复合弹芯 · '+ballisticBranches[fusionBranch(branch)].name}:isStormAugment(branch)?stormAugments[branch]:isIonAugment(branch)?ionAugments[branch]:isFractureAugment(branch)?fractureAugments[branch]:isPhotonAugment(branch)?photonAugments[branch]:isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
+    const chosenNode=isOpticalFusion(branch)?{name:'双镜复合 · '+opticalBranches[opticalFusionBranch(branch)].name}:isAmmoFusion(branch)?{name:'复合弹芯 · '+ballisticBranches[fusionBranch(branch)].name}:isStormAugment(branch)?stormAugments[branch]:isIonAugment(branch)?ionAugments[branch]:isFractureAugment(branch)?fractureAugments[branch]:isPhotonAugment(branch)?photonAugments[branch]:isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
     this.upgradeUntil=this.world.time+.45;
@@ -427,18 +427,20 @@ export class CanvasRuntime {
     if(action.startsWith('build:') && this.mode==='choice') {
       const route=action.slice(6) as Route;
       if(!routes.includes(route))return;
-      if((this.world.build.ranks[route]===1||route==='ballistic'&&(this.world.canRefineFracture()||this.world.canRefineStorm()||this.world.canFuseAmmo())||route==='electric'&&(this.world.canRefineMagnetic()||this.world.canRefineIon())||route==='optical'&&this.world.canRefinePhoton())&&this.world.build.available(this.world.buildPoints).includes(route)){this.branchRoute=route;this.mode='branch';}
+      if((this.world.build.ranks[route]===1||route==='ballistic'&&(this.world.canRefineFracture()||this.world.canRefineStorm()||this.world.canFuseAmmo())||route==='electric'&&(this.world.canRefineMagnetic()||this.world.canRefineIon())||route==='optical'&&(this.world.canRefinePhoton()||this.world.canFuseOptics()))&&this.world.build.available(this.world.buildPoints).includes(route)){this.branchRoute=route;this.mode='branch';}
       else this.selectBuild(route);
     }
+    else if(action==='optic-defer'&&this.mode==='branch'&&this.branchRoute==='optical'&&this.world.canFuseOptics())this.selectBuild('optical');
     else if(action==='fusion-defer'&&this.mode==='branch'&&this.branchRoute==='ballistic'&&this.world.canFuseAmmo())this.selectBuild('ballistic');
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
       const branch=action.slice(7) as BuildBranch,route=this.branchRoute;
       if(isIonAugment(branch)&&route==='electric'&&this.world.canRefineIon())this.selectBuild(route,branch);
+      else if(isOpticalFusion(branch)&&route==='optical'&&this.world.canFuseOptics())this.selectBuild(route,branch);
       else if(isAmmoFusion(branch)&&route==='ballistic'&&this.world.canFuseAmmo())this.selectBuild(route,branch);
       else if(isStormAugment(branch)&&route==='ballistic'&&this.world.canRefineStorm())this.selectBuild(route,branch);
       else if(isFractureAugment(branch)&&route==='ballistic'&&this.world.canRefineFracture())this.selectBuild(route,branch);
-      else if(isPhotonAugment(branch)&&route==='optical'&&this.world.canRefinePhoton())this.selectBuild(route,branch);
+      else if(isPhotonAugment(branch)&&route==='optical'&&(this.world.canRefinePhoton()||this.world.canFuseOptics()))this.selectBuild(route,branch);
       else if(isMagneticAugment(branch)&&route==='electric'&&this.world.canRefineMagnetic())this.selectBuild(route,branch);
       else if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'||branch==='mirror'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
     }
@@ -721,7 +723,8 @@ export class CanvasRuntime {
       opticalChargeLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,charge,side===0?band:1,this.save.settings.effects==='weak',side!==0);
       opticalEmitterLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,pulse,side===0?band:1,this.save.settings.effects==='weak');
     }
-    if(w.build.opticalBranch==='mirror')mirrorMount(this.ctx,w.player.x,y-100+pose.bob+kick,pulse);
+    if(hasOptical(w.build,'mirror'))mirrorMount(this.ctx,w.player.x,y-100+pose.bob+kick,pulse);
+    if(w.build.opticalFusion)dualLensMount(this.ctx,w.player.x,y-100+pose.bob+kick,[w.build.opticalBranch!,w.build.opticalFusion].map(k=>({burn:'#ffc187',relay:'#a3efff',mirror:'#c5bcff'})[k]),pulse);
   }
   private drawCalibrationRig(y:number,pose:PlayerPose,recoil:number){
     const w=this.world,kind=w.weaponKind,band=calibrationVisualBand(w.weaponCalibration(kind));calibrationMount(this.ctx,w.player.x,y-(w.profileFor(kind).muzzleY??78)+pose.bob+recoil,96*(1+band*.07),kind,band,this.weaponMotion.flash(kind,w.weaponStage(kind),w.time),this.save.settings.effects==='weak');
@@ -1373,12 +1376,13 @@ export class CanvasRuntime {
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`常态 ${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 77, 22, '#d6e7f0', 'left');
     }
-    const support=w.supportProfile();
-    this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':w.build.opticalBranch==='mirror'?'·折返':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,w.build.opticalBranch==='mirror'?22:24,'#7fe4ff');
-    this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,w.build.opticalBranch==='mirror'?923:930,w.build.opticalBranch==='mirror'?20:23,'#a2f9ed');
-    if(w.build.opticalBranch==='mirror')this.text(`折返束：65% / 最多2敌 · 一次反射 · 命中${w.mirrorHits}`,360,949,20,'#c5bcff');
-    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, w.build.opticalBranch==='mirror'?978:970, w.build.opticalBranch==='mirror'?20:23, '#c7deeb');
-    this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, w.build.opticalBranch==='mirror'?1007:1004, w.build.opticalBranch==='mirror'?20:23, '#f0d19a');
+    const support=w.supportProfile(),compactOptics=hasOptical(w.build,'mirror')||!!w.build.opticalFusion;
+    this.text(support.laserUnlocked?`激光${w.build.opticalFusion?'·'+opticalName(w.build):w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':hasOptical(w.build,'mirror')?'·折返':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,w.build.opticalFusion?20:hasOptical(w.build,'mirror')?22:24,'#7fe4ff');
+    this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,compactOptics?923:930,compactOptics?20:23,'#a2f9ed');
+    if(w.build.opticalFusion)this.text([hasOptical(w.build,'burn')?'灼烧3×25%':'',hasOptical(w.build,'relay')?'分光65%/180':'',hasOptical(w.build,'mirror')?'折返65%/2敌':''].filter(Boolean).join(' · '),360,949,20,'#c5bcff');
+    else if(hasOptical(w.build,'mirror'))this.text(`折返束：65% / 最多2敌 · 一次反射 · 命中${w.mirrorHits}`,360,949,20,'#c5bcff');
+    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, compactOptics?978:970, compactOptics?20:23, '#c7deeb');
+    this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, compactOptics?1007:1004, compactOptics?20:23, '#f0d19a');
     for(const [i,label] of ['技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
   }
@@ -1539,11 +1543,12 @@ export class CanvasRuntime {
         this.text(node.detail,110,y+29,21,'#bdd8e7','left');
       }
     }
-    this.text(this.world.build.ammoFusion?'复合弹芯 · '+ammoName(this.world.build):this.world.canFuseAmmo()?'复合弹芯可选 · 保留原弹芯，追加一种':this.world.build.refinements.ballistic>=5?'复合弹芯：弹道3＋精调10＋任一T3弹道':this.world.build.stormAugment?'雷暴精研 · '+stormAugments[this.world.build.stormAugment].name+'已生效':'雷暴精研：弹道3 + 精调5 + T3霰射',360,1025,22,'#bdd8e7');
+    this.text(this.world.build.opticalFusion?'双镜复合 · '+opticalName(this.world.build):this.world.canFuseOptics()?'双镜复合可选 · 原镜组保留，再追加一种':this.world.build.ranks.optical>=3&&this.world.build.refinements.optical>=this.world.build.refinements.ballistic?'双镜复合：光学精调 '+Math.min(OPTICAL_FUSION.refinements,this.world.build.refinements.optical)+'/'+OPTICAL_FUSION.refinements+' · 原镜组保留':this.world.build.ammoFusion?'复合弹芯 · '+ammoName(this.world.build):this.world.canFuseAmmo()?'复合弹芯可选 · 保留原弹芯，追加一种':this.world.build.refinements.ballistic>=5?'复合弹芯：弹道3＋精调10＋任一T3弹道':this.world.build.stormAugment?'雷暴精研 · '+stormAugments[this.world.build.stormAugment].name+'已生效':'雷暴精研：弹道3 + 精调5 + T3霰射',360,1025,22,'#bdd8e7');
     this.text(this.world.build.ionAugment?'离子精研已生效 · 原放电与常规精调保留':'离子精研：雷电3 + 精调2 + T3电弧',360,1055,23,'#bdd8e7');
     this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
   }
   private drawBuildBranch(){
+    if(this.branchRoute==='optical'&&this.world.canFuseOptics()){this.drawOpticalFusion();return;}
     if(this.branchRoute==='ballistic'&&this.world.canFuseAmmo()){this.drawAmmoFusion();return;}
     if(this.branchRoute==='ballistic'&&this.world.canRefineStorm()){this.drawStormBranch();return;}
     if(this.branchRoute==='ballistic'&&this.world.canRefineFracture()){this.drawFractureBranch();return;}
@@ -1564,6 +1569,21 @@ export class CanvasRuntime {
     }
     this.text('本局选定不可切换 · 三阶棱镜与旧武器保留',360,1020,22,'#f0d19a');
     this.button('返回升级选择',1100,'branch-back');
+  }
+  private drawOpticalFusion(){
+    const w=this.world;this.rect(35,120,650,1080,'#102330');
+    this.text('双镜复合 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('已装 '+opticalName(w.build)+' · 保留原镜组，再追加一种',360,250,24,'#bdd8e7');
+    const choices=(['burn','relay','mirror'] as const).filter(b=>b!==w.build.opticalBranch);
+    for(const [i,kind]of choices.entries()){
+      const branch=`optic-${kind}` as const,node=opticalBranches[kind],preview=buildPreview(w,'optical',branch),y=315+i*290,color=kind==='burn'?'#ffc187':kind==='mirror'?'#c5bcff':'#a3efff';
+      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
+      this.text('追加 '+node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,23,'#effaff','left');
+      this.text(kind==='burn'?'主束首敌追加3次25%灼烧':kind==='relay'?'追加65%独立侧束 · 横距180':'追加65%斜束 · 反射1次 / 最多2敌',90,y+130,22,'#bdd8e7','left');
+      this.text(preview.gain.split(' · ')[0],90,y+173,22,'#d4e7ad','left');
+      this.text('选择复合　›',625,y+219,25,color,'right');this.buttons.push({x:65,y,w:590,h:250,label:'追加'+node.name,action:'branch:'+branch});
+    }
+    this.text('消耗1点 · 含本次常规精调 · 本局仅双镜一次',360,945,23,'#f0d19a');this.button('仅做常规精调，稍后复合',1015,'optic-defer');this.button('返回升级选择',1130,'branch-back');
   }
   private drawAmmoFusion(){
     const w=this.world;this.rect(35,120,650,1080,'#102330');
@@ -1694,7 +1714,7 @@ export class CanvasRuntime {
     this.text('直伤含常驻火力 · 不计超载、命中率与派生',360,305,20,'#bdd8e7');
     const available=this.world.build.available(this.world.buildPoints);
     for(const [i,route] of routes.entries()){
-      const rank=this.world.build.ranks[route],y=330+i*235,node=route==='ballistic'&&this.world.canFuseAmmo()?{name:'复合弹芯 · 二选一'}:route==='ballistic'&&this.world.canRefineStorm()?{name:'雷暴精研 · 二选一'}:route==='ballistic'&&this.world.canRefineFracture()?{name:'裂甲精研 · 二选一'}:route==='optical'&&this.world.canRefinePhoton()?{name:'光链精研 · 二选一'}:route==='electric'&&this.world.canRefineMagnetic()?{name:'磁暴精研 · 二选一'}:route==='electric'&&this.world.canRefineIon()?{name:'离子精研 · 二选一'}:this.world.build.next(route);
+      const rank=this.world.build.ranks[route],y=330+i*235,node=route==='ballistic'&&this.world.canFuseAmmo()?{name:'复合弹芯 · 二选一'}:route==='ballistic'&&this.world.canRefineStorm()?{name:'雷暴精研 · 二选一'}:route==='ballistic'&&this.world.canRefineFracture()?{name:'裂甲精研 · 二选一'}:route==='optical'&&this.world.canFuseOptics()?{name:'双镜复合 · 二选一'}:route==='optical'&&this.world.canRefinePhoton()?{name:'光链精研 · 二选一'}:route==='electric'&&this.world.canRefineMagnetic()?{name:'磁暴精研 · 二选一'}:route==='electric'&&this.world.canRefineIon()?{name:'离子精研 · 二选一'}:this.world.build.next(route);
       const enabled=available.includes(route);
       const preview=buildPreview(this.world,route),color=['#ffd28a','#c6a1ff','#7fe4ff'][i],goalHint=recipeRouteHint(this.world,this.save.recipeGoal,route);
       this.rect(65,y,590,205,enabled?'#203e50':'#15232e');
@@ -1791,7 +1811,7 @@ export class CanvasRuntime {
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
       electricBranch:this.world.build.electricBranch??null,seekerLinks:this.world.seekerLinks,capacitorBursts:this.world.capacitorBursts,capacitorTransfers:this.world.capacitorTransfers,capacitorRecovered:this.world.capacitorRecovered,
-      opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,mirrorShots:this.world.mirrorShots,mirrorHits:this.world.mirrorHits,mirrorBounces:this.world.mirrorBounces,mirrorDoubleHits:this.world.mirrorDoubleHits,mirrorBeams:this.supportBeams.filter(b=>b.mirror).length,
+      opticalBranch:this.world.build.opticalBranch??null,opticalFusion:this.world.build.opticalFusion??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,mirrorShots:this.world.mirrorShots,mirrorHits:this.world.mirrorHits,mirrorBounces:this.world.mirrorBounces,mirrorDoubleHits:this.world.mirrorDoubleHits,mirrorBeams:this.supportBeams.filter(b=>b.mirror).length,
       photonAugment:this.world.build.photonAugment??null,laserChainProfile:laserChainProfile(this.world.build.photonAugment),laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),

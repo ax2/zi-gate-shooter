@@ -25,7 +25,7 @@ import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type Io
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
-import { BuildTree, hasAmmo,isAmmoFusion,AMMO_FUSION,ammoName,isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BallisticBranch,type BuildBranch, type Route } from './build-tree';
+import { BuildTree, hasOptical,isOpticalFusion,opticalFusionBranch,opticalName,OPTICAL_FUSION,hasAmmo,isAmmoFusion,AMMO_FUSION,ammoName,isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BallisticBranch,type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
@@ -90,6 +90,7 @@ export class World {
     return this.researchPoints-before;
   }
   chooseBuild(route: Route,branch?:BuildBranch) {
+    if(isOpticalFusion(branch)&&!this.canFuseOptics())return false;
     if(isAmmoFusion(branch)&&!this.canFuseAmmo())return false;
     if(isStormAugment(branch)&&!this.canRefineStorm())return false;
     if(isIonAugment(branch)&&!this.canRefineIon())return false;
@@ -97,6 +98,7 @@ export class World {
     if(isPhotonAugment(branch)&&!this.canRefinePhoton())return false;
     if(isMagneticAugment(branch)&&!this.canRefineMagnetic())return false;
     if(!this.build.choose(route,this.buildPoints,branch))return false;
+    if(isOpticalFusion(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'双镜复合 · '+opticalName(this.build),detail:'原镜组保留 · 追加'+({burn:'三次灼烧',relay:'独立侧束',mirror:'场边折返束'})[opticalFusionBranch(branch)]+' · 本次常规精调保留'});
     if(isAmmoFusion(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'复合弹芯 · '+ammoName(this.build),detail:'两种弹芯共同生效 · 旧火力与本次常规精调保留'});
     if(isStormAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'雷暴精研 · '+stormAugments[branch].name,detail:stormAugments[branch].detail+' · 常规增伤保留'});
     if(isFractureAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'裂甲精研 · '+fractureAugments[branch].name,detail:fractureAugments[branch].detail+' · 常规精调保留'});
@@ -274,7 +276,7 @@ export class World {
   }
   private opticalSecondary(body:Body,damage:number){
     if(!(body.kind in C.enemies)||guardClosed(body)||(body.dropGrace??0)>0)return;
-    if(this.build.opticalBranch==='burn'){
+    if(hasOptical(this.build,'burn')){
       if(!body.active)return;
       body.burnDamage=Math.max(body.burnDamage??0,damage*OPTICAL_FORK.burnDamage);
       body.burnTicks=OPTICAL_FORK.burnTicks;
@@ -479,6 +481,7 @@ export class World {
     this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
   }
   stormLinks=0;stormRelayLinks=0;stormFocusBursts=0;stormFocusDamage=0;prismHits=0;proofWins=0;
+  canFuseOptics(){return this.build.ranks.optical>=3&&this.build.refinements.optical>=OPTICAL_FUSION.refinements&&!!this.build.opticalBranch&&!this.build.opticalFusion&&!this.canRefinePhoton();}
   canFuseAmmo(){return this.build.ranks.ballistic>=3&&this.build.refinements.ballistic>=AMMO_FUSION.refinements&&!!this.build.ballisticBranch&&!this.build.ammoFusion&&this.activeWeapons.some(k=>isBallisticWeapon(k)&&this.weaponStage(k)>=3)&&!this.canRefineFracture()&&!this.canRefineStorm();}
   canRefineStorm(){return this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1&&this.build.refinements.ballistic>=STORM_REFINEMENT.refinements
     &&this.weaponStage('scatter')>=3&&this.activeWeapons.includes('scatter')&&!this.build.stormAugment&&!this.canRefineFracture();}
@@ -849,8 +852,8 @@ export class World {
           }
           this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0,opticalBand});
         }
-        if(this.build.opticalBranch==='relay'){const id=this.splitLaser(laserDamage);if(id!==undefined)visited.add(id);}
-        if(this.build.opticalBranch==='mirror')this.mirrorLaser(laserDamage);
+        if(hasOptical(this.build,'relay')){const id=this.splitLaser(laserDamage);if(id!==undefined)visited.add(id);}
+        if(hasOptical(this.build,'mirror'))this.mirrorLaser(laserDamage);
         if(this.laserChainUnlocked()&&!mainBlocked){this.laserLinkEnergy=laserDamage;this.laserLinkTargets=visited;if(origin)this.releaseLaserLink(origin);}
       }
     }

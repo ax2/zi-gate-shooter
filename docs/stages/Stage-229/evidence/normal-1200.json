@@ -1,0 +1,240 @@
+{
+  "seed": 1337,
+  "results": [
+    {
+      "base": "burn",
+      "extra": "relay",
+      "seconds": 1200,
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "round": 13,
+      "gates": 49,
+      "pickups": 37,
+      "bossWins": 12,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "blast",
+        "arc"
+      ],
+      "peakBodies": 15,
+      "peakBullets": 70,
+      "fusion": {
+        "time": 227.7333333334067,
+        "round": 3,
+        "spentBefore": 9,
+        "spentAfter": 10,
+        "refinements": 7,
+        "before": {
+          "laserUnlocked": true,
+          "laserInterval": 2.25,
+          "laserDamage": 55.2,
+          "laserTargets": 6,
+          "refractionTargets": 1,
+          "refractionRange": 180,
+          "refractionDamage": 0.6,
+          "prism": false
+        },
+        "after": {
+          "laserUnlocked": true,
+          "laserInterval": 2.25,
+          "laserDamage": 58.650000000000006,
+          "laserTargets": 6,
+          "refractionTargets": 1,
+          "refractionRange": 180,
+          "refractionDamage": 0.6,
+          "prism": false
+        },
+        "stats": {
+          "burn": 15,
+          "relay": 0,
+          "mirror": 0,
+          "shots": 0
+        },
+        "base": "burn",
+        "extra": "relay",
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ]
+      },
+      "firstUseful": {
+        "time": 231.75000000007657,
+        "round": 3,
+        "stats": {
+          "burn": 15,
+          "relay": 1,
+          "mirror": 0,
+          "shots": 0
+        }
+      },
+      "final": {
+        "burn": 528,
+        "relay": 224,
+        "mirror": 0,
+        "shots": 0
+      }
+    },
+    {
+      "base": "relay",
+      "extra": "mirror",
+      "seconds": 1200,
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "round": 13,
+      "gates": 49,
+      "pickups": 37,
+      "bossWins": 12,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "blast",
+        "arc"
+      ],
+      "peakBodies": 14,
+      "peakBullets": 67,
+      "fusion": {
+        "time": 225.60000000007167,
+        "round": 3,
+        "spentBefore": 9,
+        "spentAfter": 10,
+        "refinements": 7,
+        "before": {
+          "laserUnlocked": true,
+          "laserInterval": 2.25,
+          "laserDamage": 55.2,
+          "laserTargets": 6,
+          "refractionTargets": 1,
+          "refractionRange": 180,
+          "refractionDamage": 0.6,
+          "prism": false
+        },
+        "after": {
+          "laserUnlocked": true,
+          "laserInterval": 2.25,
+          "laserDamage": 58.650000000000006,
+          "laserTargets": 6,
+          "refractionTargets": 1,
+          "refractionRange": 180,
+          "refractionDamage": 0.6,
+          "prism": false
+        },
+        "stats": {
+          "burn": 0,
+          "relay": 42,
+          "mirror": 0,
+          "shots": 0
+        },
+        "base": "relay",
+        "extra": "mirror",
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ]
+      },
+      "firstUseful": {
+        "time": 234.78333333341232,
+        "round": 3,
+        "stats": {
+          "burn": 0,
+          "relay": 43,
+          "mirror": 1,
+          "shots": 5
+        }
+      },
+      "final": {
+        "burn": 0,
+        "relay": 268,
+        "mirror": 239,
+        "shots": 713
+      }
+    },
+    {
+      "base": "mirror",
+      "extra": "burn",
+      "seconds": 1200,
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "round": 13,
+      "gates": 48,
+      "pickups": 38,
+      "bossWins": 12,
+      "weapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "blast",
+        "arc"
+      ],
+      "peakBodies": 15,
+      "peakBullets": 74,
+      "fusion": {
+        "time": 225.18333333340468,
+        "round": 3,
+        "spentBefore": 9,
+        "spentAfter": 10,
+        "refinements": 7,
+        "before": {
+          "laserUnlocked": true,
+          "laserInterval": 2.25,
+          "laserDamage": 55.2,
+          "laserTargets": 6,
+          "refractionTargets": 1,
+          "refractionRange": 180,
+          "refractionDamage": 0.6,
+          "prism": false
+        },
+        "after": {
+          "laserUnlocked": true,
+          "laserInterval": 2.25,
+          "laserDamage": 58.650000000000006,
+          "laserTargets": 6,
+          "refractionTargets": 1,
+          "refractionRange": 180,
+          "refractionDamage": 0.6,
+          "prism": false
+        },
+        "stats": {
+          "burn": 0,
+          "relay": 0,
+          "mirror": 23,
+          "shots": 91
+        },
+        "base": "mirror",
+        "extra": "burn",
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ]
+      },
+      "firstUseful": {
+        "time": 234.75000000007896,
+        "round": 3,
+        "stats": {
+          "burn": 1,
+          "relay": 0,
+          "mirror": 24,
+          "shots": 96
+        }
+      },
+      "final": {
+        "burn": 469,
+        "relay": 0,
+        "mirror": 284,
+        "shots": 804
+      }
+    }
+  ],
+  "limits": "Normally earned progression with legal choices, same omniscient zero-reaction safe operator; virtual60Hz not FPS or human difficulty. Legacy serializes World/effects, excluding no public counters but JS private ledger is separately tested."
+}

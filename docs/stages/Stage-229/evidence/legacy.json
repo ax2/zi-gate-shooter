@@ -1,0 +1,20 @@
+[
+  {
+    "base": "burn",
+    "frames": 18000,
+    "hp": 3,
+    "equal": true
+  },
+  {
+    "base": "relay",
+    "frames": 18000,
+    "hp": 3,
+    "equal": true
+  },
+  {
+    "base": "mirror",
+    "frames": 18000,
+    "hp": 3,
+    "equal": true
+  }
+]

@@ -24,7 +24,7 @@ export const magneticAugments={
  'field-link':{name:'分流电桥',detail:'原三拍保留 · 每拍追加一次场外跳击',role:`${MAGNETIC.radius}外至${MAGNETIC_REFINEMENT.linkRange}内，优先当前蓄能射手`},
 } as const;
 export const isMagneticAugment=(value:unknown):value is MagneticAugment=>value==='field-wide'||value==='field-link';
-export type BuildBranch=AmmoFusion|StormAugment|IonAugment|OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment|PhotonAugment|FractureAugment;
+export type BuildBranch=OpticalFusion|AmmoFusion|StormAugment|IonAugment|OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment|PhotonAugment|FractureAugment;
 export const SEEKER_BRIDGE={range:340} as const;
 export const electricBranches={
  seeker:{name:'猎隼电桥',detail:'首跳范围340 · 优先蓄能射手',role:'借前排目标，跳击后排火力点'},
@@ -33,6 +33,12 @@ export const electricBranches={
 } as const;
 export const ELECTRIC_FORK={hits:3,damage:2,relayRange:220} as const;
 export type OpticalBranch='burn'|'relay'|'mirror';
+export type OpticalFusion=`optic-${OpticalBranch}`;
+export const OPTICAL_FUSION={refinements:6} as const;
+export const isOpticalFusion=(v:unknown):v is OpticalFusion=>v==='optic-burn'||v==='optic-relay'||v==='optic-mirror';
+export const opticalFusionBranch=(v:OpticalFusion):OpticalBranch=>v.slice(6) as OpticalBranch;
+export const hasOptical=(build:{opticalBranch?:OpticalBranch;opticalFusion?:OpticalBranch},kind:OpticalBranch)=>build.opticalBranch===kind||build.opticalFusion===kind;
+export const opticalName=(build:{opticalBranch?:OpticalBranch;opticalFusion?:OpticalBranch})=>[build.opticalBranch,build.opticalFusion].filter((v):v is OpticalBranch=>!!v).map(v=>({burn:'灼热',relay:'分光',mirror:'折返'})[v]).join('＋');
 export const opticalBranches={
  burn:{name:'灼热透镜',detail:'间隔-25% · 灼烧3×25% /0.3秒',role:'对重装与首领持续施压'},
  relay:{name:'分光镜组',detail:'间隔-25% · 侧束65%伤害 /横距180',role:'对侧翼敌人扩大覆盖'},
@@ -59,6 +65,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
 };
 export class BuildTree {
+  opticalFusion?:OpticalBranch;
   ammoFusion?:BallisticBranch;
   stormAugment?:StormAugment;
   ionAugment?:IonAugment;
@@ -89,7 +96,10 @@ export class BuildTree {
   }
   choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(isAmmoFusion(branch)){
+    if(isOpticalFusion(branch)){
+      const kind=opticalFusionBranch(branch);if(route!=='optical'||this.ranks.optical<3||this.refinements.optical<OPTICAL_FUSION.refinements||!this.opticalBranch||this.opticalFusion||kind===this.opticalBranch)return false;
+      this.opticalFusion=kind;
+    }else if(isAmmoFusion(branch)){
       const kind=fusionBranch(branch);if(route!=='ballistic'||this.ranks.ballistic<3||this.refinements.ballistic<AMMO_FUSION.refinements||!this.ballisticBranch||this.ammoFusion||kind===this.ballisticBranch)return false;
       this.ammoFusion=kind;
     }else if(isStormAugment(branch)){

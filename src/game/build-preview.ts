@@ -1,7 +1,7 @@
 import {isIonAugment,ionAugments} from '../core/ion-storm';
 import {isStormAugment,stormAugments} from '../core/storm-refinement';
 import {canLaserChain,isPhotonAugment,photonAugments} from '../core/laser-chain';
-import {BuildTree,isAmmoFusion,fusionBranch,ballisticBranches,ammoName,isMagneticAugment,magneticAugments,type Route,type BuildBranch} from '../core/build-tree';
+import {BuildTree,isOpticalFusion,opticalFusionBranch,opticalName,isAmmoFusion,fusionBranch,ballisticBranches,ammoName,isMagneticAugment,magneticAugments,type Route,type BuildBranch} from '../core/build-tree';
 import {builtWeapon,builtSupport} from '../core/build-profile';
 import {permanentPower} from '../core/rewards';
 import type {World} from '../core/world';
@@ -29,10 +29,10 @@ export function buildPreview(world:World,route:Route,branch?:BuildBranch){
   const current=world.build,projected=new BuildTree();
   Object.assign(projected.ranks,current.ranks);Object.assign(projected.refinements,current.refinements);
   projected.magneticAugment=current.magneticAugment;projected.ballisticBranch=current.ballisticBranch;projected.electricBranch=current.electricBranch;projected.opticalBranch=current.opticalBranch;
-  projected.photonAugment=current.photonAugment;
+  projected.photonAugment=current.photonAugment;projected.opticalFusion=current.opticalFusion;
   projected.fractureAugment=current.fractureAugment;projected.ionAugment=current.ionAugment;
   projected.stormAugment=current.stormAugment;projected.ammoFusion=current.ammoFusion;
-  const valid=(!isAmmoFusion(branch)||world.canFuseAmmo())&&(!isStormAugment(branch)||world.canRefineStorm())&&(!isIonAugment(branch)||world.canRefineIon())&&(!isFractureAugment(branch)||world.canRefineFracture())&&(!isPhotonAugment(branch)||world.canRefinePhoton())&&(!isMagneticAugment(branch)||world.canRefineMagnetic())&&projected.choose(route,world.buildPoints,branch);
+  const valid=(!isOpticalFusion(branch)||world.canFuseOptics())&&(!isAmmoFusion(branch)||world.canFuseAmmo())&&(!isStormAugment(branch)||world.canRefineStorm())&&(!isIonAugment(branch)||world.canRefineIon())&&(!isFractureAugment(branch)||world.canRefineFracture())&&(!isPhotonAugment(branch)||world.canRefinePhoton())&&(!isMagneticAugment(branch)||world.canRefineMagnetic())&&projected.choose(route,world.buildPoints,branch);
   const rank=current.ranks[route],kind=route==='ballistic'?'scatter':'arc';
   if(route==='ballistic'&&rank===1&&!branch)projected.ballisticBranch=undefined;
   const owned=world.activeWeapons.includes(kind),stage=owned?world.weaponStage(kind):1,calibration=owned?world.weaponCalibration(kind):0;
@@ -68,6 +68,7 @@ export function buildPreview(world:World,route:Route,branch?:BuildBranch){
   if(valid&&isMagneticAugment(branch))gain=`电弧直击 ${volley(before)} → ${volley(after)} · ${magneticAugments[branch].name}`;
   if(valid&&isPhotonAugment(branch))gain+=' · '+photonAugments[branch].name;
   if(valid&&isFractureAugment(branch))gain+=' · '+fractureAugments[branch].name;
+  if(valid&&route==='optical'&&(isOpticalFusion(branch)||!branch&&world.canFuseOptics()))return {gain:isOpticalFusion(branch)?gain+' · 追加'+({burn:'灼热',relay:'分光',mirror:'折返'})[opticalFusionBranch(branch)]+'镜组':gain,plan:isOpticalFusion(branch)?'双镜复合：'+opticalName(projected)+' · 原能力保留':'双镜复合二选一 · 原镜组保留，再追加一种',weaponGains,valid,stage,before,after,laserBefore,laserAfter};
   if(valid&&route==='ballistic'&&(isAmmoFusion(branch)||!branch&&world.canFuseAmmo()))return {gain:isAmmoFusion(branch)?gain+' · 追加'+ballisticBranches[fusionBranch(branch)].name:gain,plan:isAmmoFusion(branch)?'复合弹芯：'+ammoName(projected)+' · 原能力保留':'复合弹芯二选一 · 保留原弹芯，再追加一种',weaponGains,valid,stage,before,after,laserBefore,laserAfter};
   if(valid&&route==='ballistic'&&(isStormAugment(branch)||!branch&&world.canRefineStorm()))return {gain:isStormAugment(branch)?gain+' · '+stormAugments[branch].name:gain,plan:isStormAugment(branch)?stormAugments[branch].detail:'雷暴精研二选一：串联清群 / 聚雷破核 · 原跳电保留',weaponGains,valid,stage,before,after,laserBefore,laserAfter};
   if(valid&&route==='ballistic'&&(isFractureAugment(branch)||!branch&&world.canRefineFracture()))return {gain,plan:isFractureAugment(branch)?fractureAugments[branch].detail:'裂甲精研二选一：双击破核 / 贯通冲击 · 原火力保留',weaponGains,valid,stage,before,after,laserBefore,laserAfter};
