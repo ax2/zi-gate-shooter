@@ -1,0 +1,38 @@
+{
+  "baseline": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "score": 15305,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "fusion": "fragment",
+    "draws": 157278,
+    "overflow": 100,
+    "maxOverflow": 11.040000000000077,
+    "worldHash": "76c2412973df7fdec8e36cb0bcf6d8cfb9ad28e7178516cd12afa254e6ed017c",
+    "effectHash": "6fe82471028f92d1db9ee8a19ffa826c1ab29b46fa9acf655f833e08cd86c98f"
+  },
+  "current": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "score": 15305,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc",
+      "blast"
+    ],
+    "fusion": "fragment",
+    "draws": 157278,
+    "overflow": 0,
+    "maxOverflow": 0,
+    "worldHash": "76c2412973df7fdec8e36cb0bcf6d8cfb9ad28e7178516cd12afa254e6ed017c",
+    "effectHash": "6fe82471028f92d1db9ee8a19ffa826c1ab29b46fa9acf655f833e08cd86c98f"
+  }
+}

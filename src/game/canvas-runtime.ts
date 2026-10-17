@@ -60,7 +60,7 @@ import { capacitorLight, capacitorMarks } from './capacitor-light';
 import { formationShield } from './formation-shield';
 import { burnLight } from './burn-light';
 import { fractureLight, fractureMarks, fractureWaveLight } from './fracture-light';
-import { mountedRig } from './mounted-rig';
+import { mountedRig,mountedCenter,mountedPose } from './mounted-rig';
 import { contracts, hunts, type HuntKind, type ContractKind } from '../core/contracts';
 import { achievements, achievementGroups, achievementGroup, achievementProgress, trackAchievement, type AchievementGroup, awardAchievements, parseAchievements } from '../core/achievements';
 import { isAmmoFusion,fusionBranch,ammoName,tree, routes, magneticAugments, isMagneticAugment, opticalBranches, electricBranches, ballisticBranches, BALLISTIC_FORK, OPTICAL_FORK, ELECTRIC_FORK, type BuildBranch, type Route } from '../core/build-tree';
@@ -690,14 +690,15 @@ export class CanvasRuntime {
       const motion=this.calibratedRecoil(kind,this.mountedMotion.get(kind)!)*.65;
       const size=mount.size*(1+(stage-1)*.07)*(1+band*.05);
       const c=this.ctx,px=w.player.x+Math.sign(mount.x)*25,py=y-24+pose.bob;
-      const tx=w.player.x+mount.x,ty=y+mount.y+pose.bob+motion+size*.22;
+      const socket=mountedPose(w.player.x,mount,size),mx=socket.x,my=y+socket.y+pose.bob+motion;
+      const tx=mx,ty=my+size*.22;
       c.save();c.lineCap='round';
       for(const [width,color] of [[10,'#101b25'],[5,'#9aaab4'],[1,'#e0e6df']] as const){
-        c.lineWidth=width;c.strokeStyle=color;c.beginPath();c.moveTo(px,py);c.lineTo(tx,ty);c.stroke();
+        c.lineWidth=width;c.strokeStyle=color;c.beginPath();c.moveTo(px,py);if(socket.fold>0&&mount.y>-60)c.lineTo(px,py-50);c.lineTo(tx,ty);c.stroke();
       }
       c.fillStyle='#d0d7d3';c.beginPath();c.arc(tx,ty,3,0,Math.PI*2);c.fill();c.restore();
-      this.frameSprite('mounted-modules-v1.png',mount.frame,3,w.player.x+mount.x,y+mount.y+pose.bob+motion,size,size,2);
-      calibrationMount(c,w.player.x+mount.x,y+mount.y+pose.bob+motion-size*.12,size*.75,kind,band,this.mountedMotion.get(kind)!.flash(kind,stage,w.time),this.save.settings.effects==='weak');
+      this.frameSprite('mounted-modules-v1.png',mount.frame,3,mx,my,size,size,2);
+      calibrationMount(c,mx,my-size*.12,size*.75,kind,band,this.mountedMotion.get(kind)!.flash(kind,stage,w.time),this.save.settings.effects==='weak');
     }
   }
   private drawOpticalRig(y:number,pose:PlayerPose) {
@@ -967,7 +968,7 @@ export class CanvasRuntime {
         this.drawMountedRig(playerY,pose);
         this.playerSprite(w.weaponStage(w.weaponKind) - 1, w.player.x, playerY, pose, recoil);
         this.drawCalibrationRig(playerY,pose,recoil);
-        if(w.build.ammoFusion&&w.build.ballisticBranch)ammoRack(c,w.player.x+51,playerY+23+pose.bob,w.build.ballisticBranch,w.build.ammoFusion,Math.max(...[...this.mountedMotion].map(([k,m])=>m.flash(k,w.weaponStage(k),w.time))));
+        if(w.build.ammoFusion&&w.build.ballisticBranch)ammoRack(c,mountedCenter(w.player.x,51,64),playerY+23+pose.bob,w.build.ballisticBranch,w.build.ammoFusion,Math.max(...[...this.mountedMotion].map(([k,m])=>m.flash(k,w.weaponStage(k),w.time))));
         this.drawOpticalRig(playerY,pose);
         const remaining = w.player.invulnerable - (C.invulnerability - 0.12);
         if (remaining > 0) {
