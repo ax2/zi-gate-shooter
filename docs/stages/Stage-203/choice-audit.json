@@ -1,0 +1,1972 @@
+[
+  {
+    "primary": "ballistic",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "choices": [
+      {
+        "time": 13.283333333333573,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 1,
+          "electric": 0,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter"
+        ]
+      },
+      {
+        "time": 53.28333333333159,
+        "route": "ballistic",
+        "fork": true,
+        "ranks": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "time": 79.6333333333301,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 2,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 79.64999999999677,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 115.93333333332804,
+        "route": "electric",
+        "fork": true,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 2,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 129.73333333332872,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 162.18333333335454,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 1
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 162.20000000002122,
+        "route": "optical",
+        "fork": true,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 2
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 191.15000000004426,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 210.16666666672606,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 1,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 229.16666666674118,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 245.8500000000878,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 3,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 274.8166666667454,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 4,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 281.8333333334057,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 5,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 312.8333333333775,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 6,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 327.0166666666979,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 7,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 327.03333333336457,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 8,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 355.98333333333824,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 9,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 374.9999999999876,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 10,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 393.9999999999703,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 11,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 407.18333333329167,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 12,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 436.149999999932,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 13,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 443.1666666665923,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 14,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 474.1666666665641,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 15,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 487.09999999988565,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 16,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 487.1166666665523,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 17,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 523.0833333331863,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 18,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 535.0833333331753,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 19,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 555.9333333331564,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 20,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 568.0166666664787,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 21,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 596.983333333119,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 22,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      }
+    ],
+    "stormLinks": 80
+  },
+  {
+    "primary": "electric",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "choices": [
+      {
+        "time": 13.283333333333573,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 1,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc"
+        ]
+      },
+      {
+        "time": 53.28333333333159,
+        "route": "electric",
+        "fork": true,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 79.38333333333011,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 79.39999999999678,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 1,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 115.68333333332805,
+        "route": "ballistic",
+        "fork": true,
+        "ranks": {
+          "ballistic": 2,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 129.51666666666188,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 0
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 163.03333333335522,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 1
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 163.0500000000219,
+        "route": "optical",
+        "fork": true,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 2
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 192.00000000004493,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 211.01666666672674,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 1,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 230.01666666674186,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 2,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 247.8333333334227,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 3,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 276.8000000000769,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 4,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 283.8166666667372,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 5,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 314.816666666709,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 6,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 330.7333333333612,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 7,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 330.75000000002785,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 8,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 359.7000000000015,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 9,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 378.7166666666509,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 10,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 397.7166666666336,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 11,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 412.64999999995337,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 12,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 429.3333333332715,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 13,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 448.633333333254,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 14,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 479.6333333332258,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 15,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 496.98333333321,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 16,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 496.99999999987665,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 17,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 525.9499999998503,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 18,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 544.9666666664997,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 19,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 563.9666666664824,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 20,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 582.3333333331324,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 21,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      },
+      {
+        "time": 599.0166666664505,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 22,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "arc",
+          "pierce"
+        ]
+      }
+    ],
+    "stormLinks": 116
+  },
+  {
+    "primary": "optical",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "choices": [
+      {
+        "time": 13.283333333333573,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 1
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter"
+        ]
+      },
+      {
+        "time": 53.28333333333159,
+        "route": "optical",
+        "fork": true,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 2
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "time": 79.59999999999677,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "time": 79.61666666666343,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 1,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "time": 115.8999999999947,
+        "route": "ballistic",
+        "fork": true,
+        "ranks": {
+          "ballistic": 2,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce"
+        ]
+      },
+      {
+        "time": 129.9166666666622,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 2,
+          "electric": 1,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 162.00000000002106,
+        "route": "ballistic",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 1,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 162.01666666668774,
+        "route": "electric",
+        "fork": true,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 2,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 190.96666666671078,
+        "route": "electric",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 209.98333333339258,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 1
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 228.9833333334077,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 2
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 246.6666666667551,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 275.6333333334113,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 4
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 282.6500000000716,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 5
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 313.6500000000434,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 6
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 328.83333333336293,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 7
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 328.8500000000296,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 8
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 357.80000000000325,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 9
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 376.8166666666526,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 10
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 395.81666666663534,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 11
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 410.24999999995555,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 12
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 426.9333333332737,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 13
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 446.23333333325616,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 14
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 477.23333333322796,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 15
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 493.683333333213,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 16
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 493.69999999987965,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 17
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 522.6499999998533,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 18
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 541.6666666665027,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 19
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 560.6666666664854,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 20
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 578.3499999998027,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 21
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      },
+      {
+        "time": 578.3666666664693,
+        "route": "optical",
+        "fork": false,
+        "ranks": {
+          "ballistic": 3,
+          "electric": 3,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 22
+        },
+        "owned": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ]
+      }
+    ],
+    "stormLinks": 105
+  }
+]

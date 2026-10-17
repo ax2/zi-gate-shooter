@@ -9,7 +9,7 @@ export function builtWeapon(kind:WeaponKind,stage:number,calibration:number,buil
   return {...p,targets:kind==='scatter'&&build.ballisticBranch==='penetrator'?BALLISTIC_FORK.targets:p.targets,
     splashRadius:kind==='scatter'&&build.ballisticBranch==='fragment'?BALLISTIC_FORK.radius:p.splashRadius,
     damage:p.damage.map(n=>n*(1+.5*calibration)*refinement*(kind==='scatter'?(rank.ballistic>=2?1.3:rank.ballistic>=1?1.1:1):1)),
-    chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0)+(build.electricBranch==='spread'?1:0):kind==='scatter'&&rank.ballistic>=3?1:p.chainHops};
+    chainHops:kind==='arc'?(p.chainHops??0)+(rank.electric>=1?1:0)+(build.electricBranch==='spread'?1:0):kind==='scatter'&&rank.ballistic>=3?1+(build.stormAugment==='storm-relay'?1:0):p.chainHops};
 }
 export function builtSupport(mastery:number|undefined,build:BuildTree){
   const p=supportProfile(mastery),rank=build.ranks.optical;

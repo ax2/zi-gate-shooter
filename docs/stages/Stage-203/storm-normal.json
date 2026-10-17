@@ -1,0 +1,40 @@
+[
+  {
+    "branch": "storm-relay",
+    "chosenAt": 209.53333333339222,
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "stormLinks": 40,
+    "relayLinks": 7,
+    "focusBursts": 0,
+    "focusDamage": 0,
+    "owned": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "stage": 3,
+    "refinements": 28
+  },
+  {
+    "branch": "storm-focus",
+    "chosenAt": 209.53333333339222,
+    "time": 599.999999999783,
+    "round": 8,
+    "hp": 3,
+    "stormLinks": 37,
+    "relayLinks": 0,
+    "focusBursts": 38,
+    "focusDamage": 13424.867625,
+    "owned": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "stage": 3,
+    "refinements": 28
+  }
+]

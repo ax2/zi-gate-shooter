@@ -1,0 +1,15 @@
+import {it,expect} from 'vitest';import {writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {C} from '../src/core/config';import {progressionTarget} from './helpers/progression-driver';
+it('records actual ten-minute research opportunities without granting equipment or points',()=>{
+ const runs=[];
+ for(const primary of ['ballistic','electric','optical'] as const){
+  const w=new World(1337,1,'scatter');let x=360;const choices=[];
+  for(let f=0;f<600*60&&w.player.hp>0;f++){
+   if(w.bossRewardRound!==null&&w.phase==='recovery')w.claimBossReward('research');
+   const a=w.build.available(w.buildPoints),route=a.includes(primary)&&w.build.ranks[primary]<3?primary:a.find(r=>w.build.ranks[r]<3)??(a.includes(primary)?primary:a[0]);
+   if(route){const branch=route==='ballistic'&&w.canRefineFracture()?'fracture-line':route==='electric'&&w.canRefineMagnetic()?'field-link':route==='electric'&&w.canRefineIon()?'ion-orb':route==='optical'&&w.canRefinePhoton()?'photon-reach':undefined;const fork=w.build.ranks[route]===1||!!branch;if(w.chooseBuild(route,branch))choices.push({time:w.time,route,fork,branch,ranks:{...w.build.ranks},refinements:{...w.build.refinements},owned:[...w.activeWeapons]});}
+   if(f%6===0)x=progressionTarget(w,'scatter');w.step(C.step,x);w.drainEffects();
+  }
+  expect(w.time).toBeCloseTo(600,4);runs.push({primary,time:w.time,hp:w.player.hp,round:w.round,choices,stormLinks:w.stormLinks});
+ }
+ writeFileSync('build/qa/Stage-203/choice-audit.json',JSON.stringify(runs,null,2));
+},120000);

@@ -1,4 +1,5 @@
 import {isIonAugment,type IonAugment} from './ion-storm';
+import {isStormAugment,type StormAugment,STORM_REFINEMENT} from './storm-refinement';
 import {MAGNETIC,MAGNETIC_REFINEMENT} from './magnetic-field';
 import {isPhotonAugment,type PhotonAugment} from './laser-chain';
 import {isFractureAugment,type FractureAugment} from './combos';
@@ -17,7 +18,7 @@ export const magneticAugments={
  'field-link':{name:'分流电桥',detail:'原三拍保留 · 每拍追加一次场外跳击',role:`${MAGNETIC.radius}外至${MAGNETIC_REFINEMENT.linkRange}内，优先当前蓄能射手`},
 } as const;
 export const isMagneticAugment=(value:unknown):value is MagneticAugment=>value==='field-wide'||value==='field-link';
-export type BuildBranch=IonAugment|OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment|PhotonAugment|FractureAugment;
+export type BuildBranch=StormAugment|IonAugment|OpticalBranch|ElectricBranch|BallisticBranch|MagneticAugment|PhotonAugment|FractureAugment;
 export const SEEKER_BRIDGE={range:340} as const;
 export const electricBranches={
  seeker:{name:'猎隼电桥',detail:'首跳范围340 · 优先蓄能射手',role:'借前排目标，跳击后排火力点'},
@@ -51,6 +52,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
 };
 export class BuildTree {
+  stormAugment?:StormAugment;
   ionAugment?:IonAugment;
   fractureAugment?:FractureAugment;
   photonAugment?:PhotonAugment;
@@ -79,7 +81,10 @@ export class BuildTree {
   }
   choose(route:Route,earned:number,branch?:BuildBranch){
     if(!this.available(earned).includes(route))return false;
-    if(isIonAugment(branch)){
+    if(isStormAugment(branch)){
+      if(route!=='ballistic'||this.ranks.ballistic<3||this.ranks.electric<1||this.refinements.ballistic<STORM_REFINEMENT.refinements||this.stormAugment)return false;
+      this.stormAugment=branch;
+    }else if(isIonAugment(branch)){
       if(route!=='electric'||this.ranks.electric<3||this.refinements.electric<2||this.ionAugment)return false;
       this.ionAugment=branch;
     }else if(isFractureAugment(branch)){

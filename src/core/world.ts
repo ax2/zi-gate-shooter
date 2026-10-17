@@ -1,4 +1,5 @@
 import {FIRE_CONTROL} from './fire-control';
+import {isStormAugment,stormAugments,STORM_REFINEMENT} from './storm-refinement';
 import {LOCKSHOT} from './lockshot';
 import {RELAY_SCREEN} from './relay-screen';
 import {BATTERY} from './battery';
@@ -44,7 +45,7 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
+  dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; bossVariant?: number;
 }
@@ -76,11 +77,13 @@ export class World {
     return this.researchPoints-before;
   }
   chooseBuild(route: Route,branch?:BuildBranch) {
+    if(isStormAugment(branch)&&!this.canRefineStorm())return false;
     if(isIonAugment(branch)&&!this.canRefineIon())return false;
     if(isFractureAugment(branch)&&!this.canRefineFracture())return false;
     if(isPhotonAugment(branch)&&!this.canRefinePhoton())return false;
     if(isMagneticAugment(branch)&&!this.canRefineMagnetic())return false;
     if(!this.build.choose(route,this.buildPoints,branch))return false;
+    if(isStormAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'雷暴精研 · '+stormAugments[branch].name,detail:stormAugments[branch].detail+' · 常规增伤保留'});
     if(isFractureAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'裂甲精研 · '+fractureAugments[branch].name,detail:fractureAugments[branch].detail+' · 常规精调保留'});
     if(isPhotonAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'光链精研 · '+photonAugments[branch].name,detail:photonAugments[branch].detail+' · 常规精调保留'});
     if(isMagneticAugment(branch))this.effects.push({type:'combination',x:this.player.x,y:C.playerY,text:'磁暴精研 · '+magneticAugments[branch].name,detail:branch==='field-wide'?`半径${MAGNETIC_REFINEMENT.wideRadius} · 每拍${MAGNETIC_REFINEMENT.wideDamage*100}% · 常规精调保留`:`场外${MAGNETIC_REFINEMENT.linkRange}内一敌 · 原三拍/常规精调保留`});
@@ -417,7 +420,17 @@ export class World {
     else this.calibrations.set(kind,this.weaponCalibration(kind)+1);
     this.effects.push({type:'upgrade',x:this.player.x,y:C.playerY,weaponKind:kind,text:stage<3?`${weaponNames[kind]} · 升至T${stage+1}`:`${weaponNames[kind]} · 专属精校${this.weaponCalibration(kind)}`,detail:stage<3?'其他配件与已有火力保留':`该武器伤害系数 ${100+this.weaponCalibration(kind)*50}%`});
   }
-  stormLinks=0;prismHits=0;proofWins=0;
+  stormLinks=0;stormRelayLinks=0;stormFocusBursts=0;stormFocusDamage=0;prismHits=0;proofWins=0;
+  canRefineStorm(){return this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1&&this.build.refinements.ballistic>=STORM_REFINEMENT.refinements
+    &&this.weaponStage('scatter')>=3&&this.activeWeapons.includes('scatter')&&!this.build.stormAugment&&!this.canRefineFracture();}
+  private stormFocus(body:Body,damage:number){
+    if(this.build.stormAugment!=='storm-focus'||this.player.hp<=0||this.bossVictory||!body.active||!(body.kind in C.enemies)||guardClosed(body)||(body.dropGrace??0)
+      ||body.y<C.playerShotTop||body.y>C.playerY||(body.kind==='boss'&&this.phase!=='boss'))return;
+    body.stormHits=(body.stormHits??0)+1;
+    if(body.stormHits<STORM_REFINEMENT.hits)return;
+    body.stormHits=0;const before=body.hp;this.hit(body,damage*STORM_REFINEMENT.damage,'scatter');
+    if(body.hp<before){this.stormFocusBursts++;this.stormFocusDamage+=before-body.hp;this.effects.push({type:'capacitor',x:body.x,y:body.y,size:70,weaponKind:'scatter'});}
+  }
   aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
   availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='magnetic'?this.magneticUnlocked()&&!!this.build.magneticAugment:kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
   proofCount(kind:BuildProof){return kind==='magnetic'?this.magneticProofHits:kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.scatterRicochets:this.laserArcHits;}
@@ -879,16 +892,17 @@ export class World {
             const visited = new Set([body.id]); let origin = body, damage = bullet.damage;
             for (let hop = 0; hop < bullet.chainHops && !guardClosed(origin) && !(origin.dropGrace??0); hop++) {
               const seeker=hop===0&&bullet.weaponKind==='arc'&&this.build.electricBranch==='seeker';
+              const stormRelay=hop>0&&bullet.weaponKind==='scatter'&&this.build.stormAugment==='storm-relay';
               const candidates = this.bodies.filter(other => other.active && !visited.has(other.id)&&(!seeker||!(other.dropGrace??0)) && other.kind in C.enemies
                 && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss')
-                && Math.hypot(other.x-origin.x,other.y-origin.y) <= (seeker?SEEKER_BRIDGE.range:this.build.ranks.electric>=2?220:160));
+                && Math.hypot(other.x-origin.x,other.y-origin.y) <= (stormRelay?STORM_REFINEMENT.relayRange:seeker?SEEKER_BRIDGE.range:this.build.ranks.electric>=2?220:160));
               const priority=(target:Body)=>seeker&&!guardClosed(target)&&['sniper','armor','elite','guard','boss'].includes(target.kind)?target.warning>0?2:1:0;
               candidates.sort((a,b) => priority(b)-priority(a)||Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y) || a.id-b.id);
               const next = candidates[0]; if (!next) break;
               visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
               this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y,seeker});
               const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(seeker)this.seekerLinks++;if(conducts)this.ionImpact(next,damage);}
-              if(bullet.weaponKind==='scatter'&&next.hp<before)this.stormLinks++;origin = next;
+              if(bullet.weaponKind==='scatter'&&next.hp<before){this.stormLinks++;if(hop>0&&this.build.stormAugment==='storm-relay')this.stormRelayLinks++;}origin = next;
             }
           }
           if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {
@@ -903,6 +917,7 @@ export class World {
           // Complete the original attack before spending at most one stored beam.
           // Derived hits never enter this projectile-contact callback.
           if(linkEligible&&body.hp<hpBefore)this.releaseLaserLink(body);
+          if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='scatter')this.stormFocus(body,bullet.damage);
         });
       }
     }
@@ -1083,5 +1098,3 @@ export class World {
     }
   }
 }
-
-

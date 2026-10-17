@@ -1,0 +1,28 @@
+{
+  "choiceExactPhysicalEqual": false,
+  "choicePhysicalEqualExceptSubNanopixelPlayerX": true,
+  "physicalDiff": [
+    {
+      "path": "player.x",
+      "mobile": 499.9999999999999,
+      "desktop": 500.0000000000005,
+      "delta": -6.252776074688882e-13
+    },
+    {
+      "path": "player.px",
+      "mobile": 499.9999999999999,
+      "desktop": 500.0000000000005,
+      "delta": -6.252776074688882e-13
+    }
+  ],
+  "focusCharge": [
+    {
+      "id": 8210,
+      "x": 220,
+      "y": 420,
+      "hits": 3
+    }
+  ],
+  "focusBursts": 1,
+  "relayExtraHits": 1
+}

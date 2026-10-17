@@ -1,0 +1,8 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 build
+npm notice run npm run typecheck && vite build
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 typecheck
+npm notice run tsc --noEmit
+tests/storm-refinement.test.ts(1,134): error TS6133: 'StormAugment' is declared but its value is never read.
+tests/storm-refinement.test.ts(6,574): error TS18048: 'w.growth.mastery' is possibly 'undefined'.
