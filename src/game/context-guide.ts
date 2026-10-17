@@ -31,7 +31,7 @@ export function contextGuide(world: Context): Guide {
   if(visible.some(b=>b.pattern==='fire-control'&&b.kind==='conduit'))return {kind:'enemy',title:'火控中继：断供或集火纵列',detail:'中继增幅扇射 · 击破停火1.5秒，旧弹仍危险'};
   if(visible.some(b=>b.pattern==='fire-control'&&b.kind==='armor'))return {kind:'enemy',title:'火控断供：趁停火突破',detail:'恢复后只发单线弹 · 留意仍在飞行的子弹'};
   const locked=visible.find(b=>b.pattern==='lockshot'&&!lockshotLeaving(b));
-  if(locked)return {kind:'enemy',title:(locked.empRemaining??0)>0?'斜射停火：已发子弹仍危险':'斜射哨机：入场锁位后不再追踪',detail:'可在蓄能时击破 · 横移避开原位置的实弹'};
+  if(locked)return {kind:'enemy',title:(locked.empRemaining??0)>0?'斜射停火：已发子弹仍危险':locked.forkshot?'三角哨机：锁位后分三点射击':'斜射哨机：入场锁位后不再追踪',detail:locked.forkshot?'可蓄能抢先拆炮 · 首弹通过后可回中路':'可在蓄能时击破 · 横移避开原位置的实弹'};
   if(visible.some(b=>b.pattern==='relocate'))return {kind:'enemy',title:'机动哨机：入场抢位，齐射再换位',detail:'停稳再蓄能 · 重新对齐目标'};
   if (visible.some(b => b.kind === 'sniper' && b.warning > 0))
     return { kind: 'enemy', title: '狙击蓄能：保持横向移动', detail: '也可抢先击毁 · 命中不会打断蓄能' };

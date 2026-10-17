@@ -1055,7 +1055,7 @@ export class CanvasRuntime {
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='lockshot'){
           const target=!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')?lockshotTargetLabel(w,b,this.save.achievements.tracked):null;
-          this.text(target??(lockshotLeaving(b)?'斜射·撤离':(b.empRemaining??0)>0?'斜射·停火':b.warning>0?'斜射·蓄能':'斜射哨机'),b.x,b.y-b.height/2-36,22,target?'#adf0ff':'#ffce9b','center',true);
+          this.text(target??(b.forkshot?(lockshotLeaving(b)?'三角·撤离':(b.empRemaining??0)>0?'三角·停火':b.warning>0?'三角·蓄能':'三角哨机'):(lockshotLeaving(b)?'斜射·撤离':(b.empRemaining??0)>0?'斜射·停火':b.warning>0?'斜射·蓄能':'斜射哨机')),b.x,b.y-b.height/2-36,22,target?'#adf0ff':'#ffce9b','center',true);
         }
         if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);
         if(b.pattern==='intercept')this.text(b.warning>0?(b.burst?'截击·核心蓄能':'截击·翼炮蓄能'):(b.interceptCoreRemaining??0)>0?'截击·核心连射':'截击精英',b.x,b.y-b.height*.68-20,21,b.burst?'#ffb19c':'#ffe1a7','center',true);

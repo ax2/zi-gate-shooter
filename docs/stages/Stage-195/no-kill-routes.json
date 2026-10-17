@@ -1,0 +1,308 @@
+[
+  {
+    "round": 2,
+    "plan": 0,
+    "start": 68,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 0,
+    "start": 360,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 0,
+    "start": 652,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 1,
+    "start": 68,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 1,
+    "start": 360,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 1,
+    "start": 652,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 2,
+    "start": 68,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 2,
+    "start": 360,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 2,
+    "plan": 2,
+    "start": 652,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 0,
+    "start": 68,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 0,
+    "start": 360,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 0,
+    "start": 652,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 1,
+    "start": 68,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 1,
+    "start": 360,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 1,
+    "start": 652,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 2,
+    "start": 68,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 2,
+    "start": 360,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 5,
+    "plan": 2,
+    "start": 652,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 0,
+    "start": 68,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 0,
+    "start": 360,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 0,
+    "start": 652,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 1,
+    "start": 68,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 1,
+    "start": 360,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 1,
+    "start": 652,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 2,
+    "start": 68,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 2,
+    "start": 360,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  },
+  {
+    "round": 8,
+    "plan": 2,
+    "start": 652,
+    "time": 72.44999999999717,
+    "hp": 3,
+    "phase": "boss-entry",
+    "shots": [
+      3
+    ],
+    "method": "controlled no-kill route forecast; friendly bullets removed after each step, not a normal playable run"
+  }
+]

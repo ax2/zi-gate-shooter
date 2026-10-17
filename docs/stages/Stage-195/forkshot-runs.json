@@ -1,0 +1,131 @@
+[
+  {
+    "policy": "preempt",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "preempt": 2,
+    "bait": 1,
+    "guns": [
+      {
+        "id": 3958,
+        "time": 105.56666666666196,
+        "round": 2,
+        "shots": 0,
+        "attempted": 0,
+        "passed": 0,
+        "hp": 0,
+        "lockX": 360,
+        "age": 0.7000000000000005
+      },
+      {
+        "id": 17716,
+        "time": 353.60000000000707,
+        "round": 5,
+        "shots": 0,
+        "attempted": 0,
+        "passed": 0,
+        "hp": 0,
+        "lockX": 360,
+        "age": 0.7166666666666672
+      }
+    ],
+    "bolts": [],
+    "peakBodies": 9,
+    "peakBullets": 62,
+    "fallbacks": 2,
+    "rendering": "mock Canvas; normal controls/actual World; automated full knowledge, not human difficulty or pixel evidence"
+  },
+  {
+    "policy": "bait",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "preempt": 0,
+    "bait": 3,
+    "guns": [
+      {
+        "id": 3958,
+        "time": 105.56666666666196,
+        "round": 2,
+        "shots": 3,
+        "attempted": 3,
+        "passed": 3,
+        "hp": 0,
+        "lockX": 360,
+        "age": 3.8333333333333246
+      },
+      {
+        "id": 17719,
+        "time": 353.60000000000707,
+        "round": 5,
+        "shots": 3,
+        "attempted": 3,
+        "passed": 3,
+        "hp": 0,
+        "lockX": 360,
+        "age": 3.4499999999999926
+      }
+    ],
+    "bolts": [
+      {
+        "time": 106.64999999999523,
+        "id": 4008,
+        "source": 3958,
+        "x": 524.0193164690145,
+        "y": 437.17533441085936,
+        "vx": -183.5849438764537,
+        "vy": 656.8261325357568
+      },
+      {
+        "time": 107.2999999999952,
+        "id": 4040,
+        "source": 3958,
+        "x": 512.2830124055898,
+        "y": 432.4992353258828,
+        "vx": -318.4107614720002,
+        "vy": 603.1074423175535
+      },
+      {
+        "time": 107.94999999999516,
+        "id": 4078,
+        "source": 3958,
+        "x": 538.1572031458107,
+        "y": 439.3380587048928,
+        "vx": -21.169917819602116,
+        "vy": 681.6713537911882
+      },
+      {
+        "time": 354.6833333333394,
+        "id": 17788,
+        "source": 17719,
+        "x": 523.4629984572676,
+        "y": 439.1657166306647,
+        "vx": -216.96402458126346,
+        "vy": 776.2490657240761
+      },
+      {
+        "time": 355.3333333333388,
+        "id": 17836,
+        "source": 17719,
+        "x": 511.3181313102201,
+        "y": 434.326833635936,
+        "vx": -376.30362719418207,
+        "vy": 712.763340920745
+      },
+      {
+        "time": 355.98333333333824,
+        "id": 17879,
+        "source": 17719,
+        "x": 538.0930518796907,
+        "y": 441.40372947395696,
+        "vx": -25.0189937868025,
+        "vy": 805.6115999350405
+      }
+    ],
+    "peakBodies": 9,
+    "peakBullets": 62,
+    "fallbacks": 2,
+    "rendering": "mock Canvas; normal controls/actual World; automated full knowledge, not human difficulty or pixel evidence"
+  }
+]

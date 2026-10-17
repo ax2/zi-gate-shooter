@@ -1,0 +1,63 @@
+[
+  {
+    "name": "first-shot",
+    "time": 106.64999999999523,
+    "shots": 1,
+    "passed": 0,
+    "source": 3958,
+    "intercepts": [
+      360.0
+    ],
+    "hp": 64.24,
+    "bait": 0
+  },
+  {
+    "name": "second-shot",
+    "time": 107.2999999999952,
+    "shots": 2,
+    "passed": 0,
+    "source": 3958,
+    "intercepts": [
+      360.0,
+      200.0
+    ],
+    "hp": 64.24,
+    "bait": 0
+  },
+  {
+    "name": "third-shot",
+    "time": 107.94999999999516,
+    "shots": 3,
+    "passed": 1,
+    "source": 3958,
+    "intercepts": [
+      360.0,
+      200.0,
+      520.0
+    ],
+    "hp": 64.24,
+    "bait": 0
+  },
+  {
+    "name": "all-passed",
+    "time": 108.86666666666177,
+    "shots": 3,
+    "passed": 3,
+    "source": 3958,
+    "intercepts": [
+      520.0
+    ],
+    "hp": 64.24,
+    "bait": 0
+  },
+  {
+    "name": "bait-destroyed",
+    "time": 109.38333333332841,
+    "shots": 3,
+    "passed": 3,
+    "source": 3958,
+    "intercepts": [],
+    "hp": 0,
+    "bait": 1
+  }
+]

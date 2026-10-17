@@ -1,0 +1,28 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/forkshot.test.ts tests/forkshot-routes.test.mjs tests/forkshot-progression.test.mjs tests/forkshot-default-progression.test.mjs tests/lockshot.test.ts tests/lockshot-challenge.test.ts tests/lockshot-routes.test.ts tests/context-guide.test.ts tests/kill-rewards.test.ts tests/mobile-sentry.test.ts tests/fire-control.test.ts tests/projectile-pressure.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/fire-control.test.ts (10 tests | 1 failed) 154ms
+   × changes the heavy 55.5 phrase and only the following shield position across 108 authored schedules, retaining reward windows and unit count 24ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fire-control.test.ts > changes the heavy 55.5 phrase and only the following shield position across 108 authored schedules, retaining reward windows and unit count
+AssertionError: {"round":2,"seed":1,"plan":1,"count":62,"keepHash":"5673d51096c2d5b7b1c72f0c64fc37669c0afe8bda7c8e61b765157ef41c7be5","oldGroup":[],"rewards":[{"at":8,"kind":"crate","x":240,"stage":2},{"at":16,"kind":"armory","x":360,"pattern":"drift-supply"},{"at":20,"kind":"gates","x":360},{"at":27,"kind":"gates","x":360,"pair":true},{"at":48,"kind":"armory","x":360,"stage":3},{"at":49.2,"kind":"gates","x":500},{"at":58,"kind":"gates","x":360,"pair":true}]}: expected '0c88fe10b234761de613fbd9cfc6600be3dd8…' to be '5673d51096c2d5b7b1c72f0c64fc37669c0af…' // Object.is equality
+
+Expected: "5673d51096c2d5b7b1c72f0c64fc37669c0afe8bda7c8e61b765157ef41c7be5"
+Received: "0c88fe10b234761de613fbd9cfc6600be3dd8785c904f677ed024e409db1beef"
+
+ ❯ tests/fire-control.test.ts:8:486
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 11 passed (12)
+      Tests  1 failed | 66 passed (67)
+   Start at  09:13:33
+   Duration  18.16s (tests 88%, transform 8%, import 4%)
+

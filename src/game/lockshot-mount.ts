@@ -5,7 +5,14 @@ export function lockshotMount(c:CanvasRenderingContext2D,b:Body,weak:boolean){
  const p=lockshotProfile(b);
  const elapsed=b.age-(b.lockFiredAt??-Infinity),recoil=elapsed>=0&&elapsed<.09?5*(1-elapsed/.09):0;
  const stowed=lockshotLeaving(b)&&recoil===0;
- c.save();c.translate(b.x,b.y+LOCKSHOT.pivot);c.rotate(stowed?0:-Math.atan2(p.ux,p.uy));
+ c.save();c.translate(b.x,b.y+LOCKSHOT.pivot);
+ if(b.forkshot){
+  // A physical three-chamber feed: dark faces, steel bevels and spent-round indicators.
+  c.fillStyle='#253a45';c.strokeStyle='#0b1721';c.lineWidth=3;
+  c.beginPath();c.moveTo(-28,-12);c.lineTo(28,-12);c.lineTo(23,14);c.lineTo(-23,14);c.closePath();c.fill();c.stroke();
+  for(let i=0;i<3;i++){const x=-17+i*17;c.fillStyle='#718892';c.fillRect(x-5,-9,10,17);c.fillStyle=(b.lockAcceptedShots??0)>i?'#243740':'#d9af77';c.fillRect(x-3,-6,6,10);c.strokeStyle='#c1cbd0';c.lineWidth=1;c.beginPath();c.moveTo(x-4,-9);c.lineTo(x+4,-9);c.stroke();}
+ }
+ c.rotate(stowed?0:recoil>0&&b.lockFiredAngle!==undefined?-b.lockFiredAngle:-Math.atan2(p.ux,p.uy));
  c.fillStyle='#253a45';c.strokeStyle='#0c171f';c.lineWidth=3;c.beginPath();c.arc(0,0,13,0,Math.PI*2);c.fill();c.stroke();
  c.strokeStyle='#78919b';c.lineWidth=1.5;c.beginPath();c.arc(0,0,10,.2,Math.PI-0.2);c.stroke();
  c.fillStyle='#3d5360';c.strokeStyle='#0c171f';c.lineWidth=3;c.beginPath();c.moveTo(-9,1);c.lineTo(-7,31-recoil);c.lineTo(-10,39-recoil);c.lineTo(-6,48-recoil);c.lineTo(6,48-recoil);c.lineTo(10,39-recoil);c.lineTo(7,31-recoil);c.lineTo(9,1);c.closePath();c.fill();c.stroke();
