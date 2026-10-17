@@ -22,28 +22,20 @@ it.each([[1, 0], [2, 2], [3, 3], [4, 0], [5, 2], [6, 3]])('round %s opens with c
     expect(safeRoute(start, [boss], [], 5, { phase: 'boss', phaseTime: 0 })).not.toBeNull();
 });
 
-it.each([3, 7, 11])('later boss blockade cycle %s advertises its rotating gap and leaves a reachable route', cycle => {
-  const world = new World(); const boss = world.spawn('boss',360,C.bossY);
-  boss.bossVariant = 2; boss.attackCycle = cycle; boss.timer = 0;
-  const emitted: number[] = [];
-  advanceBody(boss, C.step, 'boss', 1, x => emitted.push(x));
-  expect(boss.attack).toBe(3); expect(emitted).toHaveLength(0);
-  expect(boss.lane).toBe([140, 360, 580][Math.floor(cycle / 4)]);
-  const advertised = bossWarningLanes(boss);
-  expect(advertised.every(x => Math.abs(x - boss.lane) >= 110)).toBe(true);
-  for (const start of [C.minX, 360, C.maxX])
-    expect(safeRoute(start, [boss], [], 5, { phase: 'boss', phaseTime: 1 })).not.toBeNull();
-  for (let frame = 0; frame < 81; frame++) advanceBody(boss, C.step, 'boss', 1 + frame * C.step, x => emitted.push(x));
-  expect(emitted).toEqual(advertised.flatMap(x => [x, x]));
-  expect(boss.attackCycle).toBe(cycle);
-  expect(boss.burst).toBe(1); expect(boss.warning).toBe(1.8);
-  const second = bossWarningLanes(boss);
-  expect(second).not.toEqual(advertised);
-  for (let frame = 0; frame < 107; frame++) advanceBody(boss, C.step, 'boss', 3, x => emitted.push(x));
-  expect(emitted).toEqual(advertised.flatMap(x => [x, x]));
-  advanceBody(boss, C.step, 'boss', 3, x => emitted.push(x));
-  expect(emitted).toEqual([...advertised, ...second].flatMap(x => [x, x]));
-  expect(boss.attackCycle).toBe(cycle + 1);
+it.each([3,7,11])('later fortress cycle%s uses four six-port pulses around its rotating gap',cycle=>{
+ const world=new World(),boss=world.spawn('boss',360,C.bossY);boss.bossVariant=2;boss.attackCycle=cycle;boss.timer=0;
+ const shots:{x:number;y:number;vx:number;vy:number;time:number;beat:number}[]=[];let time=1;
+ const tick=()=>{time+=C.step;advanceBody(boss,C.step,'boss',time,(x,y,vx=0,vy=280)=>shots.push({x,y,vx,vy,time,beat:boss.barrageShotBeat!}));};
+ tick();expect(boss.attack).toBe(3);expect(boss.warning).toBe(1.35);expect(shots).toHaveLength(0);
+ const firstGap=[140,360,580][Math.floor(cycle/4)],secondGap=firstGap===360?580:360;expect(boss.lane).toBe(firstGap);
+ for(const start of[C.minX,360,C.maxX])expect(safeRoute(start,[boss],[],8,{phase:'boss',phaseTime:time})).not.toBeNull();
+ for(let f=0;f<300&&shots.length<24;f++)tick();expect(shots).toHaveLength(24);
+ for(let beat=0;beat<4;beat++){
+  const row=shots.filter(p=>p.beat===beat),gap=beat<2?firstGap:secondGap,targets=[80,150,220,290,360,430,500,570,640].filter(x=>Math.abs(x-gap)>=110);
+  expect(row).toHaveLength(6);expect(row[0].time-shots[0].time).toBeCloseTo([0,.2,1.8,2][beat]);
+  for(const[p,i]of row.map((p,i)=>[p,i]as const))expect(p.x+p.vx*(C.playerY-p.y)/p.vy).toBeCloseTo(targets[i]);
+ }
+ expect(boss.attackCycle).toBe(cycle+1);expect(boss.burst).toBe(0);expect(boss.warning).toBe(0);
 });
 
 it.each([1,2])('chapter %s sustains its own four-attack phrase and full double-lock route', variant => {

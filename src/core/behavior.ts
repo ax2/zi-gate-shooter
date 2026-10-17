@@ -1,3 +1,4 @@
+import{BASTION_BARRAGE,barrageVolley,barrageNextGap}from'./bastion-barrage';
 import{WING_SHEAR,wingShearVolley}from'./wing-shear';
 import {CONTROL_SHUTTER,shutterClosed,type ShutterState}from'./control-shutter';
 import {BANKSHOT} from './bankshot';
@@ -92,7 +93,17 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         if(beat+1<WING_SHEAR.beats){b.wingBeat=beat+1;b.burst=1;b.timer=WING_SHEAR.spacing;}
         else{b.wingBeat=0;b.wingVolleys=(b.wingVolleys??0)+1;finish(WING_SHEAR.spacing*(WING_SHEAR.beats-1));}
       };
+      const bastionBarrage=()=>{
+        const beat=b.barrageBeat??0;b.barrageLane??=b.lane;b.barrageShotBeat=beat;
+        for(const s of barrageVolley(b,beat)){b.barrageShotPort=s.port;shot(s.x,s.y,s.vx,s.vy);}
+        b.burst=1;
+        if(beat===0){b.barrageBeat=1;b.lane=barrageNextGap(b.barrageLane);b.warning=BASTION_BARRAGE.spacing;b.timer=BASTION_BARRAGE.echo;}
+        else if(beat===1){b.barrageBeat=2;b.warning=BASTION_BARRAGE.spacing-BASTION_BARRAGE.echo;b.timer=b.warning;}
+        else if(beat===2){b.barrageBeat=3;b.warning=0;b.timer=BASTION_BARRAGE.echo;}
+        else{b.barrageBeat=0;b.barrageVolleys=(b.barrageVolleys??0)+1;finish(BASTION_BARRAGE.echo);}
+      };
       if (b.burst) {
+        if(b.attack===3&&b.bossVariant===2){bastionBarrage();return;}
         if(b.attack===2&&b.bossVariant===1){wingShear();return;}
         if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){sequencedCounter();return;}
         if (b.attack === 3) {
@@ -103,6 +114,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         b.attack=b.counterReady?4:bossAttackForCycle(b.bossVariant,b.attackCycle,!!b.counterfire);b.counterReady=false;
         if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2))b.counterBeat=0;
         if(b.attack===2&&b.bossVariant===1)b.wingBeat=0;
+        if(b.attack===3&&b.bossVariant===2){b.barrageBeat=0;b.barrageLane=undefined;}
         b.warning = b.attack===4?BOSS_COUNTER.warning:1.35; b.timer = b.warning;
         // Advance only after an attack finishes, so delayed warnings cannot
         // accidentally repeat/skip a pattern. B alternates left/right sweep.
@@ -115,6 +127,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
           for(const muzzle of counterMuzzles(b))for(const vx of BOSS_COUNTER.vx)shot(muzzle.x,muzzle.y,vx,BOSS_COUNTER.vy);
           b.counterVolleys=(b.counterVolleys??0)+1;b.counterShotAge=b.age;finish();
         }else if (b.attack === 3) {
+          if(b.bossVariant===2){bastionBarrage();return;}
           for (const x of bossWarningLanes(b)) for (let i = 0; i < 2; i++) shot(x, b.y + 90 - i * 75, 0, 280);
           // Only the third chapter locks twice. Advertise the adjacent new gap
           // before the second volley; never move an already-fired projectile.

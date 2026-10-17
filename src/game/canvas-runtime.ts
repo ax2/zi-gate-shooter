@@ -1,3 +1,4 @@
+import{bastionBarrageRig}from'./bastion-barrage-rig';
 import{wingShearRig}from'./wing-shear-rig';
 import {combatCopy,type CombatCopy} from './combat-copy';
 import{boosterMount}from'./booster-mount';
@@ -573,7 +574,7 @@ export class CanvasRuntime {
   }
   private effect(e: EffectEvent,equipmentHandled=false) {
     if(e.type==='fracture-wave'){if(this.supportBeams.length>=16)this.supportBeams.shift();this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX??e.x,ty:e.targetY??e.y,life:.24,laser:false,fractureWave:true});return;}
-    if(e.type==='counter-fire'||e.type==='wing-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',e.gain??1);return;}
+    if(e.type==='counter-fire'||e.type==='wing-fire'||e.type==='barrage-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',e.gain??1);return;}
     if(e.type==='boss-counter'){this.notify(e.text??'首领过热',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
     if(e.type==='round'){this.notify(e.text??'下一轮',1195,e.detail);if(this.save.settings.sound)this.platform.sound('round',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.type==='emp'){
@@ -976,6 +977,7 @@ export class CanvasRuntime {
           bossHullWear(c,b,this.save.settings.effects==='weak');
           if(b.counterfire)bossHeatLight(c,b,this.save.settings.effects==='weak');
           wingShearRig(c,b,this.save.settings.effects==='weak');
+          bastionBarrageRig(c,b,this.save.settings.effects==='weak');
         }
       }
     }
@@ -1089,7 +1091,7 @@ export class CanvasRuntime {
     for (const b of w.bodies) {
       if(b.pattern==='rebound')reboundLight(c,b,this.save.settings.effects==='weak');
       if(b.pattern==='intercept')interceptorLight(c,b,this.save.settings.effects==='weak');
-      if (b.warning > 0 && b.pattern!=='lockshot' && b.pattern!=='intercept' && b.pattern!=='rake' && b.pattern!=='booster' && !(b.kind==='boss'&&(b.attack===4||b.bossVariant===1&&b.attack===2))) {
+      if (b.warning > 0 && b.pattern!=='lockshot' && b.pattern!=='intercept' && b.pattern!=='rake' && b.pattern!=='booster' && !(b.kind==='boss'&&(b.attack===4||b.bossVariant===1&&b.attack===2||b.bossVariant===2&&b.attack===3))) {
         // The enemy telegraphs its action locally; never preview future bullet paths.
         const charge = .65 + Math.sin(w.time * 22) * .2;
         const muzzleY = b.y + b.height * .32;
@@ -1848,7 +1850,7 @@ export class CanvasRuntime {
       combatContribution:combatContribution(this.world),
       magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormAugment:this.world.build.stormAugment??null,stormRelayLinks:this.world.stormRelayLinks,stormFocusBursts:this.world.stormFocusBursts,stormFocusDamage:this.world.stormFocusDamage,stormProofRelay:this.world.proofCount('storm-relay'),stormProofFocus:this.world.proofCount('storm-focus'),stormCharges:this.world.bodies.filter(b=>b.active&&b.stormHits).map(b=>({id:b.id,x:b.x,y:b.y,hits:b.stormHits})),stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern,aceRole:b.aceRole,rage:b.aceEnraged??false,ragePending:b.aceRagePending??false,rageShots:b.aceRageShots??0})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
-      wingShear:this.world.bodies.filter(b=>b.active&&b.kind==='boss'&&b.bossVariant===1).map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,attack:b.attack,beat:b.wingBeat??0,firedBeat:b.wingFiredBeat??null,firedAt:b.wingFiredAt??null,shots:b.wingShots??0,volleys:b.wingVolleys??0,warning:b.warning,timer:b.timer})),bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterShots:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterShots??0,bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
+      bastionBarrage:this.world.bodies.filter(b=>b.active&&b.kind==='boss'&&b.bossVariant===2).map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,attack:b.attack,beat:b.barrageBeat??0,lane:b.barrageLane??b.lane,firedBeat:b.barrageFiredBeat??null,firedAt:b.barrageFiredAt??null,ports:b.barrageFiredPorts??0,shots:b.barrageShots??0,volleys:b.barrageVolleys??0,warning:b.warning,timer:b.timer})),wingShear:this.world.bodies.filter(b=>b.active&&b.kind==='boss'&&b.bossVariant===1).map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,attack:b.attack,beat:b.wingBeat??0,firedBeat:b.wingFiredBeat??null,firedAt:b.wingFiredAt??null,shots:b.wingShots??0,volleys:b.wingVolleys??0,warning:b.warning,timer:b.timer})),bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterShots:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterShots??0,bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,
       fireControlShots:this.world.fireControlShots,fireControlBoostedShots:this.world.fireControlBoostedShots,lastFireControlBreak:this.world.lastFireControlBreak,fireControlUnits:this.world.bodies.filter(b=>b.active&&b.pattern==='fire-control').map(b=>({id:b.id,kind:b.kind,shutter:!!b.controlShutter,closed:shutterClosed(b),patrol:!!b.controlPatrol,home:b.controlHomeX,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.controlGroup,source:fireControlSource(b,this.world.bodies)?.id,emp:b.empRemaining??0,shots:b.controlShots??0,boosted:b.controlBoostedShots??0})),
