@@ -46,7 +46,7 @@ export interface Body {
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; bossVariant?: number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; bossVariant?: number;
 }
 export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
@@ -382,6 +382,12 @@ export class World {
     }
     this.fractureWaves++;if(fromKill)this.fractureFinishWaves++;this.effects.push({type:'fracture-wave',x:source.x,y:start,targetX:source.x,targetY:end});
   }
+  /** Player intent affects future offers only; never upgrades or rewrites an admitted reward. */
+  refitTarget?:WeaponKind;
+  setRefitTarget(kind?:WeaponKind){
+    if(kind!==undefined&&!this.activeWeapons.includes(kind))return false;
+    this.refitTarget=kind;return true;
+  }
   private calibrations=new Map<WeaponKind,number>();
   weaponCalibration(kind:WeaponKind){return this.calibrations.get(kind)??0;}
   profileFor(kind:WeaponKind) {
@@ -602,9 +608,9 @@ export class World {
           const row = this.nextRow++;
           const choices: WeaponKind[][] = this.round > 3 ? [['arc', 'scatter'], ['blast', 'pierce'], ['pulse', 'arc']] : [['scatter', 'pierce'], ['blast', 'arc'], ['pulse', 'blast']];
           const chapterChoices = choices[sectorIndex(this.round)];
-          const offered = armoryChoices(this.activeWeapons, chapterChoices,this.round>1?refitFocus(this.activeWeapons,this.weaponKind,this.build.ranks):undefined);
+          const offered = armoryChoices(this.activeWeapons, chapterChoices,this.round>1?(this.refitTarget??refitFocus(this.activeWeapons,this.weaponKind,this.build.ranks)):undefined);
           const crates = (s.convoy?SUPPLY_CONVOY.lanes:[222,498]).map((x, i) => { const offer=offered[i],stage=offer.refit?Math.min(3,this.weaponStage(offer.kind)+1):Math.max(2,s.stage??2,this.growth.stage);
-            const b = this.spawn('crate', x, 180, stage); b.row = row; b.weaponKind = offer.kind;b.refit=offer.refit;if(s.pattern==='drift-supply'){b.pattern=s.pattern;b.dropGrace=DRIFT_SUPPLY.opening;} return b; });
+            const b = this.spawn('crate', x, 180, stage); b.row = row; b.weaponKind = offer.kind;b.refit=offer.refit;if(offer.refit&&this.refitTarget===offer.kind)b.directedRefit=true;if(s.pattern==='drift-supply'){b.pattern=s.pattern;b.dropGrace=DRIFT_SUPPLY.opening;} return b; });
           if (!this.admit(crates[0])) { for (const b of crates) b.active = false; this.scheduleIndex--; break; }
           if(s.pattern==='drift-supply')this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'滑行军械箱',detail:'护盖0.45秒后开启 · 横移跟枪 · 碎后拾取'});
         } else if (s.kind === 'gates') {
@@ -1047,7 +1053,7 @@ export class World {
     b.active = false;
     if (b.kind === 'crate') {
       this.cratesBroken++;
-      const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;pickup.openingSupply=b.openingSupply;
+      const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;pickup.openingSupply=b.openingSupply;if(b.directedRefit)pickup.directedRefit=true;
       this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
       if(b.kind==='sniper'&&b.pattern==='lockshot'){

@@ -4,7 +4,7 @@ import type { World } from '../core/world';
 import { guardClosed } from '../core/behavior';
 import { weaponNames, weaponProfile, type WeaponKind } from '../core/weapons';
 
-type Context = Pick<World, 'round' | 'phase' | 'bodies' | 'pickups' | 'gatesTaken' | 'activeWeapons'>;
+type Context = Pick<World, 'round' | 'phase' | 'bodies' | 'pickups' | 'gatesTaken' | 'activeWeapons'> & Partial<Pick<World,'refitTarget'>>;
 export interface Guide { kind: 'move' | 'crate' | 'pickup' | 'gate' | 'pair' | 'boss' | 'enemy' | 'weapon'; title: string; detail: string }
 const movement: Guide = { kind: 'move', title: '左右拖动 · 自动开火', detail: '' };
 
@@ -40,7 +40,7 @@ export function contextGuide(world: Context): Guide {
   if(visible.some(b=>b.pattern==='convoy'))return {kind:'enemy',title:'补给护卫：尽早决定外侧路线',detail:'可集火击毁或等弱点暴露 · 留意实际扇形弹幕'};
   const equipment = visible.filter(b => b.weaponKind && (b.kind === 'pickup' || b.kind === 'crate'));
   if(equipment.some(b=>b.refit))return {kind:equipment.some(b=>b.refit&&b.kind==='pickup')?'pickup':'crate',
-    title:equipment.some(b=>!b.refit&&!world.activeWeapons.includes(b.weaponKind!))?'补给取舍：扩展火力或改装核心':'配件改装：选择强化已有配件',detail:'同排只领一件 · 直伤不计超载与派生'};
+    title:equipment.some(b=>!b.refit&&!world.activeWeapons.includes(b.weaponKind!))?'补给取舍：扩展火力或改装核心':'配件改装：选择强化已有配件',detail:world.refitTarget?'同排只领一件 · 打碎后拾取才升级':'同排只领一件 · 暂停→当前火力可定向'};
   if (equipment.length && equipment.every(b => world.activeWeapons.includes(b.weaponKind!)))
     return { kind: equipment.some(b => b.kind === 'pickup') ? 'pickup' : 'crate', title: '已有武器：领取升阶或充能', detail: '同阶装备充能+30 · 满100突破强化' };
   if (visible.some(b => b.weaponKind && b.kind === 'pickup'))

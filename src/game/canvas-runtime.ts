@@ -101,7 +101,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
@@ -362,6 +362,7 @@ export class CanvasRuntime {
     if (this.mode === 'rig') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'contracts') { this.mode=this.contractReturn;return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
+    if(this.mode==='refit-plan'){this.mode='loadout';return 'stay';}
     if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
     if (this.mode === 'settings') { this.action('back'); return 'stay'; }
@@ -461,6 +462,13 @@ export class CanvasRuntime {
     else if(action.startsWith('contract:')&&this.mode==='contracts'){const kind=action.slice(9) as ContractKind;if(kind in contracts){const options=this.world.availableProofs();this.world.acceptContract(kind,kind==='research'?(options.includes(this.proofChoice)?this.proofChoice:options[0]):undefined,kind==='hunter'?this.huntChoice:undefined);}}
     else if (action === 'tree' && (this.mode === 'choice' || this.mode === 'loadout')) { this.treeReturn = this.mode; this.mode = 'tree'; }
     else if (action === 'tree-back') this.mode = this.treeReturn;
+    else if(action==='refit-plan'&&this.mode==='loadout')this.mode='refit-plan';
+    else if(action==='refit-plan-back'&&this.mode==='refit-plan')this.mode='loadout';
+    else if(action==='refit-auto'&&this.mode==='refit-plan')this.world.setRefitTarget();
+    else if(action.startsWith('refit-focus:')&&this.mode==='refit-plan'){
+      const kind=action.slice('refit-focus:'.length) as WeaponKind;
+      if(dossierWeapons.includes(kind))this.world.setRefitTarget(kind);
+    }
     else if (action === 'loadout') this.mode = 'loadout';
     else if (action === 'loadout-back') this.mode = 'paused';
     else if (action === 'pause') this.pause();
@@ -699,6 +707,7 @@ export class CanvasRuntime {
     if(this.mode==='contract-reward'){this.drawContractReward();c.restore();return;}
     if(this.mode==='boss-reward'){this.drawBossReward();c.restore();return;}
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
+    if(this.mode==='refit-plan'){this.drawRefitPlan();c.restore();return;}
     if (this.mode === 'loadout') { this.drawLoadout(); c.restore(); return; }
     if (this.mode === 'tree') { this.drawBuildTree(); c.restore(); return; }
     const sector = this.mode === 'menu' ? 0 : sectorIndex(w.round);
@@ -992,7 +1001,7 @@ export class CanvasRuntime {
           const panelY = b.y - 158 >= this.hudTop + 172 ? b.y - 158 : Math.max(this.hudTop + 172, b.y + 70);
           const goalSupply=recipeSupplyMatch(w,this.save.recipeGoal,b);
           this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
-          this.text(b.refit?`${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x-(goalSupply?18:0), panelY + 23, goalSupply?23:25, weaponColors[b.weaponKind], 'center', true);
+          this.text(b.refit?`${b.directedRefit?'定向':''}${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x-(goalSupply?18:0), panelY + 23, goalSupply?23:25, weaponColors[b.weaponKind], 'center', true);
           if(goalSupply){c.strokeStyle='#ffe19a';c.lineWidth=2;c.strokeRect(b.x-118,panelY,236,100);this.text('目标',b.x+108,panelY+23,18,'#ffe19a','right',true);}
           this.text(b.refit?refitLabel(w,b.weaponKind):role, b.x, panelY + 51, b.refit?21:24, '#cfdee9');
           this.text(b.pattern==='drift-supply'?`${(b.dropGrace??0)>0?'护盖':b.age<DRIFT_SUPPLY.settle?'滑行':'停稳'} · 碎后拾取 ${Math.ceil(b.hp)}`:`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, b.pattern==='drift-supply'?21:23, '#fff0c8');
@@ -1241,13 +1250,35 @@ export class CanvasRuntime {
     this.text('同排选一种奖励 · 旧能力保留到本局结束', 360, 1045, 25, '#b8d4e3');
     this.button('返回主界面', 1100, 'armory-back', true);
   }
+  private drawRefitPlan(){
+    const w=this.world;this.rect(40,100,640,1100,'#102330');
+    this.text('军械补给 · 改装目标',360,165,38,'#effaff','center',true);
+    this.text('次轮起影响后续改装箱 · 已投送的不变',360,222,23,'#bdd8e7');
+    this.text('同排仍选一个 · 打碎后拾取才升级',360,260,23,'#f0d19a');
+    for(const [i,kind] of w.activeWeapons.entries()){
+      const y=292+i*134,preview=equipmentPreview(w,kind)!,chosen=w.refitTarget===kind;
+      this.rect(66,y,588,124,chosen?'#26475a':'#132d3c');this.rect(66,y,4,124,preview.color);
+      const entry=weaponDossier[kind];this.frameSprite(entry.asset,w.weaponStage(kind)-1,kind==='pulse'?4:3,126,y+62,76,100,kind==='pulse'?2:1);
+      this.text(preview.title,182,y+29,26,preview.color,'left',true);
+      this.text(chosen?'已指定':'选择',632,y+29,21,chosen?'#ffe19a':'#bdd8e7','right',chosen);
+      this.text(preview.detail,182,y+67,23,'#e1f7ff','left');
+      this.text(preview.hint,182,y+103,21,'#c4dca9','left');
+      this.buttons.push({x:66,y,w:588,h:124,action:`refit-focus:${kind}`,label:`指定改装${weaponNames[kind]}`});
+    }
+    this.text('直伤不计超载、命中率与派生 · 本局有效',360,1004,21,'#bdd8e7');
+    this.rect(120,1030,480,66,'#203e50');this.text(w.refitTarget?'恢复自动改装':'自动改装 · 当前生效',360,1063,26,'#d8eaf5');
+    this.buttons.push({x:120,y:1030,w:480,h:66,action:'refit-auto',label:'恢复自动改装'});
+    this.button('返回当前火力',1130,'refit-plan-back');
+  }
   private drawLoadout() {
     const w = this.world, power = permanentPower(w.growth);
     this.rect(40, 100, 640, 1100, '#102330');
     this.text('当前火力', 330, 165, 46, '#e7f5ff', 'center', true);
     this.rect(490,135,160,60,'#203e50');this.text('查看机甲',570,165,25,'#80e4ff');
     this.buttons.push({x:490,y:135,w:160,h:60,action:'rig-view',label:'查看机甲'});
-    this.text(`T${w.weaponStage(w.weaponKind)} · 已叠加 ${w.activeWeapons.length} 种武器`, 360, 228, 28, '#a5d9ed');
+    this.text(`已叠加 ${w.activeWeapons.length} 种武器`,82,228,25,'#a5d9ed','left');
+    this.rect(300,202,348,54,'#203e50');this.text(`改装目标 · ${w.refitTarget?weaponNames[w.refitTarget]:'自动'}　›`,474,229,24,'#ffe19a');
+    this.buttons.push({x:300,y:202,w:348,h:54,action:'refit-plan',label:'选择改装目标'});
     this.text(`本局火力 +${power}% · 充能突破 ${w.growth.mastery ?? 0} 次`, 360, 278, 27, '#f0d19a');
     this.text(`技能点：可用${w.buildPoints-w.build.spent} · 研发${w.researchPoints} ＋ 充能突破${w.growth.mastery??0}`,360,310,21,'#bdd8e7');
     for (const [index, kind] of w.activeWeapons.entries()) {
@@ -1621,7 +1652,7 @@ export class CanvasRuntime {
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
-      lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
+      lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length, blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,

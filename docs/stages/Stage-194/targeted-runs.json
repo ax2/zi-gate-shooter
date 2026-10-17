@@ -1,0 +1,227 @@
+[
+  {
+    "focus": "pulse",
+    "selectedAt": 20.000000000000146,
+    "from": {
+      "tier": 1,
+      "calibration": 0
+    },
+    "time": 300.0000000000558,
+    "round": 4,
+    "hp": 3,
+    "offers": [
+      {
+        "time": 100.01666666666227,
+        "round": 2,
+        "kind": "pulse",
+        "stage": 2,
+        "row": 7
+      },
+      {
+        "time": 132.03333333333055,
+        "round": 2,
+        "kind": "pulse",
+        "stage": 3,
+        "row": 10
+      },
+      {
+        "time": 183.76666666670505,
+        "round": 3,
+        "kind": "pulse",
+        "stage": 3,
+        "row": 13
+      },
+      {
+        "time": 215.7833333333972,
+        "round": 3,
+        "kind": "pulse",
+        "stage": 3,
+        "row": 16
+      },
+      {
+        "time": 269.98333333341645,
+        "round": 4,
+        "kind": "pulse",
+        "stage": 3,
+        "row": 19
+      }
+    ],
+    "claims": [
+      {
+        "time": 104.966666666662,
+        "kind": "pulse",
+        "refit": true,
+        "row": 7,
+        "tier": 2,
+        "calibration": 0
+      },
+      {
+        "time": 136.98333333333449,
+        "kind": "pulse",
+        "refit": true,
+        "row": 10,
+        "tier": 3,
+        "calibration": 0
+      },
+      {
+        "time": 188.41666666670875,
+        "kind": "pulse",
+        "refit": true,
+        "row": 13,
+        "tier": 3,
+        "calibration": 1
+      },
+      {
+        "time": 220.4333333334009,
+        "kind": "pulse",
+        "refit": true,
+        "row": 16,
+        "tier": 3,
+        "calibration": 2
+      },
+      {
+        "time": 274.6333333334122,
+        "kind": "pulse",
+        "refit": true,
+        "row": 19,
+        "tier": 3,
+        "calibration": 3
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "tiers": {
+      "pulse": 3,
+      "scatter": 2,
+      "pierce": 3,
+      "arc": 1
+    },
+    "calibrations": {
+      "pulse": 3,
+      "scatter": 0,
+      "pierce": 0,
+      "arc": 0
+    },
+    "rendering": "mock Canvas; normal controls and actual World, not pixel or human difficulty evidence"
+  },
+  {
+    "focus": "scatter",
+    "selectedAt": 20.000000000000146,
+    "from": {
+      "tier": 2,
+      "calibration": 0
+    },
+    "time": 300.0000000000558,
+    "round": 4,
+    "hp": 3,
+    "offers": [
+      {
+        "time": 100.01666666666227,
+        "round": 2,
+        "kind": "scatter",
+        "stage": 3,
+        "row": 7
+      },
+      {
+        "time": 132.03333333333055,
+        "round": 2,
+        "kind": "scatter",
+        "stage": 3,
+        "row": 10
+      },
+      {
+        "time": 183.16666666670457,
+        "round": 3,
+        "kind": "scatter",
+        "stage": 3,
+        "row": 13
+      },
+      {
+        "time": 215.18333333339672,
+        "round": 3,
+        "kind": "scatter",
+        "stage": 3,
+        "row": 16
+      },
+      {
+        "time": 267.8333333334184,
+        "round": 4,
+        "kind": "scatter",
+        "stage": 3,
+        "row": 19
+      },
+      {
+        "time": 299.85000000005596,
+        "round": 4,
+        "kind": "scatter",
+        "stage": 3,
+        "row": 22
+      }
+    ],
+    "claims": [
+      {
+        "time": 104.966666666662,
+        "kind": "scatter",
+        "refit": true,
+        "row": 7,
+        "tier": 3,
+        "calibration": 0
+      },
+      {
+        "time": 136.98333333333449,
+        "kind": "scatter",
+        "refit": true,
+        "row": 10,
+        "tier": 3,
+        "calibration": 1
+      },
+      {
+        "time": 187.81666666670827,
+        "kind": "scatter",
+        "refit": true,
+        "row": 13,
+        "tier": 3,
+        "calibration": 2
+      },
+      {
+        "time": 219.83333333340042,
+        "kind": "scatter",
+        "refit": true,
+        "row": 16,
+        "tier": 3,
+        "calibration": 3
+      },
+      {
+        "time": 272.4833333334142,
+        "kind": "scatter",
+        "refit": true,
+        "row": 19,
+        "tier": 3,
+        "calibration": 4
+      }
+    ],
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "tiers": {
+      "pulse": 1,
+      "scatter": 3,
+      "pierce": 3,
+      "arc": 1
+    },
+    "calibrations": {
+      "pulse": 0,
+      "scatter": 4,
+      "pierce": 0,
+      "arc": 0
+    },
+    "rendering": "mock Canvas; normal controls and actual World, not pixel or human difficulty evidence"
+  }
+]
