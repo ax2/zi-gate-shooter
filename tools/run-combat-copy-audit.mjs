@@ -1,0 +1,1 @@
+import{build}from'esbuild';const seconds=process.env.COPY_SECONDS??'300';await build({entryPoints:['tools/audit-combat-copy.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-240/audit-${seconds}.mjs`});await import(`../build/qa/Stage-240/audit-${seconds}.mjs`);

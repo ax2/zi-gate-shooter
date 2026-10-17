@@ -1,3 +1,4 @@
+import {combatCopy,type CombatCopy} from './combat-copy';
 import{boosterMount}from'./booster-mount';
 import {OVERLOAD} from '../core/overload';
 import {combatNoticePosition} from './combat-notice';
@@ -181,6 +182,8 @@ export class CanvasRuntime {
   private noticeDetail = '';
   private noticeY = 277;
   private noticeUntil = 0;
+  private copyCache?:{key:string;copy:CombatCopy};
+  private presentedCopy:{title:string;detail:string;lines:string[];titleFont:number;detailFont:number;bounds:{left:number;right:number;top:number;bottom:number};rows:{text:string;size:number;y:number;width:number}[]}|null=null;
   private presentedNotice:{text:string;detail:string;y:number;top:number;bottom:number}|null=null;
   private shakeUntil = 0;
   private shieldBreak?:{x:number;y:number;until:number};
@@ -668,6 +671,25 @@ export class CanvasRuntime {
   private text(text: string, x: number, y: number, size: number, color = '#ecf7ff', align: CanvasTextAlign = 'center', bold = false) {
     const c = this.ctx; c.fillStyle = color; c.font = `${bold ? '700 ' : ''}${size}px ${fonts}`; c.textAlign = align; c.textBaseline = 'middle'; c.fillText(text, x, y);
   }
+  private drawCombatCopy(title:string,detail:string,top:number,height:number,bottom:boolean,color:string){
+    const key=JSON.stringify([title,detail,bottom]);
+    if(this.copyCache?.key!==key){
+      const measure=(text:string,size:number,bold:boolean)=>{
+        this.ctx.font=`${bold?'700 ':''}${size}px ${fonts}`;
+        // Conservative bound for headless canvas shims without font metrics.
+        const width=this.ctx.measureText(text)?.width;
+        return Number.isFinite(width)?width:Array.from(text).length*size;
+      };
+      this.copyCache={key,copy:combatCopy(title,detail,bottom,measure)};
+    }
+    const copy=this.copyCache.copy,two=copy.lines.length===2;
+    const titleY=top+(!detail?height/2:two?(bottom?23:26):(bottom?28:32));
+    this.text(title,360,titleY,copy.titleFont,color,'center',true);
+    const offsets=two?(bottom?[52,75]:[61,85]):[bottom?63:76];
+    const rows=[{text:title,size:copy.titleFont,y:titleY,width:copy.titleWidth}];
+    copy.lines.forEach((line,i)=>{const y=top+offsets[i];this.text(line,360,y,copy.detailFont,'#f2d598');rows.push({text:line,size:copy.detailFont,y,width:copy.widths[i]});});
+    this.presentedCopy={title,detail,lines:[...copy.lines],titleFont:copy.titleFont,detailFont:copy.detailFont,bounds:{left:58,right:662,top,bottom:top+height},rows};
+  }
   private rect(x: number, y: number, width: number, height: number, color: string) { this.ctx.fillStyle = color; this.ctx.fillRect(x, y, width, height); }
   private frameSprite(key: string, frame: number, columns: number, x: number, y: number, width: number, height: number, rows = 2) {
     const img = this.images.get(key); if (!img) return;
@@ -753,7 +775,7 @@ export class CanvasRuntime {
   }
   private renderFrame(dt: number) {
     const c = this.ctx, p = this.platform, w = this.world;
-    this.presentedNotice=null;
+    this.presentedNotice=null;this.presentedCopy=null;
     c.save(); c.fillStyle = '#0a1119'; c.fillRect(0, 0, p.width, p.height);
     c.translate(this.offsetX, this.offsetY); c.scale(this.scale, this.scale);
     c.beginPath(); c.rect(0, 0, 720, 1280); c.clip();
@@ -838,15 +860,14 @@ export class CanvasRuntime {
       if(noticeVisible&&noticePlacement){
         const {y,top,bottom}=noticePlacement;
         this.presentedNotice={text:this.notice,detail:this.noticeDetail,y,top,bottom};
-        this.rect(58,top,604,bottom-top,'#0a1c2af0');this.text(this.notice,360,y,28,'#d2f2ff');
-        if(this.noticeDetail)this.text(this.noticeDetail,360,y+(bottomNotice?37:43),bottomNotice?22:24,'#f2d598');
+        this.rect(58,top,604,bottom-top,'#0a1c2af0');
+        this.drawCombatCopy(this.notice,this.noticeDetail,top,bottom-top,bottomNotice,'#d2f2ff');
       }
     }
     if(activeBuild&&receiptPosition!==null){
       const f=this.buildFeedback!,top=receiptPosition,bottom=top===1180,height=bottom?88:104;
       this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.equipment?weaponColors[f.equipment.kind]:f.combo?'#d3a3ff':'#7fe4ff');
-      this.text(f.title,360,top+(bottom?28:32),bottom?28:30,f.equipment?weaponColors[f.equipment.kind]:f.combo?'#e1bfff':'#d2f2ff','center',true);
-      this.text(f.detail,360,top+(bottom?63:76),bottom?22:23,'#f2d598');
+      this.drawCombatCopy(f.title,f.detail,top,height,bottom,f.equipment?weaponColors[f.equipment.kind]:f.combo?'#e1bfff':'#d2f2ff');
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;
@@ -1809,6 +1830,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
+      combatCopy:this.presentedCopy?{...this.presentedCopy,lines:[...this.presentedCopy.lines],rows:this.presentedCopy.rows.map(r=>({...r})),bounds:{...this.presentedCopy.bounds}}:null,
       combatNotice:this.presentedNotice?{...this.presentedNotice}:null,
       pickupSignals:this.world.bodies.filter(b=>b.kind==='pickup').map(b=>({id:b.id,x:b.x,y:b.y,...pickupSignal(b)})),
       mode: this.mode, time: this.world.time,roundTime:this.world.roundTime,phaseTime:this.world.phaseTime, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, buildRefinements:{...this.world.build.refinements}, activeWeapons:this.world.activeWeapons,
