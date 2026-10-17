@@ -1,3 +1,5 @@
+import {ammoFragmentLight} from './ammo-fragment';
+import {ballisticMechanics} from './ballistic-mechanics';
 import {BANKSHOT} from '../core/bankshot';
 import {bankshotMount} from './bankshot-mount';
 import {bossHullWear,bossWearBand} from './boss-hull-wear';
@@ -104,7 +106,7 @@ export interface Platform {
 }
 export interface CanvasControl { x: number; y: number; w: number; h: number; label: string; action: string }
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; total: number; color: string; hot?:boolean }
-interface Blast { ion?:boolean; electric?: boolean; fracture?: boolean; x: number; y: number; size: number; life: number; total: number }
+interface Blast { ammo?:boolean; ion?:boolean; electric?: boolean; fracture?: boolean; x: number; y: number; size: number; life: number; total: number }
 const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
@@ -578,6 +580,7 @@ export class CanvasRuntime {
     if(e.type==='kill'||e.type==='boss-kill')this.save.achievements.kills++;
     if(e.type==='boss-kill')this.save.achievements.bosses++;
     if(['contract','formation-clear','fracture','kill','boss-kill','pickup','upgrade'].includes(e.type))this.checkAchievements();
+    if(e.type==='ammo-fragment'){if(!this.blasts.some(b=>b.ammo&&Math.hypot(b.x-e.x,b.y-e.y)<72)&&this.blasts.length<4)this.blasts.push({x:e.x,y:e.y,size:70,life:.18,total:.18,ammo:true});return;}
     if(e.type==='ricochet'&&e.targetX!==undefined&&e.targetY!==undefined){
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.2,laser:false,ricochet:true});
       return;
@@ -989,6 +992,7 @@ export class CanvasRuntime {
     }
     for (const e of this.blasts) {
       e.life -= dt; const age = 1 - e.life / e.total;
+      if(e.ammo){ammoFragmentLight(c,e.x,e.y,age,this.save.settings.effects==='weak');continue;}
       if(e.ion){ionStormLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');continue;}
       if(e.electric){capacitorLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');continue;}
       c.save(); c.globalAlpha = detonationSpriteAlpha(age,this.save.settings.effects==='weak');
@@ -1287,6 +1291,7 @@ export class CanvasRuntime {
       this.text(`T${tier + 1}`, x, 603, 25, color, 'center', true);
     }
     this.text(entry.role, 360, 684, 32, color, 'center', true);
+    if(kind!=='arc')this.text('弹道弹芯可追加贯穿、爆破或侧跳',360,718,22,'#c6d9c5');
     this.text('适合这样打', 92, 756, 25, '#f0d19a', 'left', true);
     this.text(entry.strength, 92, 803, 25, '#d6e7f0', 'left');
     this.text('留意取舍', 92, 868, 25, '#f0d19a', 'left', true);
@@ -1332,8 +1337,7 @@ export class CanvasRuntime {
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 28, 28, weaponColors[kind], 'left', true);
-      this.text(kind === 'arc' ? `${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%` : kind === 'blast' ? `范围${profile.splashRadius}${w.magneticUnlocked()?w.build.magneticAugment==='field-wide'?' · 广域电场':w.build.magneticAugment==='field-link'?' · 分流电场':' · 三拍电场':''}`
-        : kind === 'pierce' ? `贯穿${profile.targets}敌${w.fractureUnlocked()?' · 裂甲'+w.fractureProfile().hits+'击':''}` : kind === 'scatter' ? w.build.ballisticBranch==='penetrator'?'贯穿2敌':w.build.ballisticBranch==='fragment'?'140范围 · 50%溅射':w.build.ballisticBranch==='ricochet'?'280范围 · 55%侧跳':'近距聚弹' : '集中直射', 628, y + 28, 23, '#a9c9d9', 'right');
+      this.text(kind==='arc'?`${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%`:ballisticMechanics(w,kind),628,y+28,kind==='arc'?23:20,'#a9c9d9','right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 68, 23, '#d6e7f0', 'left');
     }
@@ -1530,17 +1534,18 @@ export class CanvasRuntime {
   private drawBallisticBranch(){
     this.rect(35,120,650,1080,'#102330');
     this.text('弹道改造 · 三选一',360,190,40,'#effaff','center',true);
-    this.text('都保留霰射总伤害+30% · 弹数与扇角不变',360,250,24,'#bdd8e7');
+    this.text('四种弹道系数130% · 原有火力保留',360,250,24,'#bdd8e7');
+    this.text('本次受益：'+buildPreview(this.world,'ballistic').weaponGains.map(r=>r.name).join(' / '),360,279,20,'#d4e7ad');
     for(const [i,branch] of (['penetrator','fragment','ricochet'] as const).entries()){
       const node=ballisticBranches[branch],y=300+i*215,color=branch==='penetrator'?'#aee6ff':branch==='ricochet'?'#ffe3a4':'#ffd092';
       this.rect(65,y,590,200,'#203e50');this.rect(65,y,5,200,color);
       this.text(node.name,90,y+35,32,color,'left',true);this.text(node.role,90,y+68,24,'#effaff','left');
-      this.text(branch==='penetrator'?'每颗霰弹最多命中两敌，直伤保留':branch==='ricochet'?'每颗命中后跳向280范围内一名侧敌':`命中敌人后追加${BALLISTIC_FORK.radius}范围邻敌爆破`,90,y+105,23,'#d9e8f1','left');
-      this.text(branch==='penetrator'?'箱子、数字门与闭合护盾会截断':branch==='ricochet'?'横距至少80 · 55%伤害 · 不递归/不充门':`${BALLISTIC_FORK.splash*100}%伤害 · 不充门 · 闭盾不扩散`,90,y+141,22,'#bdd8e7','left');
+      this.text(branch==='penetrator'?'至少贯穿两敌 · 原有更高贯穿保留':branch==='ricochet'?'各武器直击后追加280范围侧击':`爆破范围至少${BALLISTIC_FORK.radius} · 原爆炸取较大值`,90,y+105,23,'#d9e8f1','left');
+      this.text(branch==='penetrator'?'箱子、数字门与闭合护盾会截断':branch==='ricochet'?'横距至少80 · 55%伤害 · 不递归/不充门':`${BALLISTIC_FORK.splash*100}%邻敌伤害 · 不充门 · 原爆炸保留`,90,y+141,22,'#bdd8e7','left');
       this.text('选择此改造　›',625,y+177,24,color,'right');
       this.buttons.push({x:65,y,w:590,h:200,action:`branch:${branch}`,label:node.name});
     }
-    this.text('本局选定不可切换 · 雷暴组合与旧武器保留',360,985,23,'#f0d19a');
+    this.text('现有与后续弹道配件共用 · 已有能力保留',360,985,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
   }
   private drawStormBranch(){
@@ -1730,7 +1735,7 @@ export class CanvasRuntime {
       framePulses:this.framePulses,renderedMode:this.renderedMode,imageCount:this.images.size,
       runNewBest:this.runNewBest,bossWins:this.world.bossWins,contractStats:{...this.world.contractStats},runAchievements:[...this.runAchievements],
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
-      ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
+      ballisticReactions:this.world.ballisticReactions(),ballisticTotals:this.world.ballisticTotals(),ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       weaponImpacts:this.impacts.filter(h=>!h.opticalBand).map(h=>({...h})),
       upgradePulseRemaining:Math.max(0,this.upgradeUntil-this.world.time),combatFeedback:this.buildFeedback?{title:this.buildFeedback.title,combo:this.buildFeedback.combo,remaining:Math.max(0,this.buildFeedback.until-this.world.time),hidden:this.buildFeedback.hidden}:null,pendingCombatFeedback:this.pendingBuildFeedback.map(f=>({title:f.title,combo:f.combo,remaining:f.remaining})),
       equipmentReceipts:this.equipmentFeedback.pending.map(r=>({...r})),equipmentReceipt:this.buildFeedback?.equipment?{...this.buildFeedback}:null,
@@ -1742,7 +1747,7 @@ export class CanvasRuntime {
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
-      lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,hotParticles:this.particles.filter(p=>p.hot!==false).length, blasts: this.blasts.length,arcs:this.arcs.length,
+      lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,hotParticles:this.particles.filter(p=>p.hot!==false).length, ammoFragments:this.blasts.filter(b=>b.ammo).length,blasts: this.blasts.length,arcs:this.arcs.length,
       bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,

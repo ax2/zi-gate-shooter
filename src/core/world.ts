@@ -20,7 +20,7 @@ import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type Io
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
 import { Contract, contracts, HUNTER, hunts, type HuntKind, type ContractKind } from './contracts';
-import { BuildTree, isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BuildBranch, type Route } from './build-tree';
+import { BuildTree, isMagneticAugment, magneticAugments, SEEKER_BRIDGE, OPTICAL_FORK, ELECTRIC_FORK, BALLISTIC_FORK, RICOCHET, type MagneticAugment, type BallisticBranch,type BuildBranch, type Route } from './build-tree';
 import { armoryChoices,refitFocus } from './armory-offers';
 import { supportMilestone,laserVisualBand } from './support-profile';
 import {builtWeapon,builtSupport} from './build-profile';
@@ -35,7 +35,7 @@ import { timeline, sectorIndex, sectorNames, SWARM } from './director';
 import type { Spawn } from './director';
 import { safeRoute } from './reachability';
 import { advanceBody, guardClosed, guardDamageScale } from './behavior';
-import { weaponNames, ARC_SHOT } from './weapons';
+import { isBallisticWeapon,type BallisticWeapon,weaponNames, ARC_SHOT } from './weapons';
 import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
@@ -55,7 +55,7 @@ export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
-  bankRemaining?:number;sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
+  readonly ammoBranch?:BallisticBranch|null;bankRemaining?:number;sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
 export interface EffectEvent { fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
@@ -117,6 +117,10 @@ export class World {
     this.effects.push({type:'emp',x:source.x,y:source.y,size:CONDUIT.radius,text:`${source.pattern==='fire-control'?'火控断供':'中继击破'} · ${affected}台停火`,detail:source.pattern==='fire-control'?`中断${interrupted}台蓄能 · 恢复单线，旧弹仍危险`:interrupted?`中断${interrupted}台蓄能 · 已发敌弹仍危险`:'停火1.5秒 · 已发敌弹仍危险'});
   }
   scatterPierces=0;scatterBursts=0;scatterSplashHits=0;scatterRicochets=0;
+  readonly #attachmentHits=new Map<BallisticWeapon,{pierces:number;ricochets:number;splashHits:number}>();
+  private attachmentHit(kind:BallisticWeapon,metric:'pierces'|'ricochets'|'splashHits'){let row=this.#attachmentHits.get(kind);if(!row){row={pierces:0,ricochets:0,splashHits:0};this.#attachmentHits.set(kind,row);}row[metric]++;}
+  ballisticReactions(){return [{kind:'scatter' as BallisticWeapon,pierces:this.scatterPierces,ricochets:this.scatterRicochets,splashHits:this.scatterSplashHits},...[...this.#attachmentHits].map(([kind,row])=>({kind,...row}))];}
+  ballisticTotals(){return this.ballisticReactions().reduce((a,b)=>({pierces:a.pierces+b.pierces,ricochets:a.ricochets+b.ricochets,splashHits:a.splashHits+b.splashHits}),{pierces:0,ricochets:0,splashHits:0});}
   ionCharge=0;ionBursts=0;ionHits=0;
   ionOrbs:IonOrb[]=[];ionSpears:IonSpear[]=[];
   ionOrbSpawns=0;ionOrbHits=0;ionSpearShots=0;ionSpearHits=0;ionBonusDamage=0;
@@ -445,7 +449,7 @@ export class World {
   }
   aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
   availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>isStormAugment(kind)?this.build.stormAugment===kind&&this.activeWeapons.includes('scatter')&&this.weaponStage('scatter')>=3:kind==='magnetic'?this.magneticUnlocked()&&!!this.build.magneticAugment:kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
-  proofCount(kind:BuildProof){return isStormAugment(kind)?this.stormProofHits?.[kind]??0:kind==='magnetic'?this.magneticProofHits:kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.scatterRicochets:this.laserArcHits;}
+  proofCount(kind:BuildProof){return isStormAugment(kind)?this.stormProofHits?.[kind]??0:kind==='magnetic'?this.magneticProofHits:kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.ballisticTotals().ricochets:this.laserArcHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
   contract?: Contract;
@@ -726,7 +730,7 @@ export class World {
         const velocity=kind==='arc'?this.arcVelocity(x,y):{vx:w.vx[i],vy:-C.bulletSpeed};
         this.bullets.push({ id: this.nextId++, x, y, px: x, py: y, ...velocity,
           damage: w.damage[i] * (1 + permanentPower(this.growth) / 100) * (this.growth.overload > 0 ? 1.35 : 1),
-          age: 0, active: true, hostile: false, weaponKind: kind, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops,
+          age: 0, active: true, hostile: false, weaponKind: kind,ammoBranch:isBallisticWeapon(kind)?this.build.ballisticBranch??null:undefined, remainingTargets: w.targets, hitBodies: [], splashRadius: w.splashRadius, chainHops: w.chainHops,
           ...(calibrationBand?{calibrationBand}:{}) });
         this.shots++;
       }
@@ -869,9 +873,10 @@ export class World {
           bullet.hitBodies?.push(body.id);
           bullet.remainingTargets = (bullet.remainingTargets ?? 1) - 1;
           if (bullet.remainingTargets <= 0 || body.kind === 'gate' || body.kind === 'crate' || guardClosed(body) || (body.dropGrace??0)>0) bullet.active = false;
+          const ammo=bullet.ammoBranch===undefined?this.build.ballisticBranch:bullet.ammoBranch;
           const protectedEntry=(body.dropGrace??0)>0;
-          if(!protectedEntry&&bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='penetrator'&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
-            this.scatterPierces++;this.effects.push({type:'scatter-pierce',x:body.x,y:body.y,weaponKind:'scatter'});
+          if(!protectedEntry&&isBallisticWeapon(bullet.weaponKind)&&ammo==='penetrator'&&body.kind in C.enemies&&(bullet.hitBodies?.length??0)>1){
+            if(bullet.weaponKind==='scatter')this.scatterPierces++;else this.attachmentHit(bullet.weaponKind,'pierces');this.effects.push({type:'scatter-pierce',x:body.x,y:body.y,weaponKind:bullet.weaponKind});
           }
           const ionEligible=bullet.weaponKind==='arc'&&body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
           const linkEligible=body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
@@ -879,14 +884,14 @@ export class World {
           this.hit(body, bullet.damage, bullet.weaponKind);
           if(protectedEntry)return;
           if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='blast')this.leaveMagnetic(body,bullet.damage);
-          if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='scatter'&&this.build.ballisticBranch==='ricochet'){
+          if(linkEligible&&body.hp<hpBefore&&isBallisticWeapon(bullet.weaponKind)&&ammo==='ricochet'){
             const target=this.bodies.filter(other=>other!==body&&other.active&&other.kind in C.enemies
               &&!(other.dropGrace??0)&&!guardClosed(other)&&!(other.kind==='boss'&&this.phase!=='boss')
               &&other.y>=C.playerShotTop&&other.y<=C.playerY&&Math.abs(other.x-body.x)>=RICOCHET.minSide
               &&Math.hypot(other.x-body.x,other.y-body.y)<=RICOCHET.range)
               .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id)[0];
-            if(target){const before=target.hp;this.hit(target,bullet.damage*RICOCHET.damage,'scatter');
-              if(target.hp<before){this.scatterRicochets++;if(target.proofRound===this.round&&target.proofGroup)this.contract?.recordRicochetGroup(target.proofGroup,this.round);this.effects.push({type:'ricochet',x:body.x,y:body.y,targetX:target.x,targetY:target.y,weaponKind:'scatter'});}
+            if(target){const before=target.hp;this.hit(target,bullet.damage*RICOCHET.damage,bullet.weaponKind);
+              if(target.hp<before){if(bullet.weaponKind==='scatter')this.scatterRicochets++;else this.attachmentHit(bullet.weaponKind,'ricochets');if(target.proofRound===this.round&&target.proofGroup)this.contract?.recordRicochetGroup(target.proofGroup,this.round);this.effects.push({type:'ricochet',x:body.x,y:body.y,targetX:target.x,targetY:target.y,weaponKind:bullet.weaponKind});}
             }
           }
           if(bullet.weaponKind==='pierce'){
@@ -922,14 +927,14 @@ export class World {
               if(bullet.weaponKind==='scatter'&&next.hp<before){this.stormLinks++;if(hop>0&&this.build.stormAugment==='storm-relay'){this.stormRelayLinks++;this.recordStormProof('storm-relay',next);}}origin = next;
             }
           }
-          if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {
+          if (bullet.splashRadius && body.kind in C.enemies && !(isBallisticWeapon(bullet.weaponKind)&&bullet.weaponKind!=='blast'&&guardClosed(body))) {
             // No secondary explosions, reward charging or off-screen farming.
             if(bullet.weaponKind==='scatter')this.scatterBursts++;
-            this.effects.push({type:bullet.weaponKind==='scatter'?'scatter-burst':'blast',x:body.x,y:body.y,size:bullet.splashRadius,weaponKind:bullet.weaponKind});
+            this.effects.push({type:bullet.weaponKind==='scatter'?'scatter-burst':bullet.weaponKind==='blast'?'blast':'ammo-fragment',x:body.x,y:body.y,size:bullet.splashRadius,weaponKind:bullet.weaponKind});
             for (const other of this.bodies) if (other !== body && other.active && other.kind in C.enemies
               && other.y >= C.playerShotTop && other.y <= C.playerY && !(other.kind==='boss'&&this.phase!=='boss') && !(other.dropGrace??0)
               && Math.hypot(other.x-body.x,other.y-body.y) <= bullet.splashRadius)
-              {if(bullet.weaponKind==='scatter')this.scatterSplashHits++;this.hit(other,bullet.damage*BALLISTIC_FORK.splash,bullet.weaponKind);}
+              {if(bullet.weaponKind==='scatter')this.scatterSplashHits++;else if(isBallisticWeapon(bullet.weaponKind))this.attachmentHit(bullet.weaponKind,'splashHits');this.hit(other,bullet.damage*BALLISTIC_FORK.splash,bullet.weaponKind);}
           }
           // Complete the original attack before spending at most one stored beam.
           // Derived hits never enter this projectile-contact callback.

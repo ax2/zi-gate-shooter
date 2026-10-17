@@ -5,9 +5,9 @@ import {isPhotonAugment,type PhotonAugment} from './laser-chain';
 import {isFractureAugment,type FractureAugment} from './combos';
 export type BallisticBranch='penetrator'|'fragment'|'ricochet';
 export const ballisticBranches={
- penetrator:{name:'贯穿弹芯',detail:'霰射总伤害+30% · 每颗贯穿2敌',role:'瞄准纵向敌列，打穿前排'},
- fragment:{name:'爆破弹芯',detail:'霰射总伤害+30% · 140范围50%溅射',role:'瞄准紧凑敌群，扩散清场'},
- ricochet:{name:'跳弹弹芯',detail:'霰射总伤害+30% · 280范围55%跳弹',role:'借前排命中，打击分散侧翼'},
+ penetrator:{name:'贯穿弹芯',detail:'弹道伤害系数130% · 至少贯穿2敌',role:'速射穿列 / 榴弹连爆 · 原高贯穿保留'},
+ fragment:{name:'爆破弹芯',detail:'弹道伤害系数130% · 140范围50%溅射',role:'速射微爆 / 穿甲扩散 · 原爆炸保留'},
+ ricochet:{name:'跳弹弹芯',detail:'弹道伤害系数130% · 280范围55%跳弹',role:'借前排命中，将各武器火力送往侧翼'},
 } as const;
 export const BALLISTIC_FORK={targets:2,radius:140,splash:.5} as const;
 export const RICOCHET={range:280,minSide:80,damage:.55} as const;
@@ -37,7 +37,7 @@ export const routes: Route[] = ['ballistic','electric','optical'];
 export const tree: Record<Route, {name:string; detail:string}[]> = {
   ballistic: [
     {name:'霰射机构',detail:'安装T1霰射 · 霰射伤害+10%'},
-    {name:'重型弹芯 · 选择分支',detail:'总伤害+30% · 贯穿/爆破/跳弹'},
+    {name:'重型弹芯 · 选择分支',detail:'四种弹道系数130% · 贯穿/爆破/跳弹'},
     {name:'雷暴霰射',detail:'霰射命中追加一次跳电 · 需雷电路线'},
   ],
   electric: [

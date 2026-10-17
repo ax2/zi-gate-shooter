@@ -10,6 +10,7 @@ import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
 export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const MID_GATE_AT=39;
+export const AMMO_TRIAL={at:24.5,troops:[{x:300,y:500},{x:300,y:330},{x:420,y:500}]} as const;
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
 export const ARMOURED_PACK={droneRows:[32,34.2,34.9],pairXs:[290,430],screenLead:1.4} as const;
@@ -161,9 +162,9 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
   if(round===1){
     // The first equipment branch needs a real, compact group to demonstrate
     // its effect. The player still shoots the nearer gate before these units.
-    for(const [i,x] of [240,300,360].entries()){
-      add(24.5,'drone',x);Object.assign(out[out.length-1],{drop:true,dropY:SWARM.arrivalY,
-        dropLabel:i===0?'火力检验':undefined,dropDetail:'密集敌群 · 让新火力发挥作用'});
+    for(const [i,t] of AMMO_TRIAL.troops.entries()){
+      add(AMMO_TRIAL.at,'armor',t.x);Object.assign(out[out.length-1],{drop:true,dropY:t.y,
+        dropLabel:i===0?'弹芯检验':undefined,dropDetail:'纵列与侧翼 · 可试贯穿、爆破或跳弹'});
     }
     // Keep the original tutorial roster/timing and make its machinery visible.
     // The first three simple targets appear higher than the later combat wave.

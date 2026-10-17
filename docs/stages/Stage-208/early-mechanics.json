@@ -1,0 +1,104 @@
+[
+  {
+    "opening": "pierce",
+    "branch": "fragment",
+    "watch": "pierce",
+    "selected": 21.26666666666674,
+    "first": 25.86666666666648,
+    "hp": 3,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "blast"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 2
+      }
+    ]
+  },
+  {
+    "opening": "blast",
+    "branch": "penetrator",
+    "watch": "blast",
+    "selected": 21.26666666666674,
+    "first": 38.83333333333241,
+    "hp": 3,
+    "weapons": [
+      "pulse",
+      "blast",
+      "scatter",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 2,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 4,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 3,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 1,
+        "ricochets": 0,
+        "splashHits": 1
+      }
+    ]
+  },
+  {
+    "opening": "blast",
+    "branch": "ricochet",
+    "watch": "pulse",
+    "selected": 21.26666666666674,
+    "first": 25.93333333333314,
+    "hp": 3,
+    "weapons": [
+      "pulse",
+      "blast",
+      "scatter",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 2,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 2,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 1,
+        "splashHits": 0
+      }
+    ]
+  }
+]

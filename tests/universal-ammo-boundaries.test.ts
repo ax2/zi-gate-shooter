@@ -1,0 +1,14 @@
+import{it,expect}from'vitest';import{World}from'../src/core/world';import{C}from'../src/core/config';import{Contract}from'../src/core/contracts';import{ammoFragmentLight}from'../src/game/ammo-fragment';
+it('a real pre-upgrade bullet keeps its birth ammo while new rounds receive the selected attachment',()=>{
+ const w=new World();(w as any).scheduled=[];w.player.x=w.player.px=360;w.growth.mastery=2;w.chooseBuild('ballistic');w.step(C.step,360);const old=w.bullets.find(b=>b.weaponKind==='pulse')!;expect(old.ammoBranch).toBeNull();w.chooseBuild('ballistic','ricochet');const a=w.spawn('armor',360,850),side=w.spawn('armor',560,850);for(const b of [a,side]){b.hp=b.maxHp=1000;b.speed=0;b.timer=999;}old.y=old.py=850;w.bullets=[old];w.step(C.step,360);expect(w.ballisticTotals().ricochets).toBe(0);
+ let observed=false;for(let f=0;f<9;f++){w.step(C.step,360);observed ||= w.bullets.some(b=>b.weaponKind==='pulse'&&b.ammoBranch==='ricochet');}expect(observed).toBe(true);
+});
+it('actual pulse ricochets count toward the matching marked two-batch proof without being relabelled as scatter',()=>{
+ const w=new World();(w as any).scheduled=[];w.player.x=w.player.px=68;w.growth.mastery=2;w.chooseBuild('ballistic');w.chooseBuild('ballistic','ricochet');const c=new Contract('research',w.round,0,w.activeWeapons.length,0,{kind:'ricochet',start:0});c.reinforcements=1;c.nextReinforcement=999;w.contract=c;
+ const source=w.spawn('armor',360,600),side=w.spawn('elite',560,600);for(const b of [source,side]){b.hp=b.maxHp=1000;b.speed=0;b.timer=999;}Object.assign(side,{proofTarget:true,proofGroup:1,proofRound:w.round});
+ for(let n=0;n<12;n++){if(n===6){side.active=false;const second=w.spawn('elite',200,600);Object.assign(second,{hp:1000,maxHp:1000,speed:0,timer:999,proofTarget:true,proofGroup:2,proofRound:w.round});c.reinforcements=2;}w.bullets=[{id:208999+n,x:360,y:600,px:360,py:600,vx:0,vy:0,age:0,active:true,hostile:false,damage:10,weaponKind:'pulse',ammoBranch:'ricochet'}];w.step(C.step,68);w.drainEffects();}
+ expect(w.scatterRicochets).toBe(0);expect(w.proofCount('ricochet')).toBe(12);expect(c.proofGroupCount).toBe(2);expect(c.status).toBe('won');expect(w.certifiedBuilds.has('ricochet')).toBe(true);
+});
+it('micro-fragment light is bounded, source-over, finite and restores the drawing stack with less weak detail',()=>{
+ for(const age of [0,.2,.5,.9]){const calls=[];for(const weak of [false,true]){let depth=0,count=0;const c=new Proxy({}, {get(_t,k){return(...args:unknown[])=>{count++;if(k==='save')depth++;if(k==='restore')depth--;for(const a of args)if(typeof a==='number')expect(Number.isFinite(a)).toBe(true);if(k==='arc')expect(Number(args[2])).toBeLessThanOrEqual(65);};},set(_t,k,v){if(k==='globalCompositeOperation')expect(v).not.toBe('lighter');return true;}})as CanvasRenderingContext2D;ammoFragmentLight(c,360,500,age,weak);expect(depth).toBe(0);calls.push(count);}expect(calls[1]).toBeLessThan(calls[0]);}
+});

@@ -1,0 +1,1490 @@
+[
+  {
+    "opening": "arc",
+    "branch": "penetrator",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "arc",
+        "scatter",
+        "blast"
+      ],
+      "gain": "3配件直伤/秒 347.7 → 439.7",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 60.8,
+          "after": 79.03999999999999
+        },
+        {
+          "kind": "scatter",
+          "before": 104.50000000000001,
+          "after": 123.50000000000001
+        },
+        {
+          "kind": "blast",
+          "before": 182.39999999999998,
+          "after": 237.12
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15045,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "blast",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 42,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 3,
+        "ricochets": 0,
+        "splashHits": 9
+      },
+      {
+        "kind": "pulse",
+        "pierces": 8,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 6,
+        "ricochets": 0,
+        "splashHits": 0
+      }
+    ],
+    "totals": {
+      "pierces": 59,
+      "ricochets": 0,
+      "splashHits": 9
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10042.185115000017,
+        "contacts": 355,
+        "kills": 57
+      },
+      {
+        "source": "arc",
+        "damage": 18008.732945000007,
+        "contacts": 239,
+        "kills": 106
+      },
+      {
+        "source": "scatter",
+        "damage": 40907.882261249884,
+        "contacts": 966,
+        "kills": 89
+      },
+      {
+        "source": "blast",
+        "damage": 26546.699025000005,
+        "contacts": 137,
+        "kills": 52
+      },
+      {
+        "source": "storm",
+        "damage": 933.15043125,
+        "contacts": 59,
+        "kills": 12
+      },
+      {
+        "source": "pierce",
+        "damage": 18227.388382499972,
+        "contacts": 265,
+        "kills": 38
+      },
+      {
+        "source": "laser",
+        "damage": 1728.6030000000005,
+        "contacts": 21,
+        "kills": 3
+      },
+      {
+        "source": "fracture",
+        "damage": 4992.924240000003,
+        "contacts": 40,
+        "kills": 3
+      }
+    ],
+    "bankShots": 5,
+    "peakBullets": 53,
+    "peakBodies": 10
+  },
+  {
+    "opening": "arc",
+    "branch": "fragment",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "arc",
+        "scatter",
+        "blast"
+      ],
+      "gain": "3配件直伤/秒 347.7 → 439.7",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 60.8,
+          "after": 79.03999999999999
+        },
+        {
+          "kind": "scatter",
+          "before": 104.50000000000001,
+          "after": 123.50000000000001
+        },
+        {
+          "kind": "blast",
+          "before": 182.39999999999998,
+          "after": 237.12
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15240,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "blast",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 26
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 25
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 13
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 11
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 0,
+      "splashHits": 75
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10418.527750000014,
+        "contacts": 379,
+        "kills": 67
+      },
+      {
+        "source": "arc",
+        "damage": 17257.06585,
+        "contacts": 228,
+        "kills": 96
+      },
+      {
+        "source": "scatter",
+        "damage": 41018.67281499986,
+        "contacts": 957,
+        "kills": 87
+      },
+      {
+        "source": "blast",
+        "damage": 25603.633800000003,
+        "contacts": 141,
+        "kills": 57
+      },
+      {
+        "source": "storm",
+        "damage": 1114.6066375000003,
+        "contacts": 56,
+        "kills": 12
+      },
+      {
+        "source": "pierce",
+        "damage": 18844.97417500001,
+        "contacts": 283,
+        "kills": 40
+      },
+      {
+        "source": "laser",
+        "damage": 2400.3085999999994,
+        "contacts": 29,
+        "kills": 6
+      },
+      {
+        "source": "fracture",
+        "damage": 5239.558000000001,
+        "contacts": 41,
+        "kills": 2
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 51,
+    "peakBodies": 10
+  },
+  {
+    "opening": "arc",
+    "branch": "ricochet",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "arc",
+        "scatter",
+        "blast"
+      ],
+      "gain": "3配件直伤/秒 347.7 → 439.7",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 60.8,
+          "after": 79.03999999999999
+        },
+        {
+          "kind": "scatter",
+          "before": 104.50000000000001,
+          "after": 123.50000000000001
+        },
+        {
+          "kind": "blast",
+          "before": 182.39999999999998,
+          "after": 237.12
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15520,
+    "weapons": [
+      "pulse",
+      "arc",
+      "scatter",
+      "blast",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 65,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 11,
+        "splashHits": 5
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 38,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 30,
+        "splashHits": 0
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 144,
+      "splashHits": 5
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10549.924449999988,
+        "contacts": 365,
+        "kills": 63
+      },
+      {
+        "source": "arc",
+        "damage": 17341.044725000003,
+        "contacts": 231,
+        "kills": 101
+      },
+      {
+        "source": "scatter",
+        "damage": 41367.188788750005,
+        "contacts": 940,
+        "kills": 86
+      },
+      {
+        "source": "blast",
+        "damage": 25809.601299999984,
+        "contacts": 140,
+        "kills": 59
+      },
+      {
+        "source": "storm",
+        "damage": 932.8884100000004,
+        "contacts": 54,
+        "kills": 7
+      },
+      {
+        "source": "pierce",
+        "damage": 19262.717544999996,
+        "contacts": 286,
+        "kills": 47
+      },
+      {
+        "source": "laser",
+        "damage": 2554.3500000000004,
+        "contacts": 29,
+        "kills": 5
+      },
+      {
+        "source": "fracture",
+        "damage": 5133.272200000001,
+        "contacts": 43,
+        "kills": 8
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 51,
+    "peakBodies": 10
+  },
+  {
+    "opening": "pierce",
+    "branch": "penetrator",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "pierce",
+        "scatter",
+        "arc"
+      ],
+      "gain": "3配件直伤/秒 219.2 → 274.6",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 51.2,
+          "after": 66.56
+        },
+        {
+          "kind": "pierce",
+          "before": 80,
+          "after": 104
+        },
+        {
+          "kind": "scatter",
+          "before": 88.00000000000001,
+          "after": 104.00000000000003
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15270,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "arc",
+      "blast"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 40,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 9,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 7,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 3,
+        "ricochets": 0,
+        "splashHits": 10
+      }
+    ],
+    "totals": {
+      "pierces": 59,
+      "ricochets": 0,
+      "splashHits": 10
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10719.247887499989,
+        "contacts": 397,
+        "kills": 71
+      },
+      {
+        "source": "pierce",
+        "damage": 15998.733775000028,
+        "contacts": 454,
+        "kills": 36
+      },
+      {
+        "source": "scatter",
+        "damage": 48862.41760750007,
+        "contacts": 1029,
+        "kills": 103
+      },
+      {
+        "source": "arc",
+        "damage": 12689.655114999983,
+        "contacts": 225,
+        "kills": 92
+      },
+      {
+        "source": "storm",
+        "damage": 1265.3026899999998,
+        "contacts": 69,
+        "kills": 9
+      },
+      {
+        "source": "blast",
+        "damage": 25979.248849999996,
+        "contacts": 128,
+        "kills": 50
+      },
+      {
+        "source": "laser",
+        "damage": 2354.667,
+        "contacts": 28,
+        "kills": 4
+      },
+      {
+        "source": "fracture",
+        "damage": 4042.1523249999973,
+        "contacts": 46,
+        "kills": 3
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 59,
+    "peakBodies": 10
+  },
+  {
+    "opening": "pierce",
+    "branch": "fragment",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "pierce",
+        "scatter",
+        "arc"
+      ],
+      "gain": "3配件直伤/秒 219.2 → 274.6",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 51.2,
+          "after": 66.56
+        },
+        {
+          "kind": "pierce",
+          "before": 80,
+          "after": 104
+        },
+        {
+          "kind": "scatter",
+          "before": 88.00000000000001,
+          "after": 104.00000000000003
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15200,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "arc",
+      "blast"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 25
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 27
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 19
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 10
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 0,
+      "splashHits": 81
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10948.917962500018,
+        "contacts": 413,
+        "kills": 71
+      },
+      {
+        "source": "pierce",
+        "damage": 16406.403150000024,
+        "contacts": 478,
+        "kills": 45
+      },
+      {
+        "source": "scatter",
+        "damage": 48325.83261000011,
+        "contacts": 1016,
+        "kills": 91
+      },
+      {
+        "source": "arc",
+        "damage": 12905.036449999985,
+        "contacts": 224,
+        "kills": 92
+      },
+      {
+        "source": "storm",
+        "damage": 1251.50294,
+        "contacts": 57,
+        "kills": 7
+      },
+      {
+        "source": "blast",
+        "damage": 25263.79910000001,
+        "contacts": 127,
+        "kills": 51
+      },
+      {
+        "source": "laser",
+        "damage": 2517.716999999999,
+        "contacts": 30,
+        "kills": 5
+      },
+      {
+        "source": "fracture",
+        "damage": 4043.018649999996,
+        "contacts": 49,
+        "kills": 4
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 51,
+    "peakBodies": 10
+  },
+  {
+    "opening": "pierce",
+    "branch": "ricochet",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "pierce",
+        "scatter",
+        "arc"
+      ],
+      "gain": "3配件直伤/秒 219.2 → 274.6",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 51.2,
+          "after": 66.56
+        },
+        {
+          "kind": "pierce",
+          "before": 80,
+          "after": 104
+        },
+        {
+          "kind": "scatter",
+          "before": 88.00000000000001,
+          "after": 104.00000000000003
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15450,
+    "weapons": [
+      "pulse",
+      "pierce",
+      "scatter",
+      "arc",
+      "blast"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 71,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 41,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 39,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 12,
+        "splashHits": 5
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 163,
+      "splashHits": 5
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 11126.124639999982,
+        "contacts": 404,
+        "kills": 68
+      },
+      {
+        "source": "pierce",
+        "damage": 16668.59265500001,
+        "contacts": 481,
+        "kills": 50
+      },
+      {
+        "source": "scatter",
+        "damage": 48157.020667500066,
+        "contacts": 986,
+        "kills": 98
+      },
+      {
+        "source": "arc",
+        "damage": 13090.454439999998,
+        "contacts": 221,
+        "kills": 89
+      },
+      {
+        "source": "storm",
+        "damage": 857.1177475000003,
+        "contacts": 49,
+        "kills": 5
+      },
+      {
+        "source": "blast",
+        "damage": 25884.853675,
+        "contacts": 129,
+        "kills": 54
+      },
+      {
+        "source": "laser",
+        "damage": 2614.142,
+        "contacts": 30,
+        "kills": 5
+      },
+      {
+        "source": "fracture",
+        "damage": 4158.219399999991,
+        "contacts": 48,
+        "kills": 5
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 56,
+    "peakBodies": 10
+  },
+  {
+    "opening": "blast",
+    "branch": "penetrator",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "blast",
+        "scatter",
+        "arc"
+      ],
+      "gain": "3配件直伤/秒 235.2 → 295.4",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 51.2,
+          "after": 66.56
+        },
+        {
+          "kind": "blast",
+          "before": 96,
+          "after": 124.80000000000001
+        },
+        {
+          "kind": "scatter",
+          "before": 88.00000000000001,
+          "after": 104.00000000000003
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 14815,
+    "weapons": [
+      "pulse",
+      "blast",
+      "scatter",
+      "arc",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 40,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 3,
+        "ricochets": 0,
+        "splashHits": 14
+      },
+      {
+        "kind": "pierce",
+        "pierces": 10,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 7,
+        "ricochets": 0,
+        "splashHits": 0
+      }
+    ],
+    "totals": {
+      "pierces": 60,
+      "ricochets": 0,
+      "splashHits": 14
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10271.23110000001,
+        "contacts": 382,
+        "kills": 55
+      },
+      {
+        "source": "scatter",
+        "damage": 38219.20773249991,
+        "contacts": 1008,
+        "kills": 88
+      },
+      {
+        "source": "blast",
+        "damage": 31690.060679999995,
+        "contacts": 150,
+        "kills": 61
+      },
+      {
+        "source": "arc",
+        "damage": 13927.701339999974,
+        "contacts": 230,
+        "kills": 89
+      },
+      {
+        "source": "storm",
+        "damage": 861.4112475000003,
+        "contacts": 57,
+        "kills": 10
+      },
+      {
+        "source": "pierce",
+        "damage": 18247.906499999997,
+        "contacts": 290,
+        "kills": 41
+      },
+      {
+        "source": "laser",
+        "damage": 2120.4750000000004,
+        "contacts": 27,
+        "kills": 5
+      },
+      {
+        "source": "fracture",
+        "damage": 5386.185000000017,
+        "contacts": 47,
+        "kills": 7
+      }
+    ],
+    "bankShots": 5,
+    "peakBullets": 53,
+    "peakBodies": 10
+  },
+  {
+    "opening": "blast",
+    "branch": "fragment",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "blast",
+        "scatter",
+        "arc"
+      ],
+      "gain": "3配件直伤/秒 235.2 → 295.4",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 51.2,
+          "after": 66.56
+        },
+        {
+          "kind": "blast",
+          "before": 96,
+          "after": 124.80000000000001
+        },
+        {
+          "kind": "scatter",
+          "before": 88.00000000000001,
+          "after": 104.00000000000003
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15210,
+    "weapons": [
+      "pulse",
+      "blast",
+      "scatter",
+      "arc",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 25
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 17
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 21
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 11
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 0,
+      "splashHits": 74
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10046.570300000007,
+        "contacts": 388,
+        "kills": 63
+      },
+      {
+        "source": "scatter",
+        "damage": 36908.122784999985,
+        "contacts": 973,
+        "kills": 82
+      },
+      {
+        "source": "blast",
+        "damage": 32995.73199999999,
+        "contacts": 153,
+        "kills": 60
+      },
+      {
+        "source": "arc",
+        "damage": 13127.432049999994,
+        "contacts": 228,
+        "kills": 96
+      },
+      {
+        "source": "storm",
+        "damage": 919.2654399999998,
+        "contacts": 46,
+        "kills": 4
+      },
+      {
+        "source": "pierce",
+        "damage": 19283.75502499999,
+        "contacts": 308,
+        "kills": 48
+      },
+      {
+        "source": "laser",
+        "damage": 2539.4249999999993,
+        "contacts": 32,
+        "kills": 6
+      },
+      {
+        "source": "fracture",
+        "damage": 5752.078400000017,
+        "contacts": 50,
+        "kills": 6
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 51,
+    "peakBodies": 10
+  },
+  {
+    "opening": "blast",
+    "branch": "ricochet",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "blast",
+        "scatter",
+        "arc"
+      ],
+      "gain": "3配件直伤/秒 235.2 → 295.4",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 51.2,
+          "after": 66.56
+        },
+        {
+          "kind": "blast",
+          "before": 96,
+          "after": 124.80000000000001
+        },
+        {
+          "kind": "scatter",
+          "before": 88.00000000000001,
+          "after": 104.00000000000003
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15340,
+    "weapons": [
+      "pulse",
+      "blast",
+      "scatter",
+      "arc",
+      "pierce"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 73,
+        "splashHits": 0
+      },
+      {
+        "kind": "blast",
+        "pierces": 0,
+        "ricochets": 15,
+        "splashHits": 9
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 31,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 24,
+        "splashHits": 0
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 143,
+      "splashHits": 9
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 10946.22051999999,
+        "contacts": 384,
+        "kills": 56
+      },
+      {
+        "source": "scatter",
+        "damage": 33853.589877500104,
+        "contacts": 987,
+        "kills": 98
+      },
+      {
+        "source": "blast",
+        "damage": 33937.48435499997,
+        "contacts": 160,
+        "kills": 70
+      },
+      {
+        "source": "arc",
+        "damage": 13784.631759999997,
+        "contacts": 225,
+        "kills": 89
+      },
+      {
+        "source": "storm",
+        "damage": 658.70048,
+        "contacts": 40,
+        "kills": 4
+      },
+      {
+        "source": "pierce",
+        "damage": 20363.418019999997,
+        "contacts": 298,
+        "kills": 46
+      },
+      {
+        "source": "laser",
+        "damage": 2918.8500000000004,
+        "contacts": 31,
+        "kills": 4
+      },
+      {
+        "source": "fracture",
+        "damage": 5605.5004999999965,
+        "contacts": 44,
+        "kills": 3
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 51,
+    "peakBodies": 9
+  },
+  {
+    "opening": "scatter",
+    "branch": "penetrator",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce"
+      ],
+      "gain": "3配件直伤/秒 381 → 471.8",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 60.8,
+          "after": 79.03999999999999
+        },
+        {
+          "kind": "scatter",
+          "before": 198.55,
+          "after": 234.65
+        },
+        {
+          "kind": "pierce",
+          "before": 121.6,
+          "after": 158.07999999999998
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15680,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 38,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 9,
+        "ricochets": 0,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 8,
+        "ricochets": 0,
+        "splashHits": 0
+      }
+    ],
+    "totals": {
+      "pierces": 55,
+      "ricochets": 0,
+      "splashHits": 0
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 7704.469540000011,
+        "contacts": 316,
+        "kills": 72
+      },
+      {
+        "source": "scatter",
+        "damage": 93424.04612500015,
+        "contacts": 881,
+        "kills": 164
+      },
+      {
+        "source": "pierce",
+        "damage": 14220.474059999999,
+        "contacts": 270,
+        "kills": 49
+      },
+      {
+        "source": "arc",
+        "damage": 5561.649824999999,
+        "contacts": 155,
+        "kills": 69
+      },
+      {
+        "source": "storm",
+        "damage": 1753.0604500000004,
+        "contacts": 41,
+        "kills": 17
+      },
+      {
+        "source": "laser",
+        "damage": 1521.900000000003,
+        "contacts": 19,
+        "kills": 3
+      }
+    ],
+    "bankShots": 4,
+    "peakBullets": 47,
+    "peakBodies": 9
+  },
+  {
+    "opening": "scatter",
+    "branch": "fragment",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce"
+      ],
+      "gain": "3配件直伤/秒 381 → 471.8",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 60.8,
+          "after": 79.03999999999999
+        },
+        {
+          "kind": "scatter",
+          "before": 198.55,
+          "after": 234.65
+        },
+        {
+          "kind": "pierce",
+          "before": 121.6,
+          "after": 158.07999999999998
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15455,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 10
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 25
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 17
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 0,
+      "splashHits": 52
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 7968.125500000005,
+        "contacts": 352,
+        "kills": 86
+      },
+      {
+        "source": "scatter",
+        "damage": 89147.02525499991,
+        "contacts": 875,
+        "kills": 143
+      },
+      {
+        "source": "pierce",
+        "damage": 15518.252349999999,
+        "contacts": 310,
+        "kills": 58
+      },
+      {
+        "source": "arc",
+        "damage": 5503.686999999999,
+        "contacts": 160,
+        "kills": 71
+      },
+      {
+        "source": "storm",
+        "damage": 1813.3518950000002,
+        "contacts": 33,
+        "kills": 9
+      },
+      {
+        "source": "laser",
+        "damage": 2313.75,
+        "contacts": 29,
+        "kills": 6
+      }
+    ],
+    "bankShots": 4,
+    "peakBullets": 42,
+    "peakBodies": 9
+  },
+  {
+    "opening": "scatter",
+    "branch": "ricochet",
+    "selected": {
+      "time": 53.28333333333159,
+      "points": 2,
+      "spentBefore": 1,
+      "spentAfter": 2,
+      "owned": [
+        "pulse",
+        "scatter",
+        "pierce"
+      ],
+      "gain": "3配件直伤/秒 381 → 471.8",
+      "profiles": [
+        {
+          "kind": "pulse",
+          "before": 60.8,
+          "after": 79.03999999999999
+        },
+        {
+          "kind": "scatter",
+          "before": 198.55,
+          "after": 234.65
+        },
+        {
+          "kind": "pierce",
+          "before": 121.6,
+          "after": 158.07999999999998
+        }
+      ]
+    },
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "score": 15860,
+    "weapons": [
+      "pulse",
+      "scatter",
+      "pierce",
+      "arc"
+    ],
+    "reactions": [
+      {
+        "kind": "scatter",
+        "pierces": 0,
+        "ricochets": 48,
+        "splashHits": 0
+      },
+      {
+        "kind": "pierce",
+        "pierces": 0,
+        "ricochets": 33,
+        "splashHits": 0
+      },
+      {
+        "kind": "pulse",
+        "pierces": 0,
+        "ricochets": 36,
+        "splashHits": 0
+      }
+    ],
+    "totals": {
+      "pierces": 0,
+      "ricochets": 117,
+      "splashHits": 0
+    },
+    "contributions": [
+      {
+        "source": "pulse",
+        "damage": 8025.766519999998,
+        "contacts": 343,
+        "kills": 77
+      },
+      {
+        "source": "scatter",
+        "damage": 91706.48304000002,
+        "contacts": 887,
+        "kills": 161
+      },
+      {
+        "source": "pierce",
+        "damage": 15754.058908750007,
+        "contacts": 316,
+        "kills": 65
+      },
+      {
+        "source": "arc",
+        "damage": 5400.720099999993,
+        "contacts": 156,
+        "kills": 69
+      },
+      {
+        "source": "storm",
+        "damage": 1791.0502000000001,
+        "contacts": 27,
+        "kills": 3
+      },
+      {
+        "source": "laser",
+        "damage": 2221.75,
+        "contacts": 29,
+        "kills": 8
+      }
+    ],
+    "bankShots": 6,
+    "peakBullets": 42,
+    "peakBodies": 9
+  }
+]

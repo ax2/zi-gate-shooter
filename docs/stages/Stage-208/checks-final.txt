@@ -1,0 +1,30 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/universal-ammo-progression.test.ts tests/universal-ammo-boundaries.test.ts tests/universal-ammo.test.ts tests/ballistic-branches.test.ts tests/build-preview.test.ts tests/equipment-preview.test.ts tests/run-report.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/universal-ammo-boundaries.test.ts (3 tests | 1 failed) 26ms
+   × a real pre-upgrade bullet keeps its birth ammo while new rounds receive the selected attachment 15ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/universal-ammo-boundaries.test.ts > a real pre-upgrade bullet keeps its birth ammo while new rounds receive the selected attachment
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/universal-ammo-boundaries.test.ts:4:118
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 74 passed (75)
+   Start at  12:29:04
+   Duration  32.26s (tests 91%, transform 6%, import 3%)

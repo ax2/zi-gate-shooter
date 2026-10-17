@@ -1,5 +1,8 @@
 import { C } from './config';
 export type WeaponKind = 'pulse' | 'scatter' | 'pierce' | 'blast' | 'arc';
+export const ballisticWeapons=['pulse','scatter','pierce','blast'] as const;
+export type BallisticWeapon=typeof ballisticWeapons[number];
+export const isBallisticWeapon=(value:unknown):value is BallisticWeapon=>ballisticWeapons.some(k=>k===value);
 export const weaponNames: Record<WeaponKind, string> = { pulse: '速射炮', scatter: '霰射炮', pierce: '穿甲炮', blast: '爆裂炮', arc: '电弧炮' };
 export const weaponColors: Record<WeaponKind, string> = { pulse: '#83e5ff', scatter: '#ffd28b', pierce: '#d5b4ff', blast: '#ffb46d', arc: '#a2ff9c' };
 export const ARC_SHOT={speed:3600,aimWidth:180,maxSlope:.45,minLead:80} as const;

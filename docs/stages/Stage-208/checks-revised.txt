@@ -1,0 +1,64 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/universal-ammo-early.test.ts tests/universal-ammo-progression.test.ts tests/universal-ammo.test.ts tests/universal-ammo-boundaries.test.ts tests/universal-ammo-runtime.test.ts tests/universal-ammo-baseline.test.mjs tests/ballistic-branches.test.ts tests/build-preview.test.ts tests/equipment-preview.test.ts tests/run-report.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/universal-ammo-baseline.test.mjs (1 test | 1 failed) 389ms
+   × before choosing ammunition the four selectable openings and legacy default keep complete state and effects apart from the declared null birth stamp 387ms
+ ❯ tests/universal-ammo-early.test.ts (10 tests | 9 failed) 3177ms
+   × new first-chapter armour retains a complete no-kill route seed1 x68 357ms
+   × new first-chapter armour retains a complete no-kill route seed1 x360 299ms
+   × new first-chapter armour retains a complete no-kill route seed1 x652 336ms
+   × new first-chapter armour retains a complete no-kill route seed77 x68 285ms
+   × new first-chapter armour retains a complete no-kill route seed77 x360 288ms
+   × new first-chapter armour retains a complete no-kill route seed77 x652 325ms
+   × new first-chapter armour retains a complete no-kill route seed1337 x68 288ms
+   × new first-chapter armour retains a complete no-kill route seed1337 x360 340ms
+   × new first-chapter armour retains a complete no-kill route seed1337 x652 324ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/universal-ammo-baseline.test.mjs > before choosing ammunition the four selectable openings and legacy default keep complete state and effects apart from the declared null birth stamp
+AssertionError: expected { …(4) } to deeply equal { …(4) }
+
+- Expected
++ Received
+
+  {
+-   "hash": "30c39f81c6f9bea5870b736e465c031fc587d7c3c0d91a8a937100f274ddf4a1",
++   "hash": "b6b2501425718b1a50e5b07ccfd3c746175e03480aa234f1d10bbb8c263d9b2e",
+    "hp": 3,
+    "score": 30,
+    "time": 15.000000000000325,
+  }
+
+ ❯ tests/universal-ammo-baseline.test.mjs:5:219
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed1 x68
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed1 x360
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed1 x652
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed77 x68
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed77 x360
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed77 x652
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed1337 x68
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed1337 x360
+ FAIL  tests/universal-ammo-early.test.ts > new first-chapter armour retains a complete no-kill route seed1337 x652
+AssertionError: expected 'running' to be 'boss-entry' // Object.is equality
+
+Expected: "boss-entry"
+Received: "running"
+
+ ❯ tests/universal-ammo-early.test.ts:12:246
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+
+ Test Files  2 failed | 8 passed (10)
+      Tests  10 failed | 78 passed (88)
+   Start at  12:40:24
+   Duration  31.60s (tests 86%, transform 10%, import 4%)

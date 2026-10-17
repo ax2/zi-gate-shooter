@@ -1,0 +1,45 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/universal-ammo.test.ts tests/ballistic-branches.test.ts tests/build-preview.test.ts tests/equipment-preview.test.ts tests/run-report.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/universal-ammo.test.ts (17 tests | 2 failed) 49ms
+   × pierce has one nonrecursive enemy splash, no reward charging, and truthful source credit 7ms
+   × preview exposes every owned ballistic gun, respects higher native piercing, and never spends points or installs an unchosen fork 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/universal-ammo.test.ts > pierce has one nonrecursive enemy splash, no reward charging, and truthful source credit
+AssertionError: expected 10 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 10
+
+ ❯ tests/universal-ammo.test.ts:13:234
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/universal-ammo.test.ts > preview exposes every owned ballistic gun, respects higher native piercing, and never spends points or installs an unchosen fork
+AssertionError: expected [ { kind: 'pulse', …(5) }, …(1) ] to have a length of 4 but got 2
+
+- Expected
++ Received
+
+- 4
++ 2
+
+ ❯ tests/universal-ammo.test.ts:25:280
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 69 passed (71)
+   Start at  12:25:48
+   Duration  677ms (transform 63%, import 25%, tests 10%, worker 2%)

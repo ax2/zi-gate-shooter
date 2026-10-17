@@ -3,10 +3,10 @@ import {weaponColors,weaponNames} from '../core/weapons';
 import type {DamageSource} from '../core/combat-ledger';
 
 export const contributionSources={
- pulse:{name:weaponNames.pulse,color:weaponColors.pulse,role:'直射与折射 · 持续瞄准单一目标'},
+ pulse:{name:weaponNames.pulse,color:weaponColors.pulse,role:'直击与弹芯分支 · 原折射保留'},
  scatter:{name:weaponNames.scatter,color:weaponColors.scatter,role:'霰弹与弹芯 · 近距聚弹 / 群敌覆盖'},
- pierce:{name:weaponNames.pierce,color:weaponColors.pierce,role:'穿甲直击 · 沿纵列贯穿更多目标'},
- blast:{name:weaponNames.blast,color:weaponColors.blast,role:'弹体与爆炸 · 瞄准紧凑敌群'},
+ pierce:{name:weaponNames.pierce,color:weaponColors.pierce,role:'穿甲与弹芯分支 · 原高贯穿保留'},
+ blast:{name:weaponNames.blast,color:weaponColors.blast,role:'爆炸与弹芯分支 · 纵列 / 群敌'},
  arc:{name:weaponNames.arc,color:weaponColors.arc,role:'电弧直击、跳电与蓄爆 · 连通敌阵'},
  laser:{name:'激光与棱镜',color:'#7fe4ff',role:'主侧束、分光与灼烧 · 瞄准纵列'},
  storm:{name:'雷暴霰射',color:'#b6ffb3',role:'派生跳电与破核 · 原霰弹另计'},
