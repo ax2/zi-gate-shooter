@@ -86,6 +86,7 @@ import { droneFrame } from './drone-motion';
 import { chargerFrame } from './charger-motion';
 import { armorFrame } from './armor-motion';
 import { eliteFrame } from './elite-motion';
+import {aceRig} from './ace-rig';
 import { bossFrame } from './boss-motion';
 import { EnemyWreck, isWreckKind } from './enemy-wreck';
 import type { Save } from '../ui/storage';
@@ -922,7 +923,7 @@ export class CanvasRuntime {
           const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
           this.frameSprite('elite-v1.png', frame, 3, 0, 0, width, height, 1);
-          this.hitSprite('elite-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);c.restore();
+          this.hitSprite('elite-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);aceRig(c,b,this.save.settings.effects==='weak');c.restore();
         } else {
           const frame = bossFrame(b), bossArt = b.bossVariant === 2 ? 'boss-bastion-v1.png' : b.bossVariant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png';
           this.frameSprite(bossArt, frame, 3, b.x, y, width, height, 1);
@@ -1119,7 +1120,10 @@ export class CanvasRuntime {
         }
         if(b.pattern==='relocate')this.text(sentryDirection(b)?'换位中':b.warning>0?'机动·蓄能':'机动哨机',b.x,b.y+92,21,'#b8eaff','center',true);
         if(b.pattern==='intercept')this.text(b.warning>0?(b.burst?'截击·核心蓄能':'截击·翼炮蓄能'):(b.interceptCoreRemaining??0)>0?'截击·核心连射':'截击精英',b.x,b.y-b.height*.68-20,21,b.burst?'#ffb19c':'#ffe1a7','center',true);
-        if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active')this.text(w.contract.hunt==='crossfire'?'王牌 · 扇射':'悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
+        if(b.bountyRound===w.contract?.round&&w.contract?.kind==='hunter'&&w.contract.status==='active'){
+          if(b.aceRole){const x=b.x<360?70:650,color=b.aceEnraged?'#ffa27b':'#ffd884';this.gateText(b.aceRole==='fan'?'扇炮':'针炮',x,b.y-12,20,color,true);this.gateText(b.aceEnraged?'暴走':b.aceRagePending?'蓄势':'王牌',x,b.y+14,18,color,true);}
+          else this.text('悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
+        }
       }
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
@@ -1748,7 +1752,7 @@ export class CanvasRuntime {
       bankShots:this.world.bankShots??0,bankReflections:this.world.bankReflections??0,lastBankReflection:this.world.lastBankReflection,bankGuns:this.world.bodies.filter(b=>b.pattern==='bankshot').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,shots:b.bankShots??0,firedAt:b.bankFiredAt})),bankProjectiles:this.world.bullets.filter(b=>b.bankRemaining!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,vx:b.vx,vy:b.vy,remaining:b.bankRemaining,source:b.sourceId})),
       combatContribution:combatContribution(this.world),
       magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormAugment:this.world.build.stormAugment??null,stormRelayLinks:this.world.stormRelayLinks,stormFocusBursts:this.world.stormFocusBursts,stormFocusDamage:this.world.stormFocusDamage,stormProofRelay:this.world.proofCount('storm-relay'),stormProofFocus:this.world.proofCount('storm-focus'),stormCharges:this.world.bodies.filter(b=>b.active&&b.stormHits).map(b=>({id:b.id,x:b.x,y:b.y,hits:b.stormHits})),stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
-      contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
+      contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern,aceRole:b.aceRole,rage:b.aceEnraged??false,ragePending:b.aceRagePending??false,rageShots:b.aceRageShots??0})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),
       dropSpawns:this.world.dropSpawns,dropKills:this.world.dropKills,arcLinks:this.world.arcLinks,protectedDrops:this.world.bodies.filter(b=>b.active&&(b.dropGrace??0)>0).length,

@@ -1,0 +1,16 @@
+{
+  "baseline": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "score": 14455,
+    "hash": "6df127cd0a6f41b909e66ad00b5ee0bb811141b1ac41664f8db335595733b680",
+    "effects": "517d3bee7a35368fae49a24ca09631d5a78f2d0340637fa97d6def675fec9200"
+  },
+  "current": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "score": 14455,
+    "hash": "6df127cd0a6f41b909e66ad00b5ee0bb811141b1ac41664f8db335595733b680",
+    "effects": "517d3bee7a35368fae49a24ca09631d5a78f2d0340637fa97d6def675fec9200"
+  }
+}

@@ -1,0 +1,602 @@
+[
+  {
+    "seed": 1337,
+    "first": "fan",
+    "reward": "energy",
+    "accepted": {
+      "time": 104.966666666662,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 112.03333333332826,
+      "selected": "energy",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 112.03333333332826,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 11,
+    "guns": [
+      {
+        "id": 3802,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 3.0833333333333273,
+        "shots": 3,
+        "rage": false,
+        "rageShots": 0
+      },
+      {
+        "id": 3803,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 7.066666666666647,
+        "shots": 8,
+        "rage": true,
+        "rageShots": 5
+      }
+    ],
+    "events": [
+      {
+        "time": 104.98333333332866,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 108.04999999999515,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 471.3749999999979,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 108.24999999999514,
+        "type": "drop-wave",
+        "x": 500,
+        "y": 1024,
+        "text": "针炮王牌 · 暴走",
+        "detail": "搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险"
+      },
+      {
+        "time": 112.03333333332826,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 500,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  },
+  {
+    "seed": 1337,
+    "first": "fan",
+    "reward": "equipment",
+    "accepted": {
+      "time": 104.966666666662,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 112.03333333332826,
+      "selected": "pierce",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 112.03333333332826,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 11,
+    "guns": [
+      {
+        "id": 3802,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 3.0833333333333273,
+        "shots": 3,
+        "rage": false,
+        "rageShots": 0
+      },
+      {
+        "id": 3803,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 7.066666666666647,
+        "shots": 8,
+        "rage": true,
+        "rageShots": 5
+      }
+    ],
+    "events": [
+      {
+        "time": 104.98333333332866,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 108.04999999999515,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 471.3749999999979,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 108.24999999999514,
+        "type": "drop-wave",
+        "x": 500,
+        "y": 1024,
+        "text": "针炮王牌 · 暴走",
+        "detail": "搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险"
+      },
+      {
+        "time": 112.03333333332826,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 500,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  },
+  {
+    "seed": 1337,
+    "first": "needle",
+    "reward": "energy",
+    "accepted": {
+      "time": 104.966666666662,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 110.68333333332833,
+      "selected": "energy",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 110.68333333332833,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 10,
+    "guns": [
+      {
+        "id": 3802,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 5.716666666666652,
+        "shots": 8,
+        "rage": true,
+        "rageShots": 5
+      },
+      {
+        "id": 3803,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 2.2333333333333303,
+        "shots": 2,
+        "rage": false,
+        "rageShots": 0
+      }
+    ],
+    "events": [
+      {
+        "time": 104.98333333332866,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 107.1999999999952,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 391.0499999999985,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 107.39999999999519,
+        "type": "drop-wave",
+        "x": 220,
+        "y": 1024,
+        "text": "扇炮王牌 · 暴走",
+        "detail": "搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险"
+      },
+      {
+        "time": 110.68333333332833,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 500,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  },
+  {
+    "seed": 1337,
+    "first": "needle",
+    "reward": "equipment",
+    "accepted": {
+      "time": 104.966666666662,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 110.68333333332833,
+      "selected": "pierce",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 110.68333333332833,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 10,
+    "guns": [
+      {
+        "id": 3802,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 5.716666666666652,
+        "shots": 8,
+        "rage": true,
+        "rageShots": 5
+      },
+      {
+        "id": 3803,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 2.2333333333333303,
+        "shots": 2,
+        "rage": false,
+        "rageShots": 0
+      }
+    ],
+    "events": [
+      {
+        "time": 104.98333333332866,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 107.1999999999952,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 391.0499999999985,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 107.39999999999519,
+        "type": "drop-wave",
+        "x": 220,
+        "y": 1024,
+        "text": "扇炮王牌 · 暴走",
+        "detail": "搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险"
+      },
+      {
+        "time": 110.68333333332833,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 500,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  },
+  {
+    "seed": 77,
+    "first": "fan",
+    "reward": "energy",
+    "accepted": {
+      "time": 82.0166666666633,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 86.28333333332972,
+      "selected": "energy",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 86.28333333332972,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 3,
+    "guns": [
+      {
+        "id": 2874,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 1.816666666666665,
+        "shots": 0,
+        "rage": false,
+        "rageShots": 0
+      },
+      {
+        "id": 2875,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 4.266666666666657,
+        "shots": 3,
+        "rage": false,
+        "rageShots": 0
+      }
+    ],
+    "events": [
+      {
+        "time": 82.03333333332996,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 83.83333333332986,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 351.67499999999876,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 86.28333333332972,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 500,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  },
+  {
+    "seed": 77,
+    "first": "fan",
+    "reward": "equipment",
+    "accepted": {
+      "time": 82.0166666666633,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 86.28333333332972,
+      "selected": "blast",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 86.28333333332972,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 3,
+    "guns": [
+      {
+        "id": 2874,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 1.816666666666665,
+        "shots": 0,
+        "rage": false,
+        "rageShots": 0
+      },
+      {
+        "id": 2875,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 4.266666666666657,
+        "shots": 3,
+        "rage": false,
+        "rageShots": 0
+      }
+    ],
+    "events": [
+      {
+        "time": 82.03333333332996,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 83.83333333332986,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 351.67499999999876,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 86.28333333332972,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 500,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  },
+  {
+    "seed": 77,
+    "first": "needle",
+    "reward": "energy",
+    "accepted": {
+      "time": 82.0166666666633,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 84.38333333332983,
+      "selected": "energy",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 84.38333333332983,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 3,
+    "guns": [
+      {
+        "id": 2874,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 2.366666666666663,
+        "shots": 3,
+        "rage": false,
+        "rageShots": 0
+      },
+      {
+        "id": 2875,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 1.2500000000000004,
+        "shots": 0,
+        "rage": false,
+        "rageShots": 0
+      }
+    ],
+    "events": [
+      {
+        "time": 82.03333333332996,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 83.26666666666323,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 298.12499999999915,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 84.38333333332983,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 403.6499999999984,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  },
+  {
+    "seed": 77,
+    "first": "needle",
+    "reward": "equipment",
+    "accepted": {
+      "time": 82.0166666666633,
+      "round": 2,
+      "damage": 0
+    },
+    "claim": {
+      "time": 84.38333333332983,
+      "selected": "blast",
+      "researchBefore": 3,
+      "researchAfter": 4
+    },
+    "time": 84.38333333332983,
+    "hp": 3,
+    "status": "won",
+    "reason": "悬赏目标全破",
+    "bountyShots": 3,
+    "guns": [
+      {
+        "id": 2874,
+        "role": "fan",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 2.366666666666663,
+        "shots": 3,
+        "rage": false,
+        "rageShots": 0
+      },
+      {
+        "id": 2875,
+        "role": "needle",
+        "active": false,
+        "hp": 0,
+        "maxHp": 467.20000000000005,
+        "age": 1.2500000000000004,
+        "shots": 0,
+        "rage": false,
+        "rageShots": 0
+      }
+    ],
+    "events": [
+      {
+        "time": 82.03333333332996,
+        "type": "drop-wave",
+        "x": 360,
+        "y": 1024,
+        "text": "双线王牌 · 协同出击",
+        "detail": "扇炮＋针炮 · 击破一机后另一机暴走"
+      },
+      {
+        "time": 83.26666666666323,
+        "type": "bounty-progress",
+        "x": 500,
+        "y": 298.12499999999915,
+        "text": "悬赏精英 1/2",
+        "detail": "再击破一名领取契约强化"
+      },
+      {
+        "time": 84.38333333332983,
+        "type": "bounty-progress",
+        "x": 220,
+        "y": 403.6499999999984,
+        "text": "悬赏精英 2/2",
+        "detail": "目标全破 · 即将选择强化"
+      }
+    ]
+  }
+]

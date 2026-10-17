@@ -1,0 +1,30 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/ace-duo.test.ts tests/ace-duo-progression.test.ts tests/crossfire-hunt.test.ts tests/crossfire-hunt-routes.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/ace-duo-progression.test.ts (1 test | 1 failed) 2794ms
+   × normal tier-three preparation supports either kill order with a real survivor phase and one earned reward 2793ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/ace-duo-progression.test.ts > normal tier-three preparation supports either kill order with a real survivor phase and one earned reward
+AssertionError: {"seed":77,"first":"fan","reward":"energy","accepted":{"time":82.0166666666633,"round":2,"damage":0},"claim":{"time":86.28333333332972,"selected":"energy","researchBefore":3,"researchAfter":4},"time":86.28333333332972,"hp":3,"status":"won","reason":"悬赏目标全破","bountyShots":3,"guns":[{"id":2874,"role":"fan","active":false,"hp":0,"maxHp":467.20000000000005,"age":1.816666666666665,"shots":0,"rage":false,"rageShots":0},{"id":2875,"role":"needle","active":false,"hp":0,"maxHp":467.20000000000005,"age":4.266666666666657,"shots":3,"rage":false,"rageShots":0}],"events":[{"time":82.03333333332996,"type":"drop-wave","x":360,"y":1024,"text":"双线王牌 · 协同出击","detail":"扇炮＋针炮 · 击破一机后另一机暴走"},{"time":83.83333333332986,"type":"bounty-progress","x":220,"y":351.67499999999876,"text":"悬赏精英 1/2","detail":"再击破一名领取契约强化"},{"time":86.28333333332972,"type":"bounty-progress","x":500,"y":500,"text":"悬赏精英 2/2","detail":"目标全破 · 即将选择强化"}]}: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/ace-duo-progression.test.ts:25:291
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 15 passed (16)
+   Start at  14:22:17
+   Duration  3.32s (tests 75%, transform 18%, import 7%)

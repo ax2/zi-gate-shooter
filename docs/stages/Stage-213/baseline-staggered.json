@@ -1,0 +1,18 @@
+{
+  "baseline": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "score": 15615,
+    "status": "won",
+    "hash": "b4d0df9e6aa8991c3cef800a6fe275fc343c816a9d98e79110f778f0ac278394",
+    "effects": "2e7c4b32b8d520f720dbfdcda1f80f78d32b2e0f589f7caba9327434241960f9"
+  },
+  "current": {
+    "time": 599.999999999783,
+    "hp": 3,
+    "score": 15615,
+    "status": "won",
+    "hash": "b4d0df9e6aa8991c3cef800a6fe275fc343c816a9d98e79110f778f0ac278394",
+    "effects": "2e7c4b32b8d520f720dbfdcda1f80f78d32b2e0f589f7caba9327434241960f9"
+  }
+}

@@ -4,6 +4,7 @@ import {FIRE_CONTROL,fireControlSource} from './fire-control';
 import {CombatLedger,type DamageSource} from './combat-ledger';
 import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
 import {LOCKSHOT,INTRO_LOCKSHOT} from './lockshot';
+import {ACE_DUO,type AceRole} from './ace-duo';
 import {RELAY_SCREEN} from './relay-screen';
 import {BATTERY} from './battery';
 import {calibrationVisualBand,type CalibrationBand} from './calibration-visual';
@@ -41,6 +42,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  aceRole?:AceRole;aceRagePending?:boolean;aceEnraged?:boolean;aceRageShots?:number;aceFiredAt?:number;
   id: number; kind: BodyKind; x: number; y: number; px: number; py: number;
   width: number; height: number; hp: number; maxHp: number; speed: number;
   active: boolean; age: number; timer: number; warning: number; hit: number;
@@ -490,11 +492,11 @@ export class World {
   private spawnCrossfire(challenge:Contract){
     if(challenge.reinforcements||challenge.elapsed<challenge.nextReinforcement)return;
     if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+2>C.limits.enemies){challenge.nextReinforcement=challenge.elapsed+HUNTER.retry;return;}
-    const candidates=[220,500].map(x=>{const b=this.spawn('elite',x,180);b.hp*=hunts.crossfire.durability;b.maxHp=b.hp;b.pattern='fan';b.bountyRound=challenge.round;return b;});
+    const candidates=[220,500].map((x,i)=>{const b=this.spawn('elite',x,180);b.hp*=hunts.crossfire.durability;b.maxHp=b.hp;b.pattern='fan';b.bountyRound=challenge.round;b.aceRole=i===0?'fan':'needle';return b;});
     if(!safeRoute(this.player.x,this.bodies,this.bullets,22,{phase:this.phase,phaseTime:this.phaseTime})){
-      for(const b of candidates){delete b.bountyRound;b.active=false;}this.fallbackCount++;challenge.nextReinforcement=challenge.elapsed+HUNTER.retry;return;
+      for(const b of candidates){delete b.bountyRound;delete b.aceRole;b.active=false;}this.fallbackCount++;challenge.nextReinforcement=challenge.elapsed+HUNTER.retry;return;
     }
-    challenge.reinforcements=2;this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'双线王牌 · 同时出击',detail:'两侧强化扇射精英 · 全破额外研发1点'});
+    challenge.reinforcements=2;this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'双线王牌 · 协同出击',detail:'扇炮＋针炮 · 击破一机后另一机暴走'});
   }
   private spawnProofWave(challenge:Contract){
     if(!challenge.proof||challenge.reinforcements>=PROOF_WAVES.groups||challenge.elapsed<challenge.nextReinforcement)return;
@@ -811,7 +813,7 @@ export class World {
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;
       const previousWarning = b.warning;
-      const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0;
+      const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0,wasAceEnraged=b.aceEnraged;
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
@@ -828,7 +830,9 @@ export class World {
           b.interceptFiredAt=b.age;b.interceptFireBeat=b.burst?1:0;
         }
         if(b.bountyRound!==undefined){b.bountyShots=(b.bountyShots??0)+1;this.bountyShots++;}
+        if(b.aceRole){b.aceFiredAt=b.age;if(b.aceEnraged)b.aceRageShots=(b.aceRageShots??0)+1;}
       },this.bodies);
+      if(b.aceEnraged&&!wasAceEnraged)this.effects.push({type:'drop-wave',x:b.x,y:C.playerY,text:(b.aceRole==='fan'?'扇炮':'针炮')+'王牌 · 暴走',detail:'搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险'});
       if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · 双炮反击',detail:'双炮加入攻击循环 · 已发敌弹仍危险'});
       if(b.kind==='boss'&&(b.counterVolleys??0)>wasCounterVolleys)this.effects.push({type:'counter-fire',x:b.x,y:b.y});
       if (b.kind === 'boss' && previousWarning <= 0 && b.warning > 0
@@ -1123,6 +1127,7 @@ export class World {
         if(reward.activated)this.emit('overload',this.player.x,C.playerY);
         this.effects.push({type:'reward',x:b.x,y:b.y,text:`${brokeCore?'截击断核':b.pattern==='intercept'?'截击精英击破':'精英击破'} · 充能+${C.killCharge.elite}`,detail:this.chargeReceipt(reward.activated)});
       }
+      if(b.aceRole)for(const partner of this.bodies)if(partner.active&&partner.hp>0&&partner.id!==b.id&&partner.aceRole&&partner.bountyRound===b.bountyRound){partner.aceRagePending=true;if(partner.warning<=0&&!partner.burst)partner.timer=Math.min(partner.timer,ACE_DUO.rageLead);}
       if(b.bountyRound!==undefined&&this.contract?.targetKilled(b.id,b.bountyRound)){
         this.effects.push({type:'bounty-progress',x:b.x,y:b.y,text:`悬赏精英 ${this.contract.targetKills}/2`,detail:this.contract.targetKills<2?'再击破一名领取契约强化':'目标全破 · 即将选择强化'});
       }

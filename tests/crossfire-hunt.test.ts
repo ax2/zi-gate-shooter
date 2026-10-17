@@ -1,8 +1,8 @@
 import {it,expect,vi} from 'vitest';import {World} from '../src/core/world';import {C} from '../src/core/config';import * as reach from '../src/core/reachability';
 function setup(){const w=new World();const p=w.spawn('pickup',360,C.playerY,2);p.weaponKind='pulse';w.step(C.step,360);w.drainEffects();return w;}
-it('freezes a legal explicit choice, atomically admits two durable fan elites and preserves the default hunt',()=>{
+it('freezes a legal explicit choice, atomically admits the durable fan and needle pair and preserves the default hunt',()=>{
  const w=setup();expect(w.acceptContract('precision',undefined,'crossfire')).toBe(false);expect(w.acceptContract('hunter',undefined,'unknown' as any)).toBe(false);expect(w.acceptContract('hunter',undefined,'crossfire')).toBe(true);w.step(C.step,360);
- const targets=w.bodies.filter(b=>b.bountyRound===w.round);expect(targets).toHaveLength(2);expect(targets.map(b=>b.x)).toEqual([220,500]);expect(targets.every(b=>b.hp===320&&b.pattern==='fan')).toBe(true);expect(w.contract!.reinforcements).toBe(2);expect(w.acceptContract('hunter')).toBe(false);
+ const targets=w.bodies.filter(b=>b.bountyRound===w.round);expect(targets).toHaveLength(2);expect(targets.map(b=>b.x)).toEqual([220,500]);expect(targets.every(b=>b.hp===320&&b.pattern==='fan')).toBe(true);expect(targets.map(b=>b.aceRole)).toEqual(['fan','needle']);expect(w.contract!.reinforcements).toBe(2);expect(w.acceptContract('hunter')).toBe(false);
  const old=setup();old.acceptContract('hunter');old.step(C.step,360);expect(old.contract!.reinforcements).toBe(1);expect(old.bodies.find(b=>b.bountyRound)?.hp).toBe(200);
 });
 it('capacity and safety rejection leave no marked half-encounter or false escape, and retry only later',()=>{

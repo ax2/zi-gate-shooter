@@ -1,0 +1,35 @@
+{
+  "sameWeakWorld": true,
+  "mobileRageShots": 5,
+  "desktopRageShots": 5,
+  "mobile": {
+    "researchBefore": 3,
+    "researchAfter": 4,
+    "claimed": 1,
+    "paidOnce": true,
+    "ownedPreserved": true,
+    "calibrationBefore": 0,
+    "calibrationAfter": 0,
+    "resumed": "playing",
+    "unspent": 0,
+    "awards": [
+      "ace",
+      "flawless-ace"
+    ]
+  },
+  "desktop": {
+    "researchBefore": 3,
+    "researchAfter": 4,
+    "claimed": 1,
+    "paidOnce": true,
+    "ownedPreserved": true,
+    "calibrationBefore": 0,
+    "calibrationAfter": 1,
+    "resumed": "playing",
+    "unspent": 0,
+    "awards": [
+      "ace",
+      "flawless-ace"
+    ]
+  }
+}

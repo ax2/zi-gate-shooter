@@ -3,7 +3,7 @@ import type {StormAugment} from './storm-refinement';
 export const HUNTER={targets:2,spacing:6,hoverY:500,holdSeconds:20,retry:.5} as const;
 export const hunts={
  staggered:{name:'分批悬赏',detail:'两名精英分批入场 · 30秒全破',research:0,durability:1},
- crossfire:{name:'双线王牌',detail:'30秒全破强化扇射双机 · 建议T3火力',research:1,durability:1.6},
+ crossfire:{name:'双线王牌',detail:'30秒全破扇炮＋针炮 · 幸存者暴走',research:1,durability:1.6},
 } as const;
 export type HuntKind=keyof typeof hunts;
 export const contracts={

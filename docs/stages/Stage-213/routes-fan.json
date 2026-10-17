@@ -1,0 +1,110 @@
+[
+  {
+    "role": "fan",
+    "round": 1,
+    "start": 68,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 1,
+    "start": 360,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 1,
+    "start": 652,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 2,
+    "start": 68,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 2,
+    "start": 360,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 2,
+    "start": 652,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 4,
+    "start": 68,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 4,
+    "start": 360,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  },
+  {
+    "role": "fan",
+    "round": 4,
+    "start": 652,
+    "time": 30.03333333333291,
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "rageShots": 40,
+    "contract": "failed",
+    "peakBullets": 9
+  }
+]

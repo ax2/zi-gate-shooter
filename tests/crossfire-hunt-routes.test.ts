@@ -1,5 +1,5 @@
 import {it,expect} from 'vitest';import {mkdirSync,writeFileSync} from 'node:fs';import {World} from '../src/core/world';import {C} from '../src/core/config';import {safeRoute} from '../src/core/reachability';
-it.each([1,2,4])('keeps the actual unarmed double-fan encounter avoidable with reaction time in round %s',round=>{
+it.each([1,2,4])('keeps the actual unarmed fan-and-needle encounter avoidable with reaction time in round %s',round=>{
  const records=[];
  for(const start of [68,360,652]){
   const w=new World(1337,round);w.player.x=start;const p=w.spawn('pickup',start,C.playerY,2);p.weaponKind='pulse';w.step(C.step,start);expect(w.acceptContract('hunter',undefined,'crossfire')).toBe(true);

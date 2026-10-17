@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/ace-duo.test.ts tests/ace-duo-progression.test.ts tests/ace-duo-routes.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/ace-duo-routes.test.ts (2 tests | 1 failed) 1568ms
+   × keeps isolated fan survivor revenge avoidable with initial reaction at three chapter scales 234ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/ace-duo-routes.test.ts > keeps isolated fan survivor revenge avoidable with initial reaction at three chapter scales
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ tests/ace-duo-routes.test.ts:17:52
+     15|    w.step(C.step,path[Math.floor((f-at)/6)]??w.player.x);w.drainEffect…
+     16|   }
+     17|   expect(shots).toBeGreaterThan(0);expect(w.kills).toBe(0);expect(w.co…
+       |                                                    ^
+     18|   rows.push({role,round,start,time:w.time,hp:w.player.hp,damage:w.dama…
+     19|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 10 passed (11)
+   Start at  14:24:34
+   Duration  3.05s (tests 79%, transform 15%, import 5%)

@@ -16,6 +16,7 @@ import { C, clamp } from './config';
 import {CONDUIT} from './conduit';
 import {MOBILE_SENTRY,sentryDestination} from './mobile-sentry';
 import {INTERCEPTOR,interceptorMuzzles} from './interceptor';
+import {advanceAce} from './ace-duo';
 export type EnemyShot = (x: number, y: number, vx?: number, vy?: number) => void;
 export const guardClosed = (b: Pick<Body, 'kind' | 'burst' | 'empRemaining'> & ShutterState) => shutterClosed(b)||(b.kind === 'guard' && b.burst === 0 && !(b.empRemaining??0));
 
@@ -187,6 +188,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(b.kind==='elite'&&b.bountyRound!==undefined&&b.age<HUNTER.holdSeconds){if(b.y<HUNTER.hoverY)b.y=Math.min(HUNTER.hoverY,b.y+b.speed*dt);}
     else if(!batteryHolding(b)&&!fireControlHolding(b))b.y += b.speed * dt;
     if ((b.kind === 'armor' || b.kind === 'elite') && b.y > 0 && b.y < 600) {
+      if(b.aceRole){advanceAce(b,offline,shot);return;}
       if (b.timer <= 1e-9 && !offline) {
         if (b.warning <= 0) { b.warning = b.pattern==='fire-control'?FIRE_CONTROL.warning:.6; b.timer = b.warning; }
         else {

@@ -26,6 +26,10 @@ export function contextGuide(world: Context): Guide {
   if (blockade) return { kind: 'boss', title: '首领封锁：观察实际弹幕', detail: '留意仍在飞行的子弹 · 随弹幕移动' };
   if (world.phase !== 'running') return movement;
   const visible = world.bodies.filter(b => b.active && b.y >= 160 && b.y <= C.playerY + (b.kind === 'pickup' ? 52 : 0));
+  const ace=visible.find(b=>b.aceRole&&b.aceEnraged&&b.y<600);
+  if(ace)return {kind:'enemy',title:(ace.aceRole==='fan'?'扇炮':'针炮')+'王牌暴走：先看实弹再转火',detail:ace.aceRole==='fan'?'五线扇射扩大封锁 · 横移寻找空隙':'五连快弹封锁纵列 · 先离开同列'};
+  if(visible.some(b=>b.aceRole&&b.y<600))return {kind:'enemy',title:'双线王牌：先拆哪台，决定暴走招式',detail:'扇炮横向压制 · 针炮纵列连发 · 旧弹不消失'};
+  if(visible.some(b=>b.aceRole))return {kind:'enemy',title:'王牌撤离：尽快完成追击',detail:'留意仍在飞行的子弹 · 30秒内击毁双机'};
   if(visible.some(b=>b.pattern==='rebound'&&b.warning>0))return {kind:'enemy',title:'折返冲锋：看清第二次转向',detail:'两段冲刺 · 可集火击毁，或留出横向空隙'};
   const interceptor=visible.find(b=>b.pattern==='intercept'&&(b.warning>0||(b.interceptCoreRemaining??0)>0));
   if(interceptor)return {kind:'enemy',title:interceptor.burst?'截击核心：及时离开中路':'截击翼炮：留意两侧实弹',detail:'可抢先击毁或击破中继 · 已发弹仍危险'};

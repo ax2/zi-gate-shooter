@@ -3,6 +3,15 @@ import { expect, it } from 'vitest';
 import { contextGuide,weaponGuide } from '../src/game/context-guide';
 import { World } from '../src/core/world';
 
+it('explains actual ace roles, survivor attacks and retreat without mutating the encounter',()=>{
+ const w=new World(),b=w.spawn('elite',220,500);b.aceRole='fan';
+ expect(contextGuide(w).detail).toContain('针炮纵列连发');b.aceEnraged=true;
+ let before=JSON.stringify(w);expect(contextGuide(w).detail).toContain('五线扇射');expect(JSON.stringify(w)).toBe(before);
+ b.aceRole='needle';expect(contextGuide(w).detail).toContain('五连快弹');b.y=650;
+ before=JSON.stringify(w);expect(contextGuide(w).title).toContain('撤离');expect(JSON.stringify(w)).toBe(before);
+ b.active=false;expect(contextGuide(w).title).not.toContain('王牌');
+});
+
 it('follows real target state rather than scheduled seconds and never mutates the world', () => {
   const w = new World(); w.time = 30;
   expect(contextGuide(w).kind).toBe('move');
