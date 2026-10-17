@@ -1,0 +1,3294 @@
+{
+  "seconds": 300,
+  "seed": 1337,
+  "method": "Normally earned progression, same omniscient zero-reaction safe operator. Virtual60Hz not FPS or human difficulty. Window counts include all actual enemies; emitter sources require observed admission, shots counted from real projectiles. No World injection.",
+  "runs": [
+    {
+      "before": {
+        "route": "ballistic",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 12,
+        "kills": 334,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 59,
+        "chapters": [
+          {
+            "round": 1,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 24.43333333333338,
+                "empty": 0,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 29.31666666666663,
+                "empty": 0,
+                "peak": 10
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.233333333333352,
+                "empty": 0,
+                "peak": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 18.383333333333304,
+                "empty": 0,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 27.766666666666612,
+                "empty": 0,
+                "peak": 10
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.466666666666667,
+                "empty": 0.8666666666666677,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 16.800000000000043,
+                "empty": 0.11666666666666665,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 25.78333333333335,
+                "empty": 0,
+                "peak": 7
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 5.93333333333332,
+                "empty": 1.0666666666666678,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 15.683333333333364,
+                "empty": 1.2166666666666672,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 33.81666666666655,
+                "empty": 0,
+                "peak": 12
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 1.9999999999999978,
+                "empty": 2.9999999999999942,
+                "peak": 1
+              }
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "round": 1,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 360,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 360,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.300000000000015,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 330,
+            "shots": 1,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 420,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 2,
+            "at": 21.00000000000009,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.350000000000012,
+            "kind": "charger",
+            "x": 150,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 150,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 230,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.01666666666664,
+            "kind": "sniper",
+            "x": 540,
+            "y": 360,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 23.7166666666666,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "guard",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 130.56
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.700000000000161,
+            "kind": "drone",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.800000000000166,
+            "kind": "armor",
+            "x": 420,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "charger",
+            "x": 540,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "rebound",
+            "maxHp": 34.08
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 13.600000000000255,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 4,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 280,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 440,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.366666666666735,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 280,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.300000000000015,
+            "kind": "drone",
+            "x": 440,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.416666666666675,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.116666666666635,
+            "kind": "drone",
+            "x": 200,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.233333333333295,
+            "kind": "drone",
+            "x": 280,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.349999999999955,
+            "kind": "drone",
+            "x": 440,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.466666666666615,
+            "kind": "drone",
+            "x": 520,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      },
+      "after": {
+        "route": "ballistic",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 13,
+        "pickups": 12,
+        "kills": 318,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 59,
+        "chapters": [
+          {
+            "round": 1,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 24.43333333333338,
+                "empty": 0,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 27.833333333333314,
+                "empty": 0,
+                "peak": 9
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.233333333333352,
+                "empty": 0,
+                "peak": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 21.18333333333336,
+                "empty": 0,
+                "peak": 8
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 29.41666666666664,
+                "empty": 0,
+                "peak": 9
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 5.266666666666656,
+                "empty": 1.9833333333333312,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 16.55000000000001,
+                "empty": 0,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 25.766666666666683,
+                "empty": 0,
+                "peak": 7
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 5.98333333333332,
+                "empty": 1.016666666666668,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 15.466666666666685,
+                "empty": 1.4666666666666663,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 36.883333333333255,
+                "empty": 0,
+                "peak": 12
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 1.9999999999999978,
+                "empty": 2.9999999999999942,
+                "peak": 1
+              }
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "round": 1,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 360,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.05000000000003,
+            "kind": "armor",
+            "x": 520,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 360,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.300000000000015,
+            "kind": "armor",
+            "x": 200,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 330,
+            "shots": 1,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 420,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 2,
+            "at": 21.00000000000009,
+            "kind": "sniper",
+            "x": 570,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.350000000000012,
+            "kind": "sniper",
+            "x": 150,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 23.33333333333329,
+            "kind": "drone",
+            "x": 150,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.33333333333329,
+            "kind": "drone",
+            "x": 230,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.33333333333329,
+            "kind": "sniper",
+            "x": 540,
+            "y": 360,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 23.7166666666666,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "guard",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 130.56
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.700000000000161,
+            "kind": "drone",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.800000000000166,
+            "kind": "armor",
+            "x": 420,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "sweep",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "charger",
+            "x": 540,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "rebound",
+            "maxHp": 34.08
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 13.600000000000255,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 4,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 280,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 440,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.366666666666735,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.183333333333355,
+            "kind": "armor",
+            "x": 280,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 22.300000000000015,
+            "kind": "armor",
+            "x": 440,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 22.416666666666675,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.116666666666635,
+            "kind": "drone",
+            "x": 200,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.233333333333295,
+            "kind": "drone",
+            "x": 280,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.349999999999955,
+            "kind": "drone",
+            "x": 440,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.466666666666615,
+            "kind": "drone",
+            "x": 520,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "electric",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 11,
+        "kills": 320,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 62,
+        "chapters": [
+          {
+            "round": 1,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 23.73333333333338,
+                "empty": 0,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 29.31666666666663,
+                "empty": 0,
+                "peak": 10
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.233333333333352,
+                "empty": 0,
+                "peak": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 16.38333333333333,
+                "empty": 0.19999999999999998,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 26.99999999999998,
+                "empty": 0,
+                "peak": 10
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.199999999999996,
+                "empty": 0.6666666666666671,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 15.850000000000065,
+                "empty": 0.2333333333333333,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 27.00000000000005,
+                "empty": 0,
+                "peak": 8
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 6.199999999999986,
+                "empty": 1.3833333333333333,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 17.58333333333336,
+                "empty": 1.2166666666666672,
+                "peak": 8
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 31.53333333333329,
+                "empty": 0.5166666666666666,
+                "peak": 12
+              },
+              {
+                "start": 46,
+                "seconds": 4.166666666666657,
+                "enemySeconds": 1.1666666666666674,
+                "empty": 2.9999999999999942,
+                "peak": 1
+              }
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "round": 1,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 360,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 360,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.300000000000015,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 420,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 2,
+            "at": 21.00000000000009,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.350000000000012,
+            "kind": "charger",
+            "x": 150,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 150,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 230,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.01666666666664,
+            "kind": "sniper",
+            "x": 540,
+            "y": 360,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 23.7166666666666,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "guard",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 130.56
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.200000000000136,
+            "kind": "drone",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.800000000000166,
+            "kind": "armor",
+            "x": 420,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "charger",
+            "x": 540,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "rebound",
+            "maxHp": 34.08
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 13.600000000000255,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 280,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 440,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 280,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.300000000000015,
+            "kind": "drone",
+            "x": 440,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.416666666666675,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.116666666666635,
+            "kind": "drone",
+            "x": 200,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.233333333333295,
+            "kind": "drone",
+            "x": 280,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.349999999999955,
+            "kind": "drone",
+            "x": 440,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.466666666666615,
+            "kind": "drone",
+            "x": 520,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      },
+      "after": {
+        "route": "electric",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 13,
+        "pickups": 11,
+        "kills": 322,
+        "bossWins": 3,
+        "peakBodies": 14,
+        "peakBullets": 62,
+        "chapters": [
+          {
+            "round": 1,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 23.73333333333338,
+                "empty": 0,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 27.999999999999968,
+                "empty": 0,
+                "peak": 9
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.233333333333352,
+                "empty": 0,
+                "peak": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 19.583333333333368,
+                "empty": 0.21666666666666665,
+                "peak": 8
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 26.95000000000001,
+                "empty": 0,
+                "peak": 9
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 6.766666666666651,
+                "empty": 1.6166666666666658,
+                "peak": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 14.80000000000003,
+                "empty": 0.6166666666666669,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 27.00000000000005,
+                "empty": 0,
+                "peak": 8
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 6.0499999999999865,
+                "empty": 1.3833333333333333,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 11.183333333333358,
+                "empty": 1.6166666666666658,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 32.01666666666668,
+                "empty": 0.5166666666666666,
+                "peak": 12
+              },
+              {
+                "start": 46,
+                "seconds": 0.6666666666666671,
+                "enemySeconds": 0,
+                "empty": 0.6666666666666671,
+                "peak": 0
+              }
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "round": 1,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 360,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.05000000000003,
+            "kind": "armor",
+            "x": 520,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 360,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.300000000000015,
+            "kind": "armor",
+            "x": 200,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 330,
+            "shots": 1,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 420,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 2,
+            "at": 21.00000000000009,
+            "kind": "sniper",
+            "x": 570,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.350000000000012,
+            "kind": "sniper",
+            "x": 150,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 23.33333333333329,
+            "kind": "drone",
+            "x": 150,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.33333333333329,
+            "kind": "drone",
+            "x": 230,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.33333333333329,
+            "kind": "sniper",
+            "x": 540,
+            "y": 360,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 23.7166666666666,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "guard",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 130.56
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.200000000000136,
+            "kind": "drone",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.800000000000166,
+            "kind": "armor",
+            "x": 420,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "sweep",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "charger",
+            "x": 540,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "rebound",
+            "maxHp": 34.08
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 13.600000000000255,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 280,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 440,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.183333333333355,
+            "kind": "armor",
+            "x": 280,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 22.300000000000015,
+            "kind": "armor",
+            "x": 440,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 22.416666666666675,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.116666666666635,
+            "kind": "drone",
+            "x": 200,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.233333333333295,
+            "kind": "drone",
+            "x": 280,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.349999999999955,
+            "kind": "drone",
+            "x": 440,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.466666666666615,
+            "kind": "drone",
+            "x": 520,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "optical",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 15,
+        "pickups": 11,
+        "kills": 318,
+        "bossWins": 3,
+        "peakBodies": 13,
+        "peakBullets": 57,
+        "chapters": [
+          {
+            "round": 1,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 24.43333333333338,
+                "empty": 0,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 26.416666666666693,
+                "empty": 0,
+                "peak": 9
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.233333333333352,
+                "empty": 0,
+                "peak": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 21.850000000000012,
+                "empty": 0,
+                "peak": 8
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 32.133333333333354,
+                "empty": 0,
+                "peak": 11
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 5.73333333333332,
+                "empty": 2.199999999999997,
+                "peak": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 15.266666666666712,
+                "empty": 0.6166666666666669,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 25.900000000000027,
+                "empty": 0,
+                "peak": 7
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 7.49999999999998,
+                "empty": 1.100000000000001,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 13.633333333333335,
+                "empty": 1.4666666666666663,
+                "peak": 7
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 24.366666666666607,
+                "empty": 0.6000000000000002,
+                "peak": 9
+              },
+              {
+                "start": 46,
+                "seconds": 1.016666666666668,
+                "enemySeconds": 0,
+                "empty": 1.016666666666668,
+                "peak": 0
+              }
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "round": 1,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 360,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 360,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.300000000000015,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 330,
+            "shots": 1,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 420,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 2,
+            "at": 21.00000000000009,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.350000000000012,
+            "kind": "charger",
+            "x": 150,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 150,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 230,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.01666666666664,
+            "kind": "sniper",
+            "x": 540,
+            "y": 360,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 23.7166666666666,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 24.166666666666575,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "guard",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 130.56
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.200000000000136,
+            "kind": "drone",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.800000000000166,
+            "kind": "armor",
+            "x": 420,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "charger",
+            "x": 540,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "rebound",
+            "maxHp": 34.08
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 13.600000000000255,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 280,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 440,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 280,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.300000000000015,
+            "kind": "drone",
+            "x": 440,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.416666666666675,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.116666666666635,
+            "kind": "drone",
+            "x": 200,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.233333333333295,
+            "kind": "drone",
+            "x": 280,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.349999999999955,
+            "kind": "drone",
+            "x": 440,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.466666666666615,
+            "kind": "drone",
+            "x": 520,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      },
+      "after": {
+        "route": "optical",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 13,
+        "pickups": 11,
+        "kills": 300,
+        "bossWins": 3,
+        "peakBodies": 14,
+        "peakBullets": 58,
+        "chapters": [
+          {
+            "round": 1,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 24.43333333333338,
+                "empty": 0,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 25.10000000000004,
+                "empty": 0,
+                "peak": 8
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.233333333333352,
+                "empty": 0,
+                "peak": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 22.066666666666688,
+                "empty": 0,
+                "peak": 8
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 30.46666666666664,
+                "empty": 0,
+                "peak": 10
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 9.316666666666665,
+                "empty": 0.850000000000001,
+                "peak": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 15.216666666666706,
+                "empty": 0.55,
+                "peak": 6
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 26.200000000000045,
+                "empty": 0,
+                "peak": 7
+              },
+              {
+                "start": 46,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 8.366666666666648,
+                "empty": 0.6500000000000004,
+                "peak": 4
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "windows": [
+              {
+                "start": 10,
+                "seconds": 4.999999999999988,
+                "enemySeconds": 19.43333333333336,
+                "empty": 1.2166666666666672,
+                "peak": 9
+              },
+              {
+                "start": 21,
+                "seconds": 5.016666666666654,
+                "enemySeconds": 32.78333333333333,
+                "empty": 0,
+                "peak": 11
+              }
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "round": 1,
+            "at": 21.00000000000009,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.133333333333415,
+            "kind": "drone",
+            "x": 360,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 21.250000000000075,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.05000000000003,
+            "kind": "armor",
+            "x": 520,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 22.183333333333355,
+            "kind": "drone",
+            "x": 360,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 22.300000000000015,
+            "kind": "armor",
+            "x": 200,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 300,
+            "y": 330,
+            "shots": 1,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 1,
+            "at": 24.516666666666556,
+            "kind": "armor",
+            "x": 420,
+            "y": 500,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 80
+          },
+          {
+            "round": 2,
+            "at": 21.00000000000009,
+            "kind": "sniper",
+            "x": 570,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 21.450000000000063,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.350000000000012,
+            "kind": "sniper",
+            "x": 150,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 150,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 22.816666666666652,
+            "kind": "drone",
+            "x": 230,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 23.01666666666664,
+            "kind": "sniper",
+            "x": 540,
+            "y": 360,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 24.749999999999876,
+            "kind": "charger",
+            "x": 570,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 24.749999999999876,
+            "kind": "drone",
+            "x": 570,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 24.749999999999876,
+            "kind": "drone",
+            "x": 490,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "guard",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 130.56
+          },
+          {
+            "round": 3,
+            "at": 10.000000000000076,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 10.600000000000106,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.200000000000136,
+            "kind": "drone",
+            "x": 180,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "weave",
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 11.800000000000166,
+            "kind": "armor",
+            "x": 420,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "sweep",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "charger",
+            "x": 540,
+            "y": 360,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "rebound",
+            "maxHp": 34.08
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 360,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 12.400000000000196,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 13.600000000000255,
+            "kind": "armor",
+            "x": 300,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 200,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 280,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 440,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 21.516666666666726,
+            "kind": "drone",
+            "x": 520,
+            "y": 330,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.05000000000003,
+            "kind": "drone",
+            "x": 200,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 22.183333333333355,
+            "kind": "armor",
+            "x": 280,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 22.300000000000015,
+            "kind": "armor",
+            "x": 440,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 22.416666666666675,
+            "kind": "drone",
+            "x": 520,
+            "y": 355,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.116666666666635,
+            "kind": "drone",
+            "x": 200,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.233333333333295,
+            "kind": "drone",
+            "x": 280,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.349999999999955,
+            "kind": "drone",
+            "x": 440,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 23.466666666666615,
+            "kind": "drone",
+            "x": 520,
+            "y": 380,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,9 +1,10 @@
+import{restoreChapterLayers}from'./helpers/restore-chapter-layers';
 import{it,expect}from'vitest';import{World}from'../src/core/world';import{timeline}from'../src/core/director';import{closingAssault}from'../src/core/closing-assault';import{C}from'../src/core/config';
 const path='../build/qa/Stage-223/baseline.mjs',old=await import(path);
 function setup(round=1){const w=new World(1337,round);Object.assign(w,{scheduled:closingAssault(round,false),secondChance:true});w.roundTime=67.99;w.player.x=w.player.px=652;(w as any).shoot=()=>{};return w;}
 function frames(w:World,n=1){for(let i=0;i<n;i++){w.step(C.step,652);w.drainEffects();}}
 it('adds only one closing group per chapter across 108 schedules, without rescheduling any old target',()=>{
- for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){const a=timeline(round,seed,plan),closing=a.filter(s=>s.closing);expect(a.filter(s=>!s.closing&&!s.openingAssault)).toEqual(old.timeline(round,seed,plan));expect(closing.length).toBe((round-1)%3===0?4:3);expect(closing.every(s=>s.at===68&&s.drop&&(s.dropY??0)>=320)).toBe(true);}
+ for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){const a=restoreChapterLayers(timeline(round,seed,plan),round,seed,plan),closing=a.filter(s=>s.closing);expect(a.filter(s=>!s.closing&&!s.openingAssault)).toEqual(old.timeline(round,seed,plan));expect(closing.length).toBe((round-1)%3===0?4:3);expect(closing.every(s=>s.at===68&&s.drop&&(s.dropY??0)>=320)).toBe(true);}
 });
 it('waits for an unclaimed old reward to leave naturally, then deploys the complete group once',()=>{
  const w=setup(),crate=w.spawn('crate',240,800,2);frames(w,120);expect(crate.active).toBe(true);expect(w.dropSpawns).toBe(0);expect(w.phase).toBe('running');

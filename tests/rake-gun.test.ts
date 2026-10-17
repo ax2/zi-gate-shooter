@@ -1,9 +1,10 @@
+import{restoreChapterLayers}from'./helpers/restore-chapter-layers';
 import{it,expect}from'vitest';import{World}from'../src/core/world';import{C}from'../src/core/config';import{timeline}from'../src/core/director';import{closingAssault}from'../src/core/closing-assault';import{rakeBarrelAngle}from'../src/core/rake-gun';import{dangerTimeline,safeRoute}from'../src/core/reachability';
 const path='../build/qa/Stage-226/baseline.mjs',old=await import(path);
 function setup(round=1,x=240){const w=new World(1337,round);w.phase='boss';(w as any).scheduled=[];(w as any).shoot=()=>{};w.player.x=w.player.px=68;const b=w.spawn('armor',x,350);b.pattern='rake';b.timer=.1;return{w,b};}
 function step(w:World,n=1,x=68){for(let i=0;i<n;i++){w.step(C.step,x);w.drainEffects();}}
 it('only changes one heavy closing gun at round3 and two from round6, with every slot, reward and durability rule retained',()=>{
- for(let r=1;r<=15;r++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){const a=timeline(r,seed,plan),guns=a.filter(s=>s.pattern==='rake');expect(guns.length).toBe(r%3===0?(r===3?1:2):0);expect(guns.every(s=>s.closing&&s.kind==='armor'&&s.at===68&&s.dropY===350)).toBe(true);if(guns.length===2)expect(guns[1].opening!-guns[0].opening!).toBeCloseTo(.25);expect(a.map(s=>s.pattern==='rake'?{...s,pattern:'fan',opening:.1}:s)).toEqual(old.timeline(r,seed,plan));}
+ for(let r=1;r<=15;r++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){const a=restoreChapterLayers(timeline(r,seed,plan),r,seed,plan),guns=a.filter(s=>s.pattern==='rake');expect(guns.length).toBe(r%3===0?(r===3?1:2):0);expect(guns.every(s=>s.closing&&s.kind==='armor'&&s.at===68&&s.dropY===350)).toBe(true);if(guns.length===2)expect(guns[1].opening!-guns[0].opening!).toBeCloseTo(.25);expect(a.map(s=>s.pattern==='rake'?{...s,pattern:'fan',opening:.1}:s)).toEqual(old.timeline(r,seed,plan));}
 });
 it('admits the entire real moving dual-gun/guard formation from either edge or center instead of stalling the director',()=>{
  for(const round of[3,6,9,12,15])for(const x of[68,360,652]){const w=new World(1337,round);w.player.x=w.player.px=x;w.roundTime=67.99;Object.assign(w,{scheduled:closingAssault(round,false),secondChance:true});(w as any).shoot=()=>{};step(w,1,x);expect(w.dropSpawns).toBe(3);expect(w.bodies.filter(b=>b.active)).toHaveLength(3);expect(w.phase).toBe('running');}

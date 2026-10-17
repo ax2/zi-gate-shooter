@@ -1,0 +1,152 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/chapter-layers.test.ts tests/rake-gun.test.ts tests/closing-assault.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/closing-assault.test.ts (6 tests | 1 failed) 89ms
+   × adds only one closing group per chapter across 108 schedules, without rescheduling any old target 25ms
+ ❯ tests/rake-gun.test.ts (9 tests | 1 failed) 108ms
+   × only changes one heavy closing gun at round3 and two from round6, with every slot, reward and durability rule retained 25ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/closing-assault.test.ts > adds only one closing group per chapter across 108 schedules, without rescheduling any old target
+AssertionError: expected [ …(72) ] to deeply equal [ …(72) ]
+
+- Expected
++ Received
+
+@@ -148,12 +148,12 @@
+      "x": 360,
+    },
+    {
+      "at": 21,
+      "drop": true,
+-     "dropDetail": "连续机群 · 集火开路再转火",
+-     "dropLabel": "集群突破",
++     "dropDetail": "前层轻机掩护双炮 · 集火一翼再转炮",
++     "dropLabel": "炮机夹层",
+      "dropY": 330,
+      "kind": "drone",
+      "lane": undefined,
+      "pattern": undefined,
+      "x": 520,
+@@ -183,14 +183,15 @@
+    {
+      "at": 22.05,
+      "drop": true,
+      "dropDetail": undefined,
+      "dropLabel": undefined,
+-     "dropY": 355,
+-     "kind": "drone",
++     "dropY": 350,
++     "kind": "armor",
+      "lane": undefined,
+-     "pattern": undefined,
++     "opening": 0.1,
++     "pattern": "fan",
+      "x": 520,
+    },
+    {
+      "at": 22.17,
+      "drop": true,
+@@ -205,14 +206,15 @@
+    {
+      "at": 22.29,
+      "drop": true,
+      "dropDetail": undefined,
+      "dropLabel": undefined,
+-     "dropY": 355,
+-     "kind": "drone",
++     "dropY": 350,
++     "kind": "armor",
+      "lane": undefined,
+-     "pattern": undefined,
++     "opening": 0.1,
++     "pattern": "fan",
+      "x": 200,
+    },
+    {
+      "at": 23,
+      "kind": "charger",
+
+ ❯ tests/closing-assault.test.ts:6:215
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/rake-gun.test.ts > only changes one heavy closing gun at round3 and two from round6, with every slot, reward and durability rule retained
+AssertionError: expected [ …(80) ] to deeply equal [ …(80) ]
+
+- Expected
++ Received
+
+@@ -190,12 +190,12 @@
+      "x": 360,
+    },
+    {
+      "at": 21,
+      "drop": true,
+-     "dropDetail": "连续机群 · 集火开路再转火",
+-     "dropLabel": "集群突破",
++     "dropDetail": "前层轻机掩护双炮 · 集火一翼再转炮",
++     "dropLabel": "炮机夹层",
+      "dropY": 330,
+      "kind": "drone",
+      "lane": undefined,
+      "pattern": undefined,
+      "x": 520,
+@@ -225,14 +225,15 @@
+    {
+      "at": 22.05,
+      "drop": true,
+      "dropDetail": undefined,
+      "dropLabel": undefined,
+-     "dropY": 355,
+-     "kind": "drone",
++     "dropY": 350,
++     "kind": "armor",
+      "lane": undefined,
+-     "pattern": undefined,
++     "opening": 0.1,
++     "pattern": "fan",
+      "x": 520,
+    },
+    {
+      "at": 22.17,
+      "drop": true,
+@@ -247,14 +248,15 @@
+    {
+      "at": 22.29,
+      "drop": true,
+      "dropDetail": undefined,
+      "dropLabel": undefined,
+-     "dropY": 355,
+-     "kind": "drone",
++     "dropY": 350,
++     "kind": "armor",
+      "lane": undefined,
+-     "pattern": undefined,
++     "opening": 0.1,
++     "pattern": "fan",
+      "x": 200,
+    },
+    {
+      "at": 23,
+      "kind": "charger",
+
+ ❯ tests/rake-gun.test.ts:6:439
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  2 failed | 16 passed (18)
+   Start at  23:28:46
+   Duration  1.26s (transform 72%, tests 14%, import 13%, worker 1%)
+
+  Transform  transforming modules took 2.06s · 72% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

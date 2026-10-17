@@ -1,8 +1,9 @@
+import{restoreChapterLayers}from'./helpers/restore-chapter-layers';
 import{it,expect}from'vitest';import{enemyHealthScale}from'../src/core/difficulty';import{openingAssaults}from'../src/core/opening-assaults';import{timeline}from'../src/core/director';import{World}from'../src/core/world';import{C}from'../src/core/config';import{dangerTimeline}from'../src/core/reachability';
 const path='../build/qa/Stage-225/baseline.mjs',old=await import(path);
 it('adds only the explicit chapter-specific opening roster across 108 schedules and preserves all rewards and prior fights',()=>{
  for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){
-  const actual=timeline(round,seed,plan),added=actual.filter(s=>s.openingAssault);
+  const actual=restoreChapterLayers(timeline(round,seed,plan),round,seed,plan),added=actual.filter(s=>s.openingAssault);
   expect(actual.filter(s=>!s.openingAssault).map(s=>s.pattern==='rake'?{...s,pattern:'fan',opening:.1}:s)).toEqual(old.timeline(round,seed,plan));
   expect(added.length).toBe(round===1?4:(round-1)%3===0?6:(round-1)%3===1?5:4);
   expect(added.every(s=>s.at>=6.5&&s.at<=8.6&&s.drop&&s.kind in C.enemies)).toBe(true);

@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.LAYERS_ROUTES==='1'?'routes':process.env.LAYERS_SECONDS??'300';await build({entryPoints:['tools/audit-chapter-layers.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-228/audit-${suffix}.mjs`});await import(`../build/qa/Stage-228/audit-${suffix}.mjs`);
