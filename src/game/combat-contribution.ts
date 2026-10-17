@@ -8,7 +8,7 @@ export const contributionSources={
  pierce:{name:weaponNames.pierce,color:weaponColors.pierce,role:'穿甲与弹芯分支 · 原高贯穿保留'},
  blast:{name:weaponNames.blast,color:weaponColors.blast,role:'爆炸与弹芯分支 · 纵列 / 群敌'},
  arc:{name:weaponNames.arc,color:weaponColors.arc,role:'电弧直击、跳电与蓄爆 · 连通敌阵'},
- laser:{name:'激光与棱镜',color:'#7fe4ff',role:'主侧束、分光与灼烧 · 瞄准纵列'},
+ laser:{name:'激光与棱镜',color:'#7fe4ff',role:'主侧束、分光、灼烧与折返 · 实际扣血'},
  storm:{name:'雷暴霰射',color:'#b6ffb3',role:'派生跳电与破核 · 原霰弹另计'},
  ion:{name:'离子风暴',color:'#c8b1ff',role:'放电与精研弹体 · 原电弧另计'},
  fracture:{name:'裂甲爆破',color:'#ffc183',role:'裂甲引爆与穿震 · 原穿甲另计'},

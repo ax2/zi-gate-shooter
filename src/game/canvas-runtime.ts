@@ -81,6 +81,8 @@ import { GateFeedback,GATE_RECEIPT,gateReceiptBounds,gateReceiptReadable } from 
 import { contextGuide, weaponGuide } from './context-guide';
 import { dossierWeapons, weaponDossier } from './weapon-dossier';
 import { supportLight,opticalImpactLight,opticalEmitterLight,opticalChargeLight } from './support-light';
+import{MIRROR_LASER,type MirrorSegment}from'../core/mirror-laser';
+import{mirrorLight,mirrorMount}from'./mirror-light';
 import {laserVisualBand} from '../core/support-profile';
 import { HorizontalKeys } from './horizontal-keys';
 import { droneFrame } from './drone-motion';
@@ -151,7 +153,7 @@ export class CanvasRuntime {
   private impacts: ImpactMarker[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean;seeker?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
-  private supportBeams: {x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number;ricochet?:boolean;fractureWave?:boolean}[] = [];
+  private supportBeams: {mirror?:MirrorSegment[];bounced?:boolean;x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number;ricochet?:boolean;fractureWave?:boolean}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
@@ -437,7 +439,7 @@ export class CanvasRuntime {
       else if(isFractureAugment(branch)&&route==='ballistic'&&this.world.canRefineFracture())this.selectBuild(route,branch);
       else if(isPhotonAugment(branch)&&route==='optical'&&this.world.canRefinePhoton())this.selectBuild(route,branch);
       else if(isMagneticAugment(branch)&&route==='electric'&&this.world.canRefineMagnetic())this.selectBuild(route,branch);
-      else if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
+      else if(this.world.build.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'||branch==='mirror'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))))this.selectBuild(route,branch);
     }
     else if (action === 'reload') { this.mode = 'loading'; void this.load(); }
     else if (action === 'start') this.start();
@@ -526,7 +528,7 @@ export class CanvasRuntime {
   }
   private checkAchievements() {
     const beforeCertifications=this.save.achievements.certifiedBuilds.length,beforeMagnetic=this.save.achievements.magneticCertifications.length;
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,magneticCertifications:[...this.world.magneticCertifications]});
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,mirrorDoubleHits:this.world.mirrorDoubleHits,magneticCertifications:[...this.world.magneticCertifications]});
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.achievementShownAt=undefined;}
     if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length||beforeMagnetic!==this.save.achievements.magneticCertifications.length)this.platform.write(this.save);
   }
@@ -596,6 +598,10 @@ export class CanvasRuntime {
     }
     if(e.type==='scatter-pierce'&&this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y+25,tx:e.x,ty:e.y-35,life:.12,laser:false});
     if(e.type==='laser')this.opticalFiredAt=this.world.time;
+    if(e.type==='mirror-laser'&&e.segments){
+      if(this.supportBeams.length>=16)this.supportBeams.shift();
+      this.supportBeams.push({x:e.x,y:e.y,tx:e.x,ty:e.y,life:MIRROR_LASER.life,laser:false,mirror:e.segments.map(s=>({...s})),bounced:e.bounced});return;
+    }
     if ((e.type==='laser'||e.type==='refract') && e.targetX!==undefined && e.targetY!==undefined) {
       if(this.save.settings.sound)this.platform.sound(e.type,this.world.weaponStage(this.world.weaponKind));
       if(this.supportBeams.length<16)this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:e.type==='laser' ? .32 : .12,laser:e.type==='laser',prism:e.prism,opticalBand:e.opticalBand});
@@ -713,6 +719,7 @@ export class CanvasRuntime {
       opticalChargeLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,charge,side===0?band:1,this.save.settings.effects==='weak',side!==0);
       opticalEmitterLight(this.ctx,x,y-100+pose.bob+kick-(side===0?size:42)*.25,pulse,side===0?band:1,this.save.settings.effects==='weak');
     }
+    if(w.build.opticalBranch==='mirror')mirrorMount(this.ctx,w.player.x,y-100+pose.bob+kick,pulse);
   }
   private drawCalibrationRig(y:number,pose:PlayerPose,recoil:number){
     const w=this.world,kind=w.weaponKind,band=calibrationVisualBand(w.weaponCalibration(kind));calibrationMount(this.ctx,w.player.x,y-(w.profileFor(kind).muzzleY??78)+pose.bob+recoil,96*(1+band*.07),kind,band,this.weaponMotion.flash(kind,w.weaponStage(kind),w.time),this.save.settings.effects==='weak');
@@ -951,7 +958,7 @@ export class CanvasRuntime {
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
-    for(const beam of this.supportBeams) if(this.mode!=='menu'){if(beam.fractureWave)fractureWaveLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else if(beam.ricochet)ricochetLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);}
+    for(const beam of this.supportBeams) if(this.mode!=='menu'){if(beam.mirror)mirrorLight(c,beam.mirror,beam.life,!!beam.bounced,this.save.settings.effects==='weak');else if(beam.fractureWave)fractureWaveLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else if(beam.ricochet)ricochetLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);}
     for(const b of w.bullets) if(!b.hostile){
       calibrationShot(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse',b.calibrationBand??0,b.age,this.save.settings.effects==='weak');
       projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
@@ -1363,10 +1370,11 @@ export class CanvasRuntime {
       this.text(`常态 ${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 77, 22, '#d6e7f0', 'left');
     }
     const support=w.supportProfile();
-    this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,24,'#7fe4ff');
-    this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
-    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, 970, 23, '#c7deeb');
-    this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
+    this.text(support.laserUnlocked?`激光${w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':w.build.opticalBranch==='mirror'?'·折返':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,w.build.opticalBranch==='mirror'?22:24,'#7fe4ff');
+    this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,w.build.opticalBranch==='mirror'?923:930,w.build.opticalBranch==='mirror'?20:23,'#a2f9ed');
+    if(w.build.opticalBranch==='mirror')this.text(`折返束：65% / 最多2敌 · 一次反射 · 命中${w.mirrorHits}`,360,949,20,'#c5bcff');
+    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, w.build.opticalBranch==='mirror'?978:970, w.build.opticalBranch==='mirror'?20:23, '#c7deeb');
+    this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, w.build.opticalBranch==='mirror'?1007:1004, w.build.opticalBranch==='mirror'?20:23, '#f0d19a');
     for(const [i,label] of ['技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
   }
@@ -1539,19 +1547,19 @@ export class CanvasRuntime {
     if(this.branchRoute==='electric'){if(this.world.canRefineMagnetic())this.drawMagneticBranch();else if(this.world.canRefineIon())this.drawIonBranch();else this.drawElectricBranch();return;}
     if(this.branchRoute==='ballistic'){this.drawBallisticBranch();return;}
     this.rect(35,120,650,1080,'#102330');
-    this.text('光学改造 · 二选一',360,190,40,'#effaff','center',true);
+    this.text('光学改造 · 三选一',360,190,40,'#effaff','center',true);
     this.text('都保留原激光 · 发射间隔缩短25%',360,250,25,'#bdd8e7');
-    for(const [i,branch] of (['burn','relay'] as const).entries()){
-      const node=opticalBranches[branch],y=315+i*290,color=branch==='burn'?'#ffc187':'#a3efff';
-      this.rect(65,y,590,250,'#203e50');this.rect(65,y,5,250,color);
-      this.text(node.name,90,y+42,34,color,'left',true);this.text(node.role,90,y+88,25,'#effaff','left');
-      this.text(branch==='burn'?'主束首敌追加3次灼烧':'主束保留 · 额外瞄准一名侧翼敌人',90,y+133,24,'#d9e8f1','left');
-      this.text(branch==='burn'?`每${OPTICAL_FORK.burnInterval}秒${OPTICAL_FORK.burnDamage*100}%伤害 · 不叠层`:`横距${OPTICAL_FORK.relayRange} · ${OPTICAL_FORK.relayDamage*100}%伤害 · 不递归`,90,y+175,23,'#bdd8e7','left');
-      this.text('选择此改造　›',625,y+219,25,color,'right');
-      this.buttons.push({x:65,y,w:590,h:250,action:`branch:${branch}`,label:node.name});
+    for(const [i,branch] of (['burn','relay','mirror'] as const).entries()){
+      const node=opticalBranches[branch],y=290+i*235,color=branch==='burn'?'#ffc187':branch==='mirror'?'#c5bcff':'#a3efff';
+      this.rect(65,y,590,215,'#203e50');this.rect(65,y,5,215,color);
+      this.text(node.name,90,y+34,30,color,'left',true);this.text(node.role,90,y+75,22,'#effaff','left');
+      this.text(branch==='burn'?'主束首敌追加3次灼烧':branch==='relay'?'主束保留 · 额外瞄准一名侧翼敌人':'主束保留 · 追加45°斜光，沿场边折返',90,y+113,22,'#d9e8f1','left');
+      this.text(branch==='burn'?`每${OPTICAL_FORK.burnInterval}秒${OPTICAL_FORK.burnDamage*100}%伤害 · 不叠层`:branch==='relay'?`横距${OPTICAL_FORK.relayRange} · ${OPTICAL_FORK.relayDamage*100}%伤害 · 不递归`:`${MIRROR_LASER.damage*100}%伤害 / 最多${MIRROR_LASER.targets}敌 · 箱门闭盾可截停`,90,y+150,20,'#bdd8e7','left');
+      this.text('选择此改造　›',625,y+192,24,color,'right');
+      this.buttons.push({x:65,y,w:590,h:215,action:`branch:${branch}`,label:node.name});
     }
-    this.text('本局选定不可切换 · 三阶棱镜与旧武器保留',360,965,23,'#f0d19a');
-    this.button('返回升级选择',1050,'branch-back');
+    this.text('本局选定不可切换 · 三阶棱镜与旧武器保留',360,1020,22,'#f0d19a');
+    this.button('返回升级选择',1100,'branch-back');
   }
   private drawAmmoFusion(){
     const w=this.world;this.rect(35,120,650,1080,'#102330');
@@ -1779,7 +1787,7 @@ export class CanvasRuntime {
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
       electricBranch:this.world.build.electricBranch??null,seekerLinks:this.world.seekerLinks,capacitorBursts:this.world.capacitorBursts,
-      opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,
+      opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,mirrorShots:this.world.mirrorShots,mirrorHits:this.world.mirrorHits,mirrorBounces:this.world.mirrorBounces,mirrorDoubleHits:this.world.mirrorDoubleHits,mirrorBeams:this.supportBeams.filter(b=>b.mirror).length,
       photonAugment:this.world.build.photonAugment??null,laserChainProfile:laserChainProfile(this.world.build.photonAugment),laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),

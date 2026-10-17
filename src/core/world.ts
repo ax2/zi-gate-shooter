@@ -19,6 +19,7 @@ import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,STORM_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {OVERLOAD} from './overload';
+import{MIRROR_LASER,mirrorPath,type MirrorSegment}from'./mirror-laser';
 import {CLOSING_ASSAULT_AT,closingBrief} from './closing-assault';
 import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type IonSpear} from './ion-storm';
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
@@ -64,7 +65,7 @@ export interface Bullet {
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
   readonly ammoFusion?:BallisticBranch|null;readonly ammoBranch?:BallisticBranch|null;bankRemaining?:number;sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
-export interface EffectEvent { fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
+export interface EffectEvent { segments?:MirrorSegment[];bounced?:boolean; fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
 export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
@@ -233,6 +234,32 @@ export class World {
     this.hit(body,damage*ELECTRIC_FORK.damage,'arc');
   }
   burnHits=0;relayHits=0;
+  mirrorShots=0;mirrorHits=0;mirrorBounces=0;mirrorDoubleHits=0;
+  private mirrorLaser(damage:number){
+    if(this.bossVictory)return;
+    const segments:MirrorSegment[]=[],visited=new Set<number>();let stopped=false,bounced=false,count=0,afterBounceHits=0;
+    for(const [index,segment]of mirrorPath(this.player.x).entries()){
+      if(index>0)bounced=true;
+      const contacts=this.bodies.filter(b=>b.active&&b.kind!=='pickup'&&!visited.has(b.id)&&b.y>=C.playerShotTop&&b.y<C.playerY-100
+        &&!(b.kind==='boss'&&this.phase!=='boss'))
+        .map(body=>({body,t:sweep(segment.x,segment.y,segment.tx,segment.ty,body.x,body.y,body.x,body.y,body.width/2+MIRROR_LASER.radius,body.height/2+MIRROR_LASER.radius)}))
+        .filter((hit):hit is{body:Body;t:number}=>hit.t!==null).sort((a,b)=>a.t-b.t||a.body.id-b.body.id);
+      let end=1;
+      for(const {body,t}of contacts){
+        if(!body.active)continue;visited.add(body.id);
+        const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
+        const before=body.hp,energy=body.energy;
+        this.hit(body,damage*MIRROR_LASER.damage,'pulse','laser');
+        if(body.kind in C.enemies&&body.hp<before){this.mirrorHits++;if(index>0)afterBounceHits++;}
+        if(body.hp<before||body.kind==='gate'&&body.energy>energy)this.effects.push({type:'laser-impact',x:body.x,y:body.y,targetX:segment.x+(segment.tx-segment.x)*t,targetY:segment.y+(segment.ty-segment.y)*t,opticalBand:2});
+        if(blocked||++count>=MIRROR_LASER.targets||this.bossVictory){end=t;stopped=true;break;}
+      }
+      segments.push({...segment,tx:segment.x+(segment.tx-segment.x)*end,ty:segment.y+(segment.ty-segment.y)*end});
+      if(stopped)break;
+    }
+    this.mirrorShots++;if(bounced)this.mirrorBounces++;if(afterBounceHits>=2)this.mirrorDoubleHits++;
+    this.effects.push({type:'mirror-laser',x:this.player.x,y:C.playerY-100,segments,bounced});
+  }
   private opticalSecondary(body:Body,damage:number){
     if(!(body.kind in C.enemies)||guardClosed(body)||(body.dropGrace??0)>0)return;
     if(this.build.opticalBranch==='burn'){
@@ -811,6 +838,7 @@ export class World {
           this.effects.push({type:'laser',x,y:start,targetX:beamX(end),targetY:end,prism:side!==0,opticalBand});
         }
         if(this.build.opticalBranch==='relay'){const id=this.splitLaser(laserDamage);if(id!==undefined)visited.add(id);}
+        if(this.build.opticalBranch==='mirror')this.mirrorLaser(laserDamage);
         if(this.laserChainUnlocked()&&!mainBlocked){this.laserLinkEnergy=laserDamage;this.laserLinkTargets=visited;if(origin)this.releaseLaserLink(origin);}
       }
     }

@@ -32,10 +32,11 @@ export const electricBranches={
  capacitor:{name:'电容蓄爆',detail:'跳电范围220 · 同敌3次直击追加200%',role:'持续瞄准精英与首领，单体放电'},
 } as const;
 export const ELECTRIC_FORK={hits:3,damage:2} as const;
-export type OpticalBranch='burn'|'relay';
+export type OpticalBranch='burn'|'relay'|'mirror';
 export const opticalBranches={
  burn:{name:'灼热透镜',detail:'间隔-25% · 灼烧3×25% /0.3秒',role:'对重装与首领持续施压'},
  relay:{name:'分光镜组',detail:'间隔-25% · 侧束65%伤害 /横距180',role:'对侧翼敌人扩大覆盖'},
+ mirror:{name:'折返镜组',detail:'间隔-25% · 追加65%斜束，反射一次/最多2敌',role:'靠边改变光路，覆盖主束以外的敌人'},
 } as const;
 export const OPTICAL_FORK={burnTicks:3,burnInterval:.3,burnDamage:.25,relayRange:180,relayDamage:.65} as const;
 export type Route = 'ballistic' | 'electric' | 'optical';
@@ -53,7 +54,7 @@ export const tree: Record<Route, {name:string; detail:string}[]> = {
   ],
   optical: [
     {name:'聚焦镜组',detail:'立即解锁激光 · 激光伤害+15%'},
-    {name:'循环冷却 · 选择分支',detail:'间隔-25% · 二选一：灼烧/分光'},
+    {name:'循环冷却 · 选择分支',detail:'间隔-25% · 灼烧/分光/折返三选一'},
     {name:'深穿光束',detail:'贯穿+2 · 还可组合棱镜/电光连锁'},
   ],
 };
@@ -70,7 +71,7 @@ export class BuildTree {
   node(route:Route,index:number,branch:BuildBranch|undefined=route==='ballistic'?this.ballisticBranch:route==='electric'?this.electricBranch:this.opticalBranch){
     if(route==='ballistic'&&index===1&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))return ballisticBranches[branch];
     if(route==='electric'&&index===1&&(branch==='spread'||branch==='capacitor'||branch==='seeker'))return electricBranches[branch];
-    return route==='optical'&&index===1&&(branch==='burn'||branch==='relay')?opticalBranches[branch]:tree[route][index];
+    return route==='optical'&&index===1&&(branch==='burn'||branch==='relay'||branch==='mirror')?opticalBranches[branch]:tree[route][index];
   }
   readonly ranks: Record<Route,number> = {ballistic:0,electric:0,optical:0};
   readonly refinements: Record<Route,number> = {ballistic:0,electric:0,optical:0};
@@ -106,7 +107,7 @@ export class BuildTree {
     }else if(isMagneticAugment(branch)){
       if(route!=='electric'||this.ranks.electric<3||this.magneticAugment)return false;
       this.magneticAugment=branch;
-    }else if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;
+    }else if(branch!==undefined&&!(this.ranks[route]===1&&((route==='ballistic'&&(branch==='penetrator'||branch==='fragment'||branch==='ricochet'))||(route==='optical'&&(branch==='burn'||branch==='relay'||branch==='mirror'))||(route==='electric'&&(branch==='spread'||branch==='capacitor'||branch==='seeker')))))return false;
     if(route==='ballistic'&&this.ranks.ballistic===1){
       if(this.ballisticBranch)return false;
       this.ballisticBranch=branch==='ricochet'?'ricochet':branch==='fragment'?'fragment':'penetrator';
@@ -117,7 +118,7 @@ export class BuildTree {
     }
     if(route==='optical'&&this.ranks.optical===1){
       if(this.opticalBranch)return false;
-      this.opticalBranch=branch==='relay'?'relay':'burn';
+      this.opticalBranch=branch==='mirror'?'mirror':branch==='relay'?'relay':'burn';
     }
     if(this.ranks[route]<3)this.ranks[route]++;else this.refinements[route]++;return true;
   }

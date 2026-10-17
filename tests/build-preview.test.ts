@@ -12,7 +12,7 @@ it('never changes the run, rewards, pending events or RNG while inspecting every
   const unearned=new World();expect(buildPreview(unearned,'optical').valid).toBe(false);
 });
 it('matches the actual next combat profiles for all routes, forks, tiers and continued refinements',()=>{
-  for(const stage of [1,2,3])for(const route of routes)for(const branch of (route==='ballistic'?['penetrator','fragment','ricochet']:route==='electric'?['spread','capacitor','seeker']:['burn','relay']) as BuildBranch[]){
+  for(const stage of [1,2,3])for(const route of routes)for(const branch of (route==='ballistic'?['penetrator','fragment','ricochet']:route==='electric'?['spread','capacitor','seeker']:['burn','relay','mirror']) as BuildBranch[]){
     const w=new World();w.growth.stage=stage;w.growth.mastery=30;
     // Unit setup includes an already owned high-tier arc/scatter, not a playable-run claim.
     w.weaponKind=route==='electric'?'arc':'scatter';

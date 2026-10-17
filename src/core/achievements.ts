@@ -21,8 +21,9 @@ export const achievements = [
  {id:'bait-counter',name:'诱射反击',detail:'无伤避完斜射三连，再击毁同一哨机'},
  {id:'storm-specialist',name:'雷暴专研',detail:'主动通过串联或聚雷检验，证明精研能用'},
  {id:'storm-master',name:'雷暴双修',detail:'分别通过串联、聚雷检验，可跨局完成'},
+ {id:'wall-cutter',name:'借壁破阵',detail:'选择折返镜组，同一束光反射后命中两名敌人'},
 ] as const;
-export const achievementGroups={growth:{name:'成长',ids:['hunter','boss','arsenal','fracture']},build:{name:'构筑',ids:['specialist','hybrid','storm','proof','versatile','magnetic-master','storm-specialist','storm-master']},tactics:{name:'战术',ids:['tactician','disruptor','ace','flawless-ace','bank-shot','core-breaker','preempt-gun','bait-counter']}} as const;
+export const achievementGroups={growth:{name:'成长',ids:['hunter','boss','arsenal','fracture']},build:{name:'构筑',ids:['specialist','hybrid','storm','proof','versatile','magnetic-master','storm-specialist','storm-master']},tactics:{name:'战术',ids:['tactician','disruptor','ace','flawless-ace','bank-shot','core-breaker','preempt-gun','bait-counter','wall-cutter']}} as const;
 export type AchievementGroup=keyof typeof achievementGroups;
 export const achievementGroup=(id:string):AchievementGroup=>(Object.keys(achievementGroups) as AchievementGroup[]).find(g=>(achievementGroups[g].ids as readonly string[]).includes(id))??'growth';
 export interface Achievements {kills:number; bosses:number; unlocked:string[];certifiedBuilds:BuildProof[];magneticCertifications:MagneticAugment[];tracked:string|null}
@@ -46,12 +47,12 @@ export function achievementProgress(id:string,state:Achievements){
  if(id==='versatile')return !state.certifiedBuilds.length&&state.unlocked.includes('proof')?'0/3种 · 旧记录未分类型，请重新认证':`${Math.min(state.certifiedBuilds.length,3)}/3种 · 已认证：${state.certifiedBuilds.slice(0,2).map(k=>buildProofs[k].name).join(' / ')||'暂无'}${state.certifiedBuilds.length>2?'…':''}`;
  return state.unlocked.includes(id)?'挑战记录已保存在本机':'选择并完成对应挑战，自动记录';
 }
-export interface AchievementEvidence {lockPreemptWins?:number;lockBaitWins?:number;aceWins?:number;flawlessAceWins?:number;certifiedBuilds?:readonly BuildProof[];interceptorBreaks?:number;magneticCertifications?:readonly MagneticAugment[]}
+export interface AchievementEvidence {mirrorDoubleHits?:number;lockPreemptWins?:number;lockBaitWins?:number;aceWins?:number;flawlessAceWins?:number;certifiedBuilds?:readonly BuildProof[];interceptorBreaks?:number;magneticCertifications?:readonly MagneticAugment[]}
 export function awardAchievements(state:Achievements,ranks:Record<Route,number>,weapons:number,fractureBursts=0,tacticalWins=0,conduitTacticalWins=0,proofWins=0,evidence:AchievementEvidence={}){
  for(const kind of Object.keys(buildProofs) as BuildProof[])if(evidence.certifiedBuilds?.includes(kind)&&!state.certifiedBuilds.includes(kind))state.certifiedBuilds.push(kind);
  for(const kind of ['field-wide','field-link'] as const)if(evidence.magneticCertifications?.includes(kind)&&!state.magneticCertifications.includes(kind))state.magneticCertifications.push(kind);
  const values=Object.values(ranks),spent=values.reduce((a,b)=>a+b,0);
- const met=[state.kills>=100,state.bosses>=1,spent===3&&values.includes(3),spent===3&&values.every(v=>v===1),ranks.ballistic>=3&&ranks.electric>=1,fractureBursts>=10,weapons>=5,tacticalWins>0,conduitTacticalWins>0,proofWins>0,(evidence.aceWins??0)>0,(evidence.flawlessAceWins??0)>0,state.certifiedBuilds.length>=3,state.certifiedBuilds.includes('ricochet'),state.magneticCertifications.length>=2,(evidence.interceptorBreaks??0)>0,(evidence.lockPreemptWins??0)>0,(evidence.lockBaitWins??0)>0,state.certifiedBuilds.includes('storm-relay')||state.certifiedBuilds.includes('storm-focus'),state.certifiedBuilds.includes('storm-relay')&&state.certifiedBuilds.includes('storm-focus')];
+ const met=[state.kills>=100,state.bosses>=1,spent===3&&values.includes(3),spent===3&&values.every(v=>v===1),ranks.ballistic>=3&&ranks.electric>=1,fractureBursts>=10,weapons>=5,tacticalWins>0,conduitTacticalWins>0,proofWins>0,(evidence.aceWins??0)>0,(evidence.flawlessAceWins??0)>0,state.certifiedBuilds.length>=3,state.certifiedBuilds.includes('ricochet'),state.magneticCertifications.length>=2,(evidence.interceptorBreaks??0)>0,(evidence.lockPreemptWins??0)>0,(evidence.lockBaitWins??0)>0,state.certifiedBuilds.includes('storm-relay')||state.certifiedBuilds.includes('storm-focus'),state.certifiedBuilds.includes('storm-relay')&&state.certifiedBuilds.includes('storm-focus'),ranks.optical>=2&&(evidence.mirrorDoubleHits??0)>0];
  const fresh=achievements.filter((a,i)=>met[i]&&!state.unlocked.includes(a.id));
  state.unlocked.push(...fresh.map(a=>a.id));return fresh;
 }

@@ -1,0 +1,1 @@
+import{build}from'esbuild';await build({entryPoints:['tools/audit-mirror-laser.ts'],bundle:true,platform:'node',format:'esm',outfile:'build/qa/Stage-224/normal-audit.mjs'});await import('../build/qa/Stage-224/normal-audit.mjs');

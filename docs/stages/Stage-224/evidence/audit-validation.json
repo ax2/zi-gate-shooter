@@ -1,0 +1,56 @@
+{
+  "result": "passed",
+  "legacyFrames": [
+    {
+      "branch": "burn",
+      "frames": 18000,
+      "serializableWorldAndEffectsEqual": true
+    },
+    {
+      "branch": "relay",
+      "frames": 18000,
+      "serializableWorldAndEffectsEqual": true
+    }
+  ],
+  "physicalStreams": 7,
+  "randomSeeds": 2,
+  "normal": [
+    {
+      "seed": 1337,
+      "seconds": 600,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstHit": 40.299999999998995,
+      "firstDouble": 187.3666666667079,
+      "hits": 107,
+      "doubles": 5,
+      "bossWins": 6,
+      "peakBullets": 67
+    },
+    {
+      "seed": 9001,
+      "seconds": 600,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstHit": 40.299999999998995,
+      "firstDouble": 253.93333333342756,
+      "hits": 90,
+      "doubles": 1,
+      "bossWins": 6,
+      "peakBullets": 68
+    },
+    {
+      "seed": 1337,
+      "seconds": 1200,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstHit": 40.299999999998995,
+      "firstDouble": 187.3666666667079,
+      "hits": 279,
+      "doubles": 7,
+      "bossWins": 12,
+      "peakBullets": 67
+    }
+  ],
+  "limits": "Legacy check compares serializable World state and effect arrays, excluding new counters; JS private ledger is outside that serialization and is tested separately. Long run extends seed1337. Safe operator knows future hazards; virtual60Hz is not real device performance or human balance."
+}
