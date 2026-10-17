@@ -1,0 +1,28 @@
+import{CanvasRuntime as CurrentRuntime}from'../../src/game/canvas-runtime.ts';import{CanvasRuntime as OldRuntime}from'../../build/qa/Stage-241/baseline.mjs';import{createBrowserControls}from'../../src/game/browser-controls.ts';import{browserImage}from'../../src/game/browser-image.ts';import{defaults}from'../../src/ui/storage.ts';import{progressionTarget}from'../../tests/helpers/progression-driver.ts';
+const baseline=new URL(location.href).searchParams.get('version')==='old',gateTurn=new URL(location.href).searchParams.get('route')==='gate',Runtime=baseline?OldRuntime:CurrentRuntime;
+const canvas=document.querySelector('canvas'),advance=document.querySelector('#advance'),status=document.querySelector('#status');let stored=defaults(),clock=0,next=()=>{},frame=0,running=false,stage='menu';stored.openingWeapon='scatter';stored.nextBattlePlan=Number(new URL(location.href).searchParams.get('plan')??0);stored.settings.sound=false;stored.settings.shake=false;const history=[];let checkpoint=0,firstRef=null,secondRef=null,gateCount=null;const stops=['首炮入场','首炮实弹','后炮实弹','原双门结算'];
+const controls=createBrowserControls(canvas,name=>{if(!runtime.activateControl(name))throw Error('Rejected '+name);if(name==='start')freeze('run-started');else report();});
+const runtime=new Runtime({canvas,width:canvas.clientWidth,height:canvas.clientHeight,dpr:devicePixelRatio,menuBottom:0,image:src=>browserImage('/'+src),read:()=>stored,write:s=>stored=structuredClone(s),sound(){},silence(){},controls:controls.update,now:()=>clock,requestFrame:cb=>next=cb});
+function snapshot(){return{stage,baseline,gateTurn,firstGun:firstRef?structuredClone(firstRef):null,secondGun:secondRef?structuredClone(secondRef):null,gateCount,fixture:true,virtualClock:true,isolatedMemorySave:true,worldInjection:false,quality:runtime.save.settings.effects,round:runtime.world.round,roundTime:runtime.world.roundTime,visibleEnemies:runtime.world.bodies.filter(b=>b.active&&['drone','charger','armor','sniper','guard','elite','conduit'].includes(b.kind)&&b.y>=0&&b.y<=1280).map(b=>({kind:b.kind,x:b.x,y:b.y,hp:b.hp,pattern:b.pattern})),...runtime.diagnostics()};}
+function report(){document.querySelector('#quality').disabled=running;status.textContent=runtime.world.time.toFixed(4)+'秒 / '+stage+' / '+runtime.mode;advance.disabled=running||runtime.mode!=='playing'||checkpoint>=stops.length;}
+function freeze(s){running=false;stage=s;history.push(snapshot());report();}
+function action(a){if(!runtime.activateControl(a))throw Error('Rejected '+a);}
+function aim(x){const s=Math.min(canvas.clientWidth/720,canvas.clientHeight/1280),px=(canvas.clientWidth-720*s)/2,py=(canvas.clientHeight-1280*s)/2;if(runtime.pointer!==739)runtime.touchStart(739,px+runtime.world.player.x*s,py+900*s);runtime.touchMove(739,px+x*s,py+900*s);}
+function step(){const w=runtime.world;
+ if(runtime.mode==='choice'){const a=w.build.available(w.buildPoints),r=a.includes('electric')?'electric':a[0];if(r)action('build:'+r);}
+ if(runtime.mode==='branch')action('branch:'+(runtime.branchRoute==='ballistic'?(w.canFuseAmmo()?'fuse-fragment':w.canRefineFracture()?'fracture-line':w.canRefineStorm()?'storm-relay':'penetrator'):runtime.branchRoute==='electric'?(w.canRefineMagnetic()?'field-link':w.canRefineIon()?'ion-orb':'seeker'):w.canRefinePhoton()?'photon-reach':w.canFuseOptics()?'optic-mirror':'burn'));
+ if(runtime.mode==='boss-reward')action('boss-claim:research');
+ if(frame%6===0&&runtime.mode==='playing')aim(gateTurn&&w.round===3&&w.roundTime>=31.5&&w.roundTime<=32.05?222:progressionTarget(w));clock+=1000/60;next(clock);frame++;
+ if(w.round===3){
+  firstRef??=w.bodies.find(b=>b.active&&b.kind==='armor'&&b.y>=300&&b.y<310&&w.roundTime>=28.8&&w.roundTime<31)??null;
+  secondRef??=w.bodies.find(b=>b.active&&b.kind==='armor'&&b.id!==firstRef?.id&&b.y>=350&&b.y<360&&w.roundTime>=30.1&&w.roundTime<34)??null;
+  if(gateCount===null&&(firstRef||baseline&&w.roundTime>=28.8))gateCount=w.gatesTaken;
+  const firstShots=firstRef&&w.bullets.some(b=>b.hostile&&b.sourceId===firstRef.id),secondShots=secondRef&&w.bullets.some(b=>b.hostile&&b.sourceId===secondRef.id);
+  let ready=baseline?(checkpoint<3?w.roundTime>=[28.9,29.49,31.04][checkpoint]:w.gatesTaken>gateCount||w.roundTime>=34):checkpoint===0?firstRef&&firstRef.age>=.1:checkpoint===1?firstShots||firstRef&&!firstRef.active:checkpoint===2?secondShots||secondRef&&!secondRef.active:w.gatesTaken>gateCount||w.roundTime>=34;
+  if(ready){const label=baseline?(checkpoint===3&&w.gatesTaken===gateCount?'旧版原双门未领取':stops[checkpoint]):checkpoint===1&&!firstShots?'首炮已抢拆':checkpoint===2&&!secondShots?'后炮已抢拆':checkpoint===3&&w.gatesTaken===gateCount?'原双门未领取':stops[checkpoint];checkpoint++;freeze(label);return;}
+ }
+ if(w.time>=450||['result','error'].includes(runtime.mode)){freeze('finished');return;}report();
+}
+function pump(){if(!running)return;for(let i=0;i<180&&running;i++)step();if(running)requestAnimationFrame(pump);}
+advance.onclick=()=>{running=true;report();requestAnimationFrame(pump);};document.querySelector('#quality').onclick=()=>{runtime.save.settings.effects=runtime.save.settings.effects==='weak'?'standard':'weak';runtime.resize(canvas.clientWidth,canvas.clientHeight,devicePixelRatio);report();};
+window.addEventListener('resize',()=>{if(canvas.clientWidth>0&&canvas.clientHeight>0)runtime.resize(canvas.clientWidth,canvas.clientHeight,devicePixelRatio);});Object.defineProperty(window,'__heavyPushEvidence',{value:()=>({history,current:snapshot(),physical:JSON.parse(JSON.stringify(runtime.world,(_k,v)=>v instanceof Map?[...v]:v instanceof Set?[...v]:v))})});await runtime.load();report();
