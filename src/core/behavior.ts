@@ -1,4 +1,4 @@
-import {FIRE_CONTROL,fireControlHolding,fireControlSource} from './fire-control';
+import {FIRE_CONTROL,fireControlHolding,fireControlSource,patrolControl} from './fire-control';
 import {LOCKSHOT,FORKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
 import {driftOffset} from './drift-supply';
 import {SUPPLY_CONVOY} from './supply-convoy';
@@ -42,6 +42,7 @@ export function bossAttackForCycle(variant: number | undefined, cycle: number,co
 export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number, emit: EnemyShot, formation:readonly Body[]=[]) {
   // Instant weapons resolve before movement: a killed emitter cannot launch a new volley.
   if(!b.active)return;
+  patrolControl(b,dt);
   if(b.pattern==='fire-control'&&b.kind==='armor')b.controlLinked=!!fireControlSource(b,formation);
   const scale=b.shotScale??1;
   const shot:EnemyShot=scale===1?emit:(x,y,vx=0,vy=280)=>emit(x,y,vx*scale,vy*scale);

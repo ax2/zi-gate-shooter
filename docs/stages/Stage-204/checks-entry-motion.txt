@@ -1,0 +1,28 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/control-patrol.test.mjs tests/fire-control.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/fire-control.test.ts (10 tests | 1 failed) 143ms
+   × changes the heavy 55.5 phrase and only the following shield position across 108 authored schedules, retaining reward windows and unit count with later fork metadata and explicit mid-gate retiming normalized 36ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fire-control.test.ts > changes the heavy 55.5 phrase and only the following shield position across 108 authored schedules, retaining reward windows and unit count with later fork metadata and explicit mid-gate retiming normalized
+AssertionError: {"round":8,"seed":1,"plan":0,"count":60,"keepHash":"4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be","oldGroup":[],"rewards":[{"at":8,"kind":"crate","x":240,"stage":2},{"at":16,"kind":"armory","x":360,"pattern":"drift-supply"},{"at":20,"kind":"gates","x":360},{"at":27,"kind":"gates","x":360,"pair":true},{"at":48,"kind":"armory","x":360,"stage":3,"convoy":true},{"at":49.2,"kind":"gates","x":500},{"at":58,"kind":"gates","x":360,"pair":true}]}: expected '6df97e9a688a907cd787bc37a0d45c7158a30…' to be '4e774c387134428a124f1660258823b3d1427…' // Object.is equality
+
+Expected: "4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be"
+Received: "6df97e9a688a907cd787bc37a0d45c7158a30896d0e530a4a4ac63f20ad03cb6"
+
+ ❯ tests/fire-control.test.ts:8:695
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 21 passed (22)
+   Start at  11:17:17
+   Duration  22.55s (tests 95%, transform 4%, import 1%)
+

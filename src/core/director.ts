@@ -1,4 +1,4 @@
-import {FIRE_CONTROL} from './fire-control';
+import {FIRE_CONTROL,hasControlPatrol} from './fire-control';
 import {LOCKSHOT} from './lockshot';
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
 import {BATTERY} from './battery';
@@ -7,7 +7,7 @@ import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen,hasRotatingShields,ROTATING_SHIELD} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const MID_GATE_AT=39;
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
@@ -216,6 +216,10 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     guns.forEach((s,i)=>Object.assign(s,{x:mirror?720-FIRE_CONTROL.gunX:FIRE_CONTROL.gunX,dropY:FIRE_CONTROL.gunYs[i],pattern:'fire-control',dropLabel:undefined,dropDetail:undefined}));
     const relay=group.find(s=>s.kind==='drone');
     if(relay)Object.assign(relay,{kind:'conduit',x:mirror?720-FIRE_CONTROL.relayX:FIRE_CONTROL.relayX,dropY:FIRE_CONTROL.relayY,pattern:'fire-control',dropLabel:'火控中继编队',dropDetail:'中继增幅双炮 · 击破可停火断供'});
+    if(hasControlPatrol(round)){
+      if(guns[1])guns[1].controlPatrol=true;
+      if(relay){relay.dropLabel='游弋火控';relay.dropDetail='后炮横移 · 越界失去增幅 · 中继可拆';}
+    }
     const screen=out.find(s=>s.kind==='guard'&&s.at===56);if(screen)screen.x=mirror?720-FIRE_CONTROL.screenX:FIRE_CONTROL.screenX;
   }
   return out.sort((a, b) => a.at - b.at);

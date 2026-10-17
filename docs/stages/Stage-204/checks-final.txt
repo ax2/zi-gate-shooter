@@ -1,0 +1,46 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/control-patrol.test.mjs tests/control-patrol-render.test.ts tests/storm-refinement.test.ts tests/storm-runtime.test.ts tests/fairness.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/control-patrol.test.mjs (12 tests | 9 failed) 21236ms
+   × no-kill full R6 route seed1 from68 483ms
+   × no-kill full R6 route seed1 from360 331ms
+   × no-kill full R6 route seed1 from652 269ms
+   × no-kill full R6 route seed29 from68 306ms
+   × no-kill full R6 route seed29 from360 304ms
+   × no-kill full R6 route seed29 from652 229ms
+   × no-kill full R6 route seed1337 from68 303ms
+   × no-kill full R6 route seed1337 from360 302ms
+   × no-kill full R6 route seed1337 from652 228ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed1 from68
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed1 from360
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed29 from68
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed29 from360
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed1337 from68
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed1337 from360
+AssertionError: t=56.91666666666472: expected 0 to be greater than 0
+ ❯ tests/control-patrol.test.mjs:12:216
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed1 from652
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed29 from652
+ FAIL  tests/control-patrol.test.mjs > no-kill full R6 route seed1337 from652
+AssertionError: t=46.299999999998654: expected 0 to be greater than 0
+ ❯ tests/control-patrol.test.mjs:12:216
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  9 failed | 45 passed (54)
+   Start at  11:19:07
+   Duration  180.77s (tests 99%, transform 1%)
+

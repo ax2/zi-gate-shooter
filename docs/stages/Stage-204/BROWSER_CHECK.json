@@ -1,0 +1,53 @@
+{
+  "entry": {
+    "id": 19427,
+    "kind": "armor",
+    "patrol": true,
+    "home": 440,
+    "x": 450.9779197169108,
+    "y": 350,
+    "hp": 2160,
+    "maxHp": 2160,
+    "age": 0.05,
+    "warning": 0,
+    "group": 6,
+    "source": 19428,
+    "emp": 0,
+    "shots": 0,
+    "boosted": 0
+  },
+  "disconnected": {
+    "id": 19427,
+    "kind": "armor",
+    "patrol": true,
+    "home": 440,
+    "x": 516.5623378265616,
+    "y": 350,
+    "hp": 2160,
+    "maxHp": 2160,
+    "age": 0.3833333333333333,
+    "warning": 1,
+    "group": 6,
+    "emp": 0,
+    "shots": 0,
+    "boosted": 0
+  },
+  "actualShot": {
+    "id": 19427,
+    "kind": "armor",
+    "patrol": true,
+    "home": 440,
+    "x": 526.5771707766264,
+    "y": 350,
+    "hp": 1712.1239999999998,
+    "maxHp": 2160,
+    "age": 1.1500000000000008,
+    "warning": 0,
+    "group": 6,
+    "emp": 0,
+    "shots": 1,
+    "boosted": 0
+  },
+  "weakPhysicalEqual": true,
+  "crossViewportPhysicalEqualityClaimed": false
+}

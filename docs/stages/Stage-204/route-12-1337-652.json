@@ -1,0 +1,16 @@
+{
+  "round": 12,
+  "seed": 1337,
+  "start": 652,
+  "hp": 3,
+  "time": 71.9999999999972,
+  "patrols": [
+    {
+      "xMin": 328,
+      "xMax": 552,
+      "shots": 4
+    }
+  ],
+  "peakBodies": 14,
+  "peakBullets": 9
+}

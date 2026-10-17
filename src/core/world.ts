@@ -46,7 +46,7 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
+  controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; bossVariant?: number;
 }
 export interface Bullet {
@@ -606,14 +606,14 @@ export class World {
           const group=[s];while(this.scheduled[this.scheduleIndex+group.length-1]?.pattern==='fire-control'&&this.scheduled[this.scheduleIndex+group.length-1]?.at===s.at)group.push(this.scheduled[this.scheduleIndex+group.length-1]);
           if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.length>C.limits.enemies){this.scheduleIndex--;break;}
           const units=group.map(spawn=>{
-            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);b.pattern='fire-control';b.controlGroup=this.round;b.dropGrace=SWARM.grace;b.timer=FIRE_CONTROL.opening;
+            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);b.pattern='fire-control';b.controlGroup=this.round;if(spawn.controlPatrol){b.controlPatrol=true;b.controlHomeX=spawn.x;}b.dropGrace=SWARM.grace;b.timer=FIRE_CONTROL.opening;
             b.hp*=b.kind==='armor'?FIRE_CONTROL.durability:FIRE_CONTROL.relayDurability;b.maxHp=b.hp;
             return b;
           });
           const longest=units.reduce((a,b)=>(C.playerY-a.y)/a.speed>(C.playerY-b.y)/b.speed?a:b);
           if(!this.admit(longest)){for(const b of units)b.active=false;this.scheduleIndex--;break;}
           this.scheduleIndex+=group.length-1;this.dropSpawns+=units.length;
-          this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'火控中继编队',detail:'中继增幅双炮 · 击破可停火断供'});
+          this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:units.some(b=>b.controlPatrol)?'游弋火控':'火控中继编队',detail:units.some(b=>b.controlPatrol)?'后炮横移 · 越界失去增幅 · 中继可拆':'中继增幅双炮 · 击破可停火断供'});
           continue;
         }
         if (s.kind === 'armory') {

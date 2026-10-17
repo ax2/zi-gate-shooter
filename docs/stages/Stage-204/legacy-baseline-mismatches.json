@@ -1,0 +1,132 @@
+{
+  "baseline": "6e1aee6",
+  "cases": 108,
+  "failures": [
+    {
+      "round": 8,
+      "seed": 1,
+      "plan": 0,
+      "expected": "4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be",
+      "baseline": "6df97e9a688a907cd787bc37a0d45c7158a30896d0e530a4a4ac63f20ad03cb6"
+    },
+    {
+      "round": 8,
+      "seed": 1,
+      "plan": 1,
+      "expected": "11d5eed7b89b3b9e7631622ea095f30b42da164c97eae68405fc871809912c26",
+      "baseline": "0dde6ebe3481b27434f8f21dd66ec315225c6e4513540a8835093ce7ba780d03"
+    },
+    {
+      "round": 8,
+      "seed": 1,
+      "plan": 2,
+      "expected": "feeb60041ac4a146bda86b49fee2cf2019ac4684c228190fe2d70145f82caa60",
+      "baseline": "5092c0f8c2846770950c73480c8f8b8cd1674936edbc1dd8d0cd4ced97273f90"
+    },
+    {
+      "round": 8,
+      "seed": 77,
+      "plan": 0,
+      "expected": "4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be",
+      "baseline": "6df97e9a688a907cd787bc37a0d45c7158a30896d0e530a4a4ac63f20ad03cb6"
+    },
+    {
+      "round": 8,
+      "seed": 77,
+      "plan": 1,
+      "expected": "11d5eed7b89b3b9e7631622ea095f30b42da164c97eae68405fc871809912c26",
+      "baseline": "0dde6ebe3481b27434f8f21dd66ec315225c6e4513540a8835093ce7ba780d03"
+    },
+    {
+      "round": 8,
+      "seed": 77,
+      "plan": 2,
+      "expected": "feeb60041ac4a146bda86b49fee2cf2019ac4684c228190fe2d70145f82caa60",
+      "baseline": "5092c0f8c2846770950c73480c8f8b8cd1674936edbc1dd8d0cd4ced97273f90"
+    },
+    {
+      "round": 8,
+      "seed": 1337,
+      "plan": 0,
+      "expected": "4e774c387134428a124f1660258823b3d142767d9e9f0970d833c53c34ad91be",
+      "baseline": "6df97e9a688a907cd787bc37a0d45c7158a30896d0e530a4a4ac63f20ad03cb6"
+    },
+    {
+      "round": 8,
+      "seed": 1337,
+      "plan": 1,
+      "expected": "11d5eed7b89b3b9e7631622ea095f30b42da164c97eae68405fc871809912c26",
+      "baseline": "0dde6ebe3481b27434f8f21dd66ec315225c6e4513540a8835093ce7ba780d03"
+    },
+    {
+      "round": 8,
+      "seed": 1337,
+      "plan": 2,
+      "expected": "feeb60041ac4a146bda86b49fee2cf2019ac4684c228190fe2d70145f82caa60",
+      "baseline": "5092c0f8c2846770950c73480c8f8b8cd1674936edbc1dd8d0cd4ced97273f90"
+    },
+    {
+      "round": 11,
+      "seed": 1,
+      "plan": 0,
+      "expected": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+      "baseline": "72e4656527c53334d129e7ed0a73cd6485100d24b03baf50eb4ed67d93fa1ac4"
+    },
+    {
+      "round": 11,
+      "seed": 1,
+      "plan": 1,
+      "expected": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+      "baseline": "d011dfc4ef31c9d21d41eb878cfa89d89eb22f882dfb5751b4f647b737371ddc"
+    },
+    {
+      "round": 11,
+      "seed": 1,
+      "plan": 2,
+      "expected": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+      "baseline": "4d3bd7e8f9eb578752fe6009e6b31489ee4b12b693f9bea70bdf9d45b985b956"
+    },
+    {
+      "round": 11,
+      "seed": 77,
+      "plan": 0,
+      "expected": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+      "baseline": "72e4656527c53334d129e7ed0a73cd6485100d24b03baf50eb4ed67d93fa1ac4"
+    },
+    {
+      "round": 11,
+      "seed": 77,
+      "plan": 1,
+      "expected": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+      "baseline": "d011dfc4ef31c9d21d41eb878cfa89d89eb22f882dfb5751b4f647b737371ddc"
+    },
+    {
+      "round": 11,
+      "seed": 77,
+      "plan": 2,
+      "expected": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+      "baseline": "4d3bd7e8f9eb578752fe6009e6b31489ee4b12b693f9bea70bdf9d45b985b956"
+    },
+    {
+      "round": 11,
+      "seed": 1337,
+      "plan": 0,
+      "expected": "617d8ffddb2643922cf6d3f68e75b39d8f33b47131696d9330a6ba93b582ea9e",
+      "baseline": "72e4656527c53334d129e7ed0a73cd6485100d24b03baf50eb4ed67d93fa1ac4"
+    },
+    {
+      "round": 11,
+      "seed": 1337,
+      "plan": 1,
+      "expected": "0ce0248a78b07fe6de1b3392cb0305bdbf92a254033e93d57b1d8dbced0d4360",
+      "baseline": "d011dfc4ef31c9d21d41eb878cfa89d89eb22f882dfb5751b4f647b737371ddc"
+    },
+    {
+      "round": 11,
+      "seed": 1337,
+      "plan": 2,
+      "expected": "2b753a92d216cd57d3d883529de635f3ee47480b5380f31e8d006192f3981267",
+      "baseline": "4d3bd7e8f9eb578752fe6009e6b31489ee4b12b693f9bea70bdf9d45b985b956"
+    }
+  ]
+}

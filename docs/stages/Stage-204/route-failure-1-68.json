@@ -1,0 +1,49 @@
+{
+  "time": 56.91666666666472,
+  "roundTime": 56.91666666666472,
+  "bodies": 6,
+  "previousCount": 7,
+  "patrol": [
+    {
+      "id": 529,
+      "kind": "armor",
+      "x": 479.45200536717823,
+      "y": 350,
+      "px": 482.86054442489007,
+      "py": 350,
+      "width": 86,
+      "height": 102,
+      "hp": 2160,
+      "maxHp": 2160,
+      "speed": 126.49999999999999,
+      "active": true,
+      "age": 1.4166666666666665,
+      "timer": 2.9333333333333345,
+      "warning": 0,
+      "hit": 0,
+      "shotScale": 1.3,
+      "deploying": false,
+      "energy": 0,
+      "row": 0,
+      "stage": 2,
+      "rewardKind": "power",
+      "attack": 0,
+      "lane": 440,
+      "attackCycle": 0,
+      "burst": 0,
+      "pattern": "fire-control",
+      "controlGroup": 6,
+      "controlPatrol": true,
+      "controlHomeX": 440,
+      "dropGrace": 0,
+      "controlLinked": true,
+      "controlShots": 1
+    }
+  ],
+  "player": {
+    "x": 189.66666666666669,
+    "px": 189.66666666666669,
+    "hp": 3,
+    "invulnerable": 0
+  }
+}
