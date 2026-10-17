@@ -1,4 +1,5 @@
 import {C} from '../core/config';
+import {arcFilaments} from './arc-filaments';
 import type { WeaponKind } from '../core/weapons';
 import { weaponColors } from '../core/weapons';
 
@@ -47,12 +48,24 @@ export function coilDischarge(c: CanvasRenderingContext2D, x: number, y: number,
 }
 
 export function chainArc(c: CanvasRenderingContext2D, x:number,y:number,tx:number,ty:number,life:number,weak:boolean,photon=false,seeker=false) {
-  const dx=tx-x,dy=ty-y,length=Math.max(1,Math.hypot(dx,dy)),points=[x,y];
-  for(let i=1;i<8;i++){const bend=(i%2?1:-1)*7;points.push(x+dx*i/8-dy/length*bend,y+dy*i/8+dx/length*bend);}
-  points.push(tx,ty);c.save();c.globalCompositeOperation='lighter';
-  c.globalAlpha=Math.max(0,life/(photon?.24:.16))*(weak?.65:1);
-  if(!weak)line(c,photon?'#b5a8ff33':seeker?'#ffc76028':'#80ff8028',photon?12:10,points);
-  line(c,photon?'#83eaff':seeker?'#ffda92':'#9fffad',weak?2:photon?4:3,points);line(c,photon?'#fff1ff':'#f5ffed',photon?1.5:1,points);
+  const f=arcFilaments(x,y,tx,ty,life,photon?.24:.16,weak,photon?'photon':seeker?'seeker':'electric');if(!f)return;
+  const tint=photon?'#83eaff':seeker?'#ffda92':'#9fffad',core=photon?'#fff1ff':'#f5ffed';
+  c.save();c.beginPath();c.rect(0,C.playerShotTop,C.width,C.height-C.playerShotTop);c.clip();c.lineCap='round';c.lineJoin='round';
+  c.globalCompositeOperation='source-over';c.globalAlpha=f.alpha*(weak?.6:.75);
+  line(c,photon?'#243550':seeker?'#49391d':'#193c32',weak?4:7,f.main);
+  c.globalCompositeOperation='lighter';c.globalAlpha=f.alpha*(weak?.65:.9);
+  if(!weak)line(c,photon?'#b5a8ff24':seeker?'#ffc76020':'#80ff8020',photon?13:11,f.main);
+  line(c,tint,weak?2:photon?5:seeker?3.5:4,f.main);line(c,core,weak?.8:photon?1.5:1.1,f.main);
+  for(const fork of f.forks){
+    c.globalAlpha=f.alpha*.65;line(c,tint,2,fork);
+    c.globalAlpha=f.alpha*.75;line(c,core,.65,fork.slice(0,4));
+  }
+  if(f.rail){c.globalAlpha=f.alpha*.8;line(c,'#d4a5ff',1.5,f.rail);}
+  // A short contact corona belongs only to the real end of this settled link.
+  c.globalAlpha=f.alpha*(weak?.45:.7);c.strokeStyle=tint;c.lineWidth=weak?1:1.5;
+  const radius=4+f.age*7;
+  for(let i=0;i<(weak?1:3);i++){const a=i*Math.PI*2/3+f.age*2;c.beginPath();c.arc(tx,ty,radius,a,a+.7);c.stroke();}
+  c.globalAlpha=f.alpha*(weak?.65:.9);
   if(seeker){c.strokeStyle='#fff0c5';c.lineWidth=weak?1:2;for(const side of [-1,1]){c.beginPath();c.moveTo(tx+side*12,ty-8);c.lineTo(tx+side*6,ty);c.lineTo(tx+side*12,ty+8);c.stroke();}}
   if(photon){const r=6+(1-life/.24)*8;c.strokeStyle='#d8bdff';c.lineWidth=1.5;c.beginPath();c.moveTo(x,y-r);c.lineTo(x+r,y);c.lineTo(x,y+r);c.lineTo(x-r,y);c.closePath();c.stroke();}
   c.restore();

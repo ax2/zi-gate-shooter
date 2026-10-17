@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.SIGNAL_SECONDS??'300';await build({entryPoints:['tools/audit-arc-filaments.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-234/audit-${suffix}.mjs`});await import(`../build/qa/Stage-234/audit-${suffix}.mjs`);
