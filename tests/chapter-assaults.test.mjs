@@ -14,11 +14,11 @@ it('adds three distinct combat phrases and preserves every existing enemy, speci
 });
 it('gives the three sectors different target mixes, movement and counts, with a gentler first-chapter ramp',()=>{
  const counts=[1,2,3,4].map(r=>chapterAssaults(r,false,0));
- expect(counts.map(s=>s.length)).toEqual([24,27,27,36]);
+ expect(counts.map(s=>s.length)).toEqual([30,30,30,40]);
  expect(new Set(counts[0].map(s=>s.kind))).toEqual(new Set(['drone','armor']));
- expect(counts[1].filter(s=>s.kind==='charger')).toHaveLength(7);
+ expect(counts[1].filter(s=>s.kind==='charger')).toHaveLength(8);
  expect(counts[1].filter(s=>s.kind==='charger').every(s=>s.pattern==='flank'&&s.lane!==s.x)).toBe(true);
- expect(counts[2].filter(s=>s.kind==='armor')).toHaveLength(9);
+ expect(counts[2].filter(s=>s.kind==='armor')).toHaveLength(10);
  expect(counts[2].every(s=>s.kind!=='charger')).toBe(true);
  expect(chapterAssaults(4,false,1)).not.toEqual(counts[3]);
 });

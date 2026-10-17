@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.ROTATION_MODE==='routes'?'routes':process.env.ROTATION_SECONDS??'300';await build({entryPoints:['tools/audit-assault-rotation.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-231/audit-${suffix}.mjs`});await import(`../build/qa/Stage-231/audit-${suffix}.mjs`);

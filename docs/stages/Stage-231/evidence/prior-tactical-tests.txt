@@ -1,0 +1,75 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/stage231-prior-tactical.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/stage231-prior-tactical.test.ts (3 tests | 3 failed) 112ms
+   × authors two finite, differently shaped chapter phrases while preserving the first chapter and original rewards 20ms
+   × moves a finite existing opening and tail roster into visible protected entry, without altering reward windows 2ms
+   × uses real chapter health, local protection and a single announcement after actual admission 88ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/stage231-prior-tactical.test.ts > authors two finite, differently shaped chapter phrases while preserving the first chapter and original rewards
+AssertionError: expected [ …(5) ] to have a length of 7 but got 5
+
+- Expected
++ Received
+
+- 7
++ 5
+
+ ❯ tests/stage231-prior-tactical.test.ts:6:20
+      4|  for(const [round,count,first] of [[2,8,'sniper'],[3,7,'armor'],[4,8,'…
+      5|   for(const seed of [1,77,1337]){const list=timeline(round,seed),phras…
+      6|    expect(phrases).toHaveLength(count);expect(phrases[0].kind).toBe(fi…
+       |                    ^
+      7|    expect(phrases.every(s=>s.drop&&s.x>=180&&s.x<=540&&s.dropY!>=320&&…
+      8|    expect(list.filter(s=>s.kind==='armory')).toHaveLength(2);expect(li…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/stage231-prior-tactical.test.ts > moves a finite existing opening and tail roster into visible protected entry, without altering reward windows
+AssertionError: expected [ …(37) ] to have a length of 16 but got 37
+
+- Expected
++ Received
+
+- 16
++ 37
+
+ ❯ tests/stage231-prior-tactical.test.ts:14:18
+     12| it('moves a finite existing opening and tail roster into visible prote…
+     13|  for(const [round,count] of [[2,16],[3,13],[4,22]] as const){const lis…
+     14|   expect(bridge).toHaveLength(count);expect(bridge.every(s=>s.dropY===…
+       |                  ^
+     15|   expect(list.filter(s=>['crate','gates','armory'].includes(s.kind)).e…
+     16|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/stage231-prior-tactical.test.ts > uses real chapter health, local protection and a single announcement after actual admission
+AssertionError: expected 489.59999999999997 to be 163.2 // Object.is equality
+
+- Expected
++ Received
+
+- 163.2
++ 489.59999999999997
+
+ ❯ tests/stage231-prior-tactical.test.ts:23:93
+     21|   w.step(C.step,68);const bodies=w.bodies.filter(b=>b.active&&b.kind i…
+     22|   expect(bodies.length).toBeGreaterThan(0);expect(bodies.every(b=>b.y>…
+     23|   const control=new World(1337,round).spawn(first.kind,first.x,first.y…
+       |                                                                                             ^
+     24|   const events=w.drainEffects();expect(events.filter(e=>e.type==='drop…
+     25|   for(let i=0;i<5;i++)w.step(C.step,68);expect(w.drainEffects().some(e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  01:15:52
+   Duration  1.11s (transform 69%, import 16%, tests 14%, worker 1%)

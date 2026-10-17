@@ -1,0 +1,73 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/stage231-prior-mobile-sentry.test.ts tests/stage231-prior-sweeper.test.ts -t replaces exactly|preserves early
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/stage231-prior-sweeper.test.ts (0 test)
+ ❯ tests/stage231-prior-mobile-sentry.test.ts (5 tests | 1 failed | 4 skipped) 26ms
+   × replaces exactly one existing later-chapter sentry while preserving rewards and the first chapter 24ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/stage231-prior-sweeper.test.ts [ tests/stage231-prior-sweeper.test.ts ]
+Error: Transform failed with 3 errors:
+
+[PARSE_ERROR] Identifier `oldPath` has already been declared
+ - `oldPath` has already been declared here in tests/stage231-prior-sweeper.test.ts at 206..213
+   ╭─[ tests/stage231-prior-sweeper.test.ts:2:245 ]
+   │
+ 2 │ import {it,expect} from 'vitest';import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';import type {Spawn} from '../src/core/director';const oldPath='../build/qa/Stage-231/baseline.mjs';const {World,timeline}=await import(oldPath);const oldPath='../build/qa/Stage-231/baseline.mjs';const {World,timeline}=await import(oldPath);import {C} from '../src/core/config';import {advanceBody} from '../src/core/behavior';import {SWEEPER,sweeperDirection} from '../src/core/sweeper';import {safeRoute,dangerTimeline} from '../src/core/reachability';
+   │                                                                                                                                                                                                                                                     ───┬───
+   │                                                                                                                                                                                                                                                        ╰───── It can not be redeclared here
+───╯
+
+[PARSE_ERROR] Identifier `World` has already been declared
+ - `World` has already been declared here in tests/stage231-prior-sweeper.test.ts at 258..263
+   ╭─[ tests/stage231-prior-sweeper.test.ts:2:297 ]
+   │
+ 2 │ import {it,expect} from 'vitest';import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';import type {Spawn} from '../src/core/director';const oldPath='../build/qa/Stage-231/baseline.mjs';const {World,timeline}=await import(oldPath);const oldPath='../build/qa/Stage-231/baseline.mjs';const {World,timeline}=await import(oldPath);import {C} from '../src/core/config';import {advanceBody} from '../src/core/behavior';import {SWEEPER,sweeperDirection} from '../src/core/sweeper';import {safeRoute,dangerTimeline} from '../src/core/reachability';
+   │                                                                                                                                                                                                                                                                                                         ──┬──
+   │                                                                                                                                                                                                                                                                                                           ╰──── It can not be redeclared here
+───╯
+
+[PARSE_ERROR] Identifier `timeline` has already been declared
+ - `timeline` has already been declared here in tests/stage231-prior-sweeper.test.ts at 264..272
+ - It can not be redeclared here in tests/stage231-prior-sweeper.test.ts at 360..368
+
+  Plugin: vite:oxc
+  File: C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter/tests/stage231-prior-sweeper.test.ts
+ ❯ transformWithOxc node_modules/vite/dist/node/chunks/node.js:7581:19
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/node.js:7653:26
+ ❯ EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/node.js:8545:51
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/node.js:20184:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/stage231-prior-mobile-sentry.test.ts > replaces exactly one existing later-chapter sentry while preserving rewards and the first chapter
+AssertionError: expected [ …(4) ] to have a length of 1 but got 4
+
+- Expected
++ Received
+
+- 1
++ 4
+
+ ❯ tests/stage231-prior-mobile-sentry.test.ts:12:18
+     10|  for(let round=2;round<=16;round++)for(const seed of [1,77,1337]){
+     11|   const all=timeline(round,seed),mobile=all.filter(s=>s.pattern==='rel…
+     12|   expect(mobile).toHaveLength(1);expect(mobile[0].kind).toBe('sniper')…
+       |                  ^
+     13|   expect(all.filter(s=>s.kind==='armory')).toHaveLength(2);expect(all.…
+     14|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  1 failed | 4 skipped (5)
+   Start at  01:19:04
+   Duration  1.46s (transform 81%, import 13%, worker 3%, tests 2%)
