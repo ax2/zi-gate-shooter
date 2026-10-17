@@ -1,3 +1,4 @@
+import {RapidBreak} from './rapid-break';
 import{BOOSTER}from'./booster';
 import{counterTitle}from'./boss-counter';
 import {hasControlShutter}from'./control-shutter';
@@ -570,6 +571,7 @@ export class World {
   effects: EffectEvent[] = [];
   phase: Phase = 'running';
   round = 1; time = 0; roundTime = 0; phaseTime = 0; score = 0;
+  readonly rapidBreak = new RapidBreak();
   lockshotSpawns=0;lockshotShots=0;
   shots = 0; hits = 0; kills = 0; cratesBroken = 0; pickups = 0; gatesTaken = 0;
   lastEquipmentPickup?:{id:number;row:number;kind?:WeaponKind;refit:boolean;time:number;x:number;y:number};
@@ -1205,6 +1207,7 @@ export class World {
       if(b.dropGrace!==undefined)this.dropKills++;
       if(b.kind==='conduit')this.dischargeConduit(b);
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
+      if(b.kind!=='boss')this.score += this.rapidBreak.kill(this.time);
       this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind, bossVariant: b.bossVariant });
       if (b.kind === 'boss') this.bossVictory = true;
       else if(b.escort){

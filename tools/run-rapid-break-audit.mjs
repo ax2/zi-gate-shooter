@@ -1,0 +1,1 @@
+import{build}from'esbuild';await build({entryPoints:['tools/audit-rapid-break.ts'],bundle:true,platform:'node',format:'esm',outfile:'build/qa/Stage-238/audit.mjs'});await import('../build/qa/Stage-238/audit.mjs');

@@ -1189,7 +1189,16 @@ export class CanvasRuntime {
     const boss=w.bodies.find(b=>b.active&&b.kind==='boss');
     this.rect(0, 0, 720, y + (boss?210:162), '#08131be8');
     this.text('分数', 30, y + 6, 20, '#91adbf', 'left');
-    this.text(w.score.toString().padStart(6, '0'), 28, y + 43, 42, '#e9f6ff', 'left', true);
+    const score=w.score.toString().padStart(6,'0');
+    this.text(score,28,y+43,score.length<=6?42:Math.max(12,260/score.length),'#e9f6ff','left',true);
+    const rapid=w.rapidBreak.readout(w.time);
+    if(rapid){
+      const c=this.ctx,x=216,top=y+14,width=142,height=48;
+      c.save();const metal=c.createLinearGradient(x,top,x,top+height);metal.addColorStop(0,'#5d4c32');metal.addColorStop(.15,'#253541');metal.addColorStop(.6,'#101e2a');metal.addColorStop(1,'#3c423d');c.fillStyle=metal;
+      c.beginPath();c.moveTo(x+7,top);c.lineTo(x+width,top);c.lineTo(x+width,top+height-7);c.lineTo(x+width-7,top+height);c.lineTo(x,top+height);c.lineTo(x,top+7);c.closePath();c.fill();c.strokeStyle='#b79351';c.lineWidth=1.5;c.stroke();
+      for(let i=0;i<3;i++)this.rect(x+12+i*41,top+4,32,2,rapid.count>=[3,6,9][i]?'#ffd67d':'#536068');
+      this.text(`${rapid.count}连破 +${rapid.bonus}`,x+width/2,top+27,21,'#ffe3a0','center',true);c.restore();
+    }
     this.text('◈ '.repeat(w.player.hp) + '◇ '.repeat(3 - w.player.hp), 430, y + 35, 34, '#82deff');
     this.rect(624, y + 2, 64, 64, '#1a2e3e'); this.text('Ⅱ', 656, y + 34, 36);
     this.buttons.push({ x: 624, y: y + 2, w: 64, h: 64, label: '暂停', action: 'pause' });
@@ -1423,7 +1432,7 @@ export class CanvasRuntime {
       this.text(row.role,90,y+93,20,'#b3cfde','left');
     }
     this.text(report.total?'武器和派生分开计 · 装备时间不同，占比不代表强弱':'尚无有效伤害 · 继续瞄准敌机',360,986,21,'#bdd8e7');
-    this.text('本局累计 · 重开清零',360,1016,20,'#bdd8e7');
+    this.text('首击起0.8秒：3/6/9连破奖10/25/50分',360,1016,20,'#bdd8e7');
     this.text(`${this.contributionPage+1}/${pages}页`,360,1059,21,'#c7deeb');
     if(this.contributionPage>0){this.rect(65,1030,145,58,'#244653');this.text('上一页',137,1059,23);this.buttons.push({x:65,y:1030,w:145,h:58,action:'contribution-previous',label:'上一页贡献'});}
     if(this.contributionPage<pages-1){this.rect(510,1030,145,58,'#244653');this.text('下一页',582,1059,23);this.buttons.push({x:510,y:1030,w:145,h:58,action:'contribution-next',label:'下一页贡献'});}
@@ -1752,9 +1761,10 @@ export class CanvasRuntime {
   private drawRunReport(){
     const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked,this.save.achievements.tracked);
     this.buttons=[];this.rect(0,0,720,1280,'#050e18dd');this.rect(35,90,650,1140,'#102330');
-    this.text('本局战绩',360,145,34,'#effaff','center',true);this.text(w.score.toString(),360,218,68,'#eff8ff','center',true);
+    this.text('本局战绩',360,145,34,'#effaff','center',true);this.text(w.score.toString(),360,205,62,'#eff8ff','center',true);
     this.rect(490,110,160,60,'#244653');this.text('实战贡献',570,140,24,'#80e4ff');this.buttons.push({x:490,y:110,w:160,h:60,action:'contribution',label:'实战贡献'});
-    this.text(`${this.runNewBest?'刷新最高分':'最高分'} ${this.save.best}`,360,276,23,'#e8c88b');
+    this.text(r.rapid,360,252,20,'#ffd99a');
+    this.text(`${this.runNewBest?'刷新最高分':'最高分'} ${this.save.best}`,360,284,22,'#e8c88b');
     this.text(`存活 ${Math.floor(w.time/60)}:${Math.floor(w.time%60).toString().padStart(2,'0')} · 第${w.round}轮 · 火力叠加${w.activeWeapons.length}种`,360,319,23,'#bdd8e7');
     this.text(r.growth,360,344,20,'#bdd8e7');
     for(let i=0;i<2;i++)this.text(r.weapons.slice(i*3,i*3+3).join(' / '),360,374+i*34,23,'#c2edff');
