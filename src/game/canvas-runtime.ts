@@ -393,6 +393,7 @@ export class CanvasRuntime {
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
     if(!this.world.chooseBuild(route,branch))return;
     this.upgradeUntil=this.world.time+.45;
+    if(isStormAugment(branch)&&this.world.contract?.status!=='active')this.proofChoice=branch;
     if(isMagneticAugment(branch)&&this.world.contract?.status!=='active')this.proofChoice='magnetic';
     const earnedEffects=this.world.drainEffects();
     this.checkAchievements();
@@ -1405,6 +1406,7 @@ export class CanvasRuntime {
     this.text(proof?`${proof.name} · 检验通过`:'契约完成 · 选择强化',360,190,38,'#ffdc8a','center',true);
     this.text(proof?`${Math.min(w.contract!.proofProgress,proof.goal)}/${proof.goal}${proof.unit} · 任选一项，旧能力保留`:'任选一项 · 其他武器与能力全部保留',360,245,24,'#bdd8e7');
     if(w.contract?.proof?.kind==='magnetic'&&w.build.magneticAugment)this.text(`本局认证：${magneticAugments[w.build.magneticAugment].name} · 另一精研可跨局完成`,360,278,21,'#aee8ce');
+    if(isStormAugment(w.contract?.proof?.kind))this.text('精研已认证 · 另一流派可在下一局选择',360,278,21,'#aee8ce');
     const total=w.growth.energy+reward.charge;
     const options=[{kind:'energy' as const,title:`充能 +${reward.charge}`,detail:`充能 ${Math.floor(w.growth.energy)} → ${Math.floor(total%100)} · 突破${Math.floor(total/100)}次`,hint:'满100：本局火力+10% · 超载6秒',color:'#7fe4ff'},
       ...this.weaponUpgradeOptions()];
@@ -1426,7 +1428,7 @@ export class CanvasRuntime {
       const needTier=kind==='hunter'&&!w.activeWeapons.some(k=>w.weaponStage(k)>=2);
       this.rect(65,y,590,148,can?'#203e50':'#172c3b');
       this.text(kind==='hunter'?`${entry.name} · ${hunt.name}`:entry.name,90,y+26,28,'#ffdc8a','left',true);
-      const proofDetail=chosen==='magnetic'?`${w.build.magneticAugment==='field-wide'?'广域扩圈':'分流桥击'} · 30秒命中6次/2批强化精英`:proof?`${proof.name} · ${proof.detail}`:'先形成组合或选择跳弹分支';
+      const proofDetail=chosen==='storm-relay'?'串联电桥 · 30秒第二跳6次/2批敌阵':chosen==='storm-focus'?'聚雷破核 · 30秒破核4次/2批重装':chosen==='magnetic'?`${w.build.magneticAugment==='field-wide'?'广域扩圈':'分流桥击'} · 30秒命中6次/2批强化精英`:proof?`${proof.name} · ${proof.detail}`:'先形成组合或选择跳弹分支';
       this.text(kind==='research'?proofDetail:kind==='hunter'?hunt.detail:entry.detail,90,y+62,22,'#effaff','left');
       this.text(`成功：充能+${entry.charge} 或强化已有配件${kind==='hunter'&&hunt.research?' ＋研发1点':''}`,90,y+96,21,'#bdd8e7','left');
       this.text(can?'接取契约　›':needTier?'需要任一T2配件':kind==='research'&&!proof?'尚无可检验构筑':'本轮已接取或当前不可接取',625,y+127,21,can?'#80e4ff':'#97adbd','right');
@@ -1517,6 +1519,7 @@ export class CanvasRuntime {
       this.text(i?'仅霰弹直击计数 · 箱门/闭盾不蓄雷':'单独首领没有额外目标 · 不充箱门',90,y+207,21,'#bdd8e7','left');
       this.text('选此精研　›',625,y+244,25,color,'right');this.buttons.push({x:65,y,w:590,h:275,action:'branch:'+branch,label:node.name});
     }
+    this.text('精研后：挑战契约 → 本流派实战检验',360,950,22,'#b7e4db');
     this.text('花费1技能点 · 弹道系数+10% · 本局不改选',360,1000,22,'#f0d19a');this.button('返回升级选择',1080,'branch-back');
   }
   private drawFractureBranch(){
@@ -1674,7 +1677,7 @@ export class CanvasRuntime {
       battlePlan:this.world.battlePlan,battleBrief:battleBrief(this.world.round,this.world.battlePlan),nextBattlePlan:this.save.nextBattlePlan,openingWeapon:this.world.openingWeapon??null,savedOpeningWeapon:this.save.openingWeapon,openingSupplies:this.world.bodies.filter(b=>b.active&&b.openingSupply).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,weapon:b.weaponKind,stage:b.stage})),score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
-      magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormAugment:this.world.build.stormAugment??null,stormRelayLinks:this.world.stormRelayLinks,stormFocusBursts:this.world.stormFocusBursts,stormFocusDamage:this.world.stormFocusDamage,stormCharges:this.world.bodies.filter(b=>b.active&&b.stormHits).map(b=>({id:b.id,x:b.x,y:b.y,hits:b.stormHits})),stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
+      magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormAugment:this.world.build.stormAugment??null,stormRelayLinks:this.world.stormRelayLinks,stormFocusBursts:this.world.stormFocusBursts,stormFocusDamage:this.world.stormFocusDamage,stormProofRelay:this.world.proofCount('storm-relay'),stormProofFocus:this.world.proofCount('storm-focus'),stormCharges:this.world.bodies.filter(b=>b.active&&b.stormHits).map(b=>({id:b.id,x:b.x,y:b.y,hits:b.stormHits})),stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
       bossFormation:this.world.bossFormation?.id??null,activeEscorts:this.world.activeEscorts.length,escortSpawns:this.world.escortSpawns,escortKills:this.world.escortKills,tacticalWins:this.world.tacticalWins,bossShield:this.world.bossShieldActive(),

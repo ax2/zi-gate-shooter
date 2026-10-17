@@ -1,4 +1,5 @@
 import {buildProofs,PROOF_WAVES,requiredProofGroups,type ProofTarget,type BuildProof} from './build-proof';
+import type {StormAugment} from './storm-refinement';
 export const HUNTER={targets:2,spacing:6,hoverY:500,holdSeconds:20,retry:.5} as const;
 export const hunts={
  staggered:{name:'分批悬赏',detail:'两名精英分批入场 · 30秒全破',research:0,durability:1},
@@ -27,6 +28,7 @@ export class Contract {
   this.recordGroup('ricochet',group,round);
  }
  recordMagneticGroup(group:number,round:number){return this.recordGroup('magnetic',group,round);}
+ recordStormGroup(kind:StormAugment,group:number,round:number){return this.recordGroup(kind,group,round);}
  private recordGroup(kind:BuildProof,group:number,round:number){
   if(this.kind!=='research'||this.proof?.kind!==kind||this.status!=='active'||round!==this.round||!Number.isInteger(group)||group<1||group>Math.min(this.reinforcements,PROOF_WAVES.groups))return false;
   this.proofGroups.add(group);return true;
@@ -44,7 +46,7 @@ export class Contract {
    if(this.proof)this.proofProgress=Math.max(0,proofTotal-this.proof.start);
    if(this.proof&&this.proofProgress>=buildProofs[this.proof.kind].goal&&this.proofGroupCount>=requiredProofGroups(this.proof.kind)&&this.elapsed<=30+1e-8){this.status='won';this.reason=`${buildProofs[this.proof.kind].name}检验通过`;return true;}
    if(this.elapsed+1e-8<30)return false;
-   this.status='failed';this.reason=this.proof?.kind==='magnetic'?(this.proofProgress>=buildProofs.magnetic.goal?(this.proofGroupCount>=requiredProofGroups('magnetic')?'超过验证时限':'验证批次不足'):'有效精研命中不足'):this.proof?.kind==='ricochet'?(this.proofProgress>=buildProofs.ricochet.goal?'验证批次不足':'有效跳弹不足'):'组合有效触发不足';return true;
+   this.status='failed';this.reason=this.proof&&(this.proof.kind==='storm-relay'||this.proof.kind==='storm-focus')?(this.proofProgress>=buildProofs[this.proof.kind].goal?(this.proofGroupCount>=requiredProofGroups(this.proof.kind)?'超过验证时限':'验证批次不足'):'标记敌阵精研触发不足'):this.proof?.kind==='magnetic'?(this.proofProgress>=buildProofs.magnetic.goal?(this.proofGroupCount>=requiredProofGroups('magnetic')?'超过验证时限':'验证批次不足'):'有效精研命中不足'):this.proof?.kind==='ricochet'?(this.proofProgress>=buildProofs.ricochet.goal?'验证批次不足':'有效跳弹不足'):'组合有效触发不足';return true;
   }
   if(this.elapsed+1e-8<30)return false;
   this.status=this.kind!=='hunter'&&kills-this.startKills>=15?'won':'failed';this.reason=this.status==='won'?'挑战完成':this.kind==='hunter'?'悬赏目标未全破':'击毁数量不足';return true;

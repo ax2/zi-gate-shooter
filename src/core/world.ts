@@ -1,5 +1,5 @@
 import {FIRE_CONTROL} from './fire-control';
-import {isStormAugment,stormAugments,STORM_REFINEMENT} from './storm-refinement';
+import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
 import {LOCKSHOT} from './lockshot';
 import {RELAY_SCREEN} from './relay-screen';
 import {BATTERY} from './battery';
@@ -12,7 +12,7 @@ import {DRIFT_SUPPLY} from './drift-supply';
 import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field';
 import {canLaserChain,isPhotonAugment,photonAugments,laserChainProfile} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
-import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,type BuildProof} from './build-proof';
+import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,STORM_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type IonSpear} from './ion-storm';
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
@@ -423,17 +423,24 @@ export class World {
   stormLinks=0;stormRelayLinks=0;stormFocusBursts=0;stormFocusDamage=0;prismHits=0;proofWins=0;
   canRefineStorm(){return this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1&&this.build.refinements.ballistic>=STORM_REFINEMENT.refinements
     &&this.weaponStage('scatter')>=3&&this.activeWeapons.includes('scatter')&&!this.build.stormAugment&&!this.canRefineFracture();}
+  private stormProofHits?:Partial<Record<StormAugment,number>>;
+  private recordStormProof(kind:StormAugment,target:Body){
+    if(!target.proofTarget||!target.proofGroup||target.proofRound!==this.round)return;
+    if(this.contract?.recordStormGroup(kind,target.proofGroup,this.round)){
+      this.stormProofHits??={};this.stormProofHits[kind]=(this.stormProofHits[kind]??0)+1;
+    }
+  }
   private stormFocus(body:Body,damage:number){
     if(this.build.stormAugment!=='storm-focus'||this.player.hp<=0||this.bossVictory||!body.active||!(body.kind in C.enemies)||guardClosed(body)||(body.dropGrace??0)
       ||body.y<C.playerShotTop||body.y>C.playerY||(body.kind==='boss'&&this.phase!=='boss'))return;
     body.stormHits=(body.stormHits??0)+1;
     if(body.stormHits<STORM_REFINEMENT.hits)return;
     body.stormHits=0;const before=body.hp;this.hit(body,damage*STORM_REFINEMENT.damage,'scatter');
-    if(body.hp<before){this.stormFocusBursts++;this.stormFocusDamage+=before-body.hp;this.effects.push({type:'capacitor',x:body.x,y:body.y,size:70,weaponKind:'scatter'});}
+    if(body.hp<before){this.stormFocusBursts++;this.recordStormProof('storm-focus',body);this.stormFocusDamage+=before-body.hp;this.effects.push({type:'capacitor',x:body.x,y:body.y,size:70,weaponKind:'scatter'});}
   }
   aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
-  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>kind==='magnetic'?this.magneticUnlocked()&&!!this.build.magneticAugment:kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
-  proofCount(kind:BuildProof){return kind==='magnetic'?this.magneticProofHits:kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.scatterRicochets:this.laserArcHits;}
+  availableProofs(){return (Object.keys(buildProofs) as BuildProof[]).filter(kind=>isStormAugment(kind)?this.build.stormAugment===kind&&this.activeWeapons.includes('scatter')&&this.weaponStage('scatter')>=3:kind==='magnetic'?this.magneticUnlocked()&&!!this.build.magneticAugment:kind==='storm'?this.build.ranks.ballistic>=3&&this.build.ranks.electric>=1:kind==='prism'?this.supportProfile().prism:kind==='fracture'?this.fractureUnlocked():kind==='ion'?this.build.ranks.electric>=3:kind==='ricochet'?this.build.ballisticBranch==='ricochet'&&this.activeWeapons.includes('scatter'):this.laserChainUnlocked());}
+  proofCount(kind:BuildProof){return isStormAugment(kind)?this.stormProofHits?.[kind]??0:kind==='magnetic'?this.magneticProofHits:kind==='storm'?this.stormLinks:kind==='prism'?this.prismHits:kind==='fracture'?this.fractureBursts:kind==='ion'?this.ionHits:kind==='ricochet'?this.scatterRicochets:this.laserArcHits;}
   readonly contractStats={accepted:0,won:0,failed:0,claimed:0};
   refitsClaimed=0;
   contract?: Contract;
@@ -479,7 +486,7 @@ export class World {
     if(!challenge.proof||challenge.reinforcements>=PROOF_WAVES.groups||challenge.elapsed<challenge.nextReinforcement)return;
     const troops=proofFormation(challenge.proof.kind);
     if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+troops.length>C.limits.enemies){challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;}
-    const candidates=troops.map(t=>{const b=this.spawn(t.kind,t.x,t.y);b.proofTarget=true;if('pattern' in t)b.pattern=t.pattern;if(challenge.proof?.kind==='magnetic'){b.hp*=MAGNETIC_PROOF.durability;b.maxHp=b.hp;}if(challenge.proof?.kind==='ricochet'||challenge.proof?.kind==='magnetic'){b.proofGroup=challenge.reinforcements+1;b.proofRound=this.round;}b.dropGrace=SWARM.grace;return b;});
+    const candidates=troops.map(t=>{const b=this.spawn(t.kind,t.x,t.y);b.proofTarget=true;if('pattern' in t)b.pattern=t.pattern;if(challenge.proof?.kind==='magnetic'){b.hp*=MAGNETIC_PROOF.durability;b.maxHp=b.hp;}if(challenge.proof&&isStormAugment(challenge.proof.kind)){b.hp*=challenge.proof.kind==='storm-relay'?STORM_PROOF.relayDurability:STORM_PROOF.focusDurability;b.maxHp=b.hp;}if(challenge.proof?.kind==='ricochet'||challenge.proof?.kind==='magnetic'||challenge.proof&&isStormAugment(challenge.proof.kind)){b.proofGroup=challenge.reinforcements+1;b.proofRound=this.round;}b.dropGrace=SWARM.grace;return b;});
     const horizon=Math.max(...candidates.map(b=>(C.playerY-b.y)/b.speed+1));
     if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
       for(const b of candidates)b.active=false;this.fallbackCount++;challenge.nextReinforcement=challenge.elapsed+PROOF_WAVES.retry;return;
@@ -902,7 +909,7 @@ export class World {
               visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
               this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y,seeker});
               const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(seeker)this.seekerLinks++;if(conducts)this.ionImpact(next,damage);}
-              if(bullet.weaponKind==='scatter'&&next.hp<before){this.stormLinks++;if(hop>0&&this.build.stormAugment==='storm-relay')this.stormRelayLinks++;}origin = next;
+              if(bullet.weaponKind==='scatter'&&next.hp<before){this.stormLinks++;if(hop>0&&this.build.stormAugment==='storm-relay'){this.stormRelayLinks++;this.recordStormProof('storm-relay',next);}}origin = next;
             }
           }
           if (bullet.splashRadius && body.kind in C.enemies && !(bullet.weaponKind==='scatter'&&guardClosed(body))) {

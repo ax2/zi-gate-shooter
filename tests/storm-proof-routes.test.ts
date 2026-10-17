@@ -1,0 +1,10 @@
+import{it,expect}from'vitest';import{writeFileSync}from'node:fs';import{World}from'../src/core/world';import{C}from'../src/core/config';import{Contract}from'../src/core/contracts';import{safeRoute}from'../src/core/reachability';
+for(const kind of ['storm-relay','storm-focus'] as const)for(const round of [4,7])for(const start of [68,360,652])it(`${kind} R${round} from${start} retains a no-kill path with real marked reinforcements`,()=>{
+ // Unit-only unarmed observer; earned entry is verified in normal progression.
+ const w=new World(1337,round);w.player.x=w.player.px=start;w.contract=new Contract('research',round,0,1,0,{kind,start:0});let route:number[]=[],planned=-999,count=-1;const seen=new Set<number>(),shots=new Set<number>();
+ for(let f=0;f<35*60&&w.player.hp>0;f++){
+  if(f-planned>=60||w.contract.reinforcements!==count){route=safeRoute(w.player.x,w.bodies,w.bullets,6,{phase:w.phase,phaseTime:w.phaseTime,reaction:f===0||w.contract.reinforcements!==count?.45:0})??[];expect(route.length,`t=${w.time}`).toBeGreaterThan(0);planned=f;count=w.contract.reinforcements;}
+  w.step(C.step,route[Math.floor((f-planned)/6)]??w.player.x);w.drainEffects();w.bullets=w.bullets.filter(b=>b.hostile);for(const b of w.bodies)if(b.proofTarget)seen.add(b.id);for(const b of w.bullets)if(b.sourceId&&seen.has(b.sourceId))shots.add(b.id);expect(w.player.hp).toBe(3);
+ }
+ expect(w.kills).toBe(0);expect(w.contract?.reinforcements).toBeGreaterThanOrEqual(2);expect(w.contract?.status).toBe('failed');expect(w.proofCount(kind)).toBe(0);expect(w.certifiedBuilds.size).toBe(0);expect(w.contractReward).toBeUndefined();expect(shots.size).toBeGreaterThan(0);expect(w.peakBodies).toBeLessThanOrEqual(32);expect(w.peakBullets).toBeLessThanOrEqual(128);writeFileSync(`build/qa/Stage-205/route-${kind}-${round}-${start}.json`,JSON.stringify({kind,round,start,hp:w.player.hp,time:w.time,reinforcements:w.contract?.reinforcements,marked:seen.size,shots:shots.size,peakBodies:w.peakBodies,peakBullets:w.peakBullets},null,2));
+},60000);

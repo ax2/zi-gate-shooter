@@ -1,0 +1,32 @@
+[
+  {
+    "branch": "storm-relay",
+    "baseline": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "hash": "bc0e121b6a156ebc65a909708e305fe117675e5d2c88f8832ff5d7aad27adbcc"
+    },
+    "current": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "hash": "bc0e121b6a156ebc65a909708e305fe117675e5d2c88f8832ff5d7aad27adbcc"
+    }
+  },
+  {
+    "branch": "storm-focus",
+    "baseline": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "hash": "752dd0d43fff847b2516e324598e2e43a19ad1202f20706cdea7ed665e757c8c"
+    },
+    "current": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "hash": "752dd0d43fff847b2516e324598e2e43a19ad1202f20706cdea7ed665e757c8c"
+    }
+  }
+]

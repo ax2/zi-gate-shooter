@@ -1,0 +1,84 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/storm-proof.test.ts tests/storm-proof-progression.test.mjs tests/storm-proof-routes.test.ts tests/storm-proof-runtime.test.ts tests/achievements.test.ts tests/magnetic-proof.test.ts tests/build-proof-contract.test.ts tests/storm-runtime.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/storm-proof-routes.test.ts (12 tests | 12 failed) 2921ms
+   × storm-relay R4 from68 retains a no-kill path with real marked reinforcements 463ms
+   × storm-relay R4 from360 retains a no-kill path with real marked reinforcements 167ms
+   × storm-relay R4 from652 retains a no-kill path with real marked reinforcements 238ms
+   × storm-relay R7 from68 retains a no-kill path with real marked reinforcements 296ms
+   × storm-relay R7 from360 retains a no-kill path with real marked reinforcements 138ms
+   × storm-relay R7 from652 retains a no-kill path with real marked reinforcements 215ms
+   × storm-focus R4 from68 retains a no-kill path with real marked reinforcements 237ms
+   × storm-focus R4 from360 retains a no-kill path with real marked reinforcements 238ms
+   × storm-focus R4 from652 retains a no-kill path with real marked reinforcements 252ms
+   × storm-focus R7 from68 retains a no-kill path with real marked reinforcements 216ms
+   × storm-focus R7 from360 retains a no-kill path with real marked reinforcements 220ms
+   × storm-focus R7 from652 retains a no-kill path with real marked reinforcements 239ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/storm-proof-routes.test.ts > storm-relay R4 from68 retains a no-kill path with real marked reinforcements
+ FAIL  tests/storm-proof-routes.test.ts > storm-relay R7 from68 retains a no-kill path with real marked reinforcements
+ FAIL  tests/storm-proof-routes.test.ts > storm-focus R4 from68 retains a no-kill path with real marked reinforcements
+ FAIL  tests/storm-proof-routes.test.ts > storm-focus R7 from68 retains a no-kill path with real marked reinforcements
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ tests/storm-proof-routes.test.ts:8:18
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  tests/storm-proof-routes.test.ts > storm-relay R4 from360 retains a no-kill path with real marked reinforcements
+ FAIL  tests/storm-proof-routes.test.ts > storm-relay R7 from360 retains a no-kill path with real marked reinforcements
+AssertionError: t=20.000000000000146: expected 0 to be greater than 0
+ ❯ tests/storm-proof-routes.test.ts:5:216
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  tests/storm-proof-routes.test.ts > storm-relay R4 from652 retains a no-kill path with real marked reinforcements
+ FAIL  tests/storm-proof-routes.test.ts > storm-relay R7 from652 retains a no-kill path with real marked reinforcements
+AssertionError: t=27.016666666666413: expected 0 to be greater than 0
+ ❯ tests/storm-proof-routes.test.ts:5:216
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  tests/storm-proof-routes.test.ts > storm-focus R4 from360 retains a no-kill path with real marked reinforcements
+ FAIL  tests/storm-proof-routes.test.ts > storm-focus R7 from360 retains a no-kill path with real marked reinforcements
+AssertionError: expected 2 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 2
+
+ ❯ tests/storm-proof-routes.test.ts:8:18
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  tests/storm-proof-routes.test.ts > storm-focus R4 from652 retains a no-kill path with real marked reinforcements
+ FAIL  tests/storm-proof-routes.test.ts > storm-focus R7 from652 retains a no-kill path with real marked reinforcements
+AssertionError: expected 0 to be greater than 0
+ ❯ tests/storm-proof-routes.test.ts:8:263
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  12 failed | 35 passed (47)
+   Start at  11:36:09
+   Duration  8.20s (tests 70%, transform 22%, import 9%)
+

@@ -1,0 +1,630 @@
+[
+  {
+    "branch": "storm-relay",
+    "policy": "aim",
+    "selectedAt": 209.53333333339222,
+    "accepted": {
+      "time": 246.98333333342202,
+      "round": 4,
+      "roundTime": 0,
+      "start": 0,
+      "global": 0,
+      "owned": [
+        [
+          "pulse",
+          1,
+          0
+        ],
+        [
+          "scatter",
+          3,
+          3
+        ],
+        [
+          "pierce",
+          3,
+          0
+        ],
+        [
+          "arc",
+          1,
+          0
+        ]
+      ]
+    },
+    "terminal": {
+      "time": 252.4833333334264,
+      "status": "won",
+      "reason": "串联电桥检验通过",
+      "elapsed": 5.499999999999986,
+      "progress": 9,
+      "groups": 2,
+      "spawned": 2,
+      "hp": 3
+    },
+    "reward": {
+      "before": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 3
+      },
+      "after": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 4
+      }
+    },
+    "samples": [
+      {
+        "time": 247.48333333342242,
+        "count": 3,
+        "groups": 1
+      },
+      {
+        "time": 247.71666666675594,
+        "count": 6,
+        "groups": 1
+      },
+      {
+        "time": 252.4833333334264,
+        "count": 9,
+        "groups": 2
+      }
+    ],
+    "certified": [
+      "storm-relay"
+    ],
+    "fresh": [
+      "storm",
+      "proof",
+      "storm-specialist"
+    ],
+    "persisted": {
+      "kills": 0,
+      "bosses": 0,
+      "unlocked": [
+        "storm",
+        "proof",
+        "storm-specialist"
+      ],
+      "certifiedBuilds": [
+        "storm-relay"
+      ],
+      "magneticCertifications": [],
+      "tracked": null
+    }
+  },
+  {
+    "branch": "storm-relay",
+    "policy": "edge",
+    "selectedAt": 209.53333333339222,
+    "accepted": {
+      "time": 246.98333333342202,
+      "round": 4,
+      "roundTime": 0,
+      "start": 0,
+      "global": 0,
+      "owned": [
+        [
+          "pulse",
+          1,
+          0
+        ],
+        [
+          "scatter",
+          3,
+          3
+        ],
+        [
+          "pierce",
+          3,
+          0
+        ],
+        [
+          "arc",
+          1,
+          0
+        ]
+      ]
+    },
+    "terminal": {
+      "time": 276.9833333334101,
+      "status": "failed",
+      "reason": "标记敌阵精研触发不足",
+      "elapsed": 29.999999999999577,
+      "progress": 2,
+      "groups": 2,
+      "spawned": 6,
+      "hp": 3
+    },
+    "samples": [
+      {
+        "time": 247.51666666675578,
+        "count": 1,
+        "groups": 1
+      },
+      {
+        "time": 253.03333333342684,
+        "count": 2,
+        "groups": 2
+      }
+    ],
+    "certified": [],
+    "fresh": [],
+    "persisted": {
+      "kills": 0,
+      "bosses": 0,
+      "unlocked": [
+        "storm",
+        "proof",
+        "storm-specialist",
+        "tactician"
+      ],
+      "certifiedBuilds": [
+        "storm-relay"
+      ],
+      "magneticCertifications": [],
+      "tracked": null
+    }
+  },
+  {
+    "branch": "storm-relay",
+    "policy": "late",
+    "selectedAt": 209.53333333339222,
+    "accepted": {
+      "time": 487.51666666655194,
+      "round": 7,
+      "roundTime": 0,
+      "start": 0,
+      "global": 5,
+      "owned": [
+        [
+          "pulse",
+          1,
+          0
+        ],
+        [
+          "scatter",
+          3,
+          9
+        ],
+        [
+          "pierce",
+          3,
+          0
+        ],
+        [
+          "arc",
+          1,
+          0
+        ]
+      ]
+    },
+    "terminal": {
+      "time": 498.0166666665424,
+      "status": "won",
+      "reason": "串联电桥检验通过",
+      "elapsed": 10.500000000000101,
+      "progress": 6,
+      "groups": 3,
+      "spawned": 3,
+      "hp": 3
+    },
+    "reward": {
+      "before": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 9
+      },
+      "after": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 10
+      }
+    },
+    "samples": [
+      {
+        "time": 488.0166666665515,
+        "count": 3,
+        "groups": 1
+      },
+      {
+        "time": 493.01666666654694,
+        "count": 5,
+        "groups": 2
+      },
+      {
+        "time": 498.0166666665424,
+        "count": 6,
+        "groups": 3
+      }
+    ],
+    "certified": [
+      "storm-relay"
+    ],
+    "fresh": [
+      "tactician"
+    ],
+    "persisted": {
+      "kills": 0,
+      "bosses": 0,
+      "unlocked": [
+        "storm",
+        "tactician",
+        "proof",
+        "storm-specialist",
+        "storm-master"
+      ],
+      "certifiedBuilds": [
+        "storm-relay",
+        "storm-focus"
+      ],
+      "magneticCertifications": [],
+      "tracked": null
+    }
+  },
+  {
+    "branch": "storm-focus",
+    "policy": "aim",
+    "selectedAt": 209.53333333339222,
+    "accepted": {
+      "time": 245.98333333342123,
+      "round": 4,
+      "roundTime": 0,
+      "start": 0,
+      "global": 11,
+      "owned": [
+        [
+          "pulse",
+          1,
+          0
+        ],
+        [
+          "scatter",
+          3,
+          3
+        ],
+        [
+          "pierce",
+          3,
+          0
+        ],
+        [
+          "arc",
+          1,
+          0
+        ]
+      ]
+    },
+    "terminal": {
+      "time": 251.80000000009252,
+      "status": "won",
+      "reason": "聚雷破核检验通过",
+      "elapsed": 5.816666666666651,
+      "progress": 7,
+      "groups": 2,
+      "spawned": 2,
+      "hp": 3
+    },
+    "reward": {
+      "before": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 3
+      },
+      "after": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 4
+      }
+    },
+    "samples": [
+      {
+        "time": 246.80000000008854,
+        "count": 1,
+        "groups": 1
+      },
+      {
+        "time": 247.26666666675558,
+        "count": 2,
+        "groups": 1
+      },
+      {
+        "time": 249.5666666667574,
+        "count": 3,
+        "groups": 1
+      },
+      {
+        "time": 249.80000000009093,
+        "count": 4,
+        "groups": 1
+      },
+      {
+        "time": 250.01666666675777,
+        "count": 5,
+        "groups": 1
+      },
+      {
+        "time": 250.71666666675833,
+        "count": 6,
+        "groups": 1
+      },
+      {
+        "time": 251.80000000009252,
+        "count": 7,
+        "groups": 2
+      }
+    ],
+    "certified": [
+      "storm-focus"
+    ],
+    "fresh": [
+      "storm-master"
+    ],
+    "persisted": {
+      "kills": 0,
+      "bosses": 0,
+      "unlocked": [
+        "storm",
+        "tactician",
+        "proof",
+        "storm-specialist",
+        "storm-master"
+      ],
+      "certifiedBuilds": [
+        "storm-relay",
+        "storm-focus"
+      ],
+      "magneticCertifications": [],
+      "tracked": null
+    }
+  },
+  {
+    "branch": "storm-focus",
+    "policy": "edge",
+    "selectedAt": 209.53333333339222,
+    "accepted": {
+      "time": 245.98333333342123,
+      "round": 4,
+      "roundTime": 0,
+      "start": 0,
+      "global": 11,
+      "owned": [
+        [
+          "pulse",
+          1,
+          0
+        ],
+        [
+          "scatter",
+          3,
+          3
+        ],
+        [
+          "pierce",
+          3,
+          0
+        ],
+        [
+          "arc",
+          1,
+          0
+        ]
+      ]
+    },
+    "terminal": {
+      "time": 257.78333333342755,
+      "status": "won",
+      "reason": "聚雷破核检验通过",
+      "elapsed": 11.800000000000166,
+      "progress": 4,
+      "groups": 3,
+      "spawned": 3,
+      "hp": 1
+    },
+    "reward": {
+      "before": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 3
+      },
+      "after": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 4
+      }
+    },
+    "samples": [
+      {
+        "time": 246.80000000008854,
+        "count": 1,
+        "groups": 1
+      },
+      {
+        "time": 248.28333333342306,
+        "count": 2,
+        "groups": 1
+      },
+      {
+        "time": 252.78333333342664,
+        "count": 3,
+        "groups": 2
+      },
+      {
+        "time": 257.78333333342755,
+        "count": 4,
+        "groups": 3
+      }
+    ],
+    "certified": [
+      "storm-focus"
+    ],
+    "fresh": [],
+    "persisted": {
+      "kills": 0,
+      "bosses": 0,
+      "unlocked": [
+        "storm",
+        "tactician",
+        "proof",
+        "storm-specialist",
+        "storm-master"
+      ],
+      "certifiedBuilds": [
+        "storm-relay",
+        "storm-focus"
+      ],
+      "magneticCertifications": [],
+      "tracked": null
+    }
+  },
+  {
+    "branch": "storm-focus",
+    "policy": "late",
+    "selectedAt": 209.53333333339222,
+    "accepted": {
+      "time": 485.73333333322023,
+      "round": 7,
+      "roundTime": 0,
+      "start": 0,
+      "global": 32,
+      "owned": [
+        [
+          "pulse",
+          1,
+          0
+        ],
+        [
+          "scatter",
+          3,
+          9
+        ],
+        [
+          "pierce",
+          3,
+          0
+        ],
+        [
+          "arc",
+          1,
+          0
+        ]
+      ]
+    },
+    "terminal": {
+      "time": 497.4666666665429,
+      "status": "won",
+      "reason": "聚雷破核检验通过",
+      "elapsed": 11.733333333333496,
+      "progress": 4,
+      "groups": 3,
+      "spawned": 3,
+      "hp": 3
+    },
+    "reward": {
+      "before": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 9
+      },
+      "after": {
+        "weapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "arc"
+        ],
+        "stage": 3,
+        "calibration": 10
+      }
+    },
+    "samples": [
+      {
+        "time": 487.2499999998855,
+        "count": 1,
+        "groups": 1
+      },
+      {
+        "time": 492.46666666654744,
+        "count": 2,
+        "groups": 2
+      },
+      {
+        "time": 496.54999999987706,
+        "count": 3,
+        "groups": 3
+      },
+      {
+        "time": 497.4666666665429,
+        "count": 4,
+        "groups": 3
+      }
+    ],
+    "certified": [
+      "storm-focus"
+    ],
+    "fresh": [],
+    "persisted": {
+      "kills": 0,
+      "bosses": 0,
+      "unlocked": [
+        "storm",
+        "tactician",
+        "proof",
+        "storm-specialist",
+        "storm-master"
+      ],
+      "certifiedBuilds": [
+        "storm-relay",
+        "storm-focus"
+      ],
+      "magneticCertifications": [],
+      "tracked": null
+    }
+  }
+]

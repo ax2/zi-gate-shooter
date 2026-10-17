@@ -19,8 +19,10 @@ export const achievements = [
  {id:'core-breaker',name:'断核者',detail:'翼炮发射后、核心连射前击毁截击精英'},
  {id:'preempt-gun',name:'先制拆炮',detail:'斜射哨机蓄能时，在首发前将其击毁'},
  {id:'bait-counter',name:'诱射反击',detail:'无伤避完斜射三连，再击毁同一哨机'},
+ {id:'storm-specialist',name:'雷暴专研',detail:'主动通过串联或聚雷检验，证明精研能用'},
+ {id:'storm-master',name:'雷暴双修',detail:'分别通过串联、聚雷检验，可跨局完成'},
 ] as const;
-export const achievementGroups={growth:{name:'成长',ids:['hunter','boss','arsenal','fracture']},build:{name:'构筑',ids:['specialist','hybrid','storm','proof','versatile','magnetic-master']},tactics:{name:'战术',ids:['tactician','disruptor','ace','flawless-ace','bank-shot','core-breaker','preempt-gun','bait-counter']}} as const;
+export const achievementGroups={growth:{name:'成长',ids:['hunter','boss','arsenal','fracture']},build:{name:'构筑',ids:['specialist','hybrid','storm','proof','versatile','magnetic-master','storm-specialist','storm-master']},tactics:{name:'战术',ids:['tactician','disruptor','ace','flawless-ace','bank-shot','core-breaker','preempt-gun','bait-counter']}} as const;
 export type AchievementGroup=keyof typeof achievementGroups;
 export const achievementGroup=(id:string):AchievementGroup=>(Object.keys(achievementGroups) as AchievementGroup[]).find(g=>(achievementGroups[g].ids as readonly string[]).includes(id))??'growth';
 export interface Achievements {kills:number; bosses:number; unlocked:string[];certifiedBuilds:BuildProof[];magneticCertifications:MagneticAugment[];tracked:string|null}
@@ -39,6 +41,7 @@ export function parseAchievements(value:unknown):Achievements {
 export function trackAchievement(state:Achievements,id:string){if(!achievements.some(a=>a.id===id)||state.unlocked.includes(id))return false;state.tracked=id;return true;}
 export function achievementProgress(id:string,state:Achievements){
  if(id==='hunter')return `${Math.min(state.kills,100)}/100架敌机`;
+ if(id==='storm-specialist'||id==='storm-master')return `串联${state.certifiedBuilds.includes('storm-relay')?'✓':'待认证'} / 聚雷${state.certifiedBuilds.includes('storm-focus')?'✓':'待认证'}`;
  if(id==='magnetic-master')return (['field-wide','field-link'] as const).map(k=>`${magneticAugments[k].name}${state.magneticCertifications.includes(k)?'✓':'待认证'}`).join(' / ');
  if(id==='versatile')return !state.certifiedBuilds.length&&state.unlocked.includes('proof')?'0/3种 · 旧记录未分类型，请重新认证':`${Math.min(state.certifiedBuilds.length,3)}/3种 · 已认证：${state.certifiedBuilds.slice(0,2).map(k=>buildProofs[k].name).join(' / ')||'暂无'}${state.certifiedBuilds.length>2?'…':''}`;
  return state.unlocked.includes(id)?'挑战记录已保存在本机':'选择并完成对应挑战，自动记录';
@@ -48,7 +51,7 @@ export function awardAchievements(state:Achievements,ranks:Record<Route,number>,
  for(const kind of Object.keys(buildProofs) as BuildProof[])if(evidence.certifiedBuilds?.includes(kind)&&!state.certifiedBuilds.includes(kind))state.certifiedBuilds.push(kind);
  for(const kind of ['field-wide','field-link'] as const)if(evidence.magneticCertifications?.includes(kind)&&!state.magneticCertifications.includes(kind))state.magneticCertifications.push(kind);
  const values=Object.values(ranks),spent=values.reduce((a,b)=>a+b,0);
- const met=[state.kills>=100,state.bosses>=1,spent===3&&values.includes(3),spent===3&&values.every(v=>v===1),ranks.ballistic>=3&&ranks.electric>=1,fractureBursts>=10,weapons>=5,tacticalWins>0,conduitTacticalWins>0,proofWins>0,(evidence.aceWins??0)>0,(evidence.flawlessAceWins??0)>0,state.certifiedBuilds.length>=3,state.certifiedBuilds.includes('ricochet'),state.magneticCertifications.length>=2,(evidence.interceptorBreaks??0)>0,(evidence.lockPreemptWins??0)>0,(evidence.lockBaitWins??0)>0];
+ const met=[state.kills>=100,state.bosses>=1,spent===3&&values.includes(3),spent===3&&values.every(v=>v===1),ranks.ballistic>=3&&ranks.electric>=1,fractureBursts>=10,weapons>=5,tacticalWins>0,conduitTacticalWins>0,proofWins>0,(evidence.aceWins??0)>0,(evidence.flawlessAceWins??0)>0,state.certifiedBuilds.length>=3,state.certifiedBuilds.includes('ricochet'),state.magneticCertifications.length>=2,(evidence.interceptorBreaks??0)>0,(evidence.lockPreemptWins??0)>0,(evidence.lockBaitWins??0)>0,state.certifiedBuilds.includes('storm-relay')||state.certifiedBuilds.includes('storm-focus'),state.certifiedBuilds.includes('storm-relay')&&state.certifiedBuilds.includes('storm-focus')];
  const fresh=achievements.filter((a,i)=>met[i]&&!state.unlocked.includes(a.id));
  state.unlocked.push(...fresh.map(a=>a.id));return fresh;
 }
