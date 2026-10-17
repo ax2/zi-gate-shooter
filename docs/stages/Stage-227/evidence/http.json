@@ -1,0 +1,12 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "currentBundle": true
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-CbGPAzm3.js",
+    "status": 200,
+    "currentBundle": false
+  }
+]

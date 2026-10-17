@@ -1,0 +1,369 @@
+{
+  "method": "Earned upgrades and normal safe inputs, two seeds; long extends seed1337. Legacy serialized World and effects, excluding two new zero counters; JS private ledger tested separately. Safe operator knows future hazards; virtual60Hz not human difficulty or device FPS.",
+  "equality": [
+    {
+      "branch": "spread",
+      "frames": 18000,
+      "time": 300.0000000000558,
+      "hp": 3,
+      "serializableWorldAndEffectsEqual": true
+    },
+    {
+      "branch": "seeker",
+      "frames": 18000,
+      "time": 300.0000000000558,
+      "hp": 3,
+      "serializableWorldAndEffectsEqual": true
+    }
+  ],
+  "runs": [
+    {
+      "seed": 1337,
+      "seconds": 600,
+      "time": 599.999999999783,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstTransfer": 54.96666666666483,
+      "transfers": 61,
+      "recovered": 65,
+      "bursts": 49,
+      "followupBursts": 2,
+      "firstFollowup": 322.8000000000351,
+      "gates": 27,
+      "pickups": 21,
+      "bossWins": 7,
+      "kills": 648,
+      "peakBodies": 15,
+      "peakBullets": 67,
+      "contributions": [
+        {
+          "source": "pulse",
+          "damage": 14264.128299999667,
+          "contacts": 1310,
+          "kills": 43
+        },
+        {
+          "source": "arc",
+          "damage": 174467.02534999995,
+          "contacts": 553,
+          "kills": 278
+        },
+        {
+          "source": "scatter",
+          "damage": 42244.63520000038,
+          "contacts": 2323,
+          "kills": 122
+        },
+        {
+          "source": "pierce",
+          "damage": 12954.762099999982,
+          "contacts": 859,
+          "kills": 54
+        },
+        {
+          "source": "blast",
+          "damage": 30482.459049999696,
+          "contacts": 289,
+          "kills": 68
+        },
+        {
+          "source": "magnetic",
+          "damage": 15501.514000000072,
+          "contacts": 364,
+          "kills": 37
+        },
+        {
+          "source": "fracture",
+          "damage": 3602.7912000000033,
+          "contacts": 115,
+          "kills": 5
+        },
+        {
+          "source": "ion",
+          "damage": 34943.62320000004,
+          "contacts": 125,
+          "kills": 37
+        },
+        {
+          "source": "laser",
+          "damage": 4113.449999999998,
+          "contacts": 45,
+          "kills": 4
+        }
+      ],
+      "samples": [
+        {
+          "time": 54.96666666666483,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 1933,
+            "x": 280,
+            "y": 559.4999999999994,
+            "targetX": 200,
+            "targetY": 579.333333333333,
+            "size": 1
+          },
+          "recipient": {}
+        },
+        {
+          "time": 55.78333333333145,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 2009,
+            "x": 440,
+            "y": 524.9999999999991,
+            "targetX": 520,
+            "targetY": 505.16666666666566,
+            "size": 1
+          },
+          "recipient": {}
+        },
+        {
+          "time": 56.19999999999809,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 2049,
+            "x": 200,
+            "y": 481.9999999999993,
+            "targetX": 280,
+            "targetY": 462.1666666666661,
+            "size": 1
+          },
+          "recipient": {}
+        }
+      ]
+    },
+    {
+      "seed": 9001,
+      "seconds": 600,
+      "time": 599.999999999783,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstTransfer": 40.91666666666563,
+      "transfers": 63,
+      "recovered": 63,
+      "bursts": 42,
+      "followupBursts": 0,
+      "firstFollowup": null,
+      "gates": 28,
+      "pickups": 21,
+      "bossWins": 7,
+      "kills": 638,
+      "peakBodies": 16,
+      "peakBullets": 65,
+      "contributions": [
+        {
+          "source": "pulse",
+          "damage": 15200.458899999428,
+          "contacts": 1626,
+          "kills": 46
+        },
+        {
+          "source": "arc",
+          "damage": 193906.4255500001,
+          "contacts": 535,
+          "kills": 290
+        },
+        {
+          "source": "scatter",
+          "damage": 24440.886560000246,
+          "contacts": 2092,
+          "kills": 116
+        },
+        {
+          "source": "pierce",
+          "damage": 11247.547999999966,
+          "contacts": 753,
+          "kills": 42
+        },
+        {
+          "source": "blast",
+          "damage": 27004.84580000005,
+          "contacts": 263,
+          "kills": 61
+        },
+        {
+          "source": "magnetic",
+          "damage": 14332.681600000002,
+          "contacts": 331,
+          "kills": 35
+        },
+        {
+          "source": "fracture",
+          "damage": 3158.304499999995,
+          "contacts": 100,
+          "kills": 2
+        },
+        {
+          "source": "ion",
+          "damage": 38005.51949000005,
+          "contacts": 116,
+          "kills": 36
+        },
+        {
+          "source": "laser",
+          "damage": 4273.592499999999,
+          "contacts": 52,
+          "kills": 10
+        }
+      ],
+      "samples": [
+        {
+          "time": 40.91666666666563,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 1206,
+            "x": 480,
+            "y": 762.3333333333356,
+            "targetX": 360,
+            "targetY": 821.8333333333364,
+            "size": 1
+          },
+          "recipient": {}
+        },
+        {
+          "time": 41.73333333333225,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 1290,
+            "x": 360,
+            "y": 722.6666666666684,
+            "targetX": 240,
+            "targetY": 663.1666666666677,
+            "size": 1
+          },
+          "recipient": {}
+        },
+        {
+          "time": 54.96666666666483,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 1933,
+            "x": 280,
+            "y": 559.4999999999994,
+            "targetX": 200,
+            "targetY": 579.333333333333,
+            "size": 1
+          },
+          "recipient": {}
+        }
+      ]
+    },
+    {
+      "seed": 1337,
+      "seconds": 1200,
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstTransfer": 54.96666666666483,
+      "transfers": 123,
+      "recovered": 127,
+      "bursts": 101,
+      "followupBursts": 2,
+      "firstFollowup": 322.8000000000351,
+      "gates": 55,
+      "pickups": 42,
+      "bossWins": 14,
+      "kills": 1335,
+      "peakBodies": 16,
+      "peakBullets": 67,
+      "contributions": [
+        {
+          "source": "pulse",
+          "damage": 73979.71030000053,
+          "contacts": 3380,
+          "kills": 100
+        },
+        {
+          "source": "arc",
+          "damage": 1557606.1070980013,
+          "contacts": 1088,
+          "kills": 581
+        },
+        {
+          "source": "scatter",
+          "damage": 164362.05145200025,
+          "contacts": 4788,
+          "kills": 290
+        },
+        {
+          "source": "pierce",
+          "damage": 34940.06210000011,
+          "contacts": 1706,
+          "kills": 91
+        },
+        {
+          "source": "blast",
+          "damage": 126239.26204999967,
+          "contacts": 580,
+          "kills": 120
+        },
+        {
+          "source": "magnetic",
+          "damage": 64073.69450000027,
+          "contacts": 712,
+          "kills": 60
+        },
+        {
+          "source": "fracture",
+          "damage": 9910.016200000036,
+          "contacts": 229,
+          "kills": 5
+        },
+        {
+          "source": "ion",
+          "damage": 311604.3011999996,
+          "contacts": 247,
+          "kills": 73
+        },
+        {
+          "source": "laser",
+          "damage": 12728.217999999986,
+          "contacts": 107,
+          "kills": 15
+        }
+      ],
+      "samples": [
+        {
+          "time": 54.96666666666483,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 1933,
+            "x": 280,
+            "y": 559.4999999999994,
+            "targetX": 200,
+            "targetY": 579.333333333333,
+            "size": 1
+          },
+          "recipient": {}
+        },
+        {
+          "time": 55.78333333333145,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 2009,
+            "x": 440,
+            "y": 524.9999999999991,
+            "targetX": 520,
+            "targetY": 505.16666666666566,
+            "size": 1
+          },
+          "recipient": {}
+        },
+        {
+          "time": 56.19999999999809,
+          "event": {
+            "type": "capacitor-relay",
+            "targetId": 2049,
+            "x": 200,
+            "y": 481.9999999999993,
+            "targetX": 280,
+            "targetY": 462.1666666666661,
+            "size": 1
+          },
+          "recipient": {}
+        }
+      ]
+    }
+  ]
+}

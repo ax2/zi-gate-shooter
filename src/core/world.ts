@@ -225,13 +225,24 @@ export class World {
   }
   seekerLinks=0;
   capacitorBursts=0;
+  capacitorTransfers=0;capacitorRecovered=0;
+  private relayCapacitor(body:Body,charge:number){
+    if(this.build.electricBranch!=='capacitor'||this.bossVictory||body.kind==='boss'||charge<=0||!(body.kind in C.enemies)||(body.dropGrace??0)>0||body.y<C.playerShotTop||body.y>C.playerY)return;
+    charge=Math.min(ELECTRIC_FORK.hits-1,charge);body.capacitorHits=0;
+    const next=this.bodies.filter(b=>b!==body&&b.active&&b.hp>0&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0)
+      &&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&(b.capacitorHits??0)<ELECTRIC_FORK.hits-1
+      &&Math.hypot(b.x-body.x,b.y-body.y)<=ELECTRIC_FORK.relayRange)
+      .sort((a,b)=>Math.hypot(a.x-body.x,a.y-body.y)-Math.hypot(b.x-body.x,b.y-body.y)||a.id-b.id)[0];
+    if(next){const before=next.capacitorHits??0;next.capacitorHits=Math.min(ELECTRIC_FORK.hits-1,before+charge);this.capacitorTransfers++;this.capacitorRecovered+=next.capacitorHits-before;
+      this.effects.push({type:'capacitor-relay',targetId:next.id,x:body.x,y:body.y,targetX:next.x,targetY:next.y,size:next.capacitorHits-before});}
+  }
   private capacitor(body:Body,damage:number){
-    if(this.build.electricBranch!=='capacitor'||!body.active||!(body.kind in C.enemies)||guardClosed(body)
+    if(this.build.electricBranch!=='capacitor'||this.bossVictory||!body.active||!(body.kind in C.enemies)||guardClosed(body)||(body.dropGrace??0)>0
       ||body.y<C.playerShotTop||body.y>C.playerY||(body.kind==='boss'&&this.phase!=='boss'))return;
     body.capacitorHits=(body.capacitorHits??0)+1;
     if(body.capacitorHits<ELECTRIC_FORK.hits)return;
     body.capacitorHits=0;this.capacitorBursts++;
-    this.effects.push({type:'capacitor',x:body.x,y:body.y,size:100,weaponKind:'arc'});
+    this.effects.push({type:'capacitor',targetId:body.id,x:body.x,y:body.y,size:100,weaponKind:'arc'});
     this.hit(body,damage*ELECTRIC_FORK.damage,'arc');
   }
   burnHits=0;relayHits=0;
@@ -961,7 +972,7 @@ export class World {
           const ionEligible=bullet.weaponKind==='arc'&&body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
           const linkEligible=body.kind in C.enemies&&!guardClosed(body)&&!protectedEntry;
           const hpBefore=body.hp;
-          this.hit(body, bullet.damage, bullet.weaponKind);
+          this.hit(body, bullet.damage, bullet.weaponKind,bullet.weaponKind??'pulse',bullet.weaponKind==='arc');
           if(protectedEntry)return;
           if(linkEligible&&body.hp<hpBefore&&bullet.weaponKind==='blast')this.leaveMagnetic(body,bullet.damage);
           if(linkEligible&&body.hp<hpBefore&&isBallisticWeapon(bullet.weaponKind)&&(ammo==='ricochet'||fusion==='ricochet')){
@@ -1155,7 +1166,7 @@ export class World {
     const milestone=supportMilestone(mastery);
     return milestone ? `${milestone} · 火力+10%` : '火力+10% · 超载6秒';
   }
-  private hit(b: Body, damage: number, weaponKind?: WeaponKind,source:DamageSource=weaponKind??'pulse') {
+  private hit(b: Body, damage: number, weaponKind?: WeaponKind,source:DamageSource=weaponKind??'pulse',capacitorDirect=false) {
     if((b.dropGrace??0)>0){this.effects.push({type:'drop-impact',x:b.x,y:b.y,weaponKind});return;}
     this.hits++; b.hit = 0.07;
     if (b.kind === 'gate') {
@@ -1170,6 +1181,7 @@ export class World {
     this.effects.push({ type: 'impact', x: b.x, y: b.y, size: b.width, weaponKind });
     if (b.hp > 0) return;
     b.active = false;
+    if(wasActive)this.relayCapacitor(b,(b.capacitorHits??0)+(capacitorDirect&&!guardClosed(b)?1:0));
     if (b.kind === 'crate') {
       this.cratesBroken++;
       const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;pickup.openingSupply=b.openingSupply;if(b.directedRefit)pickup.directedRefit=true;

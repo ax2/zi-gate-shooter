@@ -58,7 +58,7 @@ import {sentryThrust} from './sentry-thrust';
 import {buildPreview} from './build-preview';
 import {empWave,offlineLight} from './emp-light';
 import {runReport} from './run-report';
-import { capacitorLight, capacitorMarks } from './capacitor-light';
+import { capacitorLight, capacitorMarks, capacitorRelay } from './capacitor-light';
 import { formationShield } from './formation-shield';
 import { burnLight } from './burn-light';
 import { fractureLight, fractureMarks, fractureWaveLight } from './fracture-light';
@@ -152,7 +152,7 @@ export class CanvasRuntime {
   private sparkPhase=0;
   private blasts: Blast[] = [];
   private impacts: ImpactMarker[] = [];
-  private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean;seeker?:boolean}[] = [];
+  private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean;seeker?:boolean;capacitorRelay?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
   private supportBeams: {mirror?:MirrorSegment[];bounced?:boolean;x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number;ricochet?:boolean;fractureWave?:boolean}[] = [];
   private destruction?: BossDestruction;
@@ -625,6 +625,7 @@ export class CanvasRuntime {
       this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.24,photon:true});
       if(this.save.settings.sound)this.platform.sound('refract',1);return;
     }
+    if(e.type==='capacitor-relay'&&e.targetX!==undefined&&e.targetY!==undefined){if(this.arcs.length<12)this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.24,capacitorRelay:true});return;}
     if (this.save.settings.sound) this.platform.sound(e.type, this.world.weaponStage(e.weaponKind ?? this.world.weaponKind), e.weaponKind ?? this.world.weaponKind);
     if ((e.type === 'arc'||e.type==='magnetic-link') && e.targetX !== undefined && e.targetY !== undefined && this.arcs.length < 12) this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.16,seeker:e.seeker});
     if (e.type === 'fire') { const kind=e.weaponKind??this.world.weaponKind;this.mountedMotion.get(kind)?.fire(kind,this.world.weaponStage(kind),this.world.time);if (!e.weaponKind || e.weaponKind === this.world.weaponKind) this.weaponMotion.fire(this.world.weaponKind, this.world.weaponStage(this.world.weaponKind), this.world.time); return; }
@@ -1028,7 +1029,7 @@ export class CanvasRuntime {
     this.particles = this.particles.filter(s => s.life > 0);
     for(const e of this.empWaves){e.life-=dt;empWave(c,e.x,e.y,e.radius,1-e.life/.5,this.save.settings.effects==='weak');}
     this.empWaves=this.empWaves.filter(e=>e.life>0);
-    for (const arc of this.arcs) { arc.life -= dt;if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon,arc.seeker); }
+    for (const arc of this.arcs) { arc.life -= dt;if(arc.capacitorRelay)capacitorRelay(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects==='weak');else if(arc.focus)focusDischarge(c,arc.x,arc.y,arc.life,this.save.settings.effects==='weak');else chainArc(c,arc.x,arc.y,arc.tx,arc.ty,arc.life,this.save.settings.effects === 'weak',arc.photon,arc.seeker); }
     this.arcs = this.arcs.filter(arc=>arc.life>0);
     trimImpactBudget(this.impacts,this.save.settings.effects==='weak');
     for (const hit of this.impacts) { hit.life -= dt;if(hit.opticalBand)opticalImpactLight(c,hit.x,hit.y,hit.life,hit.opticalBand,this.save.settings.effects==='weak',hit.prism);else impactLight(c, hit.x, hit.y, hit.kind, 1 - hit.life / (hit.total??0.14), this.save.settings.effects === 'weak'); }
@@ -1368,6 +1369,7 @@ export class CanvasRuntime {
       this.rect(72, y, 576, 94, '#091723');
       this.text(`${weaponNames[kind]} T${w.weaponStage(kind)}${kind==='arc'&&w.build.electricBranch==='capacitor'?' · 蓄爆':kind==='arc'&&w.build.electricBranch==='spread'?' · 扩散':kind==='arc'&&w.build.electricBranch==='seeker'?' · 猎隼':''}${w.weaponCalibration(kind)?' · 精校'+w.weaponCalibration(kind):''}`, 92, y + 22, 25, weaponColors[kind], 'left', true);
       this.text(kind==='arc'?`${w.build.electricBranch==='seeker'?'首跳340':'索敌'+ARC_SHOT.aimWidth} · 跳电${profile.chainHops}×${w.build.ranks.electric>=3?80:65}%`:ballisticMechanics(w,kind),92,y+49,20,'#a9c9d9','left');
+      if(kind==='arc'&&w.build.electricBranch==='capacitor')this.text(`接力${w.capacitorTransfers} · 蓄爆${w.capacitorBursts}`,625,y+23,18,'#d7c2ff','right');
       const perShot = Math.min(...damage) === Math.max(...damage) ? `${damage[0]}` : `${Math.min(...damage)}–${Math.max(...damage)}`;
       this.text(`常态 ${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 77, 22, '#d6e7f0', 'left');
     }
@@ -1676,8 +1678,8 @@ export class CanvasRuntime {
       const node=electricBranches[branch],y=295+i*215,color=branch==='spread'?'#adf3bf':branch==='seeker'?'#ffda92':'#c7b1ff';
       this.rect(65,y,590,200,'#203e50');this.rect(65,y,5,200,color);
       this.text(node.name,90,y+32,31,color,'left',true);this.text(node.role,90,y+68,24,'#effaff','left');
-      this.text(branch==='spread'?'每发电弧额外多跳一名敌人':branch==='seeker'?'首跳340 · 优先蓄能射手，再普通射手':'同一敌人累计3次电弧直击后放电',90,y+105,23,'#d9e8f1','left');
-      this.text(branch==='spread'?'伤害与原跳数保留 · 适合密集群敌':branch==='seeker'?'原伤害与跳数保留 · 后续跳距220':`追加${ELECTRIC_FORK.damage*100}%直击伤害 · 链电不积层`,90,y+141,22,'#bdd8e7','left');
+      this.text(branch==='spread'?'每发电弧额外多跳一名敌人':branch==='seeker'?'首跳340 · 优先蓄能射手，再普通射手':`${ELECTRIC_FORK.hits}格蓄爆追加${ELECTRIC_FORK.damage*100}% · 链电不积层`,90,y+105,23,'#d9e8f1','left');
+      this.text(branch==='spread'?'伤害与原跳数保留 · 适合密集群敌':branch==='seeker'?'原伤害与跳数保留 · 后续跳距220':'击破带电目标接力220内 · 最多留2格',90,y+141,22,'#bdd8e7','left');
       this.text('选择此改造　›',625,y+177,24,color,'right');
       this.buttons.push({x:65,y,w:590,h:200,action:`branch:${branch}`,label:node.name});
     }
@@ -1788,7 +1790,7 @@ export class CanvasRuntime {
       equipmentReceipts:this.equipmentFeedback.pending.map(r=>({...r})),equipmentReceipt:this.buildFeedback?.equipment?{...this.buildFeedback}:null,
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,
       ionCharge:this.world.ionCharge,ionBursts:this.world.ionBursts,ionHits:this.world.ionHits,
-      electricBranch:this.world.build.electricBranch??null,seekerLinks:this.world.seekerLinks,capacitorBursts:this.world.capacitorBursts,
+      electricBranch:this.world.build.electricBranch??null,seekerLinks:this.world.seekerLinks,capacitorBursts:this.world.capacitorBursts,capacitorTransfers:this.world.capacitorTransfers,capacitorRecovered:this.world.capacitorRecovered,
       opticalBranch:this.world.build.opticalBranch??null,burnHits:this.world.burnHits,relayHits:this.world.relayHits,mirrorShots:this.world.mirrorShots,mirrorHits:this.world.mirrorHits,mirrorBounces:this.world.mirrorBounces,mirrorDoubleHits:this.world.mirrorDoubleHits,mirrorBeams:this.supportBeams.filter(b=>b.mirror).length,
       photonAugment:this.world.build.photonAugment??null,laserChainProfile:laserChainProfile(this.world.build.photonAugment),laserChainUnlocked:this.world.laserChainUnlocked(),laserChainReady:this.world.laserChainReady,laserArcHits:this.world.laserArcHits,laserFocusHits:this.world.laserFocusHits,laserArcBeams:this.arcs.filter(a=>a.photon&&!a.focus).length,laserFocusBeams:this.arcs.filter(a=>a.focus).length,
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,

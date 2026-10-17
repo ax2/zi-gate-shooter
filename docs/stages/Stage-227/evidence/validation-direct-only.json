@@ -1,0 +1,82 @@
+{
+  "result": "passed",
+  "equality": [
+    {
+      "branch": "spread",
+      "frames": 18000,
+      "time": 300.0000000000558,
+      "hp": 3,
+      "serializableWorldAndEffectsEqual": true
+    },
+    {
+      "branch": "seeker",
+      "frames": 18000,
+      "time": 300.0000000000558,
+      "hp": 3,
+      "serializableWorldAndEffectsEqual": true
+    }
+  ],
+  "samples": [
+    {
+      "seed": 1337,
+      "seconds": 600,
+      "time": 599.999999999783,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstTransfer": 54.96666666666483,
+      "transfers": 61,
+      "recovered": 65,
+      "bursts": 49,
+      "followupBursts": 2,
+      "firstFollowup": 322.8000000000351,
+      "gates": 27,
+      "pickups": 21,
+      "bossWins": 7,
+      "kills": 648,
+      "peakBodies": 15,
+      "peakBullets": 67
+    },
+    {
+      "seed": 9001,
+      "seconds": 600,
+      "time": 599.999999999783,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstTransfer": 40.91666666666563,
+      "transfers": 63,
+      "recovered": 63,
+      "bursts": 42,
+      "followupBursts": 0,
+      "firstFollowup": null,
+      "gates": 28,
+      "pickups": 21,
+      "bossWins": 7,
+      "kills": 638,
+      "peakBodies": 16,
+      "peakBullets": 65
+    },
+    {
+      "seed": 1337,
+      "seconds": 1200,
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "choiceAt": 21.26666666666674,
+      "firstTransfer": 54.96666666666483,
+      "transfers": 123,
+      "recovered": 127,
+      "bursts": 101,
+      "followupBursts": 2,
+      "firstFollowup": 322.8000000000351,
+      "gates": 55,
+      "pickups": 42,
+      "bossWins": 14,
+      "kills": 1335,
+      "peakBodies": 16,
+      "peakBullets": 67
+    }
+  ],
+  "physicalStreams": 7,
+  "normalSeeds": 2,
+  "longExtendsSeed1337": true,
+  "limits": "Serialized World/effects excluding two new counters; JS private ledger separately tested. Transfer does no damage; later actual burst verified. Seed9001 follow-up bursts0 retained. Safe automated control knows future hazards, virtual60Hz not human or performance; no full-suite or device test."
+}

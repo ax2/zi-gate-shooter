@@ -1,3 +1,10 @@
+/** Finite transfer particles, not an attack or a future hostile path. */
+export function capacitorRelay(c:CanvasRenderingContext2D,x:number,y:number,tx:number,ty:number,life:number,weak:boolean){
+ const age=Math.max(0,Math.min(1,1-life/.24)),dx=tx-x,dy=ty-y;
+ c.save();c.globalAlpha=1-age;c.strokeStyle='#ad9bdf';c.lineWidth=weak?1:1.5;c.setLineDash([4,9]);c.beginPath();c.moveTo(x,y);c.lineTo(tx,ty);c.stroke();c.setLineDash([]);
+ for(let i=0;i<(weak?2:3);i++){const t=Math.max(0,Math.min(1,age*1.4-i*.13)),px=x+dx*t,py=y+dy*t;c.fillStyle='#172c37';c.strokeStyle='#94ead5';c.lineWidth=1.5;c.beginPath();c.arc(px,py,weak?3:4,0,Math.PI*2);c.fill();c.stroke();c.fillStyle='#e0fff1';c.fillRect(px-1,py-1,2,2);}
+ c.restore();
+}
 /** Local charge cells describe actual hits, never future hostile trajectories. */
 export function capacitorMarks(c:CanvasRenderingContext2D,x:number,y:number,width:number,hits:number,time:number){
  c.save();c.translate(x,y);c.lineWidth=2;c.strokeStyle='#b6a0ee';

@@ -29,9 +29,9 @@ export const SEEKER_BRIDGE={range:340} as const;
 export const electricBranches={
  seeker:{name:'猎隼电桥',detail:'首跳范围340 · 优先蓄能射手',role:'借前排目标，跳击后排火力点'},
  spread:{name:'连锁扩散',detail:'跳电范围220 · 额外多跳一次',role:'优先连通群敌，扩大清场范围'},
- capacitor:{name:'电容蓄爆',detail:'跳电范围220 · 同敌3次直击追加200%',role:'持续瞄准精英与首领，单体放电'},
+ capacitor:{name:'电容蓄爆',detail:'满3格追加200% · 直击击破接力最多2格',role:'带电击破保留余能 · 下次直击继续蓄爆'},
 } as const;
-export const ELECTRIC_FORK={hits:3,damage:2} as const;
+export const ELECTRIC_FORK={hits:3,damage:2,relayRange:220} as const;
 export type OpticalBranch='burn'|'relay'|'mirror';
 export const opticalBranches={
  burn:{name:'灼热透镜',detail:'间隔-25% · 灼烧3×25% /0.3秒',role:'对重装与首领持续施压'},

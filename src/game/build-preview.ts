@@ -55,7 +55,7 @@ export function buildPreview(world:World,route:Route,branch?:BuildBranch){
   }else if(route==='electric'){
     gain=rank>=3?`电弧直击伤害 ${volley(before)} → ${volley(after)}`
       :rank===2?'跳伤65%→80% · 6次电击引发140范围放电'
-      :rank===1?branch==='seeker'?'常规跳距220 · 首跳340 · 优先蓄能射手':'跳电范围 160 → 220 · 选扩散/蓄爆/猎隼'
+      :rank===1?branch==='seeker'?'常规跳距220 · 首跳340 · 优先蓄能射手':branch==='capacitor'?'满3格蓄爆200% · 带电击破接力220':'跳电范围 160 → 220 · 选扩散/蓄爆/猎隼'
       :!owned?`新增T1电弧 · 直伤${volley(after)} · 跳电${after.chainHops}次`
       :`电弧追加跳电 ${before.chainHops} → ${after.chainHops}次`;
   }else{

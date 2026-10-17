@@ -46,6 +46,7 @@ it('shows only common fork gains and actionable missing combination nodes',()=>{
   w.chooseBuild('electric');
   expect(buildPreview(w,'ballistic').plan).toContain('本次组合：雷暴霰射');
   expect(buildPreview(w,'electric').gain).toBe('跳电范围 160 → 220 · 选扩散/蓄爆/猎隼');
+  expect(buildPreview(w,'electric','capacitor').gain).toBe('满3格蓄爆200% · 带电击破接力220');
   expect(w.build.electricBranch).toBeUndefined();
   for(let i=0;i<3;i++)w.chooseBuild('optical');
   expect(buildPreview(w,'ballistic').plan).toContain('雷暴霰射');
