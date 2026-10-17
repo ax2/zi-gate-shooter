@@ -1,7 +1,7 @@
 import {it,expect} from 'vitest';import {timeline,SWARM} from '../src/core/director';import {World,type Bullet} from '../src/core/world';import {C} from '../src/core/config';
 function bullet(x=360,y=360,kind:'pulse'|'arc'|'scatter'='pulse'):Bullet{return {id:99999,x,y,px:x,py:y,vx:0,vy:0,age:0,damage:100,active:true,hostile:false,weaponKind:kind,chainHops:kind==='arc'?5:0,splashRadius:kind==='scatter'?140:0,hitBodies:[],remainingTargets:2};}
 it('retains finite first-run feedback and later dense, alternating and column packs inside open outer roads',()=>{
- expect(timeline(1,1337).filter(s=>s.drop)).toHaveLength(39);
+ expect(timeline(1,1337).filter(s=>s.drop)).toHaveLength(64);
  for(const [round,count] of [[2,11],[3,6],[4,15]] as const){for(const seed of [1,77,1337]){const list=timeline(round,seed),drops=list.filter(s=>s.drop&&s.dropY===undefined);expect(drops).toHaveLength(count);expect(drops.filter(s=>s.dropNotice)).toHaveLength(1);expect(drops.every(s=>s.kind==='drone'&&s.x>=180&&s.x<=540&&s.at>=32&&s.at<=36.4)).toBe(true);expect(list.filter(s=>s.kind==='armory')).toHaveLength(2);expect(list.filter(s=>s.kind==='gates')).toHaveLength(4);}}
 });
 it.each(['pulse','arc','scatter'] as const)('%s is absorbed without damage, derived procs or rewards during visible arrival protection',kind=>{

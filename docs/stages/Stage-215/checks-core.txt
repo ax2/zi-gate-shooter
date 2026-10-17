@@ -1,0 +1,30 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/chapter-assaults.test.mjs tests/swarm-routes.test.ts tests/context-guide.test.ts tests/intro-lockshot-progression.test.mjs tests/supply-convoy.test.ts tests/swarm.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/swarm.test.ts (6 tests | 1 failed) 34ms
+   × retains finite first-run feedback and later dense, alternating and column packs inside open outer roads 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/swarm.test.ts > retains finite first-run feedback and later dense, alternating and column packs inside open outer roads
+AssertionError: expected [ …(64) ] to have a length of 39 but got 64
+
+- Expected
++ Received
+
+- 39
++ 64
+
+ ❯ tests/swarm.test.ts:4:45
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 22 passed (23)
+   Start at  15:36:39
+   Duration  8.11s (tests 77%, transform 18%, import 5%)

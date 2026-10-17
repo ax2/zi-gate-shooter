@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/swarm-routes.test.ts tests/context-guide.test.ts tests/fairness.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/swarm-routes.test.ts (1 test | 1 failed) 777ms
+   × replays all chapter packs from three lanes without kills or immunity and with 450ms new-drop reaction 776ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/swarm-routes.test.ts > replays all chapter packs from three lanes without kills or immunity and with 450ms new-drop reaction
+AssertionError: expected 65 to be 38 // Object.is equality
+
+- Expected
++ Received
+
+- 38
++ 65
+
+ ❯ tests/swarm-routes.test.ts:9:58
+      7|  }
+      8|  // Chapters containing an elite now deploy it visibly; R4 has no elit…
+      9|  expect(w.phase).toBe('boss-entry');expect(w.dropSpawns).toBe(round===…
+       |                                                          ^
+     10|  }
+     11| },60000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 37 passed (38)
+   Start at  15:33:04
+   Duration  208.26s (tests 100%)

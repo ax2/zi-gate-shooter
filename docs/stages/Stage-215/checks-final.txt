@@ -1,0 +1,28 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/chapter-assaults.test.mjs tests/chapter-assault-progression.test.mjs tests/swarm-routes.test.ts tests/context-guide.test.ts tests/intro-lockshot-progression.test.mjs tests/supply-convoy.test.ts tests/swarm.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/chapter-assault-progression.test.mjs (3 tests | 1 failed) 20218ms
+   × electric earns its normal build through all three denser chapters with less empty battlefield time 5367ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/chapter-assault-progression.test.mjs > electric earns its normal build through all three denser chapters with less empty battlefield time
+AssertionError: expected 0.40129599629715346 to be less than 0.36990742883591765
+ ❯ tests/chapter-assault-progression.test.mjs:12:27
+     10|   expect(b.seconds).toBeGreaterThanOrEqual(72);
+     11|   expect(b.meanVisible).toBeGreaterThan(a.meanVisible*1.15);
+     12|   expect(b.emptyFraction).toBeLessThan(a.emptyFraction-.03);
+       |                           ^
+     13|  }
+     14|  expect(after.pickups).toBeGreaterThanOrEqual(10);expect(after.gates).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 25 passed (26)
+   Start at  15:49:33
+   Duration  21.05s (tests 91%, transform 7%, import 2%)

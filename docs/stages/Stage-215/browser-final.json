@@ -1,0 +1,13 @@
+{
+  "logs": [],
+  "normalFlowToRound3": true,
+  "desktop": {
+    "width": 1280,
+    "height": 800
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844
+  },
+  "samePhysicalAfterResize": true
+}

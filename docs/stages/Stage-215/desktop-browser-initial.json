@@ -1,0 +1,8 @@
+{
+  "logs": [],
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "heavy": "Actual guard and armor names overlap at 60px separation; fix authored spacing"
+}

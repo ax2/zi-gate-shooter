@@ -1,4 +1,5 @@
 import {BANKSHOT,hasBankshot} from './bankshot';
+import {chapterAssaults} from './chapter-assaults';
 import {FIRE_CONTROL,hasControlPatrol} from './fire-control';
 import {LOCKSHOT,INTRO_LOCKSHOT} from './lockshot';
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
@@ -231,5 +232,6 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     if(elite){Object.assign(elite,{at:INTRO_ESCORT.at,pattern:'fan',drop:true,dropY:INTRO_ESCORT.gunY,dropLabel:'门后护炮',dropDetail:'前盾挡枪 · 后炮扇射 · 打门后换位领取'});out.push({at:INTRO_ESCORT.at,kind:'guard',x:INTRO_ESCORT.x,pattern:'convoy',drop:true,dropY:INTRO_ESCORT.guardY});}
     const gun=out.find(s=>s.kind==='sniper'&&s.at===INTRO_LOCKSHOT.at);if(gun)Object.assign(gun,{pattern:'lockshot',dropLabel:'锁位三连',dropDetail:'蓄能时抢先拆炮 · 或避过三连再反击'});
   }
+  out.push(...chapterAssaults(round,mirror,encounter));
   return out.sort((a, b) => a.at - b.at);
 }
