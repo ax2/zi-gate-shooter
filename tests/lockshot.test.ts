@@ -4,7 +4,7 @@ function tick(w:World,x=68,n=1){for(let i=0;i<n;i++){w.step(C.step,x);w.drainEff
 function destroy(w:World,b:Body){w.bullets.push({id:99999,x:b.x,y:b.y,px:b.x,py:b.y,vx:0,vy:0,damage:10000,age:0,active:true,hostile:false});tick(w);}
 it('retains the original gun, supplies and moving sentry alongside rotating pursuit tactics',()=>{
  for(let r=1;r<=18;r++)for(const seed of[1337,9001]){
-  const list=timeline(r,seed),sector=(r-1)%3,v=Math.floor((r-1)/3)%3,guns=list.filter(s=>s.pattern==='lockshot');
+  const list=timeline(r,seed),sector=(r-1)%3,v=Math.floor((r-1)/3)%3,guns=list.filter(s=>s.pattern==='lockshot'&&!s.closing);
   const expected=r===1?1:sector===1?[3,7,4][v]:sector===0&&v===2?3:0;
   expect(guns).toHaveLength(expected);
   if(r===1||sector===1)expect(guns.find(s=>s.at===(r===1?51:23))).toMatchObject({kind:'sniper',at:r===1?51:23,drop:true,dropY:360});

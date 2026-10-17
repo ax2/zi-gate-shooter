@@ -12,7 +12,7 @@ export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,se
  w.player.x=w.player.px=start;
  const births=new Map<number,number>(),known=new Set<number>(),unknownBullets=new Set<number>();
  let path:number[]=[],planned=0,minLag=Infinity,maxBodies=0,maxBullets=0,failureTime:number|null=null,fineGridPlans=0;
- for(let f=0;f<75*60&&w.phase==='running';f++){
+ for(let f=0;f<90*60&&w.phase==='running';f++){
   let matured=false;
   for(const b of w.bodies)if(b.active){
    if(!births.has(b.id))births.set(b.id,f);

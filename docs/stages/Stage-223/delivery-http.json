@@ -1,0 +1,17 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "length": 547
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-DLTWPWMA.js",
+    "status": 200,
+    "length": 369708
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/guard-v1.png",
+    "status": 200,
+    "length": 327836
+  }
+]

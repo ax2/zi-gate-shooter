@@ -19,6 +19,7 @@ import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,STORM_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT } from './boss-formations';
 import {OVERLOAD} from './overload';
+import {CLOSING_ASSAULT_AT,closingBrief} from './closing-assault';
 import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type IonSpear} from './ion-storm';
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
@@ -633,6 +634,24 @@ export class World {
       }
       while (this.scheduleIndex < this.scheduled.length && this.scheduled[this.scheduleIndex].at <= this.roundTime && this.roundTime >= this.nextSpawnRetry) {
         const s = this.scheduled[this.scheduleIndex++];
+        if(s.closing){
+          // Wait for every old target, including unclaimed boxes and gates.
+          // Old projectiles remain live and participate in admission safety.
+          if(this.bodies.some(b=>b.active)){this.scheduleIndex--;break;}
+          const group=[s];while(this.scheduled[this.scheduleIndex+group.length-1]?.closing)group.push(this.scheduled[this.scheduleIndex+group.length-1]);
+          const units=group.map(spawn=>{
+            const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);
+            b.pattern=spawn.pattern;b.lane=spawn.lane??spawn.x;b.dropGrace=SWARM.grace;b.timer=spawn.opening??.1;
+            if(b.pattern==='lockshot'){b.lockX=this.player.x;b.lockDamageStart=this.damageTaken;}
+            return b;
+          });
+          const longest=units.reduce((a,b)=>(C.playerY-a.y)/a.speed>(C.playerY-b.y)/b.speed?a:b);
+          if(!this.admit(longest)){for(const b of units)b.active=false;this.scheduleIndex--;break;}
+          this.scheduleIndex+=group.length-1;this.dropSpawns+=units.length;
+          this.lockshotSpawns+=units.filter(b=>b.pattern==='lockshot').length;
+          const brief=closingBrief(this.round);this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:brief.title,detail:brief.detail});
+          continue;
+        }
         if(s.pattern==='fire-control'){
           const group=[s];while(this.scheduled[this.scheduleIndex+group.length-1]?.pattern==='fire-control'&&this.scheduled[this.scheduleIndex+group.length-1]?.at===s.at)group.push(this.scheduled[this.scheduleIndex+group.length-1]);
           if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.length>C.limits.enemies){this.scheduleIndex--;break;}
@@ -697,7 +716,7 @@ export class World {
           if(s.dropLabel)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:s.dropLabel,detail:s.dropDetail??(s.kind==='guard'?'前盾后援 · 留意转火角度':s.kind==='sniper'?'两侧哨机 · 优先压制一翼':'装甲纵列 · 集中火力突破')});
         }
       }
-      if (this.roundTime >= 72 && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {
+      if (this.roundTime >= CLOSING_ASSAULT_AT && this.scheduleIndex >= this.scheduled.length && !this.bodies.some(b => b.active)) {
         this.phase = 'boss-entry'; this.phaseTime = 0;
         this.escortGroup=0;this.escortRetry=0;this.bossEscortKills=0;this.bossEscortSpawns=0;this.bossStartDamage=this.damageTaken;
         const boss = this.spawn('boss', 360, -150); boss.speed = 0;
