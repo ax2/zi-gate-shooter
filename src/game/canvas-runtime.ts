@@ -1,4 +1,6 @@
 import {OVERLOAD} from '../core/overload';
+import {combatNoticePosition} from './combat-notice';
+import {pickupBeacon,pickupSignal} from './pickup-signal';
 import {ammoFragmentLight} from './ammo-fragment';
 import {ballisticMechanics} from './ballistic-mechanics';
 import {BANKSHOT} from '../core/bankshot';
@@ -43,7 +45,7 @@ import {sweeperLight} from './sweeper-light';
 import {ricochetLight} from './ricochet-light';
 import {reboundState} from '../core/rebound-charger';
 import {reboundLight} from './rebound-light';
-import {buildReceiptPosition,type ReceiptPosition} from './build-receipt';
+import {buildReceiptPosition,combatPanelClear,type ReceiptPosition} from './build-receipt';
 import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipePerformance,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
 import {interceptorLight} from './interceptor-light';
 import {bossHeatLight} from './boss-heat-light';
@@ -178,6 +180,7 @@ export class CanvasRuntime {
   private noticeDetail = '';
   private noticeY = 277;
   private noticeUntil = 0;
+  private presentedNotice:{text:string;detail:string;y:number;top:number;bottom:number}|null=null;
   private shakeUntil = 0;
   private shieldBreak?:{x:number;y:number;until:number};
   private weaponMotion = new WeaponMotion();
@@ -749,6 +752,7 @@ export class CanvasRuntime {
   }
   private renderFrame(dt: number) {
     const c = this.ctx, p = this.platform, w = this.world;
+    this.presentedNotice=null;
     c.save(); c.fillStyle = '#0a1119'; c.fillRect(0, 0, p.width, p.height);
     c.translate(this.offsetX, this.offsetY); c.scale(this.scale, this.scale);
     c.beginPath(); c.rect(0, 0, 720, 1280); c.clip();
@@ -801,7 +805,6 @@ export class CanvasRuntime {
       if(completed.ready)this.setBuildFeedback({title:`目标成形 · ${completed.name}`,detail:completed.effect,until:w.time+4,combo:true});
       this.pendingRecipeCompletion=null;
     }
-    const receiptThreat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     let f=this.buildFeedback;
     if(f&&this.mode==='playing'){
       // Only time actually spent displaying the receipt consumes its reading window.
@@ -818,18 +821,23 @@ export class CanvasRuntime {
     const receiptPosition=f?this.buildReceiptLocation():null;
     if(f)f.hidden=w.time<f.until&&receiptPosition===null;
     const activeBuild=this.mode==='playing'&&this.buildFeedback&&w.time<this.buildFeedback.until&&receiptPosition!==null;
-    const noticeVisible=this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil&&!activeBuild;
-    const bottomNotice=receiptThreat||this.noticeY===1195;
+    const noticePlacement=this.noticePlacement();
+    const noticeVisible=noticePlacement!==null&&!activeBuild;
+    const bottomNotice=noticePlacement?.y===1208;
     const bottomBusy=(activeBuild&&receiptPosition!==240)||(noticeVisible&&bottomNotice);
+    const badgeBlocked=!combatPanelClear(w,{left:40,right:680,top:1150,bottom:1256});
     // Preserve a newly earned achievement until the preceding combat receipt can be read.
     if(bottomBusy&&w.time<this.achievementUntil)this.achievementUntil=Math.max(this.achievementUntil,
       activeBuild?this.buildFeedback!.until+3:w.time+(this.noticeUntil-this.platform.now())/1000+3);
+    if(this.mode==='playing'&&badgeBlocked&&w.time<this.achievementUntil)
+      this.achievementUntil=Math.max(this.achievementUntil,w.time+3);
     if (this.mode === 'menu') this.drawMenu();
     else {
       this.drawHud();
-      if(noticeVisible){
-        const y=bottomNotice?1208:this.noticeY;
-        this.rect(58,y-31,604,this.noticeDetail?(bottomNotice?94:104):62,'#0a1c2af0');this.text(this.notice,360,y,28,'#d2f2ff');
+      if(noticeVisible&&noticePlacement){
+        const {y,top,bottom}=noticePlacement;
+        this.presentedNotice={text:this.notice,detail:this.noticeDetail,y,top,bottom};
+        this.rect(58,top,604,bottom-top,'#0a1c2af0');this.text(this.notice,360,y,28,'#d2f2ff');
         if(this.noticeDetail)this.text(this.noticeDetail,360,y+(bottomNotice?37:43),bottomNotice?22:24,'#f2d598');
       }
     }
@@ -846,7 +854,7 @@ export class CanvasRuntime {
       const progress=contract.kind==='research'&&contract.proof?`${buildProofs[contract.proof.kind].name} ${Math.min(contract.proofProgress,buildProofs[contract.proof.kind].goal)}/${buildProofs[contract.proof.kind].goal}${requiredProofGroups(contract.proof.kind)?' · 批次'+Math.min(contract.proofGroupCount,requiredProofGroups(contract.proof.kind))+'/'+requiredProofGroups(contract.proof.kind):''}`:contract.kind==='hunter'?`${contract.targetKills}/2精英`:`${Math.min(15,w.kills-contract.startKills)}/15敌`;
       this.rect(40,y,640,44,'#102330');this.text(`${contracts[contract.kind].name} · ${Math.max(0,Math.ceil(30-contract.elapsed))}秒 · ${progress}`,360,y+22,24,'#ffdc8a');
     }
-    if(this.mode==='playing' && w.time<this.achievementUntil&&!bottomBusy){this.achievementShownAt??=w.time;achievementBadge(c,this.achievementToast,w.time-this.achievementShownAt,this.save.settings.effects==='weak');}
+    if(this.mode==='playing' && w.time<this.achievementUntil&&!bottomBusy&&!badgeBlocked){this.achievementShownAt??=w.time;achievementBadge(c,this.achievementToast,w.time-this.achievementShownAt,this.save.settings.effects==='weak');}
     if (this.mode === 'paused' || this.mode === 'settings' || this.mode === 'result') this.drawDialog();
     c.restore();
   }
@@ -855,7 +863,8 @@ export class CanvasRuntime {
     for(const beam of this.supportBeams)beam.life-=dt;
     this.supportBeams=this.supportBeams.filter(beam=>beam.life>0);
     this.gateFeedback.sync(w.bodies, w.time);
-    const noticeBlocking=this.notice&&this.platform.now()<this.noticeUntil?{top:this.noticeY-31,bottom:this.noticeY+(this.noticeDetail?73:31)}:undefined;
+    const hasReceipt=this.buildFeedback&&w.time<this.buildFeedback.until&&this.buildReceiptLocation()!==null;
+    const noticeBlocking=!hasReceipt?this.noticePlacement()??undefined:undefined;
     this.gateFeedback.advance(this.mode==='playing'?dt:0,r=>this.mode==='playing'&&gateReceiptReadable(r,w.bodies,w.bullets,noticeBlocking));
     this.drawGuide();
     this.drawDestruction(dt);
@@ -1048,7 +1057,11 @@ export class CanvasRuntime {
       c.restore();
     }
     // Breaking is not collecting: keep the physical module visible above smoke.
-    for (const b of w.bodies) if (b.kind === 'pickup') this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);
+    for (const b of w.bodies) if (b.kind === 'pickup') {
+      pickupBeacon(c,b,w.time,this.save.settings.effects==='weak');
+      c.save();if(!pickupSignal(b)?.collectible)c.globalAlpha=.3;
+      this.frameSprite('props.png', 2, 3, b.x, b.y, 65, 65);c.restore();
+    }
     for (const b of w.bodies) {
       if(b.pattern==='rebound')reboundLight(c,b,this.save.settings.effects==='weak');
       if(b.pattern==='intercept')interceptorLight(c,b,this.save.settings.effects==='weak');
@@ -1081,6 +1094,7 @@ export class CanvasRuntime {
           this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
         }
       } else if (b.kind === 'pickup') {
+        const signal=pickupSignal(b);if(!signal?.collectible)continue;
         const target=recipeSupplyMatch(w,this.save.recipeGoal,b),width=target?264:232,x=clamp(b.x,width/2+12,720-width/2-12);
         // Keep the real reward readable over friendly fire; hostile shots are
         // still drawn after every native label and panel below.
@@ -1090,7 +1104,8 @@ export class CanvasRuntime {
         const combination=supplyCombinationLabel(supplyCombinations(w,b,this.save.recipeGoal));
         const showCombination=!!combination&&supplyCombinationClear(w,x,b.y,width,noticeBlocking);
         if(!behindEnemy)this.rect(x-width/2,b.y-74,width,showCombination?70:40,'#0b1723f7');
-        this.text((target?'目标·':'')+(b.weaponKind ? `拾取${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `拾取 T${b.stage}`),x,b.y-54,24,'#ffe7b1','center',true);
+        const verb=signal.urgent?'快拾取':'拾取';
+        this.text((target?'目标·':'')+(b.weaponKind ? `${verb}${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `${verb} T${b.stage}`),x,b.y-54,24,signal.urgent?'#ffd186':'#ffe7b1','center',true);
         if(showCombination)this.text(combination!,x,b.y-24,21,'#ffe2a1','center',true);
       }
       else if (b.kind === 'gate') {
@@ -1191,8 +1206,12 @@ export class CanvasRuntime {
       this.bar(360,y+196,620,boss.hp/boss.maxHp,w.bossShieldActive()?'#82dfff':'#ff925d');
     }
   }
+  private noticePlacement(){
+    return this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil
+      ?combatNoticePosition(this.world,this.noticeY,!!this.noticeDetail):null;
+  }
   private buildReceiptLocation(): ReceiptPosition | null {
-    if(this.buildFeedback?.equipment&&this.notice&&this.noticeY===1195&&this.platform.now()<this.noticeUntil)return null;
+    if(this.buildFeedback?.equipment&&this.noticePlacement()?.y===1208)return null;
     const w=this.world,position=buildReceiptPosition(w);
     const combat=w.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     // A current instruction (break, collect, cross, or dodge) wins the shared
@@ -1203,11 +1222,10 @@ export class CanvasRuntime {
   }
   private drawGuide() {
     if (this.mode !== 'playing') return;
-    const receiptThreat=this.world.bodies.some(b=>b.active&&(b.kind==='boss'||b.bountyRound!==undefined));
     if(this.world.time<this.achievementUntil)return;
     if(this.buildFeedback&&this.world.time<this.buildFeedback.until&&this.buildReceiptLocation()===1180)return;
     const activeReceipt=this.buildFeedback&&this.world.time<this.buildFeedback.until&&this.buildReceiptLocation()!==null;
-    if(!activeReceipt&&this.notice&&(this.noticeY===1195||receiptThreat)&&this.platform.now()<this.noticeUntil)return;
+    if(!activeReceipt&&this.noticePlacement()?.y===1208)return;
     // Optional help is below all entities, effects, projectiles and native labels.
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.
@@ -1779,6 +1797,8 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
+      combatNotice:this.presentedNotice?{...this.presentedNotice}:null,
+      pickupSignals:this.world.bodies.filter(b=>b.kind==='pickup').map(b=>({id:b.id,x:b.x,y:b.y,...pickupSignal(b)})),
       mode: this.mode, time: this.world.time,roundTime:this.world.roundTime,phaseTime:this.world.phaseTime, round: this.world.round, phase: this.world.phase, buildRanks:{...this.world.build.ranks}, buildRefinements:{...this.world.build.refinements}, activeWeapons:this.world.activeWeapons,
       supportBeams:this.supportBeams.length,laserCharge:this.world.laserCharge(),lastLaserAt:Number.isFinite(this.opticalFiredAt)?this.opticalFiredAt:null,opticalBand:laserVisualBand(this.world.growth.mastery,this.world.build.ranks.optical),laserBands:this.supportBeams.filter(b=>b.laser).map(b=>b.opticalBand??1),opticalImpacts:this.impacts.filter(i=>i.opticalBand).length,
       weaponLevels:Object.fromEntries(this.world.activeWeapons.map(kind=>[kind,this.world.weaponStage(kind)])),
