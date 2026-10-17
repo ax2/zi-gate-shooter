@@ -1,0 +1,3 @@
+import{observedNoFireRoute}from'../tests/helpers/observed-route-driver';import{safeRoute}from'../src/core/reachability';import{writeFileSync}from'node:fs';
+for(const [round,plan,x]of [[2,1,68],[2,1,360]]as const){
+ const r=observedNoFireRoute(round,plan,x,9001,(w,known)=>{writeFileSync('build/qa/Stage-235/failed-'+round+'-'+x+'.json',JSON.stringify({time:w.time,player:w.player,known:[...known],bodies:w.bodies,bullets:w.bullets.filter(b=>b.hostile),routes:[2,4,8].map(h=>({h,route:safeRoute(w.player.x,w.bodies.filter(b=>known.has(b.id)),w.bullets,h,{phase:w.phase,phaseTime:w.phaseTime,gridPoints:97})}))},null,2));});console.log(JSON.stringify(r));}

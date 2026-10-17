@@ -11,6 +11,7 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
  // 55.5s guard/sentry tail. Heavy waves crest before their existing battery.
  for(const [phrase,start] of [10,21,sector===2?47:sector===1?FLANK_SUPPLY_AT:53.5].entries()){
   const flip=(phrase+variation)%2===1;
+  const middle=round>1&&phrase===1?variation:0;
   const x=(value:number)=>flip?720-value:value;
   if(sector===0){
    // Split clusters: a concentrated volley clears one group; the other keeps moving.
@@ -20,12 +21,13 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
     // The middle phrase has two rear guns behind the original light screen.
     const gun=phrase===1&&row===1&&(opening?i!==1:i===1||i===2);
     const anchor=round>1&&phrase===0&&variation>0&&i===1&&(row===1||row===3);
-    const kind=anchor?(variation===1?'armor':row===1?'sniper':'charger'):gun?'armor':'drone';
-    const pattern=kind==='armor'?'fan':kind==='sniper'?'lockshot':kind==='charger'?'flank':undefined;
-    add(start+row*1.05+i*.12,kind,x(lane),kind==='armor'||kind==='sniper'?350:330+row*25,pattern,kind==='charger'?x(440):undefined,
-     row===0&&i===0?(phrase===1?'炮机夹层':phrase===0&&round>1?['集群突破','层叠炮群','猎袭机群'][variation]:'集群突破'):undefined,
-     row===0&&i===0?(phrase===1?'前层轻机掩护双炮 · 集火一翼再转炮':phrase===0&&round>1&&variation>0?variation===1?'机群藏炮 · 穿列拆炮或转火清翼':'后哨锁位接冲锋 · 抢拆炮机再转进':'连续机群 · 集火开路再转火'):undefined);
-    if(kind==='armor')out[out.length-1].opening=.1;
+    const kind=anchor?(variation===1?'armor':row===1?'sniper':'charger'):gun?(middle===1?'sniper':'armor'):'drone';
+    const moving=gun&&middle===2;
+    const pattern=kind==='armor'?(moving?'sweep':'fan'):kind==='sniper'?'lockshot':kind==='charger'?'flank':undefined;
+    add(start+row*1.05+i*.12,kind,x(lane),kind==='armor'||kind==='sniper'?350:330+row*25,pattern,moving?x(720-lane):kind==='charger'?x(440):undefined,
+     row===0&&i===0?(phrase===1?['炮机夹层','锁位夹层','游弋夹层'][middle]:phrase===0&&round>1?['集群突破','层叠炮群','猎袭机群'][variation]:'集群突破'):undefined,
+     row===0&&i===0?(phrase===1?['前层轻机掩护双炮 · 集火一翼再转炮','双哨隔屏锁位 · 拆一哨或诱射后换翼','双炮横移交错 · 跟枪拆炮或转火清翼'][middle]:phrase===0&&round>1&&variation>0?variation===1?'机群藏炮 · 穿列拆炮或转火清翼':'后哨锁位接冲锋 · 抢拆炮机再转进':'连续机群 · 集火开路再转火'):undefined);
+    if(kind==='armor')out[out.length-1].opening=moving?1+(i===2?.4:0):.1;
    }
   }else if(sector===1){
    // Opposite-side arrivals alternate instead of closing both exits simultaneously.
@@ -33,9 +35,10 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
     const left=row%2===0,side=left?150:570;
     const target=phrase===2?(left?280:440):(left?460:260);
     const gun=phrase===1&&row<2||phrase===0&&variation>0&&row===0;
-    const moving=gun&&phrase===0&&variation===2;
-    add(start+row*1.35,gun?'sniper':'charger',x(side),gun?340:330,gun?(moving?'relocate':'lockshot'):'flank',gun?(moving?x(570):undefined):x(target),row===0?(phrase===2?'补给截击':phrase===1?'哨机猎袭':['侧翼轮袭','锁位追猎','游猎追击'][variation]):undefined,row===0?(phrase===2?'两翼短刺 · 先清近敌再接补给':phrase===1?'两翼哨机错时锁位 · 拆炮后应对冲锋':variation===0?'两翼错时内切 · 清掉一侧后转移':moving?'机动炮换位接两翼冲锋 · 跟枪拆炮':'哨机锁位接两翼冲锋 · 先拆后撤或诱射转进'):undefined);
-    if(moving)out[out.length-1].opening=.1;
+    const moving=gun&&(phrase===0&&variation===2||middle===1&&row===0||middle===2);
+    const rebound=!gun&&middle>0;
+    add(start+row*1.35,gun?'sniper':'charger',x(side),gun?340:330,gun?(moving?'relocate':'lockshot'):rebound?'rebound':'flank',gun?(moving?x(phrase===1?side:720-side):undefined):x(rebound?(left?280:440):target),row===0?(phrase===2?'补给截击':phrase===1?['哨机猎袭','游猎接哨','双游猎回袭'][middle]:['侧翼轮袭','锁位追猎','游猎追击'][variation]):undefined,row===0?(phrase===2?'两翼短刺 · 先清近敌再接补给':phrase===1?['两翼哨机错时锁位 · 拆炮后应对冲锋','机动哨接驻哨 · 追拆后留意冲锋','双哨换位接折返 · 清掉一翼再转进'][middle]:variation===0?'两翼错时内切 · 清掉一侧后转移':moving?'机动炮换位接两翼冲锋 · 跟枪拆炮':'哨机锁位接两翼冲锋 · 先拆后撤或诱射转进'):undefined);
+    if(moving)out[out.length-1].opening=phrase===1?1:.1;
     for(const lane of [side,left?230:490])add(start+row*1.35+.45,'drone',x(lane),390,'weave');
    }
   }else{
@@ -44,14 +47,14 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
     // Keep 120px from the existing outer supply guards and their nameplates.
     const side=row%2===0?300:420;
     const breach=phrase===1&&row<2;
-    const mobile=phrase===0&&(row===1||variation===2&&row===2),bank=phrase===0&&variation===1&&row===2;
+    const mobile=phrase===0&&(row===1||variation===2&&row===2)||middle===2&&row===2,bank=(phrase===0&&variation===1||middle===1)&&row===2;
     add(breach?start:start+row*1.8,'armor',x(breach?420:side),breach?(row===0?550:350):350,breach?'fire-control':mobile?'sweep':bank?'bankshot':'fan',mobile?x(720-side):undefined,
      row===0&&!breach?(phrase===0?['游弋炮阶','折返炮阶','双游弋炮阶'][variation]:'重装梯队'):undefined,row===0&&!breach?(phrase===0?variation===1?'折返弹穿插横移炮 · 抢拆或看实弹换位':variation===2?'双横移炮错时交班 · 跟枪清炮再接补给':'锚炮与横移炮错层 · 跟枪拆炮或转火开路':'前后错层炮甲 · 穿列或集中拆炮'):undefined);
     if(mobile)out[out.length-1].opening=.1;
     if(breach)out[out.length-1].breach=true;
     for(const [i,lane] of [side-60,side+60].entries()){
      if(phrase===1&&row===0&&i===1){
-      add(start,'conduit',x(180),450,'fire-control',undefined,'破阵重炮','先拆侧方中继停炮开甲 · 或等开火后强拆');
+      add(start,'conduit',x(180),450,'fire-control',undefined,['破阵重炮','折返破阵','游弋破阵'][middle],['先拆侧方中继停炮开甲 · 或等开火后强拆','断中继开甲 · 后继折返炮需看实弹回切','断中继后跟枪清横移炮 · 留意侧方实弹'][middle]);
       out[out.length-1].breach=true;
      }else add(start+row*1.8+.6,'drone',x(lane),470);
     }

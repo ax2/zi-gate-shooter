@@ -23,9 +23,9 @@ it.each([4,5,6])('changes target mix or real motion between three rotations in s
 it.each([1,2,3,4,5,6])('mirrors target lanes as well as positions in round %s',r=>{
  for(const v of [0,1,2])expect(chapterAssaults(r,true,v)).toEqual(chapterAssaults(r,false,v).map(s=>({...s,x:720-s.x,lane:s.lane===undefined?undefined:720-s.lane})));
 });
-it('keeps first chapter starter groups simple and all eight other phrases intact',()=>{
+it('keeps first chapter starter groups simple and all first and final phrases intact',()=>{
  for(const v of [0,1,2]){
   expect(chapterAssaults(1,false,v).filter(s=>s.at<16).every(s=>s.kind==='drone')).toBe(true);
-  for(const r of [2,3,4])expect(chapterAssaults(r,false,v).filter(s=>s.at>=21)).toEqual(old.chapterAssaults(r,false,v).filter((s:any)=>s.at>=21));
+  for(const r of [2,3,4])expect(chapterAssaults(r,false,v).filter(s=>s.at>=27)).toEqual(old.chapterAssaults(r,false,v).filter((s:any)=>s.at>=27));
  }
 });

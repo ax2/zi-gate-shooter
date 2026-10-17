@@ -1,7 +1,7 @@
-import {World} from '../../src/core/world';import {C} from '../../src/core/config';import {progressionTarget} from './progression-driver';
+import type{BattlePlan}from'../../src/core/battle-plan';import {World} from '../../src/core/world';import {C} from '../../src/core/config';import {progressionTarget} from './progression-driver';
 /** Normal inputs and earned choices; spawn and projectile wrappers only observe. */
-export function runDefaultPressure(Runtime:typeof World,route:'ballistic'|'electric'|'optical',policy:'safe'|'aim'|'hold'|'safe-then-aim',seconds=300,engagement:'auto'|'relay'|'guns'='auto'){
- const w=new Runtime(1337,1,'scatter'),sources=new Map<number,any>(),shots:any[]=[];let aim=360,lastGrowth=0,maxGrowthGap=0;const growth=[],damageEvents:{time:number;round:number;cause:unknown}[]=[];
+export function runDefaultPressure(Runtime:typeof World,route:'ballistic'|'electric'|'optical',policy:'safe'|'aim'|'hold'|'safe-then-aim',seconds=300,engagement:'auto'|'relay'|'guns'='auto',plan:BattlePlan=0){
+ const w=new Runtime(1337,1,'scatter',plan),sources=new Map<number,any>(),shots:any[]=[];let aim=360,lastGrowth=0,maxGrowthGap=0;const growth=[],damageEvents:{time:number;round:number;cause:unknown}[]=[];
  const spawn=w.spawn.bind(w);w.spawn=((...args:Parameters<World['spawn']>)=>{const b=spawn(...args);if(b.kind in C.enemies)sources.set(b.id,{body:b,round:w.round,at:w.time,roundTime:w.roundTime,seen:false,shots:[]});return b;}) as World['spawn'];
  const fire=(w as any).hostile.bind(w);(w as any).hostile=(...args:any[])=>{const before=w.bullets.length;fire(...args);if(w.bullets.length>before){const b=w.bullets.at(-1)!;shots.push({body:b,time:w.time,x:b.x,y:b.y,vx:b.vx,vy:b.vy});}};
  const chapters=new Map<number,{frames:number;bodyFrames:number;peak:number;emptyFrames:number;emptyStreak:number;longestEmpty:number}>();

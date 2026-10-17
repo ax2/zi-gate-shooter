@@ -1,0 +1,48 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/middle-rotation.test.ts tests/assault-rotation.test.ts tests/early-reinforcements.test.ts tests/chapter-assaults.test.mjs
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/middle-rotation.test.ts (19 tests | 1 failed) 373ms
+   × keeps heavy breach/relay intact and gives mobile sentries their own-side deployment with short return charges 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/middle-rotation.test.ts > keeps heavy breach/relay intact and gives mobile sentries their own-side deployment with short return charges
+AssertionError: expected [ [ 'armor', 'fire-control' ], …(2) ] to deeply equal [ [ 'armor', 'fire-control' ], …(2) ]
+
+- Expected
++ Received
+
+@@ -2,13 +2,13 @@
+    [
+      "armor",
+      "fire-control",
+    ],
+    [
+-     "armor",
++     "conduit",
+      "fire-control",
+    ],
+    [
+-     "conduit",
++     "armor",
+      "fire-control",
+    ],
+  ]
+
+ ❯ tests/middle-rotation.test.ts:31:161
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 46 passed (47)
+   Start at  02:52:57
+   Duration  1.73s (transform 65%, tests 24%, import 11%, worker 1%)
+
+  Transform  transforming modules took 3.09s · 65% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

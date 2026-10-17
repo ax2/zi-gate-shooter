@@ -5,11 +5,11 @@ import {advanceBody} from '../src/core/behavior';
 import {sentryDirection} from '../src/core/mobile-sentry';
 import {timeline} from '../src/core/director';
 import {dangerTimeline} from '../src/core/reachability';
-it('replaces exactly one existing later-chapter sentry while preserving rewards and the first chapter',()=>{
+it('preserves the named later-chapter mobile sentry and allows additional authored reserve sentries',()=>{
  expect(timeline(1,1337).some(s=>s.pattern==='relocate')).toBe(false);
  for(let round=2;round<=16;round++)for(const seed of [1,77,1337]){
   const all=timeline(round,seed),mobile=all.filter(s=>s.pattern==='relocate');
-  expect(mobile).toHaveLength(1);expect(mobile[0].kind).toBe('sniper');expect(mobile[0].drop).toBe(true);
+  expect(mobile.filter(s=>s.dropLabel==='机动哨机')).toHaveLength(1);expect(mobile.every(s=>s.kind==='sniper'&&s.drop)).toBe(true);
   expect(all.filter(s=>s.kind==='armory')).toHaveLength(2);expect(all.filter(s=>s.kind==='gates')).toHaveLength(4);
  }
 });

@@ -1,8 +1,8 @@
-import{it,expect}from'vitest';import{earlyReinforcements}from'../src/core/early-reinforcements';import{timeline,Random}from'../src/core/director';import{battleIndex}from'../src/core/battle-plan';import{World}from'../src/core/world';import{C}from'../src/core/config';import{enemyHealthScale}from'../src/core/difficulty';
+import{it,expect}from'vitest';import{earlyReinforcements}from'../src/core/early-reinforcements';import{timeline,Random}from'../src/core/director';import{battleIndex}from'../src/core/battle-plan';import{World}from'../src/core/world';import{chapterAssaults}from'../src/core/chapter-assaults';import{C}from'../src/core/config';import{enemyHealthScale}from'../src/core/difficulty';
 const path='../build/qa/Stage-233/baseline.mjs',old=await import(path);
-it('preserves every old roster entry and every reward in108 schedules, and leaves the whole first chapter unchanged',()=>{
+it('preserves early reserves and other authored enemies/rewards in108 schedules, with chapter assaults checked separately',()=>{
  for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){const list=timeline(round,seed,plan),mirror=round>1&&new Random(seed).next()>.5;
- expect(list.filter(s=>!s.earlyReserve)).toEqual(old.timeline(round,seed,plan));expect(list.filter(s=>s.earlyReserve)).toEqual(earlyReinforcements(round,mirror,battleIndex(round,plan)).sort((a,b)=>a.at-b.at));if(round===1)expect(list).toEqual(old.timeline(round,seed,plan));
+ const strip=(items:any[],own:any[])=>{const rest=items.filter(s=>!s.earlyReserve);for(const s of own){const i=rest.findIndex(t=>JSON.stringify(t)===JSON.stringify(s));expect(i).toBeGreaterThanOrEqual(0);rest.splice(i,1);}return rest;};const v=battleIndex(round,plan);expect(strip(list,chapterAssaults(round,mirror,v))).toEqual(strip(old.timeline(round,seed,plan),old.chapterAssaults(round,mirror,v)));expect(list.filter(s=>s.earlyReserve)).toEqual(earlyReinforcements(round,mirror,battleIndex(round,plan)).sort((a,b)=>a.at-b.at));if(round===1)expect(list).toEqual(old.timeline(round,seed,plan));
  }
 });
 it.each([2,3,4,5,6,7])('authors six protected, staggered units and mirrors all actual lanes in round%s',r=>{
