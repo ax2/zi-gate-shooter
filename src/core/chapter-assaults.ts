@@ -1,4 +1,5 @@
 import type {Spawn} from './director';
+export const FLANK_SUPPLY_AT=46;
 
 /** Three visible pressure phrases, separated from the existing special encounters.
  * Counts are authored, never based on the player's damage or weapon selection. */
@@ -6,8 +7,9 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
  const sector=(round-1)%3,out:Spawn[]=[];
  const add=(at:number,kind:Spawn['kind'],x:number,y:number,pattern?:Spawn['pattern'],lane?:number,label?:string,detail?:string)=>
   out.push({at,kind,x:mirror?720-x:x,drop:true,dropY:y,pattern,lane:lane===undefined?undefined:mirror?720-lane:lane,dropLabel:label,dropDetail:detail});
- // Heavy waves crest before the 55.5s battery, then release a route to the gate.
- for(const [phrase,start] of [10,21,sector===2?47:53.5].entries()){
+ // Flank interception overlaps the supply approach, then releases before the
+ // 55.5s guard/sentry tail. Heavy waves crest before their existing battery.
+ for(const [phrase,start] of [10,21,sector===2?47:sector===1?FLANK_SUPPLY_AT:53.5].entries()){
   const flip=(phrase+variation)%2===1;
   const x=(value:number)=>flip?720-value:value;
   if(sector===0){
@@ -20,7 +22,8 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
    // Opposite-side arrivals alternate instead of closing both exits simultaneously.
    for(let row=0;row<3;row++){
     const left=row%2===0,side=left?150:570;
-    add(start+row*1.35,'charger',x(side),330,'flank',x(left?460:260),row===0?'侧翼轮袭':undefined,row===0?'两翼错时内切 · 清掉一侧后转移':undefined);
+    const target=phrase===2?(left?280:440):(left?460:260);
+    add(start+row*1.35,'charger',x(side),330,'flank',x(target),row===0?(phrase===2?'补给截击':'侧翼轮袭'):undefined,row===0?(phrase===2?'两翼短刺 · 先清近敌再接补给':'两翼错时内切 · 清掉一侧后转移'):undefined);
     for(const lane of [side,left?230:490])add(start+row*1.35+.45,'drone',x(lane),390,'weave');
    }
   }else{

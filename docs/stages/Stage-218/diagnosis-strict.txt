@@ -1,0 +1,66 @@
+[
+  {
+    "delayed": false,
+    "noFire": false,
+    "strict": false,
+    "unknownShots": 0,
+    "time": 23.7166666666666,
+    "hp": 3,
+    "reactions": [
+      {
+        "reaction": 0,
+        "found": true
+      },
+      {
+        "reaction": 0.1,
+        "found": true
+      },
+      {
+        "reaction": 0.2,
+        "found": true
+      },
+      {
+        "reaction": 0.3,
+        "found": true
+      },
+      {
+        "reaction": 0.45,
+        "found": false
+      },
+      {
+        "reaction": 0.55,
+        "found": false
+      }
+    ]
+  },
+  {
+    "delayed": true,
+    "noFire": false,
+    "strict": false,
+    "unknownShots": 0,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "kills": 1
+  },
+  {
+    "delayed": true,
+    "noFire": true,
+    "strict": false,
+    "unknownShots": 0,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "kills": 0
+  },
+  {
+    "delayed": true,
+    "noFire": true,
+    "strict": true,
+    "unknownShots": 0,
+    "time": 72.93333333333048,
+    "hp": 3,
+    "phase": "boss-entry",
+    "kills": 0
+  }
+]

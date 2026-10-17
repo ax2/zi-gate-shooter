@@ -1,0 +1,1 @@
+import{build}from'esbuild';await build({entryPoints:['tools/diagnose-side-route.ts'],bundle:true,platform:'node',format:'esm',outfile:'build/qa/Stage-218/diagnosis.mjs'});await import('../build/qa/Stage-218/diagnosis.mjs');

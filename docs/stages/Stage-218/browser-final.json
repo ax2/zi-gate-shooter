@@ -1,0 +1,59 @@
+{
+  "logs": [],
+  "normalEarnedFlow": true,
+  "virtual60Hz": true,
+  "worldInjection": false,
+  "mobile": {
+    "width": 390,
+    "height": 844
+  },
+  "desktop": {
+    "width": 1280,
+    "height": 800
+  },
+  "tailHP": 3,
+  "tailProgression": {
+    "stage": 3,
+    "bonus": 100,
+    "energy": 10,
+    "overload": 0,
+    "mastery": 3,
+    "gatesTaken": 7,
+    "pickups": 6
+  },
+  "chargers": [
+    {
+      "id": 5261,
+      "initialX": 150,
+      "at": 46.01666666666534,
+      "x": 150,
+      "y": 478.75000000000114,
+      "hp": 0,
+      "age": 0.8333333333333343,
+      "lane": 280,
+      "active": false
+    },
+    {
+      "id": 5328,
+      "initialX": 570,
+      "at": 47.36666666666526,
+      "x": 570,
+      "y": 463.875000000001,
+      "hp": 0,
+      "age": 0.7500000000000007,
+      "lane": 440,
+      "active": false
+    },
+    {
+      "id": 5401,
+      "initialX": 150,
+      "at": 48.71666666666518,
+      "x": 280,
+      "y": 1345.100000000001,
+      "hp": 28.679999999999996,
+      "age": 4.049999999999991,
+      "lane": 280,
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/flank-supply.test.mjs tests/chapter-assaults.test.mjs tests/swarm-routes.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/chapter-assaults.test.mjs (2 tests | 1 failed) 23ms
+   × adds three distinct combat phrases and preserves every existing enemy, special encounter and reward in 108 schedules 21ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/chapter-assaults.test.mjs > adds three distinct combat phrases and preserves every existing enemy, special encounter and reward in 108 schedules
+AssertionError: expected [ …(48) ] to deeply equal [ …(48) ]
+
+- Expected
++ Received
+
+@@ -159,10 +159,19 @@
+      "pattern": undefined,
+      "stage": undefined,
+      "x": 240,
+    },
+    {
++     "at": 35,
++     "kind": "gates",
++     "lane": undefined,
++     "pair": undefined,
++     "pattern": undefined,
++     "stage": undefined,
++     "x": 500,
++   },
++   {
+      "at": 35.4,
+      "drop": true,
+      "dropY": 360,
+      "kind": "drone",
+      "lane": undefined,
+@@ -234,19 +243,10 @@
+      "lane": undefined,
+      "pair": undefined,
+      "pattern": undefined,
+      "stage": undefined,
+      "x": 240,
+-   },
+-   {
+-     "at": 39,
+-     "kind": "gates",
+-     "lane": undefined,
+-     "pair": undefined,
+-     "pattern": undefined,
+-     "stage": undefined,
+-     "x": 500,
+    },
+    {
+      "at": 39.599999999999994,
+      "drop": true,
+      "dropY": 360,
+@@ -310,11 +310,11 @@
+      "kind": "guard",
+      "pattern": "convoy",
+      "x": 500,
+    },
+    {
+-     "at": 48,
++     "at": 46.5,
+      "kind": "armory",
+      "lane": undefined,
+      "pair": undefined,
+      "pattern": undefined,
+      "stage": 3,
+
+ ❯ tests/chapter-assaults.test.mjs:11:21
+      9|   const remaining=[...timeline(round,seed,plan)];
+     10|   for(const spawn of extra){const at=remaining.findIndex(s=>JSON.strin…
+     11|   expect(remaining).toEqual(old.timeline(round,seed,plan));
+       |                     ^
+     12|   expect(extra.filter(s=>s.dropLabel)).toHaveLength(3);
+     13|   expect(extra.every(s=>s.at>=10&&s.at<58&&s.drop&&s.x>=150&&s.x<=570)…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 4 passed (5)
+   Start at  17:22:21
+   Duration  6.81s (tests 78%, transform 18%, import 4%)

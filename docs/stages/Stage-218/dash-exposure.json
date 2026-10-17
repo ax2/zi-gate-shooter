@@ -1,0 +1,50 @@
+[
+  {
+    "route": "ballistic",
+    "policy": "safe",
+    "count": 3,
+    "maxAge": 4.049999999999991,
+    "moved": 1,
+    "escaped": 1
+  },
+  {
+    "route": "ballistic",
+    "policy": "safe-then-aim",
+    "count": 3,
+    "maxAge": 0.7500000000000007,
+    "moved": 0,
+    "escaped": 0
+  },
+  {
+    "route": "electric",
+    "policy": "safe",
+    "count": 3,
+    "maxAge": 4.049999999999991,
+    "moved": 1,
+    "escaped": 1
+  },
+  {
+    "route": "electric",
+    "policy": "safe-then-aim",
+    "count": 3,
+    "maxAge": 0.7500000000000007,
+    "moved": 0,
+    "escaped": 0
+  },
+  {
+    "route": "optical",
+    "policy": "safe",
+    "count": 3,
+    "maxAge": 0.7500000000000007,
+    "moved": 0,
+    "escaped": 0
+  },
+  {
+    "route": "optical",
+    "policy": "safe-then-aim",
+    "count": 3,
+    "maxAge": 1.4999999999999996,
+    "moved": 0,
+    "escaped": 0
+  }
+]

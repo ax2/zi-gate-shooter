@@ -1,0 +1,46 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/reward-retime-routes.test.ts tests/observed-route-mirrors.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/observed-route-mirrors.test.ts (1 test | 1 failed) 22216ms
+   × preserves per-body 450ms observation in mirrored flank plans and late heavy formations without firing 22215ms
+ ❯ tests/reward-retime-routes.test.ts (1 test | 1 failed) 27266ms
+   × retimed door preserves safe no-kill progression across chapters, three orders and three starting lanes 27265ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/observed-route-mirrors.test.ts > preserves per-body 450ms observation in mirrored flank plans and late heavy formations without firing
+AssertionError: R5 P1/9001/x68 t52.86666666666495: expected 52.86666666666495 to be null
+
+- Expected:
+null
+
++ Received:
+52.86666666666495
+
+ ❯ tests/observed-route-mirrors.test.ts:8:31
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/reward-retime-routes.test.ts > retimed door preserves safe no-kill progression across chapters, three orders and three starting lanes
+AssertionError: R5 P2 x68 t53.649999999998236: expected 53.649999999998236 to be null
+
+- Expected:
+null
+
++ Received:
+53.649999999998236
+
+ ❯ tests/reward-retime-routes.test.ts:9:31
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed (2)
+   Start at  17:18:20
+   Duration  27.84s (tests 98%, transform 1%)

@@ -1,0 +1,1 @@
+{"time":58.34999999999797,"x":446,"grids":[{"size":25,"failedAt":2.9000000000000004,"found":false},{"size":49,"failedAt":2.9000000000000004,"found":false},{"size":97,"failedAt":2.9000000000000004,"found":false},{"size":193,"failedAt":2.9000000000000004,"found":false}]}

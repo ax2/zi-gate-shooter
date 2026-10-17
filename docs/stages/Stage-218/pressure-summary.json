@@ -1,0 +1,74 @@
+[
+  {
+    "route": "ballistic",
+    "policy": "safe",
+    "oldTime": 300.0,
+    "newTime": 300.0,
+    "oldDamage": 0,
+    "newDamage": 0,
+    "oldGates": 15,
+    "newGates": 15,
+    "oldBodies": 92,
+    "newBodies": 92
+  },
+  {
+    "route": "ballistic",
+    "policy": "safe-then-aim",
+    "oldTime": 300.0,
+    "newTime": 300.0,
+    "oldDamage": 4,
+    "newDamage": 4,
+    "oldGates": 15,
+    "newGates": 15,
+    "oldBodies": 92,
+    "newBodies": 92
+  },
+  {
+    "route": "electric",
+    "policy": "safe",
+    "oldTime": 300.0,
+    "newTime": 300.0,
+    "oldDamage": 0,
+    "newDamage": 0,
+    "oldGates": 15,
+    "newGates": 15,
+    "oldBodies": 92,
+    "newBodies": 92
+  },
+  {
+    "route": "electric",
+    "policy": "safe-then-aim",
+    "oldTime": 240.43,
+    "newTime": 240.22,
+    "oldDamage": 4,
+    "newDamage": 4,
+    "oldGates": 12,
+    "newGates": 12,
+    "oldBodies": 92,
+    "newBodies": 92
+  },
+  {
+    "route": "optical",
+    "policy": "safe",
+    "oldTime": 300.0,
+    "newTime": 300.0,
+    "oldDamage": 0,
+    "newDamage": 0,
+    "oldGates": 15,
+    "newGates": 15,
+    "oldBodies": 92,
+    "newBodies": 92
+  },
+  {
+    "route": "optical",
+    "policy": "safe-then-aim",
+    "oldTime": 240.9,
+    "newTime": 240.9,
+    "oldDamage": 4,
+    "newDamage": 4,
+    "oldGates": 12,
+    "newGates": 12,
+    "oldBodies": 92,
+    "newBodies": 92
+  }
+]
