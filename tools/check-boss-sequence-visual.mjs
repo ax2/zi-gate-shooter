@@ -1,0 +1,8 @@
+import assert from'node:assert/strict';import{readFileSync,writeFileSync}from'node:fs';
+const get=n=>JSON.parse(readFileSync(`build/qa/Stage-230/${n}.json`,'utf8')).current,w1=get('wing-1'),w2=get('wing-2'),h1=get('heavy-1'),h2=get('heavy-2'),h3=get('heavy-3'),weak=get('heavy-weak');
+const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+near(w2.time-w1.time,.25);near(h2.time-h1.time,.2);near(h3.time-h2.time,.2);
+for(const [s,count,beat]of[[w1,3,0],[w2,6,1],[h1,2,0],[h2,4,1],[h3,6,2]]){assert.equal(s.hp,3);assert.equal(s.boss[0].counterShots,count);assert.equal(s.boss[0].counterFiredBeat,beat);assert.ok(s.boss[0].hp>0);}
+const oldFlights=[];for(const [a,b]of[[w1,w2],[h1,h3]]){const dt=b.time-a.time,ids=a.hostiles.filter(s=>s.sourceId===a.boss[0].id&&s.age<.1);assert.equal(ids.length,a===w1?3:2);for(const s of ids){const later=b.hostiles.find(n=>n.id===s.id);assert.ok(later,'old projectile must remain alive through later beats');near(later.x,s.x+s.vx*dt);near(later.y,s.y+s.vy*dt);}oldFlights.push({from:a.time,to:b.time,projectiles:ids.length,linearFlightPreserved:true});}
+near(h3.time,weak.time);assert.deepEqual(h3.boss,weak.boss);assert.deepEqual(h3.bodies,weak.bodies);assert.deepEqual(h3.hostiles,weak.hostiles);assert.equal(weak.quality,'weak');
+const out={result:'passed',normalEarnedFlow:true,wing:{times:[w1.time,w2.time],shots:6},heavy:{times:[h1.time,h2.time,h3.time],shots:6},oldFlights,sampledWeakStateEqual:true,limits:'Metadata verification only; mobile/desktop PNGs separately inspected through CUA. Virtual60Hz and isolated memory save, no World injection, not real device FPS, audio or human balance.'};writeFileSync('build/qa/Stage-230/visual-validation.json',JSON.stringify(out,null,2));console.log(JSON.stringify(out));

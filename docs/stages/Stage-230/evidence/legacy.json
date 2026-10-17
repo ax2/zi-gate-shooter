@@ -1,0 +1,20 @@
+[
+  {
+    "route": "ballistic",
+    "frames": 5400,
+    "hp": 3,
+    "equal": true
+  },
+  {
+    "route": "electric",
+    "frames": 5400,
+    "hp": 3,
+    "equal": true
+  },
+  {
+    "route": "optical",
+    "frames": 5400,
+    "hp": 3,
+    "equal": true
+  }
+]

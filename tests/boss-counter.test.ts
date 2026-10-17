@@ -1,5 +1,5 @@
 import {it,expect,vi} from 'vitest';import * as reach from '../src/core/reachability';import {World} from '../src/core/world';import {C} from '../src/core/config';import {advanceBody} from '../src/core/behavior';import {BOSS_COUNTER,counterMuzzles} from '../src/core/boss-counter';import {dangerTimeline} from '../src/core/reachability';
-it.each([0,1,2])('half-health variant %s charges actual physical ports then emits one six-shot fan',variant=>{
+it.each([0])('introductory half-health variant %s retains its simultaneous six-shot fan',variant=>{
  const w=new World(1337,4),b=w.spawn('boss',360,C.bossY);b.bossVariant=variant;b.hp=b.maxHp*.49;let time=0;const shots:{x:number;y:number;vx:number;vy:number;t:number}[]=[];
  const tick=()=>{time+=C.step;advanceBody(b,C.step,'boss',time,(x,y,vx=0,vy=280)=>shots.push({x,y,vx,vy,t:time}));};
  while(!b.warning)tick();expect(b.counterfire).toBe(true);expect(b.attack).toBe(4);const warningAt=time;

@@ -9,7 +9,7 @@ import {batteryHolding} from './battery';
 import {SWEEPER,sweeperDirection} from './sweeper';
 import {RELAY_SCREEN,ROTATING_SHIELD} from './relay-screen';
 import {REBOUND,reboundState} from './rebound-charger';
-import {BOSS_COUNTER,counterMuzzles,counterAttack} from './boss-counter';
+import {BOSS_COUNTER,counterMuzzles,counterAttack,counterSequence,counterVolley} from './boss-counter';
 import { HUNTER } from './contracts';
 import { ESCORT } from './boss-formations';
 import type { Body, Phase } from './world';
@@ -71,17 +71,27 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     }
     b.x = 360 + Math.sin(phaseTime * 0.4) * 65;
     if (b.timer <= 1e-9) {
-      const finish = () => {
+      const finish = (elapsed=0) => {
         b.warning = 0; b.burst = 0; b.attackCycle++;
-        b.timer = b.counterReady?BOSS_COUNTER.lead:b.counterfire?BOSS_COUNTER.recovery:phaseTime > 35 ? 3.5 : 2.8;
+        b.timer = b.counterReady?BOSS_COUNTER.lead:b.counterfire?BOSS_COUNTER.recovery-elapsed:phaseTime > 35 ? 3.5 : 2.8;
+      };
+      const sequencedCounter=()=>{
+        const beat=b.counterBeat??0,p=counterSequence(b.bossVariant);
+        b.counterShotBeat=beat;b.counterShotAge=b.age;
+        for(const s of counterVolley(b,beat))shot(s.x,s.y,s.vx,s.vy);
+        b.warning=0;
+        if(beat+1<p.beats){b.counterBeat=beat+1;b.burst=1;b.timer=p.spacing;}
+        else{b.counterBeat=0;b.counterVolleys=(b.counterVolleys??0)+1;finish(p.spacing*(p.beats-1));}
       };
       if (b.burst) {
+        if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){sequencedCounter();return;}
         if (b.attack === 3) {
           for (const x of bossWarningLanes(b)) for (let i = 0; i < 2; i++) shot(x, b.y + 90 - i * 75, 0, 280);
         } else for (let i = 0; i < 3; i++) shot(360, b.y + 90 - i * 60, 0, 300);
         finish();
       } else if (b.warning <= 0) {
         b.attack=b.counterReady?4:bossAttackForCycle(b.bossVariant,b.attackCycle,!!b.counterfire);b.counterReady=false;
+        if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2))b.counterBeat=0;
         b.warning = b.attack===4?BOSS_COUNTER.warning:1.35; b.timer = b.warning;
         // Advance only after an attack finishes, so delayed warnings cannot
         // accidentally repeat/skip a pattern. B alternates left/right sweep.
@@ -90,6 +100,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
           : [200, 360, 520][Math.floor(b.attackCycle / 2) % 3];
       } else {
         if(b.attack===4){
+          if(b.bossVariant===1||b.bossVariant===2){sequencedCounter();return;}
           for(const muzzle of counterMuzzles(b))for(const vx of BOSS_COUNTER.vx)shot(muzzle.x,muzzle.y,vx,BOSS_COUNTER.vy);
           b.counterVolleys=(b.counterVolleys??0)+1;b.counterShotAge=b.age;finish();
         }else if (b.attack === 3) {
