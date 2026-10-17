@@ -1,0 +1,31 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/combat-ledger.test.ts tests/combat-ledger-progression.test.ts tests/combat-contribution-runtime.test.ts tests/storm-proof-runtime.test.ts tests/run-report.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/combat-contribution-runtime.test.ts (2 tests | 1 failed) 25ms
+   × native pause → current firepower → contribution is read-only and returns to the same paused run 18ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/combat-contribution-runtime.test.ts > native pause → current firepower → contribution is read-only and returns to the same paused run
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/combat-contribution-runtime.test.ts:6:301
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 17 passed (18)
+   Start at  11:51:26
+   Duration  13.34s (tests 83%, transform 13%, import 4%)
+

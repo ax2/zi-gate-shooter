@@ -1,0 +1,22 @@
+{
+  "mobileLogs": [],
+  "desktopLogs": [],
+  "fixedScript": "./assets/canvas-preview-7hODUrym.js",
+  "temporaryTabs": [
+    60,
+    61
+  ],
+  "viewportMobile": {
+    "width": 390,
+    "height": 844,
+    "canvasWidth": 390,
+    "canvasHeight": 768
+  },
+  "viewportDesktop": {
+    "width": 1280,
+    "height": 800,
+    "canvasWidth": 1280,
+    "canvasHeight": 724
+  },
+  "userTabActions": "read only"
+}

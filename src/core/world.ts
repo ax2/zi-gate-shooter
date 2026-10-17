@@ -1,4 +1,5 @@
 import {FIRE_CONTROL} from './fire-control';
+import {CombatLedger,type DamageSource} from './combat-ledger';
 import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
 import {LOCKSHOT} from './lockshot';
 import {RELAY_SCREEN} from './relay-screen';
@@ -61,6 +62,8 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
+  readonly #combatLedger=new CombatLedger();
+  combatContributions(){return this.#combatLedger.snapshot();}
   interceptorBreaks=0;
   lockPreemptWins=0;lockBaitWins=0;
   readonly build = new BuildTree();
@@ -142,7 +145,7 @@ export class World {
     }
   }
   private ionBonusHit(body:Body,damage:number,orb:boolean){
-    const before=body.hp;this.hit(body,damage,'arc');
+    const before=body.hp;this.hit(body,damage,'arc','ion');
     if(body.hp<before){if(orb)this.ionOrbHits++;else this.ionSpearHits++;this.ionBonusDamage+=Math.min(before,before-body.hp);}
   }
   /** Derived projectiles share chronological contact resolution, without calling electric procs. */
@@ -198,7 +201,7 @@ export class World {
     this.effects.push({type:'ion-storm',x:body.x,y:body.y,size:ION_STORM.radius,weaponKind:'arc'});
     for(const target of targets){
       if(!target.active||this.bossVictory||(this.phase!=='running'&&this.phase!=='boss'))continue;
-      const before=target.hp;this.hit(target,damage*ION_STORM.damage,'arc');if(target.hp<before)this.ionHits++;
+      const before=target.hp;this.hit(target,damage*ION_STORM.damage,'arc','ion');if(target.hp<before)this.ionHits++;
     }
     this.launchIon(body,damage);
   }
@@ -238,7 +241,7 @@ export class World {
     const hit=contacts[0];if(!hit)return;
     const endX=x+(target.x-x)*hit.t,endY=start+(target.y-start)*hit.t;
     this.relayHits++;this.effects.push({type:'refract',x,y:start,targetX:endX,targetY:endY});
-    this.hit(hit.body,damage*OPTICAL_FORK.relayDamage,'pulse');return hit.body.id;
+    this.hit(hit.body,damage*OPTICAL_FORK.relayDamage,'pulse','laser');return hit.body.id;
   }
   laserArcHits=0;
   laserFocusHits=0;
@@ -264,7 +267,7 @@ export class World {
       if(!target)break;
       if(guardClosed(target)||(target.dropGrace??0)>0)return this.laserArcHits>hits?'hit':'blocked';
       visited.add(target.id);damage*=profile.decay;
-      const before=target.hp;this.hit(target,damage,'pulse');
+      const before=target.hp;this.hit(target,damage,'pulse','photon');
       if(target.hp<before){this.laserArcHits++;this.effects.push({type:'laser-arc',x:from.x,y:from.y,targetX:target.x,targetY:target.y});}
       from=target;
     }
@@ -276,7 +279,7 @@ export class World {
     let result=this.laserChain(source,this.laserLinkEnergy,visited);
     if(result==='none'){
       const target=this.bodies.find(b=>b.id===source.id&&b.active&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0));
-      if(target){const before=target.hp;this.hit(target,this.laserLinkEnergy*laserChainProfile(this.build.photonAugment).focus,'pulse');
+      if(target){const before=target.hp;this.hit(target,this.laserLinkEnergy*laserChainProfile(this.build.photonAugment).focus,'pulse','photon');
         if(target.hp<before){this.laserFocusHits++;this.effects.push({type:'laser-focus',x:target.x,y:target.y});result='hit';}}
     }
     if(result==='hit'){this.laserLinkEnergy=0;this.laserLinkTargets.clear();}
@@ -288,7 +291,7 @@ export class World {
       body.burnTimer=(body.burnTimer??OPTICAL_FORK.burnInterval)-dt;
       while(body.active&&body.burnTicks>0&&body.burnTimer<=1e-9){
         body.burnTimer+=OPTICAL_FORK.burnInterval;body.burnTicks--;this.burnHits++;
-        this.effects.push({type:'burn-tick',x:body.x,y:body.y,weaponKind:'blast'});this.hit(body,body.burnDamage??0,'blast');
+        this.effects.push({type:'burn-tick',x:body.x,y:body.y,weaponKind:'blast'});this.hit(body,body.burnDamage??0,'blast','laser');
       }
       if(!body.burnTicks)body.burnDamage=undefined;
     }
@@ -322,14 +325,14 @@ export class World {
         for(const target of this.bodies){
           if(this.bossVictory||this.player.hp<=0)break;
           if(!target.active||!(target.kind in C.enemies)||guardClosed(target)||(target.dropGrace??0)>0||target.y<C.playerShotTop||target.y>C.playerY||(target.kind==='boss'&&this.phase!=='boss')||Math.hypot(target.x-field.x,target.y-field.y)>(field.radius??MAGNETIC.radius))continue;
-          const before=target.hp;this.hit(target,field.damage,'blast');
+          const before=target.hp;this.hit(target,field.damage,'blast','magnetic');
           if(target.hp<before){this.magneticHits++;if((field.radius??MAGNETIC.radius)>MAGNETIC.radius&&Math.hypot(target.x-field.x,target.y-field.y)>MAGNETIC.radius){this.magneticWideHits++;this.recordMagneticProofHit(target);this.lastMagneticRefinementHit={mode:'field-wide',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:Math.hypot(target.x-field.x,target.y-field.y)};}this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y};this.effects.push({type:'magnetic-hit',x:target.x,y:target.y,weaponKind:'arc',fieldId:field.id,targetId:target.id});}
         }
         if(field.link&&!this.bossVictory&&this.player.hp>0){
           const distance=(b:Body)=>Math.hypot(b.x-field.x,b.y-field.y),priority=(b:Body)=>['sniper','armor','elite','guard','boss'].includes(b.kind)&&b.warning>0?1:0;
           const target=this.bodies.filter(b=>b.active&&b.kind in C.enemies&&!guardClosed(b)&&!(b.dropGrace??0)&&b.y>=C.playerShotTop&&b.y<=C.playerY&&!(b.kind==='boss'&&this.phase!=='boss')&&distance(b)>(field.radius??MAGNETIC.radius)&&distance(b)<=MAGNETIC_REFINEMENT.linkRange)
             .sort((a,b)=>priority(b)-priority(a)||distance(a)-distance(b)||a.id-b.id)[0];
-          if(target){const before=target.hp;this.hit(target,field.damage,'arc');if(target.hp<before){this.magneticLinkHits++;this.recordMagneticProofHit(target);this.lastMagneticRefinementHit={mode:'field-link',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:distance(target)};this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,link:true};this.effects.push({type:'magnetic-link',x:field.x,y:field.y,targetX:target.x,targetY:target.y,fieldId:field.id,targetId:target.id,weaponKind:'arc'});}}
+          if(target){const before=target.hp;this.hit(target,field.damage,'arc','magnetic');if(target.hp<before){this.magneticLinkHits++;this.recordMagneticProofHit(target);this.lastMagneticRefinementHit={mode:'field-link',fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,fromX:field.x,fromY:field.y,distance:distance(target)};this.lastMagneticHit={fieldId:field.id,targetId:target.id,time:this.time,x:target.x,y:target.y,link:true};this.effects.push({type:'magnetic-link',x:field.x,y:field.y,targetX:target.x,targetY:target.y,fieldId:field.id,targetId:target.id,weaponKind:'arc'});}}
         }
       }
     }
@@ -357,12 +360,12 @@ export class World {
     if(body.fractureHits<profile.hits)return;
     body.fractureHits=0;body.fractureReadyAt=this.time+FRACTURE.cooldown;this.fractureBursts++;
     this.effects.push({type:'fracture',x:body.x,y:body.y,size:FRACTURE.radius,weaponKind:'blast'});
-    this.hit(body,damage*FRACTURE.direct,'blast');
+    this.hit(body,damage*FRACTURE.direct,'blast','fracture');
     if(this.bossVictory)return;
     for(const other of this.bodies)if(other!==body&&other.active&&other.kind in C.enemies
       &&other.y>=C.playerShotTop&&other.y<=C.playerY&&!(other.kind==='boss'&&this.phase!=='boss')
       &&Math.hypot(other.x-body.x,other.y-body.y)<=FRACTURE.radius){
-        if(this.bossVictory)break;this.hit(other,damage*FRACTURE.splash,'blast');
+        if(this.bossVictory)break;this.hit(other,damage*FRACTURE.splash,'blast','fracture');
       }
     if(this.build.fractureAugment==='fracture-line'&&!this.bossVictory)this.fractureWave(body,damage);
   }
@@ -377,7 +380,7 @@ export class World {
       if(this.bossVictory||this.player.hp<=0)break;if(!b.active)continue;
       const contact=Math.min(start,b.y+b.height/2),blocked=guardClosed(b)||(b.dropGrace??0)>0;
       if(b.kind==='gate'||b.kind==='crate'||(b.dropGrace??0)>0){end=contact;break;}
-      const before=b.hp;this.hit(b,damage*FRACTURE_LINE.damage,'blast');if(b.hp<before){
+      const before=b.hp;this.hit(b,damage*FRACTURE_LINE.damage,'blast','fracture');if(b.hp<before){
         const applied=Math.min(before,before-b.hp);this.fractureWaveHits++;this.fractureWaveDamage+=applied;if(fromKill)this.fractureFinishHits++;
         this.lastFractureWaveHit={time:this.time,sourceId:source.id,targetId:b.id,fromKill,x:source.x,y:start,targetX:b.x,targetY:b.y,damage:applied};
       }
@@ -435,7 +438,7 @@ export class World {
       ||body.y<C.playerShotTop||body.y>C.playerY||(body.kind==='boss'&&this.phase!=='boss'))return;
     body.stormHits=(body.stormHits??0)+1;
     if(body.stormHits<STORM_REFINEMENT.hits)return;
-    body.stormHits=0;const before=body.hp;this.hit(body,damage*STORM_REFINEMENT.damage,'scatter');
+    body.stormHits=0;const before=body.hp;this.hit(body,damage*STORM_REFINEMENT.damage,'scatter','storm');
     if(body.hp<before){this.stormFocusBursts++;this.recordStormProof('storm-focus',body);this.stormFocusDamage+=before-body.hp;this.effects.push({type:'capacitor',x:body.x,y:body.y,size:70,weaponKind:'scatter'});}
   }
   aceWins=0;flawlessAceWins=0;readonly certifiedBuilds=new Set<BuildProof>();
@@ -747,7 +750,7 @@ export class World {
             const blocked=body.kind==='crate'||body.kind==='gate'||guardClosed(body)||(body.dropGrace??0)>0;
             const damage=support.laserDamage*(side===0?1:.45)*(1+permanentPower(this.growth)/100)*(this.growth.overload>0?1.35:1);
             visited.add(body.id);if(side===0&&count===0){mainBlocked=blocked;if(!blocked&&body.kind in C.enemies)origin={x:body.x,y:body.y,id:body.id};}
-            const before=body.hp,beforeEnergy=body.energy;this.hit(body,damage,'pulse');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
+            const before=body.hp,beforeEnergy=body.energy;this.hit(body,damage,'pulse','laser');if(side!==0&&body.kind in C.enemies&&body.hp<before)this.prismHits++;
             if(body.hp<before||body.kind==='gate'&&body.energy>beforeEnergy){const contactY=blocked?Math.min(start,body.y+body.height/2):body.y;this.effects.push({type:'laser-impact',x:body.x,y:body.y,targetX:beamX(contactY),targetY:contactY,opticalBand,prism:side!==0});}
             if(side===0&&count===0&&!blocked)this.opticalSecondary(body,damage);
             if(blocked || ++count>=support.laserTargets){end=Math.min(start,body.y+body.height/2);break;}
@@ -908,7 +911,7 @@ export class World {
               const next = candidates[0]; if (!next) break;
               visited.add(next.id); damage *= this.build.ranks.electric>=3?0.8:0.65;
               this.effects.push({type:'arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y,seeker});
-              const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(seeker)this.seekerLinks++;if(conducts)this.ionImpact(next,damage);}
+              const before=next.hp,conducts=!guardClosed(next)&&!(next.dropGrace??0);this.hit(next,damage,bullet.weaponKind,bullet.weaponKind==='scatter'?'storm':bullet.weaponKind);if(bullet.weaponKind==='arc'&&next.hp<before){this.arcLinks++;if(seeker)this.seekerLinks++;if(conducts)this.ionImpact(next,damage);}
               if(bullet.weaponKind==='scatter'&&next.hp<before){this.stormLinks++;if(hop>0&&this.build.stormAugment==='storm-relay'){this.stormRelayLinks++;this.recordStormProof('storm-relay',next);}}origin = next;
             }
           }
@@ -1060,7 +1063,7 @@ export class World {
     const milestone=supportMilestone(mastery);
     return milestone ? `${milestone} · 火力+10%` : '火力+10% · 超载6秒';
   }
-  private hit(b: Body, damage: number, weaponKind?: WeaponKind) {
+  private hit(b: Body, damage: number, weaponKind?: WeaponKind,source:DamageSource=weaponKind??'pulse') {
     if((b.dropGrace??0)>0){this.effects.push({type:'drop-impact',x:b.x,y:b.y,weaponKind});return;}
     this.hits++; b.hit = 0.07;
     if (b.kind === 'gate') {
@@ -1069,7 +1072,9 @@ export class World {
       this.emit('impact-gate', b.x, b.y); return;
     }
     const shield=b.kind==='boss'&&this.bossShieldActive()?1-(this.bossFormation?.shieldReduction??0):1;
+    const before=b.hp,wasActive=b.active;
     b.hp = Math.max(0, b.hp - damage * guardDamageScale(b)*shield);
+    if(wasActive&&b.kind in C.enemies)this.#combatLedger.record(source,before,b.hp);
     this.effects.push({ type: 'impact', x: b.x, y: b.y, size: b.width, weaponKind });
     if (b.hp > 0) return;
     b.active = false;

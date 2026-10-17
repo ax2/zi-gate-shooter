@@ -1,0 +1,422 @@
+[
+  {
+    "opening": "scatter",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 374,
+    "removed": 118719.59000000027,
+    "finishes": 374,
+    "total": 118719.59000000017,
+    "rows": [
+      {
+        "source": "scatter",
+        "damage": 92496.41112500014,
+        "contacts": 920,
+        "kills": 163,
+        "name": "霰射炮",
+        "color": "#ffd28b",
+        "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+        "share": 0.7791166657920569
+      },
+      {
+        "source": "pierce",
+        "damage": 11897.58649999999,
+        "contacts": 299,
+        "kills": 57,
+        "name": "穿甲炮",
+        "color": "#d5b4ff",
+        "role": "穿甲直击 · 沿纵列贯穿更多目标",
+        "share": 0.10021586580614011
+      },
+      {
+        "source": "pulse",
+        "damage": 5724.822000000003,
+        "contacts": 307,
+        "kills": 62,
+        "name": "速射炮",
+        "color": "#83e5ff",
+        "role": "直射与折射 · 持续瞄准单一目标",
+        "share": 0.04822137610145044
+      },
+      {
+        "source": "arc",
+        "damage": 5189.9521000000195,
+        "contacts": 154,
+        "kills": 73,
+        "name": "电弧炮",
+        "color": "#a2ff9c",
+        "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+        "share": 0.04371605478084967
+      },
+      {
+        "source": "storm",
+        "damage": 1831.6382750000002,
+        "contacts": 42,
+        "kills": 16,
+        "name": "雷暴霰射",
+        "color": "#b6ffb3",
+        "role": "派生跳电与破核 · 原霰弹另计",
+        "share": 0.015428273252965223
+      },
+      {
+        "source": "laser",
+        "damage": 1579.180000000003,
+        "contacts": 19,
+        "kills": 3,
+        "name": "激光与棱镜",
+        "color": "#7fe4ff",
+        "role": "主侧束、分光与灼烧 · 瞄准纵列",
+        "share": 0.013301764266537652
+      }
+    ]
+  },
+  {
+    "opening": "arc",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 367,
+    "removed": 117934.5330000001,
+    "finishes": 367,
+    "total": 117934.53300000001,
+    "rows": [
+      {
+        "source": "arc",
+        "damage": 75370.28749999999,
+        "contacts": 307,
+        "kills": 223,
+        "name": "电弧炮",
+        "color": "#a2ff9c",
+        "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+        "share": 0.6390858180614493
+      },
+      {
+        "source": "ion",
+        "damage": 25064.898,
+        "contacts": 48,
+        "kills": 22,
+        "name": "离子风暴",
+        "color": "#c8b1ff",
+        "role": "放电与精研弹体 · 原电弧另计",
+        "share": 0.21253230383334792
+      },
+      {
+        "source": "scatter",
+        "damage": 11178.877500000017,
+        "contacts": 1012,
+        "kills": 70,
+        "name": "霰射炮",
+        "color": "#ffd28b",
+        "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+        "share": 0.0947888393300376
+      },
+      {
+        "source": "pulse",
+        "damage": 4032.3299999999963,
+        "contacts": 388,
+        "kills": 44,
+        "name": "速射炮",
+        "color": "#83e5ff",
+        "role": "直射与折射 · 持续瞄准单一目标",
+        "share": 0.03419125761917416
+      },
+      {
+        "source": "laser",
+        "damage": 2288.1399999999976,
+        "contacts": 28,
+        "kills": 8,
+        "name": "激光与棱镜",
+        "color": "#7fe4ff",
+        "role": "主侧束、分光与灼烧 · 瞄准纵列",
+        "share": 0.019401781155990987
+      }
+    ]
+  },
+  {
+    "opening": "pierce",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 370,
+    "removed": 117795.08549999994,
+    "finishes": 370,
+    "total": 117795.0855000001,
+    "rows": [
+      {
+        "source": "scatter",
+        "damage": 53703.2780462501,
+        "contacts": 1113,
+        "kills": 98,
+        "name": "霰射炮",
+        "color": "#ffd28b",
+        "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+        "share": 0.4559042324923654
+      },
+      {
+        "source": "blast",
+        "damage": 20479.40180000002,
+        "contacts": 137,
+        "kills": 53,
+        "name": "爆裂炮",
+        "color": "#ffb46d",
+        "role": "弹体与爆炸 · 瞄准紧凑敌群",
+        "share": 0.1738561648227676
+      },
+      {
+        "source": "arc",
+        "damage": 14073.42279249999,
+        "contacts": 250,
+        "kills": 103,
+        "name": "电弧炮",
+        "color": "#a2ff9c",
+        "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+        "share": 0.11947376864461784
+      },
+      {
+        "source": "pierce",
+        "damage": 13298.079129999986,
+        "contacts": 485,
+        "kills": 37,
+        "name": "穿甲炮",
+        "color": "#d5b4ff",
+        "role": "穿甲直击 · 沿纵列贯穿更多目标",
+        "share": 0.11289162933711673
+      },
+      {
+        "source": "pulse",
+        "damage": 8626.863400000004,
+        "contacts": 404,
+        "kills": 59,
+        "name": "速射炮",
+        "color": "#83e5ff",
+        "role": "直射与折射 · 持续瞄准单一目标",
+        "share": 0.07323619116520778
+      },
+      {
+        "source": "fracture",
+        "damage": 3541.4025249999977,
+        "contacts": 59,
+        "kills": 6,
+        "name": "裂甲爆破",
+        "color": "#ffc183",
+        "role": "裂甲引爆与穿震 · 原穿甲另计",
+        "share": 0.03006409401519552
+      },
+      {
+        "source": "laser",
+        "damage": 2667.4226,
+        "contacts": 31,
+        "kills": 4,
+        "name": "激光与棱镜",
+        "color": "#7fe4ff",
+        "role": "主侧束、分光与灼烧 · 瞄准纵列",
+        "share": 0.02264460005846337
+      },
+      {
+        "source": "storm",
+        "damage": 1405.21520625,
+        "contacts": 74,
+        "kills": 10,
+        "name": "雷暴霰射",
+        "color": "#b6ffb3",
+        "role": "派生跳电与破核 · 原霰弹另计",
+        "share": 0.011929319464265755
+      }
+    ]
+  },
+  {
+    "opening": "blast",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 371,
+    "removed": 118233.78080000123,
+    "finishes": 371,
+    "total": 118233.7807999999,
+    "rows": [
+      {
+        "source": "arc",
+        "damage": 38531.76913439994,
+        "contacts": 326,
+        "kills": 134,
+        "name": "电弧炮",
+        "color": "#a2ff9c",
+        "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+        "share": 0.3258947559122627
+      },
+      {
+        "source": "blast",
+        "damage": 18092.424999999977,
+        "contacts": 191,
+        "kills": 54,
+        "name": "爆裂炮",
+        "color": "#ffb46d",
+        "role": "弹体与爆炸 · 瞄准紧凑敌群",
+        "share": 0.15302246851603676
+      },
+      {
+        "source": "scatter",
+        "damage": 18086.82439999993,
+        "contacts": 1388,
+        "kills": 43,
+        "name": "霰射炮",
+        "color": "#ffd28b",
+        "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+        "share": 0.1529750996510461
+      },
+      {
+        "source": "pierce",
+        "damage": 11966.833999999984,
+        "contacts": 519,
+        "kills": 48,
+        "name": "穿甲炮",
+        "color": "#d5b4ff",
+        "role": "穿甲直击 · 沿纵列贯穿更多目标",
+        "share": 0.10121332430570464
+      },
+      {
+        "source": "magnetic",
+        "damage": 10151.81742400001,
+        "contacts": 241,
+        "kills": 28,
+        "name": "磁暴电场",
+        "color": "#a3ffd0",
+        "role": "三拍与精研跳击 · 原爆炸另计",
+        "share": 0.08586224136038131
+      },
+      {
+        "source": "ion",
+        "damage": 8546.0500416,
+        "contacts": 45,
+        "kills": 13,
+        "name": "离子风暴",
+        "color": "#c8b1ff",
+        "role": "放电与精研弹体 · 原电弧另计",
+        "share": 0.07228095036609035
+      },
+      {
+        "source": "pulse",
+        "damage": 5841.341400000059,
+        "contacts": 510,
+        "kills": 39,
+        "name": "速射炮",
+        "color": "#83e5ff",
+        "role": "直射与折射 · 持续瞄准单一目标",
+        "share": 0.04940501234483118
+      },
+      {
+        "source": "laser",
+        "damage": 3634.8990000000003,
+        "contacts": 44,
+        "kills": 10,
+        "name": "激光与棱镜",
+        "color": "#7fe4ff",
+        "role": "主侧束、分光与灼烧 · 瞄准纵列",
+        "share": 0.03074332035569993
+      },
+      {
+        "source": "fracture",
+        "damage": 3381.8204000000005,
+        "contacts": 70,
+        "kills": 2,
+        "name": "裂甲爆破",
+        "color": "#ffc183",
+        "role": "裂甲引爆与穿震 · 原穿甲另计",
+        "share": 0.028602827187946975
+      }
+    ]
+  },
+  {
+    "opening": "pulse",
+    "time": 599.999999999783,
+    "hp": 3,
+    "round": 8,
+    "kills": 364,
+    "removed": 118100.34828000037,
+    "finishes": 364,
+    "total": 118100.3482800001,
+    "rows": [
+      {
+        "source": "scatter",
+        "damage": 22888.964600000065,
+        "contacts": 1899,
+        "kills": 103,
+        "name": "霰射炮",
+        "color": "#ffd28b",
+        "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+        "share": 0.19380945893346055
+      },
+      {
+        "source": "blast",
+        "damage": 22811.750134999995,
+        "contacts": 203,
+        "kills": 55,
+        "name": "爆裂炮",
+        "color": "#ffb46d",
+        "role": "弹体与爆炸 · 瞄准紧凑敌群",
+        "share": 0.1931556550613754
+      },
+      {
+        "source": "laser",
+        "damage": 19081.678135000002,
+        "contacts": 160,
+        "kills": 28,
+        "name": "激光与棱镜",
+        "color": "#7fe4ff",
+        "role": "主侧束、分光与灼烧 · 瞄准纵列",
+        "share": 0.16157173465534497
+      },
+      {
+        "source": "pulse",
+        "damage": 15135.62099999992,
+        "contacts": 1220,
+        "kills": 64,
+        "name": "速射炮",
+        "color": "#83e5ff",
+        "role": "直射与折射 · 持续瞄准单一目标",
+        "share": 0.1281589870007444
+      },
+      {
+        "source": "photon",
+        "damage": 14786.420990000135,
+        "contacts": 85,
+        "kills": 48,
+        "name": "电光连锁",
+        "color": "#a6ecff",
+        "role": "光链与单体聚能 · 原激光另计",
+        "share": 0.12520217937836656
+      },
+      {
+        "source": "arc",
+        "damage": 12955.233419999935,
+        "contacts": 179,
+        "kills": 56,
+        "name": "电弧炮",
+        "color": "#a2ff9c",
+        "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+        "share": 0.10969682654351547
+      },
+      {
+        "source": "pierce",
+        "damage": 8066.920000000035,
+        "contacts": 220,
+        "kills": 10,
+        "name": "穿甲炮",
+        "color": "#d5b4ff",
+        "role": "穿甲直击 · 沿纵列贯穿更多目标",
+        "share": 0.06830564107122232
+      },
+      {
+        "source": "fracture",
+        "damage": 2373.7600000000093,
+        "contacts": 30,
+        "kills": 0,
+        "name": "裂甲爆破",
+        "color": "#ffc183",
+        "role": "裂甲引爆与穿震 · 原穿甲另计",
+        "share": 0.020099517355970386
+      }
+    ]
+  }
+]

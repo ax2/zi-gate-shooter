@@ -1,0 +1,13 @@
+import{it,expect}from'vitest';import{CanvasRuntime}from'../src/game/canvas-runtime';import{defaults}from'../src/ui/storage';import{contributionSources}from'../src/game/combat-contribution';
+async function fixture(){let labels:string[]=[];const texts:string[]=[];let now=0,next:(time:number)=>void=()=>{};const c=new Proxy({}, {get(_t,k){if(k==='createLinearGradient'||k==='createRadialGradient')return()=>({addColorStop(){}});return(...args:unknown[])=>{if(k==='fillText')texts.push(String(args[0]));};},set(){return true;}})as CanvasRenderingContext2D;
+ const r=new CanvasRuntime({canvas:{getContext:()=>c}as unknown as HTMLCanvasElement,width:390,height:844,dpr:1,menuBottom:0,image:async()=>({width:768,height:512})as HTMLImageElement,read:()=>defaults(),write(){},sound(){},silence(){},controls:cs=>labels=cs.map(c=>c.label),now:()=>now,requestFrame:cb=>next=cb});await r.load();return{r,texts,labels:()=>labels,step:()=>{now+=1000/60;next(now);}};}
+it('native pause → current firepower → contribution is read-only and returns to the same paused run',async()=>{
+ const f=await fixture(),r=f.r;r.start();r.resize(390,844,1);expect(r.activateControl('contribution')).toBe(false);expect(r.activateControl('pause')).toBe(true);expect(r.activateControl('loadout')).toBe(true);expect(f.labels()).toContain('实战贡献');expect(r.activateControl('contribution')).toBe(true);
+ const before=JSON.stringify(r.world);for(let i=0;i<20;i++)f.step();expect(JSON.stringify(r.world)).toBe(before);expect(f.texts).toContain('尚无有效伤害 · 继续瞄准敌机');expect(f.labels()).toContain('返回当前火力');expect(r.back()).toBe('stay');f.step();expect(r.mode).toBe('loadout');expect(r.activateControl('loadout-back')).toBe(true);expect(r.mode).toBe('paused');
+});
+it('all sources fit two bounded pages, result returns correctly and native restart clears all contribution',async()=>{
+ const f=await fixture(),r=f.r;r.start();
+ // Controlled accounting/UI fixture, not a normally earned combat run.
+ for(const source of Object.keys(contributionSources)){const b=r.world.spawn('armor',360,600);(r.world as any).hit(b,10,'pulse',source);}
+ r.mode='result';r.resize(390,844,1);expect(r.activateControl('contribution')).toBe(true);expect(f.labels()).toContain('下一页贡献');expect(r.activateControl('contribution-next')).toBe(true);expect(f.labels()).not.toContain('下一页贡献');expect(f.labels()).toContain('上一页贡献');expect(f.texts).toContain('电光连锁');expect(r.activateControl('contribution-previous')).toBe(true);expect(r.activateControl('contribution-back')).toBe(true);expect(r.mode).toBe('result');expect(r.activateControl('start')).toBe(true);expect(r.world.combatContributions()).toEqual([]);
+});

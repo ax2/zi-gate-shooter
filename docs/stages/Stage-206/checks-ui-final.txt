@@ -1,0 +1,16 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/combat-contribution-runtime.test.ts tests/combat-ledger.test.ts tests/run-report.test.ts tests/storm-refinement.test.ts tests/fracture-finish.test.ts tests/storm-proof-runtime.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+
+ Test Files  6 passed (6)
+      Tests  48 passed (48)
+   Start at  11:52:10
+   Duration  13.74s (tests 48%, transform 43%, import 9%)
+
+  Transform  transforming modules took 10.41s · 43% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

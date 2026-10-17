@@ -1,4 +1,5 @@
 import {bossHullWear,bossWearBand} from './boss-hull-wear';
+import {combatContribution} from './combat-contribution';
 import {supplyCombinations,supplyCombinationLabel,supplyCombinationClear} from './supply-combinations';
 import {shieldLatch} from './shield-latch';
 import {guardClosed,guardDamageScale} from '../core/behavior';
@@ -107,7 +108,9 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'contribution' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  private contributionReturn:'loadout'|'result'='loadout';
+  private contributionPage=0;
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
@@ -287,6 +290,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.contributionPage=0;this.contributionReturn='loadout';
     this.buttons=[];
     for(const motion of this.mountedMotion.values())motion.reset();
     this.opticalFiredAt=-Infinity;
@@ -367,6 +371,7 @@ export class CanvasRuntime {
     if (this.mode === 'armory'||this.mode==='opening') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = this.achievementReturn; return 'stay'; }
     if(this.mode==='combos'){this.mode=this.combosReturn;return 'stay';}
+    if(this.mode==='contribution'){this.mode=this.contributionReturn;return 'stay';}
     if (this.mode === 'rig') { this.mode='loadout';return 'stay'; }
     if (this.mode === 'contracts') { this.mode=this.contractReturn;return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
@@ -446,6 +451,10 @@ export class CanvasRuntime {
       const goal=parseRecipeGoal(action.slice(12));
       if(goal){this.save.recipeGoal=this.save.recipeGoal===goal?null:goal;this.pendingRecipeCompletion=null;this.goalWasReady=this.save.recipeGoal?recipeStatus(this.world,this.save.recipeGoal).ready:false;this.platform.write(this.save);}
     }
+    else if(action==='contribution'&&(this.mode==='loadout'||this.mode==='result')){this.contributionReturn=this.mode;this.contributionPage=0;this.mode='contribution';}
+    else if(action==='contribution-back'&&this.mode==='contribution')this.mode=this.contributionReturn;
+    else if(action==='contribution-next'&&this.mode==='contribution')this.contributionPage++;
+    else if(action==='contribution-previous'&&this.mode==='contribution')this.contributionPage--;
     else if(action==='rig-view'&&this.mode==='loadout')this.mode='rig';
     else if(action==='rig-back')this.mode='loadout';
     else if(action==='contracts-live'&&this.mode==='playing'){this.pause();this.contractReturn='paused';this.mode='contracts';}
@@ -725,6 +734,7 @@ export class CanvasRuntime {
     if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
     if(this.mode==='opening'){this.drawOpening();c.restore();return;}
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
+    if(this.mode==='contribution'){this.drawContribution();c.restore();return;}
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
     if (this.mode === 'combos') {this.drawCombos();c.restore();return;}
     if(this.mode==='branch'){this.drawBuildBranch();c.restore();return;}
@@ -1329,8 +1339,31 @@ export class CanvasRuntime {
     this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,930,23,'#a2f9ed');
     this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':'数值含永久加成；超载时额外×1.35', 360, 970, 23, '#c7deeb');
     this.text(w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, 1004, 23, '#f0d19a');
-    for(const [i,label] of ['技能树','组合配方','挑战契约'].entries()){const x=72+i*198;this.rect(x,1030,180,86,'#1a2d3c');this.text(label,x+90,1073,25,'#d8eaf5');this.buttons.push({x,y:1030,w:180,h:86,label,action:['tree','combos','contracts'][i]});}
+    for(const [i,label] of ['技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
+  }
+  private drawContribution(){
+    const report=combatContribution(this.world),pages=Math.max(1,Math.ceil(report.rows.length/6));
+    this.contributionPage=clamp(this.contributionPage,0,pages-1);
+    this.rect(35,90,650,1140,'#102330');
+    this.text('本局实战贡献',360,155,40,'#effaff','center',true);
+    this.text(`敌方血量削减 ${report.total.toFixed(1)}`,360,218,30,'#ffdc8a','center',true);
+    this.text('累计实际伤害 · 不计箱门、过杀与减伤挡下部分',360,263,20,'#bdd8e7');
+    for(const [i,row]of report.rows.slice(this.contributionPage*6,this.contributionPage*6+6).entries()){
+      const y=295+i*110;
+      this.rect(65,y,590,102,'#17303f');this.rect(65,y,4,102,row.color);
+      this.text(row.name,90,y+25,26,row.color,'left',true);
+      this.text(`${row.damage.toFixed(1)} · ${(row.share*100).toFixed(1)}%`,625,y+25,24,'#effaff','right',true);
+      this.rect(90,y+49,535,5,'#304957');this.rect(90,y+49,535*row.share,5,row.color);
+      this.text(`${row.contacts}次有效作用 · ${row.kills}次最后一击`,90,y+72,20,'#d7e8f1','left');
+      this.text(row.role,90,y+93,20,'#b3cfde','left');
+    }
+    this.text(report.total?'武器和派生分开计 · 装备时间不同，占比不代表强弱':'尚无有效伤害 · 继续瞄准敌机',360,986,21,'#bdd8e7');
+    this.text('本局累计 · 重开清零',360,1016,20,'#bdd8e7');
+    this.text(`${this.contributionPage+1}/${pages}页`,360,1059,21,'#c7deeb');
+    if(this.contributionPage>0){this.rect(65,1030,145,58,'#244653');this.text('上一页',137,1059,23);this.buttons.push({x:65,y:1030,w:145,h:58,action:'contribution-previous',label:'上一页贡献'});}
+    if(this.contributionPage<pages-1){this.rect(510,1030,145,58,'#244653');this.text('下一页',582,1059,23);this.buttons.push({x:510,y:1030,w:145,h:58,action:'contribution-next',label:'下一页贡献'});}
+    this.button(this.contributionReturn==='result'?'返回本局战绩':'返回当前火力',1120,'contribution-back',true);
   }
   private drawCombos(){
     const w=this.world,goal=this.save.recipeGoal,tracked=goal?recipeStatus(w,goal):null;
@@ -1623,6 +1656,7 @@ export class CanvasRuntime {
     const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked,this.save.achievements.tracked);
     this.buttons=[];this.rect(0,0,720,1280,'#050e18dd');this.rect(35,90,650,1140,'#102330');
     this.text('本局战绩',360,145,34,'#effaff','center',true);this.text(w.score.toString(),360,218,68,'#eff8ff','center',true);
+    this.rect(490,110,160,60,'#244653');this.text('实战贡献',570,140,24,'#80e4ff');this.buttons.push({x:490,y:110,w:160,h:60,action:'contribution',label:'实战贡献'});
     this.text(`${this.runNewBest?'刷新最高分':'最高分'} ${this.save.best}`,360,276,23,'#e8c88b');
     this.text(`存活 ${Math.floor(w.time/60)}:${Math.floor(w.time%60).toString().padStart(2,'0')} · 第${w.round}轮 · 火力叠加${w.activeWeapons.length}种`,360,319,23,'#bdd8e7');
     this.text(r.growth,360,344,20,'#bdd8e7');
@@ -1677,6 +1711,7 @@ export class CanvasRuntime {
       battlePlan:this.world.battlePlan,battleBrief:battleBrief(this.world.round,this.world.battlePlan),nextBattlePlan:this.save.nextBattlePlan,openingWeapon:this.world.openingWeapon??null,savedOpeningWeapon:this.save.openingWeapon,openingSupplies:this.world.bodies.filter(b=>b.active&&b.openingSupply).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,weapon:b.weaponKind,stage:b.stage})),score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
+      combatContribution:combatContribution(this.world),
       magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormAugment:this.world.build.stormAugment??null,stormRelayLinks:this.world.stormRelayLinks,stormFocusBursts:this.world.stormFocusBursts,stormFocusDamage:this.world.stormFocusDamage,stormProofRelay:this.world.proofCount('storm-relay'),stormProofFocus:this.world.proofCount('storm-focus'),stormCharges:this.world.bodies.filter(b=>b.active&&b.stormHits).map(b=>({id:b.id,x:b.x,y:b.y,hits:b.stormHits})),stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,
       bossCounterfire:this.world.bodies.some(b=>b.active&&b.kind==='boss'&&b.counterfire),bossCounterVolleys:this.world.bodies.find(b=>b.active&&b.kind==='boss')?.counterVolleys??0,
