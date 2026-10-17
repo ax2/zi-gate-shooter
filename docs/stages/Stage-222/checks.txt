@@ -1,0 +1,80 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/reserve-tactics.test.ts tests/lockshot.test.ts tests/bankshot.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/lockshot.test.ts (11 tests | 1 failed) 68ms
+   × retains the original side-chapter gun plus two opening pursuit guns, moving sentries and authored supplies 15ms
+ ❯ tests/reserve-tactics.test.ts (4 tests | 2 failed) 111ms
+   × moving cannon actually leaves its shield and emits a fan while traversing 10ms
+   × bank cannon emits outward shots that return once, rather than straight shield fire 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/lockshot.test.ts > retains the original side-chapter gun plus two opening pursuit guns, moving sentries and authored supplies
+AssertionError: expected [ …(7) ] to have a length of 3 but got 7
+
+- Expected
++ Received
+
+- 3
++ 7
+
+ ❯ tests/lockshot.test.ts:5:256
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/reserve-tactics.test.ts > moving cannon actually leaves its shield and emits a fan while traversing
+AssertionError: expected [ -130, +0, 130 ] to deeply equal [ -100, +0, 100 ]
+
+- Expected
++ Received
+
+  [
+-   -100,
++   -130,
+    0,
+-   100,
++   130,
+  ]
+
+ ❯ tests/reserve-tactics.test.ts:43:95
+     41|  b.pattern=s.pattern;b.lane=s.lane!;b.timer=.1;const shots:number[][]=…
+     42|  for(let f=0;f<60;f++)advanceBody(b,C.step,'running',f*C.step,(...args…
+     43|  expect(b.x-s.x).toBeGreaterThan(200);expect(shots.length).toBe(3);exp…
+       |                                                                                               ^
+     44| });
+     45|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/reserve-tactics.test.ts > bank cannon emits outward shots that return once, rather than straight shield fire
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ tests/reserve-tactics.test.ts:54:32
+     52|   const [x,y,vx,vy]=shots[0],bullet={x,y,px:x,py:y,vx,vy,age:0,bankRem…
+     53|   for(let f=0;f<90;f++)advanceProjectile(bullet,C.step);
+     54|   expect(bullet.bankRemaining).toBe(0);expect(Math.sign(bullet.vx)).to…
+       |                                ^
+     55|  }
+     56| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  3 failed | 20 passed (23)
+   Start at  19:43:01
+   Duration  2.61s (transform 67%, import 30%, tests 3%)
+
+  Transform  transforming modules took 4.50s · 67% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

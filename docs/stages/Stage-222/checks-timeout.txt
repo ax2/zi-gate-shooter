@@ -1,0 +1,29 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/reserve-tactics.test.ts tests/lockshot.test.ts tests/bankshot.test.ts tests/pursuit-waves.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/pursuit-waves.test.ts (2 tests | 1 failed) 242261ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/pursuit-waves.test.ts > retains 450ms observed no-fire routes through all three reserve types and mirrored later chapters
+Error: Test timed out in 240000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/pursuit-waves.test.ts:11:1
+   × retains 450ms observed no-fire routes through all three reserve types and mirrored later chapters 242161ms
+      9|  }
+     10| });
+     11| it('retains 450ms observed no-fire routes through all three reserve ty…
+       | ^
+     12|  const results=[];for(const round of[2,3,4,5,6,8,9,12,15])for(const pl…
+     13|  mkdirSync('build/qa/Stage-219',{recursive:true});writeFileSync('build…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 25 passed (26)
+   Start at  19:58:14
+   Duration  243.11s (tests 99%, transform 1%)

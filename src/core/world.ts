@@ -685,6 +685,9 @@ export class World {
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
           if(s.pattern==='sweep'&&s.kind!=='drone')candidate.timer=SWEEPER.opening;
           if(s.pattern==='relay-screen'){if(s.kind==='guard'&&s.shieldTurn!==undefined)candidate.shieldTurn=s.shieldTurn;candidate.timer=s.kind==='guard'?RELAY_SCREEN.guardOpening+(s.shieldTurn??0)*RELAY_SCREEN.stagger:RELAY_SCREEN.sniperOpening;if(s.kind==='guard'||s.kind==='sniper'){candidate.hp*=RELAY_SCREEN.durability;candidate.maxHp=candidate.hp;}}
+          // Authored reserve deployment only; keep the full visible charge and
+          // regular recovery. Never derive this delay from the player's build.
+          if(s.opening!==undefined)candidate.timer=s.opening;
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }

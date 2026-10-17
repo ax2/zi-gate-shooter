@@ -2,7 +2,17 @@ import {it,expect} from 'vitest';import {World,type Body} from '../src/core/worl
 function setup(lock=true){const w=new World(1337,2);Object.assign(w,{scheduled:[]});w.player.x=w.player.px=360;const b=w.spawn('sniper',540,360);b.timer=LOCKSHOT.opening;if(lock){b.pattern='lockshot';b.lockX=360;b.dropGrace=.45;}return {w,b};}
 function tick(w:World,x=68,n=1){for(let i=0;i<n;i++){w.step(C.step,x);w.drainEffects();}}
 function destroy(w:World,b:Body){w.bullets.push({id:99999,x:b.x,y:b.y,px:b.x,py:b.y,vx:0,vy:0,damage:10000,age:0,active:true,hostile:false});tick(w);}
-it('retains the original side-chapter gun plus two opening pursuit guns, moving sentries and authored supplies',()=>{for(let r=1;r<=18;r++)for(const seed of [1337,9001]){const list=timeline(r,seed),guns=list.filter(s=>s.pattern==='lockshot');expect(guns).toHaveLength(r===1?1:(r-1)%3===1?3:0);if(guns.length){expect(guns.find(s=>s.at===(r===1?51:23))).toMatchObject({kind:'sniper',at:r===1?51:23,drop:true,dropY:360});if(r>1)expect(guns.filter(s=>s.at<2).map(s=>s.at)).toEqual([.5,1.7]);}expect(list.filter(s=>s.kind==='armory').map(s=>s.at)).toEqual([16,r===1?46.5:48]);expect(list.filter(s=>s.pattern==='relocate')).toHaveLength(r>1?1:0);}});
+it('retains the original gun, supplies and moving sentry alongside rotating pursuit tactics',()=>{
+ for(let r=1;r<=18;r++)for(const seed of[1337,9001]){
+  const list=timeline(r,seed),sector=(r-1)%3,v=Math.floor((r-1)/3)%3,guns=list.filter(s=>s.pattern==='lockshot');
+  const expected=r===1?1:sector===1?[3,7,4][v]:sector===0&&v===2?3:0;
+  expect(guns).toHaveLength(expected);
+  if(r===1||sector===1)expect(guns.find(s=>s.at===(r===1?51:23))).toMatchObject({kind:'sniper',at:r===1?51:23,drop:true,dropY:360});
+  if(r>1&&sector===1)expect(guns.filter(s=>s.at<2).map(s=>s.at)).toEqual(v===2?[1.7]:[.5,1.7]);
+  expect(list.filter(s=>s.kind==='armory').map(s=>s.at)).toEqual([16,r===1?46.5:48]);
+  expect(list.filter(s=>s.pattern==='relocate')).toHaveLength(r<=1?0:sector===1&&v===2?4:1);
+ }
+});
 it('fires three fixed-speed angled shots at one admitted point, then leaves instead of relocking',()=>{
  const {b}=setup(),shots:Array<{x:number;y:number;vx:number;vy:number;age:number}>=[];
  for(let i=0;i<240;i++)advanceBody(b,C.step,'running',0,(x,y,vx=0,vy=280)=>shots.push({x,y,vx,vy,age:b.age}));

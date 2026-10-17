@@ -3,7 +3,7 @@ import { C, clamp } from './config';
 import { advanceBody } from './behavior';
 import type { Body, Bullet, Phase } from './world';
 
-interface Options { reaction?: number; phase?: Phase; phaseTime?: number }
+interface Options { reaction?: number; phase?: Phase; phaseTime?: number; gridPoints?:number }
 type Interval = [number, number];
 
 /** No kills, pickups or invulnerability assumed. Actual emitter/movement rules
@@ -55,7 +55,8 @@ export function dangerTimeline(bodies: readonly Body[], bullets: readonly Bullet
  * every move are checked. Null means the conservative grid cannot prove a path. */
 export function safeRoute(x: number, bodies: readonly Body[], bullets: readonly Bullet[], horizon = 3, options: Options = {}) {
   const start = clamp(x, C.minX, C.maxX);
-  const positions = [...new Set([start, ...Array.from({ length: 25 }, (_, i) => C.minX + (C.maxX - C.minX) * i / 24)])].sort((a, b) => a - b);
+  const grid=Math.max(25,Math.min(97,Math.floor(options.gridPoints??25)));
+  const positions = [...new Set([start, ...Array.from({ length: grid }, (_, i) => C.minX + (C.maxX - C.minX) * i / (grid-1))])].sort((a, b) => a - b);
   let reachable = new Map<number, { cost: number; path: number[] }>([[start, { cost: 0, path: [] }]]);
   const reaction = options.reaction ?? 0.45;
   const timeline = dangerTimeline(bodies, bullets, horizon, options);

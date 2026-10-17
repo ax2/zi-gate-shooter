@@ -1,0 +1,1 @@
+import{build}from'esbuild';await build({entryPoints:['tools/audit-reserve-tactics.ts'],bundle:true,platform:'node',format:'esm',outfile:'build/qa/Stage-222/normal-audit.mjs'});await import('../build/qa/Stage-222/normal-audit.mjs');

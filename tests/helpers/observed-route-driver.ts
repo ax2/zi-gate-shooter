@@ -11,7 +11,7 @@ export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,se
  (w as any).shoot=()=>{};
  w.player.x=w.player.px=start;
  const births=new Map<number,number>(),known=new Set<number>(),unknownBullets=new Set<number>();
- let path:number[]=[],planned=0,minLag=Infinity,maxBodies=0,maxBullets=0,failureTime:number|null=null;
+ let path:number[]=[],planned=0,minLag=Infinity,maxBodies=0,maxBullets=0,failureTime:number|null=null,fineGridPlans=0;
  for(let f=0;f<75*60&&w.phase==='running';f++){
   let matured=false;
   for(const b of w.bodies)if(b.active){
@@ -23,7 +23,12 @@ export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,se
   // Verify this rather than gaining early knowledge from an unseen source.
   for(const b of w.bullets)if(b.hostile&&(!b.sourceId||!known.has(b.sourceId)))unknownBullets.add(b.id);
   if(f===0||matured||f-planned>=60){
-   const route=safeRoute(w.player.x,w.bodies.filter(b=>known.has(b.id)),w.bullets,8,{phase:w.phase,phaseTime:w.phaseTime,reaction:f===0?.45:0});
+   const options={phase:w.phase,phaseTime:w.phaseTime,reaction:f===0?.45:0};
+   const bodies=w.bodies.filter(b=>known.has(b.id));
+   let route=safeRoute(w.player.x,bodies,w.bullets,8,options);
+   // Same hazards/reaction and actual collision oracle, finer x resolution only.
+   // A null 24px grid is not proof that a continuous-space route is impossible.
+   if(!route){route=safeRoute(w.player.x,bodies,w.bullets,8,{...options,gridPoints:49});if(route)fineGridPlans++;}
    if(!route){failureTime=w.time;onFailure?.(w,known);break;}
    path=route;planned=f;
   }
@@ -31,6 +36,6 @@ export function observedNoFireRoute(round:number,plan:BattlePlan,start:number,se
   maxBodies=Math.max(maxBodies,w.bodies.length);maxBullets=Math.max(maxBullets,w.bullets.length);
  }
  return{round,plan,start,seed,time:w.time,phase:w.phase,hp:w.player.hp,damage:w.damageTaken,kills:w.kills,cratesBroken:w.cratesBroken,
-  failureTime,minObservationSeconds:minLag,unknownEmitterBullets:unknownBullets.size,observedBodies:known.size,maxBodies,maxBullets,
+  failureTime,fineGridPlans,minObservationSeconds:minLag,unknownEmitterBullets:unknownBullets.size,observedBodies:known.size,maxBodies,maxBullets,
   method:'Isolated no-fire fixture; per-body >=450ms delayed observation; continue existing movement, no immunity or kills'};
 }

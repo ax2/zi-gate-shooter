@@ -1,0 +1,724 @@
+[
+  {
+    "source": "mobile-flank.json",
+    "sha256": "62D6B9721522F6DC6A8A8051A448D4EDF76B7A3CB3B4A422842965BB3FF90B6E",
+    "stage": "游猎双哨",
+    "time": 84.09999999999651,
+    "round": 2,
+    "roundTime": 2.799999999999995,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 100,
+      "energy": 70,
+      "overload": 0
+    },
+    "initialBattlePlan": 2,
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard",
+    "enemies": [
+      {
+        "id": 2904,
+        "kind": "sniper",
+        "pattern": "relocate",
+        "x": 240,
+        "y": 340,
+        "hp": 46.03999999999999,
+        "maxHp": 64.24,
+        "age": 2.2999999999999967,
+        "warning": 0,
+        "sentryVolleys": 1,
+        "born": {
+          "round": 2,
+          "at": 0.5166666666666666,
+          "initialX": 240
+        }
+      },
+      {
+        "id": 2924,
+        "kind": "drone",
+        "x": 290,
+        "y": 811.0500000000027,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 1.9666666666666646,
+        "warning": 0,
+        "born": {
+          "round": 2,
+          "at": 0.850000000000001,
+          "initialX": 290
+        }
+      },
+      {
+        "id": 2955,
+        "kind": "drone",
+        "x": 430,
+        "y": 700.9750000000018,
+        "hp": 1.9899999999999984,
+        "maxHp": 12,
+        "age": 1.35,
+        "warning": 0,
+        "born": {
+          "round": 2,
+          "at": 1.4666666666666663,
+          "initialX": 430
+        }
+      },
+      {
+        "id": 2967,
+        "kind": "sniper",
+        "pattern": "lockshot",
+        "x": 480,
+        "y": 340,
+        "hp": 54.23,
+        "maxHp": 64.24,
+        "age": 1.100000000000001,
+        "warning": 0,
+        "lockShots": 1,
+        "forkshot": true,
+        "born": {
+          "round": 2,
+          "at": 1.7166666666666655,
+          "initialX": 480
+        }
+      },
+      {
+        "id": 2968,
+        "kind": "guard",
+        "x": 480,
+        "y": 615.5,
+        "hp": 93.44,
+        "maxHp": 93.44,
+        "age": 1.100000000000001,
+        "warning": 0,
+        "born": {
+          "round": 2,
+          "at": 1.7166666666666655,
+          "initialX": 480
+        }
+      },
+      {
+        "id": 2999,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 585.2427360177059,
+        "y": 467.1000000000008,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 0.6000000000000002,
+        "warning": 0,
+        "born": {
+          "round": 2,
+          "at": 2.2166666666666637,
+          "initialX": 520
+        }
+      }
+    ],
+    "hostiles": [
+      {
+        "id": 2977,
+        "x": 260,
+        "y": 1091.3666666666666,
+        "px": 260,
+        "py": 1080,
+        "vx": 0,
+        "vy": 682,
+        "damage": 1,
+        "age": 1.016666666666668,
+        "active": true,
+        "hostile": true,
+        "sourceId": 2904
+      },
+      {
+        "id": 2978,
+        "x": 260,
+        "y": 1046.366666666667,
+        "px": 260,
+        "py": 1035.0000000000005,
+        "vx": 0,
+        "vy": 682,
+        "damage": 1,
+        "age": 1.016666666666668,
+        "active": true,
+        "hostile": true,
+        "sourceId": 2904
+      },
+      {
+        "id": 2979,
+        "x": 260,
+        "y": 1001.3666666666671,
+        "px": 260,
+        "py": 990.0000000000005,
+        "vx": 0,
+        "vy": 682,
+        "damage": 1,
+        "age": 1.016666666666668,
+        "active": true,
+        "hostile": true,
+        "sourceId": 2904
+      },
+      {
+        "id": 3030,
+        "x": 453.57860056589794,
+        "y": 413.1630582552842,
+        "px": 458.63738619589725,
+        "py": 402.9841683815886,
+        "vx": -303.52713779996,
+        "vy": 610.7333924217377,
+        "damage": 1,
+        "age": 0.016666666666666666,
+        "active": true,
+        "hostile": true,
+        "sourceId": 2967
+      }
+    ],
+    "shots": [
+      {
+        "id": 2977,
+        "time": 83.09999999999657,
+        "round": 2,
+        "roundTime": 1.7999999999999985,
+        "x": 260,
+        "y": 409.3666666666667,
+        "vx": 0,
+        "vy": 682,
+        "sourceId": 2904,
+        "kind": "sniper",
+        "pattern": "relocate",
+        "spawnAt": 0.5166666666666666
+      },
+      {
+        "id": 2978,
+        "time": 83.09999999999657,
+        "round": 2,
+        "roundTime": 1.7999999999999985,
+        "x": 260,
+        "y": 364.3666666666667,
+        "vx": 0,
+        "vy": 682,
+        "sourceId": 2904,
+        "kind": "sniper",
+        "pattern": "relocate",
+        "spawnAt": 0.5166666666666666
+      },
+      {
+        "id": 2979,
+        "time": 83.09999999999657,
+        "round": 2,
+        "roundTime": 1.7999999999999985,
+        "x": 260,
+        "y": 319.3666666666667,
+        "vx": 0,
+        "vy": 682,
+        "sourceId": 2904,
+        "kind": "sniper",
+        "pattern": "relocate",
+        "spawnAt": 0.5166666666666666
+      },
+      {
+        "id": 3030,
+        "time": 84.09999999999651,
+        "round": 2,
+        "roundTime": 2.799999999999995,
+        "x": 453.57860056589794,
+        "y": 413.1630582552842,
+        "vx": -303.52713779996,
+        "vy": 610.7333924217377,
+        "sourceId": 2967,
+        "kind": "sniper",
+        "pattern": "lockshot",
+        "fork": true,
+        "spawnAt": 1.7166666666666655
+      }
+    ]
+  },
+  {
+    "source": "mobile-cannon.json",
+    "sha256": "049B60778A8E1F61DEFD1EADC2040102BF6F3DFF969686C0896EABE1789DCB5E",
+    "stage": "炮机混编",
+    "time": 254.20000000009443,
+    "round": 4,
+    "roundTime": 1.3166666666666669,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 100,
+      "energy": 0,
+      "overload": 4.683333333333338,
+      "mastery": 8
+    },
+    "initialBattlePlan": 0,
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard",
+    "enemies": [
+      {
+        "id": 12219,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 499.8631639029484,
+        "y": 549.658333333333,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 0.8166666666666675,
+        "warning": 0,
+        "born": {
+          "round": 4,
+          "at": 0.5166666666666666,
+          "initialX": 430
+        }
+      },
+      {
+        "id": 12230,
+        "kind": "armor",
+        "pattern": "fan",
+        "x": 480,
+        "y": 438.55000000000064,
+        "hp": 219.20000000000002,
+        "maxHp": 219.20000000000002,
+        "age": 0.7000000000000005,
+        "warning": 0,
+        "born": {
+          "round": 4,
+          "at": 0.6333333333333336,
+          "initialX": 480
+        }
+      },
+      {
+        "id": 12236,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 594.3611485477629,
+        "y": 504.0416666666664,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 0.5833333333333335,
+        "warning": 0,
+        "born": {
+          "round": 4,
+          "at": 0.7500000000000007,
+          "initialX": 530
+        }
+      },
+      {
+        "id": 12261,
+        "kind": "drone",
+        "x": 360,
+        "y": 425.1666666666665,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 0.3333333333333333,
+        "warning": 0,
+        "born": {
+          "round": 4,
+          "at": 1.0000000000000013,
+          "initialX": 360
+        }
+      }
+    ],
+    "hostiles": [
+      {
+        "id": 12282,
+        "x": 477.8333333333333,
+        "y": 495.6166666666673,
+        "px": 480,
+        "py": 489.55000000000064,
+        "vx": -130,
+        "vy": 364,
+        "damage": 1,
+        "age": 0.016666666666666666,
+        "active": true,
+        "hostile": true,
+        "sourceId": 12230
+      },
+      {
+        "id": 12283,
+        "x": 480,
+        "y": 495.6166666666673,
+        "px": 480,
+        "py": 489.55000000000064,
+        "vx": 0,
+        "vy": 364,
+        "damage": 1,
+        "age": 0.016666666666666666,
+        "active": true,
+        "hostile": true,
+        "sourceId": 12230
+      },
+      {
+        "id": 12284,
+        "x": 482.1666666666667,
+        "y": 495.6166666666673,
+        "px": 480,
+        "py": 489.55000000000064,
+        "vx": 130,
+        "vy": 364,
+        "damage": 1,
+        "age": 0.016666666666666666,
+        "active": true,
+        "hostile": true,
+        "sourceId": 12230
+      }
+    ],
+    "shots": [
+      {
+        "id": 12282,
+        "time": 254.20000000009443,
+        "round": 4,
+        "roundTime": 1.3166666666666669,
+        "x": 477.8333333333333,
+        "y": 495.6166666666673,
+        "vx": -130,
+        "vy": 364,
+        "sourceId": 12230,
+        "kind": "armor",
+        "pattern": "fan",
+        "spawnAt": 0.6333333333333336
+      },
+      {
+        "id": 12283,
+        "time": 254.20000000009443,
+        "round": 4,
+        "roundTime": 1.3166666666666669,
+        "x": 480,
+        "y": 495.6166666666673,
+        "vx": 0,
+        "vy": 364,
+        "sourceId": 12230,
+        "kind": "armor",
+        "pattern": "fan",
+        "spawnAt": 0.6333333333333336
+      },
+      {
+        "id": 12284,
+        "time": 254.20000000009443,
+        "round": 4,
+        "roundTime": 1.3166666666666669,
+        "x": 482.1666666666667,
+        "y": 495.6166666666673,
+        "vx": 130,
+        "vy": 364,
+        "sourceId": 12230,
+        "kind": "armor",
+        "pattern": "fan",
+        "spawnAt": 0.6333333333333336
+      }
+    ]
+  },
+  {
+    "source": "desktop-sweep.json",
+    "sha256": "3AC713A54749B8362A2D430F0CFD9C848ACB77859080DFE4CDD99D37B778BD87",
+    "stage": "游弋盾炮",
+    "time": 166.16666666669104,
+    "round": 3,
+    "roundTime": 1.2000000000000006,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 100,
+      "energy": 35,
+      "overload": 4.800000000000004,
+      "mastery": 4
+    },
+    "initialBattlePlan": 2,
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard",
+    "enemies": [
+      {
+        "id": 7243,
+        "kind": "armor",
+        "pattern": "sweep",
+        "x": 408,
+        "y": 404.69999999999936,
+        "hp": 75.97919999999999,
+        "maxHp": 163.2,
+        "age": 0.7000000000000005,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 0.5166666666666666,
+          "initialX": 240
+        }
+      },
+      {
+        "id": 7269,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 470.5884585651911,
+        "y": 449.8666666666668,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 0.26666666666666666,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 0.9500000000000013,
+          "initialX": 435
+        }
+      },
+      {
+        "id": 7281,
+        "kind": "armor",
+        "pattern": "fan",
+        "x": 360,
+        "y": 386.21666666666647,
+        "hp": 163.2,
+        "maxHp": 163.2,
+        "age": 0.21666666666666665,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 1.0000000000000013,
+          "initialX": 360
+        }
+      },
+      {
+        "id": 7294,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 527.3329012585727,
+        "y": 403.1166666666667,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 0.016666666666666666,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 1.2000000000000006,
+          "initialX": 525
+        }
+      }
+    ],
+    "hostiles": [
+      {
+        "id": 7295,
+        "x": 406,
+        "y": 461.2999999999994,
+        "px": 408,
+        "py": 455.69999999999936,
+        "vx": -120,
+        "vy": 336,
+        "damage": 1,
+        "age": 0.016666666666666666,
+        "active": true,
+        "hostile": true,
+        "sourceId": 7243
+      },
+      {
+        "id": 7296,
+        "x": 408,
+        "y": 461.2999999999994,
+        "px": 408,
+        "py": 455.69999999999936,
+        "vx": 0,
+        "vy": 336,
+        "damage": 1,
+        "age": 0.016666666666666666,
+        "active": true,
+        "hostile": true,
+        "sourceId": 7243
+      },
+      {
+        "id": 7297,
+        "x": 410,
+        "y": 461.2999999999994,
+        "px": 408,
+        "py": 455.69999999999936,
+        "vx": 120,
+        "vy": 336,
+        "damage": 1,
+        "age": 0.016666666666666666,
+        "active": true,
+        "hostile": true,
+        "sourceId": 7243
+      }
+    ],
+    "shots": [
+      {
+        "id": 7295,
+        "time": 166.16666666669104,
+        "round": 3,
+        "roundTime": 1.2000000000000006,
+        "x": 406,
+        "y": 461.2999999999994,
+        "vx": -120,
+        "vy": 336,
+        "sourceId": 7243,
+        "kind": "armor",
+        "pattern": "sweep",
+        "spawnAt": 0.5166666666666666
+      },
+      {
+        "id": 7296,
+        "time": 166.16666666669104,
+        "round": 3,
+        "roundTime": 1.2000000000000006,
+        "x": 408,
+        "y": 461.2999999999994,
+        "vx": 0,
+        "vy": 336,
+        "sourceId": 7243,
+        "kind": "armor",
+        "pattern": "sweep",
+        "spawnAt": 0.5166666666666666
+      },
+      {
+        "id": 7297,
+        "time": 166.16666666669104,
+        "round": 3,
+        "roundTime": 1.2000000000000006,
+        "x": 410,
+        "y": 461.2999999999994,
+        "vx": 120,
+        "vy": 336,
+        "sourceId": 7243,
+        "kind": "armor",
+        "pattern": "sweep",
+        "spawnAt": 0.5166666666666666
+      }
+    ]
+  },
+  {
+    "source": "mobile-bank.json",
+    "sha256": "FE1C82565580BFFA88C41147690E323EF529792E461CC25063B9BD43E49425FE",
+    "stage": "折返盾炮",
+    "time": 166.73333333335816,
+    "round": 3,
+    "roundTime": 2.0166666666666644,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 100,
+      "energy": 20,
+      "overload": 3.9833333333333405,
+      "mastery": 4
+    },
+    "initialBattlePlan": 1,
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard",
+    "enemies": [
+      {
+        "id": 7218,
+        "kind": "guard",
+        "x": 480,
+        "y": 666.8333333333364,
+        "hp": 130.56,
+        "maxHp": 130.56,
+        "age": 1.5166666666666662,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 0.5166666666666666,
+          "initialX": 480
+        }
+      },
+      {
+        "id": 7219,
+        "kind": "armor",
+        "pattern": "bankshot",
+        "x": 480,
+        "y": 320,
+        "hp": 652.8,
+        "maxHp": 652.8,
+        "age": 1.5166666666666662,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 0.5166666666666666,
+          "initialX": 480
+        }
+      },
+      {
+        "id": 7257,
+        "kind": "armor",
+        "pattern": "fan",
+        "x": 360,
+        "y": 485.0333333333324,
+        "hp": 148.60541999999998,
+        "maxHp": 163.2,
+        "age": 1.0333333333333345,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 1.0000000000000013,
+          "initialX": 360
+        }
+      },
+      {
+        "id": 7270,
+        "kind": "drone",
+        "pattern": "weave",
+        "x": 354.67855704262354,
+        "y": 555.8333333333337,
+        "hp": 12,
+        "maxHp": 12,
+        "age": 0.8333333333333343,
+        "warning": 0,
+        "born": {
+          "round": 3,
+          "at": 1.2000000000000006,
+          "initialX": 285
+        }
+      }
+    ],
+    "hostiles": [
+      {
+        "id": 7271,
+        "x": 681.2000000000011,
+        "y": 615.4000000000005,
+        "px": 682.399999999999,
+        "py": 610.2000000000005,
+        "vx": -264,
+        "vy": 312,
+        "damage": 1,
+        "age": 0.7833333333333341,
+        "active": true,
+        "hostile": true,
+        "sourceId": 7219,
+        "bankRemaining": 0
+      }
+    ],
+    "shots": [
+      {
+        "id": 7271,
+        "time": 165.96666666669088,
+        "round": 3,
+        "roundTime": 1.2500000000000004,
+        "x": 484.4,
+        "y": 376.2,
+        "vx": 264,
+        "vy": 312,
+        "sourceId": 7219,
+        "kind": "armor",
+        "pattern": "bankshot",
+        "spawnAt": 0.5166666666666666
+      }
+    ]
+  },
+  {
+    "source": "hunt-missed.json",
+    "sha256": "29CB4F3E070F9D524E784159B224995EB5E68CD10BB42960C43B72763A058A74",
+    "stage": "missed-锁位猎袭",
+    "time": 260.46666666675844,
+    "round": 4,
+    "roundTime": 8.016666666666644,
+    "hp": 3,
+    "growth": {
+      "stage": 3,
+      "bonus": 100,
+      "energy": 85,
+      "overload": 0,
+      "mastery": 7
+    },
+    "initialBattlePlan": 1,
+    "normalEarnedFlow": true,
+    "worldInjection": false,
+    "quality": "standard",
+    "enemies": [],
+    "hostiles": [],
+    "shots": []
+  }
+]
