@@ -1,0 +1,44 @@
+{
+  "result": "passed",
+  "routes": 90,
+  "physicalStreams": 12,
+  "normalSeed": 1337,
+  "normalStrategies": 3,
+  "longExtendsShort": true,
+  "samples": [
+    {
+      "route": "ballistic",
+      "hp": 3,
+      "wins": 14,
+      "pickups": 44,
+      "gates": 58,
+      "guns": 7,
+      "actualShots": 3,
+      "peakBodies": 15,
+      "peakBullets": 67
+    },
+    {
+      "route": "electric",
+      "hp": 3,
+      "wins": 13,
+      "pickups": 41,
+      "gates": 52,
+      "guns": 7,
+      "actualShots": 12,
+      "peakBodies": 16,
+      "peakBullets": 67
+    },
+    {
+      "route": "optical",
+      "hp": 3,
+      "wins": 12,
+      "pickups": 39,
+      "gates": 51,
+      "guns": 7,
+      "actualShots": 12,
+      "peakBodies": 15,
+      "peakBullets": 67
+    }
+  ],
+  "limits": "Safe automatic operator knows future hazards and has zero reaction; no human difficulty or FPS claim. Actual shots counted, including legitimate zero-shot early kills. Twelve streams are old/new300s and1200s for three strategies, one normal seed; route seeds1337/9001. Complete three-beat and dual-gun rendering require separate normal UI evidence. No full-suite, audio, human or device acceptance."
+}

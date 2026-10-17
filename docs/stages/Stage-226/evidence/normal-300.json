@@ -1,0 +1,595 @@
+{
+  "seconds": 300,
+  "seed": 1337,
+  "method": "Normally earned progression, identical omniscient zero-reaction safe operator, virtual60Hz; no World injection. Closing guns identified by admitted armor after68s; first3 rounds include baseline fans and new rake. Early6.5..10 is unchanged, not a benefit claim. Source slots require observed active admission, actual shots measured separately. Not human difficulty or device performance.",
+  "runs": [
+    {
+      "before": {
+        "route": "ballistic",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 12,
+        "kills": 334,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 59,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 2.999999999999999,
+            "earlyEmpty": 1.2500000000000004,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 0.8612440191387576
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.233333333333318,
+            "earlyEmpty": 0,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7894736842105259
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 5.599999999999989,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 12,
+            "earlyMean": 1.607655502392345
+          }
+        ],
+        "closingGuns": [
+          {
+            "round": 1,
+            "at": 68.66666666666406,
+            "kind": "armor",
+            "x": 360,
+            "y": 320,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          }
+        ]
+      },
+      "after": {
+        "route": "ballistic",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 12,
+        "kills": 334,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 59,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 2.999999999999999,
+            "earlyEmpty": 1.2500000000000004,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 0.8612440191387576
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.233333333333318,
+            "earlyEmpty": 0,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7894736842105259
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 5.599999999999989,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 12,
+            "earlyMean": 1.607655502392345
+          }
+        ],
+        "closingGuns": [
+          {
+            "round": 1,
+            "at": 68.66666666666406,
+            "kind": "armor",
+            "x": 360,
+            "y": 320,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "rake",
+            "maxHp": 163.2,
+            "acceptedShots": 3
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "electric",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 11,
+        "kills": 320,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 62,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 8.683333333333334,
+            "earlyEmpty": 0.8666666666666677,
+            "earlyMax": 5,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 2.4928229665071826
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.266666666666652,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7990430622009568
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.466666666666653,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 11,
+            "earlyMean": 1.8564593301435406
+          }
+        ],
+        "closingGuns": [
+          {
+            "round": 1,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 360,
+            "y": 320,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          }
+        ]
+      },
+      "after": {
+        "route": "electric",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 11,
+        "kills": 320,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 62,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 8.683333333333334,
+            "earlyEmpty": 0.8666666666666677,
+            "earlyMax": 5,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 2.4928229665071826
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.266666666666652,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7990430622009568
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.466666666666653,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 11,
+            "earlyMean": 1.8564593301435406
+          }
+        ],
+        "closingGuns": [
+          {
+            "round": 1,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 360,
+            "y": 320,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "rake",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "optical",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 15,
+        "pickups": 11,
+        "kills": 318,
+        "bossWins": 3,
+        "peakBodies": 13,
+        "peakBullets": 57,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 12.06666666666666,
+            "earlyEmpty": 0,
+            "earlyMax": 5,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 3.4641148325358904
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.266666666666652,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7990430622009568
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 4.699999999999992,
+            "earlyEmpty": 1.0333333333333345,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 15,
+            "pickups": 11,
+            "earlyMean": 1.3492822966507183
+          }
+        ],
+        "closingGuns": [
+          {
+            "round": 1,
+            "at": 68.06666666666409,
+            "kind": "armor",
+            "x": 360,
+            "y": 320,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          }
+        ]
+      },
+      "after": {
+        "route": "optical",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 15,
+        "pickups": 11,
+        "kills": 318,
+        "bossWins": 3,
+        "peakBodies": 13,
+        "peakBullets": 57,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 12.06666666666666,
+            "earlyEmpty": 0,
+            "earlyMax": 5,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 3.4641148325358904
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.266666666666652,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7990430622009568
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 4.699999999999992,
+            "earlyEmpty": 1.0333333333333345,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 15,
+            "pickups": 11,
+            "earlyMean": 1.3492822966507183
+          }
+        ],
+        "closingGuns": [
+          {
+            "round": 1,
+            "at": 68.06666666666409,
+            "kind": "armor",
+            "x": 360,
+            "y": 320,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 80,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2,
+            "acceptedShots": 0
+          },
+          {
+            "round": 3,
+            "at": 68.0166666666641,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "rake",
+            "maxHp": 163.2,
+            "acceptedShots": 3
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -45,6 +45,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  rakeVolley?:number;rakeFiring?:boolean;rakeShots?:number;rakeFiredAt?:number;rakeFiredVolley?:number;
   introEscort?:boolean;
   convoyHold?:number;
   aceRole?:AceRole;aceRagePending?:boolean;aceEnraged?:boolean;aceRageShots?:number;aceFiredAt?:number;
@@ -57,7 +58,7 @@ export interface Body {
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; bossVariant?: number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake'; bossVariant?: number;
 }
 export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
@@ -886,6 +887,7 @@ export class World {
         if(this.bullets.length<=before)return;
         this.bullets[this.bullets.length-1].sourceId=b.id;
         if(b.pattern==='bankshot'){this.bullets[this.bullets.length-1].bankRemaining=1;b.bankShots=(b.bankShots??0)+1;b.bankFiredAt=b.age;this.bankShots=(this.bankShots??0)+1;}
+        if(b.pattern==='rake'){b.rakeShots=(b.rakeShots??0)+1;b.rakeFiredAt=b.age;b.rakeFiredVolley=b.rakeVolley??0;}
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
         if(b.pattern==='lockshot'){b.lockAcceptedShots=(b.lockAcceptedShots??0)+1;b.lockFiredAt=b.age;if(b.forkshot)b.lockFiredAngle=Math.atan2(vx??0,vy??280);this.lockshotShots++;}
         if(b.pattern==='battery')b.batteryShots=(b.batteryShots??0)+1;

@@ -1,0 +1,506 @@
+[
+  {
+    "warning": 0.9,
+    "firstSingleGun": 240,
+    "spread": 55,
+    "delay": 0.1,
+    "passed": 3,
+    "cases": [
+      {
+        "round": 3,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 6,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 6,
+        "start": 652,
+        "okay": false
+      },
+      {
+        "round": 9,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 9,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 9,
+        "start": 652,
+        "okay": false
+      },
+      {
+        "round": 12,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 12,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 12,
+        "start": 652,
+        "okay": false
+      },
+      {
+        "round": 15,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 15,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 15,
+        "start": 652,
+        "okay": false
+      }
+    ]
+  },
+  {
+    "warning": 0.9,
+    "firstSingleGun": 240,
+    "spread": 55,
+    "delay": 0.35,
+    "passed": 3,
+    "cases": [
+      {
+        "round": 3,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 6,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 6,
+        "start": 652,
+        "okay": false
+      },
+      {
+        "round": 9,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 9,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 9,
+        "start": 652,
+        "okay": false
+      },
+      {
+        "round": 12,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 12,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 12,
+        "start": 652,
+        "okay": false
+      },
+      {
+        "round": 15,
+        "start": 68,
+        "okay": false
+      },
+      {
+        "round": 15,
+        "start": 360,
+        "okay": false
+      },
+      {
+        "round": 15,
+        "start": 652,
+        "okay": false
+      }
+    ]
+  },
+  {
+    "warning": 0.9,
+    "firstSingleGun": 240,
+    "spread": 40,
+    "delay": 0.1,
+    "passed": 15,
+    "cases": [
+      {
+        "round": 3,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 652,
+        "okay": true
+      }
+    ]
+  },
+  {
+    "warning": 0.9,
+    "firstSingleGun": 240,
+    "spread": 40,
+    "delay": 0.35,
+    "passed": 15,
+    "cases": [
+      {
+        "round": 3,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 652,
+        "okay": true
+      }
+    ]
+  },
+  {
+    "warning": 0.9,
+    "firstSingleGun": 240,
+    "spread": 30,
+    "delay": 0.1,
+    "passed": 15,
+    "cases": [
+      {
+        "round": 3,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 652,
+        "okay": true
+      }
+    ]
+  },
+  {
+    "warning": 0.9,
+    "firstSingleGun": 240,
+    "spread": 30,
+    "delay": 0.35,
+    "passed": 15,
+    "cases": [
+      {
+        "round": 3,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 3,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 6,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 9,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 12,
+        "start": 652,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 68,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 360,
+        "okay": true
+      },
+      {
+        "round": 15,
+        "start": 652,
+        "okay": true
+      }
+    ]
+  }
+]

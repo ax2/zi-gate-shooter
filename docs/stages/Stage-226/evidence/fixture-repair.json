@@ -1,0 +1,8 @@
+{
+  "fixtureFailureHash": "4DFA72E747F1827F5D47483C8E1C1A1DC65AF17C54644D1192CBD4FBEB2076B8",
+  "time": 306.6833333333831,
+  "error": "Rejected branch:ricochet",
+  "owner": "test fixture only",
+  "fix": "Choose earned fusion and late refinements, rerun from real menu",
+  "finalLogs": "116 and118 warn/error empty"
+}

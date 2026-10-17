@@ -1,0 +1,36 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/rake-gun.test.ts tests/opening-assaults.test.ts tests/closing-assault.test.ts tests/projectile-pressure.test.ts tests/mirror-laser.test.ts tests/reserve-tactics.test.ts tests/lockshot.test.ts tests/boss.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/boss.test.ts (14 tests | 1 failed) 2349ms
+   × round 6 opens with chapter signature 3 through the real director 504ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/boss.test.ts > round 6 opens with chapter signature 3 through the real director
+AssertionError: expected 'running' to be 'boss-entry' // Object.is equality
+
+Expected: "boss-entry"
+Received: "running"
+
+ ❯ tests/boss.test.ts:15:23
+     13|     world.step(C.step); world.drainEffects();
+     14|   }
+     15|   expect(world.phase).toBe('boss-entry');
+       |                       ^
+     16|   const boss = world.bodies.find(body => body.kind === 'boss')!;
+     17|   expect(boss).toBeDefined(); expect(boss.attackCycle).toBe(signature);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  1 failed | 62 passed (63)
+   Start at  22:12:20
+   Duration  3.54s (transform 60%, tests 25%, import 15%, worker 1%)
+
+  Transform  transforming modules took 8.41s · 60% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

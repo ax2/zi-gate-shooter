@@ -1,4 +1,5 @@
 import type{Spawn}from'./director';
+import{RAKE}from'./rake-gun';
 export const CLOSING_ASSAULT_AT=68;
 /** One authored closing fight after the road and its rewards are clear.
  * Faster kills buy an earlier boss, never damage-scaled enemy durability. */
@@ -7,10 +8,10 @@ export function closingAssault(round:number,mirror:boolean):Spawn[]{
  const add=(kind:Spawn['kind'],x:number,y:number,pattern?:Spawn['pattern'],lane?:number)=>out.push({at:CLOSING_ASSAULT_AT,kind,x:mirror?720-x:x,drop:true,dropY:y,pattern,lane:lane===undefined?undefined:mirror?720-lane:lane,closing:true,opening:kind==='guard'?1.5:.1});
  if(sector===0){add('guard',360,500);add('armor',360,320,'fan');add('drone',240,390);add('drone',480,390);}
  else if(sector===1){add('sniper',360,340,'lockshot');add('charger',150,350,'flank',280);add('charger',570,350,'flank',440);}
- else{add('armor',240,350,'fan');add('armor',480,350,'fan');add('guard',360,500);}
+ else{add('armor',240,350,round>=6?'rake':'fan');add('armor',480,350,'rake');if(round>=6)out[out.length-1].opening=.1+RAKE.stagger;add('guard',360,500);}
  return out;
 }
-export const closingBrief=(round:number)=>([
+export const closingBrief=(round:number)=>round%3===0?{title:round>=6?'终线旋扫·双炮':'终线旋扫',detail:'三拍连续转向 · 抢拆一炮或随实弹换位'}:([
  {title:'终线突破',detail:'前盾护炮 · 拆盾压炮后直面首领'},
  {title:'终线猎袭',detail:'中路锁位 · 两翼短刺 · 清场后首领接近'},
  {title:'终线炮阵',detail:'双炮错位扇射 · 集火一翼打开缺口'},

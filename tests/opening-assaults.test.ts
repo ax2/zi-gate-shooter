@@ -3,7 +3,7 @@ const path='../build/qa/Stage-225/baseline.mjs',old=await import(path);
 it('adds only the explicit chapter-specific opening roster across 108 schedules and preserves all rewards and prior fights',()=>{
  for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){
   const actual=timeline(round,seed,plan),added=actual.filter(s=>s.openingAssault);
-  expect(actual.filter(s=>!s.openingAssault)).toEqual(old.timeline(round,seed,plan));
+  expect(actual.filter(s=>!s.openingAssault).map(s=>s.pattern==='rake'?{...s,pattern:'fan',opening:.1}:s)).toEqual(old.timeline(round,seed,plan));
   expect(added.length).toBe(round===1?4:(round-1)%3===0?6:(round-1)%3===1?5:4);
   expect(added.every(s=>s.at>=6.5&&s.at<=8.6&&s.drop&&s.kind in C.enemies)).toBe(true);
   expect(added.filter(s=>s.dropLabel)).toHaveLength(1);

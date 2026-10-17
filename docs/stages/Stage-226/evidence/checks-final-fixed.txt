@@ -1,0 +1,27 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/rake-gun.test.ts tests/opening-assaults.test.ts tests/closing-assault.test.ts tests/projectile-pressure.test.ts tests/mirror-laser.test.ts tests/reserve-tactics.test.ts tests/lockshot.test.ts tests/boss.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/rake-gun.test.ts (9 tests | 1 failed) 649ms
+   × the shared no-kill forecast covers actual scaled left/right salvos and provides a real collision-free route 41ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/rake-gun.test.ts > the shared no-kill forecast covers actual scaled left/right salvos and provides a real collision-free route
+AssertionError: expected null not to be null
+ ❯ tests/rake-gun.test.ts:30:343
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  1 failed | 63 passed (64)
+   Start at  22:14:58
+   Duration  4.59s (transform 66%, tests 23%, import 11%, worker 1%)
+
+  Transform  transforming modules took 14.59s · 66% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

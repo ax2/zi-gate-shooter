@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.RAKE_ROUTES==='1'?'routes':process.env.RAKE_SECONDS??'300';await build({entryPoints:['tools/audit-rake-gun.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-226/audit-${suffix}.mjs`});await import(`../build/qa/Stage-226/audit-${suffix}.mjs`);

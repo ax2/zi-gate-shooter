@@ -1,5 +1,6 @@
 import {CONTROL_SHUTTER,shutterClosed,type ShutterState}from'./control-shutter';
 import {BANKSHOT} from './bankshot';
+import{RAKE,rakeVelocity,rakeMuzzle}from'./rake-gun';
 import {FIRE_CONTROL,fireControlHolding,fireControlSource,patrolControl} from './fire-control';
 import {LOCKSHOT,FORKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
 import {driftOffset} from './drift-supply';
@@ -180,6 +181,17 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         if(b.burst){shot(b.x,b.y+b.height/2,0,INTERCEPTOR.coreVy);b.interceptCoreRemaining=2;b.timer=INTERCEPTOR.coreSpacing;}
         else {for(const muzzle of interceptorMuzzles(b))shot(muzzle.x,muzzle.y,Math.sign(muzzle.x-b.x)*INTERCEPTOR.wingVx,INTERCEPTOR.wingVy);b.burst=1;b.timer=INTERCEPTOR.between;}
         b.warning=0;
+      }
+    }
+  } else if(b.kind==='armor'&&b.pattern==='rake'){
+    b.y+=b.speed*dt;
+    if(b.y>=600){b.warning=0;b.rakeFiring=false;return;}
+    if(b.timer<=1e-9&&!offline){
+      if(!b.rakeFiring&&b.warning<=0){b.warning=RAKE.warning;b.timer=RAKE.warning;}
+      else{
+        const volley=b.rakeVolley??0,muzzle=rakeMuzzle(b),vx=rakeVelocity(b.x,volley);
+        for(const spread of[-RAKE.spread,0,RAKE.spread])shot(muzzle.x,muzzle.y,vx+spread,RAKE.vy);
+        b.rakeVolley=(volley+1)%3;b.rakeFiring=volley<2;b.warning=0;b.timer=volley<2?RAKE.spacing:RAKE.recovery;
       }
     }
   } else {
