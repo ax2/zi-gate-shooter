@@ -1,3 +1,4 @@
+import {BANKSHOT,advanceProjectile,type FlightSegment} from './bankshot';
 import {FIRE_CONTROL} from './fire-control';
 import {CombatLedger,type DamageSource} from './combat-ledger';
 import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
@@ -47,14 +48,14 @@ export interface Body {
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
-  controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; bossVariant?: number;
+  bankShots?:number;bankFiredAt?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; bossVariant?: number;
 }
 export interface Bullet {
   readonly calibrationBand?:CalibrationBand;
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
-  sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
+  bankRemaining?:number;sourceId?:number;weaponKind?: WeaponKind; remainingTargets?: number; hitBodies?: number[]; splashRadius?: number; chainHops?: number;
 }
 export interface EffectEvent { fieldId?:number;targetId?:number; seeker?:boolean; escortReward?:boolean; type: string; x: number; y: number; targetX?: number; targetY?: number; prism?: boolean; opticalBand?:1|2|3; text?: string; detail?: string; size?: number; enemyKind?: EnemyKind; bossVariant?: number; equipmentStage?: number; weaponKind?: WeaponKind }
 interface Contact { t: number; rank: number; id: number; apply: () => void }
@@ -99,6 +100,7 @@ export class World {
     this.announceMagnetic();this.announceLaserChain();return true;
   }
   dropSpawns=0;dropKills=0;arcLinks=0;
+  bankShots?:number;bankReflections?:number;lastBankReflection?:{time:number;x:number;y:number;id:number};
   fireControlShots=0;fireControlBoostedShots=0;lastFireControlBreak?:{time:number;id:number;affected:number;interrupted:number};
   conduitBursts=0;empTargets=0;conduitTacticalWins=0;
   private dischargeConduit(source:Body){
@@ -593,7 +595,7 @@ export class World {
     }
   }
   private admit(candidate: Body) {
-    const arrival=candidate.pattern==='fire-control'?Math.max(0,FIRE_CONTROL.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
+    const arrival=candidate.pattern==='bankshot'?Math.max(0,BANKSHOT.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.pattern==='fire-control'?Math.max(0,FIRE_CONTROL.hold-candidate.age)+(C.playerY-candidate.y)/Math.max(1,candidate.speed):candidate.kind==='conduit'?Math.max(0,CONDUIT.holdSeconds-candidate.age)+(C.playerY-Math.max(candidate.y,CONDUIT.hoverY))/Math.max(1,candidate.speed)
       :(C.playerY-candidate.y)/Math.max(1,candidate.speed);
     const horizon = Math.max(3,arrival+1);
     if (safeRoute(this.player.x, this.bodies, this.bullets, horizon,{reaction:C.spawnSafetyReaction})) return true;
@@ -656,6 +658,7 @@ export class World {
           const candidate = this.spawn(s.kind,s.x,s.drop?(s.dropY??SWARM.arrivalY):undefined);
           if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
+          if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;if(s.forkshot)candidate.forkshot=true;}
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;
@@ -803,6 +806,7 @@ export class World {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
         this.bullets[this.bullets.length-1].sourceId=b.id;
+        if(b.pattern==='bankshot'){this.bullets[this.bullets.length-1].bankRemaining=1;b.bankShots=(b.bankShots??0)+1;b.bankFiredAt=b.age;this.bankShots=(this.bankShots??0)+1;}
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
         if(b.pattern==='lockshot'){b.lockAcceptedShots=(b.lockAcceptedShots??0)+1;b.lockFiredAt=b.age;if(b.forkshot)b.lockFiredAngle=Math.atan2(vx??0,vy??280);this.lockshotShots++;}
         if(b.pattern==='battery')b.batteryShots=(b.batteryShots??0)+1;
@@ -825,16 +829,19 @@ export class World {
         b.warning = 0; b.timer = 0.3; this.attackDeferrals++;
       }
     }
-    for (const b of this.bullets) { b.px = b.x; b.py = b.y; b.x += b.vx * dt; b.y += b.vy * dt; b.age += dt; }
+    const reflected=new Map<number,FlightSegment[]>();
+    for (const b of this.bullets) { b.px=b.x;b.py=b.y;const segments=advanceProjectile(b,dt);if(segments){reflected.set(b.id,segments);this.bankReflections=(this.bankReflections??0)+1;this.lastBankReflection={time:this.time,x:segments[0].x1,y:segments[0].y1,id:b.id};this.effects.push({type:'bank-bounce',x:segments[0].x1,y:segments[0].y1});} }
     const contacts: Contact[] = [];
     const add = (t: number | null, rank: number, id: number, apply: () => void) => { if (t !== null) contacts.push({ t, rank, id, apply }); };
     this.advanceIon(dt,add);
     for (const bullet of this.bullets) {
       if (bullet.hostile) {
-        add(sweep(bullet.px, bullet.py, bullet.x, bullet.y, this.player.px, C.playerY, this.player.x, C.playerY, 27, 31), 1, bullet.id, () => {
+        const segments=reflected.get(bullet.id)??[{x0:bullet.px,y0:bullet.py,x1:bullet.x,y1:bullet.y,from:0,to:1}];
+        for(const segment of segments){const dx=this.player.x-this.player.px,t=sweep(segment.x0,segment.y0,segment.x1,segment.y1,segment.from===0?this.player.px:this.player.px+dx*segment.from,C.playerY,segment.to===1?this.player.x:this.player.px+dx*segment.to,C.playerY,27,31);
+        add(t===null?null:segment.from+t*(segment.to-segment.from), 1, bullet.id, () => {
           if (!bullet.active || this.player.hp <= 0) return;
           bullet.active = false; this.hurt('bullet');
-        });
+        });}
         // A fired bolt is evaded only after it has cleared the entire player
         // collision band. Queue this with damage/kill contacts: a same-time
         // kill or hurt must resolve first, never manufacture a counter window.

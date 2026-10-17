@@ -1,3 +1,5 @@
+import {BANKSHOT} from '../core/bankshot';
+import {bankshotMount} from './bankshot-mount';
 import {bossHullWear,bossWearBand} from './boss-hull-wear';
 import {combatContribution} from './combat-contribution';
 import {supplyCombinations,supplyCombinationLabel,supplyCombinationClear} from './supply-combinations';
@@ -631,7 +633,7 @@ export class CanvasRuntime {
     for (let i = 0; i < amount && this.particles.length < cap; i++) {
       const angle = Math.random() * Math.PI * 2, speed = (explosion ? 130 : 75) + Math.random() * (explosion ? 330 : 180), life = 0.18 + Math.random() * 0.4;
       const hot=this.sparkPhase===0;this.sparkPhase=(this.sparkPhase+1)%4;
-      this.particles.push({ hot,x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: e.type==='drop-impact'?'#b6efff':(e.type==='capacitor'||e.type==='ion-storm')?(i%3===0?'#efffff':i%2?'#c5a9ff':'#80ffd1'):explosion ? (i % 4 === 0 ? '#99ddff' : i % 3 === 0 ? '#ffe2a0' : '#ffad42') : weaponColors[e.weaponKind ?? this.world.weaponKind] });
+      this.particles.push({ hot,x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: e.type==='bank-bounce'?'#ff9470':e.type==='drop-impact'?'#b6efff':(e.type==='capacitor'||e.type==='ion-storm')?(i%3===0?'#efffff':i%2?'#c5a9ff':'#80ffd1'):explosion ? (i % 4 === 0 ? '#99ddff' : i % 3 === 0 ? '#ffe2a0' : '#ffad42') : weaponColors[e.weaponKind ?? this.world.weaponKind] });
     }
   }
   private gateText(text:string,x:number,y:number,size:number,color:string,bold=false){
@@ -881,13 +883,13 @@ export class CanvasRuntime {
           this.frameSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, 1);
           this.hitSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'armor') {
-          const braced=batteryHolding(b)||fireControlHolding(b),frame = armorFrame(b,braced), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
+          const braced=batteryHolding(b)||fireControlHolding(b)||(b.pattern==='bankshot'&&b.age<BANKSHOT.hold),frame = armorFrame(b,braced), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
           if(b.controlPatrol)controlPatrolDrive(c,b.age,this.save.settings.effects==='weak',(b.controlHomeX??b.x)<360?-1:1);
           if(braced&&!b.controlPatrol)batteryMount(c,b.warning,(b.empRemaining??0)>0,this.save.settings.effects==='weak');
           if(b.pattern==='fire-control')controlReceiver(c,b.age,!!fireControlSource(b,w.bodies),(b.empRemaining??0)>0,this.save.settings.effects==='weak');
           this.frameSprite('armor-v1.png', frame, 3, 0, 0, width, height, 1);
-          this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);c.restore();
+          this.hitSprite('armor-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);if(b.pattern==='bankshot')bankshotMount(c,b,this.save.settings.effects==='weak');c.restore();
         } else if(b.kind==='conduit'){
           const bob=Math.sin(b.age*3)*2;
           if(b.pattern==='fire-control'){c.save();c.translate(b.x,y+bob);controlTransmitter(c,b.age,w.bodies.filter(g=>fireControlSource(g,w.bodies)?.id===b.id).length,this.save.settings.effects==='weak');c.restore();}
@@ -1095,6 +1097,7 @@ export class CanvasRuntime {
       } else if (b.kind === 'armor' || b.kind === 'elite' || b.kind === 'sniper') {
         this.bar(b.x,b.y-b.height/2-14,b.width,b.hp/b.maxHp,'#f39b69');
         if(b.pattern==='fire-control')this.text((b.controlPatrol?'游弋·':'')+((b.empRemaining??0)>0?'火控·停火':fireControlSource(b,w.bodies)?b.warning>0?'增幅·蓄能':'增幅·扇射':'断供·单线'),b.x,b.y-b.height/2-36,21,(b.empRemaining??0)>0?'#adf0ff':'#ffd49a','center',true);
+        if(b.pattern==='bankshot')this.text((b.empRemaining??0)>0?'折返炮·停火':b.warning>0?'折返炮·蓄能':'折返炮·反弹一次',b.x,b.y-b.height/2-36,21,'#ffc7a1','center',true);
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='lockshot'){
           const target=!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')?lockshotTargetLabel(w,b,this.save.achievements.tracked):null;
@@ -1711,6 +1714,7 @@ export class CanvasRuntime {
       battlePlan:this.world.battlePlan,battleBrief:battleBrief(this.world.round,this.world.battlePlan),nextBattlePlan:this.save.nextBattlePlan,openingWeapon:this.world.openingWeapon??null,savedOpeningWeapon:this.save.openingWeapon,openingSupplies:this.world.bodies.filter(b=>b.active&&b.openingSupply).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,weapon:b.weaponKind,stage:b.stage})),score: this.world.score, hp: this.world.player.hp, growth: { ...this.world.growth }, weaponKind: this.world.weaponKind,
       playerX: this.world.player.x,
       inputMode: this.inputMode,
+      bankShots:this.world.bankShots??0,bankReflections:this.world.bankReflections??0,lastBankReflection:this.world.lastBankReflection,bankGuns:this.world.bodies.filter(b=>b.pattern==='bankshot').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,shots:b.bankShots??0,firedAt:b.bankFiredAt})),bankProjectiles:this.world.bullets.filter(b=>b.bankRemaining!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,vx:b.vx,vy:b.vy,remaining:b.bankRemaining,source:b.sourceId})),
       combatContribution:combatContribution(this.world),
       magneticProofTargets:this.world.bodies.filter(b=>b.active&&b.proofTarget&&b.proofRound===this.world.round).map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,age:b.age,warning:b.warning,group:b.proofGroup,shots:b.proofShots??0})),magneticProofHits:this.world.magneticProofHits,magneticCertifications:[...this.world.magneticCertifications],savedMagneticCertifications:[...this.save.achievements.magneticCertifications],proofKind:this.world.contract?.proof?.kind??null,proofGroupCount:this.world.contract?.proofGroupCount??0,proofProgress:this.world.contract?.proofProgress??0,proofWins:this.world.proofWins,aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],trackedAchievement:this.save.achievements.tracked,savedCertifications:[...this.save.achievements.certifiedBuilds],stormAugment:this.world.build.stormAugment??null,stormRelayLinks:this.world.stormRelayLinks,stormFocusBursts:this.world.stormFocusBursts,stormFocusDamage:this.world.stormFocusDamage,stormProofRelay:this.world.proofCount('storm-relay'),stormProofFocus:this.world.proofCount('storm-focus'),stormCharges:this.world.bodies.filter(b=>b.active&&b.stormHits).map(b=>({id:b.id,x:b.x,y:b.y,hits:b.stormHits})),stormLinks:this.world.stormLinks,prismHits:this.world.prismHits,
       contractKind:this.world.contract?.kind??null,huntChoice:this.huntChoice,huntKind:this.world.contract?.kind==='hunter'?this.world.contract.hunt:null,bountyShots:this.world.bountyShots,bountyEnemies:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined).map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.bountyShots??0,pattern:b.pattern})),bountyKills:this.world.contract?.targetKills??0,bountyTargets:this.world.bodies.filter(b=>b.active&&b.bountyRound!==undefined&&b.bountyRound===this.world.contract?.round).length,

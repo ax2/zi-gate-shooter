@@ -1,0 +1,84 @@
+[
+  {
+    "branch": "storm-relay",
+    "baseline": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "score": 15460,
+      "kills": 374,
+      "earlyHash": "6cb5b4063f88b2f5932f829974a4248a1732d02ec762a330af621972a2759ea0",
+      "guns": [
+        {
+          "hp": 219.20000000000002
+        },
+        {
+          "hp": 219.20000000000002
+        }
+      ],
+      "phraseShots": 0,
+      "bankShots": 0,
+      "reflections": 0
+    },
+    "current": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "score": 15460,
+      "kills": 374,
+      "earlyHash": "6cb5b4063f88b2f5932f829974a4248a1732d02ec762a330af621972a2759ea0",
+      "guns": [
+        {
+          "hp": 876.8000000000001
+        },
+        {
+          "hp": 876.8000000000001
+        }
+      ],
+      "phraseShots": 3,
+      "bankShots": 5,
+      "reflections": 5
+    }
+  },
+  {
+    "branch": "storm-focus",
+    "baseline": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "score": 15630,
+      "kills": 376,
+      "earlyHash": "adecd0edd5d6e97804f4a92cb92281c4d38125b4174839b716c5b7cf25b98121",
+      "guns": [
+        {
+          "hp": 219.20000000000002
+        },
+        {
+          "hp": 219.20000000000002
+        }
+      ],
+      "phraseShots": 0,
+      "bankShots": 0,
+      "reflections": 0
+    },
+    "current": {
+      "time": 599.999999999783,
+      "hp": 3,
+      "round": 8,
+      "score": 15630,
+      "kills": 376,
+      "earlyHash": "adecd0edd5d6e97804f4a92cb92281c4d38125b4174839b716c5b7cf25b98121",
+      "guns": [
+        {
+          "hp": 876.8000000000001
+        },
+        {
+          "hp": 876.8000000000001
+        }
+      ],
+      "phraseShots": 3,
+      "bankShots": 4,
+      "reflections": 4
+    }
+  }
+]

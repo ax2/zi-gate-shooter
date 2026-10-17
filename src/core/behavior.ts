@@ -1,3 +1,4 @@
+import {BANKSHOT} from './bankshot';
 import {FIRE_CONTROL,fireControlHolding,fireControlSource,patrolControl} from './fire-control';
 import {LOCKSHOT,FORKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
 import {driftOffset} from './drift-supply';
@@ -143,6 +144,10 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         b.warning = 0; b.timer = 2.4;
       }
     }
+  } else if(b.kind==='armor'&&b.pattern==='bankshot'){
+    if(b.age>=BANKSHOT.hold)b.y+=b.speed*dt;
+    if(b.y>=600){b.warning=0;return;}
+    if(b.timer<=1e-9&&!offline){if(b.warning<=0){b.warning=BANKSHOT.warning;b.timer=b.warning;}else{b.warning=0;shot(b.x,b.y+b.height/2,Math.sign(b.x-360)*BANKSHOT.vx,BANKSHOT.vy);b.timer=BANKSHOT.recovery;}}
   } else if(b.kind==='conduit'){
     if(b.pattern==='fire-control'){if(!fireControlHolding(b))b.y+=b.speed*dt;return;}
     if(b.age<CONDUIT.holdSeconds){if(b.y<CONDUIT.hoverY)b.y=Math.min(CONDUIT.hoverY,b.y+b.speed*dt);}

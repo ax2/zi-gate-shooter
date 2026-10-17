@@ -1,0 +1,24 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/bankshot-baseline.test.mjs -t holding the centre
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/bankshot-baseline.test.mjs (3 tests | 1 failed | 2 skipped) 10869ms
+   × holding the centre through the new corridor phrase has a real cost in the same normally earned build 10867ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/bankshot-baseline.test.mjs > holding the centre through the new corridor phrase has a real cost in the same normally earned build
+AssertionError: expected 3 to be less than 3
+ ❯ tests/bankshot-baseline.test.mjs:14:332
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 skipped (3)
+   Start at  12:11:39
+   Duration  11.75s (tests 94%, transform 5%, import 1%)
+

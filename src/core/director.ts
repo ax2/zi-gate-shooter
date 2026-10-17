@@ -1,3 +1,4 @@
+import {BANKSHOT,hasBankshot} from './bankshot';
 import {FIRE_CONTROL,hasControlPatrol} from './fire-control';
 import {LOCKSHOT} from './lockshot';
 import {SUPPLY_CONVOY,hasSupplyConvoy} from './supply-convoy';
@@ -7,7 +8,7 @@ import {SWEEPER} from './sweeper';
 import {RELAY_SCREEN,hasRelayScreen,hasRotatingShields,ROTATING_SHIELD} from './relay-screen';
 import {battleIndex,type BattlePlan} from './battle-plan';
 import type { EnemyKind } from './config';
-export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
+export interface Spawn { at: number; kind: EnemyKind | 'crate' | 'gates' | 'armory'; x: number; stage?: number; pair?: boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot'; lane?: number; shieldTurn?:0|1;forkshot?:boolean;convoy?:boolean; controlPatrol?:boolean; drop?:boolean; dropNotice?:boolean; dropY?:number; dropLabel?:string; dropDetail?:string }
 export const MID_GATE_AT=39;
 export const SWARM={arrivalY:360,grace:.45} as const;
 // Light screens pass first; the armoured pair keeps a readable firing window.
@@ -222,5 +223,6 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
     }
     const screen=out.find(s=>s.kind==='guard'&&s.at===56);if(screen)screen.x=mirror?720-FIRE_CONTROL.screenX:FIRE_CONTROL.screenX;
   }
+  if(hasBankshot(round)){const guns=out.filter(s=>s.kind==='armor'&&s.at===BANKSHOT.at);guns.forEach((s,i)=>Object.assign(s,{x:mirror?720-BANKSHOT.xs[i]:BANKSHOT.xs[i],pattern:'bankshot',drop:true,dropY:BANKSHOT.y,dropLabel:i===0?'折返炮阵':undefined,dropDetail:'外射弹沿场边反弹一次 · 抢拆炮台或看实弹换位'}));}
   return out.sort((a, b) => a.at - b.at);
 }
