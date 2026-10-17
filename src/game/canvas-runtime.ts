@@ -1,3 +1,4 @@
+import {bossHullWear,bossWearBand} from './boss-hull-wear';
 import {supplyCombinations,supplyCombinationLabel,supplyCombinationClear} from './supply-combinations';
 import {shieldLatch} from './shield-latch';
 import {guardClosed,guardDamageScale} from '../core/behavior';
@@ -894,7 +895,8 @@ export class CanvasRuntime {
         } else {
           const frame = bossFrame(b), bossArt = b.bossVariant === 2 ? 'boss-bastion-v1.png' : b.bossVariant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png';
           this.frameSprite(bossArt, frame, 3, b.x, y, width, height, 1);
-          this.hitSprite(bossArt, frame, 3, b.x, y, width, height, b.hit, 0.07, 1);
+          this.hitSprite(bossArt, frame, 3, b.x, y, width, height, b.hit*.5, 0.07, 1);
+          bossHullWear(c,b,this.save.settings.effects==='weak');
           if(b.counterfire)bossHeatLight(c,b,this.save.settings.effects==='weak');
         }
       }
@@ -1679,7 +1681,7 @@ export class CanvasRuntime {
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
       enemyFragments: this.enemyWreck.pieces.length,
-      supplyCombinations:this.world.bodies.filter(b=>b.active&&(b.kind==='crate'||b.kind==='pickup')).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind??this.world.weaponKind,row:b.row,x:b.x,y:b.y,combinations:supplyCombinations(this.world,b,this.save.recipeGoal)})),gateReceipts: this.gateFeedback.receipts.length,gateReceiptDetails:this.gateFeedback.receipts.map(r=>({...r,lines:[...r.lines]})),
+      supplyCombinations:this.world.bodies.filter(b=>b.active&&(b.kind==='crate'||b.kind==='pickup')).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind??this.world.weaponKind,row:b.row,x:b.x,y:b.y,combinations:supplyCombinations(this.world,b,this.save.recipeGoal)})),bossWear:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,variant:b.bossVariant??0,band:bossWearBand(b),hp:b.hp,maxHp:b.maxHp,hit:b.hit})),gateReceipts: this.gateFeedback.receipts.length,gateReceiptDetails:this.gateFeedback.receipts.map(r=>({...r,lines:[...r.lines]})),
       callbackWork:{...this.callbackWork.snapshot(),maxMs:this.maxCallbackWorkMs},interruptedFrames:this.interruptedFrames.map(frame=>({...frame})),
       ...this.frameTimes.snapshot() };
   }

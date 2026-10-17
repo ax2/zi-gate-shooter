@@ -1,0 +1,10 @@
+import {it,expect} from 'vitest';import {World} from '../src/core/world';import {bossHullWear,bossWearBand} from '../src/game/boss-hull-wear';
+it('derives bounded structural wear only from actual health, independent of warning and counter state',()=>{const w=new World(),b=w.spawn('boss',360,360);b.hp=b.maxHp;expect(bossWearBand(b)).toBe(0);b.hp=b.maxHp*.65;expect(bossWearBand(b)).toBe(1);b.hp=b.maxHp*.3;expect(bossWearBand(b)).toBe(2);b.hp=b.maxHp*.7;b.counterfire=true;b.warning=1;expect(bossWearBand(b)).toBe(0);expect(bossWearBand({hp:NaN,maxHp:100})).toBe(0);expect(bossWearBand({hp:0,maxHp:0})).toBe(0);});
+it.each([0,1,2])('variant %s stays inside the real mechanical hull and below the HUD with a fixed draw budget',variant=>{
+ for(const health of [1,.64,.29])for(const age of [0,17.3,500])for(const weak of [false,true])for(const hit of [0,.07]){
+  const w=new World(),b=w.spawn('boss',360,360);b.bossVariant=variant;b.hp=b.maxHp*health;b.age=age;b.hit=hit;const before=JSON.stringify(b),stack:number[][]=[];let m=[1,0,0,1,0,0],calls=0;
+  const point=(x:number,y:number)=>{const px=m[0]*x+m[2]*y+m[4],py=m[1]*x+m[3]*y+m[5];expect(px).toBeGreaterThanOrEqual(190);expect(px).toBeLessThanOrEqual(530);expect(py).toBeGreaterThanOrEqual(250);expect(py).toBeLessThanOrEqual(470);};
+  const c=new Proxy({}, {get(_t,k){return (...a:number[])=>{calls++;for(const n of a)expect(Number.isFinite(n)).toBe(true);const [x,y]=a;if(k==='save')stack.push([...m]);if(k==='restore')m=stack.pop()!;if(k==='translate'){m[4]+=m[0]*x+m[2]*y;m[5]+=m[1]*x+m[3]*y;}if(k==='scale'){m[0]*=x;m[1]*=x;m[2]*=y;m[3]*=y;}if(k==='rotate'){const [aa,bb,cc,dd]=m,cs=Math.cos(x),sn=Math.sin(x);m[0]=aa*cs+cc*sn;m[1]=bb*cs+dd*sn;m[2]=cc*cs-aa*sn;m[3]=dd*cs-bb*sn;}if(k==='moveTo'||k==='lineTo')point(x,y);if(k==='arc')for(const [dx,dy]of [[a[2],0],[-a[2],0],[0,a[2]],[0,-a[2]]])point(x+dx,y+dy);};},set(){return true;}}) as CanvasRenderingContext2D;
+  bossHullWear(c,b,weak);expect(JSON.stringify(b)).toBe(before);expect(stack).toHaveLength(0);expect(m).toEqual([1,0,0,1,0,0]);expect(calls).toBeLessThanOrEqual(250);if(health===1)expect(calls).toBe(0);else expect(calls).toBeGreaterThan(30);
+ }
+});

@@ -1,0 +1,14 @@
+[
+  {
+    "checkpoint": "worn",
+    "time": 75.63333333333033,
+    "sameCompletePhysicalWorld": true,
+    "hp": 1460.550000000002
+  },
+  {
+    "checkpoint": "critical",
+    "time": 77.23333333333024,
+    "sameCompletePhysicalWorld": true,
+    "hp": 612.2000000000021
+  }
+]
