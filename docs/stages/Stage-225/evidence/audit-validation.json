@@ -1,0 +1,122 @@
+{
+  "result": "passed",
+  "routes": 90,
+  "physicalStreams": 12,
+  "randomSeeds": {
+    "normal": 1,
+    "routes": 2
+  },
+  "normal": [
+    {
+      "route": "ballistic",
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "bossWins": 14,
+      "beforePickups": 45,
+      "afterPickups": 44,
+      "beforeGates": 57,
+      "afterGates": 58,
+      "peakBodies": 15,
+      "peakBullets": 67
+    },
+    {
+      "route": "electric",
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "bossWins": 13,
+      "beforePickups": 41,
+      "afterPickups": 41,
+      "beforeGates": 52,
+      "afterGates": 52,
+      "peakBodies": 16,
+      "peakBullets": 67
+    },
+    {
+      "route": "optical",
+      "time": 1199.9999999992374,
+      "hp": 3,
+      "bossWins": 12,
+      "beforePickups": 39,
+      "afterPickups": 39,
+      "beforeGates": 51,
+      "afterGates": 51,
+      "peakBodies": 15,
+      "peakBullets": 67
+    }
+  ],
+  "comparisons": [
+    {
+      "route": "ballistic",
+      "round": 1,
+      "beforeMean": 0.019138755980861285,
+      "afterMean": 2.0669856459330145,
+      "beforeEmpty": 3.4166666666666594,
+      "afterEmpty": 0
+    },
+    {
+      "route": "ballistic",
+      "round": 2,
+      "beforeMean": 0,
+      "afterMean": 0.8612440191387576,
+      "beforeEmpty": 3.483333333333326,
+      "afterEmpty": 1.2500000000000004
+    },
+    {
+      "route": "ballistic",
+      "round": 3,
+      "beforeMean": 0,
+      "afterMean": 1.7894736842105259,
+      "beforeEmpty": 3.483333333333326,
+      "afterEmpty": 0
+    },
+    {
+      "route": "electric",
+      "round": 1,
+      "beforeMean": 0.019138755980861285,
+      "afterMean": 2.0669856459330145,
+      "beforeEmpty": 3.4166666666666594,
+      "afterEmpty": 0
+    },
+    {
+      "route": "electric",
+      "round": 2,
+      "beforeMean": 1.234449760765551,
+      "afterMean": 2.4928229665071826,
+      "beforeEmpty": 0.8666666666666677,
+      "afterEmpty": 0.8666666666666677
+    },
+    {
+      "route": "electric",
+      "round": 3,
+      "beforeMean": 0,
+      "afterMean": 1.7990430622009568,
+      "beforeEmpty": 3.483333333333326,
+      "afterEmpty": 0.03333333333333333
+    },
+    {
+      "route": "optical",
+      "round": 1,
+      "beforeMean": 0.019138755980861285,
+      "afterMean": 2.0669856459330145,
+      "beforeEmpty": 3.4166666666666594,
+      "afterEmpty": 0
+    },
+    {
+      "route": "optical",
+      "round": 2,
+      "beforeMean": 1.043062200956939,
+      "afterMean": 3.4641148325358904,
+      "beforeEmpty": 0.8666666666666677,
+      "afterEmpty": 0
+    },
+    {
+      "route": "optical",
+      "round": 3,
+      "beforeMean": 0,
+      "afterMean": 1.7990430622009568,
+      "beforeEmpty": 3.483333333333326,
+      "afterEmpty": 0.03333333333333333
+    }
+  ],
+  "limits": "Three strategies, each old/new300s and1200s; long runs extend the same seed1337. Safe normal operator knows future hazards and has zero reaction, not human difficulty or FPS. All12 flows completed; long ballistic pickups45→44 and gates57→58 at fixed cutoff, first14 completed chapters retain pickups, not a claim of identical long rewards. No-fire routes use per-body450ms observation and no kills. firstPickup is meaningful only for chapter1; later values are cumulative-run artifacts, not per-chapter timing."
+}

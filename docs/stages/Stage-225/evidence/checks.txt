@@ -1,0 +1,51 @@
+npm warn Unknown env config "devdir". This will error in a future major version of npm. See `npm help npmrc` for supported config options.
+npm notice run zi-gate-shooter@0.1.0 npx
+npm notice run vitest run tests/opening-assaults.test.ts tests/lockshot.test.ts tests/projectile-pressure.test.ts tests/mirror-laser.test.ts
+
+ RUN  v5.0.3 C:/Users/ax2/Documents/Codex/2026-10-11/game-design-handoff-md-agents-md/zi-gate-shooter
+
+ ❯ tests/lockshot.test.ts (11 tests | 1 failed) 62ms
+   × retains the original gun, supplies and moving sentry alongside rotating pursuit tactics 14ms
+ ❯ tests/opening-assaults.test.ts (4 tests | 1 failed) 83ms
+   × admits real shooters with ordinary fixed durability and keeps their live firing inside the conservative forecast 15ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/lockshot.test.ts > retains the original gun, supplies and moving sentry alongside rotating pursuit tactics
+AssertionError: expected [ …(4) ] to have a length of 3 but got 4
+
+- Expected
++ Received
+
+- 3
++ 4
+
+ ❯ tests/lockshot.test.ts:9:16
+      7|   const list=timeline(r,seed),sector=(r-1)%3,v=Math.floor((r-1)/3)%3,g…
+      8|   const expected=r===1?1:sector===1?[3,7,4][v]:sector===0&&v===2?3:0;
+      9|   expect(guns).toHaveLength(expected);
+       |                ^
+     10|   if(r===1||sector===1)expect(guns.find(s=>s.at===(r===1?51:23))).toMa…
+     11|   if(r>1&&sector===1)expect(guns.filter(s=>s.at<2).map(s=>s.at)).toEqu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/opening-assaults.test.ts > admits real shooters with ordinary fixed durability and keeps their live firing inside the conservative forecast
+AssertionError: expected 64.24 to be 44 // Object.is equality
+
+- Expected
++ Received
+
+- 44
++ 64.24
+
+ ❯ tests/opening-assaults.test.ts:23:47
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 2 passed (4)
+      Tests  2 failed | 28 passed (30)
+   Start at  21:43:42
+   Duration  866ms (transform 70%, import 20%, tests 9%, worker 1%)

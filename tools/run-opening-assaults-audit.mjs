@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.OPENING_ROUTES==='1'?'routes':process.env.OPENING_SECONDS??'300';await build({entryPoints:['tools/audit-opening-assaults.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-225/audit-${suffix}.mjs`});await import(`../build/qa/Stage-225/audit-${suffix}.mjs`);

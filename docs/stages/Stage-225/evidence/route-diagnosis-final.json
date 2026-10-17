@@ -1,0 +1,22 @@
+[
+  {
+    "round": 2,
+    "plan": 1,
+    "start": 68,
+    "seed": 9001,
+    "time": 78.86666666666348,
+    "phase": "boss-entry",
+    "hp": 3,
+    "damage": 0,
+    "kills": 0,
+    "cratesBroken": 0,
+    "failureTime": null,
+    "fineGridPlans": 0,
+    "minObservationSeconds": 0.45,
+    "unknownEmitterBullets": 0,
+    "observedBodies": 120,
+    "maxBodies": 18,
+    "maxBullets": 8,
+    "method": "Isolated no-fire fixture; per-body >=450ms delayed observation; continue existing movement, no immunity or kills"
+  }
+]

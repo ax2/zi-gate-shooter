@@ -6,7 +6,8 @@ it('retains the original gun, supplies and moving sentry alongside rotating purs
  for(let r=1;r<=18;r++)for(const seed of[1337,9001]){
   const list=timeline(r,seed),sector=(r-1)%3,v=Math.floor((r-1)/3)%3,guns=list.filter(s=>s.pattern==='lockshot'&&!s.closing);
   const expected=r===1?1:sector===1?[3,7,4][v]:sector===0&&v===2?3:0;
-  expect(guns).toHaveLength(expected);
+  expect(guns).toHaveLength(expected+(r>1&&sector===1?1:0));
+  if(sector===1)expect(guns.filter(s=>s.openingAssault)).toHaveLength(1);
   if(r===1||sector===1)expect(guns.find(s=>s.at===(r===1?51:23))).toMatchObject({kind:'sniper',at:r===1?51:23,drop:true,dropY:360});
   if(r>1&&sector===1)expect(guns.filter(s=>s.at<2).map(s=>s.at)).toEqual(v===2?[1.7]:[.5,1.7]);
   expect(list.filter(s=>s.kind==='armory').map(s=>s.at)).toEqual([16,r===1?46.5:48]);

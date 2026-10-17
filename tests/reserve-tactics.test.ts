@@ -9,7 +9,7 @@ const baselinePath='../build/qa/Stage-222/baseline.mjs',old=await import(baselin
 
 it('keeps tutorial, reward schedules and roster size across 108 chapter schedules',()=>{
  for(let round=1;round<=12;round++)for(const seed of[1,29,1337])for(const plan of[0,1,2]as const){
-  const before=old.timeline(round,seed,plan),after=timeline(round,seed,plan).filter(s=>!s.closing);
+  const before=old.timeline(round,seed,plan),after=timeline(round,seed,plan).filter(s=>!s.closing&&!s.openingAssault);
   expect(after.length).toBe(before.length);
   expect(after.filter(s=>['gates','crate','armory'].includes(s.kind))).toEqual(before.filter((s:any)=>['gates','crate','armory'].includes(s.kind)));
   if(round===1)expect(after).toEqual(before);

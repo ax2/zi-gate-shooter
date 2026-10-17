@@ -1,0 +1,964 @@
+{
+  "seconds": 300,
+  "seed": 1337,
+  "method": "Normally earned progression, identical omniscient zero-reaction safe operator, virtual60Hz; no World injection. Early combat interval6.5..10 excludes later gate windows. Source slots require observed active admission, actual shots measured separately. Not human difficulty or device performance.",
+  "runs": [
+    {
+      "before": {
+        "route": "ballistic",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 12,
+        "kills": 322,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 59,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0.06666666666666667,
+            "earlyEmpty": 3.4166666666666594,
+            "earlyMax": 1,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 0.019138755980861285
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0,
+            "earlyEmpty": 3.483333333333326,
+            "earlyMax": 0,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 0
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0,
+            "earlyEmpty": 3.483333333333326,
+            "earlyMax": 0,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 0
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0,
+            "earlyEmpty": 3.483333333333326,
+            "earlyMax": 0,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 12,
+            "earlyMean": 0
+          }
+        ],
+        "openingSources": []
+      },
+      "after": {
+        "route": "ballistic",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 12,
+        "kills": 334,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 59,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 2.999999999999999,
+            "earlyEmpty": 1.2500000000000004,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 0.8612440191387576
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.233333333333318,
+            "earlyEmpty": 0,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7894736842105259
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 5.599999999999989,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 12,
+            "earlyMean": 1.607655502392345
+          }
+        ],
+        "openingSources": [
+          {
+            "round": 1,
+            "at": 6.516666666666649,
+            "kind": "drone",
+            "x": 440,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 6.666666666666648,
+            "kind": "drone",
+            "x": 520,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 7.416666666666646,
+            "kind": "drone",
+            "x": 440,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 7.566666666666645,
+            "kind": "drone",
+            "x": 520,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 6.516666666666649,
+            "kind": "sniper",
+            "x": 180,
+            "y": 340,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 7.316666666666646,
+            "kind": "charger",
+            "x": 570,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 7.666666666666645,
+            "kind": "drone",
+            "x": 490,
+            "y": 430,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 8.216666666666654,
+            "kind": "charger",
+            "x": 150,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 8.550000000000004,
+            "kind": "drone",
+            "x": 230,
+            "y": 430,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 6.516666666666649,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 6.816666666666648,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 7.416666666666646,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 7.716666666666645,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 6.516666666666649,
+            "kind": "drone",
+            "x": 480,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 6.666666666666648,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 7.416666666666646,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 7.566666666666645,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 8.31666666666666,
+            "kind": "drone",
+            "x": 480,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 8.466666666666667,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "electric",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 11,
+        "kills": 303,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 62,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0.06666666666666667,
+            "earlyEmpty": 3.4166666666666594,
+            "earlyMax": 1,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 0.019138755980861285
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 4.299999999999993,
+            "earlyEmpty": 0.8666666666666677,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 1.234449760765551
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0,
+            "earlyEmpty": 3.483333333333326,
+            "earlyMax": 0,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 0
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0,
+            "earlyEmpty": 3.483333333333326,
+            "earlyMax": 0,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 11,
+            "earlyMean": 0
+          }
+        ],
+        "openingSources": []
+      },
+      "after": {
+        "route": "electric",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 14,
+        "pickups": 11,
+        "kills": 320,
+        "bossWins": 3,
+        "peakBodies": 15,
+        "peakBullets": 62,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 8.683333333333334,
+            "earlyEmpty": 0.8666666666666677,
+            "earlyMax": 5,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 2.4928229665071826
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.266666666666652,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7990430622009568
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.466666666666653,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 14,
+            "pickups": 11,
+            "earlyMean": 1.8564593301435406
+          }
+        ],
+        "openingSources": [
+          {
+            "round": 1,
+            "at": 6.516666666666649,
+            "kind": "drone",
+            "x": 440,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 6.666666666666648,
+            "kind": "drone",
+            "x": 520,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 7.416666666666646,
+            "kind": "drone",
+            "x": 440,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 7.566666666666645,
+            "kind": "drone",
+            "x": 520,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 6.516666666666649,
+            "kind": "sniper",
+            "x": 180,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 7.316666666666646,
+            "kind": "charger",
+            "x": 570,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 7.666666666666645,
+            "kind": "drone",
+            "x": 490,
+            "y": 430,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 8.216666666666654,
+            "kind": "charger",
+            "x": 150,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 8.550000000000004,
+            "kind": "drone",
+            "x": 230,
+            "y": 430,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 6.516666666666649,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 6.816666666666648,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 7.416666666666646,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 7.716666666666645,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 6.516666666666649,
+            "kind": "drone",
+            "x": 480,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 6.666666666666648,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 7.416666666666646,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 7.566666666666645,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 8.31666666666666,
+            "kind": "drone",
+            "x": 480,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 8.466666666666667,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "optical",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 15,
+        "pickups": 11,
+        "kills": 306,
+        "bossWins": 3,
+        "peakBodies": 13,
+        "peakBullets": 57,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0.06666666666666667,
+            "earlyEmpty": 3.4166666666666594,
+            "earlyMax": 1,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 0.019138755980861285
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 3.6333333333333298,
+            "earlyEmpty": 0.8666666666666677,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 1.043062200956939
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0,
+            "earlyEmpty": 3.483333333333326,
+            "earlyMax": 0,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 0
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 0,
+            "earlyEmpty": 3.483333333333326,
+            "earlyMax": 0,
+            "firstPickup": 0,
+            "gates": 15,
+            "pickups": 11,
+            "earlyMean": 0
+          }
+        ],
+        "openingSources": []
+      },
+      "after": {
+        "route": "optical",
+        "time": 300.0000000000558,
+        "hp": 3,
+        "damage": 0,
+        "round": 4,
+        "gates": 15,
+        "pickups": 11,
+        "kills": 318,
+        "bossWins": 3,
+        "peakBodies": 13,
+        "peakBullets": 57,
+        "chapters": [
+          {
+            "round": 1,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 7.199999999999984,
+            "earlyEmpty": 0,
+            "earlyMax": 3,
+            "firstPickup": 13.283333333333573,
+            "gates": 4,
+            "pickups": 3,
+            "earlyMean": 2.0669856459330145
+          },
+          {
+            "round": 2,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 12.06666666666666,
+            "earlyEmpty": 0,
+            "earlyMax": 5,
+            "firstPickup": 0,
+            "gates": 8,
+            "pickups": 6,
+            "earlyMean": 3.4641148325358904
+          },
+          {
+            "round": 3,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 6.266666666666652,
+            "earlyEmpty": 0.03333333333333333,
+            "earlyMax": 2,
+            "firstPickup": 0,
+            "gates": 12,
+            "pickups": 9,
+            "earlyMean": 1.7990430622009568
+          },
+          {
+            "round": 4,
+            "earlySeconds": 3.483333333333326,
+            "earlyEnemySeconds": 4.699999999999992,
+            "earlyEmpty": 1.0333333333333345,
+            "earlyMax": 3,
+            "firstPickup": 0,
+            "gates": 15,
+            "pickups": 11,
+            "earlyMean": 1.3492822966507183
+          }
+        ],
+        "openingSources": [
+          {
+            "round": 1,
+            "at": 6.516666666666649,
+            "kind": "drone",
+            "x": 440,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 6.666666666666648,
+            "kind": "drone",
+            "x": 520,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 7.416666666666646,
+            "kind": "drone",
+            "x": 440,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 1,
+            "at": 7.566666666666645,
+            "kind": "drone",
+            "x": 520,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 6.516666666666649,
+            "kind": "sniper",
+            "x": 180,
+            "y": 340,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "lockshot",
+            "maxHp": 64.24
+          },
+          {
+            "round": 2,
+            "at": 7.316666666666646,
+            "kind": "charger",
+            "x": 570,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 7.666666666666645,
+            "kind": "drone",
+            "x": 490,
+            "y": 430,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 2,
+            "at": 8.216666666666654,
+            "kind": "charger",
+            "x": 150,
+            "y": 350,
+            "shots": 0,
+            "accepted": true,
+            "pattern": "flank",
+            "maxHp": 28.679999999999996
+          },
+          {
+            "round": 2,
+            "at": 8.550000000000004,
+            "kind": "drone",
+            "x": 230,
+            "y": 430,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 6.516666666666649,
+            "kind": "armor",
+            "x": 240,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 6.816666666666648,
+            "kind": "drone",
+            "x": 240,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 3,
+            "at": 7.416666666666646,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 163.2
+          },
+          {
+            "round": 3,
+            "at": 7.716666666666645,
+            "kind": "drone",
+            "x": 480,
+            "y": 470,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 6.516666666666649,
+            "kind": "drone",
+            "x": 480,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 6.666666666666648,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 7.416666666666646,
+            "kind": "armor",
+            "x": 480,
+            "y": 350,
+            "shots": 3,
+            "accepted": true,
+            "pattern": "fan",
+            "maxHp": 219.20000000000002
+          },
+          {
+            "round": 4,
+            "at": 7.566666666666645,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 8.31666666666666,
+            "kind": "drone",
+            "x": 480,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          },
+          {
+            "round": 4,
+            "at": 8.466666666666667,
+            "kind": "drone",
+            "x": 240,
+            "y": 390,
+            "shots": 0,
+            "accepted": true,
+            "maxHp": 12
+          }
+        ]
+      }
+    }
+  ]
+}
