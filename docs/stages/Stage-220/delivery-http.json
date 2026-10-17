@@ -1,0 +1,17 @@
+[
+  {
+    "url": "http://127.0.0.1:5178/",
+    "status": 200,
+    "bytes": 547
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/canvas-preview-CLVrpDkz.js",
+    "status": 200,
+    "bytes": 366118
+  },
+  {
+    "url": "http://127.0.0.1:5178/assets/guard-v1.png",
+    "status": 200,
+    "bytes": 327836
+  }
+]

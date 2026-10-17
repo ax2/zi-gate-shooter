@@ -1,0 +1,4249 @@
+{
+  "logs": [],
+  "normalEarnedFlow": true,
+  "virtual60Hz": true,
+  "worldInjection": false,
+  "evidence": {
+    "history": [
+      {
+        "drawCount": 0,
+        "callbackCount": 0,
+        "mode": "playing",
+        "time": 0,
+        "roundTime": 0,
+        "phaseTime": 0,
+        "round": 1,
+        "phase": "running",
+        "buildRanks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "buildRefinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 0
+        },
+        "activeWeapons": [
+          "pulse"
+        ],
+        "supportBeams": 0,
+        "laserCharge": 0,
+        "lastLaserAt": null,
+        "opticalBand": 1,
+        "laserBands": [],
+        "opticalImpacts": 0,
+        "weaponLevels": {
+          "pulse": 1
+        },
+        "weaponCalibrations": {
+          "pulse": 0
+        },
+        "calibrationBands": {
+          "pulse": 0
+        },
+        "calibratedShots": [],
+        "contractStatus": null,
+        "contractRewardPending": false,
+        "bossRewardRound": null,
+        "bossLootStats": {
+          "claimed": 0,
+          "research": 0,
+          "equipment": 0
+        },
+        "battlePlan": 0,
+        "battleBrief": "初始突围",
+        "nextBattlePlan": 1,
+        "openingWeapon": "scatter",
+        "savedOpeningWeapon": "scatter",
+        "openingSupplies": [],
+        "score": 0,
+        "hp": 3,
+        "growth": {
+          "stage": 1,
+          "bonus": 0,
+          "energy": 0,
+          "overload": 0
+        },
+        "weaponKind": "pulse",
+        "playerX": 360,
+        "inputMode": "touch",
+        "bankShots": 0,
+        "bankReflections": 0,
+        "bankGuns": [],
+        "bankProjectiles": [],
+        "combatContribution": {
+          "total": 0,
+          "rows": [
+            {
+              "source": "pulse",
+              "damage": 0,
+              "contacts": 0,
+              "kills": 0,
+              "name": "速射炮",
+              "color": "#83e5ff",
+              "role": "直击与弹芯分支 · 原折射保留",
+              "share": 0
+            }
+          ]
+        },
+        "magneticProofTargets": [],
+        "magneticProofHits": 0,
+        "magneticCertifications": [],
+        "savedMagneticCertifications": [],
+        "proofKind": null,
+        "proofGroupCount": 0,
+        "proofProgress": 0,
+        "proofWins": 0,
+        "aceWins": 0,
+        "flawlessAceWins": 0,
+        "certifiedBuilds": [],
+        "trackedAchievement": null,
+        "savedCertifications": [],
+        "stormAugment": null,
+        "stormRelayLinks": 0,
+        "stormFocusBursts": 0,
+        "stormFocusDamage": 0,
+        "stormProofRelay": 0,
+        "stormProofFocus": 0,
+        "stormCharges": [],
+        "stormLinks": 0,
+        "prismHits": 0,
+        "contractKind": null,
+        "huntChoice": "staggered",
+        "huntKind": null,
+        "bountyShots": 0,
+        "bountyEnemies": [],
+        "bountyKills": 0,
+        "bountyTargets": 0,
+        "bossCounterfire": false,
+        "bossCounterVolleys": 0,
+        "bossFormation": null,
+        "activeEscorts": 0,
+        "escortSpawns": 0,
+        "escortKills": 0,
+        "tacticalWins": 0,
+        "bossShield": false,
+        "dropSpawns": 0,
+        "dropKills": 0,
+        "arcLinks": 0,
+        "protectedDrops": 0,
+        "fireControlShots": 0,
+        "fireControlBoostedShots": 0,
+        "fireControlUnits": [],
+        "relayScreen": [],
+        "conduitBursts": 0,
+        "empTargets": 0,
+        "conduitTacticalWins": 0,
+        "offlineEnemies": 0,
+        "empWaves": 0,
+        "recipeGoal": null,
+        "goalSupplies": [],
+        "mobileSentries": [],
+        "interceptorBreaks": 0,
+        "interceptors": [],
+        "refitsClaimed": 0,
+        "enemyProjectileScale": 1,
+        "framePulses": 0,
+        "renderedMode": "",
+        "imageCount": 29,
+        "runNewBest": false,
+        "bossWins": 0,
+        "contractStats": {
+          "accepted": 0,
+          "won": 0,
+          "failed": 0,
+          "claimed": 0
+        },
+        "runAchievements": [],
+        "researchPoints": 0,
+        "buildPoints": 0,
+        "unspentBuildPoints": 0,
+        "ballisticReactions": [
+          {
+            "kind": "scatter",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 0
+          }
+        ],
+        "ballisticTotals": {
+          "pierces": 0,
+          "ricochets": 0,
+          "splashHits": 0
+        },
+        "ballisticBranch": null,
+        "scatterRicochets": 0,
+        "ricochetTraces": 0,
+        "scatterPierces": 0,
+        "scatterBursts": 0,
+        "scatterSplashHits": 0,
+        "weaponImpacts": [],
+        "upgradePulseRemaining": 0,
+        "combatFeedback": null,
+        "pendingCombatFeedback": [],
+        "equipmentReceipts": [],
+        "equipmentReceipt": null,
+        "ionAugment": null,
+        "ionOrbSpawns": 0,
+        "ionOrbHits": 0,
+        "ionSpearShots": 0,
+        "ionSpearHits": 0,
+        "ionBonusDamage": 0,
+        "ionOrbs": [],
+        "ionSpears": [],
+        "ionCharge": 0,
+        "ionBursts": 0,
+        "ionHits": 0,
+        "electricBranch": null,
+        "seekerLinks": 0,
+        "capacitorBursts": 0,
+        "opticalBranch": null,
+        "burnHits": 0,
+        "relayHits": 0,
+        "photonAugment": null,
+        "laserChainProfile": {
+          "hops": 2,
+          "range": 220,
+          "decay": 0.8,
+          "focus": 0.8
+        },
+        "laserChainUnlocked": false,
+        "laserChainReady": false,
+        "laserArcHits": 0,
+        "laserFocusHits": 0,
+        "laserArcBeams": 0,
+        "laserFocusBeams": 0,
+        "fractureAugment": null,
+        "fractureProfile": {
+          "hits": 3,
+          "direct": 2,
+          "splash": 0.75,
+          "radius": 120,
+          "cooldown": 0.35
+        },
+        "fractureFinishWaves": 0,
+        "fractureFinishHits": 0,
+        "fractureWaveDamage": 0,
+        "fractureWaves": 0,
+        "fractureWaveHits": 0,
+        "fractureWaveBeams": 0,
+        "fractureUnlocked": false,
+        "fractureBursts": 0,
+        "magneticWideHits": 0,
+        "magneticAugment": null,
+        "magneticLinkHits": 0,
+        "magneticUnlocked": false,
+        "magneticBursts": 0,
+        "magneticHits": 0,
+        "magneticFields": [],
+        "sweepers": [],
+        "lockPreemptWins": 0,
+        "lockBaitWins": 0,
+        "lockshotSpawns": 0,
+        "lockshotShots": 0,
+        "lockshotEnemies": [],
+        "hostileProjectiles": [],
+        "refitTarget": null,
+        "directedSupplies": [],
+        "driftSupplies": [],
+        "bodies": 0,
+        "bullets": [],
+        "particles": 0,
+        "hotParticles": 0,
+        "ammoFragments": 0,
+        "blasts": 0,
+        "arcs": 0,
+        "bossDestructionAge": null,
+        "crateFragments": 0,
+        "droneFragments": 0,
+        "enemyFragments": 0,
+        "supplyCombinations": [],
+        "bossWear": [],
+        "gateReceipts": 0,
+        "gateReceiptDetails": [],
+        "callbackWork": {
+          "frameSamples": 0,
+          "sampleLimit": 3600,
+          "frameSampleSeconds": 0,
+          "p95": 0,
+          "p99": 0,
+          "over33msPercent": 0,
+          "maxMs": 0
+        },
+        "interruptedFrames": [],
+        "frameSamples": 0,
+        "sampleLimit": 36000,
+        "frameSampleSeconds": 0,
+        "p95": 0,
+        "p99": 0,
+        "over33msPercent": 0,
+        "stage": "run-started",
+        "baseline": false,
+        "normalEarnedFlow": true,
+        "virtual60Hz": true,
+        "worldInjection": false,
+        "quality": "standard",
+        "progression": {
+          "stage": 1,
+          "bonus": 0,
+          "energy": 0,
+          "overload": 0,
+          "gates": 0,
+          "pickups": 0
+        },
+        "teamPolicy": "escort",
+        "buildRoute": "optical",
+        "escorts": []
+      },
+      {
+        "drawCount": 14545,
+        "callbackCount": 14555,
+        "mode": "playing",
+        "time": 242.58333333341852,
+        "roundTime": 72.01666666666387,
+        "phaseTime": 0.8000000000000008,
+        "round": 3,
+        "phase": "boss",
+        "buildRanks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "buildRefinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 8
+        },
+        "activeWeapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ],
+        "supportBeams": 2,
+        "laserCharge": 0.3629629629629617,
+        "lastLaserAt": 241.7833333334179,
+        "opticalBand": 3,
+        "laserBands": [],
+        "opticalImpacts": 0,
+        "weaponLevels": {
+          "pulse": 2,
+          "scatter": 2,
+          "pierce": 2,
+          "blast": 3,
+          "arc": 3
+        },
+        "weaponCalibrations": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibrationBands": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibratedShots": [
+          {
+            "id": 10786,
+            "kind": "blast",
+            "band": 1
+          },
+          {
+            "id": 10794,
+            "kind": "arc",
+            "band": 1
+          }
+        ],
+        "contractStatus": null,
+        "contractRewardPending": false,
+        "bossRewardRound": null,
+        "bossLootStats": {
+          "claimed": 2,
+          "research": 2,
+          "equipment": 0
+        },
+        "battlePlan": 0,
+        "battleBrief": "重装混编",
+        "nextBattlePlan": 1,
+        "openingWeapon": "scatter",
+        "savedOpeningWeapon": "scatter",
+        "openingSupplies": [],
+        "score": 6275,
+        "hp": 3,
+        "growth": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 20,
+          "overload": 0,
+          "mastery": 7
+        },
+        "weaponKind": "arc",
+        "playerX": 220,
+        "inputMode": "touch",
+        "bankShots": 0,
+        "bankReflections": 0,
+        "bankGuns": [],
+        "bankProjectiles": [],
+        "combatContribution": {
+          "total": 22333.001309999974,
+          "rows": [
+            {
+              "source": "scatter",
+              "damage": 4566.651500000004,
+              "contacts": 644,
+              "kills": 53,
+              "name": "霰射炮",
+              "color": "#ffd28b",
+              "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+              "share": 0.20447997278158977
+            },
+            {
+              "source": "blast",
+              "damage": 4459.127499999996,
+              "contacts": 71,
+              "kills": 29,
+              "name": "爆裂炮",
+              "color": "#ffb46d",
+              "role": "爆炸与弹芯分支 · 纵列 / 群敌",
+              "share": 0.1996653937419216
+            },
+            {
+              "source": "arc",
+              "damage": 4417.0846649999985,
+              "contacts": 105,
+              "kills": 46,
+              "name": "电弧炮",
+              "color": "#a2ff9c",
+              "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+              "share": 0.197782850754689
+            },
+            {
+              "source": "pierce",
+              "damage": 2616.604999999998,
+              "contacts": 260,
+              "kills": 28,
+              "name": "穿甲炮",
+              "color": "#d5b4ff",
+              "role": "穿甲与弹芯分支 · 原高贯穿保留",
+              "share": 0.11716315974191832
+            },
+            {
+              "source": "photon",
+              "damage": 2455.268394999999,
+              "contacts": 43,
+              "kills": 27,
+              "name": "电光连锁",
+              "color": "#a6ecff",
+              "role": "光链与单体聚能 · 原激光另计",
+              "share": 0.10993902525320731
+            },
+            {
+              "source": "laser",
+              "damage": 1677.8042499999983,
+              "contacts": 40,
+              "kills": 12,
+              "name": "激光与棱镜",
+              "color": "#7fe4ff",
+              "role": "主侧束、分光与灼烧 · 瞄准纵列",
+              "share": 0.07512668031988756
+            },
+            {
+              "source": "pulse",
+              "damage": 1436.7599999999861,
+              "contacts": 189,
+              "kills": 19,
+              "name": "速射炮",
+              "color": "#83e5ff",
+              "role": "直击与弹芯分支 · 原折射保留",
+              "share": 0.06433349374123991
+            },
+            {
+              "source": "fracture",
+              "damage": 703.6999999999986,
+              "contacts": 30,
+              "kills": 0,
+              "name": "裂甲爆破",
+              "color": "#ffc183",
+              "role": "裂甲引爆与穿震 · 原穿甲另计",
+              "share": 0.031509423665546696
+            }
+          ]
+        },
+        "magneticProofTargets": [],
+        "magneticProofHits": 0,
+        "magneticCertifications": [],
+        "savedMagneticCertifications": [],
+        "proofKind": null,
+        "proofGroupCount": 0,
+        "proofProgress": 0,
+        "proofWins": 0,
+        "aceWins": 0,
+        "flawlessAceWins": 0,
+        "certifiedBuilds": [],
+        "trackedAchievement": null,
+        "savedCertifications": [],
+        "stormAugment": null,
+        "stormRelayLinks": 0,
+        "stormFocusBursts": 0,
+        "stormFocusDamage": 0,
+        "stormProofRelay": 0,
+        "stormProofFocus": 0,
+        "stormCharges": [],
+        "stormLinks": 0,
+        "prismHits": 0,
+        "contractKind": null,
+        "huntChoice": "staggered",
+        "huntKind": null,
+        "bountyShots": 0,
+        "bountyEnemies": [],
+        "bountyKills": 0,
+        "bountyTargets": 0,
+        "bossCounterfire": false,
+        "bossCounterVolleys": 0,
+        "bossFormation": "bulwark",
+        "activeEscorts": 2,
+        "escortSpawns": 4,
+        "escortKills": 2,
+        "tacticalWins": 1,
+        "bossShield": true,
+        "dropSpawns": 214,
+        "dropKills": 169,
+        "arcLinks": 24,
+        "protectedDrops": 0,
+        "fireControlShots": 22,
+        "fireControlBoostedShots": 21,
+        "lastFireControlBreak": {
+          "time": 225.85000000007187,
+          "id": 9847,
+          "affected": 1,
+          "interrupted": 1
+        },
+        "fireControlUnits": [],
+        "relayScreen": [],
+        "conduitBursts": 3,
+        "empTargets": 4,
+        "conduitTacticalWins": 0,
+        "offlineEnemies": 0,
+        "empWaves": 0,
+        "recipeGoal": null,
+        "goalSupplies": [],
+        "mobileSentries": [],
+        "interceptorBreaks": 1,
+        "interceptors": [],
+        "refitsClaimed": 3,
+        "enemyProjectileScale": 1.2,
+        "framePulses": 14558,
+        "renderedMode": "playing",
+        "imageCount": 29,
+        "runNewBest": false,
+        "bossWins": 2,
+        "contractStats": {
+          "accepted": 0,
+          "won": 0,
+          "failed": 0,
+          "claimed": 0
+        },
+        "runAchievements": [
+          "preempt-gun",
+          "boss",
+          "specialist",
+          "arsenal",
+          "bait-counter",
+          "hunter",
+          "core-breaker",
+          "fracture",
+          "tactician"
+        ],
+        "researchPoints": 4,
+        "buildPoints": 11,
+        "unspentBuildPoints": 0,
+        "ballisticReactions": [
+          {
+            "kind": "scatter",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 0
+          },
+          {
+            "kind": "blast",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 8
+          }
+        ],
+        "ballisticTotals": {
+          "pierces": 0,
+          "ricochets": 0,
+          "splashHits": 8
+        },
+        "ballisticBranch": null,
+        "scatterRicochets": 0,
+        "ricochetTraces": 0,
+        "scatterPierces": 0,
+        "scatterBursts": 0,
+        "scatterSplashHits": 0,
+        "weaponImpacts": [
+          {
+            "x": 377.9631171566674,
+            "y": 360,
+            "kind": "pulse",
+            "life": 0.06333333333340121,
+            "total": 0.18
+          },
+          {
+            "x": 500,
+            "y": 480,
+            "kind": "pulse",
+            "life": 0.06333333333340121,
+            "total": 0.18
+          },
+          {
+            "x": 220,
+            "y": 480,
+            "kind": "pierce",
+            "life": 0.06333333333340121,
+            "total": 0.18
+          },
+          {
+            "x": 220,
+            "y": 480,
+            "kind": "scatter",
+            "life": 0.08000000000005818,
+            "total": 0.18
+          },
+          {
+            "x": 379.6223626508297,
+            "y": 360,
+            "kind": "pierce",
+            "life": 0.13000000000002906,
+            "total": 0.18
+          },
+          {
+            "x": 379.6223626508297,
+            "y": 360,
+            "kind": "scatter",
+            "life": 0.13000000000002906,
+            "total": 0.18
+          }
+        ],
+        "upgradePulseRemaining": 0,
+        "combatFeedback": {
+          "title": "电弧炮 精校0→1",
+          "combo": false,
+          "remaining": 0,
+          "hidden": false
+        },
+        "pendingCombatFeedback": [],
+        "equipmentReceipts": [],
+        "equipmentReceipt": {
+          "title": "电弧炮 精校0→1",
+          "detail": "领取时常态全弹直伤/秒 182 → 273",
+          "equipment": {
+            "remaining": 1.7166666666654748,
+            "kind": "arc",
+            "before": {
+              "stage": 3,
+              "calibration": 0,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 182
+            },
+            "after": {
+              "stage": 3,
+              "calibration": 1,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 273
+            }
+          },
+          "until": 237.9000000000789,
+          "combo": false,
+          "observedAt": 242.58333333341852,
+          "hidden": false
+        },
+        "ionAugment": null,
+        "ionOrbSpawns": 0,
+        "ionOrbHits": 0,
+        "ionSpearShots": 0,
+        "ionSpearHits": 0,
+        "ionBonusDamage": 0,
+        "ionOrbs": [],
+        "ionSpears": [],
+        "ionCharge": 0,
+        "ionBursts": 0,
+        "ionHits": 0,
+        "electricBranch": null,
+        "seekerLinks": 0,
+        "capacitorBursts": 0,
+        "opticalBranch": "burn",
+        "burnHits": 20,
+        "relayHits": 0,
+        "photonAugment": "photon-reach",
+        "laserChainProfile": {
+          "hops": 3,
+          "range": 300,
+          "decay": 0.8,
+          "focus": 0.8
+        },
+        "laserChainUnlocked": true,
+        "laserChainReady": false,
+        "laserArcHits": 31,
+        "laserFocusHits": 12,
+        "laserArcBeams": 0,
+        "laserFocusBeams": 0,
+        "fractureAugment": null,
+        "fractureProfile": {
+          "hits": 3,
+          "direct": 2,
+          "splash": 0.75,
+          "radius": 120,
+          "cooldown": 0.35
+        },
+        "fractureFinishWaves": 0,
+        "fractureFinishHits": 0,
+        "fractureWaveDamage": 0,
+        "fractureWaves": 0,
+        "fractureWaveHits": 0,
+        "fractureWaveBeams": 0,
+        "fractureUnlocked": true,
+        "fractureBursts": 30,
+        "magneticWideHits": 0,
+        "magneticAugment": null,
+        "magneticLinkHits": 0,
+        "magneticUnlocked": false,
+        "magneticBursts": 0,
+        "magneticHits": 0,
+        "magneticFields": [],
+        "sweepers": [],
+        "lockPreemptWins": 2,
+        "lockBaitWins": 1,
+        "lockshotSpawns": 6,
+        "lockshotShots": 8,
+        "lockshotEnemies": [],
+        "hostileProjectiles": [],
+        "refitTarget": null,
+        "directedSupplies": [],
+        "lastEquipmentPickup": {
+          "id": 9458,
+          "row": 17,
+          "kind": "arc",
+          "refit": true,
+          "time": 220.41666666673422,
+          "x": 222,
+          "y": 973.333333333338
+        },
+        "driftSupplies": [],
+        "bodies": 3,
+        "bullets": [],
+        "particles": 137,
+        "hotParticles": 37,
+        "ammoFragments": 0,
+        "blasts": 3,
+        "arcs": 0,
+        "bossDestructionAge": null,
+        "crateFragments": 0,
+        "droneFragments": 0,
+        "enemyFragments": 0,
+        "supplyCombinations": [],
+        "bossWear": [
+          {
+            "id": 10741,
+            "variant": 2,
+            "band": 0,
+            "hp": 16532.079750000023,
+            "maxHp": 17280,
+            "hit": 0.03666666666666668
+          }
+        ],
+        "gateReceipts": 0,
+        "gateReceiptDetails": [],
+        "callbackWork": {
+          "frameSamples": 3600,
+          "sampleLimit": 3600,
+          "frameSampleSeconds": 0,
+          "p95": 0,
+          "p99": 0,
+          "over33msPercent": 0,
+          "maxMs": 0
+        },
+        "interruptedFrames": [],
+        "frameSamples": 14555,
+        "sampleLimit": 36000,
+        "frameSampleSeconds": 242.58333333330654,
+        "p95": 16.666666666671517,
+        "p99": 16.666666666671517,
+        "over33msPercent": 0,
+        "stage": "shield-entry",
+        "baseline": false,
+        "normalEarnedFlow": true,
+        "virtual60Hz": true,
+        "worldInjection": false,
+        "quality": "standard",
+        "progression": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 20,
+          "overload": 0,
+          "mastery": 7,
+          "gates": 12,
+          "pickups": 9
+        },
+        "teamPolicy": "escort",
+        "buildRoute": "optical",
+        "escorts": [
+          {
+            "id": 6506,
+            "round": 2,
+            "at": 0.21666666666666665,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 110,
+            "y": 310.90000000000026,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 0.733333333333334,
+            "lockX": 363.0322324655593,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 6631,
+            "round": 2,
+            "at": 2.6166666666666623,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 610,
+            "y": 320,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 1.8833333333333315,
+            "lockX": 414.92852782383653,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 10762,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 220,
+            "y": 480,
+            "hp": 310.68,
+            "maxHp": 391.68,
+            "age": 0.6000000000000002,
+            "shots": 0,
+            "active": true
+          },
+          {
+            "id": 10763,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 500,
+            "y": 480,
+            "hp": 364.13999999999993,
+            "maxHp": 391.68,
+            "age": 0.6000000000000002,
+            "shots": 0,
+            "active": true
+          }
+        ]
+      },
+      {
+        "drawCount": 14690,
+        "callbackCount": 14700,
+        "mode": "playing",
+        "time": 245.0000000000871,
+        "roundTime": 72.01666666666387,
+        "phaseTime": 3.21666666666666,
+        "round": 3,
+        "phase": "boss",
+        "buildRanks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "buildRefinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 8
+        },
+        "activeWeapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ],
+        "supportBeams": 0,
+        "laserCharge": 0.4370370370370341,
+        "lastLaserAt": 244.03333333341968,
+        "opticalBand": 3,
+        "laserBands": [],
+        "opticalImpacts": 0,
+        "weaponLevels": {
+          "pulse": 2,
+          "scatter": 2,
+          "pierce": 2,
+          "blast": 3,
+          "arc": 3
+        },
+        "weaponCalibrations": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibrationBands": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibratedShots": [
+          {
+            "id": 10923,
+            "kind": "blast",
+            "band": 1
+          },
+          {
+            "id": 10933,
+            "kind": "arc",
+            "band": 1
+          }
+        ],
+        "contractStatus": null,
+        "contractRewardPending": false,
+        "bossRewardRound": null,
+        "bossLootStats": {
+          "claimed": 2,
+          "research": 2,
+          "equipment": 0
+        },
+        "battlePlan": 0,
+        "battleBrief": "重装混编",
+        "nextBattlePlan": 1,
+        "openingWeapon": "scatter",
+        "savedOpeningWeapon": "scatter",
+        "openingSupplies": [],
+        "score": 6395,
+        "hp": 3,
+        "growth": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 50,
+          "overload": 0,
+          "mastery": 7
+        },
+        "weaponKind": "arc",
+        "playerX": 238.33333333333334,
+        "inputMode": "touch",
+        "bankShots": 0,
+        "bankReflections": 0,
+        "bankGuns": [],
+        "bankProjectiles": [],
+        "combatContribution": {
+          "total": 24161.865434999963,
+          "rows": [
+            {
+              "source": "arc",
+              "damage": 4967.925164999996,
+              "contacts": 112,
+              "kills": 46,
+              "name": "电弧炮",
+              "color": "#a2ff9c",
+              "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+              "share": 0.2056101660844302
+            },
+            {
+              "source": "scatter",
+              "damage": 4864.461500000003,
+              "contacts": 682,
+              "kills": 53,
+              "name": "霰射炮",
+              "color": "#ffd28b",
+              "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+              "share": 0.20132806024792807
+            },
+            {
+              "source": "blast",
+              "damage": 4762.787499999997,
+              "contacts": 75,
+              "kills": 30,
+              "name": "爆裂炮",
+              "color": "#ffb46d",
+              "role": "爆炸与弹芯分支 · 纵列 / 群敌",
+              "share": 0.19712002423044717
+            },
+            {
+              "source": "pierce",
+              "damage": 2769.154999999994,
+              "contacts": 276,
+              "kills": 28,
+              "name": "穿甲炮",
+              "color": "#d5b4ff",
+              "role": "穿甲与弹芯分支 · 原高贯穿保留",
+              "share": 0.11460849359705069
+            },
+            {
+              "source": "photon",
+              "damage": 2531.588394999999,
+              "contacts": 44,
+              "kills": 28,
+              "name": "电光连锁",
+              "color": "#a6ecff",
+              "role": "光链与单体聚能 · 原激光另计",
+              "share": 0.10477619792273306
+            },
+            {
+              "source": "laser",
+              "damage": 1918.8298749999985,
+              "contacts": 45,
+              "kills": 12,
+              "name": "激光与棱镜",
+              "color": "#7fe4ff",
+              "role": "主侧束、分光与灼烧 · 瞄准纵列",
+              "share": 0.07941563453211084
+            },
+            {
+              "source": "pulse",
+              "damage": 1601.567999999982,
+              "contacts": 212,
+              "kills": 19,
+              "name": "速射炮",
+              "color": "#83e5ff",
+              "role": "直击与弹芯分支 · 原折射保留",
+              "share": 0.06628494825072617
+            },
+            {
+              "source": "fracture",
+              "damage": 745.5499999999971,
+              "contacts": 32,
+              "kills": 0,
+              "name": "裂甲爆破",
+              "color": "#ffc183",
+              "role": "裂甲引爆与穿震 · 原穿甲另计",
+              "share": 0.030856475134573905
+            }
+          ]
+        },
+        "magneticProofTargets": [],
+        "magneticProofHits": 0,
+        "magneticCertifications": [],
+        "savedMagneticCertifications": [],
+        "proofKind": null,
+        "proofGroupCount": 0,
+        "proofProgress": 0,
+        "proofWins": 0,
+        "aceWins": 0,
+        "flawlessAceWins": 0,
+        "certifiedBuilds": [],
+        "trackedAchievement": null,
+        "savedCertifications": [],
+        "stormAugment": null,
+        "stormRelayLinks": 0,
+        "stormFocusBursts": 0,
+        "stormFocusDamage": 0,
+        "stormProofRelay": 0,
+        "stormProofFocus": 0,
+        "stormCharges": [],
+        "stormLinks": 0,
+        "prismHits": 0,
+        "contractKind": null,
+        "huntChoice": "staggered",
+        "huntKind": null,
+        "bountyShots": 0,
+        "bountyEnemies": [],
+        "bountyKills": 0,
+        "bountyTargets": 0,
+        "bossCounterfire": false,
+        "bossCounterVolleys": 0,
+        "bossFormation": "bulwark",
+        "activeEscorts": 0,
+        "escortSpawns": 4,
+        "escortKills": 4,
+        "tacticalWins": 1,
+        "bossShield": false,
+        "dropSpawns": 214,
+        "dropKills": 169,
+        "arcLinks": 25,
+        "protectedDrops": 0,
+        "fireControlShots": 22,
+        "fireControlBoostedShots": 21,
+        "lastFireControlBreak": {
+          "time": 225.85000000007187,
+          "id": 9847,
+          "affected": 1,
+          "interrupted": 1
+        },
+        "fireControlUnits": [],
+        "relayScreen": [],
+        "conduitBursts": 3,
+        "empTargets": 4,
+        "conduitTacticalWins": 0,
+        "offlineEnemies": 0,
+        "empWaves": 0,
+        "recipeGoal": null,
+        "goalSupplies": [],
+        "mobileSentries": [],
+        "interceptorBreaks": 1,
+        "interceptors": [],
+        "refitsClaimed": 3,
+        "enemyProjectileScale": 1.2,
+        "framePulses": 14703,
+        "renderedMode": "playing",
+        "imageCount": 29,
+        "runNewBest": false,
+        "bossWins": 2,
+        "contractStats": {
+          "accepted": 0,
+          "won": 0,
+          "failed": 0,
+          "claimed": 0
+        },
+        "runAchievements": [
+          "preempt-gun",
+          "boss",
+          "specialist",
+          "arsenal",
+          "bait-counter",
+          "hunter",
+          "core-breaker",
+          "fracture",
+          "tactician"
+        ],
+        "researchPoints": 4,
+        "buildPoints": 11,
+        "unspentBuildPoints": 0,
+        "ballisticReactions": [
+          {
+            "kind": "scatter",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 0
+          },
+          {
+            "kind": "blast",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 8
+          }
+        ],
+        "ballisticTotals": {
+          "pierces": 0,
+          "ricochets": 0,
+          "splashHits": 8
+        },
+        "ballisticBranch": null,
+        "scatterRicochets": 0,
+        "ricochetTraces": 0,
+        "scatterPierces": 0,
+        "scatterBursts": 0,
+        "scatterSplashHits": 0,
+        "weaponImpacts": [
+          {
+            "x": 421.7519772882075,
+            "y": 360,
+            "kind": "blast",
+            "life": 0.09666666666671514,
+            "total": 0.18
+          },
+          {
+            "x": 422.01701664553735,
+            "y": 360,
+            "kind": "scatter",
+            "life": 0.1133333333333721,
+            "total": 0.18
+          }
+        ],
+        "upgradePulseRemaining": 0,
+        "combatFeedback": {
+          "title": "电弧炮 精校0→1",
+          "combo": false,
+          "remaining": 0,
+          "hidden": false
+        },
+        "pendingCombatFeedback": [],
+        "equipmentReceipts": [],
+        "equipmentReceipt": {
+          "title": "电弧炮 精校0→1",
+          "detail": "领取时常态全弹直伤/秒 182 → 273",
+          "equipment": {
+            "remaining": 1.7166666666654748,
+            "kind": "arc",
+            "before": {
+              "stage": 3,
+              "calibration": 0,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 182
+            },
+            "after": {
+              "stage": 3,
+              "calibration": 1,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 273
+            }
+          },
+          "until": 237.9000000000789,
+          "combo": false,
+          "observedAt": 245.0000000000871,
+          "hidden": false
+        },
+        "ionAugment": null,
+        "ionOrbSpawns": 0,
+        "ionOrbHits": 0,
+        "ionSpearShots": 0,
+        "ionSpearHits": 0,
+        "ionBonusDamage": 0,
+        "ionOrbs": [],
+        "ionSpears": [],
+        "ionCharge": 0,
+        "ionBursts": 0,
+        "ionHits": 0,
+        "electricBranch": null,
+        "seekerLinks": 0,
+        "capacitorBursts": 0,
+        "opticalBranch": "burn",
+        "burnHits": 24,
+        "relayHits": 0,
+        "photonAugment": "photon-reach",
+        "laserChainProfile": {
+          "hops": 3,
+          "range": 300,
+          "decay": 0.8,
+          "focus": 0.8
+        },
+        "laserChainUnlocked": true,
+        "laserChainReady": false,
+        "laserArcHits": 32,
+        "laserFocusHits": 12,
+        "laserArcBeams": 0,
+        "laserFocusBeams": 0,
+        "fractureAugment": null,
+        "fractureProfile": {
+          "hits": 3,
+          "direct": 2,
+          "splash": 0.75,
+          "radius": 120,
+          "cooldown": 0.35
+        },
+        "fractureFinishWaves": 0,
+        "fractureFinishHits": 0,
+        "fractureWaveDamage": 0,
+        "fractureWaves": 0,
+        "fractureWaveHits": 0,
+        "fractureWaveBeams": 0,
+        "fractureUnlocked": true,
+        "fractureBursts": 32,
+        "magneticWideHits": 0,
+        "magneticAugment": null,
+        "magneticLinkHits": 0,
+        "magneticUnlocked": false,
+        "magneticBursts": 0,
+        "magneticHits": 0,
+        "magneticFields": [],
+        "sweepers": [],
+        "lockPreemptWins": 2,
+        "lockBaitWins": 1,
+        "lockshotSpawns": 6,
+        "lockshotShots": 8,
+        "lockshotEnemies": [],
+        "hostileProjectiles": [
+          {
+            "id": 10847,
+            "source": 10741,
+            "x": 290,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10848,
+            "source": 10741,
+            "x": 290,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10849,
+            "source": 10741,
+            "x": 360,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10850,
+            "source": 10741,
+            "x": 360,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10851,
+            "source": 10741,
+            "x": 430,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10852,
+            "source": 10741,
+            "x": 430,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10853,
+            "source": 10741,
+            "x": 500,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10854,
+            "source": 10741,
+            "x": 500,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10855,
+            "source": 10741,
+            "x": 570,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10856,
+            "source": 10741,
+            "x": 570,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10857,
+            "source": 10741,
+            "x": 640,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10858,
+            "source": 10741,
+            "x": 640,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          }
+        ],
+        "refitTarget": null,
+        "directedSupplies": [],
+        "lastEquipmentPickup": {
+          "id": 9458,
+          "row": 17,
+          "kind": "arc",
+          "refit": true,
+          "time": 220.41666666673422,
+          "x": 222,
+          "y": 973.333333333338
+        },
+        "driftSupplies": [],
+        "bodies": 1,
+        "bullets": [
+          {
+            "id": 10847,
+            "sourceId": 10741,
+            "x": 290,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10848,
+            "sourceId": 10741,
+            "x": 290,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10849,
+            "sourceId": 10741,
+            "x": 360,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10850,
+            "sourceId": 10741,
+            "x": 360,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10851,
+            "sourceId": 10741,
+            "x": 430,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10852,
+            "sourceId": 10741,
+            "x": 430,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10853,
+            "sourceId": 10741,
+            "x": 500,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10854,
+            "sourceId": 10741,
+            "x": 500,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10855,
+            "sourceId": 10741,
+            "x": 570,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10856,
+            "sourceId": 10741,
+            "x": 570,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10857,
+            "sourceId": 10741,
+            "x": 640,
+            "y": 937.200000000002,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10858,
+            "sourceId": 10741,
+            "x": 640,
+            "y": 862.200000000002,
+            "vx": 0,
+            "vy": 336
+          }
+        ],
+        "particles": 28,
+        "hotParticles": 7,
+        "ammoFragments": 0,
+        "blasts": 0,
+        "arcs": 0,
+        "bossDestructionAge": null,
+        "crateFragments": 0,
+        "droneFragments": 0,
+        "enemyFragments": 0,
+        "supplyCombinations": [],
+        "bossWear": [
+          {
+            "id": 10741,
+            "variant": 2,
+            "band": 0,
+            "hp": 15378.035625000033,
+            "maxHp": 17280,
+            "hit": 0.020000000000000014
+          }
+        ],
+        "gateReceipts": 0,
+        "gateReceiptDetails": [],
+        "callbackWork": {
+          "frameSamples": 3600,
+          "sampleLimit": 3600,
+          "frameSampleSeconds": 0,
+          "p95": 0,
+          "p99": 0,
+          "over33msPercent": 0,
+          "maxMs": 0
+        },
+        "interruptedFrames": [],
+        "frameSamples": 14700,
+        "sampleLimit": 36000,
+        "frameSampleSeconds": 244.99999999997178,
+        "p95": 16.666666666671517,
+        "p99": 16.666666666671517,
+        "over33msPercent": 0,
+        "stage": "shield-choice",
+        "baseline": false,
+        "normalEarnedFlow": true,
+        "virtual60Hz": true,
+        "worldInjection": false,
+        "quality": "standard",
+        "progression": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 50,
+          "overload": 0,
+          "mastery": 7,
+          "gates": 12,
+          "pickups": 9
+        },
+        "teamPolicy": "escort",
+        "buildRoute": "optical",
+        "escorts": [
+          {
+            "id": 6506,
+            "round": 2,
+            "at": 0.21666666666666665,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 110,
+            "y": 310.90000000000026,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 0.733333333333334,
+            "lockX": 363.0322324655593,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 6631,
+            "round": 2,
+            "at": 2.6166666666666623,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 610,
+            "y": 320,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 1.8833333333333315,
+            "lockX": 414.92852782383653,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 10762,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 220,
+            "y": 480,
+            "hp": 0,
+            "maxHp": 391.68,
+            "age": 1.100000000000001,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 10763,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 500,
+            "y": 480,
+            "hp": 0,
+            "maxHp": 391.68,
+            "age": 2.033333333333331,
+            "shots": 0,
+            "active": false
+          }
+        ]
+      },
+      {
+        "drawCount": 14870,
+        "callbackCount": 14880,
+        "mode": "playing",
+        "time": 248.0000000000895,
+        "roundTime": 72.01666666666387,
+        "phaseTime": 6.21666666666665,
+        "round": 3,
+        "phase": "boss",
+        "buildRanks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "buildRefinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 8
+        },
+        "activeWeapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ],
+        "supportBeams": 0,
+        "laserCharge": 0.7703703703703663,
+        "lastLaserAt": 246.28333333342147,
+        "opticalBand": 3,
+        "laserBands": [],
+        "opticalImpacts": 0,
+        "weaponLevels": {
+          "pulse": 2,
+          "scatter": 2,
+          "pierce": 2,
+          "blast": 3,
+          "arc": 3
+        },
+        "weaponCalibrations": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibrationBands": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibratedShots": [
+          {
+            "id": 11092,
+            "kind": "blast",
+            "band": 1
+          }
+        ],
+        "contractStatus": null,
+        "contractRewardPending": false,
+        "bossRewardRound": null,
+        "bossLootStats": {
+          "claimed": 2,
+          "research": 2,
+          "equipment": 0
+        },
+        "battlePlan": 0,
+        "battleBrief": "重装混编",
+        "nextBattlePlan": 1,
+        "openingWeapon": "scatter",
+        "savedOpeningWeapon": "scatter",
+        "openingSupplies": [],
+        "score": 6395,
+        "hp": 3,
+        "growth": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 50,
+          "overload": 0,
+          "mastery": 7
+        },
+        "weaponKind": "arc",
+        "playerX": 400.61456961201844,
+        "inputMode": "touch",
+        "bankShots": 0,
+        "bankReflections": 0,
+        "bankGuns": [],
+        "bankProjectiles": [],
+        "combatContribution": {
+          "total": 25594.701434999948,
+          "rows": [
+            {
+              "source": "arc",
+              "damage": 5308.125164999995,
+              "contacts": 115,
+              "kills": 46,
+              "name": "电弧炮",
+              "color": "#a2ff9c",
+              "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+              "share": 0.20739156416731241
+            },
+            {
+              "source": "scatter",
+              "damage": 5269.461499999996,
+              "contacts": 723,
+              "kills": 53,
+              "name": "霰射炮",
+              "color": "#ffd28b",
+              "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+              "share": 0.20588095209402105
+            },
+            {
+              "source": "blast",
+              "damage": 5021.987499999997,
+              "contacts": 77,
+              "kills": 30,
+              "name": "爆裂炮",
+              "color": "#ffb46d",
+              "role": "爆炸与弹芯分支 · 纵列 / 群敌",
+              "share": 0.1962119977353042
+            },
+            {
+              "source": "pierce",
+              "damage": 2890.654999999994,
+              "contacts": 285,
+              "kills": 28,
+              "name": "穿甲炮",
+              "color": "#d5b4ff",
+              "role": "穿甲与弹芯分支 · 原高贯穿保留",
+              "share": 0.11293958663050135
+            },
+            {
+              "source": "photon",
+              "damage": 2665.7243949999993,
+              "contacts": 45,
+              "kills": 28,
+              "name": "电光连锁",
+              "color": "#a6ecff",
+              "role": "光链与单体聚能 · 原激光另计",
+              "share": 0.10415141593934381
+            },
+            {
+              "source": "laser",
+              "damage": 1918.8298749999985,
+              "contacts": 45,
+              "kills": 12,
+              "name": "激光与棱镜",
+              "color": "#7fe4ff",
+              "role": "主侧束、分光与灼烧 · 瞄准纵列",
+              "share": 0.0749698088830237
+            },
+            {
+              "source": "pulse",
+              "damage": 1720.367999999974,
+              "contacts": 223,
+              "kills": 19,
+              "name": "速射炮",
+              "color": "#83e5ff",
+              "role": "直击与弹芯分支 · 原折射保留",
+              "share": 0.06721578700064167
+            },
+            {
+              "source": "fracture",
+              "damage": 799.5499999999971,
+              "contacts": 34,
+              "kills": 0,
+              "name": "裂甲爆破",
+              "color": "#ffc183",
+              "role": "裂甲引爆与穿震 · 原穿甲另计",
+              "share": 0.031238887549851928
+            }
+          ]
+        },
+        "magneticProofTargets": [],
+        "magneticProofHits": 0,
+        "magneticCertifications": [],
+        "savedMagneticCertifications": [],
+        "proofKind": null,
+        "proofGroupCount": 0,
+        "proofProgress": 0,
+        "proofWins": 0,
+        "aceWins": 0,
+        "flawlessAceWins": 0,
+        "certifiedBuilds": [],
+        "trackedAchievement": null,
+        "savedCertifications": [],
+        "stormAugment": null,
+        "stormRelayLinks": 0,
+        "stormFocusBursts": 0,
+        "stormFocusDamage": 0,
+        "stormProofRelay": 0,
+        "stormProofFocus": 0,
+        "stormCharges": [],
+        "stormLinks": 0,
+        "prismHits": 0,
+        "contractKind": null,
+        "huntChoice": "staggered",
+        "huntKind": null,
+        "bountyShots": 0,
+        "bountyEnemies": [],
+        "bountyKills": 0,
+        "bountyTargets": 0,
+        "bossCounterfire": false,
+        "bossCounterVolleys": 0,
+        "bossFormation": "bulwark",
+        "activeEscorts": 0,
+        "escortSpawns": 4,
+        "escortKills": 4,
+        "tacticalWins": 1,
+        "bossShield": false,
+        "dropSpawns": 214,
+        "dropKills": 169,
+        "arcLinks": 25,
+        "protectedDrops": 0,
+        "fireControlShots": 22,
+        "fireControlBoostedShots": 21,
+        "lastFireControlBreak": {
+          "time": 225.85000000007187,
+          "id": 9847,
+          "affected": 1,
+          "interrupted": 1
+        },
+        "fireControlUnits": [],
+        "relayScreen": [],
+        "conduitBursts": 3,
+        "empTargets": 4,
+        "conduitTacticalWins": 0,
+        "offlineEnemies": 0,
+        "empWaves": 0,
+        "recipeGoal": null,
+        "goalSupplies": [],
+        "mobileSentries": [],
+        "interceptorBreaks": 1,
+        "interceptors": [],
+        "refitsClaimed": 3,
+        "enemyProjectileScale": 1.2,
+        "framePulses": 14883,
+        "renderedMode": "playing",
+        "imageCount": 29,
+        "runNewBest": false,
+        "bossWins": 2,
+        "contractStats": {
+          "accepted": 0,
+          "won": 0,
+          "failed": 0,
+          "claimed": 0
+        },
+        "runAchievements": [
+          "preempt-gun",
+          "boss",
+          "specialist",
+          "arsenal",
+          "bait-counter",
+          "hunter",
+          "core-breaker",
+          "fracture",
+          "tactician"
+        ],
+        "researchPoints": 4,
+        "buildPoints": 11,
+        "unspentBuildPoints": 0,
+        "ballisticReactions": [
+          {
+            "kind": "scatter",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 0
+          },
+          {
+            "kind": "blast",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 8
+          }
+        ],
+        "ballisticTotals": {
+          "pierces": 0,
+          "ricochets": 0,
+          "splashHits": 8
+        },
+        "ballisticBranch": null,
+        "scatterRicochets": 0,
+        "ricochetTraces": 0,
+        "scatterPierces": 0,
+        "scatterBursts": 0,
+        "scatterSplashHits": 0,
+        "weaponImpacts": [
+          {
+            "x": 401.9532748917344,
+            "y": 360,
+            "kind": "arc",
+            "life": 0.04666666666674425,
+            "total": 0.18
+          },
+          {
+            "x": 400.6145696120186,
+            "y": 360,
+            "kind": "pierce",
+            "life": 0.1133333333333721,
+            "total": 0.18
+          },
+          {
+            "x": 400.6145696120186,
+            "y": 360,
+            "kind": "scatter",
+            "life": 0.1133333333333721,
+            "total": 0.18
+          }
+        ],
+        "upgradePulseRemaining": 0,
+        "combatFeedback": {
+          "title": "电弧炮 精校0→1",
+          "combo": false,
+          "remaining": 0,
+          "hidden": false
+        },
+        "pendingCombatFeedback": [],
+        "equipmentReceipts": [],
+        "equipmentReceipt": {
+          "title": "电弧炮 精校0→1",
+          "detail": "领取时常态全弹直伤/秒 182 → 273",
+          "equipment": {
+            "remaining": 1.7166666666654748,
+            "kind": "arc",
+            "before": {
+              "stage": 3,
+              "calibration": 0,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 182
+            },
+            "after": {
+              "stage": 3,
+              "calibration": 1,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 273
+            }
+          },
+          "until": 237.9000000000789,
+          "combo": false,
+          "observedAt": 248.0000000000895,
+          "hidden": false
+        },
+        "ionAugment": null,
+        "ionOrbSpawns": 0,
+        "ionOrbHits": 0,
+        "ionSpearShots": 0,
+        "ionSpearHits": 0,
+        "ionBonusDamage": 0,
+        "ionOrbs": [],
+        "ionSpears": [],
+        "ionCharge": 0,
+        "ionBursts": 0,
+        "ionHits": 0,
+        "electricBranch": null,
+        "seekerLinks": 0,
+        "capacitorBursts": 0,
+        "opticalBranch": "burn",
+        "burnHits": 24,
+        "relayHits": 0,
+        "photonAugment": "photon-reach",
+        "laserChainProfile": {
+          "hops": 3,
+          "range": 300,
+          "decay": 0.8,
+          "focus": 0.8
+        },
+        "laserChainUnlocked": true,
+        "laserChainReady": false,
+        "laserArcHits": 32,
+        "laserFocusHits": 13,
+        "laserArcBeams": 0,
+        "laserFocusBeams": 0,
+        "fractureAugment": null,
+        "fractureProfile": {
+          "hits": 3,
+          "direct": 2,
+          "splash": 0.75,
+          "radius": 120,
+          "cooldown": 0.35
+        },
+        "fractureFinishWaves": 0,
+        "fractureFinishHits": 0,
+        "fractureWaveDamage": 0,
+        "fractureWaves": 0,
+        "fractureWaveHits": 0,
+        "fractureWaveBeams": 0,
+        "fractureUnlocked": true,
+        "fractureBursts": 34,
+        "magneticWideHits": 0,
+        "magneticAugment": null,
+        "magneticLinkHits": 0,
+        "magneticUnlocked": false,
+        "magneticBursts": 0,
+        "magneticHits": 0,
+        "magneticFields": [],
+        "sweepers": [],
+        "lockPreemptWins": 2,
+        "lockBaitWins": 1,
+        "lockshotSpawns": 6,
+        "lockshotShots": 8,
+        "lockshotEnemies": [],
+        "hostileProjectiles": [
+          {
+            "id": 10954,
+            "source": 10741,
+            "x": 80,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10955,
+            "source": 10741,
+            "x": 80,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10956,
+            "source": 10741,
+            "x": 150,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10957,
+            "source": 10741,
+            "x": 150,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10958,
+            "source": 10741,
+            "x": 220,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10959,
+            "source": 10741,
+            "x": 220,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10960,
+            "source": 10741,
+            "x": 500,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10961,
+            "source": 10741,
+            "x": 500,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10962,
+            "source": 10741,
+            "x": 570,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10963,
+            "source": 10741,
+            "x": 570,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10964,
+            "source": 10741,
+            "x": 640,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10965,
+            "source": 10741,
+            "x": 640,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          }
+        ],
+        "refitTarget": null,
+        "directedSupplies": [],
+        "lastEquipmentPickup": {
+          "id": 9458,
+          "row": 17,
+          "kind": "arc",
+          "refit": true,
+          "time": 220.41666666673422,
+          "x": 222,
+          "y": 973.333333333338
+        },
+        "driftSupplies": [],
+        "bodies": 1,
+        "bullets": [
+          {
+            "id": 10954,
+            "sourceId": 10741,
+            "x": 80,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10955,
+            "sourceId": 10741,
+            "x": 80,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10956,
+            "sourceId": 10741,
+            "x": 150,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10957,
+            "sourceId": 10741,
+            "x": 150,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10958,
+            "sourceId": 10741,
+            "x": 220,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10959,
+            "sourceId": 10741,
+            "x": 220,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10960,
+            "sourceId": 10741,
+            "x": 500,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10961,
+            "sourceId": 10741,
+            "x": 500,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10962,
+            "sourceId": 10741,
+            "x": 570,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10963,
+            "sourceId": 10741,
+            "x": 570,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10964,
+            "sourceId": 10741,
+            "x": 640,
+            "y": 1340.3999999999971,
+            "vx": 0,
+            "vy": 336
+          },
+          {
+            "id": 10965,
+            "sourceId": 10741,
+            "x": 640,
+            "y": 1265.3999999999987,
+            "vx": 0,
+            "vy": 336
+          }
+        ],
+        "particles": 95,
+        "hotParticles": 22,
+        "ammoFragments": 0,
+        "blasts": 2,
+        "arcs": 0,
+        "bossDestructionAge": null,
+        "crateFragments": 0,
+        "droneFragments": 0,
+        "enemyFragments": 0,
+        "supplyCombinations": [],
+        "bossWear": [
+          {
+            "id": 10741,
+            "variant": 2,
+            "band": 0,
+            "hp": 13945.199625000048,
+            "maxHp": 17280,
+            "hit": 0.053333333333333344
+          }
+        ],
+        "gateReceipts": 0,
+        "gateReceiptDetails": [],
+        "callbackWork": {
+          "frameSamples": 3600,
+          "sampleLimit": 3600,
+          "frameSampleSeconds": 0,
+          "p95": 0,
+          "p99": 0,
+          "over33msPercent": 0,
+          "maxMs": 0
+        },
+        "interruptedFrames": [],
+        "frameSamples": 14880,
+        "sampleLimit": 36000,
+        "frameSampleSeconds": 247.99999999997002,
+        "p95": 16.666666666671517,
+        "p99": 16.666666666671517,
+        "over33msPercent": 0,
+        "stage": "shield-cleared",
+        "baseline": false,
+        "normalEarnedFlow": true,
+        "virtual60Hz": true,
+        "worldInjection": false,
+        "quality": "standard",
+        "progression": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 50,
+          "overload": 0,
+          "mastery": 7,
+          "gates": 12,
+          "pickups": 9
+        },
+        "teamPolicy": "escort",
+        "buildRoute": "optical",
+        "escorts": [
+          {
+            "id": 6506,
+            "round": 2,
+            "at": 0.21666666666666665,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 110,
+            "y": 310.90000000000026,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 0.733333333333334,
+            "lockX": 363.0322324655593,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 6631,
+            "round": 2,
+            "at": 2.6166666666666623,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 610,
+            "y": 320,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 1.8833333333333315,
+            "lockX": 414.92852782383653,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 10762,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 220,
+            "y": 480,
+            "hp": 0,
+            "maxHp": 391.68,
+            "age": 1.100000000000001,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 10763,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 500,
+            "y": 480,
+            "hp": 0,
+            "maxHp": 391.68,
+            "age": 2.033333333333331,
+            "shots": 0,
+            "active": false
+          }
+        ]
+      },
+      {
+        "drawCount": 15516,
+        "callbackCount": 15525,
+        "mode": "playing",
+        "time": 258.75000000009334,
+        "roundTime": 72.01666666666387,
+        "phaseTime": 1.0000000000000013,
+        "round": 3,
+        "phase": "recovery",
+        "buildRanks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "buildRefinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 8
+        },
+        "activeWeapons": [
+          "pulse",
+          "scatter",
+          "pierce",
+          "blast",
+          "arc"
+        ],
+        "supportBeams": 0,
+        "laserCharge": 0,
+        "lastLaserAt": 257.5333333334278,
+        "opticalBand": 3,
+        "laserBands": [],
+        "opticalImpacts": 0,
+        "weaponLevels": {
+          "pulse": 2,
+          "scatter": 2,
+          "pierce": 2,
+          "blast": 3,
+          "arc": 3
+        },
+        "weaponCalibrations": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibrationBands": {
+          "pulse": 0,
+          "scatter": 0,
+          "pierce": 0,
+          "blast": 1,
+          "arc": 1
+        },
+        "calibratedShots": [],
+        "contractStatus": null,
+        "contractRewardPending": false,
+        "bossRewardRound": 3,
+        "bossLootStats": {
+          "claimed": 2,
+          "research": 2,
+          "equipment": 0
+        },
+        "battlePlan": 0,
+        "battleBrief": "重装混编",
+        "nextBattlePlan": 1,
+        "openingWeapon": "scatter",
+        "savedOpeningWeapon": "scatter",
+        "openingSupplies": [],
+        "score": 7395,
+        "hp": 3,
+        "growth": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 0,
+          "overload": 6,
+          "mastery": 8
+        },
+        "weaponKind": "arc",
+        "playerX": 364.12351751514467,
+        "inputMode": "touch",
+        "bankShots": 0,
+        "bankReflections": 0,
+        "bankGuns": [],
+        "bankProjectiles": [],
+        "combatContribution": {
+          "total": 39539.90106000002,
+          "rows": [
+            {
+              "source": "blast",
+              "damage": 8780.387500000008,
+              "contacts": 106,
+              "kills": 30,
+              "name": "爆裂炮",
+              "color": "#ffb46d",
+              "role": "爆炸与弹芯分支 · 纵列 / 群敌",
+              "share": 0.2220639724585088
+            },
+            {
+              "source": "arc",
+              "damage": 8029.725164999987,
+              "contacts": 139,
+              "kills": 46,
+              "name": "电弧炮",
+              "color": "#a2ff9c",
+              "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+              "share": 0.20307904040567124
+            },
+            {
+              "source": "scatter",
+              "damage": 7731.861500000012,
+              "contacts": 963,
+              "kills": 53,
+              "name": "霰射炮",
+              "color": "#ffd28b",
+              "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+              "share": 0.19554579785789702
+            },
+            {
+              "source": "pierce",
+              "damage": 4196.614625000065,
+              "contacts": 382,
+              "kills": 29,
+              "name": "穿甲炮",
+              "color": "#d5b4ff",
+              "role": "穿甲与弹芯分支 · 原高贯穿保留",
+              "share": 0.10613619438834435
+            },
+            {
+              "source": "photon",
+              "damage": 3336.4043950000005,
+              "contacts": 50,
+              "kills": 28,
+              "name": "电光连锁",
+              "color": "#a6ecff",
+              "role": "光链与单体聚能 · 原激光另计",
+              "share": 0.08438069660157109
+            },
+            {
+              "source": "laser",
+              "damage": 3260.189874999995,
+              "contacts": 62,
+              "kills": 12,
+              "name": "激光与棱镜",
+              "color": "#7fe4ff",
+              "role": "主侧束、分光与灼烧 · 瞄准纵列",
+              "share": 0.08245316218805919
+            },
+            {
+              "source": "pulse",
+              "damage": 2973.1679999999533,
+              "contacts": 339,
+              "kills": 19,
+              "name": "速射炮",
+              "color": "#83e5ff",
+              "role": "直击与弹芯分支 · 原折射保留",
+              "share": 0.07519411835371831
+            },
+            {
+              "source": "fracture",
+              "damage": 1231.549999999997,
+              "contacts": 50,
+              "kills": 0,
+              "name": "裂甲爆破",
+              "color": "#ffc183",
+              "role": "裂甲引爆与穿震 · 原穿甲另计",
+              "share": 0.031147017746229952
+            }
+          ]
+        },
+        "magneticProofTargets": [],
+        "magneticProofHits": 0,
+        "magneticCertifications": [],
+        "savedMagneticCertifications": [],
+        "proofKind": null,
+        "proofGroupCount": 0,
+        "proofProgress": 0,
+        "proofWins": 0,
+        "aceWins": 0,
+        "flawlessAceWins": 0,
+        "certifiedBuilds": [],
+        "trackedAchievement": null,
+        "savedCertifications": [],
+        "stormAugment": null,
+        "stormRelayLinks": 0,
+        "stormFocusBursts": 0,
+        "stormFocusDamage": 0,
+        "stormProofRelay": 0,
+        "stormProofFocus": 0,
+        "stormCharges": [],
+        "stormLinks": 0,
+        "prismHits": 0,
+        "contractKind": null,
+        "huntChoice": "staggered",
+        "huntKind": null,
+        "bountyShots": 0,
+        "bountyEnemies": [],
+        "bountyKills": 0,
+        "bountyTargets": 0,
+        "bossCounterfire": false,
+        "bossCounterVolleys": 0,
+        "bossFormation": "bulwark",
+        "activeEscorts": 0,
+        "escortSpawns": 4,
+        "escortKills": 4,
+        "tacticalWins": 2,
+        "bossShield": false,
+        "dropSpawns": 214,
+        "dropKills": 169,
+        "arcLinks": 25,
+        "protectedDrops": 0,
+        "fireControlShots": 22,
+        "fireControlBoostedShots": 21,
+        "lastFireControlBreak": {
+          "time": 225.85000000007187,
+          "id": 9847,
+          "affected": 1,
+          "interrupted": 1
+        },
+        "fireControlUnits": [],
+        "relayScreen": [],
+        "conduitBursts": 3,
+        "empTargets": 4,
+        "conduitTacticalWins": 0,
+        "offlineEnemies": 0,
+        "empWaves": 0,
+        "recipeGoal": null,
+        "goalSupplies": [],
+        "mobileSentries": [],
+        "interceptorBreaks": 1,
+        "interceptors": [],
+        "refitsClaimed": 3,
+        "enemyProjectileScale": 1.2,
+        "framePulses": 15528,
+        "renderedMode": "playing",
+        "imageCount": 29,
+        "runNewBest": false,
+        "bossWins": 3,
+        "contractStats": {
+          "accepted": 0,
+          "won": 0,
+          "failed": 0,
+          "claimed": 0
+        },
+        "runAchievements": [
+          "preempt-gun",
+          "boss",
+          "specialist",
+          "arsenal",
+          "bait-counter",
+          "hunter",
+          "core-breaker",
+          "fracture",
+          "tactician"
+        ],
+        "researchPoints": 4,
+        "buildPoints": 12,
+        "unspentBuildPoints": 1,
+        "ballisticReactions": [
+          {
+            "kind": "scatter",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 0
+          },
+          {
+            "kind": "blast",
+            "pierces": 0,
+            "ricochets": 0,
+            "splashHits": 8
+          }
+        ],
+        "ballisticTotals": {
+          "pierces": 0,
+          "ricochets": 0,
+          "splashHits": 8
+        },
+        "ballisticBranch": null,
+        "scatterRicochets": 0,
+        "ricochetTraces": 0,
+        "scatterPierces": 0,
+        "scatterBursts": 0,
+        "scatterSplashHits": 0,
+        "weaponImpacts": [],
+        "upgradePulseRemaining": 0,
+        "combatFeedback": {
+          "title": "电弧炮 精校0→1",
+          "combo": false,
+          "remaining": 0,
+          "hidden": false
+        },
+        "pendingCombatFeedback": [],
+        "equipmentReceipts": [],
+        "equipmentReceipt": {
+          "title": "电弧炮 精校0→1",
+          "detail": "领取时常态全弹直伤/秒 182 → 273",
+          "equipment": {
+            "remaining": 1.7166666666654748,
+            "kind": "arc",
+            "before": {
+              "stage": 3,
+              "calibration": 0,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 182
+            },
+            "after": {
+              "stage": 3,
+              "calibration": 1,
+              "pellets": 1,
+              "targets": 1,
+              "radius": 0,
+              "hops": 3,
+              "rate": 2.5,
+              "direct": 273
+            }
+          },
+          "until": 237.9000000000789,
+          "combo": false,
+          "observedAt": 258.75000000009334,
+          "hidden": false
+        },
+        "ionAugment": null,
+        "ionOrbSpawns": 0,
+        "ionOrbHits": 0,
+        "ionSpearShots": 0,
+        "ionSpearHits": 0,
+        "ionBonusDamage": 0,
+        "ionOrbs": [],
+        "ionSpears": [],
+        "ionCharge": 0,
+        "ionBursts": 0,
+        "ionHits": 0,
+        "electricBranch": null,
+        "seekerLinks": 0,
+        "capacitorBursts": 0,
+        "opticalBranch": "burn",
+        "burnHits": 36,
+        "relayHits": 0,
+        "photonAugment": "photon-reach",
+        "laserChainProfile": {
+          "hops": 3,
+          "range": 300,
+          "decay": 0.8,
+          "focus": 0.8
+        },
+        "laserChainUnlocked": true,
+        "laserChainReady": false,
+        "laserArcHits": 32,
+        "laserFocusHits": 18,
+        "laserArcBeams": 0,
+        "laserFocusBeams": 0,
+        "fractureAugment": null,
+        "fractureProfile": {
+          "hits": 3,
+          "direct": 2,
+          "splash": 0.75,
+          "radius": 120,
+          "cooldown": 0.35
+        },
+        "fractureFinishWaves": 0,
+        "fractureFinishHits": 0,
+        "fractureWaveDamage": 0,
+        "fractureWaves": 0,
+        "fractureWaveHits": 0,
+        "fractureWaveBeams": 0,
+        "fractureUnlocked": true,
+        "fractureBursts": 50,
+        "magneticWideHits": 0,
+        "magneticAugment": null,
+        "magneticLinkHits": 0,
+        "magneticUnlocked": false,
+        "magneticBursts": 0,
+        "magneticHits": 0,
+        "magneticFields": [],
+        "sweepers": [],
+        "lockPreemptWins": 2,
+        "lockBaitWins": 1,
+        "lockshotSpawns": 6,
+        "lockshotShots": 8,
+        "lockshotEnemies": [],
+        "hostileProjectiles": [],
+        "refitTarget": null,
+        "directedSupplies": [],
+        "lastEquipmentPickup": {
+          "id": 9458,
+          "row": 17,
+          "kind": "arc",
+          "refit": true,
+          "time": 220.41666666673422,
+          "x": 222,
+          "y": 973.333333333338
+        },
+        "driftSupplies": [],
+        "bodies": 0,
+        "bullets": [],
+        "particles": 0,
+        "hotParticles": 0,
+        "ammoFragments": 0,
+        "blasts": 1,
+        "arcs": 0,
+        "bossDestructionAge": 1.0166666666660742,
+        "crateFragments": 0,
+        "droneFragments": 0,
+        "enemyFragments": 0,
+        "supplyCombinations": [],
+        "bossWear": [],
+        "gateReceipts": 0,
+        "gateReceiptDetails": [],
+        "callbackWork": {
+          "frameSamples": 3600,
+          "sampleLimit": 3600,
+          "frameSampleSeconds": 0,
+          "p95": 0,
+          "p99": 0,
+          "over33msPercent": 0,
+          "maxMs": 0
+        },
+        "interruptedFrames": [],
+        "frameSamples": 15525,
+        "sampleLimit": 36000,
+        "frameSampleSeconds": 258.7499999999638,
+        "p95": 16.666666666671517,
+        "p99": 16.666666666671517,
+        "over33msPercent": 0,
+        "stage": "victory",
+        "baseline": false,
+        "normalEarnedFlow": true,
+        "virtual60Hz": true,
+        "worldInjection": false,
+        "quality": "standard",
+        "progression": {
+          "stage": 3,
+          "bonus": 100,
+          "energy": 0,
+          "overload": 6,
+          "mastery": 8,
+          "gates": 12,
+          "pickups": 9
+        },
+        "teamPolicy": "escort",
+        "buildRoute": "optical",
+        "escorts": [
+          {
+            "id": 6506,
+            "round": 2,
+            "at": 0.21666666666666665,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 110,
+            "y": 310.90000000000026,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 0.733333333333334,
+            "lockX": 363.0322324655593,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 6631,
+            "round": 2,
+            "at": 2.6166666666666623,
+            "kind": "sniper",
+            "pattern": "lockshot",
+            "x": 610,
+            "y": 320,
+            "hp": 0,
+            "maxHp": 64.24,
+            "age": 1.8833333333333315,
+            "lockX": 414.92852782383653,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 10762,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 220,
+            "y": 480,
+            "hp": 0,
+            "maxHp": 391.68,
+            "age": 1.100000000000001,
+            "shots": 0,
+            "active": false
+          },
+          {
+            "id": 10763,
+            "round": 3,
+            "at": 0.21666666666666665,
+            "kind": "guard",
+            "x": 500,
+            "y": 480,
+            "hp": 0,
+            "maxHp": 391.68,
+            "age": 2.033333333333331,
+            "shots": 0,
+            "active": false
+          }
+        ]
+      }
+    ],
+    "current": {
+      "drawCount": 15516,
+      "callbackCount": 15525,
+      "mode": "playing",
+      "time": 258.75000000009334,
+      "roundTime": 72.01666666666387,
+      "phaseTime": 1.0000000000000013,
+      "round": 3,
+      "phase": "recovery",
+      "buildRanks": {
+        "ballistic": 0,
+        "electric": 0,
+        "optical": 3
+      },
+      "buildRefinements": {
+        "ballistic": 0,
+        "electric": 0,
+        "optical": 8
+      },
+      "activeWeapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "blast",
+        "arc"
+      ],
+      "supportBeams": 0,
+      "laserCharge": 0,
+      "lastLaserAt": 257.5333333334278,
+      "opticalBand": 3,
+      "laserBands": [],
+      "opticalImpacts": 0,
+      "weaponLevels": {
+        "pulse": 2,
+        "scatter": 2,
+        "pierce": 2,
+        "blast": 3,
+        "arc": 3
+      },
+      "weaponCalibrations": {
+        "pulse": 0,
+        "scatter": 0,
+        "pierce": 0,
+        "blast": 1,
+        "arc": 1
+      },
+      "calibrationBands": {
+        "pulse": 0,
+        "scatter": 0,
+        "pierce": 0,
+        "blast": 1,
+        "arc": 1
+      },
+      "calibratedShots": [],
+      "contractStatus": null,
+      "contractRewardPending": false,
+      "bossRewardRound": 3,
+      "bossLootStats": {
+        "claimed": 2,
+        "research": 2,
+        "equipment": 0
+      },
+      "battlePlan": 0,
+      "battleBrief": "重装混编",
+      "nextBattlePlan": 1,
+      "openingWeapon": "scatter",
+      "savedOpeningWeapon": "scatter",
+      "openingSupplies": [],
+      "score": 7395,
+      "hp": 3,
+      "growth": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 0,
+        "overload": 6,
+        "mastery": 8
+      },
+      "weaponKind": "arc",
+      "playerX": 364.12351751514467,
+      "inputMode": "touch",
+      "bankShots": 0,
+      "bankReflections": 0,
+      "bankGuns": [],
+      "bankProjectiles": [],
+      "combatContribution": {
+        "total": 39539.90106000002,
+        "rows": [
+          {
+            "source": "blast",
+            "damage": 8780.387500000008,
+            "contacts": 106,
+            "kills": 30,
+            "name": "爆裂炮",
+            "color": "#ffb46d",
+            "role": "爆炸与弹芯分支 · 纵列 / 群敌",
+            "share": 0.2220639724585088
+          },
+          {
+            "source": "arc",
+            "damage": 8029.725164999987,
+            "contacts": 139,
+            "kills": 46,
+            "name": "电弧炮",
+            "color": "#a2ff9c",
+            "role": "电弧直击、跳电与蓄爆 · 连通敌阵",
+            "share": 0.20307904040567124
+          },
+          {
+            "source": "scatter",
+            "damage": 7731.861500000012,
+            "contacts": 963,
+            "kills": 53,
+            "name": "霰射炮",
+            "color": "#ffd28b",
+            "role": "霰弹与弹芯 · 近距聚弹 / 群敌覆盖",
+            "share": 0.19554579785789702
+          },
+          {
+            "source": "pierce",
+            "damage": 4196.614625000065,
+            "contacts": 382,
+            "kills": 29,
+            "name": "穿甲炮",
+            "color": "#d5b4ff",
+            "role": "穿甲与弹芯分支 · 原高贯穿保留",
+            "share": 0.10613619438834435
+          },
+          {
+            "source": "photon",
+            "damage": 3336.4043950000005,
+            "contacts": 50,
+            "kills": 28,
+            "name": "电光连锁",
+            "color": "#a6ecff",
+            "role": "光链与单体聚能 · 原激光另计",
+            "share": 0.08438069660157109
+          },
+          {
+            "source": "laser",
+            "damage": 3260.189874999995,
+            "contacts": 62,
+            "kills": 12,
+            "name": "激光与棱镜",
+            "color": "#7fe4ff",
+            "role": "主侧束、分光与灼烧 · 瞄准纵列",
+            "share": 0.08245316218805919
+          },
+          {
+            "source": "pulse",
+            "damage": 2973.1679999999533,
+            "contacts": 339,
+            "kills": 19,
+            "name": "速射炮",
+            "color": "#83e5ff",
+            "role": "直击与弹芯分支 · 原折射保留",
+            "share": 0.07519411835371831
+          },
+          {
+            "source": "fracture",
+            "damage": 1231.549999999997,
+            "contacts": 50,
+            "kills": 0,
+            "name": "裂甲爆破",
+            "color": "#ffc183",
+            "role": "裂甲引爆与穿震 · 原穿甲另计",
+            "share": 0.031147017746229952
+          }
+        ]
+      },
+      "magneticProofTargets": [],
+      "magneticProofHits": 0,
+      "magneticCertifications": [],
+      "savedMagneticCertifications": [],
+      "proofKind": null,
+      "proofGroupCount": 0,
+      "proofProgress": 0,
+      "proofWins": 0,
+      "aceWins": 0,
+      "flawlessAceWins": 0,
+      "certifiedBuilds": [],
+      "trackedAchievement": null,
+      "savedCertifications": [],
+      "stormAugment": null,
+      "stormRelayLinks": 0,
+      "stormFocusBursts": 0,
+      "stormFocusDamage": 0,
+      "stormProofRelay": 0,
+      "stormProofFocus": 0,
+      "stormCharges": [],
+      "stormLinks": 0,
+      "prismHits": 0,
+      "contractKind": null,
+      "huntChoice": "staggered",
+      "huntKind": null,
+      "bountyShots": 0,
+      "bountyEnemies": [],
+      "bountyKills": 0,
+      "bountyTargets": 0,
+      "bossCounterfire": false,
+      "bossCounterVolleys": 0,
+      "bossFormation": "bulwark",
+      "activeEscorts": 0,
+      "escortSpawns": 4,
+      "escortKills": 4,
+      "tacticalWins": 2,
+      "bossShield": false,
+      "dropSpawns": 214,
+      "dropKills": 169,
+      "arcLinks": 25,
+      "protectedDrops": 0,
+      "fireControlShots": 22,
+      "fireControlBoostedShots": 21,
+      "lastFireControlBreak": {
+        "time": 225.85000000007187,
+        "id": 9847,
+        "affected": 1,
+        "interrupted": 1
+      },
+      "fireControlUnits": [],
+      "relayScreen": [],
+      "conduitBursts": 3,
+      "empTargets": 4,
+      "conduitTacticalWins": 0,
+      "offlineEnemies": 0,
+      "empWaves": 0,
+      "recipeGoal": null,
+      "goalSupplies": [],
+      "mobileSentries": [],
+      "interceptorBreaks": 1,
+      "interceptors": [],
+      "refitsClaimed": 3,
+      "enemyProjectileScale": 1.2,
+      "framePulses": 15528,
+      "renderedMode": "playing",
+      "imageCount": 29,
+      "runNewBest": false,
+      "bossWins": 3,
+      "contractStats": {
+        "accepted": 0,
+        "won": 0,
+        "failed": 0,
+        "claimed": 0
+      },
+      "runAchievements": [
+        "preempt-gun",
+        "boss",
+        "specialist",
+        "arsenal",
+        "bait-counter",
+        "hunter",
+        "core-breaker",
+        "fracture",
+        "tactician"
+      ],
+      "researchPoints": 4,
+      "buildPoints": 12,
+      "unspentBuildPoints": 1,
+      "ballisticReactions": [
+        {
+          "kind": "scatter",
+          "pierces": 0,
+          "ricochets": 0,
+          "splashHits": 0
+        },
+        {
+          "kind": "blast",
+          "pierces": 0,
+          "ricochets": 0,
+          "splashHits": 8
+        }
+      ],
+      "ballisticTotals": {
+        "pierces": 0,
+        "ricochets": 0,
+        "splashHits": 8
+      },
+      "ballisticBranch": null,
+      "scatterRicochets": 0,
+      "ricochetTraces": 0,
+      "scatterPierces": 0,
+      "scatterBursts": 0,
+      "scatterSplashHits": 0,
+      "weaponImpacts": [],
+      "upgradePulseRemaining": 0,
+      "combatFeedback": {
+        "title": "电弧炮 精校0→1",
+        "combo": false,
+        "remaining": 0,
+        "hidden": false
+      },
+      "pendingCombatFeedback": [],
+      "equipmentReceipts": [],
+      "equipmentReceipt": {
+        "title": "电弧炮 精校0→1",
+        "detail": "领取时常态全弹直伤/秒 182 → 273",
+        "equipment": {
+          "remaining": 1.7166666666654748,
+          "kind": "arc",
+          "before": {
+            "stage": 3,
+            "calibration": 0,
+            "pellets": 1,
+            "targets": 1,
+            "radius": 0,
+            "hops": 3,
+            "rate": 2.5,
+            "direct": 182
+          },
+          "after": {
+            "stage": 3,
+            "calibration": 1,
+            "pellets": 1,
+            "targets": 1,
+            "radius": 0,
+            "hops": 3,
+            "rate": 2.5,
+            "direct": 273
+          }
+        },
+        "until": 237.9000000000789,
+        "combo": false,
+        "observedAt": 258.75000000009334,
+        "hidden": false
+      },
+      "ionAugment": null,
+      "ionOrbSpawns": 0,
+      "ionOrbHits": 0,
+      "ionSpearShots": 0,
+      "ionSpearHits": 0,
+      "ionBonusDamage": 0,
+      "ionOrbs": [],
+      "ionSpears": [],
+      "ionCharge": 0,
+      "ionBursts": 0,
+      "ionHits": 0,
+      "electricBranch": null,
+      "seekerLinks": 0,
+      "capacitorBursts": 0,
+      "opticalBranch": "burn",
+      "burnHits": 36,
+      "relayHits": 0,
+      "photonAugment": "photon-reach",
+      "laserChainProfile": {
+        "hops": 3,
+        "range": 300,
+        "decay": 0.8,
+        "focus": 0.8
+      },
+      "laserChainUnlocked": true,
+      "laserChainReady": false,
+      "laserArcHits": 32,
+      "laserFocusHits": 18,
+      "laserArcBeams": 0,
+      "laserFocusBeams": 0,
+      "fractureAugment": null,
+      "fractureProfile": {
+        "hits": 3,
+        "direct": 2,
+        "splash": 0.75,
+        "radius": 120,
+        "cooldown": 0.35
+      },
+      "fractureFinishWaves": 0,
+      "fractureFinishHits": 0,
+      "fractureWaveDamage": 0,
+      "fractureWaves": 0,
+      "fractureWaveHits": 0,
+      "fractureWaveBeams": 0,
+      "fractureUnlocked": true,
+      "fractureBursts": 50,
+      "magneticWideHits": 0,
+      "magneticAugment": null,
+      "magneticLinkHits": 0,
+      "magneticUnlocked": false,
+      "magneticBursts": 0,
+      "magneticHits": 0,
+      "magneticFields": [],
+      "sweepers": [],
+      "lockPreemptWins": 2,
+      "lockBaitWins": 1,
+      "lockshotSpawns": 6,
+      "lockshotShots": 8,
+      "lockshotEnemies": [],
+      "hostileProjectiles": [],
+      "refitTarget": null,
+      "directedSupplies": [],
+      "lastEquipmentPickup": {
+        "id": 9458,
+        "row": 17,
+        "kind": "arc",
+        "refit": true,
+        "time": 220.41666666673422,
+        "x": 222,
+        "y": 973.333333333338
+      },
+      "driftSupplies": [],
+      "bodies": 0,
+      "bullets": [],
+      "particles": 0,
+      "hotParticles": 0,
+      "ammoFragments": 0,
+      "blasts": 1,
+      "arcs": 0,
+      "bossDestructionAge": 1.0166666666660742,
+      "crateFragments": 0,
+      "droneFragments": 0,
+      "enemyFragments": 0,
+      "supplyCombinations": [],
+      "bossWear": [],
+      "gateReceipts": 0,
+      "gateReceiptDetails": [],
+      "callbackWork": {
+        "frameSamples": 3600,
+        "sampleLimit": 3600,
+        "frameSampleSeconds": 0,
+        "p95": 0,
+        "p99": 0,
+        "over33msPercent": 0,
+        "maxMs": 0
+      },
+      "interruptedFrames": [],
+      "frameSamples": 15525,
+      "sampleLimit": 36000,
+      "frameSampleSeconds": 258.7499999999638,
+      "p95": 16.666666666671517,
+      "p99": 16.666666666671517,
+      "over33msPercent": 0,
+      "stage": "victory",
+      "baseline": false,
+      "normalEarnedFlow": true,
+      "virtual60Hz": true,
+      "worldInjection": false,
+      "quality": "standard",
+      "progression": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 0,
+        "overload": 6,
+        "mastery": 8,
+        "gates": 12,
+        "pickups": 9
+      },
+      "teamPolicy": "escort",
+      "buildRoute": "optical",
+      "escorts": [
+        {
+          "id": 6506,
+          "round": 2,
+          "at": 0.21666666666666665,
+          "kind": "sniper",
+          "pattern": "lockshot",
+          "x": 110,
+          "y": 310.90000000000026,
+          "hp": 0,
+          "maxHp": 64.24,
+          "age": 0.733333333333334,
+          "lockX": 363.0322324655593,
+          "shots": 0,
+          "active": false
+        },
+        {
+          "id": 6631,
+          "round": 2,
+          "at": 2.6166666666666623,
+          "kind": "sniper",
+          "pattern": "lockshot",
+          "x": 610,
+          "y": 320,
+          "hp": 0,
+          "maxHp": 64.24,
+          "age": 1.8833333333333315,
+          "lockX": 414.92852782383653,
+          "shots": 0,
+          "active": false
+        },
+        {
+          "id": 10762,
+          "round": 3,
+          "at": 0.21666666666666665,
+          "kind": "guard",
+          "x": 220,
+          "y": 480,
+          "hp": 0,
+          "maxHp": 391.68,
+          "age": 1.100000000000001,
+          "shots": 0,
+          "active": false
+        },
+        {
+          "id": 10763,
+          "round": 3,
+          "at": 0.21666666666666665,
+          "kind": "guard",
+          "x": 500,
+          "y": 480,
+          "hp": 0,
+          "maxHp": 391.68,
+          "age": 2.033333333333331,
+          "shots": 0,
+          "active": false
+        }
+      ]
+    },
+    "physical": {
+      "openingWeapon": "scatter",
+      "battlePlan": 0,
+      "interceptorBreaks": 1,
+      "lockPreemptWins": 2,
+      "lockBaitWins": 1,
+      "build": {
+        "photonAugment": "photon-reach",
+        "opticalBranch": "burn",
+        "ranks": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 3
+        },
+        "refinements": {
+          "ballistic": 0,
+          "electric": 0,
+          "optical": 8
+        }
+      },
+      "firstEquipmentResearch": true,
+      "firstArmoryResearch": true,
+      "bossResearchPoints": 2,
+      "contractResearchPoints": 0,
+      "dropSpawns": 214,
+      "dropKills": 169,
+      "arcLinks": 25,
+      "fireControlShots": 22,
+      "fireControlBoostedShots": 21,
+      "lastFireControlBreak": {
+        "time": 225.85000000007187,
+        "id": 9847,
+        "affected": 1,
+        "interrupted": 1
+      },
+      "conduitBursts": 3,
+      "empTargets": 4,
+      "conduitTacticalWins": 0,
+      "scatterPierces": 0,
+      "scatterBursts": 0,
+      "scatterSplashHits": 0,
+      "scatterRicochets": 0,
+      "ionCharge": 0,
+      "ionBursts": 0,
+      "ionHits": 0,
+      "ionOrbs": [],
+      "ionSpears": [],
+      "ionOrbSpawns": 0,
+      "ionOrbHits": 0,
+      "ionSpearShots": 0,
+      "ionSpearHits": 0,
+      "ionBonusDamage": 0,
+      "ionReadyAt": 0,
+      "seekerLinks": 0,
+      "capacitorBursts": 0,
+      "burnHits": 36,
+      "relayHits": 0,
+      "laserArcHits": 32,
+      "laserFocusHits": 18,
+      "laserLinkEnergy": 0,
+      "laserLinkTargets": [],
+      "announcedLaserChain": true,
+      "fractureBursts": 50,
+      "magneticFields": [],
+      "magneticBursts": 0,
+      "magneticHits": 0,
+      "magneticLinkHits": 0,
+      "magneticWideHits": 0,
+      "magneticProofHits": 0,
+      "magneticCertifications": [],
+      "magneticReadyAt": 0,
+      "magneticId": 0,
+      "announcedMagnetic": false,
+      "announcedFracture": true,
+      "fractureWaves": 0,
+      "fractureWaveHits": 0,
+      "fractureFinishWaves": 0,
+      "fractureFinishHits": 0,
+      "fractureWaveDamage": 0,
+      "calibrations": [
+        [
+          "blast",
+          1
+        ],
+        [
+          "arc",
+          1
+        ]
+      ],
+      "bossWins": 3,
+      "bossLootRounds": [
+        3
+      ],
+      "bossLootStats": {
+        "claimed": 2,
+        "research": 2,
+        "equipment": 0
+      },
+      "stormLinks": 0,
+      "stormRelayLinks": 0,
+      "stormFocusBursts": 0,
+      "stormFocusDamage": 0,
+      "prismHits": 0,
+      "proofWins": 0,
+      "aceWins": 0,
+      "flawlessAceWins": 0,
+      "certifiedBuilds": [],
+      "contractStats": {
+        "accepted": 0,
+        "won": 0,
+        "failed": 0,
+        "claimed": 0
+      },
+      "refitsClaimed": 3,
+      "bountyShots": 0,
+      "damageTaken": 0,
+      "growth": {
+        "stage": 3,
+        "bonus": 100,
+        "energy": 0,
+        "overload": 6,
+        "mastery": 8
+      },
+      "weaponKind": "arc",
+      "player": {
+        "x": 364.12351751514467,
+        "px": 364.12351751514467,
+        "hp": 3,
+        "invulnerable": 0
+      },
+      "lastDamageCause": null,
+      "bodies": [],
+      "bullets": [],
+      "effects": [],
+      "phase": "recovery",
+      "round": 3,
+      "time": 258.75000000009334,
+      "roundTime": 72.01666666666387,
+      "phaseTime": 1.0000000000000013,
+      "score": 7395,
+      "lockshotSpawns": 6,
+      "lockshotShots": 8,
+      "shots": 11175,
+      "hits": 5170,
+      "kills": 217,
+      "cratesBroken": 10,
+      "pickups": 9,
+      "gatesTaken": 12,
+      "lastEquipmentPickup": {
+        "id": 9458,
+        "row": 17,
+        "kind": "arc",
+        "refit": true,
+        "time": 220.41666666673422,
+        "x": 222,
+        "y": 973.333333333338
+      },
+      "maxStage": 3,
+      "peakBodies": 13,
+      "peakBullets": 54,
+      "fallbackCount": 2,
+      "attackDeferrals": 0,
+      "nextId": 11631,
+      "nextRow": 19,
+      "fireTimers": [],
+      "laserTimer": 0,
+      "acquiredWeapons": [
+        "pulse",
+        "scatter",
+        "pierce",
+        "blast",
+        "arc"
+      ],
+      "weaponStages": [
+        [
+          "pulse",
+          2
+        ],
+        [
+          "scatter",
+          2
+        ],
+        [
+          "pierce",
+          2
+        ],
+        [
+          "blast",
+          3
+        ],
+        [
+          "arc",
+          3
+        ]
+      ],
+      "scheduled": [
+        {
+          "at": 0.5,
+          "kind": "guard",
+          "x": 240,
+          "drop": true,
+          "dropY": 500,
+          "dropLabel": "盾炮追击",
+          "dropDetail": "前盾挡枪 · 转火后炮或集中击穿"
+        },
+        {
+          "at": 0.5,
+          "kind": "armor",
+          "x": 240,
+          "drop": true,
+          "dropY": 320,
+          "pattern": "fan"
+        },
+        {
+          "at": 0.95,
+          "kind": "drone",
+          "x": 435,
+          "drop": true,
+          "dropY": 400,
+          "pattern": "weave"
+        },
+        {
+          "at": 1,
+          "kind": "armor",
+          "x": 360,
+          "pattern": "fan",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 1.2,
+          "kind": "drone",
+          "x": 525,
+          "drop": true,
+          "dropY": 400,
+          "pattern": "weave"
+        },
+        {
+          "at": 4,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 5.5,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 8,
+          "kind": "crate",
+          "x": 240,
+          "stage": 2
+        },
+        {
+          "at": 10,
+          "kind": "guard",
+          "x": 180,
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 10,
+          "kind": "armor",
+          "x": 300,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fan",
+          "dropLabel": "重装梯队",
+          "dropDetail": "前后错层炮甲 · 穿列或集中拆炮"
+        },
+        {
+          "at": 10.6,
+          "kind": "drone",
+          "x": 240,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 10.6,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 11.2,
+          "kind": "drone",
+          "x": 180,
+          "pattern": "weave",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 11.8,
+          "kind": "armor",
+          "x": 420,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fan"
+        },
+        {
+          "at": 12.4,
+          "kind": "charger",
+          "x": 540,
+          "pattern": "rebound",
+          "lane": 240,
+          "drop": true,
+          "dropY": 360,
+          "dropLabel": "折返冲锋",
+          "dropDetail": "内切冲刺 · 再蓄能折返 · 注意机体转向"
+        },
+        {
+          "at": 12.4,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 12.4,
+          "kind": "drone",
+          "x": 480,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 13.6,
+          "kind": "armor",
+          "x": 300,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fan"
+        },
+        {
+          "at": 14,
+          "kind": "guard",
+          "x": 480,
+          "drop": true,
+          "dropY": 500,
+          "dropLabel": "盾炮追击",
+          "dropDetail": "前盾挡枪 · 转火后炮或集中击穿"
+        },
+        {
+          "at": 14,
+          "kind": "armor",
+          "x": 480,
+          "drop": true,
+          "dropY": 320,
+          "pattern": "fan"
+        },
+        {
+          "at": 14.2,
+          "kind": "drone",
+          "x": 240,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 14.2,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 14.45,
+          "kind": "drone",
+          "x": 195,
+          "drop": true,
+          "dropY": 400,
+          "pattern": "weave"
+        },
+        {
+          "at": 14.7,
+          "kind": "drone",
+          "x": 285,
+          "drop": true,
+          "dropY": 400,
+          "pattern": "weave"
+        },
+        {
+          "at": 15.5,
+          "kind": "drone",
+          "x": 500
+        },
+        {
+          "at": 16,
+          "kind": "armory",
+          "x": 360
+        },
+        {
+          "at": 17,
+          "kind": "drone",
+          "x": 360
+        },
+        {
+          "at": 20,
+          "kind": "gates",
+          "x": 360
+        },
+        {
+          "at": 21,
+          "kind": "armor",
+          "x": 300,
+          "drop": true,
+          "dropY": 550,
+          "pattern": "fire-control",
+          "breach": true
+        },
+        {
+          "at": 21,
+          "kind": "conduit",
+          "x": 540,
+          "drop": true,
+          "dropY": 450,
+          "pattern": "fire-control",
+          "dropLabel": "破阵重炮",
+          "dropDetail": "先拆侧方中继停炮开甲 · 或等开火后强拆",
+          "breach": true
+        },
+        {
+          "at": 21,
+          "kind": "armor",
+          "x": 300,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fire-control",
+          "breach": true
+        },
+        {
+          "at": 21.6,
+          "kind": "drone",
+          "x": 480,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 23,
+          "kind": "guard",
+          "x": 540
+        },
+        {
+          "at": 23.400000000000002,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 23.400000000000002,
+          "kind": "drone",
+          "x": 240,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 24.2,
+          "kind": "drone",
+          "x": 540,
+          "pattern": "weave"
+        },
+        {
+          "at": 24.6,
+          "kind": "armor",
+          "x": 420,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fan"
+        },
+        {
+          "at": 25.200000000000003,
+          "kind": "drone",
+          "x": 480,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 25.200000000000003,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 25.4,
+          "kind": "charger",
+          "x": 180,
+          "pattern": "flank",
+          "lane": 360
+        },
+        {
+          "at": 26,
+          "kind": "guard",
+          "x": 240,
+          "drop": true,
+          "dropY": 500,
+          "dropLabel": "盾炮追击",
+          "dropDetail": "前盾挡枪 · 转火后炮或集中击穿"
+        },
+        {
+          "at": 26,
+          "kind": "armor",
+          "x": 240,
+          "drop": true,
+          "dropY": 320,
+          "pattern": "fan"
+        },
+        {
+          "at": 26.45,
+          "kind": "drone",
+          "x": 435,
+          "drop": true,
+          "dropY": 400,
+          "pattern": "weave"
+        },
+        {
+          "at": 26.7,
+          "kind": "drone",
+          "x": 525,
+          "drop": true,
+          "dropY": 400,
+          "pattern": "weave"
+        },
+        {
+          "at": 27,
+          "kind": "gates",
+          "x": 360,
+          "pair": true
+        },
+        {
+          "at": 31,
+          "kind": "sniper",
+          "x": 180,
+          "pattern": "relocate",
+          "lane": 180,
+          "drop": true,
+          "dropY": 360,
+          "dropLabel": "机动哨机",
+          "dropDetail": "入场侧移抢位 · 齐射后再次换位"
+        },
+        {
+          "at": 31.6,
+          "kind": "drone",
+          "x": 180,
+          "pattern": "weave"
+        },
+        {
+          "at": 31.6,
+          "kind": "drone",
+          "x": 540,
+          "pattern": "weave"
+        },
+        {
+          "at": 32,
+          "kind": "drone",
+          "x": 300,
+          "drop": true,
+          "dropNotice": true
+        },
+        {
+          "at": 32,
+          "kind": "drone",
+          "x": 420,
+          "drop": true,
+          "dropNotice": false
+        },
+        {
+          "at": 34.2,
+          "kind": "drone",
+          "x": 300,
+          "drop": true,
+          "dropNotice": false
+        },
+        {
+          "at": 34.2,
+          "kind": "drone",
+          "x": 420,
+          "drop": true,
+          "dropNotice": false
+        },
+        {
+          "at": 34.9,
+          "kind": "drone",
+          "x": 300,
+          "drop": true,
+          "dropNotice": false
+        },
+        {
+          "at": 34.9,
+          "kind": "drone",
+          "x": 420,
+          "drop": true,
+          "dropNotice": false
+        },
+        {
+          "at": 35,
+          "kind": "guard",
+          "x": 540
+        },
+        {
+          "at": 35,
+          "kind": "armor",
+          "x": 220
+        },
+        {
+          "at": 35.5,
+          "kind": "drone",
+          "x": 180,
+          "pattern": "weave"
+        },
+        {
+          "at": 35.5,
+          "kind": "drone",
+          "x": 540,
+          "pattern": "weave"
+        },
+        {
+          "at": 36.5,
+          "kind": "armor",
+          "x": 220
+        },
+        {
+          "at": 38,
+          "kind": "drone",
+          "x": 180,
+          "pattern": "weave"
+        },
+        {
+          "at": 38,
+          "kind": "drone",
+          "x": 540,
+          "pattern": "weave"
+        },
+        {
+          "at": 39,
+          "kind": "gates",
+          "x": 500
+        },
+        {
+          "at": 40,
+          "kind": "elite",
+          "x": 360,
+          "pattern": "intercept",
+          "drop": true,
+          "dropY": 360,
+          "dropLabel": "截击精英",
+          "dropDetail": "翼炮压边 · 核心连射 · 蓄能可打断"
+        },
+        {
+          "at": 40.5,
+          "kind": "drone",
+          "x": 180,
+          "pattern": "weave"
+        },
+        {
+          "at": 40.5,
+          "kind": "drone",
+          "x": 540,
+          "pattern": "weave"
+        },
+        {
+          "at": 44.5,
+          "kind": "armor",
+          "x": 220,
+          "pattern": "battery",
+          "drop": true,
+          "dropY": 420,
+          "dropLabel": "交替炮阵",
+          "dropDetail": "左右驻炮错时扇射 · 中路中继可击破停火"
+        },
+        {
+          "at": 44.5,
+          "kind": "charger",
+          "x": 480,
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 45.6,
+          "kind": "armor",
+          "x": 500,
+          "pattern": "battery",
+          "drop": true,
+          "dropY": 420
+        },
+        {
+          "at": 45.6,
+          "kind": "conduit",
+          "x": 360,
+          "pattern": "battery",
+          "drop": true,
+          "dropY": 560
+        },
+        {
+          "at": 47,
+          "kind": "armor",
+          "x": 300,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fan",
+          "dropLabel": "重装梯队",
+          "dropDetail": "前后错层炮甲 · 穿列或集中拆炮"
+        },
+        {
+          "at": 47.6,
+          "kind": "drone",
+          "x": 240,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 47.6,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 48,
+          "kind": "armory",
+          "x": 360,
+          "stage": 3
+        },
+        {
+          "at": 48.8,
+          "kind": "armor",
+          "x": 420,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fan"
+        },
+        {
+          "at": 49.4,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 49.4,
+          "kind": "drone",
+          "x": 480,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 50,
+          "kind": "guard",
+          "x": 180
+        },
+        {
+          "at": 50.6,
+          "kind": "armor",
+          "x": 300,
+          "drop": true,
+          "dropY": 350,
+          "pattern": "fan"
+        },
+        {
+          "at": 51.2,
+          "kind": "drone",
+          "x": 180,
+          "pattern": "weave"
+        },
+        {
+          "at": 51.2,
+          "kind": "drone",
+          "x": 240,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 51.2,
+          "kind": "drone",
+          "x": 360,
+          "drop": true,
+          "dropY": 470
+        },
+        {
+          "at": 52.4,
+          "kind": "charger",
+          "x": 540,
+          "pattern": "flank",
+          "lane": 360
+        },
+        {
+          "at": 55.5,
+          "kind": "armor",
+          "x": 440,
+          "pattern": "fire-control",
+          "drop": true,
+          "dropY": 550
+        },
+        {
+          "at": 55.5,
+          "kind": "armor",
+          "x": 440,
+          "pattern": "fire-control",
+          "drop": true,
+          "dropY": 350
+        },
+        {
+          "at": 55.5,
+          "kind": "conduit",
+          "x": 210,
+          "pattern": "fire-control",
+          "drop": true,
+          "dropY": 450,
+          "dropLabel": "火控中继编队",
+          "dropDetail": "中继增幅双炮 · 击破可停火断供"
+        },
+        {
+          "at": 56,
+          "kind": "guard",
+          "x": 620
+        },
+        {
+          "at": 57.2,
+          "kind": "drone",
+          "x": 540,
+          "pattern": "weave"
+        },
+        {
+          "at": 58,
+          "kind": "gates",
+          "x": 360,
+          "pair": true
+        },
+        {
+          "at": 58.4,
+          "kind": "charger",
+          "x": 180,
+          "pattern": "flank",
+          "lane": 360
+        },
+        {
+          "at": 60,
+          "kind": "armor",
+          "x": 360,
+          "pattern": "fan",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 62,
+          "kind": "drone",
+          "x": 200,
+          "pattern": "weave",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 62,
+          "kind": "drone",
+          "x": 520,
+          "pattern": "weave",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 64,
+          "kind": "drone",
+          "x": 200,
+          "pattern": "weave",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 64,
+          "kind": "drone",
+          "x": 520,
+          "pattern": "weave",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 66,
+          "kind": "drone",
+          "x": 200,
+          "pattern": "weave",
+          "drop": true,
+          "dropY": 360
+        },
+        {
+          "at": 66,
+          "kind": "drone",
+          "x": 520,
+          "pattern": "weave",
+          "drop": true,
+          "dropY": 360
+        }
+      ],
+      "scheduleIndex": 96,
+      "escortSpawns": 4,
+      "escortKills": 4,
+      "tacticalWins": 2,
+      "escortGroup": 1,
+      "escortRetry": 0,
+      "bossEscortKills": 2,
+      "bossEscortSpawns": 2,
+      "bossStartDamage": 0,
+      "bossVictory": false,
+      "secondChance": true,
+      "nextSpawnRetry": 0,
+      "seed": 1337
+    }
+  }
+}

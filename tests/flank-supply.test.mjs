@@ -17,7 +17,7 @@ it('changes only the nine-unit final flank phrase in 108 schedules, preserving a
   expect(b[0].dropLabel).toBe('补给截击');
  }
 });
-it('keeps fixed enemy health and budgets through twelve rounds',()=>{
- for(let round=1;round<=12;round++){const a=new old.World(1337,round),b=new World(1337,round);for(const kind of Object.keys(C.enemies))expect(b.spawn(kind,360,300).maxHp).toBe(a.spawn(kind,360,300).maxHp);}
+it('keeps fixed normal enemy health and budgets through twelve rounds; boss curve is audited separately',()=>{
+ for(let round=1;round<=12;round++){const a=new old.World(1337,round),b=new World(1337,round);for(const kind of Object.keys(C.enemies).filter(k=>k!=='boss'))expect(b.spawn(kind,360,300).maxHp).toBe(a.spawn(kind,360,300).maxHp);}
  expect(C.limits).toEqual({bullets:80,hostile:48,enemies:26,rewards:6});
 });

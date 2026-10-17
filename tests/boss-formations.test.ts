@@ -6,9 +6,9 @@ import {safeRoute} from '../src/core/reachability';
 function battle(round=4,start=360){const w=new World(1337,round);w.phase='boss';w.player.x=start;const b=w.spawn('boss',360,C.bossY);b.bossVariant=(round-1)%3;b.attackCycle=[0,2,3][b.bossVariant];return {w,b};}
 function frames(w:World,n:number,x=w.player.x){for(let i=0;i<n;i++)w.step(C.step,x);}
 let id=100000;
-function hit(w:World,b:Body,damage=10000){w.bullets=[];const y=b.y+b.height/2+6;w.bullets.push({id:id++,x:b.x,y,px:b.x,py:y,vx:0,vy:-C.bulletSpeed,damage,age:0,active:true,hostile:false,weaponKind:'pulse'});w.step(C.step,68);return w.drainEffects();}
-it('keeps the first three rounds unchanged and schedules three authored, bounded late formations',()=>{
- for(let r=1;r<=3;r++){expect(bossFormationFor(r)).toBeUndefined();const {w}=battle(r);frames(w,180,68);expect(w.escortSpawns).toBe(0);}
+function hit(w:World,b:Body,damage=b.maxHp*2){w.bullets=[];const y=b.y+b.height/2+6;w.bullets.push({id:id++,x:b.x,y,px:b.x,py:y,vx:0,vy:-C.bulletSpeed,damage,age:0,active:true,hostile:false,weaponKind:'pulse'});w.step(C.step,68);return w.drainEffects();}
+it('keeps the first boss solo, introduces aimed and shield teams, and retains nine bounded late pairings',()=>{
+ expect(bossFormationFor(1)).toBeUndefined();const {w}=battle(1);frames(w,180,68);expect(w.escortSpawns).toBe(0);expect(bossFormationFor(2)?.id).toBe('crossfire');expect(bossFormationFor(3)?.id).toBe('bulwark');
  expect([4,5,6].map(r=>bossFormationFor(r)?.id)).toEqual(['bulwark','pincer','crossfire']);
  expect([4,5,6,7,8,9,10,11,12].map(r=>bossFormationFor(r)?.id)).toEqual(['bulwark','pincer','crossfire','pincer','crossfire','bulwark','crossfire','bulwark','pincer']);expect(bossFormationFor(13)).toBe(bossFormationFor(4));
  for(let r=4;r<=6;r++)expect(bossFormationFor(r)!.groups.reduce((n,g)=>n+g.troops.length,0)).toBe(2);
@@ -67,12 +67,16 @@ it.each([4,5,6])('round %s admits its two units and never replaces kills with en
  expect(w.peakBodies).toBeLessThanOrEqual(C.limits.enemies+C.limits.rewards);
 });
 it('supply guards use authored durability and a bounded hover while ordinary guards retain forward motion',()=>{
- const {w}=battle();frames(w,180,68);const guards=w.activeEscorts;expect(guards).toHaveLength(2);
- const ordinary=w.spawn('guard',620,180);const reference=ordinary.maxHp;
- for(const g of guards){expect(g.maxHp).toBeCloseTo(reference*3);expect(g.y).toBeCloseTo(440);}
- let path:number[]=[];for(let f=0;f<660;f++){
-  if(f%60===0){const route=safeRoute(w.player.x,w.bodies,w.bullets,6,{phase:w.phase,phaseTime:w.phaseTime,reaction:f===0?.45:0});expect(route).not.toBeNull();path=route??[];}
-  w.step(C.step,path[Math.floor((f%60)/6)]??w.player.x);w.bullets=w.bullets.filter(b=>b.hostile);expect(w.player.hp,`hover t=${w.time}`).toBe(3);if(f===59)expect(ordinary.y).toBeGreaterThan(180);
+ const {w}=battle(4,68);const guards=new Map<number,Body>();
+ // Observe the actual encounter from admission; do not idle for three seconds
+ // and then impose a fresh reaction delay on an already visible volley.
+ const referenceWorld=new World(1337,4);referenceWorld.phase='boss';const ordinary=referenceWorld.spawn('guard',620,180),reference=ordinary.maxHp;
+ let path:number[]=[],planned=0,seen=0;
+ for(let f=0;f<840;f++){
+  if(f===0||f-planned>=60||seen!==w.escortSpawns){const route=safeRoute(w.player.x,w.bodies,w.bullets,6,{phase:w.phase,phaseTime:w.phaseTime,reaction:f===0||seen!==w.escortSpawns?.45:0});expect(route,`hover t=${w.time}`).not.toBeNull();path=route??[];planned=f;seen=w.escortSpawns;}
+  w.step(C.step,path[Math.floor((f-planned)/6)]??w.player.x);referenceWorld.step(C.step,68);w.bullets=w.bullets.filter(b=>b.hostile);expect(w.player.hp,`hover t=${w.time}`).toBe(3);
+  for(const g of w.activeEscorts)guards.set(g.id,g);
+  if(f===180){expect(guards.size).toBe(2);for(const g of guards.values()){expect(g.maxHp).toBeCloseTo(reference*3);expect(g.y).toBeCloseTo(480);}expect(ordinary.y).toBeGreaterThan(180);}
  }
- expect(guards.every(g=>g.y>440||!g.active),JSON.stringify({phase:w.phase,hp:w.player.hp,boss:w.bodies.find(b=>b.kind==='boss')?.hp,counter:w.bodies.find(b=>b.kind==='boss')?.counterfire,guards:guards.map(g=>({age:g.age,y:g.y,active:g.active}))})).toBe(true);
+ expect([...guards.values()].every(g=>g.y>480||!g.active)).toBe(true);expect(w.damageTaken).toBe(0);
 });

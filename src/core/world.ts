@@ -552,12 +552,15 @@ export class World {
       if(this.phaseTime<group.at||this.phaseTime<this.escortRetry)return;
       if(this.phaseTime>group.at+ESCORT.deadline){this.escortGroup++;continue;}
       if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.troops.length>C.limits.enemies){this.escortRetry=this.phaseTime+ESCORT.retry;return;}
-      const candidates=group.troops.map(t=>{const b=this.spawn(t.kind,t.x,180);b.escort=true;if(b.kind==='guard'){b.hp*=ESCORT.guardDurability;b.maxHp=b.hp;}b.pattern=t.pattern;b.lane=t.lane??t.x;return b;});
+      const candidates=group.troops.map(t=>{const b=this.spawn(t.kind,t.x,t.kind==='guard'?ESCORT.hoverY:180);b.escort=true;if(b.kind==='guard'){b.hp*=ESCORT.guardDurability;b.maxHp=b.hp;}b.pattern=t.pattern;b.lane=t.lane??t.x;
+        if(t.pattern==='lockshot'){b.lockX=this.player.x;b.timer=LOCKSHOT.opening;b.lockDamageStart=this.damageTaken;}
+        return b;});
       const horizon=Math.max(...candidates.map(b=>Math.max(3,(C.playerY-b.y)/Math.max(1,b.speed)+1)));
       if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
         for(const b of candidates)b.active=false;this.fallbackCount++;this.escortRetry=this.phaseTime+ESCORT.retry;return;
       }
       this.escortSpawns+=candidates.length;this.bossEscortSpawns+=candidates.length;this.escortGroup++;
+      this.lockshotSpawns+=candidates.filter(b=>b.pattern==='lockshot').length;
       this.effects.push({type:'formation',x:360,y:400,text:formation.name,detail:formation.hint});
     }
   }

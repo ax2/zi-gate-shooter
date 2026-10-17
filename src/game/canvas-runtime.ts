@@ -1200,7 +1200,10 @@ export class CanvasRuntime {
     if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
     if(this.world.bullets.some(b=>b.active&&b.hostile&&b.x+8>=44&&b.x-8<=676&&b.y+12>=1150&&b.y-7<=1256))return;
     let guide = contextGuide(this.world);
-    if(this.world.phase==='boss'&&this.world.phaseTime<8&&this.world.bossFormation)guide={kind:'move',title:this.world.bossFormation.name,detail:this.world.bossFormation.hint};
+    if(this.world.phase==='boss'&&this.world.phaseTime<8&&this.world.bossFormation)
+      guide=this.world.activeEscorts.length
+        ?{kind:'boss',title:this.world.bossFormation.name,detail:this.world.bossFormation.hint}
+        :{kind:'boss',title:'首领火力窗口',detail:'持续输出首领 · 留意仍在飞行的实弹'};
     if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
       guide = weaponGuide(this.weaponGuideKind, this.world.weaponStage(this.weaponGuideKind),this.world.profileFor(this.weaponGuideKind));
     const goal=this.save.recipeGoal;

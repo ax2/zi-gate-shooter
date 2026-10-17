@@ -1,0 +1,2161 @@
+{
+  "method": "Normal earned builds and inputs; virtual 60Hz, no World injection; safe aiming and deliberately idle boss policies, not human difficulty or performance",
+  "runs": [
+    {
+      "before": {
+        "route": "ballistic",
+        "policy": "boss",
+        "time": 1199.9999999992374,
+        "hp": 3,
+        "damage": 0,
+        "gates": 58,
+        "pickups": 44,
+        "bossWins": 14,
+        "escortKills": 19,
+        "escortSpawns": 19,
+        "tacticalWins": 8,
+        "peakBodies": 17,
+        "peakBullets": 67,
+        "fallbacks": 25,
+        "battles": [
+          {
+            "round": 1,
+            "initialHP": 2250,
+            "duration": 3.2499999999998153,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 422.01701664553735,
+            "escorts": []
+          },
+          {
+            "round": 2,
+            "initialHP": 3802.5000000000005,
+            "duration": 2.9666666666690276,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 8,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 419.240821059746,
+            "escorts": []
+          },
+          {
+            "round": 3,
+            "initialHP": 5760,
+            "duration": 4.616666666670341,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 24,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 401.8741496704499,
+            "escorts": []
+          },
+          {
+            "round": 4,
+            "initialHP": 8122.5,
+            "duration": 3.349999999996953,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.8,
+            "shots": 5,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 422.85754035861976,
+            "escorts": [
+              {
+                "id": 16518,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.816666666666665,
+                "shots": 0
+              },
+              {
+                "id": 16519,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.1666666666666674,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "initialHP": 10890,
+            "duration": 1.799999999998363,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 8,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 402.5332711677176,
+            "escorts": [
+              {
+                "id": 21779,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.36666666666666664,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "initialHP": 14062.5,
+            "duration": 1.866666666664969,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 12,
+            "escortShots": 0,
+            "minX": 313.00000000000006,
+            "maxX": 399.5093823371123,
+            "escorts": [
+              {
+                "id": 26906,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 198,
+                "age": 0.36666666666666664,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 7,
+            "initialHP": 35280,
+            "duration": 2.616666666664287,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 5,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 414.92852782383545,
+            "escorts": [
+              {
+                "id": 32098,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.36666666666666664,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "initialHP": 64867.49999999999,
+            "duration": 4.0166666666630135,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9972470224181,
+            "escorts": [
+              {
+                "id": 37287,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 37459,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.41666666666666663,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 9,
+            "initialHP": 104039.99999999999,
+            "duration": 7.683333333326345,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.65,
+            "shots": 30,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 416.9636231601693,
+            "escorts": [
+              {
+                "id": 42590,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.6666666666666656,
+                "shots": 0
+              },
+              {
+                "id": 42591,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 0.9166666666666679,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 10,
+            "initialHP": 154012.49999999997,
+            "duration": 4.116666666662923,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9972470224181,
+            "escorts": [
+              {
+                "id": 48191,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.3333333333333333,
+                "shots": 0
+              },
+              {
+                "id": 48360,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.41666666666666663,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 11,
+            "initialHP": 216000,
+            "duration": 6.366666666660876,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.65,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9900891772969,
+            "escorts": [
+              {
+                "id": 53508,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 1.6666666666666656,
+                "shots": 0
+              },
+              {
+                "id": 53509,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 0.8333333333333343,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 12,
+            "initialHP": 291217.5,
+            "duration": 8.366666666659057,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 30,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 417.17107094514165,
+            "escorts": [
+              {
+                "id": 58986,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 59162,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 0.31666666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 13,
+            "initialHP": 380880,
+            "duration": 7.116666666660194,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.65,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9972470224181,
+            "escorts": [
+              {
+                "id": 64608,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2772.4800000000005,
+                "age": 1.6666666666666656,
+                "shots": 0
+              },
+              {
+                "id": 64609,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2772.4800000000005,
+                "age": 0.6666666666666671,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 14,
+            "initialHP": 486202.49999999994,
+            "duration": 6.499999999994088,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9900891772969,
+            "escorts": [
+              {
+                "id": 70133,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 141,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 70305,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 141,
+                "age": 0.31666666666666665,
+                "shots": 0
+              }
+            ]
+          }
+        ]
+      },
+      "after": {
+        "route": "ballistic",
+        "policy": "boss",
+        "time": 1199.9999999992374,
+        "hp": 3,
+        "damage": 0,
+        "gates": 51,
+        "pickups": 39,
+        "bossWins": 13,
+        "escortKills": 24,
+        "escortSpawns": 24,
+        "tacticalWins": 12,
+        "peakBodies": 17,
+        "peakBullets": 67,
+        "fallbacks": 23,
+        "battles": [
+          {
+            "round": 1,
+            "initialHP": 2250,
+            "duration": 3.2499999999998153,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 422.01701664553735,
+            "escorts": []
+          },
+          {
+            "round": 2,
+            "initialHP": 7605.000000000001,
+            "duration": 5.6166666666711365,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9918144719595,
+            "escorts": [
+              {
+                "id": 6686,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 364.33012417002055,
+                "hp": 0,
+                "maxHp": 64.24,
+                "age": 0.41666666666666663,
+                "shots": 0
+              },
+              {
+                "id": 6821,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 415.6125808408415,
+                "hp": 0,
+                "maxHp": 64.24,
+                "age": 0.41666666666666663,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "initialHP": 17280,
+            "duration": 10.533333333341716,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.8,
+            "shots": 35,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 415.4411313009371,
+            "escorts": [
+              {
+                "id": 11296,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 391.68,
+                "age": 1.816666666666665,
+                "shots": 0
+              },
+              {
+                "id": 11297,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 391.68,
+                "age": 1.4166666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "initialHP": 32490,
+            "duration": 10.349999999990587,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.8,
+            "shots": 17,
+            "escortShots": 0,
+            "minX": 305.83465452916965,
+            "maxX": 424.99944574277254,
+            "escorts": [
+              {
+                "id": 17090,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.816666666666665,
+                "shots": 0
+              },
+              {
+                "id": 17091,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.1666666666666674,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "initialHP": 43560,
+            "duration": 5.766666666661422,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.99944574277254,
+            "escorts": [
+              {
+                "id": 22838,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 23010,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.31666666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "initialHP": 56250,
+            "duration": 9.199999999991633,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 30,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 416.75364366798874,
+            "escorts": [
+              {
+                "id": 28240,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 365.19445510799625,
+                "hp": 0,
+                "maxHp": 198,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 28416,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 238.33333333333334,
+                "hp": 0,
+                "maxHp": 198,
+                "age": 0.5166666666666666,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 7,
+            "initialHP": 141120,
+            "duration": 11.683333333322707,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 23,
+            "escortShots": 0,
+            "minX": 295.08917927151236,
+            "maxX": 424.9972470224181,
+            "escorts": [
+              {
+                "id": 33944,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 34113,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.31666666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "initialHP": 259469.99999999997,
+            "duration": 12.566666666655237,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 26,
+            "escortShots": 0,
+            "minX": 295.00662508803487,
+            "maxX": 424.99944574277254,
+            "escorts": [
+              {
+                "id": 39765,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 363.03223246555814,
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 39937,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 414.92852782383545,
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.41666666666666663,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 9,
+            "initialHP": 416159.99999999994,
+            "duration": 21.19999999998072,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.65,
+            "shots": 64,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 554.6666666666667,
+            "escorts": [
+              {
+                "id": 45652,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.6666666666666656,
+                "shots": 0
+              },
+              {
+                "id": 45653,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 0.9166666666666679,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 10,
+            "initialHP": 616049.9999999999,
+            "duration": 20.366666666648143,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 33,
+            "escortShots": 0,
+            "minX": 295.00498825833336,
+            "maxX": 424.9988228298406,
+            "escorts": [
+              {
+                "id": 52199,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 363.8976604211639,
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.3333333333333333,
+                "shots": 0
+              },
+              {
+                "id": 52368,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 415.38702142670854,
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.41666666666666663,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 11,
+            "initialHP": 864000,
+            "duration": 20.366666666648143,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.65,
+            "shots": 40,
+            "escortShots": 0,
+            "minX": 295.0118009676462,
+            "maxX": 424.99998634045454,
+            "escorts": [
+              {
+                "id": 58636,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 1.6666666666666656,
+                "shots": 0
+              },
+              {
+                "id": 58637,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 0.8333333333333343,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 12,
+            "initialHP": 1164870,
+            "duration": 26.366666666642686,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 88,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 554.6666666666667,
+            "escorts": [
+              {
+                "id": 65085,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 0.36666666666666664,
+                "shots": 0
+              },
+              {
+                "id": 65261,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 0.31666666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 13,
+            "initialHP": 1523520,
+            "duration": 24.86666666664405,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.65,
+            "shots": 39,
+            "escortShots": 0,
+            "minX": 295.0018826385484,
+            "maxX": 424.9962118149478,
+            "escorts": [
+              {
+                "id": 71975,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2772.4800000000005,
+                "age": 1.6666666666666656,
+                "shots": 0
+              },
+              {
+                "id": 71976,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2772.4800000000005,
+                "age": 0.6666666666666671,
+                "shots": 0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "electric",
+        "policy": "boss",
+        "time": 1199.9999999992374,
+        "hp": 3,
+        "damage": 0,
+        "gates": 53,
+        "pickups": 42,
+        "bossWins": 13,
+        "escortKills": 20,
+        "escortSpawns": 20,
+        "tacticalWins": 10,
+        "peakBodies": 17,
+        "peakBullets": 68,
+        "fallbacks": 19,
+        "battles": [
+          {
+            "round": 1,
+            "initialHP": 2250,
+            "duration": 3.3499999999998096,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 422.7458055514388,
+            "escorts": []
+          },
+          {
+            "round": 2,
+            "initialHP": 3802.5000000000005,
+            "duration": 3.350000000002666,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 422.7458055514388,
+            "escorts": []
+          },
+          {
+            "round": 3,
+            "initialHP": 5760,
+            "duration": 6.500000000005173,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 30,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 409.8872437689638,
+            "escorts": []
+          },
+          {
+            "round": 4,
+            "initialHP": 8122.5,
+            "duration": 4.549999999995862,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 2.683333333333333,
+            "shots": 8,
+            "escortShots": 3,
+            "minX": 360,
+            "maxX": 424.99944574277254,
+            "escorts": [
+              {
+                "id": 15187,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 2.6999999999999953,
+                "shots": 3
+              },
+              {
+                "id": 15188,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.816666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "initialHP": 10890,
+            "duration": 3.699999999996635,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.49987705307086,
+            "escorts": [
+              {
+                "id": 19620,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.44999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 19765,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.4333333333333333,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "initialHP": 14062.5,
+            "duration": 5.449999999995043,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 33,
+            "escortShots": 3,
+            "minX": 238.33333333333334,
+            "maxX": 400.1940371995329,
+            "escorts": [
+              {
+                "id": 24597,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 198,
+                "age": 0.7000000000000005,
+                "shots": 0
+              },
+              {
+                "id": 24774,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 198,
+                "age": 2.6999999999999953,
+                "shots": 3
+              }
+            ]
+          },
+          {
+            "round": 7,
+            "initialHP": 35280,
+            "duration": 6.0166666666611945,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9918144719595,
+            "escorts": [
+              {
+                "id": 30053,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.44999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 30223,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.4333333333333333,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "initialHP": 64867.49999999999,
+            "duration": 9.299999999991542,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 22,
+            "escortShots": 0,
+            "minX": 326.6699950218771,
+            "maxX": 424.9962118149478,
+            "escorts": [
+              {
+                "id": 35490,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.7000000000000005,
+                "shots": 0
+              },
+              {
+                "id": 35663,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.6333333333333336,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 9,
+            "initialHP": 104039.99999999999,
+            "duration": 15.699999999985721,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.8833333333333333,
+            "shots": 47,
+            "escortShots": 0,
+            "minX": 189.66666666666669,
+            "maxX": 417.3759778030385,
+            "escorts": [
+              {
+                "id": 41159,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.8999999999999981,
+                "shots": 0
+              },
+              {
+                "id": 41160,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.4999999999999996,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 10,
+            "initialHP": 154012.49999999997,
+            "duration": 14.099999999987176,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 23,
+            "escortShots": 0,
+            "minX": 295.0018826385484,
+            "maxX": 424.9962118149478,
+            "escorts": [
+              {
+                "id": 47318,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.7000000000000005,
+                "shots": 0
+              },
+              {
+                "id": 47488,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.6333333333333336,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 11,
+            "initialHP": 216000,
+            "duration": 13.91666666665401,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.4833333333333334,
+            "shots": 26,
+            "escortShots": 0,
+            "minX": 295.00498825833336,
+            "maxX": 424.9972470224181,
+            "escorts": [
+              {
+                "id": 53334,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 1.4999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 53335,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 1.1500000000000008,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 12,
+            "initialHP": 291217.5,
+            "duration": 20.899999999981105,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 64,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 554.6666666666667,
+            "escorts": [
+              {
+                "id": 59344,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 0.44999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 59521,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 0.4333333333333333,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 13,
+            "initialHP": 380880,
+            "duration": 18.34999999998331,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.4833333333333334,
+            "shots": 33,
+            "escortShots": 0,
+            "minX": 295.0118009676462,
+            "maxX": 424.99979081704146,
+            "escorts": [
+              {
+                "id": 65854,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2772.4800000000005,
+                "age": 1.4999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 65855,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2772.4800000000005,
+                "age": 1.100000000000001,
+                "shots": 0
+              }
+            ]
+          }
+        ]
+      },
+      "after": {
+        "route": "electric",
+        "policy": "boss",
+        "time": 1199.9999999992374,
+        "hp": 3,
+        "damage": 0,
+        "gates": 46,
+        "pickups": 36,
+        "bossWins": 11,
+        "escortKills": 22,
+        "escortSpawns": 22,
+        "tacticalWins": 10,
+        "peakBodies": 17,
+        "peakBullets": 67,
+        "fallbacks": 16,
+        "battles": [
+          {
+            "round": 1,
+            "initialHP": 2250,
+            "duration": 3.3499999999998096,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 422.7458055514388,
+            "escorts": []
+          },
+          {
+            "round": 2,
+            "initialHP": 7605.000000000001,
+            "duration": 6.683333333338652,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9918144719595,
+            "escorts": [
+              {
+                "id": 6686,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 364.33012417002055,
+                "hp": 0,
+                "maxHp": 64.24,
+                "age": 0.7000000000000005,
+                "shots": 0
+              },
+              {
+                "id": 6811,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 415.6125808408415,
+                "hp": 0,
+                "maxHp": 64.24,
+                "age": 0.6333333333333336,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "initialHP": 17280,
+            "duration": 14.100000000011221,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.9666666666666666,
+            "shots": 47,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 414.98380959278666,
+            "escorts": [
+              {
+                "id": 10878,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 391.68,
+                "age": 1.9666666666666646,
+                "shots": 0
+              },
+              {
+                "id": 10879,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 391.68,
+                "age": 1.6666666666666656,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "initialHP": 32490,
+            "duration": 16.11666666665201,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 2.2333333333333334,
+            "shots": 23,
+            "escortShots": 0,
+            "minX": 295.00002898357883,
+            "maxX": 424.9900891772969,
+            "escorts": [
+              {
+                "id": 15778,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 2.2333333333333303,
+                "shots": 0
+              },
+              {
+                "id": 15779,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.6999999999999988,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "initialHP": 43560,
+            "duration": 11.299999999989723,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 26,
+            "escortShots": 0,
+            "minX": 296.64887449974617,
+            "maxX": 424.99944574277254,
+            "escorts": [
+              {
+                "id": 20869,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.44999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 21014,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.4333333333333333,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "initialHP": 56250,
+            "duration": 14.899999999986449,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 62,
+            "escortShots": 3,
+            "minX": 238.33333333333334,
+            "maxX": 415.88859695398435,
+            "escorts": [
+              {
+                "id": 26284,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 364.33012417002055,
+                "hp": 0,
+                "maxHp": 198,
+                "age": 0.7000000000000005,
+                "shots": 0
+              },
+              {
+                "id": 26461,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 238.33333333333334,
+                "hp": 0,
+                "maxHp": 198,
+                "age": 2.6999999999999953,
+                "shots": 3
+              }
+            ]
+          },
+          {
+            "round": 7,
+            "initialHP": 141120,
+            "duration": 22.683333333312703,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 39,
+            "escortShots": 0,
+            "minX": 295.00662508803487,
+            "maxX": 424.99944574277254,
+            "escorts": [
+              {
+                "id": 32412,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.44999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 32582,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.4333333333333333,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "initialHP": 259469.99999999997,
+            "duration": 30.49999999997226,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 59,
+            "escortShots": 0,
+            "minX": 295.00002898357883,
+            "maxX": 424.9900891772969,
+            "escorts": [
+              {
+                "id": 39004,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 364.7623954696269,
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.7000000000000005,
+                "shots": 0
+              },
+              {
+                "id": 39177,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 415.83566859386906,
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.6333333333333336,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 9,
+            "initialHP": 416159.99999999994,
+            "duration": 42.09999999996171,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.4833333333333334,
+            "shots": 148,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 530.3333333333333,
+            "escorts": [
+              {
+                "id": 46156,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.4999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 46157,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.100000000000001,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 10,
+            "initialHP": 616049.9999999999,
+            "duration": 41.699999999962074,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 68,
+            "escortShots": 0,
+            "minX": 295.00002898357883,
+            "maxX": 424.99150623731833,
+            "escorts": [
+              {
+                "id": 54210,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 364.7623954696269,
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.7000000000000005,
+                "shots": 0
+              },
+              {
+                "id": 54380,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 415.83566859386906,
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.6333333333333336,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 11,
+            "initialHP": 864000,
+            "duration": 50.099999999954434,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 1.4833333333333334,
+            "shots": 91,
+            "escortShots": 0,
+            "minX": 295.0069026781598,
+            "maxX": 424.99998634045454,
+            "escorts": [
+              {
+                "id": 62148,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 1.4999999999999996,
+                "shots": 0
+              },
+              {
+                "id": 62149,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 1.100000000000001,
+                "shots": 0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "before": {
+        "route": "optical",
+        "policy": "boss",
+        "time": 1199.9999999992374,
+        "hp": 3,
+        "damage": 0,
+        "gates": 51,
+        "pickups": 39,
+        "bossWins": 12,
+        "escortKills": 20,
+        "escortSpawns": 20,
+        "tacticalWins": 9,
+        "peakBodies": 17,
+        "peakBullets": 70,
+        "fallbacks": 18,
+        "battles": [
+          {
+            "round": 1,
+            "initialHP": 2250,
+            "duration": 3.683333333333124,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.64792125577867,
+            "escorts": []
+          },
+          {
+            "round": 2,
+            "initialHP": 3802.5000000000005,
+            "duration": 3.7000000000029445,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.55209482309704,
+            "escorts": []
+          },
+          {
+            "round": 3,
+            "initialHP": 5760,
+            "duration": 6.900000000005491,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 30,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 409.6083473039969,
+            "escorts": []
+          },
+          {
+            "round": 4,
+            "initialHP": 8122.5,
+            "duration": 7.0333333333269366,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 6.283333333333333,
+            "shots": 17,
+            "escortShots": 6,
+            "minX": 360,
+            "maxX": 424.99979081704146,
+            "escorts": [
+              {
+                "id": 15031,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 6.299999999999983,
+                "shots": 6
+              },
+              {
+                "id": 15032,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.816666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "initialHP": 10890,
+            "duration": 4.366666666662695,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 14,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9972470224181,
+            "escorts": [
+              {
+                "id": 19607,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.9166666666666679,
+                "shots": 0
+              },
+              {
+                "id": 19751,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.9000000000000011,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "initialHP": 14062.5,
+            "duration": 6.499999999994088,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 30,
+            "escortShots": 0,
+            "minX": 189.66666666666669,
+            "maxX": 401.2875922057024,
+            "escorts": [
+              {
+                "id": 24620,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 198,
+                "age": 1.1166666666666676,
+                "shots": 0
+              },
+              {
+                "id": 24796,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 198,
+                "age": 1.5166666666666662,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 7,
+            "initialHP": 35280,
+            "duration": 7.699999999992997,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.9900891772969,
+            "escorts": [
+              {
+                "id": 30152,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.9166666666666679,
+                "shots": 0
+              },
+              {
+                "id": 30321,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.9000000000000011,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "initialHP": 64867.49999999999,
+            "duration": 13.69999999998754,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 26,
+            "escortShots": 0,
+            "minX": 295.0118009676462,
+            "maxX": 424.99979081704146,
+            "escorts": [
+              {
+                "id": 35698,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 1.1166666666666676,
+                "shots": 0
+              },
+              {
+                "id": 35870,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.7000000000000005,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 9,
+            "initialHP": 104039.99999999999,
+            "duration": 21.299999999980628,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 2.283333333333333,
+            "shots": 79,
+            "escortShots": 3,
+            "minX": 238.33333333333334,
+            "maxX": 554.6666666666667,
+            "escorts": [
+              {
+                "id": 41666,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 2.2999999999999967,
+                "shots": 3
+              },
+              {
+                "id": 41667,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.4999999999999996,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 10,
+            "initialHP": 154012.49999999997,
+            "duration": 21.19999999998072,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 39,
+            "escortShots": 0,
+            "minX": 295.0118009676462,
+            "maxX": 424.99998634045454,
+            "escorts": [
+              {
+                "id": 48234,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 1.1166666666666676,
+                "shots": 0
+              },
+              {
+                "id": 48403,
+                "kind": "sniper",
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.7000000000000005,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 11,
+            "initialHP": 216000,
+            "duration": 30.899999999971897,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 5.483333333333333,
+            "shots": 62,
+            "escortShots": 3,
+            "minX": 295.00002898357883,
+            "maxX": 424.9900891772969,
+            "escorts": [
+              {
+                "id": 54737,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 5.499999999999986,
+                "shots": 3
+              },
+              {
+                "id": 54738,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 2112,
+                "age": 1.4999999999999996,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 12,
+            "initialHP": 291217.5,
+            "duration": 35.61666666663427,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 119,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 481.6666666666667,
+            "escorts": [
+              {
+                "id": 61920,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 0.9166666666666679,
+                "shots": 0
+              },
+              {
+                "id": 62096,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 115.08,
+                "age": 1.3166666666666669,
+                "shots": 0
+              }
+            ]
+          }
+        ]
+      },
+      "after": {
+        "route": "optical",
+        "policy": "boss",
+        "time": 1199.9999999992374,
+        "hp": 3,
+        "damage": 0,
+        "gates": 43,
+        "pickups": 33,
+        "bossWins": 10,
+        "escortKills": 20,
+        "escortSpawns": 20,
+        "tacticalWins": 9,
+        "peakBodies": 17,
+        "peakBullets": 72,
+        "fallbacks": 17,
+        "battles": [
+          {
+            "round": 1,
+            "initialHP": 2250,
+            "duration": 3.683333333333124,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 11,
+            "escortShots": 0,
+            "minX": 360,
+            "maxX": 424.64792125577867,
+            "escorts": []
+          },
+          {
+            "round": 2,
+            "initialHP": 7605.000000000001,
+            "duration": 7.500000000005969,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 16,
+            "escortShots": 2,
+            "minX": 360,
+            "maxX": 433,
+            "escorts": [
+              {
+                "id": 6505,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 363.4650234435968,
+                "hp": 0,
+                "maxHp": 64.24,
+                "age": 2.033333333333331,
+                "shots": 2
+              },
+              {
+                "id": 6655,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 420.89118963523634,
+                "hp": 0,
+                "maxHp": 64.24,
+                "age": 0.9000000000000011,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "initialHP": 17280,
+            "duration": 16.10000000001037,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 2.283333333333333,
+            "shots": 50,
+            "escortShots": 3,
+            "minX": 165.33333333333331,
+            "maxX": 415.66610114734914,
+            "escorts": [
+              {
+                "id": 10729,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 391.68,
+                "age": 2.2999999999999967,
+                "shots": 3
+              },
+              {
+                "id": 10730,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 391.68,
+                "age": 2.033333333333331,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "initialHP": 32490,
+            "duration": 19.299999999982447,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 6.283333333333333,
+            "shots": 39,
+            "escortShots": 6,
+            "minX": 295.0118009676462,
+            "maxX": 424.99979081704146,
+            "escorts": [
+              {
+                "id": 15725,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 6.299999999999983,
+                "shots": 6
+              },
+              {
+                "id": 15726,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 526.08,
+                "age": 1.816666666666665,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "initialHP": 43560,
+            "duration": 14.499999999986812,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 32,
+            "escortShots": 0,
+            "minX": 295.00002898357883,
+            "maxX": 424.9900891772969,
+            "escorts": [
+              {
+                "id": 20996,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.9166666666666679,
+                "shots": 0
+              },
+              {
+                "id": 21140,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 47.04,
+                "age": 0.9000000000000011,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "initialHP": 56250,
+            "duration": 20.11666666664837,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 64,
+            "escortShots": 0,
+            "minX": 238.33333333333334,
+            "maxX": 554.6666666666667,
+            "escorts": [
+              {
+                "id": 26593,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 363.4650234435968,
+                "hp": 0,
+                "maxHp": 198,
+                "age": 1.1166666666666676,
+                "shots": 0
+              },
+              {
+                "id": 26769,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 238.33333333333334,
+                "hp": 0,
+                "maxHp": 198,
+                "age": 1.5166666666666662,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 7,
+            "initialHP": 141120,
+            "duration": 34.866666666634956,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 56,
+            "escortShots": 0,
+            "minX": 295.0010642055104,
+            "maxX": 424.9947704933558,
+            "escorts": [
+              {
+                "id": 33070,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.9166666666666679,
+                "shots": 0
+              },
+              {
+                "id": 33239,
+                "kind": "charger",
+                "pattern": "flank",
+                "hp": 0,
+                "maxHp": 62.88,
+                "age": 0.9000000000000011,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "initialHP": 259469.99999999997,
+            "duration": 52.633333333285464,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 101,
+            "escortShots": 0,
+            "minX": 295.00498825833336,
+            "maxX": 424.9999959674361,
+            "escorts": [
+              {
+                "id": 40500,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 363.8976604211639,
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 1.1166666666666676,
+                "shots": 0
+              },
+              {
+                "id": 40672,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 415.38702142670854,
+                "hp": 0,
+                "maxHp": 296.56,
+                "age": 0.7000000000000005,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 9,
+            "initialHP": 416159.99999999994,
+            "duration": 77.3666666665963,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 2.283333333333333,
+            "shots": 257,
+            "escortShots": 3,
+            "minX": 165.33333333333331,
+            "maxX": 481.6666666666667,
+            "escorts": [
+              {
+                "id": 49170,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 2.2999999999999967,
+                "shots": 3
+              },
+              {
+                "id": 49171,
+                "kind": "guard",
+                "hp": 0,
+                "maxHp": 1543.6799999999998,
+                "age": 1.4999999999999996,
+                "shots": 0
+              }
+            ]
+          },
+          {
+            "round": 10,
+            "initialHP": 616049.9999999999,
+            "duration": 90.09999999991817,
+            "phase": "recovery",
+            "damage": 0,
+            "shieldSeconds": 0,
+            "shots": 141,
+            "escortShots": 0,
+            "minX": 295.00498825833336,
+            "maxX": 424.9999959674361,
+            "escorts": [
+              {
+                "id": 59702,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 363.8976604211639,
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 1.1166666666666676,
+                "shots": 0
+              },
+              {
+                "id": 59871,
+                "kind": "sniper",
+                "pattern": "lockshot",
+                "lockX": 415.38702142670854,
+                "hp": 0,
+                "maxHp": 416.24,
+                "age": 0.7000000000000005,
+                "shots": 0
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
