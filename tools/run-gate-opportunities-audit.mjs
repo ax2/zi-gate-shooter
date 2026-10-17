@@ -1,0 +1,1 @@
+import{build}from'esbuild';import{mkdirSync}from'node:fs';mkdirSync('build/qa/Stage-236',{recursive:true});await build({entryPoints:['tools/audit-gate-opportunities.ts'],bundle:true,platform:'node',format:'esm',outfile:'build/qa/Stage-236/gate-audit.mjs'});await import('../build/qa/Stage-236/gate-audit.mjs');

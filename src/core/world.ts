@@ -36,6 +36,7 @@ import {enemyProjectileScale} from './projectile-pressure';
 import type { EnemyKind } from './config';
 import { sweep } from './collision';
 import { activateOverload, gateValue, gateRewardLabel, grantEquipment, grantGate, permanentPower } from './rewards';
+import {gateAtCrossing} from './gate-contact';
 import type { Growth } from './rewards';
 import { timeline, sectorIndex, sectorNames, SWARM,INTRO_ESCORT } from './director';
 import type { Spawn } from './director';
@@ -1103,7 +1104,7 @@ export class World {
         add(t, 3, first.id, () => {
           if (!first.active) return;
           const x = this.player.px + (this.player.x - this.player.px) * t;
-          const chosen = gates.find(g => x >= g.x - g.width / 2 && x < g.x + g.width / 2);
+          const chosen = gateAtCrossing(gates,x);
           if (chosen && this.player.hp > 0) {
             const result = grantGate(this.growth, gateValue(chosen.energy, chosen.rewardKind), chosen.rewardKind);
             this.gatesTaken++;

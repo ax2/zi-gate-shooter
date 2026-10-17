@@ -1,0 +1,1 @@
+import{build}from'esbuild';const suffix=process.env.GATE_MODE==='routes'?'routes':(process.env.GATE_SECONDS??'300')+'-plan'+(process.env.GATE_PLAN??'0');await build({entryPoints:['tools/audit-gate-contact.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-236/audit-${suffix}.mjs`});await import(`../build/qa/Stage-236/audit-${suffix}.mjs`);
