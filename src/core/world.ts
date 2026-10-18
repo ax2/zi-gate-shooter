@@ -1,3 +1,4 @@
+import{lateAssaultDurability}from'./late-assaults';
 import{SCISSOR}from'./scissor-gun';
 import{calibrationGateTarget,calibrationGateReward,calibrationGateLabel}from'./calibration-gate';
 import{claimBossSalvage,BOSS_SALVAGE}from './boss-salvage';
@@ -76,7 +77,7 @@ export interface Body {
   interceptWingShots?:number;interceptCoreShots?:number;interceptFiredAt?:number;interceptFireBeat?:0|1;interceptCoreRemaining?:number;
   energy: number; row: number; stage: number; rewardKind: 'power' | 'energy'; attack: number; lane: number;
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
-  heavyReserve?:boolean;flankReserve?:boolean;dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number;counterBeat?:number;counterShotBeat?:number;counterFiredAt?:number;counterFiredBeat?:number;counterShots?:number;wingBeat?:number;wingShotBeat?:number;wingShotAge?:number;wingVolleys?:number;wingFiredAt?:number;wingFiredBeat?:number;wingShots?:number;barrageBeat?:number;barrageLane?:number;barrageShotBeat?:number;barrageShotPort?:number;barrageFiredAt?:number;barrageFiredBeat?:number;barrageFiredPorts?:number;barrageShots?:number;barrageVolleys?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
+  lateAssault?:boolean;heavyReserve?:boolean;flankReserve?:boolean;dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number;counterBeat?:number;counterShotBeat?:number;counterFiredAt?:number;counterFiredBeat?:number;counterShots?:number;wingBeat?:number;wingShotBeat?:number;wingShotAge?:number;wingVolleys?:number;wingFiredAt?:number;wingFiredBeat?:number;wingShots?:number;barrageBeat?:number;barrageLane?:number;barrageShotBeat?:number;barrageShotPort?:number;barrageFiredAt?:number;barrageFiredBeat?:number;barrageFiredPorts?:number;barrageShots?:number;barrageVolleys?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
   batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster' | 'minelayer' | 'scissor'; bossVariant?: number;
 }
@@ -821,6 +822,7 @@ export class World {
           const candidate = this.spawn(s.kind,s.x,s.drop?(s.dropY??SWARM.arrivalY):undefined);
           if(s.drop)candidate.dropGrace=SWARM.grace;
           candidate.pattern = s.pattern; candidate.lane = s.lane ?? s.x;
+          if(s.lateAssault){candidate.lateAssault=true;candidate.hp*=lateAssaultDurability(s.kind,s.pattern);candidate.maxHp=candidate.hp;}
           if(s.flankReserve)candidate.flankReserve=true;
           if(s.heavyReserve)candidate.heavyReserve=true;
           if(this.round===1&&s.at===INTRO_ESCORT.at&&(s.kind==='elite'||s.kind==='guard'))candidate.introEscort=true;

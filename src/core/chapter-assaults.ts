@@ -1,3 +1,4 @@
+import{lateAssaults}from'./late-assaults';
 import type {Spawn} from './director';
 export const FLANK_SUPPLY_AT=46;
 
@@ -9,7 +10,7 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
   out.push({at,kind,x:mirror?720-x:x,drop:true,dropY:y,pattern,lane:lane===undefined?undefined:mirror?720-lane:lane,dropLabel:label,dropDetail:detail});
  // Flank interception overlaps the supply approach, then releases before the
  // 55.5s guard/sentry tail. Heavy waves crest before their existing battery.
- for(const [phrase,start] of [10,21,sector===2?47:sector===1?FLANK_SUPPLY_AT:53.5].entries()){
+ for(const [phrase,start] of [10,21].entries()){
   const flip=(phrase+variation)%2===1;
   const middle=round>1&&phrase===1?variation:0;
   const x=(value:number)=>flip?720-value:value;
@@ -61,5 +62,5 @@ export function chapterAssaults(round:number,mirror:boolean,variation:number):Sp
    }
   }
  }
- return out;
+ return [...out,...lateAssaults(round,mirror,variation)];
 }
