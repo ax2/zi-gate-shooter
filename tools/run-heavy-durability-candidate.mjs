@@ -1,7 +1,9 @@
 import {build} from 'esbuild';import{readFile}from'node:fs/promises';import{execFileSync}from'node:child_process';
 import path from 'node:path';
 // The cached comparison is valid only while these original inputs are unchanged.
-execFileSync('git',['diff','--exit-code','efa2c4d','--','src/core','tests/helpers'],{stdio:'pipe'});
+// This new opt-in module is not imported by the baseline World. Its candidate
+// hook is separate; all pre-existing core/driver inputs still must match.
+execFileSync('git',['diff','--exit-code','efa2c4d','--','src/core','tests/helpers',':(exclude)src/core/boss-salvage.ts'],{stdio:'pipe'});
 for(const file of['src/core/world.ts','src/core/director.ts','src/core/heavy-escorts.ts','tests/helpers/default-pressure-driver.ts','tests/helpers/progression-driver.ts']){
  const old=execFileSync('git',['rev-parse',`efa2c4d:${file}`],{encoding:'utf8'}).trim(),now=execFileSync('git',['hash-object',file],{encoding:'utf8'}).trim();if(old!==now)throw Error('Cached baseline inputs changed: '+file);
 }
