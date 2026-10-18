@@ -45,7 +45,7 @@ import {equipmentPreview} from './equipment-preview';
 import {calibrationVisualBand} from '../core/calibration-visual';
 import {calibrationShot,calibrationMount} from './calibration-light';
 import {openingWeapons,isOpeningWeapon,parseOpeningWeapon,openingHints} from '../core/opening-plan';
-import {battleBrief,sideBattlePreview,nextBattlePlan,parseBattlePlan} from '../core/battle-plan';
+import {battleBrief,battlePlans,battlePlansInfo,isBattlePlan,nextBattlePlan,parseBattlePlan} from '../core/battle-plan';
 import {gateMachine,gatePanelBlocked,pairedGate} from './gate-machine';
 import {magneticLight} from './magnetic-light';
 import {sweeperDirection} from '../core/sweeper';
@@ -141,7 +141,7 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'contribution' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'overdrive' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'opening' | 'battle-plan' | 'achievements' | 'armory' | 'loadout' | 'contribution' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'overdrive' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private overdriveReturn:'choice'|'tree'='choice';
   private contributionReturn:'loadout'|'result'='loadout';
   private loadoutReturn:'paused'|'result'='paused';
@@ -411,7 +411,7 @@ export class CanvasRuntime {
     if(this.mode==='branch'){this.mode='choice';return 'stay';}
     if(this.mode==='overdrive'){this.mode=this.overdriveReturn;return 'stay';}
     if (this.mode === 'choice'||this.mode==='contract-reward'||this.mode==='boss-reward') return 'stay';
-    if (this.mode === 'armory'||this.mode==='opening') { this.mode = 'menu'; return 'stay'; }
+    if (this.mode === 'armory'||this.mode==='opening'||this.mode==='battle-plan') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = this.achievementReturn; return 'stay'; }
     if(this.mode==='combos'){this.mode=this.combosReturn;return 'stay';}
     if(this.mode==='contribution'){this.mode=this.contributionReturn;return 'stay';}
@@ -488,6 +488,11 @@ export class CanvasRuntime {
     else if(action==='track-clear'&&this.mode==='achievements')this.save.achievements.tracked=null;
     else if(action==='achievements-back'&&this.mode==='achievements')this.mode=this.achievementReturn;
     else if(action==='opening-menu'&&this.mode==='menu')this.mode='opening';
+    else if(action==='battle-plan-menu'&&this.mode==='menu')this.mode='battle-plan';
+    else if(action==='battle-plan-back'&&this.mode==='battle-plan')this.mode='menu';
+    else if(action.startsWith('battle-plan:')&&this.mode==='battle-plan'){
+      const raw=action.slice(12),plan=Number(raw);if(raw===String(plan)&&isBattlePlan(plan))this.save.nextBattlePlan=plan;
+    }
     else if(action==='opening-back'&&this.mode==='opening')this.mode='menu';
     else if(action.startsWith('opening:')&&this.mode==='opening'){const kind=action.slice(8);if(isOpeningWeapon(kind))this.save.openingWeapon=kind;}
     else if (action === 'armory') { this.dossierWeapon = 'pulse'; this.mode = 'armory'; }
@@ -834,6 +839,7 @@ export class CanvasRuntime {
     }
     if (this.mode === 'achievements') { this.drawAchievements(); c.restore(); return; }
     if(this.mode==='opening'){this.drawOpening();c.restore();return;}
+    if(this.mode==='battle-plan'){this.drawBattlePlan();c.restore();return;}
     if (this.mode === 'armory') { this.drawArmory(); c.restore(); return; }
     if(this.mode==='contribution'){this.drawContribution();c.restore();return;}
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
@@ -1371,15 +1377,38 @@ export class CanvasRuntime {
     this.text(`最高分　${this.save.best}`, 360, 890, 26, '#e8c98d');
     this.rect(176,650,368,96,'#173442');const openingLabel=`首箱预定 · ${weaponNames[this.save.openingWeapon]} T2　›`;this.text(openingLabel,360,685,25,weaponColors[this.save.openingWeapon],'center',true);
     this.buttons.push({x:176,y:650,w:368,h:96,action:'opening-menu',label:openingLabel});this.text('8秒投送 · 击碎后拾取',360,734,21,'#b8d4e3');
-    this.rect(176,754,368,70,'#173442');const goal=this.save.recipeGoal;
-    const goalLabel=goal?`构筑目标 · ${recipes[goal].name}`:'选择构筑目标　›';this.text(goalLabel,360,789,25,'#d3e9b7','center',true);
-    this.buttons.push({x:176,y:754,w:368,h:70,action:'combos-menu',label:goalLabel});
-    this.text(`下次侧翼战况 · ${sideBattlePreview(this.save.nextBattlePlan)}`,360,850,22,'#b8d4e3');
+    this.rect(80,754,272,114,'#173442');const goal=this.save.recipeGoal;
+    const goalLabel=goal?`构筑目标 · ${recipes[goal].name}`:'选择构筑目标　›';this.text('构筑目标',216,787,22,'#b8cbb5');this.text(goal?recipes[goal].name:'选择组合　›',216,830,25,'#d3e9b7','center',true);
+    this.buttons.push({x:80,y:754,w:272,h:114,action:'combos-menu',label:goalLabel});
+    this.rect(368,754,272,114,'#173442');const battleLabel=`战况预定 · ${battlePlansInfo[this.save.nextBattlePlan].name}　›`;
+    this.text('战况预定',504,787,22,'#9bbfce');this.text(battlePlansInfo[this.save.nextBattlePlan].name+'　›',504,830,25,'#b8e5f5','center',true);this.buttons.push({x:368,y:754,w:272,h:114,action:'battle-plan-menu',label:battleLabel});
     this.button('开始突围　›', 932, 'start', true);
     this.button('武器档案', 1030, 'armory');
     for(const [i,label] of ['成就','设置'].entries()){const x=112+i*258;this.rect(x,1128,238,86,'#1a2d3c');this.text(label, x+119,1171,30,'#d8eaf5');this.buttons.push({x,y:1128,w:238,h:86,label,action:i?'settings':'achievements'});}
     const tracked=achievements.find(a=>a.id===this.save.achievements.tracked);
     this.text(tracked?`${this.save.achievements.unlocked.includes(tracked.id)?'已达成':'下局目标'} · ${tracked.name} · 到成就页查看`:'射击装备，再走位领取强化', 360, 1230, 23, '#99b6c9');
+  }
+  private drawBattlePlan(){
+    this.rect(40,100,640,1100,'#102330');this.text('战况预定',360,165,44,'#e7f5ff','center',true);
+    this.text('首轮第2/3章预览 · 配合首箱规划打法',360,220,23,'#bdd8e7');
+    for(const [i,plan]of battlePlans.entries()){
+      const y=260+i*235,selected=this.save.nextBattlePlan===plan,info=battlePlansInfo[plan],c=this.ctx;
+      const metal=c.createLinearGradient(65,y,655,y+215);metal.addColorStop(0,selected?'#345768':'#223b4c');metal.addColorStop(.25,selected?'#1d3d50':'#142c3d');metal.addColorStop(1,'#0b1c29');c.fillStyle=metal;c.fillRect(65,y,590,215);
+      c.strokeStyle=selected?'#9cddf4':'#426171';c.lineWidth=selected?2:1;c.strokeRect(65,y,590,215);
+      for(const x of[76,644])for(const py of[y+11,y+204]){c.fillStyle='#889da6';c.fillRect(x-2,py-2,4,4);}
+      this.rect(65,y+14,4,187,selected?'#b8edff':'#516b78');
+      this.text(info.name,88,y+36,30,selected?'#d6f5ff':'#e1edf5','left',true);
+      this.text(selected?'已预定':'选择 ›',630,y+36,23,selected?'#ffdfa0':'#b6cbd8','right');
+      this.frameSprite(info.asset,0,3,132,y+112,76,78,1);
+      this.frameSprite('armor-v1.png',0,3,132,y+175,58,61,1);
+      this.text(`侧翼 · ${battleBrief(2,plan)}`,205,y+84,26,'#c9efff','left',true);
+      this.text(`重装 · ${battleBrief(3,plan)}`,205,y+124,25,'#ffdcaa','left');
+      this.text(info.tactic,205,y+173,21,'#bad2df','left');
+      this.buttons.push({x:65,y,w:590,h:215,action:`battle-plan:${plan}`,label:`预定${info.name}${selected?' · 已预定':''}`});
+    }
+    this.text('首章教学相同 · 后续循环继续变阵',360,1000,22,'#bdd8e7');
+    this.button('确认战况 · 返回主界面',1045,'battle-plan-back',true);
+    this.text('下局自动轮换战况，也可再次预定',360,1166,21,'#9fbccf');
   }
   private drawOpening(){
     this.rect(40,100,640,1100,'#102330');this.text('首箱预定',360,180,44,'#e7f5ff','center',true);
