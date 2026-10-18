@@ -1,0 +1,15 @@
+# 截击精英三炮悬浮架 · Stage250候选
+
+2026-10-18，内置imagegen参考项目已有原创精英机体及第一轮候选编辑生成。无商业素材引用；当前为作者制作候选，不代表用户最终美术批准。
+
+原始源图art/source/interceptor-strip-v2.png，2170×725，SHA256 9b774d3464a5ed6f1be96ef52d9322a46b72a4919fecf27a488c7ae316548484。完整提示词见interceptor-v2-prompt.md。第一轮人形候选与原输出保留在阶段制作目录及长期档案，不覆盖已有elite图。
+
+tools/pack-interceptor-candidate.mjs仅做技术裁切、平移对齐和缩放；不涂改像素、不生成特效。按手工测得的中心378/1084.5/1790.5，将三格归一到724×725，再导出1152×384运行候选。实际绘制198.24×184.96，对应原有x±52、y+68炮口。测点近似，真实Canvas对位和发射截图是补充证据。
+
+中格三个炮口都有烘焙亮光，不能代表交替攻击。interceptor-art仅使用暗炮口的第0/2格，实际翼炮/中央炮蓄能与闪光继续由已有interceptorLight按真实状态绘制，EMP时不表现发射姿态。普通精英保持原机体。没有新增弹道、伤害、未来射击轨迹或碰撞规则。
+
+新机体先通过独立候选包验证，未写入public/assets、正式加载清单或dist。构建当前候选：node tools/pack-interceptor-candidate.mjs，随后node tools/build-interceptor-candidate.mjs。手动正常试玩：5255/build/qa/Stage-250/interceptor-play.html（需运行本地Vite）。候选使用独立存档键，不迁移主版本存档。
+
+真实Edge证据：桌面及390×844手机模拟；128.25秒翼炮蓄能、128.75秒翼炮发射、129秒核心蓄能、129.65秒核心发射、130.15秒真实飞行。无World注入；虚拟时钟、自动操作者、观察期让开精英，HP2，不是真人难度或性能证明。截图及诊断见build/qa/Stage-250/screenshots/interceptor-*。候选浏览器日志单次warn/error为空，不能替代全时段稳定性检查。
+
+受控检查1200次回调：标准/弱档、普通/截击各300次，完整World与Stage249基线一致，正确选择机体，排除全炮口烘焙发光格。类型检查通过。全仓299模块仍在运行且已有失败；不宣称整体完成或全仓通过。
