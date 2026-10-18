@@ -27,7 +27,7 @@ import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,STORM_PROOF,type B
 import { bossFormationFor, ESCORT,type EscortTroop } from './boss-formations';
 import {OVERLOAD} from './overload';
 import{MIRROR_LASER,mirrorPath,type MirrorSegment}from'./mirror-laser';
-import {CLOSING_ASSAULT_AT,closingBrief} from './closing-assault';
+import {CLOSING_ASSAULT_AT,CLOSING_CLEAR_CHARGE,closingBrief,closingDurability} from './closing-assault';
 import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type IonSpear} from './ion-storm';
 import { FRACTURE,FRACTURE_LINE,fractureProfile,isFractureAugment,fractureAugments } from './combos';
 import { enemyHealthScale, firstAttackDelay } from './difficulty';
@@ -126,6 +126,9 @@ export class World {
     this.announceMagnetic();this.announceLaserChain();return true;
   }
   dropSpawns=0;dropKills=0;arcLinks=0;
+  private closingIds=new Set<number>();private closingKillIds=new Set<number>();private closingAwarded=false;
+  closingClears=0;
+  get closingStatus(){return{round:this.round,total:this.closingIds.size,kills:this.closingKillIds.size,rewarded:this.closingAwarded};}
   bankShots?:number;bankReflections?:number;lastBankReflection?:{time:number;x:number;y:number;id:number};
   fireControlShots=0;fireControlBoostedShots=0;lastFireControlBreak?:{time:number;id:number;affected:number;interrupted:number};
   conduitBursts=0;empTargets=0;conduitTacticalWins=0;
@@ -713,15 +716,17 @@ export class World {
           const group=[s];while(this.scheduled[this.scheduleIndex+group.length-1]?.closing)group.push(this.scheduled[this.scheduleIndex+group.length-1]);
           const units=group.map(spawn=>{
             const b=this.spawn(spawn.kind as EnemyKind,spawn.x,spawn.dropY);
-            b.pattern=spawn.pattern;b.lane=spawn.lane??spawn.x;b.dropGrace=SWARM.grace;b.timer=spawn.opening??.1;
+            b.pattern=spawn.pattern;b.lane=spawn.lane??spawn.x;b.forkshot=spawn.forkshot;b.dropGrace=SWARM.grace;b.timer=spawn.opening??.1;
+            b.hp*=closingDurability(this.round,b.kind as EnemyKind);b.maxHp=b.hp;
             if(b.pattern==='lockshot'){b.lockX=this.player.x;b.lockDamageStart=this.damageTaken;}
             return b;
           });
           const longest=units.reduce((a,b)=>(C.playerY-a.y)/a.speed>(C.playerY-b.y)/b.speed?a:b);
           if(!this.admit(longest)){for(const b of units)b.active=false;this.scheduleIndex--;break;}
           this.scheduleIndex+=group.length-1;this.dropSpawns+=units.length;
+          this.closingIds=new Set(units.map(b=>b.id));this.closingKillIds.clear();this.closingAwarded=false;
           this.lockshotSpawns+=units.filter(b=>b.pattern==='lockshot').length;
-          const brief=closingBrief(this.round);this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:brief.title,detail:brief.detail});
+          const brief=closingBrief(this.round,this.battlePlan);this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:brief.title,detail:brief.detail+` · 全歼充能+${CLOSING_CLEAR_CHARGE}`});
           continue;
         }
         if(s.pattern==='fire-control'){
@@ -811,6 +816,7 @@ export class World {
       this.phaseTime += dt;
       if (this.phaseTime >= 4) {
         this.round++; this.roundTime = 0; this.phaseTime = 0; this.phase = 'running';
+        this.closingIds.clear();this.closingKillIds.clear();this.closingAwarded=false;
         this.scheduleIndex = 0; this.secondChance = this.growth.stage > 1; this.nextSpawnRetry = 0;
         this.scheduled = timeline(this.round, this.seed + this.round * 719,this.battlePlan);
         this.effects.push({type:'round',x:360,y:400,text:`第 ${this.round} 轮 · ${sectorNames[sectorIndex(this.round)]}`,
@@ -1250,6 +1256,14 @@ export class World {
       if(b.dropGrace!==undefined)this.dropKills++;
       if(b.kind==='conduit')this.dischargeConduit(b);
       this.kills++; this.score += C.enemies[b.kind as EnemyKind].score;
+      if(wasActive&&this.phase==='running'&&this.player.hp>0&&this.closingIds.has(b.id)&&!this.closingKillIds.has(b.id)){
+        this.closingKillIds.add(b.id);
+        if(!this.closingAwarded&&this.closingKillIds.size===this.closingIds.size){
+          this.closingAwarded=true;this.closingClears++;
+          const reward=grantGate(this.growth,CLOSING_CLEAR_CHARGE,'energy');if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+          this.effects.push({type:'closing-clear',x:b.x,y:b.y,text:`终线全歼 ${this.closingIds.size}/${this.closingIds.size} · 充能+${CLOSING_CLEAR_CHARGE}`,detail:this.chargeReceipt(reward.activated)});
+        }
+      }
       if(b.kind!=='boss')this.score += this.rapidBreak.kill(this.time);
       this.effects.push({ type: b.kind === 'boss' ? 'boss-kill' : 'kill', x: b.x, y: b.y, size: b.width * 1.4, enemyKind: b.kind as EnemyKind, bossVariant: b.bossVariant });
       if (b.kind === 'boss') this.bossVictory = true;

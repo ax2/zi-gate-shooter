@@ -58,6 +58,7 @@ import {heavyEscortHolding} from '../core/heavy-escorts';
 import {BossArmorFragments} from './boss-armor-fragments';
 import {BOSS_SALVAGE,bossSalvageCount} from '../core/boss-salvage';
 import{bossTacticalStatus}from './boss-tactical-status';
+import{CLOSING_CLEAR_CHARGE}from'../core/closing-assault';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,requiredProofGroups,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
@@ -138,7 +139,7 @@ export class CanvasRuntime {
   private contributionPage=0;
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
-  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
+  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;closingClear?:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
   private pendingBuildFeedback:Array<NonNullable<CanvasRuntime['buildFeedback']>&{remaining:number}>=[];
   private equipmentFeedback=new EquipmentReceiptQueue();
   private achievementToast = '';
@@ -570,14 +571,14 @@ export class CanvasRuntime {
   }
   private setBuildFeedback(feedback:NonNullable<CanvasRuntime['buildFeedback']>){
     const current=this.buildFeedback;
-    if(current?.combo&&this.world.time<current.until){
+    if((current?.combo||current?.closingClear)&&this.world.time<current.until){
       if(feedback.combo&&current.title.replace(/^目标成形 /,'组合完成 ')===feedback.title.replace(/^目标成形 /,'组合完成 ')){
         this.buildFeedback={...feedback,until:current.until,observedAt:current.observedAt,hidden:current.hidden};return;
       }
       const queued={...feedback,remaining:Math.max(.1,feedback.until-this.world.time)};
       const duplicate=this.pendingBuildFeedback.findIndex(f=>f.title===queued.title);
       if(duplicate>=0)this.pendingBuildFeedback[duplicate]=queued;else{
-        if(this.pendingBuildFeedback.length>=2){const ordinary=this.pendingBuildFeedback.findIndex(f=>!f.combo);this.pendingBuildFeedback.splice(ordinary<0?0:ordinary,1);}
+        if(this.pendingBuildFeedback.length>=2){const ordinary=this.pendingBuildFeedback.findIndex(f=>!f.combo&&!f.closingClear);this.pendingBuildFeedback.splice(ordinary<0?0:ordinary,1);}
         this.pendingBuildFeedback.push(queued);
       }
       return;
@@ -601,6 +602,7 @@ export class CanvasRuntime {
     }
     if(e.type==='drop-wave'){this.notify(e.text??'突降机群',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
     if(e.type==='bounty-progress'){this.notify(e.text??'悬赏推进',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
+    if(e.type==='closing-clear'){this.setBuildFeedback({title:e.text??'终线全歼',detail:e.detail??'',until:this.world.time+3,combo:false,closingClear:true});if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.escortReward){this.notify(e.text??'编队击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
 
     if(e.type==='formation'||e.type==='boss-reserve'){
@@ -889,8 +891,8 @@ export class CanvasRuntime {
     }
     if(activeBuild&&receiptPosition!==null){
       const f=this.buildFeedback!,top=receiptPosition,bottom=top===1180,height=bottom?88:104;
-      this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.equipment?weaponColors[f.equipment.kind]:f.combo?'#d3a3ff':'#7fe4ff');
-      this.drawCombatCopy(f.title,f.detail,top,height,bottom,f.equipment?weaponColors[f.equipment.kind]:f.combo?'#e1bfff':'#d2f2ff');
+      this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.equipment?weaponColors[f.equipment.kind]:f.closingClear?'#ffd67d':f.combo?'#d3a3ff':'#7fe4ff');
+      this.drawCombatCopy(f.title,f.detail,top,height,bottom,f.equipment?weaponColors[f.equipment.kind]:f.closingClear?'#ffe3a0':f.combo?'#e1bfff':'#d2f2ff');
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;
@@ -1241,7 +1243,8 @@ export class CanvasRuntime {
   private drawHud() {
     const y = this.hudTop, w = this.world;
     const boss=w.bodies.find(b=>b.active&&b.kind==='boss');
-    this.rect(0, 0, 720, y + (boss?210:162), '#08131be8');
+    const closing=this.mode==='playing'&&w.phase==='running'&&w.closingStatus.total>0&&w.contract?.status!=='active';
+    this.rect(0, 0, 720, y + (boss?210:closing?194:162), '#08131be8');
     this.text('分数', 30, y + 6, 20, '#91adbf', 'left');
     const score=w.score.toString().padStart(6,'0');
     this.text(score,28,y+43,score.length<=6?42:Math.max(12,260/score.length),'#e9f6ff','left',true);
@@ -1275,6 +1278,7 @@ export class CanvasRuntime {
         this.rect(50,y+206,620,28,'#102330');this.text(`破甲 ${bossSalvageCount(boss)}/4 · 每段充能+${BOSS_SALVAGE.charge}${tactic?' · '+tactic:''}`,360,y+220,19,tactic?'#fff0cf':'#ffdf9e');
       }
     }
+    if(closing){const s=w.closingStatus;this.rect(50,y+162,620,28,'#102330');this.text(`终线全歼 ${s.kills}/${s.total} · 全破充能+${CLOSING_CLEAR_CHARGE} · 首领即将接近`,360,y+176,20,'#ffdf9e');}
   }
   private noticePlacement(){
     return this.mode==='playing'&&this.notice&&this.platform.now()<this.noticeUntil
@@ -1868,6 +1872,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
+      closingStatus:this.world.closingStatus,closingClears:this.world.closingClears,
       bossPlateFragments:this.bossFragments.pieces.length,bossSalvage:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,count:bossSalvageCount(b),hp:b.hp,maxHp:b.maxHp})),
       combatCopy:this.presentedCopy?{...this.presentedCopy,lines:[...this.presentedCopy.lines],rows:this.presentedCopy.rows.map(r=>({...r})),bounds:{...this.presentedCopy.bounds}}:null,
       combatNotice:this.presentedNotice?{...this.presentedNotice}:null,

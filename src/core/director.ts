@@ -250,7 +250,7 @@ export function timeline(round: number, seed: number,plan:BattlePlan=0): Spawn[]
   out.push(...openingAssaults(round,mirror,encounter));
   out.push(...earlyReinforcements(round,mirror,encounter));
   out.push(...pursuitWaves(round,mirror,encounter));
-  out.push(...closingAssault(round,mirror));
+  out.push(...closingAssault(round,mirror,plan));
   out.push(...heavyCounterPush(round,mirror,encounter));
   out.push(...continuityReserves(round,mirror,encounter));
   out.push(...flankHunters(round,mirror,encounter));
