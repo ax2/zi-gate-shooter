@@ -1,4 +1,5 @@
 import{calibrationGateReward,CALIBRATION_GATE}from'../core/calibration-gate';
+import{moduleAssembly,MODULE_ASSEMBLY_DURATION}from'./module-assembly';
 import{bossWeaveRig}from'./boss-weave-rig';
 import{isWeaveBoss}from'../core/boss-weave';
 import{mineGoal,mineTargetLabel}from'./mine-goal';
@@ -151,6 +152,7 @@ export class CanvasRuntime {
   private huntChoice:HuntKind='staggered';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;closingClear?:boolean;tactic?:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
   private equipmentHud?:{text:string;color:string;until:number};
+  private moduleAssemblies=new Map<WeaponKind,number>();
   private pendingBuildFeedback:Array<NonNullable<CanvasRuntime['buildFeedback']>&{remaining:number}>=[];
   private equipmentFeedback=new EquipmentReceiptQueue();
   private achievementToast = '';
@@ -337,7 +339,7 @@ export class CanvasRuntime {
     this.buttons=[];
     for(const motion of this.mountedMotion.values())motion.reset();
     this.opticalFiredAt=-Infinity;
-    this.buildFeedback=undefined;this.pendingBuildFeedback.length=0;this.equipmentFeedback.clear();this.equipmentHud=undefined;
+    this.buildFeedback=undefined;this.pendingBuildFeedback.length=0;this.equipmentFeedback.clear();this.equipmentHud=undefined;this.moduleAssemblies.clear();
     this.runNewBest=false;this.runAchievements=[];this.achievementReturn='menu';
     this.achievementUntil=0;this.achievementShownAt=undefined;
     this.supportBeams=[];
@@ -441,7 +443,9 @@ export class CanvasRuntime {
     const preview=buildPreview(this.world,route,branch);
     const chosenNode=isOpticalFusion(branch)?{name:'双镜复合 · '+opticalBranches[opticalFusionBranch(branch)].name}:isAmmoFusion(branch)?{name:'复合弹芯 · '+ballisticBranches[fusionBranch(branch)].name}:isStormAugment(branch)?stormAugments[branch]:isIonAugment(branch)?ionAugments[branch]:isFractureAugment(branch)?fractureAugments[branch]:isPhotonAugment(branch)?photonAugments[branch]:isMagneticAugment(branch)?magneticAugments[branch]:this.world.build.ranks[route]<3?this.world.build.node(route,this.world.build.ranks[route],branch):this.world.build.next(route);
     const hadPrism=this.world.supportProfile().prism,hadStorm=this.world.build.ranks.ballistic>=3;
+    const equipmentBefore=captureEquipment(this.world);
     if(!this.world.chooseBuild(route,branch))return;
+    for(const change of equipmentChanges(equipmentBefore,this.world))this.moduleAssemblies.set(change.kind,this.world.time);
     this.upgradeUntil=this.world.time+.45;
     if(isStormAugment(branch)&&this.world.contract?.status!=='active')this.proofChoice=branch;
     if(isMagneticAugment(branch)&&this.world.contract?.status!=='active')this.proofChoice='magnetic';
@@ -558,7 +562,7 @@ export class CanvasRuntime {
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
     else if (action === 'resume') { this.pausePreview = false; this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.shieldBreak=undefined;this.equipmentHud=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear();this.bossFragments.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.shieldBreak=undefined;this.equipmentHud=undefined;this.moduleAssemblies.clear();this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear();this.bossFragments.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -584,6 +588,7 @@ export class CanvasRuntime {
   private recordEquipment(before:ReturnType<typeof captureEquipment>){
     const changes=equipmentChanges(before,this.world);
     for(const change of changes){
+      this.moduleAssemblies.set(change.kind,this.world.time);
       const a=change.before,b=change.after;
       this.equipmentHud={text:`收获 · ${weaponNames[change.kind]}${!a?' T'+b.stage:a.stage!==b.stage?' T'+a.stage+'→'+b.stage:' 精校+'+(b.calibration-a.calibration)}`,color:weaponColors[change.kind],until:this.world.time+3.2};
       const current=this.buildFeedback;
@@ -793,6 +798,7 @@ export class CanvasRuntime {
       c.fillStyle='#d0d7d3';c.beginPath();c.arc(tx,ty,3,0,Math.PI*2);c.fill();c.restore();
       this.frameSprite('mounted-modules-v1.png',mount.frame,3,mx,my,size,size,2);
       calibrationMount(c,mx,my-size*.12,size*.75,kind,band,this.mountedMotion.get(kind)!.flash(kind,stage,w.time),this.save.settings.effects==='weak');
+      this.drawModuleAssembly(kind,mx,my,size);
     }
   }
   private drawOpticalRig(y:number,pose:PlayerPose) {
@@ -810,7 +816,9 @@ export class CanvasRuntime {
   }
   private drawCalibrationRig(y:number,pose:PlayerPose,recoil:number){
     const w=this.world,kind=w.weaponKind,band=calibrationVisualBand(w.weaponCalibration(kind));calibrationMount(this.ctx,w.player.x,y-(w.profileFor(kind).muzzleY??78)+pose.bob+recoil,96*(1+band*.07),kind,band,this.weaponMotion.flash(kind,w.weaponStage(kind),w.time),this.save.settings.effects==='weak');
+    this.drawModuleAssembly(kind,w.player.x,y-65+pose.bob+recoil,96);
   }
+  private drawModuleAssembly(kind:WeaponKind,x:number,y:number,size:number){const at=this.moduleAssemblies.get(kind);if(at===undefined)return;const age=this.world.time-at;if(age>=MODULE_ASSEMBLY_DURATION){this.moduleAssemblies.delete(kind);return;}moduleAssembly(this.ctx,x,y,size,kind,age,this.save.settings.effects==='weak');}
   private calibratedRecoil(kind:WeaponKind,motion=this.weaponMotion){return motion.sample(kind,this.world.weaponStage(kind),this.world.time)*(1+calibrationVisualBand(this.world.weaponCalibration(kind))*.12);}
   private bar(x: number, y: number, width: number, ratio: number, color: string) {
     this.rect(x - width / 2 - 2, y - 2, width + 4, 12, '#07121b');
@@ -2011,6 +2019,7 @@ export class CanvasRuntime {
       ballisticReactions:this.world.ballisticReactions(),ballisticTotals:this.world.ballisticTotals(),ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       weaponImpacts:this.impacts.filter(h=>!h.opticalBand).map(h=>({...h})),
       equipmentHud:this.equipmentHud&&this.world.time<this.equipmentHud.until?{text:this.equipmentHud.text,remaining:this.equipmentHud.until-this.world.time}:null,
+      moduleAssemblies:[...this.moduleAssemblies].filter(([,at])=>this.world.time-at<MODULE_ASSEMBLY_DURATION).map(([kind,at])=>({kind,at,age:this.world.time-at})),
       upgradePulseRemaining:Math.max(0,this.upgradeUntil-this.world.time),combatFeedback:this.buildFeedback?{title:this.buildFeedback.title,combo:this.buildFeedback.combo,remaining:Math.max(0,this.buildFeedback.until-this.world.time),hidden:this.buildFeedback.hidden}:null,pendingCombatFeedback:this.pendingBuildFeedback.map(f=>({title:f.title,combo:f.combo,remaining:f.remaining})),
       equipmentReceipts:this.equipmentFeedback.pending.map(r=>({...r})),equipmentReceipt:this.buildFeedback?.equipment?{...this.buildFeedback}:null,
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,
