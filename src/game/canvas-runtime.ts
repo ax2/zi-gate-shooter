@@ -1,3 +1,5 @@
+import{bossWeaveRig}from'./boss-weave-rig';
+import{isWeaveBoss}from'../core/boss-weave';
 import{mineGoal,mineTargetLabel}from'./mine-goal';
 import {coolingRotors} from './cooling-rotors';
 import{bastionBarrageRig}from'./bastion-barrage-rig';
@@ -614,7 +616,7 @@ export class CanvasRuntime {
       this.notify(e.text??'首领破甲',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;
     }
     if(e.type==='fracture-wave'){if(this.supportBeams.length>=16)this.supportBeams.shift();this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX??e.x,ty:e.targetY??e.y,life:.24,laser:false,fractureWave:true});return;}
-    if(e.type==='counter-fire'||e.type==='wing-fire'||e.type==='barrage-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',e.gain??1);return;}
+    if(e.type==='counter-fire'||e.type==='wing-fire'||e.type==='barrage-fire'||e.type==='weave-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',e.gain??1);return;}
     if(e.type==='boss-counter'){this.notify(e.text??'首领过热',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
     if(e.type==='round'){this.notify(e.text??'下一轮',1195,e.detail);if(this.save.settings.sound)this.platform.sound('round',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.type==='emp'){
@@ -1027,6 +1029,7 @@ export class CanvasRuntime {
           this.hitSprite(bossArt, frame, 3, b.x, y, width, height, b.hit*.5, 0.07, 1);
           bossHullWear(c,b,this.save.settings.effects==='weak');
           if(b.counterfire)bossHeatLight(c,b,this.save.settings.effects==='weak');
+          bossWeaveRig(c,b,this.save.settings.effects==='weak');
           wingShearRig(c,b,this.save.settings.effects==='weak');
           bastionBarrageRig(c,b,this.save.settings.effects==='weak');
         }
@@ -1298,7 +1301,7 @@ export class CanvasRuntime {
       this.buttons.push({x:480,y:y+170,w:210,h:44,action:'contracts-live',label:'挑战契约'});
     }
     if(boss){
-      this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}${boss.counterfire?'·过热':''}${w.bossShieldActive()?'·屏障45%':''}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
+      this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}${isWeaveBoss(boss)&&boss.attack===0?'·交织':''}${boss.counterfire?'·过热':''}${w.bossShieldActive()?'·屏障45%':''}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
       this.bar(360,y+196,620,boss.hp/boss.maxHp,w.bossShieldActive()?'#82dfff':'#ff925d');
       if((w as World&{bossSalvageEnabled?:boolean}).bossSalvageEnabled&&w.round>=BOSS_SALVAGE.fromRound){
         for(const ratio of BOSS_SALVAGE.ratios)this.rect(49+620*ratio,y+190,2,12,'#ffedd1');
@@ -1338,6 +1341,8 @@ export class CanvasRuntime {
       guide=this.world.activeEscorts.length
         ?{kind:'boss',title:this.world.bossFormation.name,detail:this.world.bossFormation.hint}
         :{kind:'boss',title:'首领火力窗口',detail:'持续输出首领 · 留意仍在飞行的实弹'};
+    const weaveBoss=this.world.bodies.find(b=>b.active&&b.kind==='boss'&&isWeaveBoss(b)&&b.attack===0&&(b.warning>0||b.burst));
+    if(this.world.phase==='boss'&&weaveBoss&&!this.world.activeEscorts.length)guide={kind:'boss',title:'双炮三拍交织',detail:'弹幕由外向内，下一轮反向 · 观察实弹换位'};
     if (guide.kind === 'move' && this.world.phase === 'running' && this.world.time < this.weaponGuideUntil)
       guide = weaponGuide(this.weaponGuideKind, this.world.weaponStage(this.weaponGuideKind),this.world.profileFor(this.weaponGuideKind));
     const goal=this.save.recipeGoal;
@@ -1928,7 +1933,7 @@ export class CanvasRuntime {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
       minelayers:this.world.bodies.filter(b=>b.active&&b.pattern==='minelayer').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.mineShots??0,passed:b.minePassed??0,touched:!!b.mineTouched,damageStart:b.mineDamageStart,firedAt:b.mineFiredAt})),mines:this.world.bullets.filter(b=>b.hostile&&b.mine).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy,age:b.age,radius:MINELAYER.radius})),
       closingStatus:this.world.closingStatus,closingClears:this.world.closingClears,overdriveForm:this.world.overdriveForm??null,overdriveShots:this.world.overdriveShots,overdriveHits:this.world.overdriveHits,
-      bossPlateFragments:this.bossFragments.pieces.length,bossSalvage:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,count:bossSalvageCount(b),hp:b.hp,maxHp:b.maxHp})),
+      bossWeave:this.world.bodies.filter(b=>b.active&&b.kind==='boss'&&isWeaveBoss(b)).map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,attack:b.attack,warning:b.warning,beat:b.weaveBeat??0,volleys:b.weaveVolleys??0,shots:b.weaveShots??0,firedAt:b.weaveFiredAt,firedBeat:b.weaveFiredBeat,ports:b.weaveFiredPorts??0})),bossPlateFragments:this.bossFragments.pieces.length,bossSalvage:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,count:bossSalvageCount(b),hp:b.hp,maxHp:b.maxHp})),
       combatCopy:this.presentedCopy?{...this.presentedCopy,lines:[...this.presentedCopy.lines],rows:this.presentedCopy.rows.map(r=>({...r})),bounds:{...this.presentedCopy.bounds}}:null,
       combatNotice:this.presentedNotice?{...this.presentedNotice}:null,
       pickupSignals:this.world.bodies.filter(b=>b.kind==='pickup').map(b=>({id:b.id,x:b.x,y:b.y,...pickupSignal(b)})),

@@ -1,4 +1,5 @@
 import{BASTION_BARRAGE,barrageVolley,barrageNextGap}from'./bastion-barrage';
+import{BOSS_WEAVE,isWeaveBoss,weaveVolley}from'./boss-weave';
 import{WING_SHEAR,wingShearVolley}from'./wing-shear';
 import {CONTROL_SHUTTER,shutterClosed,type ShutterState}from'./control-shutter';
 import {BANKSHOT} from './bankshot';
@@ -88,6 +89,13 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         if(beat+1<p.beats){b.counterBeat=beat+1;b.burst=1;b.timer=p.spacing;}
         else{b.counterBeat=0;b.counterVolleys=(b.counterVolleys??0)+1;finish(p.spacing*(p.beats-1));}
       };
+      const weave=()=>{
+        const beat=b.weaveBeat??0;b.weaveShotBeat=beat;b.weaveShotPhrase=b.weaveVolleys??0;
+        for(const s of weaveVolley(b,beat))shot(s.x,s.y,s.vx,s.vy);
+        b.warning=0;
+        if(beat+1<BOSS_WEAVE.beats){b.weaveBeat=beat+1;b.burst=1;b.timer=BOSS_WEAVE.spacing;}
+        else{b.weaveBeat=0;b.weaveVolleys=(b.weaveVolleys??0)+1;finish(BOSS_WEAVE.spacing*(BOSS_WEAVE.beats-1));}
+      };
       const wingShear=()=>{
         const beat=b.wingBeat??0;b.wingShotBeat=beat;b.wingShotAge=b.age;
         for(const s of wingShearVolley(b,beat))shot(s.x,s.y,s.vx,s.vy);
@@ -105,6 +113,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         else{b.barrageBeat=0;b.barrageVolleys=(b.barrageVolleys??0)+1;finish(BASTION_BARRAGE.echo);}
       };
       if (b.burst) {
+        if(b.attack===0&&isWeaveBoss(b)){weave();return;}
         if(b.attack===3&&b.bossVariant===2){bastionBarrage();return;}
         if(b.attack===2&&b.bossVariant===1){wingShear();return;}
         if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){sequencedCounter();return;}
@@ -114,6 +123,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         finish();
       } else if (b.warning <= 0) {
         b.attack=b.counterReady?4:bossAttackForCycle(b.bossVariant,b.attackCycle,!!b.counterfire);b.counterReady=false;
+        if(b.attack===0&&isWeaveBoss(b))b.weaveBeat=0;
         if(b.attack===4&&(b.bossVariant===1||b.bossVariant===2))b.counterBeat=0;
         if(b.attack===2&&b.bossVariant===1)b.wingBeat=0;
         if(b.attack===3&&b.bossVariant===2){b.barrageBeat=0;b.barrageLane=undefined;}
@@ -140,6 +150,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
           for (const x of [200, 520]) for (let i = 0; i < 4; i++) shot(x, b.y + 90 - i * 50, 0, 300);
           finish();
         } else if (!b.attack) {
+          if(isWeaveBoss(b)){weave();return;}
           for (let i = 0; i < 5; i++) shot(b.lane, b.y + 90 - i * 45, 0, 320);
           finish();
         } else {

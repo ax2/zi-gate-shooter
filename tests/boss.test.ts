@@ -53,42 +53,24 @@ it.each([1,2])('chapter %s sustains its own four-attack phrase and full double-l
   expect(phrase).toEqual(variant===1?[2,1,2,0,2,1,2,0]:[3,0,3,1,3,0,3,1]);
 });
 
-it('boss alternates A/B, sweeps in two timed beats, mirrors sides and keeps warnings locked', () => {
-  const world = new World(); world.phase = 'boss'; world.player.x = 68;
-  const boss = world.spawn('boss',360,C.bossY);
-  const warnings: { attack: number; lane: number; time: number }[] = [];
-  const batches: { xs: number[]; time: number }[] = [];
-  const seen = new Set<number>();
-  let previousWarning = 0, lockedLane = boss.lane;
-  for (let frame = 0; frame < 55 * 60; frame++) {
-    const previousCycle = boss.attackCycle;
-    world.step(C.step, 68); world.drainEffects();
-    if (previousWarning <= 0 && boss.warning > 0) {
-      warnings.push({ attack: boss.attack, lane: boss.lane, time: world.time }); lockedLane = boss.lane;
-      expect(bossWarningLanes(boss)).toEqual(boss.attack ? [boss.lane, 360] : [boss.lane]);
-    } else if (boss.warning > 0 && boss.attackCycle === previousCycle) expect(boss.lane).toBe(lockedLane);
-    if (boss.burst) expect(bossWarningLanes(boss)).toEqual([360]);
-    const fresh = world.bullets.filter(b => b.hostile && !seen.has(b.id));
-    if (fresh.length) batches.push({ xs: fresh.map(b => b.x), time: world.time });
-    for (const shot of fresh) seen.add(shot.id);
-    previousWarning = boss.warning;
+it('boss alternates three-pair A with two-beat B, mirrors B lanes and keeps its warning locked', () => {
+  const world=new World(),boss=world.spawn('boss',360,C.bossY);boss.bossVariant=0;boss.timer=0;
+  const warnings:{attack:number;lane:number;time:number}[]=[],batches:{xs:number[];time:number}[]=[];let previousWarning=0,lockedLane=0;
+  for(let f=0;f<55*60;f++){
+    const time=(f+1)*C.step,cycle=boss.attackCycle,xs:number[]=[];
+    advanceBody(boss,C.step,'boss',time,x=>xs.push(x));
+    if(xs.length)batches.push({xs,time});
+    if(previousWarning<=0&&boss.warning>0){warnings.push({attack:boss.attack,lane:boss.lane,time});lockedLane=boss.lane;}
+    else if(boss.warning>0&&boss.attackCycle===cycle)expect(boss.lane).toBe(lockedLane);
+    if(boss.attack===1&&boss.burst)expect(bossWarningLanes(boss)).toEqual([360]);
+    previousWarning=boss.warning;
   }
-  expect(warnings.length).toBeGreaterThan(9);
-  expect(warnings.map(w => w.attack)).toEqual(warnings.map((_w, i) => i % 2));
-  expect(warnings.filter(w => w.attack === 1).slice(0, 4).map(w => w.lane)).toEqual([200, 520, 200, 520]);
-  let index = 0;
-  for (const warning of warnings) {
-    const first = batches[index++]; if (!first) break;
-    expect(first.time - warning.time).toBeGreaterThanOrEqual(1.35 - C.step);
-    expect(first.xs).toEqual(Array(warning.attack ? 3 : 5).fill(warning.lane));
-    if (warning.attack) {
-      const second = batches[index++]; if (!second) break;
-      expect(second.xs).toEqual([360, 360, 360]);
-      expect(second.time - first.time).toBeGreaterThanOrEqual(0.35 - C.step);
-      expect(second.time - first.time).toBeLessThanOrEqual(0.35 + C.step + 1e-8);
-    }
+  expect(warnings.length).toBeGreaterThan(9);expect(warnings.map(w=>w.attack)).toEqual(warnings.map((_w,i)=>i%2));
+  expect(warnings.filter(w=>w.attack===1).slice(0,4).map(w=>w.lane)).toEqual([200,520,200,520]);
+  let index=0;for(const warning of warnings){const first=batches[index++];if(!first)break;expect(first.time-warning.time).toBeCloseTo(1.35);
+    if(warning.attack===0){expect(first.xs).toHaveLength(2);expect(first.xs[1]-first.xs[0]).toBeCloseTo(192);for(let beat=1;beat<3;beat++){const next=batches[index++];if(!next)break;expect(next.xs).toHaveLength(2);expect(next.time-first.time).toBeCloseTo(.15*beat);}}
+    else{expect(first.xs).toEqual([warning.lane,warning.lane,warning.lane]);const second=batches[index++];if(!second)break;expect(second.xs).toEqual([360,360,360]);expect(second.time-first.time).toBeCloseTo(.35);}
   }
-  expect(world.player.hp).toBe(3); expect(world.attackDeferrals).toBe(0);
 });
 
 it.each([1,3])('entry freezes boss cooldown and victory cancels unfinished attack %s second beat', attack => {

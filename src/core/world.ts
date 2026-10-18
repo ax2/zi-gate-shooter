@@ -56,6 +56,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  weaveBeat?:number;weaveShotBeat?:number;weaveShotPhrase?:number;weaveVolleys?:number;weaveShots?:number;weaveFiredAt?:number;weaveFiredBeat?:number;weaveFiredPhrase?:number;weaveFiredPorts?:number;
   mineSpent?:boolean;mineShots?:number;mineFiredAt?:number;minePassed?:number;mineTouched?:boolean;mineDamageStart?:number;mineKilled?:boolean;mineAwarded?:boolean;
   bossSalvageMask?:number;
   bossReserveAt?:number;bossReserveSpent?:boolean;bossReserveSpawns?:number;escortHold?:number;bossReserve?:boolean;
@@ -979,11 +980,12 @@ export class World {
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;
       const previousWarning = b.warning;
-      const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0,wasCounterFiredAt=b.counterFiredAt,wasWingFiredAt=b.wingFiredAt,wasBarrageFiredAt=b.barrageFiredAt,wasAceEnraged=b.aceEnraged;
+      const wasCounter=b.counterfire,wasCounterVolleys=b.counterVolleys??0,wasCounterFiredAt=b.counterFiredAt,wasWeaveFiredAt=b.weaveFiredAt,wasWingFiredAt=b.wingFiredAt,wasBarrageFiredAt=b.barrageFiredAt,wasAceEnraged=b.aceEnraged;
       advanceBody(b, dt, this.phase, this.phaseTime, (x, y, vx, vy) => {
         const before=this.bullets.length;this.hostile(x,y,vx,vy);
         if(this.bullets.length<=before)return;
         this.bullets[this.bullets.length-1].sourceId=b.id;
+        if(b.kind==='boss'&&b.attack===0&&b.bossVariant!==1&&b.bossVariant!==2){if(b.weaveFiredAt!==b.age)b.weaveFiredPorts=0;b.weaveFiredPorts=(b.weaveFiredPorts??0)|(x<b.x?1:2);b.weaveShots=(b.weaveShots??0)+1;b.weaveFiredAt=b.age;b.weaveFiredBeat=b.weaveShotBeat??0;b.weaveFiredPhrase=b.weaveShotPhrase??0;}
         if(b.kind==='boss'&&b.attack===3&&b.bossVariant===2){if(b.barrageFiredAt!==b.age)b.barrageFiredPorts=0;b.barrageFiredPorts=(b.barrageFiredPorts??0)|(1<<(b.barrageShotPort??0));b.barrageShots=(b.barrageShots??0)+1;b.barrageFiredAt=b.age;b.barrageFiredBeat=b.barrageShotBeat??0;}
         if(b.kind==='boss'&&b.attack===2&&b.bossVariant===1){b.wingShots=(b.wingShots??0)+1;b.wingFiredAt=b.age;b.wingFiredBeat=b.wingShotBeat??0;}
         if(b.kind==='boss'&&b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){b.counterShots=(b.counterShots??0)+1;b.counterFiredAt=b.age;b.counterFiredBeat=b.counterShotBeat??0;}
@@ -1006,6 +1008,7 @@ export class World {
       },this.bodies);
       pullPickup(b,this.player.x,dt,this.bodies);
       if(b.barrageFiredAt!==wasBarrageFiredAt)this.effects.push({type:'barrage-fire',x:b.x,y:b.y,gain:.5});
+      if(b.weaveFiredAt!==wasWeaveFiredAt)this.effects.push({type:'weave-fire',x:b.x,y:b.y,gain:.45});
       if(b.wingFiredAt!==wasWingFiredAt)this.effects.push({type:'wing-fire',x:b.x,y:b.y,gain:.45});
       if(b.aceEnraged&&!wasAceEnraged)this.effects.push({type:'drop-wave',x:b.x,y:C.playerY,text:(b.aceRole==='fan'?'扇炮':'针炮')+'王牌 · 暴走',detail:'搭档被击毁 · 蓄能后加密射击 · 旧弹仍危险'});
       if(b.kind==='boss'&&!wasCounter&&b.counterfire)this.effects.push({type:'boss-counter',x:b.x,y:b.y,text:'首领过热 · '+counterTitle(b.bossVariant),detail:b.bossVariant===1?'双翼错时开火 · 已发敌弹仍危险':b.bossVariant===2?'交剪、直射、外扩三拍 · 已发敌弹仍危险':'双炮加入攻击循环 · 已发敌弹仍危险'});
