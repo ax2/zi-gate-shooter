@@ -1,3 +1,4 @@
+import{mineGoal,mineTargetLabel}from'./mine-goal';
 import {coolingRotors} from './cooling-rotors';
 import{bastionBarrageRig}from'./bastion-barrage-rig';
 import{wingShearRig}from'./wing-shear-rig';
@@ -144,7 +145,7 @@ export class CanvasRuntime {
   private contributionPage=0;
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
-  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;closingClear?:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
+  private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;closingClear?:boolean;tactic?:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
   private pendingBuildFeedback:Array<NonNullable<CanvasRuntime['buildFeedback']>&{remaining:number}>=[];
   private equipmentFeedback=new EquipmentReceiptQueue();
   private achievementToast = '';
@@ -565,7 +566,7 @@ export class CanvasRuntime {
   }
   private checkAchievements() {
     const beforeCertifications=this.save.achievements.certifiedBuilds.length,beforeMagnetic=this.save.achievements.magneticCertifications.length;
-    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,mirrorDoubleHits:this.world.mirrorDoubleHits,magneticCertifications:[...this.world.magneticCertifications]});
+    const fresh=awardAchievements(this.save.achievements,this.world.build.ranks,this.world.activeWeapons.length,this.world.fractureBursts,this.world.tacticalWins,this.world.conduitTacticalWins,this.world.proofWins,{aceWins:this.world.aceWins,flawlessAceWins:this.world.flawlessAceWins,certifiedBuilds:[...this.world.certifiedBuilds],interceptorBreaks:this.world.interceptorBreaks,minePreemptWins:this.world.minePreemptWins,mineCounterWins:this.world.mineCounterWins,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,mirrorDoubleHits:this.world.mirrorDoubleHits,magneticCertifications:[...this.world.magneticCertifications]});
     if(fresh.length){this.runAchievements.push(...fresh.map(a=>a.id));this.achievementToast=fresh.map(a=>a.name).join(' · ');this.achievementUntil=this.world.time+4;this.achievementShownAt=undefined;}
     if(fresh.length||beforeCertifications!==this.save.achievements.certifiedBuilds.length||beforeMagnetic!==this.save.achievements.magneticCertifications.length)this.platform.write(this.save);
   }
@@ -582,14 +583,14 @@ export class CanvasRuntime {
   }
   private setBuildFeedback(feedback:NonNullable<CanvasRuntime['buildFeedback']>){
     const current=this.buildFeedback;
-    if((current?.combo||current?.closingClear)&&this.world.time<current.until){
+    if((current?.combo||current?.closingClear||current?.tactic)&&this.world.time<current.until){
       if(feedback.combo&&current.title.replace(/^目标成形 /,'组合完成 ')===feedback.title.replace(/^目标成形 /,'组合完成 ')){
         this.buildFeedback={...feedback,until:current.until,observedAt:current.observedAt,hidden:current.hidden};return;
       }
       const queued={...feedback,remaining:Math.max(.1,feedback.until-this.world.time)};
       const duplicate=this.pendingBuildFeedback.findIndex(f=>f.title===queued.title);
       if(duplicate>=0)this.pendingBuildFeedback[duplicate]=queued;else{
-        if(this.pendingBuildFeedback.length>=2){const ordinary=this.pendingBuildFeedback.findIndex(f=>!f.combo&&!f.closingClear);this.pendingBuildFeedback.splice(ordinary<0?0:ordinary,1);}
+        if(this.pendingBuildFeedback.length>=2){const ordinary=this.pendingBuildFeedback.findIndex(f=>!f.combo&&!f.closingClear&&!f.tactic);this.pendingBuildFeedback.splice(ordinary<0?0:ordinary,1);}
         this.pendingBuildFeedback.push(queued);
       }
       return;
@@ -620,6 +621,7 @@ export class CanvasRuntime {
     }
     if(e.type==='drop-wave'){this.notify(e.text??'突降机群',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
     if(e.type==='bounty-progress'){this.notify(e.text??'悬赏推进',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
+    if(e.type==='mine-tactic'){this.checkAchievements();this.setBuildFeedback({title:e.text??'布雷战术',detail:e.detail??'',until:this.world.time+3,combo:false,tactic:true});if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.type==='closing-clear'){this.setBuildFeedback({title:e.text??'终线全歼',detail:e.detail??'',until:this.world.time+3,combo:false,closingClear:true});if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.escortReward){this.notify(e.text??'编队击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
 
@@ -910,8 +912,8 @@ export class CanvasRuntime {
     }
     if(activeBuild&&receiptPosition!==null){
       const f=this.buildFeedback!,top=receiptPosition,bottom=top===1180,height=bottom?88:104;
-      this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.equipment?weaponColors[f.equipment.kind]:f.closingClear?'#ffd67d':f.combo?'#d3a3ff':'#7fe4ff');
-      this.drawCombatCopy(f.title,f.detail,top,height,bottom,f.equipment?weaponColors[f.equipment.kind]:f.closingClear?'#ffe3a0':f.combo?'#e1bfff':'#d2f2ff');
+      this.rect(58,top,604,height,'#0a1c2af0');this.rect(58,top,5,height,f.equipment?weaponColors[f.equipment.kind]:(f.closingClear||f.tactic)?'#ffd67d':f.combo?'#d3a3ff':'#7fe4ff');
+      this.drawCombatCopy(f.title,f.detail,top,height,bottom,f.equipment?weaponColors[f.equipment.kind]:(f.closingClear||f.tactic)?'#ffe3a0':f.combo?'#e1bfff':'#d2f2ff');
     }
     if(this.mode==='choice')this.drawBuildChoices();
     const contract=w.contract;
@@ -1221,7 +1223,7 @@ export class CanvasRuntime {
         else if(b.pattern==='fire-control')this.text((b.controlPatrol?'游弋·':'')+((b.empRemaining??0)>0?'火控·停火':fireControlSource(b,w.bodies)?b.warning>0?'增幅·蓄能':'增幅·扇射':'断供·单线'),b.x,b.y-b.height/2-36,21,(b.empRemaining??0)>0?'#adf0ff':'#ffd49a','center',true);
         if(b.pattern==='bankshot')this.text((b.empRemaining??0)>0?'折返炮·停火':b.warning>0?'折返炮·蓄能':'折返炮·反弹一次',b.x,b.y-b.height/2-36,21,'#ffc7a1','center',true);
         if(b.pattern==='booster')this.text((b.empRemaining??0)>0?'火箭·停火':b.warning>0?'火箭·蓄能':b.burst?'火箭·续发':b.boosterSpent?'火箭·撤离':'火箭·缓行→加速',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
-        if(b.pattern==='minelayer')this.text(b.warning>0?'布雷·蓄能':b.mineSpent?'布雷·撤离':'布雷机',b.x,b.y-b.height/2-36,21,'#ffb59d','center',true);
+        if(b.pattern==='minelayer')this.text((!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')?mineTargetLabel(w,b,this.save.achievements.tracked):null)??((b.empRemaining??0)>0?'布雷·停火':b.warning>0?'布雷·蓄能':b.mineSpent?'布雷·撤离':'布雷机'),b.x,b.y-b.height/2-36,21,'#ffb59d','center',true);
         if(b.pattern==='rake')this.text((b.empRemaining??0)>0?'旋扫·停火':b.warning>0?'旋扫·蓄能':b.rakeFiring?`旋扫·${(b.rakeVolley??0)+1}/3`:'三拍旋扫',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='lockshot'){
@@ -1346,8 +1348,8 @@ export class CanvasRuntime {
         guide={kind:guide.kind,title:`目标补给 · ${status.name}`,detail:`${names} · ${drops.length?'靠近拾取':'打碎再拾取'} · 同排只领一件`};
       }else if(guide.kind==='move')guide={kind:'move',title:`构筑目标 · ${status.name}${status.ready?' · 已成形':''}`,detail:status.ready?'按配方条件触发 · 暂停可选择新目标':status.need};
     }
-    const tactic=!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')&&this.world.phase==='running'?lockshotGoal(this.world,this.save.achievements.tracked):null;
-    if(tactic&&(guide.kind==='move'||(guide.kind==='enemy'&&guide.title.startsWith('斜射'))))guide=tactic;
+    const tactic=!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')&&this.world.phase==='running'?(mineGoal(this.world,this.save.achievements.tracked)??lockshotGoal(this.world,this.save.achievements.tracked)):null;
+    if(tactic&&(guide.kind==='move'||(guide.kind==='enemy'&&(guide.title.startsWith('斜射')||guide.title.startsWith('布雷')))))guide=tactic;
     if (guide.detail) {
       this.rect(44, 1150, 632, 106, '#081a25df');
       this.text(guide.title, 360, 1180, 28, '#e3f4ff', 'center', true);
@@ -1919,7 +1921,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
-      minelayers:this.world.bodies.filter(b=>b.active&&b.pattern==='minelayer').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.mineShots??0,firedAt:b.mineFiredAt})),mines:this.world.bullets.filter(b=>b.hostile&&b.mine).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy,age:b.age,radius:MINELAYER.radius})),
+      minelayers:this.world.bodies.filter(b=>b.active&&b.pattern==='minelayer').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.mineShots??0,passed:b.minePassed??0,touched:!!b.mineTouched,damageStart:b.mineDamageStart,firedAt:b.mineFiredAt})),mines:this.world.bullets.filter(b=>b.hostile&&b.mine).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy,age:b.age,radius:MINELAYER.radius})),
       closingStatus:this.world.closingStatus,closingClears:this.world.closingClears,overdriveForm:this.world.overdriveForm??null,overdriveShots:this.world.overdriveShots,overdriveHits:this.world.overdriveHits,
       bossPlateFragments:this.bossFragments.pieces.length,bossSalvage:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,count:bossSalvageCount(b),hp:b.hp,maxHp:b.maxHp})),
       combatCopy:this.presentedCopy?{...this.presentedCopy,lines:[...this.presentedCopy.lines],rows:this.presentedCopy.rows.map(r=>({...r})),bounds:{...this.presentedCopy.bounds}}:null,
@@ -1964,7 +1966,7 @@ export class CanvasRuntime {
       boosterGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='booster').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.boosterShots??0,firedAt:b.boosterFiredAt,spent:!!b.boosterSpent})),boosterProjectiles:this.world.bullets.filter(b=>b.boostFactor!==undefined).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy,age:b.age,boostAfter:b.boostAfter??null,factor:b.boostFactor})),
       rakeGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='rake').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,warning:b.warning,volley:b.rakeVolley??0,shots:b.rakeShots??0,firedVolley:b.rakeFiredVolley,firedAt:b.rakeFiredAt})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
-      lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,hotParticles:this.particles.filter(p=>p.hot!==false).length, ammoFragments:this.blasts.filter(b=>b.ammo).length,blasts: this.blasts.length,arcs:this.arcs.length,
+      pendingMineCounter:this.world.pendingMineCounter,minePreemptWins:this.world.minePreemptWins,mineCounterWins:this.world.mineCounterWins,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,hotParticles:this.particles.filter(p=>p.hot!==false).length, ammoFragments:this.blasts.filter(b=>b.ammo).length,blasts: this.blasts.length,arcs:this.arcs.length,
       effectsMode:this.save.settings.effects,bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,

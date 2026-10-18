@@ -3,7 +3,7 @@ import{BOSS_RESERVES,bossReserveFor}from './boss-reserves';
 import{pullPickup}from'./pickup-recovery';
 import {RapidBreak} from './rapid-break';
 import{BOOSTER}from'./booster';
-import{MINELAYER}from'./minelayer';
+import{MINELAYER,MINE_TACTIC,mineTactic}from'./minelayer';
 import{hostileContactShape}from'./hostile-shape';
 import{counterTitle}from'./boss-counter';
 import {hasControlShutter}from'./control-shutter';
@@ -56,7 +56,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
-  mineSpent?:boolean;mineShots?:number;mineFiredAt?:number;
+  mineSpent?:boolean;mineShots?:number;mineFiredAt?:number;minePassed?:number;mineTouched?:boolean;mineDamageStart?:number;mineKilled?:boolean;mineAwarded?:boolean;
   bossSalvageMask?:number;
   bossReserveAt?:number;bossReserveSpent?:boolean;bossReserveSpawns?:number;escortHold?:number;bossReserve?:boolean;
   boosterSpent?:boolean;boosterShots?:number;boosterFiredAt?:number;boosterFiredSide?:-1|1;
@@ -94,6 +94,12 @@ export class World {
   combatContributions(){return this.#combatLedger.snapshot();}
   interceptorBreaks=0;
   lockPreemptWins=0;lockBaitWins=0;
+  minePreemptWins=0;mineCounterWins=0;
+  private mineTargets=new Map<number,Body>();
+  get pendingMineCounter(){
+    const b=[...this.mineTargets.values()].find(b=>b.mineKilled&&!b.mineAwarded&&b.mineShots===MINE_TACTIC.shots&&!b.mineTouched&&b.mineDamageStart===this.damageTaken);
+    return b?{id:b.id,passed:b.minePassed??0}:null;
+  }
   readonly build = new BuildTree();
   private firstEquipmentResearch=false;
   private firstArmoryResearch=false;
@@ -813,7 +819,7 @@ export class World {
           if(this.round===1&&s.at===INTRO_ESCORT.at&&(s.kind==='elite'||s.kind==='guard'))candidate.introEscort=true;
           if(this.round===1&&s.kind==='guard'&&s.pattern==='convoy')candidate.convoyHold=INTRO_ESCORT.hold;
           if(s.pattern==='booster')candidate.timer=BOOSTER.opening;
-          if(s.pattern==='minelayer'){candidate.timer=MINELAYER.opening;candidate.hp*=MINELAYER.durability;candidate.maxHp=candidate.hp;}
+          if(s.pattern==='minelayer'){candidate.timer=MINELAYER.opening;candidate.hp*=MINELAYER.durability;candidate.maxHp=candidate.hp;candidate.mineDamageStart=this.damageTaken;}
           if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
           if(s.heavyReserve&&s.kind==='armor'&&s.pattern!=='bankshot'){candidate.hp*=HEAVY_ESCORTS.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
@@ -827,6 +833,7 @@ export class World {
           // Preserve the queued item; wait with an empty lane, never swallow rewards
           // or cancel any already advertised body/attack to manufacture a safe route.
           if (!this.admit(candidate)) { this.scheduleIndex--; break; }
+          if(s.pattern==='minelayer')this.mineTargets.set(candidate.id,candidate);
           if(s.drop)this.dropSpawns++;
           if(s.pattern==='lockshot'){candidate.lockDamageStart=this.damageTaken;this.lockshotSpawns++;}
           if(s.dropNotice)this.effects.push({type:'drop-wave',x:360,y:C.playerY,text:'突降机群',detail:'短暂投送屏障 · 群攻可快速清场'});
@@ -1024,17 +1031,22 @@ export class World {
         add(t===null?null:segment.from+t*(segment.to-segment.from), 1, bullet.id, () => {
           if (!bullet.active || this.player.hp <= 0) return;
           bullet.active = false; this.hurt('bullet');
-          if(bullet.mine)this.effects.push({type:'mine-burst',x:bullet.x,y:bullet.y,size:110});
+          if(bullet.mine){const source=this.mineTargets.get(bullet.sourceId!);if(source)source.mineTouched=true;this.effects.push({type:'mine-burst',x:bullet.x,y:bullet.y,size:110});}
         });}
         // A fired bolt is evaded only after it has cleared the entire player
         // collision band. Queue this with damage/kill contacts: a same-time
         // kill or hurt must resolve first, never manufacture a counter window.
-        const passY=C.playerY+40;
+        const passY=C.playerY+(bullet.mine?hostileContactShape(bullet).y:40);
         if(bullet.vy>0&&bullet.py<=passY&&bullet.y>passY){
           const source=this.bodies.find(b=>b.active&&b.id===bullet.sourceId&&b.pattern==='lockshot');
           if(source)add((passY-bullet.py)/(bullet.y-bullet.py),4,bullet.id,()=>{
             if(bullet.active&&source.active&&this.player.hp>0&&!this.bossVictory)
               source.lockPassed=Math.min(LOCKSHOT.shots,(source.lockPassed??0)+1);
+          });
+          const mineSource=bullet.mine?this.mineTargets.get(bullet.sourceId!):undefined;
+          if(mineSource)add((passY-bullet.py)/(bullet.y-bullet.py),4,bullet.id,()=>{
+            if(bullet.active&&this.player.hp>0&&!this.bossVictory)
+              mineSource.minePassed=Math.min(MINE_TACTIC.shots,(mineSource.minePassed??0)+1);
           });
         }
       } else for (const body of this.bodies) {
@@ -1201,6 +1213,9 @@ export class World {
     }
     contacts.sort((a, b) => Math.round(a.t * 1e8) - Math.round(b.t * 1e8) || a.rank - b.rank || a.id - b.id);
     for (const contact of contacts) contact.apply();
+    // Resolve after all same-frame contacts; retained sources only live for
+    // their actual ordnance, so an early kill cannot erase evasion evidence.
+    for(const b of this.mineTargets.values())if(b.mineKilled)this.awardMineTactic(b);
     const liveBoss=this.bodies.find(b=>b.active&&b.kind==='boss');
     if(hadBossShield&&!this.bossShieldActive()&&liveBoss&&this.player.hp>0)this.emit('shield-down',liveBoss.x,liveBoss.y,'护卫屏障瓦解');
     if (this.player.hp <= 0) {
@@ -1225,6 +1240,7 @@ export class World {
     for(const b of this.bodies)if(b.bountyRound!==undefined&&b.hp>0&&(!b.active||b.y>=1344))this.contract?.targetEscaped(b.bountyRound);
     this.bodies = this.bodies.filter(b => b.active && b.y < 1344);
     this.bullets = this.bullets.filter(b => b.active && b.y > (b.hostile ? -90 : C.playerShotTop) && b.y < 1370 && b.x > -40 && b.x < 760 && b.age < (b.hostile ? 6 : C.bulletLife));
+    for(const [id,b]of this.mineTargets)if(b.mineAwarded||(!this.bodies.includes(b)&&!this.bullets.some(p=>p.mine&&p.sourceId===id))||this.phase==='dead'||this.phase==='recovery')this.mineTargets.delete(id);
     if(!this.ionLive()){this.ionOrbs=[];this.ionSpears=[];}else{
       this.ionOrbs=this.ionOrbs.filter(p=>p.active&&p.age<ION_ORB.life&&p.y>C.playerShotTop);
       this.ionSpears=this.ionSpears.filter(p=>p.active&&p.age<ION_SPEAR.life&&p.y>C.playerShotTop&&p.x>-40&&p.x<760);
@@ -1256,6 +1272,15 @@ export class World {
     const mastery=this.growth.mastery??0;
     const milestone=supportMilestone(mastery);
     return milestone ? `${milestone} · 火力+10%` : '火力+10% · 超载6秒';
+  }
+  private awardMineTactic(b:Body){
+    if(b.mineAwarded||!b.mineKilled||this.player.hp<=0||this.phase==='dead'||this.phase==='recovery'||this.bossVictory)return;
+    const tactic=mineTactic(b,this.damageTaken);if(!tactic)return;
+    b.mineAwarded=true;
+    const charge=tactic==='preempt'?MINE_TACTIC.preemptCharge:MINE_TACTIC.counterCharge;
+    if(tactic==='preempt')this.minePreemptWins++;else this.mineCounterWins++;
+    const reward=grantGate(this.growth,charge,'energy');if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+    this.effects.push({type:'mine-tactic',x:b.x,y:b.y,text:`${tactic==='preempt'?'抢拆布雷':'穿雷反击'} · 充能+${charge}`,detail:this.chargeReceipt(reward.activated)});
   }
   private hit(b: Body, damage: number, weaponKind?: WeaponKind,source:DamageSource=weaponKind??'pulse',capacitorDirect=false) {
     if((b.dropGrace??0)>0){this.effects.push({type:'drop-impact',x:b.x,y:b.y,weaponKind});return;}
@@ -1289,6 +1314,7 @@ export class World {
       const pickup = this.spawn('pickup', b.x, b.y, b.stage); pickup.weaponKind = b.weaponKind; pickup.row = b.row;pickup.refit=b.refit;pickup.openingSupply=b.openingSupply;if(b.directedRefit)pickup.directedRefit=true;
       this.effects.push({ type: 'crate-break', x: b.x, y: b.y, text: '靠近领取', size: 110, equipmentStage: b.stage });
     } else {
+      if(wasActive&&b.pattern==='minelayer'&&this.phase==='running'&&this.player.hp>0){b.mineKilled=true;if(mineTactic(b,this.damageTaken)==='preempt')this.awardMineTactic(b);}
       if(b.kind==='sniper'&&b.pattern==='lockshot'){
         if(b.warning>0&&!(b.lockAcceptedShots??0))this.lockPreemptWins++;
         if((b.lockAcceptedShots??0)===LOCKSHOT.shots&&(b.lockPassed??0)===LOCKSHOT.shots&&b.lockDamageStart===this.damageTaken)this.lockBaitWins++;

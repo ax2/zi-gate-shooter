@@ -1,5 +1,12 @@
 import type{Spawn}from'./director';import type{Body}from'./world';
 export const MINELAYER={fromRound:4,durability:3,opening:.1,warning:.8,hold:3.2,muzzleX:40,muzzleY:24,vx:55,vy:180,radius:36}as const;
+export const MINE_TACTIC={shots:2,preemptCharge:20,counterCharge:40}as const;
+export function mineTactic(b:Pick<Body,'pattern'|'warning'|'mineShots'|'minePassed'|'mineTouched'|'mineDamageStart'>,damage:number){
+ if(b.pattern!=='minelayer')return null;
+ if(b.warning>0&&!(b.mineShots??0))return 'preempt' as const;
+ if(b.mineShots===MINE_TACTIC.shots&&b.minePassed===MINE_TACTIC.shots&&!b.mineTouched&&b.mineDamageStart===damage)return 'counter' as const;
+ return null;
+}
 export function minelayerMuzzles(b:Pick<Body,'x'|'y'>){return[-1,1].map(side=>({x:b.x+side*MINELAYER.muzzleX,y:b.y+MINELAYER.muzzleY,vx:side*MINELAYER.vx,vy:MINELAYER.vy}));}
 /** Replace one existing gun, never add a growing wave or follow player DPS. */
 export function applyMinelayer(out:Spawn[],round:number){

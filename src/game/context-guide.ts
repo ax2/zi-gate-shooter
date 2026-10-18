@@ -33,6 +33,8 @@ export function contextGuide(world: Context): Guide {
   if(visible.some(b=>b.pattern==='rebound'&&b.warning>0))return {kind:'enemy',title:'折返冲锋：看清第二次转向',detail:'两段冲刺 · 可集火击毁，或留出横向空隙'};
   const interceptor=visible.find(b=>b.pattern==='intercept'&&(b.warning>0||(b.interceptCoreRemaining??0)>0));
   if(interceptor)return {kind:'enemy',title:interceptor.burst?'截击核心：及时离开中路':'截击翼炮：留意两侧实弹',detail:'可抢先击毁或击破中继 · 已发弹仍危险'};
+  const mine=visible.find(b=>b.pattern==='minelayer');
+  if(mine)return {kind:'enemy',title:'布雷战术：抢拆或穿雷反击',detail:'首发前拆+20 · 发雷后拆且无伤避双雷+40'};
   if(visible.some(b=>b.pattern==='fire-control'&&b.kind==='conduit'))return {kind:'enemy',title:'火控中继：断供或集火纵列',detail:'中继增幅扇射 · 击破停火1.5秒，旧弹仍危险'};
   if(visible.some(b=>b.pattern==='fire-control'&&b.kind==='armor'))return {kind:'enemy',title:'火控断供：趁停火突破',detail:'恢复后只发单线弹 · 留意仍在飞行的子弹'};
   const locked=visible.find(b=>b.pattern==='lockshot'&&!lockshotLeaving(b));
