@@ -5,6 +5,7 @@ import {achievements} from '../core/achievements';
 import {hasOptical,hasAmmo,ammoName,routes,magneticAugments} from '../core/build-tree';
 import {weaponNames} from '../core/weapons';
 import {photonAugments} from '../core/laser-chain';
+import {permanentPower} from '../core/rewards';
 export function nextRunGoal(w:World,unlocked:readonly string[],tracked?:string|null){
  const target=achievements.find(a=>a.id===tracked);if(target)return unlocked.includes(target.id)?`已达成${target.name}，到成就页选择新目标`:`目标：${target.name} · ${target.detail}`;
  if(hasOptical(w.build,'mirror')&&!unlocked.includes('wall-cutter'))return '靠边调整光路，让同束折返光命中两敌，挑战借壁破阵';
@@ -32,6 +33,7 @@ export function runReport(w:World,fresh:readonly string[],unlocked:readonly stri
  const electric=w.build.electricBranch==='seeker'?`猎隼 ${w.seekerLinks}`:`链伤 ${w.arcLinks}`;
  const names=achievements.filter(a=>fresh.includes(a.id)).map(a=>a.name);
  return {
+  power:{value:permanentPower(w.growth),gate:w.growth.bonus,breakthrough:(w.growth.mastery??0)*10,label:`常驻火力 +${permanentPower(w.growth)}%`},
   growth:`充能突破 ${w.growth.mastery??0}次 · 专属精校 ${w.activeWeapons.reduce((n,k)=>n+w.weaponCalibration(k),0)}次 · 研发 ${w.researchPoints}点${w.refitsClaimed?' · 改装'+w.refitsClaimed+'次':''}`,
   weapons:w.activeWeapons.map(k=>`${weaponNames[k]} T${w.weaponStage(k)}`),
   routes:routes.map((r,i)=>r==='ballistic'&&w.build.ammoFusion?`弹道 ${w.build.ranks.ballistic}/3 · 双芯${ammoName(w.build)} · 精调${w.build.refinements.ballistic}`:`${['弹道','雷电','光学'][i]} ${w.build.ranks[r]}/3 · ${w.build.ranks[r]?w.build.node(r,Math.min(1,w.build.ranks[r]-1)).name:'未投入'}${w.build.refinements[r]?' · 精调'+w.build.refinements[r]:''}${r==='ballistic'&&w.build.ammoFusion?' · 双芯'+ammoName(w.build):''}${r==='ballistic'&&!w.build.ammoFusion&&w.build.fractureAugment?' · '+fractureAugments[w.build.fractureAugment].name:''}${r==='electric'&&w.build.magneticAugment?' · '+magneticAugments[w.build.magneticAugment].name:''}${r==='electric'&&w.build.ionAugment?' · '+ionAugments[w.build.ionAugment].name:''}${r==='optical'&&w.build.photonAugment?' · '+photonAugments[w.build.photonAugment].name:''}`),

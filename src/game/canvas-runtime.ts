@@ -142,6 +142,7 @@ export class CanvasRuntime {
   mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'contribution' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'overdrive' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
   private overdriveReturn:'choice'|'tree'='choice';
   private contributionReturn:'loadout'|'result'='loadout';
+  private loadoutReturn:'paused'|'result'='paused';
   private contributionPage=0;
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
@@ -327,6 +328,7 @@ export class CanvasRuntime {
     this.platform.requestFrame(next => this.frame(next));
   }
   start() {
+    this.loadoutReturn='paused';
     this.contributionPage=0;this.contributionReturn='loadout';
     this.buttons=[];
     for(const motion of this.mountedMotion.values())motion.reset();
@@ -415,7 +417,7 @@ export class CanvasRuntime {
     if (this.mode === 'contracts') { this.mode=this.contractReturn;return 'stay'; }
     if (this.mode === 'tree') { this.mode = this.treeReturn; return 'stay'; }
     if(this.mode==='refit-plan'){this.mode='loadout';return 'stay';}
-    if (this.mode === 'loadout') { this.mode = 'paused'; return 'stay'; }
+    if (this.mode === 'loadout') { this.mode = this.loadoutReturn; return 'stay'; }
     if (this.mode === 'playing') { this.pause(); return 'stay'; }
     if (this.mode === 'settings') { this.action('back'); return 'stay'; }
     if (this.mode === 'paused') { this.pausePreview = false; this.notify('请继续战斗，或选择返回主界面'); return 'stay'; }
@@ -541,8 +543,8 @@ export class CanvasRuntime {
       const kind=action.slice('refit-focus:'.length) as WeaponKind;
       if(dossierWeapons.includes(kind))this.world.setRefitTarget(kind);
     }
-    else if (action === 'loadout') this.mode = 'loadout';
-    else if (action === 'loadout-back') this.mode = 'paused';
+    else if (action === 'loadout') {this.loadoutReturn=this.mode==='result'?'result':'paused';this.mode = 'loadout';}
+    else if (action === 'loadout-back') this.mode = this.loadoutReturn;
     else if (action === 'pause') this.pause();
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
@@ -1474,16 +1476,17 @@ export class CanvasRuntime {
     this.button('返回当前火力',1130,'refit-plan-back');
   }
   private drawLoadout() {
-    const w = this.world, power = permanentPower(w.growth);
+    const w = this.world, power = permanentPower(w.growth),debrief=this.loadoutReturn==='result';
     this.rect(40, 100, 640, 1100, '#102330');
-    this.text('当前火力', 330, 165, 46, '#e7f5ff', 'center', true);
+    this.text(debrief?'本局火力复盘':'当前火力', debrief?300:330, 165, debrief?34:46, '#e7f5ff', 'center', true);
     this.rect(490,135,160,60,'#203e50');this.text('查看机甲',570,165,25,'#80e4ff');
     this.buttons.push({x:490,y:135,w:160,h:60,action:'rig-view',label:'查看机甲'});
     this.text(`已叠加 ${w.activeWeapons.length} 种武器`,82,228,25,'#a5d9ed','left');
-    this.rect(300,202,348,54,'#203e50');this.text(`改装目标 · ${w.refitTarget?weaponNames[w.refitTarget]:'自动'}　›`,474,229,24,'#ffe19a');
-    this.buttons.push({x:300,y:202,w:348,h:54,action:'refit-plan',label:'选择改装目标'});
-    this.text(`常态火力 +${power}% · 超载：伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, 278, 22, '#f0d19a');
-    this.text(`技能点：可用${w.buildPoints-w.build.spent} · 研发${w.researchPoints} ＋ 充能突破${w.growth.mastery??0}`,360,310,21,'#bdd8e7');
+    if(debrief)this.text('本局只读 · 结束时状态',474,229,22,'#a6c8d9');
+    else{this.rect(300,202,348,54,'#203e50');this.text(`改装目标 · ${w.refitTarget?weaponNames[w.refitTarget]:'自动'}　›`,474,229,24,'#ffe19a');
+      this.buttons.push({x:300,y:202,w:348,h:54,action:'refit-plan',label:'选择改装目标'});}
+    this.text(debrief?`常驻 +${power}% · 门${w.growth.bonus}% / 突破${(w.growth.mastery??0)*10}%`:`常态火力 +${power}% · 超载：伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, 278, 22, '#f0d19a');
+    this.text(debrief?`研发${w.researchPoints}点 · 突破${w.growth.mastery??0}次 · 精校${w.activeWeapons.reduce((n,k)=>n+w.weaponCalibration(k),0)}次`:`技能点：可用${w.buildPoints-w.build.spent} · 研发${w.researchPoints} ＋ 充能突破${w.growth.mastery??0}`,360,310,21,'#bdd8e7');
     for (const [index, kind] of w.activeWeapons.entries()) {
       const profile = w.profileFor(kind), y = 342 + index * 102;
       const damage = profile.damage.map(n => +(n * (1 + power / 100)).toFixed(1));
@@ -1495,14 +1498,15 @@ export class CanvasRuntime {
       this.text(`常态 ${profile.rate}轮/秒 · 每轮${profile.offsets.length}发 · 单发伤害${perShot}`, 92, y + 77, 22, '#d6e7f0', 'left');
     }
     const support=w.supportProfile(),compactOptics=hasOptical(w.build,'mirror')||!!w.build.opticalFusion;
-    this.text(support.laserUnlocked?`激光${w.build.opticalFusion?'·'+opticalName(w.build):w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':hasOptical(w.build,'mirror')?'·折返':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:'第3次充能突破：追加贯穿激光',360,890,w.build.opticalFusion?20:hasOptical(w.build,'mirror')?22:24,'#7fe4ff');
-    this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:'第5次充能突破：追加弹丸折射',360,compactOptics?923:930,compactOptics?20:23,'#a2f9ed');
+    this.text(support.laserUnlocked?`激光${w.build.opticalFusion?'·'+opticalName(w.build):w.build.opticalBranch==='burn'?'·灼热':w.build.opticalBranch==='relay'?'·分光':hasOptical(w.build,'mirror')?'·折返':''}：每${support.laserInterval}秒${+(support.laserDamage*(1+power/100)).toFixed(1)}伤害 · 贯穿${support.laserTargets}敌`:(debrief?'本局未解锁激光':'第3次充能突破：追加贯穿激光'),360,890,w.build.opticalFusion?20:hasOptical(w.build,'mirror')?22:24,'#7fe4ff');
+    this.text(support.refractionTargets>0?`折射：命中后追加${support.refractionTargets}敌 · 各60%伤害`:(debrief?'本局未解锁弹丸折射':'第5次充能突破：追加弹丸折射'),360,compactOptics?923:930,compactOptics?20:23,'#a2f9ed');
     if(w.build.opticalFusion)this.text([hasOptical(w.build,'burn')?'灼烧3×25%':'',hasOptical(w.build,'relay')?'分光65%/180':'',hasOptical(w.build,'mirror')?'折返65%/2敌':''].filter(Boolean).join(' · '),360,949,20,'#c5bcff');
     else if(hasOptical(w.build,'mirror'))this.text(`折返束：65% / 最多2敌 · 一次反射 · 命中${w.mirrorHits}`,360,949,20,'#c5bcff');
-    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, compactOptics?978:970, compactOptics?20:23, '#c7deeb');
+    this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':(debrief?'常驻数值 · 不含临时超载与派生伤害':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`), 360, compactOptics?978:970, compactOptics?20:23, '#c7deeb');
     this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, compactOptics?1007:1004, compactOptics?20:23, '#f0d19a');
-    for(const [i,label] of [(w.growth.mastery??0)>=OVERDRIVE.mastery?'技能/协议':'技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
-    this.button('返回暂停菜单', 1130, 'loadout-back');
+    if(debrief)this.button('实战贡献',1030,'contribution');
+    else for(const [i,label] of [(w.growth.mastery??0)>=OVERDRIVE.mastery?'技能/协议':'技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
+    this.button(debrief?'返回本局战绩':'返回暂停菜单', 1130, 'loadout-back');
   }
   private drawContribution(){
     const report=combatContribution(this.world),pages=Math.max(1,Math.ceil(report.rows.length/6));
@@ -1566,7 +1570,7 @@ export class CanvasRuntime {
     const combinations=[w.build.ranks.ballistic>=3?'雷暴霰射':'',w.supportProfile().prism?'棱镜激光':'',w.fractureUnlocked()?'裂甲爆破':'',w.laserChainUnlocked()?'电光连锁':'',w.magneticUnlocked()?'磁暴榴弹':''].filter(Boolean);
     this.text(combinations.length?`组合：${combinations.slice(0,3).join(' · ')}`:'已有配件随真实射击独立回弹',360,1000,25,'#d6b5ff');
     if(combinations.length>3)this.text(combinations.slice(3).join(' · '),360,1031,25,'#d6b5ff');
-    this.text(w.supportProfile().laserUnlocked?`镜组蓄能 ${Math.round(w.laserCharge()*100)}% · 战斗时间已暂停`:'检查挂载与等级 · 战斗时间已暂停',360,1065,22,'#a6c5d7');
+    this.text(w.supportProfile().laserUnlocked?`镜组蓄能 ${Math.round(w.laserCharge()*100)}% · 战斗时间已暂停`:(this.loadoutReturn==='result'?'结束时挂载与等级 · 复盘不推进战斗':'检查挂载与等级 · 战斗时间已暂停'),360,1065,22,'#a6c5d7');
     this.button('返回当前火力',1100,'rig-back',true);
   }
   private weaponUpgradeOptions(){
@@ -1874,11 +1878,12 @@ export class CanvasRuntime {
     const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked,this.save.achievements.tracked);
     this.buttons=[];this.rect(0,0,720,1280,'#050e18dd');this.rect(35,90,650,1140,'#102330');
     this.text('本局战绩',360,145,34,'#effaff','center',true);this.text(w.score.toString(),360,205,62,'#eff8ff','center',true);
+    this.rect(70,110,160,60,'#244653');this.text('火力复盘',150,140,24,'#ffe1a4');this.buttons.push({x:70,y:110,w:160,h:60,action:'loadout',label:'火力复盘'});
     this.rect(490,110,160,60,'#244653');this.text('实战贡献',570,140,24,'#80e4ff');this.buttons.push({x:490,y:110,w:160,h:60,action:'contribution',label:'实战贡献'});
     this.text(r.rapid,360,252,20,'#ffd99a');
     this.text(`${this.runNewBest?'刷新最高分':'最高分'} ${this.save.best}`,360,284,22,'#e8c88b');
     this.text(`存活 ${Math.floor(w.time/60)}:${Math.floor(w.time%60).toString().padStart(2,'0')} · 第${w.round}轮 · 火力叠加${w.activeWeapons.length}种`,360,319,23,'#bdd8e7');
-    this.text(r.growth,360,344,20,'#bdd8e7');
+    this.text(r.power.label,360,345,26,'#ffdc8a','center',true);
     for(let i=0;i<2;i++)this.text(r.weapons.slice(i*3,i*3+3).join(' / '),360,374+i*34,23,'#c2edff');
     for(const [i,line] of r.routes.entries())this.text(line,78,450+i*36,23,['#ffd28a','#c6a1ff','#7fe4ff'][i],'left');
     this.text(r.combat,360,577,24,'#effaff');this.text(r.contracts,360,614,23,'#bdd8e7');
