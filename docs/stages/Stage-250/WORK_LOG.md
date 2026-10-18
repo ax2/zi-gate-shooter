@@ -19,3 +19,15 @@
 已启动npm test -- --maxWorkers=2 --reporter=json --outputFile=build/qa/Stage-250/full-suite.json，当前统一exec session40776。命令先执行项目原有本地微信候选打包以支持测试，不是平台接入、设备调试或发布；随后运行全部299个测试源文件。尚未有最终JSON时不汇报通过数量。已数次核验原句柄仍运行，子worker实际更换且CPU推进，未因观察超时重启测试。
 
 Vite为本轮exec session57428，5255进程34652；用户手动打开的验证页可能仍使用它，保持服务，不停止用户页面。原5178正式候选仍Stage249。源生产代码与美术本轮未改，整体完成性审查见COMPLETION_AUDIT.md。全仓结束后须先检查失败，再恢复真实像素与控制台验收；当前完整目标未完成。
+
+## 中断后复核（本条覆盖旧的“原session仍运行”当前状态）
+
+原会话40776返回Unknown process id；操作系统也无45832或其Vitest主/子进程，full-suite.json不存在，原文本只停留在启动信息。确认该轮已中断，不能算通过，允许启动新的独立轮次；不是因一次观察超时重启。保留原full-suite.txt与所有旧观察。
+
+增加qa-progress-reporter，按当前安装Vitest5.0.3本地类型接口编写，每个测试和模块结束立即追加JSONL，独立状态文件明确running/failed/interrupted。已有journal拒绝覆盖。真实5项contract-receipt烟测与标准JSON结果一致；合成失败/收集错误/中断自检保留失败和中断原因，重复写旧日志被拒绝。合成失败不是游戏失败。完整重跑另建retry-full目录并记录新的实际句柄。
+
+浏览器Edge本轮定向getTab再次30秒超时；按用户已指定Edge建立绑定、nameSession初始化同样超时。无新可用页面或截图，不声称连接成功。尚无条件签收画面。
+
+静态检查现有精英、首领、玩家和爆炸原图。爆炸PNG透明像素RGB虽有底色，但A=0，不能仅凭原图预览认定游戏出现色块；原图和导出alpha数值另存explosion-alpha-audit.json，未改原图。
+
+使用已读imagegen技能的内置工具，为仍复用普通精英机体的截击变体生成独立三炮候选。v1原始PNG2170×725、SHA d3c9d2e9f189f5a4dc9ed0072eb06373e67fd91c46b3e47e3cf47c77b86bcc0e，透明检查高alpha外缘0。已视检，但正面人形的枪口过高/过近，不符合现有真实±52、y+68出弹点，未接入、未签收。原请求和源文件保留。v2改为向下伸出的悬浮炮架的生成调用被中断，任务目录没有新PNG，不把调用当完成；后续重新请求前已确认原调用aborted且无输出。
