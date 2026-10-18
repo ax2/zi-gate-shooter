@@ -57,6 +57,7 @@ import {INTERCEPTOR_ART,interceptorArtFrame} from './interceptor-art';
 import {heavyEscortHolding} from '../core/heavy-escorts';
 import {BossArmorFragments} from './boss-armor-fragments';
 import {BOSS_SALVAGE,bossSalvageCount} from '../core/boss-salvage';
+import{bossTacticalStatus}from './boss-tactical-status';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,requiredProofGroups,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
@@ -1268,7 +1269,8 @@ export class CanvasRuntime {
       this.bar(360,y+196,620,boss.hp/boss.maxHp,w.bossShieldActive()?'#82dfff':'#ff925d');
       if((w as World&{bossSalvageEnabled?:boolean}).bossSalvageEnabled&&w.round>=BOSS_SALVAGE.fromRound){
         for(const ratio of BOSS_SALVAGE.ratios)this.rect(49+620*ratio,y+190,2,12,'#ffedd1');
-        this.rect(50,y+206,620,28,'#102330');this.text(`破甲 ${bossSalvageCount(boss)}/4 · 每段充能+${BOSS_SALVAGE.charge}`,360,y+220,19,'#ffdf9e');
+        const tactic=bossTacticalStatus(w.round,boss,w.bodies);
+        this.rect(50,y+206,620,28,'#102330');this.text(`破甲 ${bossSalvageCount(boss)}/4 · 每段充能+${BOSS_SALVAGE.charge}${tactic?' · '+tactic:''}`,360,y+220,19,tactic?'#fff0cf':'#ffdf9e');
       }
     }
   }
