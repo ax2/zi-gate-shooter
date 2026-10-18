@@ -1,3 +1,4 @@
+import{SCISSOR}from'./scissor-gun';
 import{calibrationGateTarget,calibrationGateReward,calibrationGateLabel}from'./calibration-gate';
 import{claimBossSalvage,BOSS_SALVAGE}from './boss-salvage';
 import{BOSS_RESERVES,bossReserveFor}from './boss-reserves';
@@ -63,6 +64,7 @@ export interface Body {
   bossSalvageMask?:number;
   bossReserveAt?:number;bossReserveSpent?:boolean;bossReserveSpawns?:number;escortHold?:number;bossReserve?:boolean;
   boosterSpent?:boolean;boosterShots?:number;boosterFiredAt?:number;boosterFiredSide?:-1|1;
+  scissorBank?:number;scissorFiring?:boolean;scissorShots?:number;scissorFiredAt?:number;scissorFiredBank?:number;
   rakeVolley?:number;rakeFiring?:boolean;rakeShots?:number;rakeFiredAt?:number;rakeFiredVolley?:number;
   introEscort?:boolean;
   convoyHold?:number;
@@ -76,7 +78,7 @@ export interface Body {
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   heavyReserve?:boolean;flankReserve?:boolean;dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number;counterBeat?:number;counterShotBeat?:number;counterFiredAt?:number;counterFiredBeat?:number;counterShots?:number;wingBeat?:number;wingShotBeat?:number;wingShotAge?:number;wingVolleys?:number;wingFiredAt?:number;wingFiredBeat?:number;wingShots?:number;barrageBeat?:number;barrageLane?:number;barrageShotBeat?:number;barrageShotPort?:number;barrageFiredAt?:number;barrageFiredBeat?:number;barrageFiredPorts?:number;barrageShots?:number;barrageVolleys?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster' | 'minelayer'; bossVariant?: number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster' | 'minelayer' | 'scissor'; bossVariant?: number;
 }
 export interface Bullet {
   mine?:boolean;
@@ -823,6 +825,7 @@ export class World {
           if(s.heavyReserve)candidate.heavyReserve=true;
           if(this.round===1&&s.at===INTRO_ESCORT.at&&(s.kind==='elite'||s.kind==='guard'))candidate.introEscort=true;
           if(this.round===1&&s.kind==='guard'&&s.pattern==='convoy')candidate.convoyHold=INTRO_ESCORT.hold;
+          if(s.pattern==='scissor'){candidate.lockX=this.player.x;candidate.timer=SCISSOR.opening;candidate.hp*=SCISSOR.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='booster')candidate.timer=BOOSTER.opening;
           if(s.pattern==='minelayer'){candidate.timer=MINELAYER.opening;candidate.hp*=MINELAYER.durability;candidate.maxHp=candidate.hp;candidate.mineDamageStart=this.damageTaken;}
           if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
@@ -996,6 +999,7 @@ export class World {
         if(b.pattern==='bankshot'){this.bullets[this.bullets.length-1].bankRemaining=1;b.bankShots=(b.bankShots??0)+1;b.bankFiredAt=b.age;this.bankShots=(this.bankShots??0)+1;}
         if(b.pattern==='booster'){const p=this.bullets[this.bullets.length-1];p.boostAfter=BOOSTER.delay;p.boostFactor=BOOSTER.factor;b.boosterShots=(b.boosterShots??0)+1;b.boosterFiredAt=b.age;b.boosterFiredSide=p.x<b.x?-1:1;}
         if(b.pattern==='minelayer'){this.bullets[this.bullets.length-1].mine=true;b.mineShots=(b.mineShots??0)+1;b.mineFiredAt=b.age;}
+        if(b.pattern==='scissor'){b.scissorShots=(b.scissorShots??0)+1;b.scissorFiredAt=b.age;b.scissorFiredBank=b.scissorBank??0;}
         if(b.pattern==='rake'){b.rakeShots=(b.rakeShots??0)+1;b.rakeFiredAt=b.age;b.rakeFiredVolley=b.rakeVolley??0;}
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
         if(b.pattern==='lockshot'){b.lockAcceptedShots=(b.lockAcceptedShots??0)+1;b.lockFiredAt=b.age;if(b.forkshot)b.lockFiredAngle=Math.atan2(vx??0,vy??280);this.lockshotShots++;}

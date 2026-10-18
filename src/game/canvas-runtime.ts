@@ -1,3 +1,5 @@
+import{cratePanel}from'./crate-panel';
+import{scissorMount}from'./scissor-mount';
 import{calibrationGateReward,CALIBRATION_GATE}from'../core/calibration-gate';
 import{moduleAssembly,MODULE_ASSEMBLY_DURATION}from'./module-assembly';
 import{bossWeaveRig}from'./boss-weave-rig';
@@ -1040,7 +1042,7 @@ export class CanvasRuntime {
           const frame = b.pattern==='intercept'?interceptorArtFrame(b):eliteFrame(b),eliteArt=b.pattern==='intercept'?INTERCEPTOR_ART:'elite-v1.png', width = b.width * 1.68, height = b.height * 1.36,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
           this.frameSprite(eliteArt, frame, 3, 0, 0, width, height, 1);
-          this.hitSprite(eliteArt, frame, 3, 0, 0, width, height, b.hit, 0.07, 1);aceRig(c,b,this.save.settings.effects==='weak');c.restore();
+          this.hitSprite(eliteArt, frame, 3, 0, 0, width, height, b.hit, 0.07, 1);aceRig(c,b,this.save.settings.effects==='weak');c.restore();if(b.pattern==='scissor')scissorMount(c,b,this.save.settings.effects==='weak');
         } else {
           const frame = bossFrame(b), bossArt = b.bossVariant === 2 ? 'boss-bastion-v1.png' : b.bossVariant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png';
           this.frameSprite(bossArt, frame, 3, b.x, y, width, height, 1);
@@ -1166,7 +1168,7 @@ export class CanvasRuntime {
     for (const b of w.bodies) {
       if(b.pattern==='rebound')reboundLight(c,b,this.save.settings.effects==='weak');
       if(b.pattern==='intercept')interceptorLight(c,b,this.save.settings.effects==='weak');
-      if (b.warning > 0 && b.pattern!=='lockshot' && b.pattern!=='intercept' && b.pattern!=='rake' && b.pattern!=='booster' && !(b.kind==='boss'&&(b.attack===4||b.bossVariant===1&&b.attack===2||b.bossVariant===2&&b.attack===3))) {
+      if (b.warning > 0 && b.pattern!=='lockshot' && b.pattern!=='intercept' && b.pattern!=='rake' && b.pattern!=='booster' && b.pattern!=='scissor' && !(b.kind==='boss'&&(b.attack===4||b.bossVariant===1&&b.attack===2||b.bossVariant===2&&b.attack===3))) {
         // The enemy telegraphs its action locally; never preview future bullet paths.
         const charge = .65 + Math.sin(w.time * 22) * .2;
         const muzzleY = b.y + b.height * .32;
@@ -1180,14 +1182,19 @@ export class CanvasRuntime {
           const choice = b.openingSupply?'预定':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加';
           const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '前方索敌 · 命中跳电' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
-          const panelY = b.y - 158 >= this.hudTop + 172 ? b.y - 158 : Math.max(this.hudTop + 172, b.y + 70);
+          const panel=cratePanel(b,this.hudTop+172,w.bodies),panelY=panel.y;
           const goalSupply=recipeSupplyMatch(w,this.save.recipeGoal,b);
-          this.rect(b.x - 118, panelY, 236, 100, '#0b1723ef');
+          if(panel.opaque)this.rect(b.x-118,panelY,236,panel.compact?48:100,'#0b1723ef');
+          if(panel.compact){
+            this.text(b.refit?`${b.directedRefit?'定向':''}${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`,b.x,panelY+15,20,weaponColors[b.weaponKind],'center',true);
+            this.text(b.refit?`${refitLabel(w,b.weaponKind)} · ${Math.ceil(b.hp)}`:`打碎再拾取 · ${Math.ceil(b.hp)}`,b.x,panelY+36,17,'#fff0c8','center',true);
+          }else{
           this.text(b.refit?`${b.directedRefit?'定向':''}${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`, b.x-(goalSupply?18:0), panelY + 23, goalSupply?23:25, weaponColors[b.weaponKind], 'center', true);
           if(goalSupply){c.strokeStyle='#ffe19a';c.lineWidth=2;c.strokeRect(b.x-118,panelY,236,100);this.text('目标',b.x+108,panelY+23,18,'#ffe19a','right',true);}
           const combination=supplyCombinationLabel(supplyCombinations(w,b,this.save.recipeGoal));
           this.text(combination??(b.refit?refitLabel(w,b.weaponKind):role), b.x, panelY + 51, combination?21:b.refit?21:24, combination?'#ffe2a1':'#cfdee9');
           this.text(b.pattern==='drift-supply'?`${(b.dropGrace??0)>0?'护盖':b.age<DRIFT_SUPPLY.settle?'滑行':'停稳'} · 碎后拾取 ${Math.ceil(b.hp)}`:`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, b.pattern==='drift-supply'?21:23, '#fff0c8');
+          }
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
         } else {
           this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
@@ -1258,6 +1265,7 @@ export class CanvasRuntime {
         if(b.pattern==='bankshot')this.text((b.empRemaining??0)>0?'折返炮·停火':b.warning>0?'折返炮·蓄能':'折返炮·反弹一次',b.x,b.y-b.height/2-36,21,'#ffc7a1','center',true);
         if(b.pattern==='booster')this.text((b.empRemaining??0)>0?'火箭·停火':b.warning>0?'火箭·蓄能':b.burst?'火箭·续发':b.boosterSpent?'火箭·撤离':'火箭·缓行→加速',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
         if(b.pattern==='minelayer')this.text((!this.save.achievements.unlocked.includes(this.save.achievements.tracked??'')?mineTargetLabel(w,b,this.save.achievements.tracked):null)??((b.empRemaining??0)>0?'布雷·停火':b.warning>0?'布雷·蓄能':b.mineSpent?'布雷·撤离':'布雷机'),b.x,b.y-b.height/2-36,21,'#ffb59d','center',true);
+        if(b.pattern==='scissor')this.text((b.empRemaining??0)>0?'剪刀炮·停火':b.warning>0?'剪刀炮·蓄能':b.scissorFiring?'剪刀炮·右管接射':'剪刀重炮',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
         if(b.pattern==='rake')this.text((b.empRemaining??0)>0?'旋扫·停火':b.warning>0?'旋扫·蓄能':b.rakeFiring?`旋扫·${(b.rakeVolley??0)+1}/3`:'三拍旋扫',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='lockshot'){
@@ -2030,6 +2038,7 @@ export class CanvasRuntime {
       fractureAugment:this.world.build.fractureAugment??null,fractureProfile:this.world.fractureProfile(),fractureFinishWaves:this.world.fractureFinishWaves,fractureFinishHits:this.world.fractureFinishHits,fractureWaveDamage:this.world.fractureWaveDamage,lastFractureWaveHit:this.world.lastFractureWaveHit,fractureWaves:this.world.fractureWaves,fractureWaveHits:this.world.fractureWaveHits,fractureWaveBeams:this.supportBeams.filter(b=>b.fractureWave).length,fractureUnlocked:this.world.fractureUnlocked(),fractureBursts:this.world.fractureBursts,
       lastMagneticHit:this.world.lastMagneticHit,lastMagneticRefinementHit:this.world.lastMagneticRefinementHit,magneticWideHits:this.world.magneticWideHits,magneticAugment:this.world.build.magneticAugment??null,magneticLinkHits:this.world.magneticLinkHits,magneticUnlocked:this.world.magneticUnlocked(),magneticBursts:this.world.magneticBursts,magneticHits:this.world.magneticHits,magneticFields:this.world.magneticFields.map(f=>({...f})),
       boosterGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='booster').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.boosterShots??0,firedAt:b.boosterFiredAt,spent:!!b.boosterSpent})),boosterProjectiles:this.world.bullets.filter(b=>b.boostFactor!==undefined).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy,age:b.age,boostAfter:b.boostAfter??null,factor:b.boostFactor})),
+      scissorGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='scissor').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,age:b.age,warning:b.warning,lockX:b.lockX,bank:b.scissorBank??0,shots:b.scissorShots??0,firedAt:b.scissorFiredAt,firedBank:b.scissorFiredBank})),
       rakeGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='rake').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,warning:b.warning,volley:b.rakeVolley??0,shots:b.rakeShots??0,firedVolley:b.rakeFiredVolley,firedAt:b.rakeFiredAt})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
       pendingMineCounter:this.world.pendingMineCounter,minePreemptWins:this.world.minePreemptWins,mineCounterWins:this.world.mineCounterWins,lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,hotParticles:this.particles.filter(p=>p.hot!==false).length, ammoFragments:this.blasts.filter(b=>b.ammo).length,blasts: this.blasts.length,arcs:this.arcs.length,

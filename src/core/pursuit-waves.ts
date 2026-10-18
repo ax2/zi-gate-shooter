@@ -25,8 +25,9 @@ export function pursuitWaves(round:number,mirror:boolean,variation:number):Spawn
    add(at,'sniper',side,340,variation===2?'relocate':variation===1||phrase===0?'lockshot':undefined,
     ['双哨追击','锁位轮袭','游猎双哨'][variation],['先拆一翼哨机 · 留意实弹后换边','两翼先后锁定 · 诱射后转进或抢先拆炮','机动炮换位 · 三角炮封侧 · 留意实弹'][variation]);
    if(variation===2)out[out.length-1].opening=.1;
-   add(at+1.2,'sniper',other,340,variation>0||phrase===0?'lockshot':undefined);
-   if(variation===2)out[out.length-1].forkshot=true;
+   const scissor=phrase===1;
+   add(at+1.2,scissor?'elite':'sniper',other,scissor?520:340,scissor?'scissor':variation>0||phrase===0?'lockshot':undefined,scissor?'剪刀重炮':undefined,scissor?'双管错时交叉 · 抢拆重炮或诱射后换位':undefined);
+   if(variation===2&&!scissor)out[out.length-1].forkshot=true;
    // Moving guns already cross the center. Their screens keep fixed lanes so
    // the supply approach does not become a full-width weaving body barrier.
    const screen=variation===2?undefined:'weave';

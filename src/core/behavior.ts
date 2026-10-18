@@ -1,3 +1,4 @@
+import{SCISSOR,scissorProfile}from'./scissor-gun';
 import{BASTION_BARRAGE,barrageVolley,barrageNextGap}from'./bastion-barrage';
 import{BOSS_WEAVE,isWeaveBoss,weaveVolley}from'./boss-weave';
 import{WING_SHEAR,wingShearVolley}from'./wing-shear';
@@ -250,7 +251,19 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         b.boosterSpent=!!b.burst;b.burst=b.burst?0:1;b.warning=0;b.timer=b.burst?BOOSTER.spacing:0;
       }
     }
+   } else if(b.kind==='elite'&&b.pattern==='scissor'){
+    if(b.age>=SCISSOR.hold)b.y+=b.speed*dt;
+    if(b.y>=600){b.warning=0;b.scissorFiring=false;return;}
+    if(b.timer<=1e-9&&!offline){
+      if(!b.scissorFiring&&b.warning<=0){b.warning=SCISSOR.warning;b.timer=SCISSOR.warning;}
+      else{
+        const bank=b.scissorBank??0;
+        for(const spread of[-SCISSOR.spread,0,SCISSOR.spread]){const p=scissorProfile(b,bank,spread);shot(p.x,p.y,p.vx,p.vy);}
+        b.scissorBank=bank===0?1:0;b.scissorFiring=bank===0;b.warning=0;b.timer=bank===0?SCISSOR.spacing:SCISSOR.recovery;
+      }
+    }
   } else if(b.kind==='armor'&&b.pattern==='rake'){
+
     b.y+=b.speed*dt;
     if(b.y>=600){b.warning=0;b.rakeFiring=false;return;}
     if(b.timer<=1e-9&&!offline){
