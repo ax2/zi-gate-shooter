@@ -1,3 +1,4 @@
+import{supplyTag,type SupplyTag}from'./supply-tag';
 import { HeavyRuptures } from './heavy-rupture';
 import{RecipeTrialPlan,recipeTrialStatus}from'./recipe-trial';
 import{cratePanel}from'./crate-panel';
@@ -741,6 +742,15 @@ export class CanvasRuntime {
       this.particles.push({ hot,x: e.x, y: e.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life, total: life, color: e.type==='bank-bounce'?'#ff9470':e.type==='drop-impact'?'#b6efff':(e.type==='capacitor'||e.type==='ion-storm')?(i%3===0?'#efffff':i%2?'#c5a9ff':'#80ffd1'):explosion ? (i % 4 === 0 ? '#99ddff' : i % 3 === 0 ? '#ffe2a0' : '#ffad42') : weaponColors[e.weaponKind ?? this.world.weaponKind] });
     }
   }
+  private drawSupplyTag(tag:SupplyTag,title:string,detail:string,footer:string,stamp:string,color:string){
+    if(tag.mode==='stamp'){this.gateText(stamp,tag.x,tag.y,18,color,true);return;}
+    const c=this.ctx,x=tag.x,y=tag.y;
+    this.rect(x-71,y,142,60,'#0b1a25f5');this.rect(x-71,y,3,60,color);
+    this.text(title,x+1,y+13,20,color,'center',true);
+    this.text(detail.replace('单轮直伤 ','伤').replaceAll(' → ','→'),x+1,y+33,17,'#fff0c8','center',true);
+    this.text(footer.replaceAll(' ','').replace('拾取成形·','成形·'),x+1,y+50,16,'#bdd3df');
+    c.strokeStyle='#60747e';c.lineWidth=1;c.strokeRect(x-71,y,142,60);
+  }
   private gateText(text:string,x:number,y:number,size:number,color:string,bold=false){
     const c=this.ctx;c.save();c.font=`${bold?'700 ':''}${size}px ${fonts}`;c.textAlign='center';c.textBaseline='middle';c.strokeStyle='#020b13';c.lineWidth=Math.max(2,size*.09);c.lineJoin='round';c.strokeText(text,x,y);this.text(text,x,y,size,color,'center',bold);c.restore();
   }
@@ -965,6 +975,7 @@ export class CanvasRuntime {
   }
   private drawWorld(dt: number) {
     const c = this.ctx, w = this.world;
+    const supplyHudBottom=this.hudTop+(w.bodies.some(b=>b.active&&b.kind==='boss')?238:w.contract?.status==='active'?214:w.closingStatus.total>0?198:172);
     for(const beam of this.supportBeams)beam.life-=dt;
     this.supportBeams=this.supportBeams.filter(beam=>beam.life>0);
     this.gateFeedback.sync(w.bodies, w.time);
@@ -1202,8 +1213,13 @@ export class CanvasRuntime {
           const choice = b.openingSupply?'预定':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加';
           const role = b.weaponKind === 'pulse' ? '高速集中火力' : b.weaponKind === 'scatter' ? '近距聚弹 · 扇面覆盖' : b.weaponKind === 'blast' ? '命中敌人 · 范围爆破' : b.weaponKind === 'arc' ? '前方索敌 · 命中跳电' : `贯穿${weaponProfile('pierce', b.stage).targets}个敌人`;
           // Enter below the crate until the full panel fits beneath the HUD.
-          const panel=cratePanel(b,this.hudTop+172,w.bodies),panelY=panel.y;
+          const panel=cratePanel(b,supplyHudBottom,w.bodies),panelY=panel.y;
           const goalSupply=recipeSupplyMatch(w,this.save.recipeGoal,b);
+          if(!panel.opaque){
+            const tag=supplyTag(b,w.bodies,w.bullets,supplyHudBottom,w.player.x);
+            const prefix=b.refit?(w.weaponStage(b.weaponKind)>=3?'精校':'改装'):choice;
+            this.drawSupplyTag(tag,`${prefix}·${weaponNames[b.weaponKind]}`,b.refit?refitLabel(w,b.weaponKind):`T${b.stage} · 打碎再拾取`,`耐久 ${Math.ceil(b.hp)} · 碎后拾取`,prefix+weaponNames[b.weaponKind].replace(/炮$/,''),weaponColors[b.weaponKind]);
+          }else{
           if(panel.opaque)this.rect(b.x-118,panelY,236,panel.compact?48:100,'#0b1723ef');
           if(panel.compact){
             this.text(b.refit?`${b.directedRefit?'定向':''}${w.weaponStage(b.weaponKind)>=3?'精校':'改装'} ${weaponNames[b.weaponKind]}`:`${choice} ${weaponNames[b.weaponKind]} T${b.stage}`,b.x,panelY+15,20,weaponColors[b.weaponKind],'center',true);
@@ -1215,10 +1231,16 @@ export class CanvasRuntime {
           this.text(combination??(b.refit?refitLabel(w,b.weaponKind):role), b.x, panelY + 51, combination?21:b.refit?21:24, combination?'#ffe2a1':'#cfdee9');
           this.text(b.pattern==='drift-supply'?`${(b.dropGrace??0)>0?'护盖':b.age<DRIFT_SUPPLY.settle?'滑行':'停稳'} · 碎后拾取 ${Math.ceil(b.hp)}`:`打碎再拾取 · ${Math.ceil(b.hp)}`, b.x, panelY + 78, b.pattern==='drift-supply'?21:23, '#fff0c8');
           }
+          }
           this.bar(b.x, b.y - 52, 102, b.hp / b.maxHp, '#e5b96a');
         } else {
+          const panel=cratePanel(b,supplyHudBottom,w.bodies);
+          if(panel.compact||panel.y!==b.y-158||b.y-110<supplyHudBottom){
+            this.drawSupplyTag(supplyTag(b,w.bodies,w.bullets,supplyHudBottom,w.player.x),`T${b.stage}装备箱`,w.weaponStage(w.weaponKind)>=b.stage?'充能+30':'当前主武器升阶',`耐久${Math.ceil(b.hp)}·碎后拾取`,`T${b.stage}箱`,'#fff0c8');
+          }else{
           this.rect(b.x - 105, b.y - 110, 210, 40, '#0b1723df');
           this.text(`T${b.stage} ${w.weaponStage(w.weaponKind) >= b.stage ? '充能+30' : '装备'} · ${Math.ceil(b.hp)}`, b.x, b.y - 90, 28, '#fff0c8', 'center', true);
+          }
           this.bar(b.x, b.y - 64, 102, b.hp / b.maxHp, '#e5b96a');
         }
       } else if (b.kind === 'pickup') {
@@ -1231,10 +1253,17 @@ export class CanvasRuntime {
           &&Math.abs(b.y-54-other.y)<20+Math.max(84,other.height*.8)+40);
         const combination=supplyCombinationLabel(supplyCombinations(w,b,this.save.recipeGoal));
         const showCombination=!!combination&&supplyCombinationClear(w,x,b.y,width,noticeBlocking);
-        if(!behindEnemy)this.rect(x-width/2,b.y-74,width,showCombination?70:40,'#0b1723f7');
+        const tagNeeded=behindEnemy||b.y-74<supplyHudBottom;
+        if(!tagNeeded)this.rect(x-width/2,b.y-74,width,showCombination?70:40,'#0b1723f7');
         const verb=signal.pulling?'回收中':signal.urgent?'快拾取':'拾取';
+        if(tagNeeded){
+          const tag=supplyTag(b,w.bodies,w.bullets,supplyHudBottom,w.player.x);
+          const kind=b.weaponKind,detail=b.refit&&kind?refitLabel(w,kind):`T${b.stage} · 靠近领取`;
+          this.drawSupplyTag(tag,`${verb}·${kind?weaponNames[kind]:`T${b.stage}装备`}`,detail,showCombination?combination!:'已打碎 · 靠近领取',verb+(kind?weaponNames[kind].replace(/炮$/,''):`T${b.stage}`),signal.urgent?'#ffd186':'#ffe7b1');
+        }else{
         this.text((target?'目标·':'')+(b.weaponKind ? `${verb}${b.refit?'改装':w.activeWeapons.includes(b.weaponKind) ? '强化' : '叠加'}${weaponNames[b.weaponKind]}` : `${verb} T${b.stage}`),x,b.y-54,24,signal.urgent?'#ffd186':'#ffe7b1','center',true);
         if(showCombination)this.text(combination!,x,b.y-24,21,'#ffe2a1','center',true);
+        }
       }
       else if (b.kind === 'gate') {
         const calibration=calibrationGateReward(b);

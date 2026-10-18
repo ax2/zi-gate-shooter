@@ -5,25 +5,27 @@ import { C, clamp } from './config';
 import { advanceBody } from './behavior';
 import type { Body, Bullet, Phase } from './world';
 
-interface Options { reaction?: number; phase?: Phase; phaseTime?: number; gridPoints?:number }
+/** Paths/timeline entries use stepFrames fixed simulation frames (default6). */
+interface Options { reaction?: number; phase?: Phase; phaseTime?: number; gridPoints?:number; stepFrames?:1|2|3|6 }
 type Interval = [number, number];
 
 /** No kills, pickups or invulnerability assumed. Actual emitter/movement rules
- * run at the fixed step. Each 100ms slab reserves every hazard crossing the
+ * run at the fixed step. Each slab (default100ms) reserves every hazard crossing the
  * player line, including future shots and charger acceleration. */
 export function dangerTimeline(bodies: readonly Body[], bullets: readonly Bullet[], horizon: number, options: Options = {}) {
   const forecastBodies = bodies.filter(b => b.active).map(b => ({ ...b }));
   let forecastBullets = bullets.filter(b => b.active && b.hostile).map(b => ({ ...b }));
   const phase = options.phase ?? (forecastBodies.some(b => b.kind === 'boss') ? 'boss' : 'running');
   const slabs: Interval[][] = [];
+  const stepFrames=options.stepFrames??6,slabSeconds=stepFrames*C.step;
   let nextId = -1, time = 0;
-  for (let step = 0; step < Math.ceil(horizon / 0.1); step++) {
+  for (let step = 0; step < Math.ceil(horizon / slabSeconds); step++) {
     const intervals: Interval[] = [];
     const reserve = (x0: number, y0: number, x1: number, y1: number, halfX: number, halfY: number) => {
       if (Math.min(y0, y1) - halfY <= C.playerY && Math.max(y0, y1) + halfY >= C.playerY)
         intervals.push([Math.min(x0, x1) - halfX, Math.max(x0, x1) + halfX]);
     };
-    for (let sub = 0; sub < 6; sub++) {
+    for (let sub = 0; sub < stepFrames; sub++) {
       time += C.step;
       for (const b of forecastBodies) {
         const x = b.x, y = b.y;
@@ -57,6 +59,7 @@ export function dangerTimeline(bodies: readonly Body[], bullets: readonly Bullet
 /** Exact initial x, reaction + spare time, and the entire lateral segment of
  * every move are checked. Null means the conservative grid cannot prove a path. */
 export function safeRoute(x: number, bodies: readonly Body[], bullets: readonly Bullet[], horizon = 3, options: Options = {}) {
+  const slabSeconds=(options.stepFrames??6)*C.step;
   const start = clamp(x, C.minX, C.maxX);
   const grid=Math.max(25,Math.min(97,Math.floor(options.gridPoints??25)));
   const positions = [...new Set([start, ...Array.from({ length: grid }, (_, i) => C.minX + (C.maxX - C.minX) * i / (grid-1))])].sort((a, b) => a - b);
@@ -65,7 +68,7 @@ export function safeRoute(x: number, bodies: readonly Body[], bullets: readonly 
   const timeline = dangerTimeline(bodies, bullets, horizon, options);
   for (let step = 0; step < timeline.length; step++) {
     const next = new Map<number, { cost: number; path: number[] }>();
-    const availableMove = C.moveSpeed * Math.max(0, Math.min(0.1, (step + 1) * 0.1 - reaction));
+    const availableMove = C.moveSpeed * Math.max(0, Math.min(slabSeconds, (step + 1) * slabSeconds - reaction));
     for (const px of positions) for (const [previous, value] of reachable) {
       const distance = Math.abs(previous - px);
       if (distance > availableMove + 1e-8) continue;
