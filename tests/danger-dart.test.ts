@@ -1,0 +1,17 @@
+import{it,expect}from'vitest';import{dangerDart}from'../src/game/danger-dart';import{createRenderFixture}from'./helpers/render-fixture';
+function record(){const calls:{key:string;args:number[];style:unknown;alpha:unknown}[]=[],state:Record<string,unknown>={fillStyle:'before',strokeStyle:'before',globalAlpha:.6,globalCompositeOperation:'lighter'},stack:Record<string,unknown>[]=[];const c=new Proxy(state,{get(t,k:string){if(k in t)return t[k];return(...args:number[])=>{calls.push({key:k,args,style:k==='stroke'?t.strokeStyle:t.fillStyle,alpha:t.globalAlpha});if(k==='save')stack.push({...t});if(k==='restore'){for(const key of Object.keys(t))delete t[key];Object.assign(t,stack.pop());}};}})as unknown as CanvasRenderingContext2D;return{c,calls,state,stack};}
+it.each([false,true])('keeps the solid body and rear-only wake finite, state-balanced and read-only (weak=%s)',weak=>{
+ for(const[vx,vy]of[[0,320],[-300,500],[300,0],[0,0],[10000,10000]]){const f=record(),b={x:300,y:600,vx,vy,age:2},before=JSON.stringify(b);dangerDart(f.c,b,weak);expect(f.stack).toHaveLength(0);expect(f.state).toEqual({fillStyle:'before',strokeStyle:'before',globalAlpha:.6,globalCompositeOperation:'lighter'});expect(JSON.stringify(b)).toBe(before);expect(f.calls.find(c=>c.key==='rotate')!.args[0]).toBe(-Math.atan2(vx,vy));for(const p of f.calls.filter(c=>c.key==='moveTo'||c.key==='lineTo')){expect(p.args.every(Number.isFinite)).toBe(true);expect(Math.abs(p.args[0])).toBeLessThanOrEqual(7);expect(p.args[1]).toBeGreaterThanOrEqual(-37);expect(p.args[1]).toBeLessThanOrEqual(11);}}
+});
+it('retains identical opaque shell, hot core and dark isolation border in weak mode',()=>{
+ const renders=[false,true].map(weak=>{const f=record();dangerDart(f.c,{x:10,y:20,vx:0,vy:600},weak);return f.calls;});
+ for(const calls of renders){expect(calls.some(c=>c.key==='stroke'&&c.style==='#070e16'&&c.alpha===1)).toBe(true);expect(calls.some(c=>c.key==='fill'&&c.style==='#fff0d8'&&c.alpha===1)).toBe(true);}
+ const body=(calls:ReturnType<typeof record>['calls'])=>calls.slice(calls.findIndex(c=>c.key==='closePath'));
+ expect(body(renders[0])).toEqual(body(renders[1]));expect(renders[1].length).toBeLessThan(renders[0].length);
+});
+it.each([false,true])('runtime renders real enemy rounds after explosions, freezes on pause and retains World (weak=%s)',async weak=>{
+ const f=createRenderFixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;Object.assign(w,{scheduled:[],shoot(){}});const gun=w.spawn('armor',360,500);gun.speed=0;gun.timer=0;for(let i=0;i<100&&!w.bullets.some(b=>b.hostile);i++)f.tick();const p=w.bullets.find(b=>b.hostile)!;expect(p).toBeDefined();
+ const victim=w.spawn('drone',580,650);victim.speed=0;victim.hp=1;w.bullets.push({id:990001,x:victim.x,y:victim.y,px:victim.x,py:victim.y,vx:0,vy:0,age:0,damage:10,active:true,hostile:false,weaponKind:'pulse'});f.tick();expect(victim.active).toBe(false);
+ const explosion=f.calls.findIndex(c=>c.kind==='drawImage'&&String(c.args[0]?.src).includes('explosion-v1'));const shell=f.calls.findIndex(c=>c.kind==='stroke'&&c.stroke==='#070e16');expect(explosion).toBeGreaterThanOrEqual(0);expect(shell).toBeGreaterThan(explosion);
+ const before=JSON.stringify(w,(_k,v)=>v instanceof Set?[...v]:v instanceof Map?[...v]:v);f.runtime.activateControl('pause');f.tick();expect(JSON.stringify(w,(_k,v)=>v instanceof Set?[...v]:v instanceof Map?[...v]:v)).toBe(before);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#070e16')).toBe(true);
+});

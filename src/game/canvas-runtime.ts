@@ -1255,7 +1255,7 @@ export class CanvasRuntime {
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
     for (const b of w.bullets.filter(b => b.hostile)) {
-      if(b.mine)mineLight(c,b,this.images.get('minelayer-v1.png')!,this.save.settings.effects==='weak');else hostileShot(c,b);
+      if(b.mine)mineLight(c,b,this.images.get('minelayer-v1.png')!,this.save.settings.effects==='weak');else hostileShot(c,b,this.save.settings.effects==='weak');
     }
   }
   private drawDestruction(dt: number) {
