@@ -1,0 +1,1 @@
+import{build}from'esbuild';const seconds=process.env.COOLING_SECONDS??'300';await build({entryPoints:['tools/audit-cooling-runtime.ts'],bundle:true,platform:'node',format:'esm',outfile:`build/qa/Stage-247/runtime-${seconds}.mjs`});await import(`../build/qa/Stage-247/runtime-${seconds}.mjs`);

@@ -26,6 +26,7 @@ function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boole
     if (key in target) return target[key];
     if (key === 'save') return () => stack.push({ ...state });
     if (key === 'restore') return () => Object.assign(state, stack.pop());
+    if (key === 'createLinearGradient' || key === 'createRadialGradient') return () => ({addColorStop(){}});
     return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, stroke:state.strokeStyle, composite: state.globalCompositeOperation, font: state.font,lineWidth:state.lineWidth });
   } });
   const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
@@ -307,7 +308,7 @@ it('keeps ground travel continuous across speed changes, freezes on pause and re
   f.runtime.start(); f.tick(); expect(offset()).toBeCloseTo(C.step * f.runtime.world.scrollSpeed);
 });
 
-it.each([[2, 'cooling-corridor-v1.jpg'], [3, 'armored-corridor-v1.jpg']] as const)('uses chapter %s environment and keeps paused world state intact', async (round, asset) => {
+it.each([[2, 'cooling-corridor-v2.jpg'], [3, 'armored-corridor-v1.jpg']] as const)('uses chapter %s environment and keeps paused world state intact', async (round, asset) => {
   const f = fixture(); await f.runtime.load(); f.runtime.start();
   f.runtime.world.round = round; f.runtime.world.time = 17; f.runtime.pause();
   const before = JSON.stringify(f.runtime.world);
@@ -318,6 +319,14 @@ it.each([[2, 'cooling-corridor-v1.jpg'], [3, 'armored-corridor-v1.jpg']] as cons
   expect(JSON.stringify(f.runtime.world)).toBe(before);
   f.runtime.start(); f.tick();
   expect(ground().every(c => c.args[0].src.endsWith('runway.jpg'))).toBe(true);
+});
+
+it.each([false,true])('keeps cooling machinery below actual combat and freezes its rotor pose on pause weak=%s',async weak=>{
+ const f=fixture(weak);await f.runtime.load();f.runtime.start();f.runtime.world.round=2;f.runtime.world.time=17;const b=f.runtime.world.spawn('drone',360,500);f.tick();
+ const machinery=()=>f.calls.findIndex(c=>c.kind==='rect'&&c.args[2]===49),enemy=()=>f.calls.findIndex(c=>c.kind==='drawImage'&&c.args[0].src.endsWith('drone-v1.png'));
+ expect(machinery()).toBeGreaterThan(0);expect(enemy()).toBeGreaterThan(machinery());expect(b.active).toBe(true);
+ const rotorPose=()=>f.calls.filter(c=>c.kind==='rotate').slice(0,6*(1+(weak?8:12))).map(c=>c.args[0]);const pose=rotorPose(),before=JSON.stringify(f.runtime.world),ground=f.runtime.diagnostics().sectorGround;
+ f.runtime.pause();for(let i=0;i<20;i++){f.tick();expect(JSON.stringify(f.runtime.world)).toBe(before);expect(rotorPose()).toEqual(pose);expect(f.runtime.diagnostics().sectorGround).toEqual(ground);}
 });
 
 it.each([false,true])('ties boss preparation to real A/B warnings, freezes the second beat and preserves World (weak=%s)',async weak=>{

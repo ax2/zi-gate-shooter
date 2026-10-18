@@ -94,3 +94,6 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 
 ## Stage-169 机械数字门候选
 2026-10-16，内置image_gen生成原创透明门框，实际提示词gate-frame-v1-prompt.md、原图source/gate-frame-v1.png（1659×948 RGBA）；技术导出public/assets/gate-frame-v1.png为640×329、262016字节、解码842240字节。八片边框、真实蓄能导管/局部升档动作、双门紧凑排版与数字底板避敌；实际来源/哈希/alpha/导出/验收范围见GATE_FRAME_V1.md与docs/stages/Stage-169。非商业游戏素材，候选未获用户最终美术签收。
+
+## Stage-247 冷却设施v2候选
+2026-10-18，内置imagegen引用自有冷却廊v1作正交风格参考生成新v2，未使用商业游戏素材。原始941×1672 PNG在source/cooling-corridor-v2.png，运行720×1279 JPEG质量84、181762字节，public/assets/cooling-corridor-v2.jpg；原v1保留。完整最终提示词prompts/stage247-cooling-corridor-v2.md。侧缘涡轮/冷却管组，中央暗蓝灰钢板，无未来危险轨迹；仅侧翼使用。运行时外49逻辑像素绘制原时钟旋转风叶，战斗层在其上，标准12/弱档8叶。素材与实景仍候选，未获正式美术签收；验收详见docs/stages/Stage-247。

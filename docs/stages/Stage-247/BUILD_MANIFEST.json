@@ -1,0 +1,364 @@
+{
+  "sourceBaseline": "01dc460458ec8d9124268b3ad0cae0c379bfb361",
+  "frozen": "build/playable/Stage-247",
+  "backupPort": 5330,
+  "backupStarted": false,
+  "files": [
+    {
+      "path": "assets/arc-player-v1.png",
+      "sha256": "96c3114eaebb91d103a13540da47502019187c04376c74bef978469b66289de5"
+    },
+    {
+      "path": "assets/armor-v1.png",
+      "sha256": "d9a1ce06c0fe715b2a555d6bb2d52d995b7c7441ab0972a6505c52a1d5757379"
+    },
+    {
+      "path": "assets/armor-wreck-v1.png",
+      "sha256": "5f8505fa827f0e00e1b827eb20d061f4bc36bbec67ba1b540801f8ebb279583e"
+    },
+    {
+      "path": "assets/armored-corridor-v1.jpg",
+      "sha256": "18248ef3482f2c88978fcb0f0303e83a134358d73330870828e3459839173bcc"
+    },
+    {
+      "path": "assets/audio/blast.wav",
+      "sha256": "9858e8931398482b3a2d8d39d4678c10bd86e824e8058ff372e7ec5f1154426f"
+    },
+    {
+      "path": "assets/audio/hurt.wav",
+      "sha256": "0c96e875b5f37e69238a84315966f8d5b2d94ede504659fe24d8a33a09e6f8c2"
+    },
+    {
+      "path": "assets/audio/mechanical-pulse-v1.wav",
+      "sha256": "e6ab14b9db45c9738b20365969a61cafbe2225dbda14aae53a4f2963ba840efb"
+    },
+    {
+      "path": "assets/audio/reward.wav",
+      "sha256": "16dea0372d24e8872bcb2cae1489bf95e800c2808e89b8b3e456a4893cac51f4"
+    },
+    {
+      "path": "assets/audio/shot-pierce1.wav",
+      "sha256": "eae7ddfbf347ef4e7f00c118e904cca58da5379e7566a573b8657884259aed5a"
+    },
+    {
+      "path": "assets/audio/shot-pierce2.wav",
+      "sha256": "9268491d8b5acaf87e2ead02523f67935b5f3e28657b0a3f290d94e275561d75"
+    },
+    {
+      "path": "assets/audio/shot-pierce3.wav",
+      "sha256": "3058fabf0222ef9d31ac0db9e993b10c4271fb7dad74d81e7c282bab2bf3e9a7"
+    },
+    {
+      "path": "assets/audio/shot-scatter1.wav",
+      "sha256": "d8cbd3c3c20445c4cff9d9acac153318bd9bb49c3deb05bb8d4a206df899e264"
+    },
+    {
+      "path": "assets/audio/shot-scatter2.wav",
+      "sha256": "e59916462235691fb0d05268b9a2485dd620f8708d024d970d3b875a63be8262"
+    },
+    {
+      "path": "assets/audio/shot-scatter3.wav",
+      "sha256": "493a6fbf894e4a62053c5056577376773fb0f7dc86c9950fa41352e906a70bc9"
+    },
+    {
+      "path": "assets/audio/shot1.wav",
+      "sha256": "a758a03645e8231f302afa17f9e55f85169955b2a504afc6fc5f1912dca1f22f"
+    },
+    {
+      "path": "assets/audio/shot2.wav",
+      "sha256": "473f71e82eed224ab58bcb1f878f53db8802fb8e1865f3ffe0c6724c62370ca8"
+    },
+    {
+      "path": "assets/audio/shot3.wav",
+      "sha256": "e64c71084873cd51e5875a103f3845ec104bd62e32c9e716943bd72f133bef6f"
+    },
+    {
+      "path": "assets/audio/upgrade.wav",
+      "sha256": "cffa0adf762c4e04d42cfdf75c308238de6a52ba7fc8ed7c57ffc5a56aada09b"
+    },
+    {
+      "path": "assets/blast-player-v1.png",
+      "sha256": "f17810198625d8ec714ba64bdf82615bae608216900d46d31b951b56afc9c8b5"
+    },
+    {
+      "path": "assets/boss-bastion-v1.png",
+      "sha256": "1ef36e9dd5b3e659186c4db62212a611979609c4ded131a7d040601f90554ba7"
+    },
+    {
+      "path": "assets/boss-flanker-v1.png",
+      "sha256": "aa3f26043adda3748884d11a98dfdee814d903aa7187f864657fc8873cef48bf"
+    },
+    {
+      "path": "assets/boss-v1.png",
+      "sha256": "199af2dc41add6599fac73da9100dd691feaecd62503fe240fc061faf84fa245"
+    },
+    {
+      "path": "assets/canvas-preview-D4tVBNzW.js",
+      "sha256": "e06f5c297976c2d3536826cc01531e105f5b4db501c284b073af5e658f442ff4"
+    },
+    {
+      "path": "assets/charger-v1.png",
+      "sha256": "804474d21a2ceb8aed533f54652cdd3f4a812d566e30168fbb120704be8982e8"
+    },
+    {
+      "path": "assets/charger-wreck-v1.png",
+      "sha256": "f61bee91f2ad58c467663454db89ed0ba4809d97ac50980edb3bd647df6b6088"
+    },
+    {
+      "path": "assets/conduit-v1.png",
+      "sha256": "e4a3b8970ff7f7d7b68e8f7655a86f8d4388856857876dd11b95a84137c07fbf"
+    },
+    {
+      "path": "assets/cooling-corridor-v1.jpg",
+      "sha256": "782b1a3adc15b777e7f61a87f6a081cb4fab845dfb081db4932b0f2d1ad9a286"
+    },
+    {
+      "path": "assets/cooling-corridor-v2.jpg",
+      "sha256": "69255db44e1e884c9f67cb92405edf30783ebbd4cd7f0eddf4dad9409f31b69c"
+    },
+    {
+      "path": "assets/crate-v1.png",
+      "sha256": "e0d5fd4d1aa6fce1ca55b3a59f19c9c0b5b38ead9a99786d8dd0c54950b03153"
+    },
+    {
+      "path": "assets/drone-v1.png",
+      "sha256": "17d912779970bb171d178011222df52ea36ca87853fe723aa5167528f597cbdf"
+    },
+    {
+      "path": "assets/drone-wreck-v1.png",
+      "sha256": "af0786899c2551713e26c22d77c551d3b82b3741ef289b526c4c21d0d4400834"
+    },
+    {
+      "path": "assets/elite-v1.png",
+      "sha256": "cf17084ccc3d122e5e49433240292984a60d04d114d9bc729833679e8ddeccf5"
+    },
+    {
+      "path": "assets/elite-wreck-v1.png",
+      "sha256": "b4e4e49425014a6c4f4fbb77cbec8f503704474eb45f6aae3caa91eaec68d182"
+    },
+    {
+      "path": "assets/explosion-v1.png",
+      "sha256": "72cb1e9f61b259c007eac0517b1bae49a1c5b6db5d7cfda26b8771c2c21c3cae"
+    },
+    {
+      "path": "assets/gate-frame-v1.png",
+      "sha256": "fc500aef964c5270fd09241e29316e8cda0c161d79c09b5639e3faaf81438e22"
+    },
+    {
+      "path": "assets/guard-v1.png",
+      "sha256": "56943764a2c202b3cb2f405dfe34a2649ef200fe0fffe457aa0427b4f8b5bf36"
+    },
+    {
+      "path": "assets/guard-wreck-v1.png",
+      "sha256": "e6207defeb1f928e4362608e02e0c0bba2352d025d18b65372190a279ec25899"
+    },
+    {
+      "path": "assets/mounted-modules-v1.png",
+      "sha256": "5802d2c78f64d44e7f7807f04e3694ae55113e8b0ab464f8c096f197aabf52b8"
+    },
+    {
+      "path": "assets/pierce-player-v2.png",
+      "sha256": "cf84dc2124c92b500ff2859e2559737999a8d4ed483ebd19f91b68b69a26a272"
+    },
+    {
+      "path": "assets/props.png",
+      "sha256": "3636ff3cd79509c226a01934216679a89c19d77791d7fcb88ee3a6b2f864dee9"
+    },
+    {
+      "path": "assets/runway.jpg",
+      "sha256": "a15b4060f7a71aa5dd5dc29398399d225573598c7cea0dcdad71ca3bb6e40213"
+    },
+    {
+      "path": "assets/scatter-player-v1.png",
+      "sha256": "bef3123494e8b45a4c57bd139a96f90fa858834ee97d31bb9f11324d6c696b0c"
+    },
+    {
+      "path": "assets/sniper-v1.png",
+      "sha256": "5002120cf9cccd8e29217fc6efb04661937b95f379eb559cf362562dbd27ce0b"
+    },
+    {
+      "path": "assets/sniper-wreck-v1.png",
+      "sha256": "e1fedf821b39ca6fc2ecb178cab17c1c09490e00b2a150c4a713913495c201fc"
+    },
+    {
+      "path": "assets/units.png",
+      "sha256": "ecba214dfc1e6c86026f914f42da8b2c8ef46e7d3bfb85b6a5a5208bd33ca76e"
+    },
+    {
+      "path": "canvas.html",
+      "sha256": "b1b3e6ad39807d9ed8ee487c3dc139638e77e1c2648baeafb970e073e99d03d3"
+    },
+    {
+      "path": "index.html",
+      "sha256": "ded3205d339267b389d0dcf7c101cef137ae07f94e3f222817123b5f7532f3e4"
+    }
+  ],
+  "sourceFiles": {
+    "src/android.ts": "80a318a939233f9043800f9a71231d38d6c80fbc7c2c1cdb92275624f95efe08",
+    "src/canvas-preview.ts": "532c59d214f085e845b9ef34722b4188833b222b7b3a316af850ed56602e1dc6",
+    "src/core/ace-duo.ts": "4b885dcd3baa07e6dc34d29844f9eb83dc86d5c5afc98cd8004c3d163d6d5841",
+    "src/core/achievements.ts": "5bc2bec993ca8d518508c5aa78902fe6a31d34ed55898f751db21d9782a61e9c",
+    "src/core/armory-offers.ts": "266849580e6e05efbee52591dcf1c7e46b3f46970509f9493f431b5a1bd8256d",
+    "src/core/bankshot.ts": "303135671c14aac19f0e37a53e876bad75fd3392b7ee8decfd4ad6f8b654f2ac",
+    "src/core/bastion-barrage.ts": "40b3d66e586dfee46145812ac59b830020ee99c8ee0f9e88ac09944a76ee0974",
+    "src/core/battery.ts": "cb040acf67a7452eec3e5e34a76f85769f795193cd00b5a120304fa278a5ec6c",
+    "src/core/battle-plan.ts": "f373d8b10649435b5d62d981695bb348f61e1962d370253f18fda8498999bf20",
+    "src/core/behavior.ts": "08a0441bc23ce46e24bb4f5960caee22905d2f6145f4f8e117f0aa2154f81932",
+    "src/core/booster.ts": "e6afd1332ff25cdd66a5efe49a2f1051a91850e17d265a747ff07e9606183106",
+    "src/core/boss-counter.ts": "c544081e211e54a65724dc7819b1e767d36455abedb39909e48c22a722b6a788",
+    "src/core/boss-formations.ts": "7e47ad42dccc331679e4d25939537fb3cb48e572b26178dbe276816194c5f113",
+    "src/core/build-profile.ts": "6737ff4f5bb5effb7f5ac4444e46892f4e591d45722234c98807475a6167212b",
+    "src/core/build-proof.ts": "62daff6fbe81dfd7bdf4dc7e87cc51dd77f2063fbbbae1a1942558922f82b5ee",
+    "src/core/build-tree.ts": "8af53c7fce28729b2e057e3ddf716960c2d79094c2db55651025a68f2d02c2fc",
+    "src/core/calibration-visual.ts": "9e10d4ecc74b04712ae8c53de28c49a828e216809d4b18e94e719ed7ae404362",
+    "src/core/chapter-assaults.ts": "876879c37dd1a6443d164638eb94b6061cb113d3c3fdceb1082f5b4f94d30558",
+    "src/core/closing-assault.ts": "4315bfec57964f20bab810608653de5919199e68eb1efc4f62a299a16f484f25",
+    "src/core/collision.ts": "3be5ddc07fdce2cd971a65557b955e33b7ade1bda15442ec6b44a084b2a9ee61",
+    "src/core/combat-ledger.ts": "c58a6138c1058bbcf6c2409ec215e4ab02a757c12379bb4fadead5f7a84b00ba",
+    "src/core/combos.ts": "5d99b49ab9331e1956858aa484965b2b5e3c2ce91dd46d29d8d46cb104829a3a",
+    "src/core/conduit.ts": "115bb7369210f199c91014340edc2125058b29d490a41618d2719fb0143f0412",
+    "src/core/config.ts": "d7a1ab07b11b6888b0add7c21b86624acd012a1f414eaa5dd8a2485e0ac74de4",
+    "src/core/continuity-reserves.ts": "197b880419eb0a31e31b858267730a4e04e40069a211fc5faec7fe839a36d06d",
+    "src/core/contracts.ts": "20c2989c5268aa7a93f7acab7083be0caf3636a65590263b349a398e0f464d82",
+    "src/core/control-shutter.ts": "8e37ea41af21ff300968b903ff9056978ce034cec478a038bff85deed0545969",
+    "src/core/difficulty.ts": "3338ec5615fddf37ad462a20196cc1b08a858f28f162a096ac0bec60be2a493e",
+    "src/core/director.ts": "7b08238f4b3539e13af463db09a2fee4f709606b3c642e9eab9ed60574314109",
+    "src/core/drift-supply.ts": "7fbfde5cdbfb342ca762d23664127576f781c256adc0508f15b3b97caaaef8af",
+    "src/core/early-reinforcements.ts": "e1846e04f2ed530bdf9e48ad96870f5ec303c3b44b51e5df3747359045d5676d",
+    "src/core/fire-control.ts": "d953079d116abdfd9abd52eacc5b2f6e269899470fbcf1610d40a1e7a758af26",
+    "src/core/flank-hunters.ts": "f5a233c4f982279e8ab61538c5ac3ee80d010a971150c890a86be56c55f0370c",
+    "src/core/gate-contact.ts": "5c60a71d4e970711933430f0ecdac1d1991415cffc538e2803f5f643cdaeadee",
+    "src/core/heavy-counter-push.ts": "f754a9c36356f7328de405b37ad80fcc362551b8ca47a65372ed66570e856d2c",
+    "src/core/interceptor.ts": "300c19df4925153820a407dbe320398af971b9e6dba101ff0a2f58d168399f3a",
+    "src/core/ion-storm.ts": "01007c644daf59534a8be52636612c70b8e0ef28d4ab9389defb7834a54f92ef",
+    "src/core/laser-chain.ts": "b0856070bdf0ac66e1d7f69540b2ad7cac8ea7fa03e8b45961592003eaddf442",
+    "src/core/lockshot.ts": "b44b7b653c6927fd813c86ec8da1598210f4ee5e3a86e2c10feed2f825e84b83",
+    "src/core/magnetic-field.ts": "4846d65f56482bb7ca47bdb4d754baa0b78f3e5932354a1fa221b1a9ef1adde9",
+    "src/core/mirror-laser.ts": "226bd114eac108c26986e06ffb731c06c355c57b7f7630a648b996001ade3039",
+    "src/core/mobile-sentry.ts": "ab102ac98e5bb2586543ea860bb53962fe3b1048235248e4e9035b066d7ba920",
+    "src/core/opening-assaults.ts": "bad2350f7d20c8c9410a990bebc0301668137461f8944fdcfe42db613c29ecd2",
+    "src/core/opening-plan.ts": "d3c19d39a42c6637f4bb9b13c5a517c0fc20e885c0ecbc9b80a7604efaceb3d0",
+    "src/core/overload.ts": "64255ed98b513e6ac0993232ec6a7eb04055bdcd6889d00b0bbdc6bad588f3fb",
+    "src/core/pickup-recovery.ts": "a7ae41e8570b038a93e88ffe41c0514b08add0dcd65be7923630a249843e9345",
+    "src/core/projectile-pressure.ts": "1d5b25cfdbf6fd2122817c7dc2e1adb3c5dca5bd2570a8ae303a61719ea7c194",
+    "src/core/pursuit-waves.ts": "059f6db848a025687360e0006bec069687e0724318779f8ce0bfcf4c2336ab23",
+    "src/core/rake-gun.ts": "45fc8fcf144d54df5f9b828df55bf6302effe41d19b65634233321709f205d2f",
+    "src/core/rapid-break.ts": "a0cfba6417ab502f288fc89671853974436dfb18b58df76fd970825fd3e64631",
+    "src/core/reachability.ts": "d09dc1eac3866345a3676885e851b67ff8675876492c60f2a25d70a8271a1077",
+    "src/core/rebound-charger.ts": "65bf41b6ea91d398cf7c831c340de3e05eaf6365ce97aa56a4e3266555604e84",
+    "src/core/recipe-goal.ts": "973fbafb3f20e243bc9cc5f5801dbd7ad1562307cfc38960746353c60dd3ce09",
+    "src/core/relay-screen.ts": "adaa732ff5f49dea8336f6ab8ae2859e5747c1ae54789c69116c0ef1b675115c",
+    "src/core/rewards.ts": "4cbfdfe6108376723531f0013143bee0cf2d741c3f100a09084845bb373ca391",
+    "src/core/storm-refinement.ts": "26161924071dbc78c926130e272a7a66f685cf9a5dc331aca233822a4e2e9e8c",
+    "src/core/supply-convoy.ts": "9c7bbab9812bd1ce6c0d41f6ef505658af3e0bc96ce2d8dfd8c42f5e24b6834c",
+    "src/core/support-profile.ts": "762492ec0e36cb3b2875c7de39f9e84e2f6ccff4a3437e8695626f14b31ab361",
+    "src/core/sweeper.ts": "4d819e9cdce9587fb51e6d1e999c3774a1b4dc10bfba598f27a9017dfcaf58ad",
+    "src/core/vanguard-patrol.ts": "787a0249645ab6bfc32980264905bad63ef6ff5c7baf7d08a1086b2ed4d6bad3",
+    "src/core/weapons.ts": "c20491513f6f2367ed3a8646c5275741ea9aeb22415513f7649a0fbf99da2594",
+    "src/core/wing-shear.ts": "dde837e60408f4aab54a0dff28d7720d8ae6a08d7131231af3a6a6f5ec7e9e6e",
+    "src/core/world.ts": "15daa08d15116e55005ce9319ae884b833f4a391651ea492bb20c5c4dc86a461",
+    "src/env.d.ts": "424faf9241dd699dda995b367ed36665732da1e6ec1f33b2fd40394488ecac92",
+    "src/game/ace-rig.ts": "3bc3978bf47819094f4c5c6e173618e4baddecbf82d428cdb935719d546f7ea7",
+    "src/game/achievement-badge.ts": "1f94452720b7567e6d784a041990c2068f66886e9544e382fdeac7406ba2f2aa",
+    "src/game/ammo-fragment.ts": "70991437e3c35ee8013802b20c3b61e329bf7126259a45fbef0227056423328f",
+    "src/game/ammo-rack.ts": "634b7fc1867ea5de4fb094695d32f74cf5b035d8a991e00abd36a9876700bcdb",
+    "src/game/arc-filaments.ts": "11187a6736212abdcd0a5585a6ce8fe1dcdec6377284055c706984fd99c23489",
+    "src/game/armor-motion.ts": "031b71a496895e41a02d37bba845c797bf3283f0cb22c0222045ad122b603c06",
+    "src/game/audio.ts": "6d6c6c7780f143fca758dd956461eed64abfb4028e3513d2c525219744c7f755",
+    "src/game/ballistic-mechanics.ts": "a49f405799d838b359fa579299b85a2102f5cc44317a341fbccea6897be62af1",
+    "src/game/bankshot-mount.ts": "805bceca3952c39c9eb514d85b6c6c35dda8a115ba1ecb2082054144a0f87568",
+    "src/game/bastion-barrage-rig.ts": "8b0592cd85e106be47b731f06b9a9e2f835fa505dc636b6681fd6418ff4a4a0e",
+    "src/game/battery-mount.ts": "a82306a82cc1588fada0a242edde065f6149cb51f9da4ab6f877b709c44059e8",
+    "src/game/booster-mount.ts": "5642327b6f830eb6b8b8b95402fb7b42e586cc380f01a624e3c5c18e17614d75",
+    "src/game/boss-destruction.ts": "4c9bf08b8e8c31e27557b22e08d6c63b1c8ab95fae9664b36f78d764bb28e118",
+    "src/game/boss-heat-light.ts": "7a475db28465822e644249a0c860d36911f7591b547f71a1c6b46e4393551959",
+    "src/game/boss-hull-wear.ts": "5245bfbb498317abb827129b7737729f4e377b4ecaa6e6f43a6270c0a4598eee",
+    "src/game/boss-motion.ts": "27d9108c0b0799179abe7f246f160f7f7a385d03750a6a52160d7b390d46a274",
+    "src/game/browser-controls.ts": "2cdadde71c6f07f2d546820335c0584a6a38103ae8f47261bf1430e4448bfcd6",
+    "src/game/browser-image.ts": "26dc73b782c4cf92f94818ea2f045bb8b5eca0d42d90e1c27b02f075863deec3",
+    "src/game/browser-keyboard.ts": "0636778e83ccf755f4673548e1a45b71143b294b89199f7c6dc28170ba5c753a",
+    "src/game/build-preview.ts": "c160825ba874718915cc0614951218e23799cfecccca58493a7f39a8301b10d4",
+    "src/game/build-receipt.ts": "41a1b2d3232d7ed792a7e169a44f10335ebbc5dfb45e276ba1a549e02e8eae5b",
+    "src/game/burn-light.ts": "1772b67b8adf28c9beee8213294624c2bcd4e80f8ca5b270b4772df349eb0534",
+    "src/game/calibration-light.ts": "8c95de687986952d570fd3a4f15db3e3d77dca90870d977fbc0b4deee5c70f2b",
+    "src/game/canvas-runtime.ts": "1609a574a21a402bb39c077a9bd1f90a6e243ae75635a3edde5a6c5f040c9069",
+    "src/game/capacitor-light.ts": "013d84c27abf4b5cfb45a6cf37b35befe4c43d39d4f247efe0b364d4056b22a4",
+    "src/game/charger-motion.ts": "0b5deadceefbd15c3d328cf78ab1ef64b7f3e4083bb06313fa6e9118882f3b8d",
+    "src/game/combat-contribution.ts": "c3ca1931facf33980f3ffa11048934eb9d915dd2167559e2931cde4dd1fb5a23",
+    "src/game/combat-copy.ts": "39facc0ab3df0be9f00c3e097a1020f3d9b1781fd3df8f1c00ba7f9332702f93",
+    "src/game/combat-light.ts": "87e7595fa4f3d6f0b87c259909590972cb99075a3bc9ecd4e01a9d6ab27fb820",
+    "src/game/combat-notice.ts": "061cf038b81e53565b09b3eefe04ddc88e4afdbf00fed49090aba48759233a78",
+    "src/game/context-guide.ts": "be2cf0751eabbc677682fa45b83a6675a64fe549c3e96065f29aff7e4ae7f6bd",
+    "src/game/control-shutter.ts": "c701f6a28f00ac54f8c20b7a3ef108406285960708e6d6add539d672725d9811",
+    "src/game/cooling-rotors.ts": "dc060c246249255c9d9fda3c585bc7b32cd23995dec3a7691699b7f030328278",
+    "src/game/crate-debris.ts": "a92b241c15c21e76da93f8dba942741c96bb30ded860a284aa5a3536f5cbf805",
+    "src/game/drift-carrier.ts": "be8fbdf5d03907f215ca4c958bb730a1673037a39717b77afa1ba89aef085611",
+    "src/game/drone-motion.ts": "683a52258926ee964332b06aa784673cd50d794d4b9c1652b6e3834c6deae884",
+    "src/game/drop-light.ts": "339508ace1d710a0e1e1c39590ab1a630ae571c343ec7b1f89d743750e923fea",
+    "src/game/elite-motion.ts": "fa801bb095517904ada79869d68cb68871cf477a14122761c6347cf3b3a29a8c",
+    "src/game/emp-light.ts": "74e24b183fe3cd1e48651d5dbe695ae8b0db3f43640b463be68ff848dad8075d",
+    "src/game/enemy-wreck.ts": "af6851c9a70d8d5f46fe4a778c21b3efe089ba695197f5f9b63453834f9d54ce",
+    "src/game/equipment-preview.ts": "0f0b20be791ef98075cc94285f111aef5102d8d64e6d08e0bbf7f1026407ce42",
+    "src/game/equipment-receipt.ts": "2c5069bea64eaae63cfb01dc8cbb12acf46125cc9159bbc372dfade82ac72818",
+    "src/game/fire-control-rig.ts": "31b251cded3fb31412b0417837322c4233009c815a3c58229e1ef95bca19d704",
+    "src/game/formation-shield.ts": "98326375d794680f60b52d2a1360841e243835ef295b79f04d9751eb4ed82b33",
+    "src/game/fracture-light.ts": "a597963696f72c46b8f66e580a966a8f6e245f539bc7f5cb630ca3c8832ddf71",
+    "src/game/frame-window.ts": "18f5b397867ec226876329b733edc2ae61c2a5510a83b1f0a507511ceea782c1",
+    "src/game/gate-feedback.ts": "2343735794f92e8f526da725e9e129559b56cf6cd86d562368ceb658343317f7",
+    "src/game/gate-machine.ts": "0aa53d15ed0e30bf05c237eb3bbc557c0956994d28688079bbf0530426e4ac68",
+    "src/game/horizontal-keys.ts": "cc26e41aed783250e592bef685c0b09e2843f66547fc4497ca91b9db7c83620b",
+    "src/game/hostile-shot.ts": "0f4ab29dbbdb6632deece38ea4f03028c15b72b6e98d4fc25ea87208a9e29a5b",
+    "src/game/impact-admission.ts": "73f16aded779dfbfd946c85258b7417d48800e71fddc0cfde0afb47b3fe99cf4",
+    "src/game/interceptor-light.ts": "06a4740807c1c5268aeb57ec10244f0def9c08c3fbdb27c2773fee9da2820c87",
+    "src/game/ion-evolution-light.ts": "f4a0c706308eaa664572eb59edb2d50b44e80f2bc879462954857168da61656a",
+    "src/game/ion-storm-light.ts": "6967566efeaa8e2d71d50522a6c570f210d7cfb3d9e496849beee08aa0b19615",
+    "src/game/license-viewer.ts": "2381b442f9675d0750e79f31fc43b77c0c39927bc402e6a5a6a4c4a7ff01b0b6",
+    "src/game/lockshot-goal.ts": "2a033defa75cc393e9d5d16f3353607eb98af4cd4dff548441b3a8d0baed509b",
+    "src/game/lockshot-mount.ts": "76df342bd8372b987633af7c09e9dad0c3058068de2c66d46831b7b62e0e64db",
+    "src/game/magnetic-light.ts": "17d3485ceb120bb74724470a5119cfa454cb5f5eeafd7a2570b53ac509fc0287",
+    "src/game/mirror-light.ts": "f0fb957253801adad4015a2733ce00384e1ec5ec57c2cca49137149167832b7c",
+    "src/game/mounted-rig.ts": "5f15f48c26f16e53c2443c7d9c9308d7878bca2105437cc08e3226a19a1d725e",
+    "src/game/music.ts": "a2b1d41139765f0c612ba18d33dbb21ebc48d0c5ab11ade79d6439f5e6d37585",
+    "src/game/pickup-signal.ts": "9dc1e3861a86fe34b57f50c4cc31b636196e38fbdf82540b006fa6188cff2a1c",
+    "src/game/player-motion.ts": "f4c6d72cc86c02d0bc89fff98c30259123aee25f1f9331ea974229dad0928cf6",
+    "src/game/rake-mount.ts": "3c7bc818c59c82c2e104c668dd1fe2fdf5016d1757e4817082ab69ad6678bfd0",
+    "src/game/rebound-light.ts": "478c6507d58fecc5472418641e4d1525d8ee00bb5250a231747e0734fb22631c",
+    "src/game/refit-label.ts": "91ac01e62655ba58b8b196dfd0f1b57519213bd5ee5b2651a642d9a0ae984ed1",
+    "src/game/ricochet-light.ts": "914fc1aeb43390537d511305fd1408739538bea45c29d94e37e9f4a7f54d4c49",
+    "src/game/run-report.ts": "4cd744ce1734a97f2e2615432e26c23a1df6eb09a0200cbb931cc563699218c1",
+    "src/game/scene.ts": "0975b46e01642459050e460eb276d7dbb5f0689c918b8f7c7f55c3433fe77f3a",
+    "src/game/sentry-thrust.ts": "45948a4bb7af1c36795207b937c666466b700701c038308cc9bac14e121ffb75",
+    "src/game/shield-latch.ts": "0c0afe350ecec248178e79f820ed913d5516f1ca49c87614335f022b315a41a1",
+    "src/game/storm-marks.ts": "e6a0b9e4ef398ed961d6c598767955895095f7f7f7d9670a9e4dc65b9df6a96d",
+    "src/game/supply-combinations.ts": "6cfef599393a608b40627e87a163d597c10dcf6115d7cba244dc36a73c6d1a9f",
+    "src/game/support-light.ts": "1a259f7660b5ac3cc8169f45bd7ba36814ad1931db612997fc6d636ce823aa33",
+    "src/game/sweeper-light.ts": "fedd15559751ab17c3436ac0e0d381607f7eedf83991e6507f06106f2066e3a0",
+    "src/game/weapon-dossier.ts": "54d64ced6867d0e801898f8c3340a3b8a9fa416705640ba50b3c30854862b5ca",
+    "src/game/weapon-motion.ts": "6b5342309782ff965d84dfae4568af37d9e50df26639ac0301acf73227b5bece",
+    "src/game/wing-shear-rig.ts": "58fb30c8d1587940fd130791578908c00704f113060a8dc06cfd6b73fbd70203",
+    "src/main.ts": "3c62e7a9b83d7715892e0e3c56ad8e351d25c77b66d792f7225b5cc3519a0502",
+    "src/style.css": "8fb5181d92ea9d4c2c9103b1206d62d52f96de763504ea13e45abb7ce40be38d",
+    "src/text-assets.d.ts": "b8b4002ae2a69e2598eb0a6f359cc342e1949641c1bd3f0ab369169cc92daa49",
+    "src/ui/interface.ts": "ecff11a0c3fc5f53b39042d07d9be562d19be48b5d8cf342a725c80f16b74be7",
+    "src/ui/storage.ts": "551ee1d9c7e176774a931c78f5e0a00f629b396aee89803e2d8bf9a2d0358b87",
+    "src/wechat.ts": "bdaffe3051c92ebd4b44a3126ecd93dcce7a9c98d0b74e70527e3acf8e4dc30c",
+    "package.json": "2dd17f261f648d668c293ca0ff137b72dd72377b1fba7e3d7e0d6bed42cd5808",
+    "package-lock.json": "a6e91e8cd78dc88ac96da4f53128c256f1e85e9c6f5926c9e4b1b543a0e599d0",
+    "index.html": "47ae0ad1d9736733f60b488f855c944352a87ad1f32648eabda9f0dad6217042",
+    "canvas.html": "18fd20b6deb2cea6a941b9274f87065b5cc720bedca7ea7c744eb29e64f32fa9"
+  },
+  "assetFiles": {
+    "art/source/cooling-corridor-v2.png": {
+      "sha256": "12086d4222aaf47672705b0efab6fcfd48f9bcf3e4e803ebb42b1f92784a5c6d",
+      "bytes": 3082454
+    },
+    "public/assets/cooling-corridor-v2.jpg": {
+      "sha256": "69255db44e1e884c9f67cb92405edf30783ebbd4cd7f0eddf4dad9409f31b69c",
+      "bytes": 181762
+    },
+    "art/prompts/stage247-cooling-corridor-v2.md": {
+      "sha256": "4203816faa22d30d3d6caf3dad039e33026efa6b35dba7e495d75b2f8c8c68d4",
+      "bytes": 1930
+    }
+  }
+}
