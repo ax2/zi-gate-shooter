@@ -7,6 +7,7 @@ export function createRenderFixture(weak = false, contextProbe?:()=>{hidden?:boo
   const stack: Record<string, any>[] = [];
   const context = new Proxy(state, { get(target, key: string) {
     if (key in target) return target[key];
+    if (key === 'measureText') return (text:string) => ({width:[...text].reduce((n,ch)=>n+(ch.charCodeAt(0)>255?1:.55),0)*(Number(/(\d+)px/.exec(state.font??'24px')?.[1])||24)});
     if (key === 'save') return () => stack.push({ ...state });
     if (key === 'restore') return () => Object.assign(state, stack.pop());
     if (key === 'createLinearGradient' || key === 'createRadialGradient') return () => ({addColorStop(){}});

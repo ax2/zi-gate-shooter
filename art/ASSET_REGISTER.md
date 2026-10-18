@@ -97,3 +97,6 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 
 ## Stage-247 冷却设施v2候选
 2026-10-18，内置imagegen引用自有冷却廊v1作正交风格参考生成新v2，未使用商业游戏素材。原始941×1672 PNG在source/cooling-corridor-v2.png，运行720×1279 JPEG质量84、181762字节，public/assets/cooling-corridor-v2.jpg；原v1保留。完整最终提示词prompts/stage247-cooling-corridor-v2.md。侧缘涡轮/冷却管组，中央暗蓝灰钢板，无未来危险轨迹；仅侧翼使用。运行时外49逻辑像素绘制原时钟旋转风叶，战斗层在其上，标准12/弱档8叶。素材与实景仍候选，未获正式美术签收；验收详见docs/stages/Stage-247。
+
+## Stage271 图示科技
+内置imagegen原创概念与16格科技插画，源图和提示见art/source/Stage-271/PROVENANCE.md；public/assets/tech-icons-v1.png为确定性1024导出，UI只读取图块，文字/连线/按钮原生绘制。候选美术，未冒称用户正式签收。
