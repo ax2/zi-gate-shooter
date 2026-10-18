@@ -2,6 +2,12 @@ import {C} from '../src/core/config';
 import { expect, it } from 'vitest';
 import { contextGuide,weaponGuide } from '../src/game/context-guide';
 import { World } from '../src/core/world';
+it('explains only the actual shielded heavy gun, follows an exposed moving gun, and never changes combat',()=>{
+ const w=new World(),shield=w.spawn('guard',240,520),gun=w.spawn('armor',240,320);shield.heavyReserve=gun.heavyReserve=true;gun.pattern='sweep';
+ const before=JSON.stringify(w);expect(contextGuide(w).title).toContain('护炮闭盾');expect(contextGuide(w).detail).toContain('横移炮');expect(JSON.stringify(w)).toBe(before);
+ gun.x=420;expect(contextGuide(w).title).toBe('后炮离盾：转火追拆');gun.pattern='bankshot';expect(contextGuide(w).detail).toContain('沿边折返');
+ gun.active=false;expect(contextGuide(w).title).not.toContain('护炮');gun.active=true;gun.y=1300;expect(contextGuide(w).title).not.toContain('后炮');
+});
 it('explains the first gate escort without directing the player to non-existent outer supplies',()=>{
  const w=new World(),b=w.spawn('guard',500,550);b.pattern='convoy';const before=JSON.stringify(w);expect(contextGuide(w).title).toContain('门后护炮');expect(contextGuide(w).detail).toContain('打门');expect(JSON.stringify(w)).toBe(before);w.round=4;expect(contextGuide(w).title).toContain('外侧路线');
 });

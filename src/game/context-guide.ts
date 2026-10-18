@@ -38,6 +38,12 @@ export function contextGuide(world: Context): Guide {
   const locked=visible.find(b=>b.pattern==='lockshot'&&!lockshotLeaving(b));
   if(locked)return {kind:'enemy',title:(locked.empRemaining??0)>0?'斜射停火：已发子弹仍危险':locked.forkshot?'三角哨机：锁位后分三点射击':'斜射哨机：入场锁位后不再追踪',detail:locked.forkshot?'可蓄能抢先拆炮 · 首弹通过后可回中路':world.round===1?'抢先拆炮，或避完三连再击毁同机':'可在蓄能时击破 · 横移避开原位置的实弹'};
   if(visible.some(b=>b.pattern==='relocate'))return {kind:'enemy',title:'机动哨机：入场抢位，齐射再换位',detail:'停稳再蓄能 · 重新对齐目标'};
+  const escortedGun=visible.find(b=>b.heavyReserve&&b.kind==='armor');
+  if(escortedGun){
+    const shield=visible.find(b=>b.heavyReserve&&b.kind==='guard'&&b.y>escortedGun.y&&Math.abs(b.x-escortedGun.x)<b.width/2);
+    const cannon=escortedGun.pattern==='bankshot'?'沿边折返弹仍危险':escortedGun.pattern==='sweep'?'跟枪拆横移炮 · 留意已发实弹':'集中火力拆后炮 · 已发弹仍危险';
+    return {kind:'enemy',title:shield?(guardClosed(shield)?'护炮闭盾：拆盾压炮，或清侧翼换位':'护炮开盾：集中拆盾再压后炮'):'后炮离盾：转火追拆',detail:cannon};
+  }
   if (visible.some(b => b.kind === 'sniper' && b.warning > 0))
     return { kind: 'enemy', title: '狙击蓄能：保持横向移动', detail: '也可抢先击毁 · 命中不会打断蓄能' };
   const rotating=visible.find(b=>b.kind==='guard'&&b.shieldTurn!==undefined);if(rotating)return {kind:'enemy',title:'轮换重盾：追开盾窗口',detail:`闭盾减伤${Math.round((1-ROTATING_SHIELD.closedScale)*100)}% · 击破中继可同时开盾`};
