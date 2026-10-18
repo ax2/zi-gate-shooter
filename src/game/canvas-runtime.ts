@@ -1,3 +1,4 @@
+import { HeavyRuptures } from './heavy-rupture';
 import{RecipeTrialPlan,recipeTrialStatus}from'./recipe-trial';
 import{cratePanel}from'./crate-panel';
 import{scissorMount}from'./scissor-mount';
@@ -190,6 +191,7 @@ export class CanvasRuntime {
   private crateDebris = new CrateDebris();
   private bossFragments = new BossArmorFragments();
   private enemyWreck = new EnemyWreck();
+  private heavyRuptures = new HeavyRuptures();
   private gateFeedback = new GateFeedback();
   private accumulator = 0;
   private lastTime = 0;
@@ -268,7 +270,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'boss-reactor-v1.png', 'minelayer-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', INTERCEPTOR_ART, 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'heavy-rupture-v1.png', 'boss-reactor-v1.png', 'minelayer-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', INTERCEPTOR_ART, 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -355,7 +357,7 @@ export class CanvasRuntime {
     this.gateFeedback.clear();
     this.crateDebris.clear();
     this.bossFragments.clear();
-    this.enemyWreck.clear();
+    this.enemyWreck.clear();this.heavyRuptures.clear();
     this.playerMotion.reset();
     this.weaponMotion.reset();
     this.weaponGuideUntil = 0;
@@ -569,7 +571,7 @@ export class CanvasRuntime {
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
     else if (action === 'resume') { this.pausePreview = false; this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.recipeTrial.clear(); this.shieldBreak=undefined;this.equipmentHud=undefined;this.moduleAssemblies.clear();this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear();this.bossFragments.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.recipeTrial.clear(); this.shieldBreak=undefined;this.equipmentHud=undefined;this.moduleAssemblies.clear();this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear();this.heavyRuptures.clear();this.bossFragments.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -723,8 +725,9 @@ export class CanvasRuntime {
     const explosion = ['mine-burst','ion-storm','scatter-burst', 'capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y);this.crateDebris.trim(9-this.bossFragments.pieces.length); this.enemyWreck.trim(9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length), e.enemyKind);
+    const heavyBurst=e.type==='kill'&&this.heavyRuptures.burst(e.enemyKind,e.x,e.y,this.world.time,this.save.settings.effects==='weak');
     if (e.type === 'boss-kill') {this.bossFragments.clear();this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);}
-    else if(explosion){
+    else if(explosion&&!heavyBurst){
       // A combination gets a readable burst even when ordinary explosions fill the budget.
       if((e.type==='ion-storm'||e.type==='fracture'||e.type==='capacitor'||e.type==='scatter-burst')&&this.blasts.length>=4){const ordinary=this.blasts.findIndex(b=>!b.fracture&&!b.electric&&!b.ion);this.blasts.splice(ordinary<0?0:ordinary,1);}
       if(this.blasts.length<4)this.blasts.push({ion:e.type==='ion-storm',electric:e.type==='capacitor',fracture:e.type==='fracture',x:e.x,y:e.y,size:e.size??80,life:.45,total:.45});
@@ -970,6 +973,13 @@ export class CanvasRuntime {
     this.gateFeedback.advance(this.mode==='playing'?dt:0,r=>this.mode==='playing'&&gateReceiptReadable(r,w.bodies,w.bullets,noticeBlocking));
     this.drawGuide();
     this.drawDestruction(dt);
+    this.heavyRuptures.sync(w.time,this.save.settings.effects==='weak');
+    for(const burst of this.heavyRuptures.items){
+      const age=Math.max(0,(w.time-burst.started)/.64);
+      c.save();c.beginPath();c.rect(0,240,720,1040);c.clip();
+      c.globalAlpha=(this.save.settings.effects==='weak'?.56:.88)*Math.min(1,(1-age)*4);
+      this.frameSprite('heavy-rupture-v1.png',Math.min(15,Math.floor(age*16)),4,burst.x,burst.y,burst.size,burst.size,4);c.restore();
+    }
     this.enemyWreck.trim(Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length));
     this.enemyWreck.advance(dt);
     for (const piece of this.enemyWreck.pieces) {
@@ -2061,6 +2071,7 @@ export class CanvasRuntime {
       effectsMode:this.save.settings.effects,bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
+      heavyRuptures: this.heavyRuptures.items.map(b=>({...b,age:this.world.time-b.started})),
       enemyFragments: this.enemyWreck.pieces.length,
       supplyCombinations:this.world.bodies.filter(b=>b.active&&(b.kind==='crate'||b.kind==='pickup')).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind??this.world.weaponKind,row:b.row,x:b.x,y:b.y,combinations:supplyCombinations(this.world,b,this.save.recipeGoal)})),bossWear:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,variant:b.bossVariant??0,band:bossWearBand(b),hp:b.hp,maxHp:b.maxHp,hit:b.hit})),gateReceipts: this.gateFeedback.receipts.length,gateReceiptDetails:this.gateFeedback.receipts.map(r=>({...r,lines:[...r.lines]})),
       callbackWork:{...this.callbackWork.snapshot(),maxMs:this.maxCallbackWorkMs},interruptedFrames:this.interruptedFrames.map(frame=>({...frame})),
