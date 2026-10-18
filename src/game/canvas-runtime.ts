@@ -61,6 +61,8 @@ import{bossTacticalStatus}from './boss-tactical-status';
 import{CLOSING_CLEAR_CHARGE}from'../core/closing-assault';
 import{OVERDRIVE,overdriveForms,isOverdriveForm}from'../core/overdrive';
 import{overdriveLance}from'./overdrive-light';
+import{MINELAYER}from'../core/minelayer';
+import{mineLight,minelayerFlash}from'./mine-light';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,requiredProofGroups,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
@@ -254,7 +256,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'boss-reactor-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', INTERCEPTOR_ART, 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'boss-reactor-v1.png', 'minelayer-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', INTERCEPTOR_ART, 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -686,7 +688,7 @@ export class CanvasRuntime {
     }
     // A coalesced pellet reuses its existing material response and legacy sparks.
     if(e.type==='impact'&&!admitWeaponImpact(this.impacts,e.x,e.y,e.weaponKind??this.world.weaponKind,this.save.settings.effects==='weak'))return;
-    const explosion = ['ion-storm','scatter-burst', 'capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
+    const explosion = ['mine-burst','ion-storm','scatter-burst', 'capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
     if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y);this.crateDebris.trim(9-this.bossFragments.pieces.length); this.enemyWreck.trim(9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length); }
     if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length), e.enemyKind);
     if (e.type === 'boss-kill') {this.bossFragments.clear();this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);}
@@ -981,6 +983,10 @@ export class CanvasRuntime {
           const local=b.pattern==='rebound';c.save();if(local){c.translate(b.x,y);c.rotate(reboundState(b).direction*.14);}
           this.frameSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, 1);
           this.hitSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, b.hit, 0.07, 1);c.restore();
+        } else if (b.kind === 'armor'&&b.pattern==='minelayer') {
+          const frame=b.mineFiredAt!==undefined&&b.age-b.mineFiredAt<.22?2:b.warning>0?1:0;
+          this.frameSprite('minelayer-v1.png',frame,3,b.x,y,b.width*1.3,b.height*1.3,2);
+          this.hitSprite('minelayer-v1.png',frame,3,b.x,y,b.width*1.3,b.height*1.3,b.hit,.07,2);minelayerFlash(c,b,this.save.settings.effects==='weak');
         } else if (b.kind === 'armor') {
           const braced=heavyEscortHolding(b)||batteryHolding(b)||fireControlHolding(b)||(b.pattern==='bankshot'&&b.age<BANKSHOT.hold),frame = armorFrame(b,braced), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
@@ -1215,6 +1221,7 @@ export class CanvasRuntime {
         else if(b.pattern==='fire-control')this.text((b.controlPatrol?'游弋·':'')+((b.empRemaining??0)>0?'火控·停火':fireControlSource(b,w.bodies)?b.warning>0?'增幅·蓄能':'增幅·扇射':'断供·单线'),b.x,b.y-b.height/2-36,21,(b.empRemaining??0)>0?'#adf0ff':'#ffd49a','center',true);
         if(b.pattern==='bankshot')this.text((b.empRemaining??0)>0?'折返炮·停火':b.warning>0?'折返炮·蓄能':'折返炮·反弹一次',b.x,b.y-b.height/2-36,21,'#ffc7a1','center',true);
         if(b.pattern==='booster')this.text((b.empRemaining??0)>0?'火箭·停火':b.warning>0?'火箭·蓄能':b.burst?'火箭·续发':b.boosterSpent?'火箭·撤离':'火箭·缓行→加速',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
+        if(b.pattern==='minelayer')this.text(b.warning>0?'布雷·蓄能':b.mineSpent?'布雷·撤离':'布雷机',b.x,b.y-b.height/2-36,21,'#ffb59d','center',true);
         if(b.pattern==='rake')this.text((b.empRemaining??0)>0?'旋扫·停火':b.warning>0?'旋扫·蓄能':b.rakeFiring?`旋扫·${(b.rakeVolley??0)+1}/3`:'三拍旋扫',b.x,b.y-b.height/2-36,21,'#ffcf9d','center',true);
         if(b.pattern==='relay-screen')this.text(b.warning>0?'后哨·蓄能':'后排哨机',b.x,b.y-b.height/2-36,21,'#b8eaff','center',true);
         if(b.pattern==='lockshot'){
@@ -1235,7 +1242,7 @@ export class CanvasRuntime {
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
     for (const b of w.bullets.filter(b => b.hostile)) {
-      hostileShot(c,b);
+      if(b.mine)mineLight(c,b,this.images.get('minelayer-v1.png')!,this.save.settings.effects==='weak');else hostileShot(c,b);
     }
   }
   private drawDestruction(dt: number) {
@@ -1321,7 +1328,7 @@ export class CanvasRuntime {
     // Briefly omit it while a passing body occupies the help area: neither its
     // silhouette nor the instruction should become an unreadable composite.
     if (this.world.bodies.some(b => b.active && b.y + b.height * 0.8 >= 1150 && b.y - b.height * 0.8 <= 1256)) return;
-    if(this.world.bullets.some(b=>b.active&&b.hostile&&b.x+8>=44&&b.x-8<=676&&b.y+12>=1150&&b.y-7<=1256))return;
+    if(this.world.bullets.some(b=>b.active&&b.hostile&&b.x+(b.mine?48:8)>=44&&b.x-(b.mine?48:8)<=676&&b.y+(b.mine?48:12)>=1150&&b.y-(b.mine?48:7)<=1256))return;
     let guide = contextGuide(this.world);
     if(this.world.phase==='boss'&&this.world.phaseTime<8&&this.world.bossFormation)
       guide=this.world.activeEscorts.length
@@ -1912,6 +1919,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
+      minelayers:this.world.bodies.filter(b=>b.active&&b.pattern==='minelayer').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,warning:b.warning,shots:b.mineShots??0,firedAt:b.mineFiredAt})),mines:this.world.bullets.filter(b=>b.hostile&&b.mine).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy,age:b.age,radius:MINELAYER.radius})),
       closingStatus:this.world.closingStatus,closingClears:this.world.closingClears,overdriveForm:this.world.overdriveForm??null,overdriveShots:this.world.overdriveShots,overdriveHits:this.world.overdriveHits,
       bossPlateFragments:this.bossFragments.pieces.length,bossSalvage:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,count:bossSalvageCount(b),hp:b.hp,maxHp:b.maxHp})),
       combatCopy:this.presentedCopy?{...this.presentedCopy,lines:[...this.presentedCopy.lines],rows:this.presentedCopy.rows.map(r=>({...r})),bounds:{...this.presentedCopy.bounds}}:null,

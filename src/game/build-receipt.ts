@@ -23,7 +23,7 @@ export function combatPanelClear(w:World,area:ReadingArea){
       &&y+halfHeight+70>=area.top&&y-halfHeight-70<=area.bottom;
   });
   return !blockedBody&&!w.bullets.some(b=>b.active&&b.hostile
-    &&b.x+14>=area.left&&b.x-14<=area.right&&b.y+18>=area.top&&b.y-18<=area.bottom);
+    &&b.x+(b.mine?48:14)>=area.left&&b.x-(b.mine?48:14)<=area.right&&b.y+(b.mine?48:18)>=area.top&&b.y-(b.mine?48:18)<=area.bottom);
 }
 // These are rendered envelopes, including native labels, not collision boxes.
 // No prediction or extra game state is involved in choosing a free reading area.

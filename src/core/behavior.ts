@@ -3,6 +3,7 @@ import{WING_SHEAR,wingShearVolley}from'./wing-shear';
 import {CONTROL_SHUTTER,shutterClosed,type ShutterState}from'./control-shutter';
 import {BANKSHOT} from './bankshot';
 import {BOOSTER} from './booster';
+import{MINELAYER,minelayerMuzzles}from'./minelayer';
 import{RAKE,rakeVelocity,rakeMuzzle}from'./rake-gun';
 import {FIRE_CONTROL,fireControlHolding,fireControlSource,patrolControl} from './fire-control';
 import {LOCKSHOT,FORKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
@@ -219,6 +220,13 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
         else {for(const muzzle of interceptorMuzzles(b))shot(muzzle.x,muzzle.y,Math.sign(muzzle.x-b.x)*INTERCEPTOR.wingVx,INTERCEPTOR.wingVy);b.burst=1;b.timer=INTERCEPTOR.between;}
         b.warning=0;
       }
+    }
+  } else if(b.kind==='armor'&&b.pattern==='minelayer'){
+    if(b.mineSpent||b.age>=MINELAYER.hold)b.y+=b.speed*dt;
+    if(b.mineSpent||b.y>=600){b.warning=0;return;}
+    if(b.timer<=1e-9&&!offline){
+      if(b.warning<=0){b.warning=MINELAYER.warning;b.timer=b.warning;}
+      else{for(const s of minelayerMuzzles(b))shot(s.x,s.y,s.vx,s.vy);b.mineSpent=true;b.warning=0;}
     }
   } else if(b.kind==='armor'&&b.pattern==='booster'){
     if(b.boosterSpent||b.age>=BOOSTER.hold)b.y+=b.speed*dt;

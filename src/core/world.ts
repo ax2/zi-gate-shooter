@@ -3,6 +3,8 @@ import{BOSS_RESERVES,bossReserveFor}from './boss-reserves';
 import{pullPickup}from'./pickup-recovery';
 import {RapidBreak} from './rapid-break';
 import{BOOSTER}from'./booster';
+import{MINELAYER}from'./minelayer';
+import{hostileContactShape}from'./hostile-shape';
 import{counterTitle}from'./boss-counter';
 import {hasControlShutter}from'./control-shutter';
 import {BANKSHOT,advanceProjectile,type FlightSegment} from './bankshot';
@@ -54,6 +56,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  mineSpent?:boolean;mineShots?:number;mineFiredAt?:number;
   bossSalvageMask?:number;
   bossReserveAt?:number;bossReserveSpent?:boolean;bossReserveSpawns?:number;escortHold?:number;bossReserve?:boolean;
   boosterSpent?:boolean;boosterShots?:number;boosterFiredAt?:number;boosterFiredSide?:-1|1;
@@ -70,9 +73,10 @@ export interface Body {
   attackCycle: number; burst: number; fractureHits?:number; fractureReadyAt?:number; burnTicks?:number; burnTimer?:number; burnDamage?:number;
   heavyReserve?:boolean;flankReserve?:boolean;dropGrace?:number;empRemaining?:number;sentryVolleys?:number;lockWarning?:number;lockX?:number;forkshot?:boolean;lockFiredAngle?:number;lockShots?:number;lockAcceptedShots?:number;lockPassed?:number;lockDamageStart?:number;lockFiredAt?:number;sweeperShots?:number;formationShots?:number;shotScale?:number; capacitorHits?:number;stormHits?:number; counterfire?:boolean;counterReady?:boolean;counterVolleys?:number;counterShotAge?:number;counterBeat?:number;counterShotBeat?:number;counterFiredAt?:number;counterFiredBeat?:number;counterShots?:number;wingBeat?:number;wingShotBeat?:number;wingShotAge?:number;wingVolleys?:number;wingFiredAt?:number;wingFiredBeat?:number;wingShots?:number;barrageBeat?:number;barrageLane?:number;barrageShotBeat?:number;barrageShotPort?:number;barrageFiredAt?:number;barrageFiredBeat?:number;barrageFiredPorts?:number;barrageShots?:number;barrageVolleys?:number; bountyRound?:number;bountyShots?:number;proofTarget?:boolean;proofShots?:number;proofGroup?:number;proofRound?:number;escort?:boolean;
   bankShots?:number;bankFiredAt?:number;controlShutter?:boolean;controlOpenUntil?:number;controlPatrol?:boolean;controlHomeX?:number;controlGroup?:number;controlLinked?:boolean;controlShots?:number;controlBoostedShots?:number;
-  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster'; bossVariant?: number;
+  batteryShots?:number;weaponKind?: WeaponKind;refit?:boolean;openingSupply?:boolean;directedRefit?:boolean; pattern?: 'weave' | 'flank' | 'fan' | 'relocate' | 'intercept' | 'rebound' | 'convoy' | 'sweep' | 'relay-screen' | 'battery' | 'drift-supply' | 'lockshot' | 'fire-control' | 'bankshot' | 'rake' | 'booster' | 'minelayer'; bossVariant?: number;
 }
 export interface Bullet {
+  mine?:boolean;
   readonly calibrationBand?:CalibrationBand;
   id: number; x: number; y: number; px: number; py: number;
   vx: number; vy: number; damage: number; age: number; active: boolean; hostile: boolean;
@@ -809,6 +813,7 @@ export class World {
           if(this.round===1&&s.at===INTRO_ESCORT.at&&(s.kind==='elite'||s.kind==='guard'))candidate.introEscort=true;
           if(this.round===1&&s.kind==='guard'&&s.pattern==='convoy')candidate.convoyHold=INTRO_ESCORT.hold;
           if(s.pattern==='booster')candidate.timer=BOOSTER.opening;
+          if(s.pattern==='minelayer'){candidate.timer=MINELAYER.opening;candidate.hp*=MINELAYER.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
           if(s.heavyReserve&&s.kind==='armor'&&s.pattern!=='bankshot'){candidate.hp*=HEAVY_ESCORTS.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
@@ -977,6 +982,7 @@ export class World {
         if(b.kind==='boss'&&b.attack===4&&(b.bossVariant===1||b.bossVariant===2)){b.counterShots=(b.counterShots??0)+1;b.counterFiredAt=b.age;b.counterFiredBeat=b.counterShotBeat??0;}
         if(b.pattern==='bankshot'){this.bullets[this.bullets.length-1].bankRemaining=1;b.bankShots=(b.bankShots??0)+1;b.bankFiredAt=b.age;this.bankShots=(this.bankShots??0)+1;}
         if(b.pattern==='booster'){const p=this.bullets[this.bullets.length-1];p.boostAfter=BOOSTER.delay;p.boostFactor=BOOSTER.factor;b.boosterShots=(b.boosterShots??0)+1;b.boosterFiredAt=b.age;b.boosterFiredSide=p.x<b.x?-1:1;}
+        if(b.pattern==='minelayer'){this.bullets[this.bullets.length-1].mine=true;b.mineShots=(b.mineShots??0)+1;b.mineFiredAt=b.age;}
         if(b.pattern==='rake'){b.rakeShots=(b.rakeShots??0)+1;b.rakeFiredAt=b.age;b.rakeFiredVolley=b.rakeVolley??0;}
         if(b.pattern==='relay-screen')b.formationShots=(b.formationShots??0)+1;
         if(b.pattern==='lockshot'){b.lockAcceptedShots=(b.lockAcceptedShots??0)+1;b.lockFiredAt=b.age;if(b.forkshot)b.lockFiredAngle=Math.atan2(vx??0,vy??280);this.lockshotShots++;}
@@ -1012,11 +1018,13 @@ export class World {
     this.advanceIon(dt,add);
     for (const bullet of this.bullets) {
       if (bullet.hostile) {
+        const shape=hostileContactShape(bullet);
         const segments=sweptSegments.get(bullet.id)??[{x0:bullet.px,y0:bullet.py,x1:bullet.x,y1:bullet.y,from:0,to:1}];
-        for(const segment of segments){const dx=this.player.x-this.player.px,t=sweep(segment.x0,segment.y0,segment.x1,segment.y1,segment.from===0?this.player.px:this.player.px+dx*segment.from,C.playerY,segment.to===1?this.player.x:this.player.px+dx*segment.to,C.playerY,27,31);
+        for(const segment of segments){const dx=this.player.x-this.player.px,t=sweep(segment.x0,segment.y0,segment.x1,segment.y1,segment.from===0?this.player.px:this.player.px+dx*segment.from,C.playerY,segment.to===1?this.player.x:this.player.px+dx*segment.to,C.playerY,shape.x,shape.y);
         add(t===null?null:segment.from+t*(segment.to-segment.from), 1, bullet.id, () => {
           if (!bullet.active || this.player.hp <= 0) return;
           bullet.active = false; this.hurt('bullet');
+          if(bullet.mine)this.effects.push({type:'mine-burst',x:bullet.x,y:bullet.y,size:110});
         });}
         // A fired bolt is evaded only after it has cleared the entire player
         // collision band. Queue this with damage/kill contacts: a same-time

@@ -1,4 +1,5 @@
 import{BOOSTER}from'./booster';
+import{hostileContactShape}from'./hostile-shape';
 import {advanceProjectile} from './bankshot';
 import { C, clamp } from './config';
 import { advanceBody } from './behavior';
@@ -28,7 +29,7 @@ export function dangerTimeline(bodies: readonly Body[], bullets: readonly Bullet
         const x = b.x, y = b.y;
         advanceBody(b, C.step, phase, (options.phaseTime ?? 0) + time, (sx, sy, vx = 0, vy = 280) => {
           // Ignoring the live bullet budget is conservative, never less dangerous.
-          forecastBullets.push({ id: nextId--, x: sx, y: sy, px: sx, py: sy, vx, vy, damage: 1, age: 0, active: true, hostile: true,...(b.pattern==='bankshot'?{bankRemaining:1}:b.pattern==='booster'?{boostAfter:BOOSTER.delay,boostFactor:BOOSTER.factor}:{}) });
+          forecastBullets.push({ id: nextId--, x: sx, y: sy, px: sx, py: sy, vx, vy, damage: 1, age: 0, active: true, hostile: true,...(b.pattern==='minelayer'?{mine:true}:b.pattern==='bankshot'?{bankRemaining:1}:b.pattern==='booster'?{boostAfter:BOOSTER.delay,boostFactor:BOOSTER.factor}:{}) });
         },forecastBodies);
         if (b.kind !== 'gate' && b.kind !== 'pickup' && b.kind !== 'boss')
           reserve(x, y, b.x, b.y, b.width / 2 + C.playerRadius + 12, b.height / 2 + C.playerRadius + 12);
@@ -36,7 +37,8 @@ export function dangerTimeline(bodies: readonly Body[], bullets: readonly Bullet
       for (const b of forecastBullets) {
         const x = b.x, y = b.y;
         const segments=advanceProjectile(b,C.step);
-        if(segments)for(const s of segments)reserve(s.x0,s.y0,s.x1,s.y1,39,43);else reserve(x,y,b.x,b.y,39,43);
+        const shape=hostileContactShape(b);
+        if(segments)for(const s of segments)reserve(s.x0,s.y0,s.x1,s.y1,shape.x+12,shape.y+12);else reserve(x,y,b.x,b.y,shape.x+12,shape.y+12);
       }
       forecastBullets = forecastBullets.filter(b => b.age < 6 && b.y < 1370 && b.x > -40 && b.x < 760);
     }
