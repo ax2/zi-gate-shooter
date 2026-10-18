@@ -53,8 +53,13 @@ describe('simulation transactions', () => {
   });
   it('crossing through a gap locks and misses the whole row', () => {
     const w = new World();
-    const a = w.spawn('gate', 222, 1023), b = w.spawn('gate', 498, 1023); a.row = b.row = 10;
+    // 80px physical gap leaves room for the 40px cockpit collision circle.
+    const a = w.spawn('gate', 200, 1023), b = w.spawn('gate', 520, 1023); a.row = b.row = 10;
     w.step(C.step); expect(w.gatesTaken).toBe(0); expect(w.bodies.length).toBe(0);
+  });
+  it('overlapping gate contact lips choose only one reward at the exact center',()=>{
+    const w=new World(),a=w.spawn('gate',222,1023),b=w.spawn('gate',498,1023);a.row=b.row=10;
+    w.step(C.step,360);expect(w.gatesTaken).toBe(1);expect(w.growth.bonus).toBe(10);expect(w.bodies).toHaveLength(0);
   });
   it('lethal contact prevents same-time pickup and cannot resurrect', () => {
     const w = new World(); w.player.hp = 1;

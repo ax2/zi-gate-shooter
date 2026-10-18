@@ -1722,7 +1722,7 @@ export class CanvasRuntime {
   }
   private drawFractureBranch(){
     this.rect(35,120,650,1080,'#102330');this.text('裂甲精研 · 二选一',360,190,40,'#effaff','center',true);
-    this.text('弹道精调照常增伤 · 原武器与组合保留',360,250,23,'#bdd8e7');
+    this.text(`原${ammoName(this.world.build)||'标准'}弹芯保留 · 本次裂甲继续叠加`,360,250,23,'#bdd8e7');
     for(const [i,branch] of (['fracture-quick','fracture-line'] as const).entries()){
       const node=fractureAugments[branch],y=325+i*305,color=i?'#ffb57f':'#ffe0a3';
       this.rect(65,y,590,275,'#203e50');this.rect(65,y,5,275,color);
