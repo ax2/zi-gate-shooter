@@ -1,6 +1,6 @@
 import type {WeaponKind} from './weapons';
 
-export type DamageSource=WeaponKind|'laser'|'storm'|'ion'|'fracture'|'magnetic'|'photon';
+export type DamageSource=WeaponKind|'laser'|'storm'|'ion'|'fracture'|'magnetic'|'photon'|'overdrive';
 export interface DamageContribution {source:DamageSource;damage:number;contacts:number;kills:number}
 
 /** Bounded, run-local accounting of enemy HP actually removed. No combat decisions. */

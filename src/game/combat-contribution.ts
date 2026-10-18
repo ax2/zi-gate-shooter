@@ -14,6 +14,7 @@ export const contributionSources={
  fracture:{name:'裂甲爆破',color:'#ffc183',role:'裂甲引爆与穿震 · 原穿甲另计'},
  magnetic:{name:'磁暴电场',color:'#a3ffd0',role:'三拍与精研跳击 · 原爆炸另计'},
  photon:{name:'电光连锁',color:'#a6ecff',role:'光链与单体聚能 · 原激光另计'},
+ overdrive:{name:'超载协议',color:'#ffd28a',role:'轨道雷枪或环流电链 · 原武器与激光另计'},
 } satisfies Record<DamageSource,{name:string;color:string;role:string}>;
 
 export function combatContribution(w:World){

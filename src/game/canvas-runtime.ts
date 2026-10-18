@@ -59,6 +59,8 @@ import {BossArmorFragments} from './boss-armor-fragments';
 import {BOSS_SALVAGE,bossSalvageCount} from '../core/boss-salvage';
 import{bossTacticalStatus}from './boss-tactical-status';
 import{CLOSING_CLEAR_CHARGE}from'../core/closing-assault';
+import{OVERDRIVE,overdriveForms,isOverdriveForm}from'../core/overdrive';
+import{overdriveLance}from'./overdrive-light';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,requiredProofGroups,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
@@ -134,7 +136,8 @@ const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
 export class CanvasRuntime {
   world = new World();
-  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'contribution' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  mode: 'loading' | 'menu' | 'opening' | 'achievements' | 'armory' | 'loadout' | 'contribution' | 'refit-plan' | 'rig' | 'combos' | 'contracts' | 'contract-reward' | 'boss-reward' | 'tree' | 'choice' | 'branch' | 'overdrive' | 'playing' | 'paused' | 'settings' | 'result' | 'error' = 'loading';
+  private overdriveReturn:'choice'|'tree'='choice';
   private contributionReturn:'loadout'|'result'='loadout';
   private contributionPage=0;
   private proofChoice:BuildProof='ion';
@@ -167,7 +170,7 @@ export class CanvasRuntime {
   private impacts: ImpactMarker[] = [];
   private arcs: {x:number;y:number;tx:number;ty:number;life:number;photon?:boolean;focus?:boolean;seeker?:boolean;capacitorRelay?:boolean}[] = [];
   private empWaves:{x:number;y:number;radius:number;life:number}[]=[];
-  private supportBeams: {mirror?:MirrorSegment[];bounced?:boolean;x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number;ricochet?:boolean;fractureWave?:boolean}[] = [];
+  private supportBeams: {overdrive?:boolean;mirror?:MirrorSegment[];bounced?:boolean;x:number;y:number;tx:number;ty:number;life:number;laser:boolean;prism?:boolean;opticalBand?:number;ricochet?:boolean;fractureWave?:boolean}[] = [];
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
@@ -399,6 +402,7 @@ export class CanvasRuntime {
   back(): 'stay' | 'exit' {
     this.cancelTouch();
     if(this.mode==='branch'){this.mode='choice';return 'stay';}
+    if(this.mode==='overdrive'){this.mode=this.overdriveReturn;return 'stay';}
     if (this.mode === 'choice'||this.mode==='contract-reward'||this.mode==='boss-reward') return 'stay';
     if (this.mode === 'armory'||this.mode==='opening') { this.mode = 'menu'; return 'stay'; }
     if (this.mode === 'achievements') { this.mode = this.achievementReturn; return 'stay'; }
@@ -449,6 +453,11 @@ export class CanvasRuntime {
       else this.selectBuild(route);
     }
     else if(action==='optic-defer'&&this.mode==='branch'&&this.branchRoute==='optical'&&this.world.canFuseOptics())this.selectBuild('optical');
+    else if(action==='overdrive-open'&&(this.mode==='choice'||this.mode==='tree')&&(this.world.growth.mastery??0)>=OVERDRIVE.mastery){this.overdriveReturn=this.mode;this.mode='overdrive';}
+    else if(action==='overdrive-back'&&this.mode==='overdrive')this.mode=this.overdriveReturn;
+    else if(action.startsWith('overdrive:')&&this.mode==='overdrive'){
+      const form=action.slice(10);if(isOverdriveForm(form)&&this.world.chooseOverdrive(form)){for(const e of this.world.drainEffects())this.effect(e);this.mode=this.overdriveReturn;}
+    }
     else if(action==='fusion-defer'&&this.mode==='branch'&&this.branchRoute==='ballistic'&&this.world.canFuseAmmo())this.selectBuild('ballistic');
     else if(action==='branch-back'&&this.mode==='branch')this.mode='choice';
     else if(action.startsWith('branch:')&&this.mode==='branch'){
@@ -587,6 +596,13 @@ export class CanvasRuntime {
     this.buildFeedback=feedback;
   }
   private effect(e: EffectEvent,equipmentHandled=false) {
+    if(e.type==='overdrive-ready'){this.setBuildFeedback({title:e.text??'超载协议已装载',detail:e.detail??'',until:this.world.time+4,combo:true});return;}
+    if(e.type==='overdrive-lance'&&e.targetX!==undefined&&e.targetY!==undefined){
+      if(this.supportBeams.length>=16)this.supportBeams.shift();this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.28,laser:false,overdrive:true});if(this.save.settings.sound)this.platform.sound('laser',3);return;
+    }
+    if(e.type==='overdrive-arc'&&e.targetX!==undefined&&e.targetY!==undefined){
+      if(this.arcs.length>=12)this.arcs.shift();this.arcs.push({x:e.x,y:e.y,tx:e.targetX,ty:e.targetY,life:.24,photon:true});if(this.save.settings.sound)this.platform.sound('refract',2);return;
+    }
     if(e.type==='boss-salvage'){
       const weak=this.save.settings.effects==='weak';this.bossFragments.burst(e.x,e.y,e.bossVariant??0,weak);this.crateDebris.trim(9-this.bossFragments.pieces.length);this.enemyWreck.trim(9-this.crateDebris.pieces.length-this.bossFragments.pieces.length);
       if(this.blasts.length<4)this.blasts.push({x:e.x-50,y:e.y+10,size:65,life:.24,total:.24});
@@ -815,6 +831,7 @@ export class CanvasRuntime {
     if (this.mode === 'rig') { this.drawRigView();c.restore();return; }
     if (this.mode === 'combos') {this.drawCombos();c.restore();return;}
     if(this.mode==='branch'){this.drawBuildBranch();c.restore();return;}
+    if(this.mode==='overdrive'){this.drawOverdrive();c.restore();return;}
     if(this.mode==='contract-reward'){this.drawContractReward();c.restore();return;}
     if(this.mode==='boss-reward'){this.drawBossReward();c.restore();return;}
     if (this.mode === 'contracts') { this.drawContracts();c.restore();return; }
@@ -1023,7 +1040,7 @@ export class CanvasRuntime {
     for (const b of w.bullets.filter(b => !b.hostile)) {
       energyShot(c, b.x, b.y, b.vx, b.vy, b.weaponKind ?? 'pulse', w.time, this.save.settings.effects === 'weak');
     }
-    for(const beam of this.supportBeams) if(this.mode!=='menu'){if(beam.mirror)mirrorLight(c,beam.mirror,beam.life,!!beam.bounced,this.save.settings.effects==='weak');else if(beam.fractureWave)fractureWaveLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else if(beam.ricochet)ricochetLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);}
+    for(const beam of this.supportBeams) if(this.mode!=='menu'){if(beam.overdrive)overdriveLance(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else if(beam.mirror)mirrorLight(c,beam.mirror,beam.life,!!beam.bounced,this.save.settings.effects==='weak');else if(beam.fractureWave)fractureWaveLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else if(beam.ricochet)ricochetLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,this.save.settings.effects==='weak');else supportLight(c,beam.x,beam.y,beam.tx,beam.ty,beam.life,beam.laser,this.save.settings.effects==='weak',beam.prism,beam.opticalBand);}
     for(const b of w.bullets) if(!b.hostile){
       calibrationShot(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse',b.calibrationBand??0,b.age,this.save.settings.effects==='weak');
       projectileBody(c,b.x,b.y,b.vx,b.vy,b.weaponKind??'pulse');
@@ -1263,8 +1280,8 @@ export class CanvasRuntime {
     this.text(`火力 +${permanentPower(w.growth)}%`, 300, y + 88, 24, '#74dcff', 'left', true);
     this.text(`${w.round}轮·${boss&&w.bossFormation?w.bossFormation.name:w.round>1?battleBrief(w.round,w.battlePlan):sectorNames[sectorIndex(w.round)]}`, 686, y + 88, 26, '#b0c4d1', 'right');
     this.bar(360, y + 115, 660, w.growth.overload > 0 ? w.growth.overload / OVERLOAD.duration : w.growth.energy / 100, w.growth.overload > 0 ? '#ffc66b' : '#5bddff');
-    this.text(w.growth.overload > 0 ? `超载 伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate} · ${w.growth.overload.toFixed(1)}秒 · 储能${Math.floor(w.growth.energy)}/100`
-      : `充能 ${Math.floor(w.growth.energy)}/100 · 满100：火力+10% · 增伤提速${OVERLOAD.duration}秒`, 360, y + 144, 22, '#d4e8ee');
+    this.text(w.growth.overload > 0 ? `超载${w.overdriveForm?'·'+overdriveForms[w.overdriveForm].name:''} 伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate} · ${w.growth.overload.toFixed(1)}秒 · 储能${Math.floor(w.growth.energy)}/100`
+      : w.canChooseOverdrive()?`充能 ${Math.floor(w.growth.energy)}/100 · 超载协议待选：暂停→技能树`:`充能 ${Math.floor(w.growth.energy)}/100 · 满100：火力+10% · 增伤提速${OVERLOAD.duration}秒`, 360, y + 144, 22, '#d4e8ee');
     if(this.mode==='playing'&&w.phase==='running'&&w.roundTime<=40&&!w.contractReward&&w.contract?.status!=='active'&&w.contract?.round!==w.round&&!w.bodies.some(b=>b.active&&Math.abs(b.x-585)<b.width/2+125&&Math.abs(b.y-(y+200))<b.height/2+48)){
       this.rect(480,y+170,210,44,'#213d4d');this.text('挑战契约　›',585,y+192,24,'#ffd598');
       this.buttons.push({x:480,y:y+170,w:210,h:44,action:'contracts-live',label:'挑战契约'});
@@ -1475,7 +1492,7 @@ export class CanvasRuntime {
     else if(hasOptical(w.build,'mirror'))this.text(`折返束：65% / 最多2敌 · 一次反射 · 命中${w.mirrorHits}`,360,949,20,'#c5bcff');
     this.text(w.laserChainUnlocked()?`光链${laserChainProfile(w.build.photonAugment).hops}跳/${laserChainProfile(w.build.photonAugment).range} · 聚能${Math.round(laserChainProfile(w.build.photonAugment).focus*100)}%${support.prism?' · 棱镜45%':''}`:support.prism?'棱镜双束：两侧各45%伤害 · 主束保留':`数值含永久加成；超载伤×${OVERLOAD.damage} / 速×${OVERLOAD.rate}`, 360, compactOptics?978:970, compactOptics?20:23, '#c7deeb');
     this.text(w.build.ammoFusion?'复合弹芯 · '+ammoName(w.build):w.build.stormAugment?`雷暴 · ${stormAugments[w.build.stormAugment].name} · ${w.build.stormAugment==='storm-focus'?w.stormFocusBursts+'次破核':w.stormLinks+'次跳伤'}${w.build.ranks.electric>=3?' · 离子'+w.ionCharge+'/6':''}`:w.build.ranks.electric>=3?w.build.ionAugment?`离子 ${w.ionCharge}/6 · ${ionAugments[w.build.ionAugment].name} · 追加命中${w.ionOrbHits+w.ionSpearHits}`:`离子风暴 ${w.ionCharge}/${ION_STORM.hits} · 范围${ION_STORM.radius} · ${ION_STORM.damage*100}%伤害`:`技能 ${w.build.baseSpent}/9 · 精调 ${w.build.spent-w.build.baseSpent}次`, 360, compactOptics?1007:1004, compactOptics?20:23, '#f0d19a');
-    for(const [i,label] of ['技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
+    for(const [i,label] of [(w.growth.mastery??0)>=OVERDRIVE.mastery?'技能/协议':'技能树','组合配方','挑战契约','实战贡献'].entries()){const x=72+i*146;this.rect(x,1030,138,86,'#1a2d3c');this.text(label,x+69,1073,23,'#d8eaf5');this.buttons.push({x,y:1030,w:138,h:86,label,action:['tree','combos','contracts','contribution'][i]});}
     this.button('返回暂停菜单', 1130, 'loadout-back');
   }
   private drawContribution(){
@@ -1637,7 +1654,7 @@ export class CanvasRuntime {
     }
     this.text(this.world.build.opticalFusion?'双镜复合 · '+opticalName(this.world.build):this.world.canFuseOptics()?'双镜复合可选 · 原镜组保留，再追加一种':this.world.build.ranks.optical>=3&&this.world.build.refinements.optical>=this.world.build.refinements.ballistic?'双镜复合：光学精调 '+Math.min(OPTICAL_FUSION.refinements,this.world.build.refinements.optical)+'/'+OPTICAL_FUSION.refinements+' · 原镜组保留':this.world.build.ammoFusion?'复合弹芯 · '+ammoName(this.world.build):this.world.canFuseAmmo()?'复合弹芯可选 · 保留原弹芯，追加一种':this.world.build.refinements.ballistic>=5?'复合弹芯：弹道3＋精调10＋任一T3弹道':this.world.build.stormAugment?'雷暴精研 · '+stormAugments[this.world.build.stormAugment].name+'已生效':'雷暴精研：弹道3 + 精调5 + T3霰射',360,1025,22,'#bdd8e7');
     this.text(this.world.build.ionAugment?'离子精研已生效 · 原放电与常规精调保留':'离子精研：雷电3 + 精调2 + T3电弧',360,1055,23,'#bdd8e7');
-    this.button(this.treeReturn==='choice'?'返回升级选择':'返回当前火力',1100,'tree-back',true);
+    const back=this.treeReturn==='choice'?'返回升级选择':'返回当前火力';if((this.world.growth.mastery??0)>=OVERDRIVE.mastery)this.overdriveFooter(back,'tree-back',1100);else this.button(back,1100,'tree-back',true);
   }
   private drawBuildBranch(){
     if(this.branchRoute==='optical'&&this.world.canFuseOptics()){this.drawOpticalFusion();return;}
@@ -1798,6 +1815,29 @@ export class CanvasRuntime {
     this.text('本局选定不可切换 · 后续风暴与旧武器保留',360,965,23,'#f0d19a');
     this.button('返回升级选择',1050,'branch-back');
   }
+  private overdriveFooter(back:string,action:string,y:number){
+    for(const [i,item]of [{label:back,action},{label:this.world.overdriveForm?'超载协议 · 已装载':'超载协议 · 二选一',action:'overdrive-open'}].entries()){
+      const x=65+i*300;this.rect(x,y,290,78,i?'#3c3c38':'#203e50');this.text(item.label,x+145,y+39,24,i?'#ffe2a0':'#d8eaf5','center',true);this.buttons.push({x,y,w:290,h:78,label:item.label,action:item.action});
+    }
+  }
+  private drawOverdrive(){
+    const w=this.world,chosen=w.overdriveForm,power=1+permanentPower(w.growth)/100;
+    this.rect(35,115,650,1080,'#102330');this.text('超载协议 · 二选一',360,185,38,'#ffe2a0','center',true);
+    this.text(`第${OVERDRIVE.mastery}次突破解锁 · 本局免费 · 不消耗技能点`,360,245,23,'#bdd8e7');
+    this.text('原武器、激光与超载增伤提速全部保留',360,287,23,'#c4dca9');
+    for(const [i,kind]of (['lance','circuit']as const).entries()){
+      const info=overdriveForms[kind],y=345+i*290,owned=chosen===kind,enabled=!chosen&&w.canChooseOverdrive();
+      this.rect(65,y,590,264,owned?'#35433f':'#203e50');this.rect(65,y,5,264,kind==='lance'?'#ffd28a':'#91e5ff');
+      this.text(info.name+(owned?' · 已装载':''),92,y+44,32,kind==='lance'?'#ffe2a0':'#a6ecff','left',true);
+      this.text(info.role,92,y+92,24,'#effaff','left');
+      this.text(`超载中每${OVERDRIVE.interval}秒 · 首击${+(info.damage*power*OVERLOAD.damage).toFixed(1)}伤害`,92,y+139,23,'#f2d598','left');
+      this.text(info.detail,92,y+182,22,'#bdd8e7','left');
+      this.text(kind==='lance'?'伤害90×常驻火力×超载1.35 · 最多3敌':`首击范围${OVERDRIVE.range} · 后跳范围${OVERDRIVE.chainRange} · 闭盾截链`,92,y+221,20,'#a9c9dc','left');
+      if(enabled)this.buttons.push({x:65,y,w:590,h:264,label:'装载'+info.name,action:'overdrive:'+kind});
+    }
+    this.text(chosen?'本局选择已锁定 · 后续每次超载自动追加':'可以稍后再选 · 选定后本局锁定',360,983,24,'#f0d19a');
+    this.button(chosen?'返回':'稍后选择',1060,'overdrive-back',true);
+  }
   private drawBuildChoices() {
     this.buttons=[];
     this.rect(35,150,650,1000,'#102330');
@@ -1819,7 +1859,7 @@ export class CanvasRuntime {
       if(enabled)this.text('›',625,y+80,32,color,'right',true);
       if(enabled)this.buttons.push({x:65,y,w:590,h:205,action:`build:${route}`,label:node!.name});
     }
-    this.button('查看完整技能树',1050,'tree');
+    if((this.world.growth.mastery??0)>=OVERDRIVE.mastery)this.overdriveFooter('查看技能树','tree',1050);else this.button('查看完整技能树',1050,'tree');
   }
   private drawRunReport(){
     const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked,this.save.achievements.tracked);
@@ -1872,7 +1912,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
-      closingStatus:this.world.closingStatus,closingClears:this.world.closingClears,
+      closingStatus:this.world.closingStatus,closingClears:this.world.closingClears,overdriveForm:this.world.overdriveForm??null,overdriveShots:this.world.overdriveShots,overdriveHits:this.world.overdriveHits,
       bossPlateFragments:this.bossFragments.pieces.length,bossSalvage:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,count:bossSalvageCount(b),hp:b.hp,maxHp:b.maxHp})),
       combatCopy:this.presentedCopy?{...this.presentedCopy,lines:[...this.presentedCopy.lines],rows:this.presentedCopy.rows.map(r=>({...r})),bounds:{...this.presentedCopy.bounds}}:null,
       combatNotice:this.presentedNotice?{...this.presentedNotice}:null,

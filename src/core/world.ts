@@ -26,6 +26,7 @@ import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,STORM_PROOF,type BuildProof} from './build-proof';
 import { bossFormationFor, ESCORT,type EscortTroop } from './boss-formations';
 import {OVERLOAD} from './overload';
+import {OVERDRIVE,overdriveForms,isOverdriveForm,type OverdriveForm}from'./overdrive';
 import{MIRROR_LASER,mirrorPath,type MirrorSegment}from'./mirror-laser';
 import {CLOSING_ASSAULT_AT,CLOSING_CLEAR_CHARGE,closingBrief,closingDurability} from './closing-assault';
 import {ION_STORM,ION_ORB,ION_SPEAR,isIonAugment,ionAugments,type IonOrb,type IonSpear} from './ion-storm';
@@ -128,6 +129,36 @@ export class World {
   dropSpawns=0;dropKills=0;arcLinks=0;
   private closingIds=new Set<number>();private closingKillIds=new Set<number>();private closingAwarded=false;
   closingClears=0;
+  overdriveForm?:OverdriveForm;private overdriveTimer=0;overdriveShots=0;overdriveHits=0;
+  canChooseOverdrive(){return this.player.hp>0&&this.phase!=='dead'&&(this.growth.mastery??0)>=OVERDRIVE.mastery&&!this.overdriveForm;}
+  chooseOverdrive(value:unknown){
+    if(!isOverdriveForm(value)||!this.canChooseOverdrive())return false;
+    this.overdriveForm=value;this.overdriveTimer=0;
+    this.effects.push({type:'overdrive-ready',x:this.player.x,y:C.playerY,text:'超载协议 · '+overdriveForms[value].name,detail:'每次超载期间追加攻击 · 原火力与增伤提速保留'});return true;
+  }
+  private fireOverdrive(dt:number){
+    if(this.bossVictory||this.player.hp<=0)return;
+    if(!this.overdriveForm||this.growth.overload<=0){this.overdriveTimer=0;return;}
+    if(this.overdriveTimer>0)this.overdriveTimer-=dt;if(this.overdriveTimer>1e-9)return;
+    this.overdriveTimer+=OVERDRIVE.interval;this.overdriveShots++;
+    const x=this.player.x,y=C.playerY-100,scale=(1+permanentPower(this.growth)/100)*OVERLOAD.damage;
+    const eligible=(b:Body)=>b.active&&b.kind in C.enemies&&b.y>=C.playerShotTop&&b.y<y&&(b.kind!=='boss'||this.phase==='boss');
+    if(this.overdriveForm==='lance'){
+      const targets=this.bodies.filter(b=>b.active&&b.kind!=='pickup'&&(b.kind!=='boss'||this.phase==='boss')&&b.y>=C.playerShotTop&&b.y<y&&Math.abs(b.x-x)<=b.width/2+OVERDRIVE.lineHalfWidth).sort((a,b)=>b.y-a.y||a.id-b.id);
+      let end:number=C.playerShotTop,count=0;
+      for(const b of targets){const blocked=b.kind==='gate'||b.kind==='crate'||guardClosed(b)||(b.dropGrace??0)>0,before=b.hp;this.hit(b,OVERDRIVE.lineDamage*scale,'pulse','overdrive');if(b.kind in C.enemies&&b.hp<before)this.overdriveHits++;
+        if(blocked||++count>=OVERDRIVE.lineTargets||this.bossVictory){end=Math.min(y,b.y+b.height/2);break;}}
+      this.effects.push({type:'overdrive-lance',x,y,targetX:x,targetY:end});
+    }else{
+      const visited=new Set<number>();let origin={x,y},damage=OVERDRIVE.arcDamage*scale;
+      for(let hop=0;hop<OVERDRIVE.arcTargets;hop++){
+        const range=hop===0?OVERDRIVE.range:OVERDRIVE.chainRange;
+        const next=this.bodies.filter(b=>eligible(b)&&!(b.dropGrace??0)&&!visited.has(b.id)&&Math.hypot(b.x-origin.x,b.y-origin.y)<=range).sort((a,b)=>Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y)||a.id-b.id)[0];if(!next)break;
+        visited.add(next.id);const blocked=guardClosed(next),before=next.hp;this.hit(next,damage,'arc','overdrive');if(next.hp<before)this.overdriveHits++;
+        this.effects.push({type:'overdrive-arc',x:origin.x,y:origin.y,targetX:next.x,targetY:next.y});origin={x:next.x,y:next.y};if(blocked||this.bossVictory)break;damage*=OVERDRIVE.falloff;
+      }
+    }
+  }
   get closingStatus(){return{round:this.round,total:this.closingIds.size,kills:this.closingKillIds.size,rewarded:this.closingAwarded};}
   bankShots?:number;bankReflections?:number;lastBankReflection?:{time:number;x:number;y:number;id:number};
   fireControlShots=0;fireControlBoostedShots=0;lastFireControlBreak?:{time:number;id:number;affected:number;interrupted:number};
@@ -840,7 +871,7 @@ export class World {
     return {vx:dx/length*ARC_SHOT.speed,vy:dy/length*ARC_SHOT.speed};
   }
   private shoot(dt: number) {
-    if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0; return; }
+    if (this.phase === 'boss-entry' || this.phase === 'recovery') { this.fireTimers.clear(); this.laserTimer=0;this.overdriveTimer=0; return; }
     const scale=this.fireRateScale();
     if(scale!==this.firingScale){
       // Keep cooldown progress at both edges; no free salvo or stored shots.
@@ -932,6 +963,7 @@ export class World {
     this.advanceMagnetic(dt);
     for(const b of this.bodies)if(b.controlShutter)b.controlLinked=!!fireControlSource(b,this.bodies);
     this.shoot(dt);
+    if(this.phase==='running'||this.phase==='boss')this.fireOverdrive(dt);
     for (const b of this.bodies) {
       b.px = b.x; b.py = b.y;
       const previousWarning = b.warning;
