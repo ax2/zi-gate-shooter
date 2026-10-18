@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest';
-import { CanvasRuntime,parseSave } from '../src/game/canvas-runtime';
-import { defaults, type Save } from '../src/ui/storage';
+import { parseSave } from '../src/game/canvas-runtime';
+import {createRenderFixture as fixture} from './helpers/render-fixture';
+import { type Save } from '../src/ui/storage';
 import { World } from '../src/core/world';
 import { C } from '../src/core/config';
 import {achievements,achievementGroups} from '../src/core/achievements';
@@ -17,26 +18,6 @@ it.each([false,true])('support beam expires, freezes on pause, and clears on res
   expect(f.runtime.diagnostics().supportBeams).toBe(0);
 });
 
-function fixture(weak = false, contextProbe?:()=>{hidden?:boolean;focused?:boolean},captureWrite?:(save:Save)=>void) {
-  let clock = 0, next: FrameRequestCallback = () => {};
-  const calls: Array<{ kind: string; args: any[]; alpha: number; color: unknown; stroke?: unknown; composite: string; font?: string; lineWidth?:number }> = [];
-  const state: Record<string, any> = { globalAlpha: 1, globalCompositeOperation: 'source-over' };
-  const stack: Record<string, any>[] = [];
-  const context = new Proxy(state, { get(target, key: string) {
-    if (key in target) return target[key];
-    if (key === 'save') return () => stack.push({ ...state });
-    if (key === 'restore') return () => Object.assign(state, stack.pop());
-    if (key === 'createLinearGradient' || key === 'createRadialGradient') return () => ({addColorStop(){}});
-    return (...args: any[]) => calls.push({ kind: key, args, alpha: state.globalAlpha, color: state.fillStyle, stroke:state.strokeStyle, composite: state.globalCompositeOperation, font: state.font,lineWidth:state.lineWidth });
-  } });
-  const save = defaults(); save.settings.effects = weak ? 'weak' : 'standard';
-  const runtime = new CanvasRuntime({ canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
-    width: 720, height: 1280, dpr: 1, menuBottom: 0,
-    image: async src => ({ src, width: (src.includes('scatter-player') || src.includes('pierce-player')) ? 576 : 768, height: (src.includes('scatter-player') || src.includes('pierce-player')) || src.includes('drone-v1') || src.includes('charger-v1') || src.includes('armor-v1') || src.includes('elite-v1') || src.includes('boss-v1') || src.includes('boss-flanker-v1') || src.includes('boss-bastion-v1') ? 256 : src.includes('explosion') || src.includes('crate-v1') ? 768 : 512 }) as HTMLImageElement,
-    read: () => save, write(value) {captureWrite?.(value);}, sound() {}, silence() {}, frameContext:contextProbe,now: () => clock,
-    requestFrame: callback => { next = callback; } });
-  return { runtime, calls, tick(ms = 1000 / 60) { calls.length = 0; clock += ms; next(clock); } };
-}
 // Existing visual checks continue via real earned choices, never by suppressing the popup.
 function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
  while(f.runtime.mode==='choice'){
@@ -46,6 +27,13 @@ function resolveResearch(f:ReturnType<typeof fixture>,reference?:World){
   if(refine)expect(f.runtime.activateControl('branch:photon-reach')).toBe(true);
   if(reference)expect(reference.chooseBuild('optical',fork?'burn':refine?'photon-reach':undefined)).toBe(true);
  }
+}
+function expectVisibleCombatCopy(f:ReturnType<typeof fixture>,title:string,detail?:string){
+ const copy=f.runtime.diagnostics().combatCopy;expect(copy).not.toBeNull();if(!copy)throw new Error('Missing visible combat copy');
+ expect(copy.title).toBe(title);if(detail)expect(copy.lines.join('')).toBe(detail);
+ expect(copy.bounds.top).toBeGreaterThanOrEqual(190);expect(copy.bounds.bottom).toBeLessThanOrEqual(1280);
+ for(const row of copy.rows){expect(row.width).toBeLessThanOrEqual(560);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===row.text&&c.args[2]===row.y)).toBe(true);}
+ return copy;
 }
 const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
 
@@ -80,8 +68,8 @@ it('marks the missing crate and pickup, keeps its original role, and reports com
  const f=fixture();await f.runtime.load();f.runtime.activateControl('combos-menu');f.runtime.activateControl('recipe-goal:fracture');f.runtime.activateControl('combos-back');f.runtime.start();
  const w=f.runtime.world;const a=w.spawn('pickup',360,C.playerY,2);a.weaponKind='pierce';f.tick();resolveResearch(f);expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(false);
  const wanted=w.spawn('crate',500,600,2);wanted.weaponKind='blast';const other=w.spawn('crate',220,600,2);other.weaponKind='pierce';f.tick();
- expect(f.calls.filter(c=>c.kind==='fillText'&&c.args[0]==='目标')).toHaveLength(1);expect(f.calls.some(c=>c.kind==='strokeRect'&&c.args[0]===382&&c.stroke==='#ffe19a')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='命中敌人 · 范围爆破')).toBe(true);expect(w.activeWeapons).not.toContain('blast');
- const pickup=w.spawn('pickup',360,C.playerY-80,2);pickup.weaponKind='blast';f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('目标·拾取'))).toBe(true);expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(false);
+ expect(f.calls.filter(c=>c.kind==='fillText'&&c.args[0]==='目标')).toHaveLength(1);expect(f.calls.some(c=>c.kind==='strokeRect'&&c.args[0]===382&&c.stroke==='#ffe19a')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='拾取成形·裂甲爆破')).toBe(true);expect(w.activeWeapons).not.toContain('blast');
+ const pickup=w.spawn('pickup',360,C.playerY-80,2);pickup.weaponKind='blast';f.tick();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='目标·快拾取叠加爆裂炮')).toBe(true);expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(false);
  pickup.y=C.playerY;f.tick();expect(w.fractureUnlocked()).toBe(true);expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='目标成形 · 裂甲爆破')).toBe(true);expect(w.activeWeapons).toContain('pulse');
  f.runtime.start();expect(f.runtime.save.recipeGoal).toBe('fracture');expect(f.runtime.diagnostics().recipeGoal?.ready).toBe(false);
 });
@@ -150,7 +138,7 @@ it('writes a second actual certification even when it earns no new badge, and re
 it('browses hunter risk without spending, freezes it on acceptance, and awards the extra point only through a visible claim',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;const pickup=w.spawn('pickup',360,C.playerY,2);pickup.weaponKind='pulse';f.tick();resolveResearch(f);const research=w.researchPoints;
  expect(f.runtime.activateControl('contracts-live')).toBe(true);expect(f.runtime.activateControl('hunt-next')).toBe(true);expect(w.contract).toBeUndefined();expect(w.researchPoints).toBe(research);
- expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('建议T3火力'))).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('＋研发1点'))).toBe(true);
+ expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('幸存者暴走'))).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).includes('＋研发1点'))).toBe(true);
  expect(f.runtime.activateControl('contract:hunter')).toBe(true);expect(w.contract!.hunt).toBe('crossfire');expect(f.runtime.activateControl('hunt-next')).toBe(false);expect(f.runtime.activateControl('resume')).toBe(true);f.tick();
  const targets=w.bodies.filter(b=>b.bountyRound===w.round);expect(targets).toHaveLength(2);
  expect(f.calls.some(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('配件强化')&&c.args[2]===1208)).toBe(true);
@@ -186,7 +174,7 @@ it('publishes the actual round projectile pressure in the bottom receipt',async(
  const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
  w.phase='recovery';w.phaseTime=3.99;f.tick();expect(w.round).toBe(2);
  const detail=f.calls.find(c=>c.kind==='fillText'&&String(c.args[0]).includes('敌弹+10% · 留意实弹'));
- expect(detail?.args[2]).toBe(1245);expect(f.runtime.diagnostics().enemyProjectileScale).toBe(1.1);
+ expect(detail).toBeDefined();expectVisibleCombatCopy(f,'第 2 轮 · 侧翼夹击','双翼穿插 · 敌弹+10% · 留意实弹');expect(f.runtime.diagnostics().enemyProjectileScale).toBe(1.1);
 });
 
 it.each([false,true])('labels refit boxes distinctly and updates their live calibration after another earned pickup (weak=%s)',async weak=>{
@@ -269,7 +257,7 @@ it.each([false,true])('bounds localized impacts and freezes and clears their lif
  f.runtime.world.effects.push({type:'impact',x:0,y:400,weaponKind:'scatter'});
  f.tick();
  const visual=f.runtime as unknown as {impacts:{kind:string;life:number}[]};
- expect(visual.impacts.length).toBe(weak?4:12);expect(visual.impacts.every(h=>h.kind==='pierce')).toBe(true);
+ expect(visual.impacts.length).toBe(weak?4:12);expect(visual.impacts.filter(h=>h.kind==='pierce')).toHaveLength((weak?4:12)-1);expect(visual.impacts.filter(h=>h.kind==='scatter')).toHaveLength(1);
  f.runtime.pause();const frozen=JSON.stringify(visual.impacts);for(let i=0;i<20;i++)f.tick();
  expect(JSON.stringify(visual.impacts)).toBe(frozen);
  f.runtime.start();expect(visual.impacts).toHaveLength(0);
@@ -491,7 +479,7 @@ it('guides real crate and gate progression with matching earned research choices
   // Named T2 opening supplies now use the owned/new-weapon guidance above.
   // The original anonymous-crate tutorial remains separately tested by context-guide.
   expect(seen).toContain('持续射击，把门的奖励打高');
-  expect(seen).toContain('穿过才领取 · 同排只领一扇');
+  expect(seen).toContain('穿过才领取 · 同排只领一扇 · 满充能可提速');
 });
 
 it.each([false, true])('omits help beneath a live projectile and restores it when the text area clears (weak=%s)', async weak => {
@@ -551,17 +539,23 @@ it.each([false, true])('crossing mutually exclusive gates shows one complete mix
   f.tick(); reference.step(C.step, 222); reference.drainEffects();
   expect(f.runtime.world.growth).toEqual(reference.growth); expect(f.runtime.world.growth.bonus).toBe(100);
   expect(f.runtime.world.growth.energy).toBe(25); expect(f.runtime.world.gatesTaken).toBe(1);
-  const taken = f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '已领取');
+  // The real hostile bolt overlaps the receipt. Preserve the earned reward,
+  // but defer optional text until that danger leaves the reading area.
+  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='穿门已领取')).toBe(false);
+  expect(f.runtime.diagnostics().gateReceipts).toBe(1);
+  for(const w of [reference,f.runtime.world])w.bullets.find(b=>b.id===9999)!.x=68;
+  f.tick();reference.step(C.step,222);reference.drainEffects();
+  const taken = f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '穿门已领取');
   expect(taken).toHaveLength(1);
   expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '火力 +5%')).toBe(true);
   expect(f.calls.some(c => c.kind === 'fillText' && c.args[0] === '充能 +25')).toBe(true);
   const danger = f.calls.findIndex(c => c.kind === 'fillRect' && c.color === '#ffead7');
   expect(danger).toBeGreaterThan(f.calls.lastIndexOf(taken[0]));
-  f.runtime.pause(); f.tick(); const before = f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '已领取');
+  f.runtime.pause(); f.tick(); const before = f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '穿门已领取');
   for (let i = 0; i < 30; i++) f.tick();
-  expect(f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '已领取')).toEqual(before);
+  expect(f.calls.filter(c => c.kind === 'fillText' && c.args[0] === '穿门已领取')).toEqual(before);
   f.runtime.touchStart(1, 360, 603); f.runtime.touchEnd(1, 360, 603);
-  for (let i = 0; i < 60; i++) { f.tick(); reference.step(C.step, 222); reference.drainEffects(); }
+  for (let i = 0; i < 100; i++) { f.tick(); reference.step(C.step, 222); reference.drainEffects(); }
   expect(f.runtime.world.growth).toEqual(reference.growth); expect(f.runtime.world.gatesTaken).toBe(1);
   expect(f.runtime.diagnostics().gateReceipts).toBe(0);
   f.runtime.world.emit('gate-taken', 222, 1024, '储能已满', 240); f.tick();
@@ -701,7 +695,7 @@ it.each([false, true])('a real boss kill presents distinct beats and matches rul
   const locations = new Set<string>(); let peak = 0;
   for (let i = 0; i < 250; i++) {
     f.tick(); reference.step(C.step, 360); reference.drainEffects();
-    if (i === 0) expect(f.calls.some(c => c.kind === 'fillText' && String(c.args[0]).startsWith('首领击破') && c.args[2] === 820)).toBe(true);
+    if (i === 0) expectVisibleCombatCopy(f,'首领击破 · 充能+50','装甲恢复+1 · 充能 50/100');
     expect(f.runtime.world.phase).toBe(reference.phase);
     expect(f.runtime.world.round).toBe(reference.round);
     expect(f.runtime.world.player.hp).toBe(reference.player.hp);
@@ -828,11 +822,12 @@ it('shows a brief weapon briefing after real pickup, yields to danger and resets
 
 it.each([false, true])('shows overload wake only during active overload and freezes it on pause (weak=%s)', async weak => {
   const f = fixture(weak); await f.runtime.load(); f.runtime.start();
-  const wake = () => f.calls.filter(c => c.kind === 'lineTo' && Math.abs(c.args[0]) === 78 && c.args[1] === 24);
+  const wake = () => f.calls.filter(c => c.kind === 'fill' && c.color === '#0c151b');
+  const geometry=()=>f.calls.filter(c=>['moveTo','lineTo','stroke'].includes(c.kind)&&c.stroke==='#ffc478').map(c=>[c.kind,c.args]);
   f.tick(); expect(wake()).toHaveLength(0);
-  f.runtime.world.growth.overload = 6; f.tick(); expect(wake()).toHaveLength(weak ? 2 : 4);
-  f.runtime.pause(); const before = f.calls.filter(c => c.kind === 'lineTo').map(c => c.args);
-  f.tick(); expect(f.calls.filter(c => c.kind === 'lineTo').map(c => c.args)).toEqual(before);
+  f.runtime.world.growth.overload = 6; f.tick(); expect(wake()).toHaveLength(2);expect(f.calls.filter(c=>c.kind==='fillRect'&&c.color==='#2a3a42')).toHaveLength(weak?4:6);
+  const before=geometry();f.runtime.pause();
+  f.tick();expect(geometry()).toEqual(before);
   f.runtime.world.growth.overload = 0; f.tick(); expect(wake()).toHaveLength(0);
   f.runtime.start(); f.tick(); expect(wake()).toHaveLength(0);
 });
@@ -1128,7 +1123,7 @@ it('keeps live-boss upgrade receipts below danger and defers achievements withou
  let achievementRead=false;
  for(let i=0;i<250;i++){w.bullets=[];f.tick();achievementRead ||= f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就');}
  expect(achievementRead).toBe(true);
- runtime.effect({type:'reward',x:360,y:500,text:'测试战斗回执',detail:'奖励仍清楚可见'});f.tick();expect(f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='测试战斗回执')?.args[2]).toBe(1208);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(false);
+ runtime.effect({type:'reward',x:360,y:500,text:'测试战斗回执',detail:'奖励仍清楚可见'});f.tick();expectVisibleCombatCopy(f,'测试战斗回执','奖励仍清楚可见');expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='成就达成 · 测试成就')).toBe(false);
 });
 
 it('real death shows earned build and new achievements, returns without mutation, and restarts cleanly',async()=>{
@@ -1268,7 +1263,7 @@ it('offers a real third electric tactic without spending on browse and retains o
 it.each([false,true])('actual seeker arcs retain a distinct narrow hit trace, freeze on pause and respect the existing pool (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const r=f.runtime as any;
  for(let i=0;i<20;i++)r.effect({type:'arc',x:200,y:700,targetX:430,targetY:480,seeker:true});f.tick();
- expect(r.arcs).toHaveLength(12);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffda92')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#fff0c5')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffc76028')).toBe(!weak);
+ expect(r.arcs).toHaveLength(12);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffda92')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#fff0c5')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffc76020')).toBe(!weak);
  const before=structuredClone(r.arcs);f.runtime.pause();for(let i=0;i<60;i++)f.tick();expect(r.arcs).toEqual(before);f.runtime.start();expect(r.arcs).toHaveLength(0);
 });
 
@@ -1310,14 +1305,18 @@ it('keeps pickup names inside the viewport and legible over fire while actual ho
 
 
 it('routes an actual calibration pickup through readable combat receipts instead of covering a charging enemy',async()=>{
- const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;
+ const f=fixture();await f.runtime.load();f.runtime.start();const w=f.runtime.world;Object.assign(w,{scheduled:[]});
  w.spawn('pickup',360,C.playerY,2);f.tick();resolveResearch(f);
  const install=w.spawn('pickup',360,C.playerY,3);install.weaponKind='scatter';f.tick();
+ // Let the earlier research notice finish before isolating the charger guide.
+ for(let i=0;i<600;i++)f.tick();
  const enemy=w.spawn('charger',500,320);enemy.pattern='rebound';enemy.reboundOrigin=500;enemy.lane=240;enemy.age=.5;enemy.hp=enemy.maxHp=1000;
  const refit=w.spawn('pickup',360,C.playerY,3);refit.weaponKind='scatter';refit.refit=true;f.tick();
  expect(w.refitsClaimed).toBe(1);expect(w.weaponCalibration('scatter')).toBe(1);expect(f.runtime.mode).toBe('playing');
- const receipt=()=>f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='霰射炮 · 专属精校1');expect(receipt()).toBeUndefined();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返冲锋：看清第二次转向')).toBe(true);
- enemy.active=false;f.tick();expect(receipt()?.args[2]).toBe(272);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='该武器伤害系数 150%')).toBe(true);
+ // An unread installation merges the later calibration into its actual final
+ // parameters; it must not pretend the installation was already acknowledged.
+ const receipt=()=>f.calls.find(c=>c.kind==='fillText'&&c.args[0]==='新增霰射炮 T3 · 7发/轮');expect(receipt()).toBeUndefined();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='折返冲锋：看清第二次转向')).toBe(true);
+ enemy.active=false;for(let i=0;i<240&&!receipt();i++)f.tick();expect(receipt()).toBeDefined();expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='领取时常态全弹直伤/秒 0 → 174')).toBe(true);
 });
 it.each([false,true])('selects the earned third ballistic fork and draws only actual bounded golden bounces (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.spawn('pickup',360,C.playerY,2);f.tick();
@@ -1328,7 +1327,7 @@ it.each([false,true])('selects the earned third ballistic fork and draws only ac
  for(let i=0;i<25;i++)w.bullets.push({id:900000+i,x:360,y:600,px:360,py:600,vx:0,vy:0,damage:1,age:0,active:true,hostile:false,weaponKind:'scatter'});
  f.tick();expect(w.scatterRicochets).toBe(25);expect(f.runtime.diagnostics().ricochetTraces).toBeLessThanOrEqual(16);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#ffc35b')).toBe(true);expect(f.calls.some(c=>c.kind==='stroke'&&c.stroke==='#efad3244')).toBe(!weak);
  const count=f.runtime.diagnostics().ricochetTraces;f.runtime.pause();for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(count);
- expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<20;i++)f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(0);f.runtime.start();f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(0);
+ (w as unknown as {shoot:()=>void}).shoot=()=>{};expect(f.runtime.activateControl('resume')).toBe(true);for(let i=0;i<120;i++){f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBeLessThanOrEqual(16);}expect(f.runtime.diagnostics().ricochetTraces).toBe(0);f.runtime.start();f.tick();expect(f.runtime.diagnostics().ricochetTraces).toBe(0);
 });
 it.each([false,true])('renders the authored eight-slice gate, uses real tier energy and keeps numbers and hostile cores above it (weak=%s)',async weak=>{
  const f=fixture(weak);await f.runtime.load();f.runtime.start();const w=f.runtime.world;w.player.x=w.player.px=68;const gate=w.spawn('gate',360,600);gate.speed=0;f.tick();
@@ -1367,9 +1366,10 @@ it('paginates tactical medals, refuses hidden targets, reopens on the tracked pa
  let persisted:Save|undefined;const f=fixture(false,undefined,s=>{persisted=JSON.parse(JSON.stringify(s));});await f.runtime.load();const before=JSON.stringify(f.runtime.world);
  expect(f.runtime.activateControl('achievements')).toBe(true);expect(f.runtime.activateControl('achievement-group:tactics')).toBe(true);
  expect(f.runtime.activateControl('track:bait-counter')).toBe(false);expect(f.runtime.activateControl('achievement-page:previous')).toBe(false);
- expect(f.runtime.activateControl('achievement-page:next')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='2/2页')).toBe(true);
+ const pages=Math.ceil(achievementGroups.tactics.ids.length/4);expect(pages).toBe(3);
+ expect(f.runtime.activateControl('achievement-page:next')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===`2/${pages}页`)).toBe(true);
  expect(f.runtime.activateControl('track:bait-counter')).toBe(true);expect(persisted?.achievements.tracked).toBe('bait-counter');expect(JSON.stringify(f.runtime.world)).toBe(before);
- expect(f.runtime.activateControl('achievement-page:next')).toBe(false);expect(f.runtime.activateControl('achievements-back')).toBe(true);expect(f.runtime.activateControl('achievements')).toBe(true);
+ expect(f.runtime.activateControl('track:wall-cutter')).toBe(false);expect(f.runtime.activateControl('achievement-page:next')).toBe(true);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===`3/${pages}页`)).toBe(true);expect(f.runtime.activateControl('achievement-page:next')).toBe(false);expect(f.runtime.activateControl('achievements-back')).toBe(true);expect(f.runtime.activateControl('achievements')).toBe(true);
  expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]==='诱射反击')).toBe(true);expect(f.runtime.activateControl('track-clear')).toBe(true);expect(persisted?.achievements.tracked).toBeNull();
 });
 

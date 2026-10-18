@@ -1,0 +1,5 @@
+import {build} from 'esbuild';import {execFileSync} from 'node:child_process';import {existsSync,mkdirSync,writeFileSync} from 'node:fs';import path from 'node:path';
+const base='965b67cfaa7f42cf50b9a0e7b2a0b0a6bb96d68f',file='build/qa/Stage-248/baseline.mjs';mkdirSync('build/qa/Stage-248',{recursive:true});if(existsSync(file))throw Error('Baseline already exists; refusing overwrite');const out=await build({stdin:{contents:"export {timeline} from './src/core/director';export {chapterAssaults} from './src/core/chapter-assaults';export {World} from './src/core/world';export {CanvasRuntime} from './src/game/canvas-runtime';",resolveDir:process.cwd()},bundle:true,platform:'browser',format:'esm',write:false,plugins:[{name:'stage248-baseline',setup(b){b.onLoad({filter:/[\\/]src[\\/].*\.ts$/},args=>({contents:execFileSync('git',['show',`${base}:${path.relative(process.cwd(),args.path).replaceAll('\\','/')}`],{encoding:'utf8',maxBuffer:8e6}),loader:'ts'}));}}]});writeFileSync(file,out.outputFiles[0].text);console.log('Captured '+base);
+
+
+

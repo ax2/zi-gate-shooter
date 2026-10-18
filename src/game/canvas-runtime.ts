@@ -490,7 +490,12 @@ export class CanvasRuntime {
     else if(action.startsWith('contract-claim:')&&this.mode==='contract-reward'){
       const kind=action.slice(15) as WeaponKind|'energy';
       const before=captureEquipment(this.world);
-      if(this.world.claimContractReward(kind)){const handled=this.recordEquipment(before);for(const e of this.world.drainEffects())this.effect(e,handled);if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';else this.action('resume');}
+      if(this.world.claimContractReward(kind)){
+        // The reward has been collected: retire only its old call to action,
+        // before processing new reward/research notices from this actual claim.
+        if(this.notice==='契约完成 · 选择强化奖励'){this.notice='';this.noticeDetail='';this.noticeUntil=0;}
+        const handled=this.recordEquipment(before);for(const e of this.world.drainEffects())this.effect(e,handled);if(this.world.build.available(this.world.buildPoints).length)this.mode='choice';else this.action('resume');
+      }
     }
     else if(action.startsWith('boss-claim:')&&this.mode==='boss-reward'){
       const kind=action.slice(11) as WeaponKind|'research';

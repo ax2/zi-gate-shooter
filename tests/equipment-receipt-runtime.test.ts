@@ -4,7 +4,7 @@ import {defaults} from '../src/ui/storage';
 import {C} from '../src/core/config';
 async function setup(){
  let clock=1000,next=(_t:number)=>{};const text:string[]=[];
- const ctx=new Proxy({}, {get(_t,k){return (...args:unknown[])=>{if(k==='fillText')text.push(String(args[0]));};},set(){return true;}}) as CanvasRenderingContext2D;
+ const ctx=new Proxy({}, {get(_t,k){if(k==='createLinearGradient'||k==='createRadialGradient')return()=>({addColorStop(){}});return (...args:unknown[])=>{if(k==='fillText')text.push(String(args[0]));};},set(){return true;}}) as CanvasRenderingContext2D;
  const r=new CanvasRuntime({canvas:{getContext:()=>ctx} as unknown as HTMLCanvasElement,width:390,height:844,dpr:1,menuBottom:0,image:async()=>({width:768,height:512}) as HTMLImageElement,read:defaults,write(){},sound(){},silence(){},now:()=>clock,requestFrame:f=>{next=f;}});await r.load();r.start();Object.assign(r.world,{scheduled:[]});
  return {r,text,frame(){text.length=0;clock+=1000/60;next(clock);},advance(n:number){for(let i=0;i<n;i++){text.length=0;clock+=1000/60;next(clock);}}};
 }
