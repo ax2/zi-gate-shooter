@@ -31,3 +31,8 @@
 复现命令：npx vitest run tests/boss-tactical-status.test.ts tests/boss-tactical-render.test.ts tests/boss-salvage-render.test.ts tests/contract-receipt.test.ts；node tools/check-boss-tactics-fixture.mjs。压力诊断使用esbuild打包tools/audit-player-pressure.ts为build/qa/Stage-253/player-pressure.mjs，再分别传ballistic/electric/optical运行。浏览器fixture同样打包tools/visual-fixtures/boss-tactics.js至build/qa/Stage-253/boss-tactics.mjs，由Vite服务对应HTML。原始诊断、失败、图片和manifest均保留。
 
 后续仍需章节变化、长局选择价值和真人感受；不把本轮UI改进当作足够内容/酷炫度或整体目标达成。
+
+
+## Stage254验证更正（2026-10-18）
+
+检查新特效时发现boss-tactics正常成长验证页的quality按钮写入已被存档回调clone替换的局部save，而非运行实例实际save。此前该正常流程中标为弱档的截图未证明实际切档，相关实景弱档结论撤回；标准档实景、真实规则/奖励记录、对应弱档单元检查仍有效。Stage252的reserve-labels受控页write为空、共享原save，不属于此问题。四个复制模板已在Stage254修正，运行诊断增加effectsMode并加入实际切档断言，最新特效将用修正页重新正常开局取得有效弱档截图。原有图片与记录保留，不改名伪装重拍，也不把该错误归为正式设置菜单故障。

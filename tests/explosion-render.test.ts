@@ -35,7 +35,7 @@ function expectVisibleCombatCopy(f:ReturnType<typeof fixture>,title:string,detai
  for(const row of copy.rows){expect(row.width).toBeLessThanOrEqual(560);expect(f.calls.some(c=>c.kind==='fillText'&&c.args[0]===row.text&&c.args[2]===row.y)).toBe(true);}
  return copy;
 }
-const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && c.args[0].src.endsWith('explosion-v1.png'));
+const blasts = (f: ReturnType<typeof fixture>) => f.calls.filter(c => c.kind === 'drawImage' && (c.args[0].src.endsWith('explosion-v1.png')||c.args[0].src.endsWith('boss-reactor-v1.png')));
 
 it('retains a completed target receipt through several pending upgrades until combat resumes',async()=>{
  const f=fixture();await f.runtime.load();f.runtime.activateControl('combos-menu');f.runtime.activateControl('recipe-goal:ion');f.runtime.activateControl('combos-back');f.runtime.start();
@@ -713,7 +713,7 @@ it.each([false, true])('a real boss kill presents distinct beats and matches rul
     if (i === 8) expect(blasts(f).length).toBe(1);
     if (i === 12) expect(blasts(f).length).toBe(2);
     if (i === 24) expect(blasts(f).length).toBe(3);
-    if (i > 72) expect(blasts(f)).toHaveLength(0);
+    if (i > 78) expect(blasts(f)).toHaveLength(0);
     if(f.runtime.mode==='boss-reward'){
       expect(f.runtime.world.phaseTime).toBeGreaterThanOrEqual(C.bossLootReveal);
       expect(f.runtime.activateControl('boss-claim:pulse')).toBe(true);expect(reference.claimBossReward('pulse')).toBe(true);

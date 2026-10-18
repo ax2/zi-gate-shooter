@@ -8,7 +8,7 @@ export class BossDestruction {
     { at: 0, x: -112, y: 90, size: 85 },
     { at: 0.16, x: 112, y: 90, size: 85 },
     { at: 0.34, x: 0, y: -25, size: 92 },
-    { at: 0.56, x: 0, y: 25, size: 140 },
+    { at: 0.56, x: 0, y: 25, size: 200,reactor:true },
   ];
   constructor(readonly x: number, readonly y: number, readonly variant = 0) {}
   advance(dt: number) {
@@ -16,7 +16,7 @@ export class BossDestruction {
     const due = [];
     while (this.next < BossDestruction.bursts.length && BossDestruction.bursts[this.next].at <= this.age) {
       const burst = BossDestruction.bursts[this.next++];
-      due.push({ x: this.x + burst.x, y: this.y + burst.y, size: burst.size });
+      due.push({ x: this.x + burst.x, y: this.y + burst.y, size: burst.size,reactor:'reactor'in burst&&burst.reactor });
     }
     return due;
   }
@@ -25,9 +25,9 @@ export class BossDestruction {
     const t = Math.max(0, this.age - 0.12);
     const alpha = Math.max(0, 1 - Math.max(0, this.age - 0.35) / (BossDestruction.lifetime - 0.35));
     return [
-      { from: 0, width: 0.32, dx: -85 * t, dy: 48 * t, angle: -0.35 * t, alpha },
-      { from: 0.32, width: 0.36, dx: 0, dy: 30 * t, angle: 0.04 * t, alpha },
-      { from: 0.68, width: 0.32, dx: 85 * t, dy: 48 * t, angle: 0.35 * t, alpha },
+      { from: 0, width: 0.32, dx: -150 * t, dy: 65*t+90*t*t, angle: -0.65 * t, alpha },
+      { from: 0.32, width: 0.36, dx: 0, dy: 45*t+110*t*t, angle: 0.08 * t, alpha },
+      { from: 0.68, width: 0.32, dx: 150 * t, dy: 65*t+90*t*t, angle: 0.65 * t, alpha },
     ];
   }
 }

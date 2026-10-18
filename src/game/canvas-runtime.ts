@@ -127,7 +127,7 @@ export interface Platform {
 }
 export interface CanvasControl { x: number; y: number; w: number; h: number; label: string; action: string }
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; total: number; color: string; hot?:boolean }
-interface Blast { ammo?:boolean; ion?:boolean; electric?: boolean; fracture?: boolean; x: number; y: number; size: number; life: number; total: number }
+interface Blast { reactor?:boolean;ammo?:boolean; ion?:boolean; electric?: boolean; fracture?: boolean; x: number; y: number; size: number; life: number; total: number }
 const fonts = '"Microsoft YaHei", "PingFang SC", sans-serif';
 
 /** Shared production canvas surface for WeChat and the browser compatibility harness. */
@@ -250,7 +250,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', INTERCEPTOR_ART, 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'boss-reactor-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', INTERCEPTOR_ART, 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -1073,6 +1073,8 @@ export class CanvasRuntime {
     }
     for (const e of this.blasts) {
       e.life -= dt; const age = 1 - e.life / e.total;
+      if(e.reactor){c.save();c.globalAlpha=(this.save.settings.effects==='weak'?.55:.9)*Math.max(0,Math.min(1,(1-age)/.2));
+        this.frameSprite('boss-reactor-v1.png',Math.min(5,Math.floor(age*6)),3,e.x,e.y,e.size*2,e.size*2,2);c.restore();continue;}
       if(e.ammo){ammoFragmentLight(c,e.x,e.y,age,this.save.settings.effects==='weak');continue;}
       if(e.ion){ionStormLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');continue;}
       if(e.electric){capacitorLight(c,e.x,e.y,e.size,age,this.save.settings.effects==='weak');continue;}
@@ -1223,7 +1225,7 @@ export class CanvasRuntime {
     for (const burst of wreck.advance(dt)) {
       // Prefer the boss's authored beats over the oldest decorative blast.
       if (this.blasts.length >= 4) this.blasts.shift();
-      this.blasts.push({ ...burst, life: 0.6, total: 0.6 });
+      const life=burst.reactor?.72:.6;this.blasts.push({ ...burst,life,total:life });
     }
     if (wreck.finished) { this.destruction = undefined; return; }
     const img = this.images.get(wreck.variant === 2 ? 'boss-bastion-v1.png' : wreck.variant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png'); if (!img) return;
@@ -1910,7 +1912,7 @@ export class CanvasRuntime {
       rakeGuns:this.world.bodies.filter(b=>b.active&&b.pattern==='rake').map(b=>({id:b.id,x:b.x,y:b.y,hp:b.hp,warning:b.warning,volley:b.rakeVolley??0,shots:b.rakeShots??0,firedVolley:b.rakeFiredVolley,firedAt:b.rakeFiredAt})),
       sweepers:this.world.bodies.filter(b=>b.active&&b.pattern==='sweep').map(b=>({id:b.id,kind:b.kind,x:b.x,y:b.y,age:b.age,lane:b.lane,dropGrace:b.dropGrace,hp:b.hp,warning:b.warning,shots:b.sweeperShots??0,direction:sweeperDirection(b)})),
       lockPreemptWins:this.world.lockPreemptWins,lockBaitWins:this.world.lockBaitWins,lockshotSpawns:this.world.lockshotSpawns,lockshotShots:this.world.lockshotShots,lockshotEnemies:this.world.bodies.filter(b=>b.active&&b.pattern==='lockshot').map(b=>({id:b.id,x:b.x,y:b.y,age:b.age,hp:b.hp,lockedX:b.lockX,warning:b.warning,attempted:b.lockShots??0,accepted:b.lockAcceptedShots??0,passed:b.lockPassed??0,damageAtAdmission:b.lockDamageStart,firedAt:b.lockFiredAt,emp:b.empRemaining??0})),hostileProjectiles:this.world.bullets.filter(b=>b.hostile).map(b=>({id:b.id,source:b.sourceId,x:b.x,y:b.y,vx:b.vx,vy:b.vy})),refitTarget:this.world.refitTarget??null,directedSupplies:this.world.bodies.filter(b=>b.active&&b.directedRefit).map(b=>({id:b.id,kind:b.kind,weapon:b.weaponKind,row:b.row,x:b.x,y:b.y})),lastEquipmentPickup:this.world.lastEquipmentPickup,driftSupplies:this.world.bodies.filter(b=>b.active&&b.pattern==='drift-supply').map(b=>({id:b.id,row:b.row,x:b.x,y:b.y,age:b.age,hp:b.hp,maxHp:b.maxHp,kind:b.weaponKind,refit:b.refit,settled:b.age>=DRIFT_SUPPLY.settle})),bodies: this.world.bodies.length, bullets: this.world.bullets.length, particles: this.particles.length,hotParticles:this.particles.filter(p=>p.hot!==false).length, ammoFragments:this.blasts.filter(b=>b.ammo).length,blasts: this.blasts.length,arcs:this.arcs.length,
-      bossDestructionAge: this.destruction?.age ?? null,
+      effectsMode:this.save.settings.effects,bossDestructionAge: this.destruction?.age ?? null,
       crateFragments: this.crateDebris.pieces.length,
       droneFragments: this.enemyWreck.pieces.filter(p => p.kind === 'drone').length,
       enemyFragments: this.enemyWreck.pieces.length,

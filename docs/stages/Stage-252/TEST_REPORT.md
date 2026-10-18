@@ -28,3 +28,8 @@
 最终typecheck/vite build成功；48运行资源7711194字节逐文件哈希核对dist并冻结到build/playable/Stage-252。固定5178真实Edge已加载canvas-preview-6q1OeBps.js，无控制台错误；5335备用未启动。Stage250/251冻结保持，未生成ZIP。新全仓回归未执行，旧254失败未整体解决。
 
 复现：npx vitest run tests/boss-reserve-routes.test.ts tests/boss-reserves.test.ts tests/boss-formations.test.ts tests/boss-salvage.test.ts tests/boss-loot.test.ts tests/boss-salvage-render.test.ts；node tools/run-boss-reserves-audit.mjs；node tools/check-boss-reserves-fixture.mjs。浏览器正常成长候选需要用esbuild将tools/visual-fixtures/boss-reserves.js输出到build/qa/Stage-252/boss-reserves-fixture.mjs，再通过Vite打开对应HTML。标签受控页同理输出reserve-labels.mjs。全局目标仍活跃，不能从本阶段通过推导完成。
+
+
+## Stage254验证更正（2026-10-18）
+
+检查新特效时发现boss-reserves正常成长验证页的quality按钮写入已被存档回调clone替换的局部save，而非运行实例实际save。此前该正常流程中标为弱档的截图未证明实际切档，相关实景弱档结论撤回；标准档实景、真实规则/奖励记录、对应弱档单元检查仍有效。Stage252的reserve-labels受控页write为空、共享原save，不属于此问题。四个复制模板已在Stage254修正，运行诊断增加effectsMode并加入实际切档断言，最新特效将用修正页重新正常开局取得有效弱档截图。原有图片与记录保留，不改名伪装重拍，也不把该错误归为正式设置菜单故障。
