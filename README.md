@@ -476,3 +476,5 @@ Stage-126：5178支持满路线持续精调与增量显示，见docs/stages/Stag
 Stage-250实景更新：Edge已成功复核正常开局至第三首领奖励，含390×844标准/弱特效；详情docs/stages/Stage-250/EDGE_REVIEW.md。完整回归重跑仍进行且已有失败，Stage250未完成，游戏候选保持Stage249。
 
 Stage250截击机体：三炮悬浮架已做成独立手动试玩候选，普通精英不换图；已留真实Edge翼炮/核心/弱档截图，1200次受控状态对照相等。正式5178仍Stage249，全仓回归仍进行且有失败。制作/运行方式见art/INTERCEPTOR_V2.md。
+
+Stage250重装压力候选已形成：后炮架设后再推进，保留先拆炮或清侧翼的选择；正常奖励实景到第三首领和36路线已留证。独立试玩5255/build/qa/Stage-250/pressure-play.html，正式5178仍249，完整回归有失败且仍进行。说明docs/stages/Stage-250/PRESSURE_CANDIDATE.md。
