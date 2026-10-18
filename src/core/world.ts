@@ -1,3 +1,4 @@
+import{claimBossSalvage,BOSS_SALVAGE}from './boss-salvage';
 import{pullPickup}from'./pickup-recovery';
 import {RapidBreak} from './rapid-break';
 import{BOOSTER}from'./booster';
@@ -51,6 +52,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  bossSalvageMask?:number;
   boosterSpent?:boolean;boosterShots?:number;boosterFiredAt?:number;boosterFiredSide?:-1|1;
   rakeVolley?:number;rakeFiring?:boolean;rakeShots?:number;rakeFiredAt?:number;rakeFiredVolley?:number;
   introEscort?:boolean;
@@ -80,6 +82,7 @@ export type Phase = 'running' | 'boss-entry' | 'boss' | 'recovery' | 'dead';
 
 /** Rendering-free authoritative simulation. Instances are discarded on restart. */
 export class World {
+  get bossSalvageEnabled(){return true;}
   readonly #combatLedger=new CombatLedger();
   combatContributions(){return this.#combatLedger.snapshot();}
   interceptorBreaks=0;
@@ -1201,6 +1204,13 @@ export class World {
     const before=b.hp,wasActive=b.active;
     b.hp = Math.max(0, b.hp - damage * guardDamageScale(b)*shield);
     if(wasActive&&b.kind in C.enemies)this.#combatLedger.record(source,before,b.hp);
+    const plateBreaks=claimBossSalvage(b,before,this.round,this.player.hp>0&&this.phase==='boss');
+    if(plateBreaks.length){
+      const charge=plateBreaks.length*BOSS_SALVAGE.charge,reward=grantGate(this.growth,charge,'energy');
+      if(reward.activated)this.emit('overload',this.player.x,C.playerY);
+      this.effects.push({type:'boss-salvage',x:b.x,y:b.y,bossVariant:b.bossVariant,gain:plateBreaks.length,
+        text:'首领破甲 '+plateBreaks.length+'段 · 充能+'+charge,detail:this.chargeReceipt(reward.activated)});
+    }
     this.effects.push({ type: 'impact', x: b.x, y: b.y, size: b.width, weaponKind });
     if (b.hp > 0) return;
     b.active = false;

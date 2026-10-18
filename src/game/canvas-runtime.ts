@@ -55,6 +55,8 @@ import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipePerformance,recipeS
 import {interceptorLight} from './interceptor-light';
 import {INTERCEPTOR_ART,interceptorArtFrame} from './interceptor-art';
 import {heavyEscortHolding} from '../core/heavy-escorts';
+import {BossArmorFragments} from './boss-armor-fragments';
+import {BOSS_SALVAGE,bossSalvageCount} from '../core/boss-salvage';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,requiredProofGroups,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
@@ -167,6 +169,7 @@ export class CanvasRuntime {
   private destruction?: BossDestruction;
   private playerMotion = new PlayerMotion();
   private crateDebris = new CrateDebris();
+  private bossFragments = new BossArmorFragments();
   private enemyWreck = new EnemyWreck();
   private gateFeedback = new GateFeedback();
   private accumulator = 0;
@@ -329,6 +332,7 @@ export class CanvasRuntime {
     this.keys.clear(); this.inputMode = 'touch';
     this.gateFeedback.clear();
     this.crateDebris.clear();
+    this.bossFragments.clear();
     this.enemyWreck.clear();
     this.playerMotion.reset();
     this.weaponMotion.reset();
@@ -529,7 +533,7 @@ export class CanvasRuntime {
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
     else if (action === 'resume') { this.pausePreview = false; this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.shieldBreak=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.shieldBreak=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear();this.bossFragments.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -581,6 +585,11 @@ export class CanvasRuntime {
     this.buildFeedback=feedback;
   }
   private effect(e: EffectEvent,equipmentHandled=false) {
+    if(e.type==='boss-salvage'){
+      const weak=this.save.settings.effects==='weak';this.bossFragments.burst(e.x,e.y,e.bossVariant??0,weak);this.crateDebris.trim(9-this.bossFragments.pieces.length);this.enemyWreck.trim(9-this.crateDebris.pieces.length-this.bossFragments.pieces.length);
+      if(this.blasts.length<4)this.blasts.push({x:e.x-50,y:e.y+10,size:65,life:.24,total:.24});
+      this.notify(e.text??'首领破甲',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;
+    }
     if(e.type==='fracture-wave'){if(this.supportBeams.length>=16)this.supportBeams.shift();this.supportBeams.push({x:e.x,y:e.y,tx:e.targetX??e.x,ty:e.targetY??e.y,life:.24,laser:false,fractureWave:true});return;}
     if(e.type==='counter-fire'||e.type==='wing-fire'||e.type==='barrage-fire'){if(this.save.settings.sound)this.platform.sound('boss-volley',e.gain??1);return;}
     if(e.type==='boss-counter'){this.notify(e.text??'首领过热',1195,e.detail);if(this.save.settings.sound)this.platform.sound('alert',1);return;}
@@ -658,9 +667,9 @@ export class CanvasRuntime {
     // A coalesced pellet reuses its existing material response and legacy sparks.
     if(e.type==='impact'&&!admitWeaponImpact(this.impacts,e.x,e.y,e.weaponKind??this.world.weaponKind,this.save.settings.effects==='weak'))return;
     const explosion = ['ion-storm','scatter-burst', 'capacitor', 'fracture', 'blast', 'kill', 'crate-break', 'boss-kill', 'crash', 'death'].includes(e.type);
-    if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y); this.enemyWreck.trim(9 - this.crateDebris.pieces.length); }
-    if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length), e.enemyKind);
-    if (e.type === 'boss-kill') this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);
+    if (e.type === 'crate-break') { this.crateDebris.burst(e.x, e.y);this.crateDebris.trim(9-this.bossFragments.pieces.length); this.enemyWreck.trim(9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length); }
+    if (e.type === 'kill' && isWreckKind(e.enemyKind)) this.enemyWreck.burst(e.x, e.y, Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length), e.enemyKind);
+    if (e.type === 'boss-kill') {this.bossFragments.clear();this.destruction = new BossDestruction(e.x, e.y, e.bossVariant);}
     else if(explosion){
       // A combination gets a readable burst even when ordinary explosions fill the budget.
       if((e.type==='ion-storm'||e.type==='fracture'||e.type==='capacitor'||e.type==='scatter-burst')&&this.blasts.length>=4){const ordinary=this.blasts.findIndex(b=>!b.fracture&&!b.electric&&!b.ion);this.blasts.splice(ordinary<0?0:ordinary,1);}
@@ -902,7 +911,7 @@ export class CanvasRuntime {
     this.gateFeedback.advance(this.mode==='playing'?dt:0,r=>this.mode==='playing'&&gateReceiptReadable(r,w.bodies,w.bullets,noticeBlocking));
     this.drawGuide();
     this.drawDestruction(dt);
-    this.enemyWreck.trim(Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length));
+    this.enemyWreck.trim(Math.min(this.save.settings.effects === 'weak' ? 3 : 6, 9 - this.crateDebris.pieces.length-this.bossFragments.pieces.length));
     this.enemyWreck.advance(dt);
     for (const piece of this.enemyWreck.pieces) {
       const wreckImage = this.images.get(piece.kind==='conduit'?'conduit-v1.png':`${piece.kind}-wreck-v1.png`);
@@ -918,6 +927,7 @@ export class CanvasRuntime {
       c.globalAlpha = Math.min(1, (piece.life - piece.age) / 0.3) * (this.save.settings.effects === 'weak' ? 0.55 : 0.9);
       this.frameSprite('crate-v1.png', piece.frame, 3, 0, 0, piece.size, piece.size, 3); c.restore();
     }
+    this.bossFragments.advance(dt);
     // Physical reward frames sit below enemy art; the number panel is later.
     ionEvolutionLight(c,w.ionOrbs,w.ionSpears,this.save.settings.effects==='weak');
     for(const field of w.magneticFields)magneticLight(c,field,this.save.settings.effects==='weak');
@@ -991,6 +1001,7 @@ export class CanvasRuntime {
         }
       }
     }
+    this.bossFragments.draw(c,key=>this.images.get(key),this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&b.proofTarget&&w.contract?.kind==='research'&&w.contract.status==='active')this.text(b.proofGroup?`验证·第${b.proofGroup}批`:'验证目标',b.x,b.y-b.height/2-24,20,'#a9f4d7');
     for(const b of w.bodies)if(b.active&&(b.dropGrace??0)>0)dropLight(c,b.x,b.y,(b.dropGrace??0)/SWARM.grace,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.active&&(b.empRemaining??0)>0)offlineLight(c,b.x,b.y,b.width,b.empRemaining??0);
@@ -1250,6 +1261,10 @@ export class CanvasRuntime {
     if(boss){
       this.text(`${boss.bossVariant===2?'封锁堡垒':boss.bossVariant===1?'双翼压制者':'重装首领'}${boss.counterfire?'·过热':''}${w.bossShieldActive()?'·屏障45%':''}　${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}`,360,y+172,25,'#ffd59e');
       this.bar(360,y+196,620,boss.hp/boss.maxHp,w.bossShieldActive()?'#82dfff':'#ff925d');
+      if((w as World&{bossSalvageEnabled?:boolean}).bossSalvageEnabled&&w.round>=BOSS_SALVAGE.fromRound){
+        for(const ratio of BOSS_SALVAGE.ratios)this.rect(49+620*ratio,y+190,2,12,'#ffedd1');
+        this.rect(50,y+206,620,28,'#102330');this.text(`破甲 ${bossSalvageCount(boss)}/4 · 每段充能+${BOSS_SALVAGE.charge}`,360,y+220,19,'#ffdf9e');
+      }
     }
   }
   private noticePlacement(){
@@ -1844,6 +1859,7 @@ export class CanvasRuntime {
   }
   diagnostics() {
     return { drawCount: this.drawCount, callbackCount: this.callbackCount,
+      bossPlateFragments:this.bossFragments.pieces.length,bossSalvage:this.world.bodies.filter(b=>b.active&&b.kind==='boss').map(b=>({id:b.id,count:bossSalvageCount(b),hp:b.hp,maxHp:b.maxHp})),
       combatCopy:this.presentedCopy?{...this.presentedCopy,lines:[...this.presentedCopy.lines],rows:this.presentedCopy.rows.map(r=>({...r})),bounds:{...this.presentedCopy.bounds}}:null,
       combatNotice:this.presentedNotice?{...this.presentedNotice}:null,
       pickupSignals:this.world.bodies.filter(b=>b.kind==='pickup').map(b=>({id:b.id,x:b.x,y:b.y,...pickupSignal(b)})),

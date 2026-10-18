@@ -45,7 +45,11 @@ it.each((['drone','charger','armor','elite','sniper','guard'] as const).flatMap(
   expect(ds.reduce((n,c)=>n+c.args[7],0)).toBeCloseTo(wreckLayout[kind].w); expect(ds.every(c=>c.alpha<= (weak?.5:.85))).toBe(true);
   const last=f.calls.indexOf(ds[2]);
   expect(f.calls.findIndex(c=>c.kind==='fillText'&&String(c.args[0]).startsWith('+'))).toBeGreaterThan(last);
-  expect(f.calls.findIndex(c=>c.kind==='moveTo'&&c.args[0]===492&&c.args[1]===693)).toBeGreaterThan(last);
+  // Hostile triangles now draw in local coordinates after their real-position
+  // translation. Check that entire foreground group follows the wrecks.
+  const danger=f.calls.findIndex(c=>c.kind==='translate'&&c.args[0]===500&&c.args[1]===700);
+  expect(danger).toBeGreaterThan(last);
+  expect(f.calls.findIndex((c,i)=>i>danger&&c.kind==='moveTo'&&c.args[0]===-8&&c.args[1]===-7)).toBeGreaterThan(danger);
   f.runtime.pause(); f.tick(); const frozen=f.wrecks().map(c=>c.args.slice(1));
   for(let i=0;i<40;i++)f.tick(); expect(f.wrecks().map(c=>c.args.slice(1))).toEqual(frozen);
   f.runtime.start(); f.tick(); expect(f.runtime.diagnostics().enemyFragments).toBe(0);

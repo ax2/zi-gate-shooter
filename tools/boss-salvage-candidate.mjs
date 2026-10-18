@@ -4,8 +4,10 @@ import{execFileSync}from'node:child_process';import path from'node:path';
 export function bossSalvageCandidate(baseline=false){
  const source=async a=>baseline?execFileSync('git',['show',`9158c27:${path.relative(process.cwd(),a.path).replaceAll('\\','/')}`],{encoding:'utf8',maxBuffer:8e6}):await readFile(a.path,'utf8');
  return{name:'boss-salvage-candidate',setup(b){b.onLoad({filter:/[\\/]world\.ts$/},async a=>{
- let src=await source(a);const marker='if(wasActive&&b.kind in C.enemies)this.#combatLedger.record(source,before,b.hp);';
+ let src=await source(a);if(!baseline&&src.includes('get bossSalvageEnabled(){return true;}'))return{contents:src,loader:'ts'};
+ const marker='if(wasActive&&b.kind in C.enemies)this.#combatLedger.record(source,before,b.hp);';
  if(src.split(marker).length!==2)throw Error('Recheck boss salvage damage hook');
+ src=src.replace('export class World {','export class World {\n get bossSalvageEnabled(){return true;}');
  src="import{claimBossSalvage,BOSS_SALVAGE}from './boss-salvage';\n"+src.replace(marker,marker+`
     const plateBreaks=claimBossSalvage(b,before,this.round,this.player.hp>0&&this.phase==='boss');
     if(plateBreaks.length){const charge=plateBreaks.length*BOSS_SALVAGE.charge,reward=grantGate(this.growth,charge,'energy');

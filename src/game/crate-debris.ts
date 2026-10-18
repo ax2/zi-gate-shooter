@@ -1,5 +1,6 @@
 /** Decorative fragments only; reserve three of the global twelve slots for boss wreckage. */
 export class CrateDebris {
+  trim(limit:number){while(this.pieces.length>Math.max(0,limit))this.pieces.shift();}
   readonly pieces: Array<{ frame: number; x: number; y: number; vx: number; vy: number; angle: number; spin: number; age: number; life: number; size: number }> = [];
   burst(x: number, y: number) {
     while (this.pieces.length > 3) this.pieces.shift();

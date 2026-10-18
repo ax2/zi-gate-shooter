@@ -14,9 +14,9 @@ export function candidatePlugin(pressure=false){return{name:'interceptor-art-can
  if(pressure)replace('const braced=batteryHolding(b)||',"const braced=(b.heavyReserve&&(b.pattern==='fan'||b.pattern==='sweep')&&b.age<3.2)||batteryHolding(b)||");
  return{contents:source,loader:'ts',resolveDir:path.dirname(args.path)};
 });}};}
-export function candidateBrowserPlugin(saveKey='zi-gate-shooter-candidate250'){return{name:'candidate-browser-entry',setup(b){
+export function candidateBrowserPlugin(saveKey='zi-gate-shooter-candidate250',remapInterceptor=true){return{name:'candidate-browser-entry',setup(b){
  b.onLoad({filter:/[\\/]canvas-preview\.ts$/},async a=>({contents:(await readFile(a.path,'utf8')).replaceAll('zi-gate-shooter-v1',saveKey),loader:'ts',resolveDir:path.dirname(a.path)}));
- b.onLoad({filter:/[\\/]browser-image\.ts$/},async a=>({contents:(await readFile(a.path,'utf8')).replace('image.src = src;',"image.src = src.endsWith('/interceptor-v2.png')?'/build/art/Stage-250/interceptor-runtime-v2.png':src;"),loader:'ts',resolveDir:path.dirname(a.path)}));
+ b.onLoad({filter:/[\\/]browser-image\.ts$/},async a=>{let src=await readFile(a.path,'utf8');if(remapInterceptor)src=src.replace('image.src = src;',"image.src = src.endsWith('/interceptor-v2.png')?'/build/art/Stage-250/interceptor-runtime-v2.png':src;");return{contents:src,loader:'ts',resolveDir:path.dirname(a.path)};});
  b.onResolve({filter:/\?raw$/},a=>({path:path.resolve(a.resolveDir,a.path.slice(0,-4)),namespace:'candidate-raw'}));
  b.onLoad({filter:/.*/,namespace:'candidate-raw'},async a=>({contents:await readFile(a.path,'utf8'),loader:'text'}));
 }};}

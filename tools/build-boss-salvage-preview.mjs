@@ -1,0 +1,5 @@
+import{build}from'esbuild';import{mkdir,writeFile}from'node:fs/promises';import{bossSalvageCandidate}from'./boss-salvage-candidate.mjs';import{candidateBrowserPlugin}from'./build-interceptor-candidate.mjs';
+const dir='build/qa/Stage-251';await mkdir(dir,{recursive:true});
+await build({entryPoints:['tools/visual-fixtures/boss-salvage.js'],bundle:true,platform:'browser',format:'esm',outfile:dir+'/boss-salvage-fixture.mjs',plugins:[bossSalvageCandidate()]});
+await build({entryPoints:['src/canvas-preview.ts'],bundle:true,platform:'browser',format:'esm',outfile:dir+'/salvage-play.mjs',plugins:[bossSalvageCandidate(),candidateBrowserPlugin('zi-gate-shooter-salvage251',false)]});
+await writeFile(dir+'/salvage-play.html','<!doctype html><html lang="zh-CN"><meta charset="utf-8"><base href="/"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>火力突围 · 破甲充能候选</title><body><script type="module" src="/build/qa/Stage-251/salvage-play.mjs"></script></body></html>');console.log('Boss salvage candidate built with current integrated Stage250 combat; no World injection.');
