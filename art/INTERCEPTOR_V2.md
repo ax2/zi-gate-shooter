@@ -8,8 +8,8 @@ tools/pack-interceptor-candidate.mjs仅做技术裁切、平移对齐和缩放�
 
 中格三个炮口都有烘焙亮光，不能代表交替攻击。interceptor-art仅使用暗炮口的第0/2格，实际翼炮/中央炮蓄能与闪光继续由已有interceptorLight按真实状态绘制，EMP时不表现发射姿态。普通精英保持原机体。没有新增弹道、伤害、未来射击轨迹或碰撞规则。
 
-新机体先通过独立候选包验证，未写入public/assets、正式加载清单或dist。构建当前候选：node tools/pack-interceptor-candidate.mjs，随后node tools/build-interceptor-candidate.mjs。手动正常试玩：5255/build/qa/Stage-250/interceptor-play.html（需运行本地Vite）。候选使用独立存档键，不迁移主版本存档。
+新机体先通过独立候选验证，现已导出public/assets/interceptor-v2.png并加入Stage250正常加载及5178试玩构建。重导运行npm run assets:interceptor。旧独立候选脚本用于制作期9158c27源码，不能对已整合源码再叠加；原候选与独立存档保留。
 
 真实Edge证据：桌面及390×844手机模拟；128.25秒翼炮蓄能、128.75秒翼炮发射、129秒核心蓄能、129.65秒核心发射、130.15秒真实飞行。无World注入；虚拟时钟、自动操作者、观察期让开精英，HP2，不是真人难度或性能证明。截图及诊断见build/qa/Stage-250/screenshots/interceptor-*。候选浏览器日志单次warn/error为空，不能替代全时段稳定性检查。
 
-受控检查1200次回调：标准/弱档、普通/截击各300次，完整World与Stage249基线一致，正确选择机体，排除全炮口烘焙发光格。类型检查通过。全仓299模块仍在运行且已有失败；不宣称整体完成或全仓通过。
+制作期受控1200次回调：标准/弱档、普通/截击各300次，完整World与Stage249基线一致，正确选择机体，排除全炮口烘焙发光格。整合后68相关检查与构建通过。旧完整基线299模块结束为1589通过、254失败；不宣称整体完成或全仓通过。

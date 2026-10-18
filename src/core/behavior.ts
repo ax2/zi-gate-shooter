@@ -9,6 +9,7 @@ import {LOCKSHOT,FORKSHOT,lockshotProfile,lockshotLeaving} from './lockshot';
 import {driftOffset} from './drift-supply';
 import {SUPPLY_CONVOY} from './supply-convoy';
 import {batteryHolding} from './battery';
+import {heavyEscortHolding} from './heavy-escorts';
 import {SWEEPER,sweeperDirection} from './sweeper';
 import {RELAY_SCREEN,ROTATING_SHIELD} from './relay-screen';
 import {REBOUND,reboundState} from './rebound-charger';
@@ -245,7 +246,7 @@ export function advanceBody(b: Body, dt: number, phase: Phase, phaseTime: number
     if(b.pattern==='sweep')b.x+=sweeperDirection(b)*Math.min(Math.abs(b.lane-b.x),SWEEPER.speed*dt);
     if (b.kind === 'drone' && b.pattern === 'weave') b.x = clamp(b.lane + Math.sin(b.age * 2) * 70, C.minX, C.maxX);
     if(b.kind==='elite'&&b.bountyRound!==undefined&&b.age<HUNTER.holdSeconds){if(b.y<HUNTER.hoverY)b.y=Math.min(HUNTER.hoverY,b.y+b.speed*dt);}
-    else if(!batteryHolding(b)&&!fireControlHolding(b))b.y += b.speed * dt;
+    else if(!batteryHolding(b)&&!fireControlHolding(b)&&!heavyEscortHolding(b))b.y += b.speed * dt;
     if ((b.kind === 'armor' || b.kind === 'elite') && b.y > 0 && b.y < 600) {
       if(b.aceRole){advanceAce(b,offline,shot);return;}
       if (b.timer <= 1e-9 && !offline) {

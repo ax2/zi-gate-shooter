@@ -53,6 +53,8 @@ import {reboundLight} from './rebound-light';
 import {buildReceiptPosition,combatPanelClear,type ReceiptPosition} from './build-receipt';
 import {recipes,recipeIds,parseRecipeGoal,recipeStatus,recipePerformance,recipeSupplyMatch,recipeRouteHint,type RecipeGoal} from '../core/recipe-goal';
 import {interceptorLight} from './interceptor-light';
+import {INTERCEPTOR_ART,interceptorArtFrame} from './interceptor-art';
+import {heavyEscortHolding} from '../core/heavy-escorts';
 import {bossHeatLight} from './boss-heat-light';
 import {buildProofs,requiredProofGroups,type BuildProof} from '../core/build-proof';
 import {ionStormLight,ionChargeLight} from './ion-storm-light';
@@ -244,7 +246,7 @@ export class CanvasRuntime {
     this.lastTime = this.platform.now();
     if (!this.started) { this.started = true; this.platform.requestFrame(time => this.frame(time)); }
     try {
-      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
+      const images = await Promise.race([interrupted, Promise.all(['units.png', 'mounted-modules-v1.png', 'scatter-player-v1.png', 'pierce-player-v2.png', 'blast-player-v1.png', 'arc-player-v1.png', 'props.png', 'gate-frame-v1.png', 'runway.jpg', 'cooling-corridor-v2.jpg', 'armored-corridor-v1.jpg', 'explosion-v1.png', 'crate-v1.png', 'drone-v1.png', 'charger-v1.png', 'armor-v1.png', 'elite-v1.png', INTERCEPTOR_ART, 'conduit-v1.png', 'sniper-v1.png', 'sniper-wreck-v1.png', 'guard-v1.png', 'guard-wreck-v1.png', 'boss-v1.png', 'boss-flanker-v1.png', 'boss-bastion-v1.png', 'drone-wreck-v1.png', 'charger-wreck-v1.png', 'armor-wreck-v1.png', 'elite-wreck-v1.png'].map(async key => [key, await this.platform.image(`assets/${key}`)] as const))]);
       if (this.loadAttempt !== attempt) return;
       this.images = new Map(images);
       this.mode = 'menu';
@@ -949,7 +951,7 @@ export class CanvasRuntime {
           this.frameSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, 1);
           this.hitSprite('charger-v1.png', frame, 3, local?0:b.x, local?0:y, side, side, b.hit, 0.07, 1);c.restore();
         } else if (b.kind === 'armor') {
-          const braced=batteryHolding(b)||fireControlHolding(b)||(b.pattern==='bankshot'&&b.age<BANKSHOT.hold),frame = armorFrame(b,braced), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
+          const braced=heavyEscortHolding(b)||batteryHolding(b)||fireControlHolding(b)||(b.pattern==='bankshot'&&b.age<BANKSHOT.hold),frame = armorFrame(b,braced), width = b.width * 1.45, height = b.height * 1.38,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
           if(b.controlPatrol)controlPatrolDrive(c,b.age,this.save.settings.effects==='weak',(b.controlHomeX??b.x)<360?-1:1);
           if(braced&&!b.controlPatrol)batteryMount(c,b.warning,(b.empRemaining??0)>0,this.save.settings.effects==='weak');
@@ -974,10 +976,10 @@ export class CanvasRuntime {
           this.hitSprite('sniper-v1.png', frame, 3, 0, 0, 140, 140, b.hit, 0.07, 1);c.restore();
           if(b.pattern==='lockshot')lockshotMount(c,b,this.save.settings.effects==='weak');
         } else if (b.kind === 'elite') {
-          const frame = eliteFrame(b), width = b.width * 1.68, height = b.height * 1.36,direction=sweeperDirection(b);
+          const frame = b.pattern==='intercept'?interceptorArtFrame(b):eliteFrame(b),eliteArt=b.pattern==='intercept'?INTERCEPTOR_ART:'elite-v1.png', width = b.width * 1.68, height = b.height * 1.36,direction=sweeperDirection(b);
           c.save();c.translate(b.x,y);c.rotate(-direction*.08);sweeperLight(c,direction,b.age,this.save.settings.effects==='weak',width*.4);
-          this.frameSprite('elite-v1.png', frame, 3, 0, 0, width, height, 1);
-          this.hitSprite('elite-v1.png', frame, 3, 0, 0, width, height, b.hit, 0.07, 1);aceRig(c,b,this.save.settings.effects==='weak');c.restore();
+          this.frameSprite(eliteArt, frame, 3, 0, 0, width, height, 1);
+          this.hitSprite(eliteArt, frame, 3, 0, 0, width, height, b.hit, 0.07, 1);aceRig(c,b,this.save.settings.effects==='weak');c.restore();
         } else {
           const frame = bossFrame(b), bossArt = b.bossVariant === 2 ? 'boss-bastion-v1.png' : b.bossVariant === 1 ? 'boss-flanker-v1.png' : 'boss-v1.png';
           this.frameSprite(bossArt, frame, 3, b.x, y, width, height, 1);

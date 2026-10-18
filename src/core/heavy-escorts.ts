@@ -1,8 +1,10 @@
 import type {Spawn} from './director';
 
-export const HEAVY_ESCORTS={starts:[14.7,37.7],follow:1.05} as const;
+export const HEAVY_ESCORTS={starts:[14.7,37.7],follow:1.05,hold:3.2,durability:3} as const;
+export const heavyEscortHolding=(b:{kind:string;pattern?:string;heavyReserve?:boolean;age:number})=>
+ !!b.heavyReserve&&b.kind==='armor'&&(b.pattern==='fan'||b.pattern==='sweep')&&b.age<HEAVY_ESCORTS.hold;
 /** Heavy chapters pressure two priorities: a shielded gun on one wing and
- * an independently killable charge on the other. Fixed roster, ordinary HP. */
+ * an independently killable charge on the other. Fixed authored durability. */
 export function heavyEscorts(round:number,mirror:boolean,variation:number):Spawn[]{
  if(round<3||round%3!==0)return [];
  const out:Spawn[]=[];

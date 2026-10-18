@@ -10,7 +10,7 @@
     "test": "node tools/build-wechat.mjs && vitest run",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "assets:export": "node tools/export-assets.mjs && node tools/generate-audio.mjs && node tools/export-fx.mjs && node tools/generate-music.mjs && node tools/export-crate.mjs && node tools/export-drone.mjs && node tools/export-charger.mjs && node tools/export-armor.mjs && node tools/export-elite.mjs && node tools/export-boss.mjs && node tools/export-boss-flanker.mjs && node tools/export-boss-bastion.mjs && node tools/export-sniper.mjs && node tools/export-guard.mjs && node tools/export-blast-player.mjs && node tools/export-arc-player.mjs && node tools/export-mounted-modules.mjs && node tools/export-drone-wreck.mjs && node tools/export-enemy-wrecks.mjs && node tools/export-sector.mjs && node tools/export-conduit.mjs && node tools/export-scatter-player.mjs && node tools/export-pierce-player.mjs && node tools/export-gate-frame.mjs",
+    "assets:export": "node tools/export-assets.mjs && node tools/generate-audio.mjs && node tools/export-fx.mjs && node tools/generate-music.mjs && node tools/export-crate.mjs && node tools/export-drone.mjs && node tools/export-charger.mjs && node tools/export-armor.mjs && node tools/export-elite.mjs && node tools/export-boss.mjs && node tools/export-boss-flanker.mjs && node tools/export-boss-bastion.mjs && node tools/export-sniper.mjs && node tools/export-guard.mjs && node tools/export-blast-player.mjs && node tools/export-arc-player.mjs && node tools/export-mounted-modules.mjs && node tools/export-drone-wreck.mjs && node tools/export-enemy-wrecks.mjs && node tools/export-sector.mjs && node tools/export-conduit.mjs && node tools/export-scatter-player.mjs && node tools/export-pierce-player.mjs && node tools/export-gate-frame.mjs && node tools/export-interceptor.mjs",
     "assets:gate": "node tools/export-gate-frame.mjs",
     "assets:music": "node tools/generate-music.mjs",
     "assets:sector": "node tools/export-sector.mjs",
@@ -20,7 +20,8 @@
     "licenses:refresh": "node tools/android-licenses.mjs --refresh",
     "build:wechat": "npm run typecheck && node tools/build-wechat.mjs",
     "android:sync": "npm run typecheck && node tools/build-android-web.mjs && cap sync android",
-    "build:android": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-android.ps1"
+    "build:android": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-android.ps1",
+    "assets:interceptor": "node tools/export-interceptor.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",

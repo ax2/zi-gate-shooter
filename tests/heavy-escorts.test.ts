@@ -1,7 +1,7 @@
 import {it,expect} from 'vitest';
-import {heavyEscorts,HEAVY_ESCORTS} from '../src/core/heavy-escorts';
+import {heavyEscorts,HEAVY_ESCORTS,heavyEscortHolding} from '../src/core/heavy-escorts';
 import {timeline,Random} from '../src/core/director';import {battleIndex} from '../src/core/battle-plan';
-import {World} from '../src/core/world';import {C} from '../src/core/config';
+import {World,type Bullet} from '../src/core/world';import {C} from '../src/core/config';
 import {enemyHealthScale} from '../src/core/difficulty';import {BANKSHOT} from '../src/core/bankshot';
 import {observedNoFireRoute} from './helpers/observed-route-driver';
 import {mkdirSync,writeFileSync} from 'node:fs';
@@ -35,11 +35,20 @@ it.each([0,1,2])('admits the authored gun and launches actual hostile ammunition
  const w=isolated(v),admitted:any[]=[],shots:any[]=[];const spawn=w.spawn.bind(w);w.spawn=((...a:any[])=>{const b=(spawn as any)(...a);admitted.push(b);return b;})as any;
  const fire=(w as any).hostile.bind(w);(w as any).hostile=(...a:any[])=>{const n=w.bullets.length;fire(...a);if(w.bullets.length>n)shots.push(w.bullets.at(-1));};
  for(let i=0;i<240;i++)w.step(C.step,68);
- const guns=admitted.filter(b=>b.heavyReserve&&b.kind==='armor');expect(guns).toHaveLength(1);expect(guns[0].maxHp).toBe(C.enemies.armor.hp*enemyHealthScale('armor',3)*(v===1?BANKSHOT.durability:1));
+ const guns=admitted.filter(b=>b.heavyReserve&&b.kind==='armor');expect(guns).toHaveLength(1);expect(guns[0].maxHp).toBe(C.enemies.armor.hp*enemyHealthScale('armor',3)*(v===1?BANKSHOT.durability:HEAVY_ESCORTS.durability));
  expect(shots.some(b=>b.hostile&&b.sourceId===guns[0].id)).toBe(true);
  expect(admitted.filter(b=>b.heavyReserve)).toHaveLength(6);
 });
 it.each([3,6,9,12].flatMap(round=>[0,1,2].flatMap(plan=>[68,360,652].map(start=>({round,plan:plan as 0|1|2,start})))))('delayed no-fire escape through real heavy chapter r$round p$plan x$start',({round,plan,start})=>{
- const result=observedNoFireRoute(round,plan,start,1337);mkdirSync('build/qa/Stage-249/routes',{recursive:true});writeFileSync(`build/qa/Stage-249/routes/${round}-${plan}-${start}.json`,JSON.stringify(result,null,2));
+ const result=observedNoFireRoute(round,plan,start,1337);mkdirSync('build/qa/Stage-250/integrated-routes',{recursive:true});writeFileSync(`build/qa/Stage-250/integrated-routes/${round}-${plan}-${start}.json`,JSON.stringify(result,null,2));
  expect(result.failureTime).toBeNull();expect(result.hp).toBe(3);expect(result.phase).toBe('boss-entry');
 },120000);
+it('only braces authored fan/sweep reserve guns, then releases them on time',()=>{
+ const b={kind:'armor',pattern:'fan',heavyReserve:true,age:0};expect(heavyEscortHolding(b)).toBe(true);
+ expect(heavyEscortHolding({...b,age:HEAVY_ESCORTS.hold})).toBe(false);expect(heavyEscortHolding({...b,heavyReserve:false})).toBe(false);expect(heavyEscortHolding({...b,pattern:'bankshot'})).toBe(false);expect(heavyEscortHolding({...b,kind:'guard'})).toBe(false);
+});
+it.each([0,2])('lets an ignored deployed cannon actually fire a second volley v%s',v=>{
+ const w=isolated(v),sources:Bullet[]=[];const fire=(w as any).hostile.bind(w);(w as any).hostile=(...a:any[])=>{const n=w.bullets.length;fire(...a);if(w.bullets.length>n)sources.push(w.bullets.at(-1)!);};
+ // The caller assigns sourceId after hostile() returns; retain the projectile.
+ for(let i=0;i<360;i++)w.step(C.step,68);const gun=w.bodies.find(b=>b.heavyReserve&&b.kind==='armor');expect(gun).toBeDefined();expect(sources.filter(shot=>shot.sourceId===gun!.id).length).toBeGreaterThanOrEqual(6);
+});

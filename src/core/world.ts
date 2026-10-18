@@ -4,6 +4,7 @@ import{BOOSTER}from'./booster';
 import{counterTitle}from'./boss-counter';
 import {hasControlShutter}from'./control-shutter';
 import {BANKSHOT,advanceProjectile,type FlightSegment} from './bankshot';
+import {HEAVY_ESCORTS} from './heavy-escorts';
 import {FIRE_CONTROL,BREACH_CONTROL,fireControlSource} from './fire-control';
 import {CombatLedger,type DamageSource} from './combat-ledger';
 import {isStormAugment,stormAugments,STORM_REFINEMENT,type StormAugment} from './storm-refinement';
@@ -752,6 +753,7 @@ export class World {
           if(this.round===1&&s.kind==='guard'&&s.pattern==='convoy')candidate.convoyHold=INTRO_ESCORT.hold;
           if(s.pattern==='booster')candidate.timer=BOOSTER.opening;
           if(s.pattern==='bankshot'){candidate.timer=BANKSHOT.opening;candidate.hp*=BANKSHOT.durability;candidate.maxHp=candidate.hp;}
+          if(s.heavyReserve&&s.kind==='armor'&&s.pattern!=='bankshot'){candidate.hp*=HEAVY_ESCORTS.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='battery'&&s.kind==='armor'){candidate.timer=s.at===BATTERY.at?BATTERY.opening:BATTERY.secondOpening;candidate.hp*=BATTERY.durability;candidate.maxHp=candidate.hp;}
           if(s.pattern==='lockshot'){candidate.lockX=this.player.x;candidate.timer=LOCKSHOT.opening;if(this.round===1){candidate.lockWarning=INTRO_LOCKSHOT.warning;candidate.hp*=INTRO_LOCKSHOT.durability;candidate.maxHp=candidate.hp;}if(s.forkshot)candidate.forkshot=true;}
           if(s.pattern==='intercept')candidate.timer=INTERCEPTOR.opening;

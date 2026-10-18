@@ -1,5 +1,6 @@
 import {build} from 'esbuild';import {writeFileSync} from 'node:fs';import assert from 'node:assert/strict';
-const pressure=process.env.PRESSURE_CANDIDATE==='1',prefix=pressure?'pressure-controller':'fixture-controller';
+const pressure=process.env.PRESSURE_CANDIDATE==='1',prefix=process.env.FIXTURE_QA_LABEL??(pressure?'pressure-controller':'fixture-controller');
+if(!/^[a-z0-9-]+$/.test(prefix))throw Error('Invalid QA label');
 const extraPlugins=pressure?[(await import('./build-interceptor-candidate.mjs')).candidatePlugin(true),(await import('./run-heavy-durability-candidate.mjs')).heavyPressureCandidate(3,3.2)]:[];
 // Unit harness for our own fixture controller, never a browser driver. This
 // synthetic DOM/canvas cannot provide pixels, browser health or visual signoff.
