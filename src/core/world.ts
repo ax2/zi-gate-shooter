@@ -1,4 +1,5 @@
 import{claimBossSalvage,BOSS_SALVAGE}from './boss-salvage';
+import{BOSS_RESERVES,bossReserveFor}from './boss-reserves';
 import{pullPickup}from'./pickup-recovery';
 import {RapidBreak} from './rapid-break';
 import{BOOSTER}from'./booster';
@@ -23,7 +24,7 @@ import {MAGNETIC,MAGNETIC_REFINEMENT,type MagneticField} from './magnetic-field'
 import {canLaserChain,isPhotonAugment,photonAugments,laserChainProfile} from './laser-chain';
 import {INTERCEPTOR} from './interceptor';
 import {buildProofs,proofFormation,PROOF_WAVES,MAGNETIC_PROOF,STORM_PROOF,type BuildProof} from './build-proof';
-import { bossFormationFor, ESCORT } from './boss-formations';
+import { bossFormationFor, ESCORT,type EscortTroop } from './boss-formations';
 import {OVERLOAD} from './overload';
 import{MIRROR_LASER,mirrorPath,type MirrorSegment}from'./mirror-laser';
 import {CLOSING_ASSAULT_AT,closingBrief} from './closing-assault';
@@ -53,6 +54,7 @@ import type { WeaponKind } from './weapons';
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
   bossSalvageMask?:number;
+  bossReserveAt?:number;bossReserveSpent?:boolean;bossReserveSpawns?:number;escortHold?:number;bossReserve?:boolean;
   boosterSpent?:boolean;boosterShots?:number;boosterFiredAt?:number;boosterFiredSide?:-1|1;
   rakeVolley?:number;rakeFiring?:boolean;rakeShots?:number;rakeFiredAt?:number;rakeFiredVolley?:number;
   introEscort?:boolean;
@@ -603,24 +605,40 @@ export class World {
   get bossFormation(){return bossFormationFor(this.round);}
   get activeEscorts(){return this.bodies.filter(b=>b.active&&b.escort&&b.y<1344);}
   bossShieldActive(){return this.phase==='boss'&&this.bossFormation?.id==='bulwark'&&this.activeEscorts.some(b=>b.kind==='guard');}
+  private admitEscorts(troops:readonly EscortTroop[],reserve=false){
+    if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+troops.length>C.limits.enemies)return false;
+    const candidates=troops.map(t=>{const y=reserve?(t.kind==='guard'?ESCORT.hoverY:t.kind==='charger'?380:320):t.kind==='guard'?ESCORT.hoverY:180;
+      const b=this.spawn(t.kind,t.x,y);b.escort=true;
+      if(b.kind==='guard'){b.hp*=ESCORT.guardDurability;b.maxHp=b.hp;}
+      if(reserve){b.bossReserve=true;b.hp=b.maxHp=C.enemies.elite.hp*enemyHealthScale('elite',this.round)*BOSS_RESERVES.eliteDurability;b.dropGrace=SWARM.grace;if(b.kind==='guard')b.escortHold=BOSS_RESERVES.guardHold;}
+      b.pattern=t.pattern;b.lane=t.lane??t.x;
+      if(t.pattern==='lockshot'){b.lockX=this.player.x;b.timer=LOCKSHOT.opening;b.lockDamageStart=this.damageTaken;}
+      return b;});
+    const horizon=Math.max(...candidates.map(b=>Math.max(3,(C.playerY-b.y)/Math.max(1,b.speed)+1)));
+    if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
+      for(const b of candidates)b.active=false;this.fallbackCount++;return false;
+    }
+    this.escortSpawns+=candidates.length;this.bossEscortSpawns+=candidates.length;
+    this.lockshotSpawns+=candidates.filter(b=>b.pattern==='lockshot').length;
+    return true;
+  }
   private spawnEscorts(){
     const formation=this.bossFormation;if(!formation||!this.bodies.some(b=>b.active&&b.kind==='boss'))return;
     while(this.escortGroup<formation.groups.length){
       const group=formation.groups[this.escortGroup];
       if(this.phaseTime<group.at||this.phaseTime<this.escortRetry)return;
       if(this.phaseTime>group.at+ESCORT.deadline){this.escortGroup++;continue;}
-      if(this.bodies.filter(b=>b.active&&b.kind in C.enemies).length+group.troops.length>C.limits.enemies){this.escortRetry=this.phaseTime+ESCORT.retry;return;}
-      const candidates=group.troops.map(t=>{const b=this.spawn(t.kind,t.x,t.kind==='guard'?ESCORT.hoverY:180);b.escort=true;if(b.kind==='guard'){b.hp*=ESCORT.guardDurability;b.maxHp=b.hp;}b.pattern=t.pattern;b.lane=t.lane??t.x;
-        if(t.pattern==='lockshot'){b.lockX=this.player.x;b.timer=LOCKSHOT.opening;b.lockDamageStart=this.damageTaken;}
-        return b;});
-      const horizon=Math.max(...candidates.map(b=>Math.max(3,(C.playerY-b.y)/Math.max(1,b.speed)+1)));
-      if(!safeRoute(this.player.x,this.bodies,this.bullets,horizon,{phase:this.phase,phaseTime:this.phaseTime})){
-        for(const b of candidates)b.active=false;this.fallbackCount++;this.escortRetry=this.phaseTime+ESCORT.retry;return;
-      }
-      this.escortSpawns+=candidates.length;this.bossEscortSpawns+=candidates.length;this.escortGroup++;
-      this.lockshotSpawns+=candidates.filter(b=>b.pattern==='lockshot').length;
+      if(!this.admitEscorts(group.troops)){this.escortRetry=this.phaseTime+ESCORT.retry;return;}
+      this.escortGroup++;
       this.effects.push({type:'formation',x:360,y:400,text:formation.name,detail:formation.hint});
     }
+    const boss=this.bodies.find(b=>b.active&&b.kind==='boss'),reserve=bossReserveFor(this.round);
+    if(!boss||!reserve||boss.bossReserveAt===undefined||boss.bossReserveSpent)return;
+    if(this.phaseTime>boss.bossReserveAt+BOSS_RESERVES.deadline){boss.bossReserveSpent=true;return;}
+    if(this.phaseTime<boss.bossReserveAt||this.phaseTime<this.escortRetry)return;
+    if(!this.admitEscorts(reserve.troops,true)){this.escortRetry=this.phaseTime+ESCORT.retry;return;}
+    boss.bossReserveSpent=true;boss.bossReserveSpawns=reserve.troops.length;
+    this.effects.push({type:'boss-reserve',x:360,y:400,text:reserve.name,detail:reserve.hint});
   }
   private bossVictory = false;
   private secondChance = false;
@@ -1144,7 +1162,8 @@ export class World {
     } else if (this.bossVictory) {
       this.bossWins++;
       this.bossLootRounds.push(this.round);
-      const planned=this.bossFormation?.groups.reduce((n,g)=>n+g.troops.length,0)??0;
+      const reserveSpawns=this.bodies.find(b=>b.kind==='boss')?.bossReserveSpawns??0;
+      const planned=(this.bossFormation?.groups.reduce((n,g)=>n+g.troops.length,0)??0)+reserveSpawns;
       if(planned>0&&this.bossEscortSpawns===planned&&this.bossEscortKills===planned&&this.damageTaken===this.bossStartDamage){
         this.tacticalWins++;this.emit('formation-clear',360,400,'战术拆解 · 编队全破且无伤获胜');
       }
@@ -1204,6 +1223,10 @@ export class World {
     const before=b.hp,wasActive=b.active;
     b.hp = Math.max(0, b.hp - damage * guardDamageScale(b)*shield);
     if(wasActive&&b.kind in C.enemies)this.#combatLedger.record(source,before,b.hp);
+    if(this.phase==='boss'&&this.player.hp>0&&b.kind==='boss'&&b.active&&b.hp>0&&bossReserveFor(this.round)
+      &&b.bossReserveAt===undefined&&before>b.maxHp*BOSS_RESERVES.ratio&&b.hp<=b.maxHp*BOSS_RESERVES.ratio){
+      b.bossReserveAt=this.phaseTime+BOSS_RESERVES.delay;
+    }
     const plateBreaks=claimBossSalvage(b,before,this.round,this.player.hp>0&&this.phase==='boss');
     if(plateBreaks.length){
       const charge=plateBreaks.length*BOSS_SALVAGE.charge,reward=grantGate(this.growth,charge,'energy');

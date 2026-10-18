@@ -602,7 +602,8 @@ export class CanvasRuntime {
     if(e.type==='bounty-progress'){this.notify(e.text??'悬赏推进',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
     if(e.escortReward){this.notify(e.text??'编队击破',1195,e.detail);if(this.save.settings.sound)this.platform.sound('pickup',this.world.weaponStage(this.world.weaponKind));return;}
 
-    if(e.type==='formation'){
+    if(e.type==='formation'||e.type==='boss-reserve'){
+      if(e.type==='boss-reserve')this.notify(e.text??'首领回援',1195,e.detail);
       if(this.save.settings.sound)this.platform.sound('alert',this.world.weaponStage(this.world.weaponKind));
       return;
     }
@@ -1205,6 +1206,10 @@ export class CanvasRuntime {
           else this.text('悬赏精英',b.x,b.y-b.height/2-42,23,'#ffd884','center',true);
         }
       }
+    }
+    for(const b of w.bodies)if(b.active&&b.bossReserve){
+      const x=b.x+(b.x<360?-1:1)*(b.width/2+48),y=b.y;this.rect(x-38,y-13,76,26,'#17232dec');
+      this.text('回援',x,y,20,'#ffcf9c','center',true);
     }
     // Hostile projectiles must remain visible over reward panels as well as explosions.
     for (const b of w.bullets.filter(b => b.hostile)) {

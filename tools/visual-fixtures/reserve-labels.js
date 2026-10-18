@@ -1,0 +1,6 @@
+import{CanvasRuntime}from'../../src/game/canvas-runtime.ts';import{World}from'../../src/core/world.ts';import{defaults}from'../../src/ui/storage.ts';import{browserImage}from'../../src/game/browser-image.ts';
+const canvas=document.querySelector('canvas'),save=defaults();save.settings.sound=false;save.settings.shake=false;
+const runtime=new CanvasRuntime({canvas,width:canvas.clientWidth,height:canvas.clientHeight,dpr:devicePixelRatio,image:src=>browserImage('/'+src),read:()=>save,write(){},sound(){},silence(){},now:()=>0,requestFrame(){}});
+await runtime.load();runtime.mode='playing';runtime.world=new World(1337,6);const w=runtime.world;w.phase='boss';w.time=521;const boss=w.spawn('boss',360,360);boss.bossVariant=2;boss.hp=boss.maxHp*.38;boss.counterfire=true;boss.bossSalvageMask=7;
+for(const[kind,y]of[['guard',480],['sniper',320]]){const b=w.spawn(kind,480,y);b.escort=true;b.bossReserve=true;b.hp=b.maxHp=1350;if(kind==='sniper')b.pattern='lockshot';}
+const render=()=>runtime.resize(canvas.clientWidth,canvas.clientHeight,devicePixelRatio);document.querySelector('#quality').onclick=()=>{save.settings.effects=save.settings.effects==='weak'?'standard':'weak';render();};window.addEventListener('resize',render);render();

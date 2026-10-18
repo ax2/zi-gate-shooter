@@ -1,0 +1,7 @@
+import{World}from'../src/core/world';import{runDefaultPressure}from'../tests/helpers/default-pressure-driver';import{writeFileSync,mkdirSync}from'node:fs';import assert from'node:assert/strict';
+const baseline='./baseline.mjs',Before=(await import(baseline)).World as typeof World,rows=[],out='build/qa/Stage-252/final';mkdirSync(out,{recursive:true});
+for(const route of['ballistic','electric','optical']as const){const pair:any={};for(const[label,Runtime]of[['before',Before],['after',World]]as const){
+ const reserves:any[]=[];class Observe extends Runtime{drainEffects(){const events=super.drainEffects();for(const e of events)if(e.type==='boss-reserve')reserves.push({round:this.round,time:this.time,...e});return events;}}
+ const result={...runDefaultPressure(Observe,route,'safe',600,'auto',0),reserves};pair[label]=result;writeFileSync(`${out}/${route}-${label}.json`,JSON.stringify(result));console.log(JSON.stringify({route,label,hp:result.hp,round:result.round,observedEnemies:result.sources.length,reserves:reserves.length,gap:result.maxGrowthGap,pickups:result.pickups,gates:result.gates}));
+ }for(const field of['sources','growth','chapters'])assert.deepEqual(pair.after[field].filter((r:any)=>r.round<=3),pair.before[field].filter((r:any)=>r.round<=3));rows.push({route,before:pair.before,after:pair.after});}
+writeFileSync(`${out}/combined.json`,JSON.stringify({method:'Normal earned inputs, omniscient operator, 600 seconds per arm. Not human difficulty.',firstThreeRoundRecordsEqual:true,rows}));
