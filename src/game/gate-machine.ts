@@ -22,7 +22,7 @@ export function gateMachine(c:CanvasRenderingContext2D,image:HTMLImageElement,b:
  c.save();
  c.fillStyle='#0005';c.beginPath();c.ellipse(b.x+4,b.y+height*.32,width*.42,13,0,0,Math.PI*2);c.fill();
  for(let row=0;row<3;row++)for(let col=0;col<3;col++)if(row!==1||col!==1)c.drawImage(image,sx[col],sy[row],sx[col+1]-sx[col],sy[row+1]-sy[row],dx[col],dy[row],dx[col+1]-dx[col],dy[row+1]-dy[row]);
- const charge=clamp(b.energy/C.thresholds[C.thresholds.length-1],0,1),color=b.rewardKind==='power'?'#68e8ff':'#ffd28a';
+ const charge=clamp(b.energy/C.thresholds[C.thresholds.length-1],0,1),color=b.calibrationTarget?'#c8a0ff':b.rewardKind==='power'?'#68e8ff':'#ffd28a';
  for(const side of [-1,1]){
   const x=b.x+side*(width/2-(paired?15:20));c.fillStyle='#091820';c.fillRect(x-3.5,b.y-44,7,88);
   for(let cell=0;cell<8;cell++){

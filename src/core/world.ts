@@ -1,3 +1,4 @@
+import{calibrationGateTarget,calibrationGateReward,calibrationGateLabel}from'./calibration-gate';
 import{claimBossSalvage,BOSS_SALVAGE}from './boss-salvage';
 import{BOSS_RESERVES,bossReserveFor}from './boss-reserves';
 import{pullPickup}from'./pickup-recovery';
@@ -56,6 +57,7 @@ import type { WeaponKind } from './weapons';
 
 export type BodyKind = EnemyKind | 'crate' | 'gate' | 'pickup';
 export interface Body {
+  calibrationTarget?:WeaponKind;
   weaveBeat?:number;weaveShotBeat?:number;weaveShotPhrase?:number;weaveVolleys?:number;weaveShots?:number;weaveFiredAt?:number;weaveFiredBeat?:number;weaveFiredPhrase?:number;weaveFiredPorts?:number;
   mineSpent?:boolean;mineShots?:number;mineFiredAt?:number;minePassed?:number;mineTouched?:boolean;mineDamageStart?:number;mineKilled?:boolean;mineAwarded?:boolean;
   bossSalvageMask?:number;
@@ -725,9 +727,11 @@ export class World {
   get scrollSpeed() { return C.scrollSpeed + Math.min(2, this.round - 1) * 10; }
   private spawnGates(x: number, pair: boolean) {
     const row = this.nextRow++;
+    const calibrationTarget=pair?calibrationGateTarget(this):undefined;
     for (const cx of pair ? [222, 498] : [x]) {
       const g = this.spawn('gate', cx, 180); g.row = row;
       if (pair && this.growth.bonus < 100) g.rewardKind = cx < 360 ? 'power' : 'energy';
+      if(calibrationTarget&&cx<360)g.calibrationTarget=calibrationTarget;
       if (!pair && x === 360) g.width = 264;
     }
   }
@@ -1205,9 +1209,11 @@ export class World {
           const x = this.player.px + (this.player.x - this.player.px) * t;
           const chosen = gateAtCrossing(gates,x);
           if (chosen && this.player.hp > 0) {
-            const result = grantGate(this.growth, gateValue(chosen.energy, chosen.rewardKind), chosen.rewardKind);
+            const calibration=calibrationGateReward(chosen);
+            const result = grantGate(this.growth,calibration?.charge??gateValue(chosen.energy,chosen.rewardKind),calibration?'energy':chosen.rewardKind);
+            if(calibration?.ready)this.upgradeOwnedWeapon(calibration.kind);
             this.gatesTaken++;
-            this.emit('gate-taken', chosen.x, C.playerY, gateRewardLabel(result), chosen.width);
+            this.emit('gate-taken', chosen.x, C.playerY, calibration?calibrationGateLabel(calibration):gateRewardLabel(result), chosen.width);
             if (result.activated) this.emit('overload', this.player.x, C.playerY, this.overloadNotice());
           }
           for (const gate of gates) gate.active = false;
@@ -1290,7 +1296,7 @@ export class World {
     this.hits++; b.hit = 0.07;
     if (b.kind === 'gate') {
       const before = gateValue(b.energy, b.rewardKind); b.energy = Math.min(144, b.energy + damage);
-      if (gateValue(b.energy, b.rewardKind) > before) this.emit('gate-level', b.x, b.y, `+${gateValue(b.energy, b.rewardKind)}${b.rewardKind === 'power' ? '%' : ''}`);
+      if (gateValue(b.energy, b.rewardKind) > before) this.emit('gate-level', b.x, b.y,b.calibrationTarget?calibrationGateLabel(calibrationGateReward(b)!):`+${gateValue(b.energy, b.rewardKind)}${b.rewardKind === 'power' ? '%' : ''}`);
       this.emit('impact-gate', b.x, b.y); return;
     }
     const shield=b.kind==='boss'&&this.bossShieldActive()?1-(this.bossFormation?.shieldReduction??0):1;

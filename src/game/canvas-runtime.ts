@@ -1,3 +1,4 @@
+import{calibrationGateReward,CALIBRATION_GATE}from'../core/calibration-gate';
 import{bossWeaveRig}from'./boss-weave-rig';
 import{isWeaveBoss}from'../core/boss-weave';
 import{mineGoal,mineTargetLabel}from'./mine-goal';
@@ -149,6 +150,7 @@ export class CanvasRuntime {
   private proofChoice:BuildProof='ion';
   private huntChoice:HuntKind='staggered';
   private buildFeedback?: {title:string;detail:string;until:number;combo:boolean;closingClear?:boolean;tactic?:boolean;equipment?:EquipmentChange;observedAt?:number;hidden?:boolean};
+  private equipmentHud?:{text:string;color:string;until:number};
   private pendingBuildFeedback:Array<NonNullable<CanvasRuntime['buildFeedback']>&{remaining:number}>=[];
   private equipmentFeedback=new EquipmentReceiptQueue();
   private achievementToast = '';
@@ -295,7 +297,7 @@ export class CanvasRuntime {
             if (this.keys.active) this.target = clamp(this.world.player.x + this.keys.direction * C.moveSpeed * C.step, C.minX, C.maxX);
             this.groundDistance += C.step * this.world.scrollSpeed;
             const previousBuildPoints=this.world.buildPoints;
-            const equipmentBefore=this.world.bodies.some(b=>b.active&&b.kind==='pickup')?captureEquipment(this.world):undefined;
+            const equipmentBefore=this.world.bodies.some(b=>b.active&&(b.kind==='pickup'||b.kind==='gate'&&b.calibrationTarget))?captureEquipment(this.world):undefined;
             this.world.step(C.step, this.target); this.accumulator -= C.step;
             const equipmentHandled=equipmentBefore?this.recordEquipment(equipmentBefore):false;
             for (const e of this.world.drainEffects()) this.effect(e,equipmentHandled);
@@ -335,7 +337,7 @@ export class CanvasRuntime {
     this.buttons=[];
     for(const motion of this.mountedMotion.values())motion.reset();
     this.opticalFiredAt=-Infinity;
-    this.buildFeedback=undefined;this.pendingBuildFeedback.length=0;this.equipmentFeedback.clear();
+    this.buildFeedback=undefined;this.pendingBuildFeedback.length=0;this.equipmentFeedback.clear();this.equipmentHud=undefined;
     this.runNewBest=false;this.runAchievements=[];this.achievementReturn='menu';
     this.achievementUntil=0;this.achievementShownAt=undefined;
     this.supportBeams=[];
@@ -556,7 +558,7 @@ export class CanvasRuntime {
     else if (action === 'preview') this.pausePreview = true;
     else if (action === 'pause-menu') this.pausePreview = false;
     else if (action === 'resume') { this.pausePreview = false; this.mode = 'playing'; this.accumulator = 0; this.lastTime = this.platform.now(); this.target = this.world.player.x; }
-    else if (action === 'home') { this.shieldBreak=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear();this.bossFragments.clear(); this.gateFeedback.clear(); }
+    else if (action === 'home') { this.shieldBreak=undefined;this.equipmentHud=undefined;this.mode = 'menu'; this.world = new World(); this.platform.silence(); this.notice = ''; this.particles = [];this.sparkPhase=0; this.blasts = []; this.impacts = []; this.arcs = []; this.empWaves=[]; this.destruction = undefined; this.crateDebris.clear(); this.enemyWreck.clear();this.bossFragments.clear(); this.gateFeedback.clear(); }
     else if (action === 'settings') { this.previousMode = this.mode === 'menu' ? 'menu' : 'paused'; this.mode = 'settings'; }
     else if (action === 'back') this.mode = this.previousMode;
     else if (action === 'licenses') this.platform.openLicenses?.();
@@ -582,6 +584,8 @@ export class CanvasRuntime {
   private recordEquipment(before:ReturnType<typeof captureEquipment>){
     const changes=equipmentChanges(before,this.world);
     for(const change of changes){
+      const a=change.before,b=change.after;
+      this.equipmentHud={text:`收获 · ${weaponNames[change.kind]}${!a?' T'+b.stage:a.stage!==b.stage?' T'+a.stage+'→'+b.stage:' 精校+'+(b.calibration-a.calibration)}`,color:weaponColors[change.kind],until:this.world.time+3.2};
       const current=this.buildFeedback;
       if(current?.equipment?.kind===change.kind&&this.world.time<current.until){
         const equipment={...change,before:current.equipment.before};
@@ -968,7 +972,7 @@ export class CanvasRuntime {
     for(const field of w.magneticFields)magneticLight(c,field,this.save.settings.effects==='weak');
     for(const b of w.bodies)if(b.kind==='gate'){
       const value=previewReward(w.growth,gateValue(b.energy,b.rewardKind),b.rewardKind),image=this.images.get('gate-frame-v1.png');
-      if(image)gateMachine(c,image,b,value.power>0&&value.energy>0,this.gateFeedback.pulse(b.id,w.time),this.save.settings.effects==='weak',pairedGate(b,w.bodies));
+      if(image)gateMachine(c,image,b,!!b.calibrationTarget||value.power>0&&value.energy>0,this.gateFeedback.pulse(b.id,w.time),this.save.settings.effects==='weak',pairedGate(b,w.bodies));
     }
     for (const b of w.bodies) {
       if(b.kind==='gate')continue;
@@ -1198,6 +1202,17 @@ export class CanvasRuntime {
         if(showCombination)this.text(combination!,x,b.y-24,21,'#ffe2a1','center',true);
       }
       else if (b.kind === 'gate') {
+        const calibration=calibrationGateReward(b);
+        if(calibration){
+          const paired=pairedGate(b,w.bodies),width=b.width-(paired?60:10),color='#d4b4ff';
+          if(!gatePanelBlocked(b,w.bodies,true))this.rect(b.x-width/2,b.y-80,width,164,'#13172bf5');
+          this.gateText(`${weaponNames[calibration.kind]}·精校门`,b.x,b.y-60,21,color);
+          this.gateText(calibration.ready?'精校 +1':`充能 +${calibration.charge}`,b.x,b.y-18,calibration.ready?38:34,'#f0e7ff',true);
+          this.gateText(calibration.ready?`充能 +${calibration.charge}`:`射至${CALIBRATION_GATE.threshold} · 精校+1`,b.x,b.y+25,calibration.ready?27:20,'#ffdcaa');
+          const current=100+w.weaponCalibration(calibration.kind)*50;
+          this.gateText(calibration.ready?(current<=9999?`系数${current}→${current+50}%`:'系数 +50百分点'):'穿过才领取',b.x,b.y+53,19,'#cbb5dc');
+          this.bar(b.x,b.y+72,width-22,Math.min(1,b.energy/C.thresholds[C.thresholds.length-1]),color);continue;
+        }
         const value = previewReward(w.growth, gateValue(b.energy, b.rewardKind), b.rewardKind);
         const mixed = value.power > 0 && value.energy > 0;
         const paired=pairedGate(b,w.bodies),panelWidth=b.width-(paired?60:10);
@@ -1282,7 +1297,8 @@ export class CanvasRuntime {
     const boss=w.bodies.find(b=>b.active&&b.kind==='boss');
     const closing=this.mode==='playing'&&w.phase==='running'&&w.closingStatus.total>0&&w.contract?.status!=='active';
     this.rect(0, 0, 720, y + (boss?210:closing?194:162), '#08131be8');
-    this.text('分数', 30, y + 6, 20, '#91adbf', 'left');
+    const equipmentHud=this.mode==='playing'&&this.equipmentHud&&w.time<this.equipmentHud.until?this.equipmentHud:null;
+    this.text(equipmentHud?.text??'分数',30,y+6,equipmentHud?19:20,equipmentHud?.color??'#91adbf','left');
     const score=w.score.toString().padStart(6,'0');
     this.text(score,28,y+43,score.length<=6?42:Math.max(12,260/score.length),'#e9f6ff','left',true);
     const rapid=w.rapidBreak.readout(w.time);
@@ -1492,7 +1508,7 @@ export class CanvasRuntime {
   private drawRefitPlan(){
     const w=this.world;this.rect(40,100,640,1100,'#102330');
     this.text('军械补给 · 改装目标',360,165,38,'#effaff','center',true);
-    this.text('次轮起影响后续改装箱 · 已投送的不变',360,222,23,'#bdd8e7');
+    this.text('影响后续改装箱/精校门 · 已投送的不变',360,222,23,'#bdd8e7');
     this.text('同排仍选一个 · 打碎后拾取才升级',360,260,23,'#f0d19a');
     for(const [i,kind] of w.activeWeapons.entries()){
       const y=292+i*134,preview=equipmentPreview(w,kind)!,chosen=w.refitTarget===kind;
@@ -1504,6 +1520,7 @@ export class CanvasRuntime {
       this.text(preview.hint,182,y+103,21,'#c4dca9','left');
       this.buttons.push({x:66,y,w:588,h:124,action:`refit-focus:${kind}`,label:`指定改装${weaponNames[kind]}`});
     }
+    this.text('精校门仅匹配T3 · 未达T3则自动选其他配件',360,964,21,'#d4b4ff');
     this.text('直伤不计超载、命中率与派生 · 本局有效',360,1004,21,'#bdd8e7');
     this.rect(120,1030,480,66,'#203e50');this.text(w.refitTarget?'恢复自动改装':'自动改装 · 当前生效',360,1063,26,'#d8eaf5');
     this.buttons.push({x:120,y:1030,w:480,h:66,action:'refit-auto',label:'恢复自动改装'});
@@ -1993,6 +2010,7 @@ export class CanvasRuntime {
       researchPoints:this.world.researchPoints,buildPoints:this.world.buildPoints,unspentBuildPoints:this.world.buildPoints-this.world.build.spent,
       ballisticReactions:this.world.ballisticReactions(),ballisticTotals:this.world.ballisticTotals(),ballisticBranch:this.world.build.ballisticBranch??null,scatterRicochets:this.world.scatterRicochets,ricochetTraces:this.supportBeams.filter(b=>b.ricochet).length,scatterPierces:this.world.scatterPierces,scatterBursts:this.world.scatterBursts,scatterSplashHits:this.world.scatterSplashHits,
       weaponImpacts:this.impacts.filter(h=>!h.opticalBand).map(h=>({...h})),
+      equipmentHud:this.equipmentHud&&this.world.time<this.equipmentHud.until?{text:this.equipmentHud.text,remaining:this.equipmentHud.until-this.world.time}:null,
       upgradePulseRemaining:Math.max(0,this.upgradeUntil-this.world.time),combatFeedback:this.buildFeedback?{title:this.buildFeedback.title,combo:this.buildFeedback.combo,remaining:Math.max(0,this.buildFeedback.until-this.world.time),hidden:this.buildFeedback.hidden}:null,pendingCombatFeedback:this.pendingBuildFeedback.map(f=>({title:f.title,combo:f.combo,remaining:f.remaining})),
       equipmentReceipts:this.equipmentFeedback.pending.map(r=>({...r})),equipmentReceipt:this.buildFeedback?.equipment?{...this.buildFeedback}:null,
       ionAugment:this.world.build.ionAugment??null,ionOrbSpawns:this.world.ionOrbSpawns,ionOrbHits:this.world.ionOrbHits,ionSpearShots:this.world.ionSpearShots,ionSpearHits:this.world.ionSpearHits,ionBonusDamage:this.world.ionBonusDamage,ionOrbs:this.world.ionOrbs,ionSpears:this.world.ionSpears,

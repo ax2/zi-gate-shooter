@@ -67,6 +67,7 @@ export function contextGuide(world: Context): Guide {
   if(visible.some(b=>b.kind==='conduit'))return {kind:'enemy',title:'导电中继：击破打断邻敌',detail:'停火1.5秒 · 已发敌弹仍危险'};
   if (visible.some(b => b.kind === 'guard' && guardClosed(b) && b.y < 650))
     return { kind: 'enemy', title: '盾卫闭盾：正面伤害减半', detail: '闭盾挡住穿甲与跳电 · 留意开盾时机' };
+  if(visible.some(b=>b.kind==='gate'&&b.calibrationTarget))return {kind:'pair',title:'精校或充能：选择下一段打法',detail:'紫门射至56精校T3配件 · 金门满档60充能 · 穿过只领一扇'};
   if (world.round !== 1) return movement;
   if (world.pickups === 0) {
     if (visible.some(b => b.kind === 'pickup')) return { kind: 'pickup', title: '装备已掉落，移到它下方', detail: '靠近拾取后，才会强化火力' };

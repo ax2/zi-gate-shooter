@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import{calibrationGateReward,CALIBRATION_GATE}from'../core/calibration-gate';
+import{weaponNames}from'../core/weapons';
 import { C, clamp } from '../core/config';
 import { World } from '../core/world';
 import type { Body, EffectEvent } from '../core/world';
@@ -186,8 +188,10 @@ export class BattleScene extends Phaser.Scene {
         let main = preview.power ? `+${preview.power}%` : preview.energy ? `+${preview.energy}` : '+0';
         let caption = preview.power ? '穿过领取 · 火力' : preview.energy ? '穿过领取 · 超载' : '储能已满';
         if (preview.power && preview.energy) { main = `+${preview.power}% / ${preview.energy}`; caption = '火力 / 超载'; }
+        const calibration=calibrationGateReward(b);
+        if(calibration){caption=`${weaponNames[calibration.kind]} · 精校门`;main=calibration.ready?`精校+1 / 充能+${calibration.charge}`:`充能+${calibration.charge} · 射至${CALIBRATION_GATE.threshold}`;}
         v.plate!.setPosition(b.x, b.y); v.sub!.setPosition(b.x, b.y - 35).setText(caption);
-        v.label!.setPosition(b.x, b.y + 6).setText(main).setFontSize(main.length > 9 ? 34 : 50);
+        v.label!.setPosition(b.x, b.y + 6).setText(main).setFontSize(calibration?24:main.length > 9 ? 34 : 50);
         const tier = C.thresholds.findIndex(threshold => threshold > b.energy);
         const progress = tier < 0 ? 1 : (b.energy - C.thresholds[tier - 1]) / (C.thresholds[tier] - C.thresholds[tier - 1]);
         this.bar(v.bar!, b.x, b.y + 46, b.width - 32, progress, b.rewardKind === 'energy' ? 0xe6b96a : 0x5bddff);
