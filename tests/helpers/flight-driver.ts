@@ -12,7 +12,7 @@ export function flightGoal(w:FlightWorld,route:FlightRoute){return flightOrders[
 /** Test-only omniscient operator. Samples physical paths, never changes HP, loot,
  * enemies or damage. It is not a proof of human difficulty or device FPS. */
 export function flightTarget(w:FlightWorld){
- const p=w.player,items=w.loot.filter(l=>l.age<15).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y));
+ const p=w.player,items=w.loot.filter(l=>l.age<(l.trialReward?27:15)).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y));
  const front=w.enemies.filter(e=>e.hp>0&&e.y>140&&e.y<950).sort((a,b)=>b.y-a.y)[0];
  const goal=items[0]?{x:items[0].x,y:items[0].y+45}:front?{x:front.x,y:Math.min(1060,Math.max(580,front.y+250))}:{x:360,y:900};
  const candidates=[goal,{x:p.x,y:p.y}];for(const dx of[-220,-110,0,110,220])for(const dy of[-180,-90,0,90,180])candidates.push({x:Math.max(45,Math.min(675,p.x+dx)),y:Math.max(210,Math.min(1160,p.y+dy))});

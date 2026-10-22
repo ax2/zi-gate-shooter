@@ -1,9 +1,10 @@
 import{Assembly,parts,type Part}from'./technology';
+import{trials,starterTrial,type TrialId}from'./records';
 export const F={width:720,height:1280,minY:196,maxY:1198,speed:600,playerRadius:12,step:1/60,enemyLimit:26,hostileLimit:200,bulletLimit:280,lootLimit:32,fxLimit:220}as const;
 export type EnemyKind='drone'|'diver'|'sentry'|'spinner'|'lancer'|'boss';
-export interface Enemy{id:number;kind:EnemyKind;x:number;y:number;px:number;py:number;hp:number;maxHp:number;r:number;age:number;timer:number;angle:number;seed:number;burn:number;burnTick:number;hit:number;aimX?:number;aimY?:number}
+export interface Enemy{id:number;kind:EnemyKind;x:number;y:number;px:number;py:number;hp:number;maxHp:number;r:number;age:number;timer:number;angle:number;seed:number;burn:number;burnTick:number;hit:number;aimX?:number;aimY?:number;keystoneHit?:string}
 export interface Bullet{id:number;x:number;y:number;px:number;py:number;vx:number;vy:number;r:number;damage:number;hostile:boolean;age:number;life:number;bounce:number;pierce:number;style:'pulse'|'wing'|'rail'|'enemy'|'orb';hits:Set<number>;explosive:boolean}
-export interface Loot{id:number;x:number;y:number;part:Part|'repair';amount:number;age:number;phase:number}
+export interface Loot{id:number;x:number;y:number;part:Part|'repair';amount:number;age:number;phase:number;trialReward?:boolean}
 export interface Effect{x:number;y:number;kind:'explosion'|'spark'|'arc'|'laser'|'ring'|'pickup'|'install';age:number;life:number;size:number;color:string;points?:{x:number;y:number}[];hostile?:boolean;icon?:number;label?:string}
 export interface Notice{title:string;detail:string;time:number;icon?:number}
 export interface FlightEvent{type:string;value?:string}
@@ -19,10 +20,15 @@ export class FlightWorld{
  get scoreProgress(){const previous=this.scoreAwards?this.nextAward-(300+this.scoreAwards*150):0;return{next:this.nextAward,previous,ratio:clamp((this.score-previous)/(this.nextAward-previous),0,1)};}
  phase:'running'|'boss'|'dead'='running';notice:Notice={title:'自由空战',detail:'拖动任意方向 · 击敌拾取零件 · 点组装打开科技树',time:5};
  readonly contribution:Record<string,number>={};
+ trial?:{id:TrialId;progress:number;completed:boolean;rewarded:boolean;claimed:boolean;rewardId?:number;pending?:{x:number;y:number}};
+ private readonly keystoneWins=new Set<string>();
  target?:string;private rng:number;private serial=0;private wave=0;private spawnTimer=1;private shotTimer=0;private arcTimer=0;private laserTimer=0;private railTimer=0;private empTimer=5;private sunTimer=4;private shots=0;private stormHits=0;private dryKills=0;private nextAward=300;
  constructor(seed=Date.now()){this.rng=seed>>>0||1;}
  random(){let x=this.rng;x^=x<<13;x^=x>>>17;x^=x<<5;this.rng=x>>>0;return this.rng/4294967296;}
- start(id:string){if(this.time||this.assembly.installed.size||!['split','coil','laser'].includes(id))return false;const p=parts[['split','coil','laser'].indexOf(id)];this.assembly.inventory[p]=2;return this.install(id);}
+ start(id:string){if(this.time||this.assembly.installed.size||!['split','coil','laser'].includes(id))return false;const p=parts[['split','coil','laser'].indexOf(id)];this.assembly.inventory[p]=2;const ok=this.install(id);if(ok)this.trial={id:starterTrial[id],progress:0,completed:false,rewarded:false,claimed:false};return ok;}
+ private advanceTrial(id:TrialId,at:{x:number;y:number}){const t=this.trial;if(!t||t.id!==id||t.completed||this.phase==='dead')return;t.progress++;if(t.progress>=trials[id].goal){t.completed=true;t.pending={x:at.x,y:at.y};this.tryTrialReward();}}
+ private tryTrialReward(){const t=this.trial;if(!t?.pending||t.rewarded||this.phase==='dead')return;const info=trials[t.id],drop=this.addDrop(t.pending.x,t.pending.y,info.part,info.reward);if(!drop)return;drop.trialReward=true;drop.age=0;t.pending=undefined;t.rewarded=true;t.rewardId=drop.id;this.notice={title:'航线达成 · '+info.name,detail:`${info.reward}${{alloy:'弹芯',coil:'线圈',lens:'透镜'}[info.part]}已投送 · 飞近拾取`,time:3,icon:info.icon};this.events.push({type:'reward',value:t.id});}
+ careerFacts(){return{kills:this.kills,bossKills:this.bossKills,score:this.score,trialCompleted:this.trial?.completed?this.trial.id:undefined,keystoneWins:[...this.keystoneWins]};}
  install(id:string){const was=this.assembly.has(id);if(this.phase==='dead'||this.player.hp<=0||!this.assembly.install(id))return false;if(this.target===id)this.target=undefined;this.fx({kind:'install',x:this.player.x,y:this.player.y,size:100,color:'#a9f3e5',life:.8});this.notice={title:was?'组件精校 +1':'新组件已装配',detail:id,time:2,icon:undefined};this.events.push({type:'upgrade',value:id});return true;}
  private fx(e:Omit<Effect,'age'>){if(this.effects.length>=F.fxLimit)this.effects.shift();this.effects.push({...e,age:0});}
  private bullet(x:number,y:number,vx:number,vy:number,damage:number,hostile=false,style:Bullet['style']='pulse',pierce=0,explosive=false){
@@ -59,10 +65,10 @@ export class FlightWorld{
   }
  }
  private hurt(){if(this.player.invulnerable>0||this.phase==='dead')return;this.player.hp--;this.damageTaken++;this.player.invulnerable=1.25;this.events.push({type:'hurt'});this.fx({kind:'ring',x:this.player.x,y:this.player.y,size:90,color:'#ff806d',life:.4});if(this.player.hp<=0){this.phase='dead';this.events.push({type:'death'});this.fx({kind:'explosion',x:this.player.x,y:this.player.y,size:170,color:'#ffbe70',life:.8});}}
- private addDrop(x:number,y:number,part:Loot['part'],amount=1){if(this.loot.length>=F.lootLimit){const same=this.loot.find(l=>l.part===part);if(same){same.amount+=amount;return;}return;}this.loot.push({id:++this.serial,x:clamp(x,40,680),y:clamp(y,158,1160),part,amount,age:0,phase:this.random()*6.28});}
+ private addDrop(x:number,y:number,part:Loot['part'],amount=1){if(this.loot.length>=F.lootLimit){const same=this.loot.find(l=>l.part===part);if(same){same.amount+=amount;return same;}return undefined;}const drop:Loot={id:++this.serial,x:clamp(x,40,680),y:clamp(y,158,1160),part,amount,age:0,phase:this.random()*6.28};this.loot.push(drop);return drop;}
  private randomPart():Part{const roll=this.random();if(this.target&&roll<.55){const cost=this.assembly.cost(this.target);const needed=parts.filter(p=>(cost[p]??0)>this.assembly.inventory[p]);if(needed.length)return needed[Math.floor(this.random()*needed.length)];}return parts[Math.floor(this.random()*parts.length)];}
- private hit(e:Enemy,amount:number,source:string){if(e.hp<=0||this.player.hp<=0||this.phase==='dead')return;const dealt=Math.min(e.hp,amount);e.hp-=amount;e.hit=.07;this.contribution[source]=(this.contribution[source]??0)+dealt;if(e.hp>0)return;
-  this.kills++;this.score+=stats[e.kind].score;this.dryKills++;
+ private hit(e:Enemy,amount:number,source:string){if(e.hp<=0||this.player.hp<=0||this.phase==='dead')return;const dealt=Math.min(e.hp,amount);e.hp-=amount;e.hit=.07;const key=this.assembly.keystone;if(key&&(source===key||key==='arsenal'&&source==='guns'))e.keystoneHit=key;this.contribution[source]=(this.contribution[source]??0)+dealt;if(e.hp>0)return;
+  this.kills++;this.score+=stats[e.kind].score;this.dryKills++;if(source==='bounce')this.advanceTrial('ricochet',e);if(e.kind==='boss'&&e.keystoneHit)this.keystoneWins.add(e.keystoneHit);
   this.fx({kind:'explosion',x:e.x,y:e.y,size:e.kind==='boss'?280:e.r*2.7,color:'#ffc383',life:.65});this.events.push({type:e.kind==='boss'?'boss-kill':'kill'});
   if(this.dryKills>=4||this.random()<.36||e.kind==='boss'){this.addDrop(e.x,e.y,this.randomPart(),e.kind==='boss'?3:1);this.dryKills=0;}
   if(e.kind==='boss'){for(const [i,p]of parts.entries())this.addDrop(e.x+(i-1)*95,e.y+80,p,2);this.addDrop(e.x,e.y+150,'repair');this.bossKills++;this.sector++;this.sectorTime=0;this.phase='running';this.spawnTimer=2;this.notice={title:'空域突破',detail:['冷却港湾','侧翼突袭','重装封锁'][this.sector%3]+' · 首领留下组装零件',time:4};for(const b of this.bullets)if(b.hostile)b.life=0;}
@@ -75,10 +81,12 @@ export class FlightWorld{
    candidates.sort((a,b)=>this.assembly.has('seeker')?Number(b.timer<.6)-Number(a.timer<.6)||Math.hypot(a.x-pos.x,a.y-pos.y)-Math.hypot(b.x-pos.x,b.y-pos.y):Math.hypot(a.x-pos.x,a.y-pos.y)-Math.hypot(b.x-pos.x,b.y-pos.y));const e=candidates[0];if(!e)break;
    visited.add(e.id);this.fx({kind:'arc',x:pos.x,y:pos.y,points:[{x:pos.x,y:pos.y},{x:e.x,y:e.y}],size:3,color:'#c4a0ff',life:.18});this.fx({kind:'spark',x:e.x,y:e.y,size:28,color:'#e4ceff',life:.2});this.hit(e,damage*Math.pow(this.assembly.has('tempest')?1:.8,i),source);pos=e;
   }
+  if(source==='coil'&&visited.size>=3)this.advanceTrial('relay',pos);
  }
  private beam(start:{x:number;y:number},end:{x:number;y:number},damage:number,source:string,reflect=false){
   const contacts=this.enemies.filter(e=>e.hp>0&&e.y>=155&&e.y<=1280&&segmentDistance(e.x,e.y,start.x,start.y,end.x,end.y)<e.r+9).sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y)).slice(0,this.assembly.has('drill')?8:3);
   for(const e of contacts){this.hit(e,damage,source);if(this.assembly.has('burn')){e.burn=3;e.burnTick=.3;}}
+  if(source==='laser'&&contacts.length>=2)this.advanceTrial('beam',contacts[contacts.length-1]);
   this.fx({kind:'laser',x:start.x,y:start.y,points:[start,end],size:reflect?7:11,color:source==='sun'?'#ffe4a0':'#8af6ff',life:.18});
  }
  private attacks(dt:number){
@@ -122,10 +130,10 @@ export class FlightWorld{
    }
   }
   for(const e of this.effects)if(e.hostile&&e.points&&e.age<e.life){const[a,b]=e.points;if(segmentDistance(p.x,p.y,a.x,a.y,b.x,b.y)<F.playerRadius+e.size/2)this.hurt();}
-  if(p.hp>0)for(const l of this.loot){l.age+=dt;l.y+=22*dt;const dx=p.x-l.x,dy=p.y-l.y,d=Math.hypot(dx,dy);if(d<155){l.x+=dx/d*360*dt||0;l.y+=dy/d*360*dt||0;}if(Math.hypot(l.x-p.x,l.y-p.y)<30){if(l.part==='repair')p.hp=Math.min(p.maxHp,p.hp+1);else{this.assembly.inventory[l.part]+=l.amount;this.partsCollected+=l.amount;}l.age=99;this.fx({kind:'pickup',x:p.x,y:p.y,size:56,color:l.part==='repair'?'#9df0ba':l.part==='alloy'?'#ffd28a':l.part==='coil'?'#c5a4ff':'#8bf3ff',life:.55,icon:l.part==='repair'?undefined:l.part==='alloy'?3:l.part==='coil'?1:2,label:l.part==='repair'?'+ 维修':`+${l.amount}`});this.events.push({type:'pickup',value:l.part});}}
-  this.enemies=this.enemies.filter(e=>e.hp>0&&e.y<1390);this.bullets=this.bullets.filter(b=>b.life>0&&b.age<b.life&&b.y>-100&&b.y<1390&&b.x>-120&&b.x<840);this.loot=this.loot.filter(l=>l.age<18&&l.y<1320);
+  if(p.hp>0)for(const l of this.loot){l.age+=dt;if(l.age>=(l.trialReward?30:18)||l.y>=1320)continue;l.y+=22*dt;const dx=p.x-l.x,dy=p.y-l.y,d=Math.hypot(dx,dy);if(d<155){l.x+=dx/d*360*dt||0;l.y+=dy/d*360*dt||0;}if(Math.hypot(l.x-p.x,l.y-p.y)<30){if(l.part==='repair')p.hp=Math.min(p.maxHp,p.hp+1);else{this.assembly.inventory[l.part]+=l.amount;this.partsCollected+=l.amount;}if(this.trial?.rewardId===l.id)this.trial.claimed=true;l.age=99;this.fx({kind:'pickup',x:p.x,y:p.y,size:56,color:l.part==='repair'?'#9df0ba':l.part==='alloy'?'#ffd28a':l.part==='coil'?'#c5a4ff':'#8bf3ff',life:.55,icon:l.part==='repair'?undefined:l.part==='alloy'?3:l.part==='coil'?1:2,label:l.part==='repair'?'+ 维修':`+${l.amount}`});this.events.push({type:'pickup',value:l.part});}}
+  this.enemies=this.enemies.filter(e=>e.hp>0&&e.y<1390);this.bullets=this.bullets.filter(b=>b.life>0&&b.age<b.life&&b.y>-100&&b.y<1390&&b.x>-120&&b.x<840);this.loot=this.loot.filter(l=>l.age<(l.trialReward?30:18)&&l.y<1320);this.tryTrialReward();
   for(const e of this.effects)e.age+=dt;this.effects=this.effects.filter(e=>e.age<e.life);
  }
  drainEvents(){return this.events.splice(0);}
- diagnostics(){return{time:this.time,sector:this.sector,sectorTime:this.sectorTime,phase:this.phase,player:{...this.player},kills:this.kills,score:this.score,nextAward:this.nextAward,scoreProgress:this.scoreProgress,scoreAwards:this.scoreAwards,partsCollected:this.partsCollected,installed:[...this.assembly.installed],keystone:this.assembly.keystone,inventory:{...this.assembly.inventory},calibrated:{...this.assembly.calibrated},ready:this.assembly.ready.map(t=>t.id),target:this.target,contribution:{...this.contribution},bossKills:this.bossKills,damageTaken:this.damageTaken,enemies:this.enemies.map(e=>({...e})),loot:this.loot.map(l=>({...l})),counts:{bullets:this.bullets.filter(b=>!b.hostile).length,hostiles:this.bullets.filter(b=>b.hostile).length,effects:this.effects.length}};}
+ diagnostics(){return{trial:this.trial?{...this.trial,pending:this.trial.pending?{...this.trial.pending}:undefined}:null,careerFacts:this.careerFacts(),time:this.time,sector:this.sector,sectorTime:this.sectorTime,phase:this.phase,player:{...this.player},kills:this.kills,score:this.score,nextAward:this.nextAward,scoreProgress:this.scoreProgress,scoreAwards:this.scoreAwards,partsCollected:this.partsCollected,installed:[...this.assembly.installed],keystone:this.assembly.keystone,inventory:{...this.assembly.inventory},calibrated:{...this.assembly.calibrated},ready:this.assembly.ready.map(t=>t.id),target:this.target,contribution:{...this.contribution},bossKills:this.bossKills,damageTaken:this.damageTaken,enemies:this.enemies.map(e=>({...e})),loot:this.loot.map(l=>({...l})),counts:{bullets:this.bullets.filter(b=>!b.hostile).length,hostiles:this.bullets.filter(b=>b.hostile).length,effects:this.effects.length}};}
 }
