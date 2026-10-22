@@ -1,0 +1,28 @@
+import{Assembly,techById}from'./technology';
+/** Nominal parameters used by both actual attacks and the readable loadout.
+ * These are not measured DPS: range, interception and contacts still decide damage. */
+export function flightProfile(a:Assembly){
+ const powers=[a.power('split'),a.power('coil'),a.power('laser')];
+ return{powers,
+  guns:{damage:7*powers[0],interval:a.has('arsenal')?.1:.16,wingCount:a.has('split')?a.has('barrage')?6:2:0,wingDamage:5*powers[0],bounce:a.has('bounce'),bounceDamage:.6,rail:a.has('rail'),railDamage:38*powers[0],railInterval:1.1,railPierce:4,flak:a.has('flak'),flakInterval:4,flakRadius:130,flakDamage:.65,seeking:a.has('arsenal')},
+  electric:{enabled:a.has('coil'),damage:18*powers[1],interval:.9,targets:a.has('chain')?4:2,range:a.has('seeker')?470:330,jumpRange:280,falloff:a.has('tempest')?1:.8,sources:a.has('tempest')?2:1,priority:a.has('seeker'),storm:a.has('stormgun'),stormDamage:12*powers[1],stormContacts:3,emp:a.has('emp'),empDamage:65*powers[1],empInterval:5,empRadius:260},
+  optical:{enabled:a.has('laser'),damage:30*powers[2],interval:a.has('drill')?.8:1.4,beams:a.has('twin')?3:1,targets:a.has('drill')?8:3,burn:a.has('burn'),burnTicks:3,burnDamage:9*powers[2],burnInterval:.3,prism:a.has('prism'),prismDamage:.65,sun:a.has('sun'),sunBeams:8,sunDamage:45*powers[2],sunInterval:4},
+ };
+}
+export type FlightProfile=ReturnType<typeof flightProfile>;
+/** Read-only projection, including explicitly reported missing ancestors.
+ * No inventory, real Assembly, World clock or RNG is touched. */
+export function projectTechnology(a:Assembly,id:string){const node=techById.get(id);if(!node||id==='chassis'||a.lockedBy(id))return undefined;const copy=new Assembly();for(const n of a.installed)copy.installed.add(n);Object.assign(copy.calibrated,a.calibrated);const added:string[]=[];
+ const add=(key:string)=>{if(copy.has(key))return;const t=techById.get(key);if(!t)return;for(const p of t.parents)add(p);copy.installed.add(key);added.push(key);};
+ const calibration=a.has(id);if(calibration)copy.calibrated[id]=(copy.calibrated[id]??0)+1;else add(id);
+ return{before:flightProfile(a),after:flightProfile(copy),calibration,added,missingParents:added.filter(key=>key!==id),canInstall:a.can(id)};
+}
+export const parameterNumber=(n:number)=>Number(n.toFixed(2)).toString();
+export function profileRows(p:FlightProfile,column:number):[string,string][]{const g=p.guns,e=p.electric,o=p.optical,n=parameterNumber;
+ if(column===0)return[['主炮伤害',n(g.damage)],['翼炮 / 每轮',g.wingCount?`${g.wingCount} × ${n(g.wingDamage)}`:'未装'],['开火间隔',n(g.interval)+'秒'],['轨道炮',g.rail?`${n(g.railDamage)} / ${n(g.railInterval)}秒`:'未装'],['贯穿 / 溅射',`${g.rail?g.railPierce+1+'敌':'—'} / ${g.flak?g.flakDamage*100+'%':'—'}`],['弹道特性',[g.bounce?'反弹+跳击':'',g.seeking?'追击':''].filter(Boolean).join(' · ')||'直射']];
+ if(column===1)return[['电弧伤害',e.enabled?n(e.damage):'未装'],['目标 / 电源',e.enabled?`${e.targets}敌 / ${e.sources}源`:'—'],['间隔 / 索敌',e.enabled?`${n(e.interval)}秒 / ${e.range}`:'—'],['逐跳伤害',e.enabled?(e.falloff===1?'不衰减':e.falloff*100+'%'):'—'],['雷暴机炮',e.storm?`${n(e.stormDamage)} / ${e.stormContacts}命中`:'未装'],['磁暴',e.emp?`${n(e.empDamage)} / ${e.empInterval}秒`:'未装']];
+ return[['主束伤害',o.enabled?`${o.beams} × ${n(o.damage)}`:'未装'],['贯穿上限',o.enabled?o.targets+'敌':'—'],['开火间隔',o.enabled?n(o.interval)+'秒':'—'],['灼烧',o.burn?`${o.burnTicks} × ${n(o.burnDamage)}`:'未装'],['折返光路',o.prism?'2路 · 反射一次':'未装'],['日冕阵列',o.sun?`${o.sunBeams} × ${n(o.sunDamage)}`:'未装']];
+}
+export function upgradeReceipt(id:string,before:FlightProfile,after:FlightProfile,calibration:boolean){const t=techById.get(id);if(!t)return'';const n=parameterNumber;if(calibration)return`${['弹道','电磁','光学'][t.column]}系数 ${Math.round(before.powers[t.column]*100)}% → ${Math.round(after.powers[t.column]*100)}%`;
+ const g=after.guns,e=after.electric,o=after.optical;return({split:`翼炮 ${before.guns.wingCount} → ${g.wingCount}发 · 原主炮保留`,bounce:'触壁反弹+1 · 命中跳击60%',coil:`电弧 ${n(e.damage)}伤 / ${n(e.interval)}秒 · ${e.targets}敌`,chain:`电弧目标 ${before.electric.targets} → ${e.targets}敌`,laser:`激光 ${n(o.damage)}伤 / ${n(o.interval)}秒 · 贯穿${o.targets}敌`,twin:`主束 ${before.optical.beams} → ${o.beams}路 · 原束保留`,rail:`轨道炮 ${n(g.railDamage)}伤 · 最多${g.railPierce+1}敌`,seeker:`索敌 ${before.electric.range} → ${e.range} · 优先蓄能敌`,burn:`追加灼烧 ${o.burnTicks} × ${n(o.burnDamage)}`,flak:`每${g.flakInterval}发主炮 · ${g.flakDamage*100}%溅射`,stormgun:`${e.stormContacts}次命中 → ${n(e.stormDamage)}点连锁`,prism:'新增两路折返束 · 原激光保留',barrage:`翼炮 ${before.guns.wingCount} → ${g.wingCount}发`,emp:`磁暴 ${n(e.empDamage)}伤 / ${e.empInterval}秒 · 清近弹`,drill:`光束 ${n(before.optical.interval)} → ${n(o.interval)}秒 · 穿${o.targets}敌`,arsenal:`间隔 ${n(before.guns.interval)} → ${n(g.interval)}秒 · 追加追击`,tempest:`电源 ${before.electric.sources} → ${e.sources} · 跳伤不衰减`,sun:`新增日冕 ${o.sunBeams} × ${n(o.sunDamage)} / ${o.sunInterval}秒`}as Record<string,string>)[id]??t.effect;
+}

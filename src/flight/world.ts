@@ -1,3 +1,4 @@
+import{flightProfile}from'./profile';
 import{Assembly,parts,type Part}from'./technology';
 import{trials,starterTrial,type TrialId}from'./records';
 export const F={width:720,height:1280,minY:196,maxY:1198,speed:600,playerRadius:12,step:1/60,enemyLimit:26,hostileLimit:200,bulletLimit:280,lootLimit:32,fxLimit:220}as const;
@@ -75,37 +76,37 @@ export class FlightWorld{
   while(this.score>=this.nextAward){this.scoreAwards++;const earned=this.nextAward;this.nextAward+=300+this.scoreAwards*150;this.addDrop(e.x-42,e.y+38,parts[(this.scoreAwards-1)%3],2);if(this.scoreAwards%3===0)this.addDrop(e.x+42,e.y+38,'repair');this.notice={title:`${earned} 分 · 击破补给`,detail:'双份组件已掉落 · 飞近拾取',time:3};this.events.push({type:'reward'});}
  }
  private arc(from:{x:number;y:number},damage:number,source='coil'){
-  const count=this.assembly.has('chain')?4:2,range=this.assembly.has('seeker')?470:330,visited=new Set<number>();let pos=from;
+  const profile=flightProfile(this.assembly).electric,count=profile.targets,range=profile.range,visited=new Set<number>();let pos=from;
   for(let i=0;i<count;i++){
-   const candidates=this.enemies.filter(e=>e.hp>0&&e.y>=155&&e.y<=1280&&!visited.has(e.id)&&Math.hypot(e.x-pos.x,e.y-pos.y)<(i===0?range:280));
+   const candidates=this.enemies.filter(e=>e.hp>0&&e.y>=155&&e.y<=1280&&!visited.has(e.id)&&Math.hypot(e.x-pos.x,e.y-pos.y)<(i===0?range:profile.jumpRange));
    candidates.sort((a,b)=>this.assembly.has('seeker')?Number(b.timer<.6)-Number(a.timer<.6)||Math.hypot(a.x-pos.x,a.y-pos.y)-Math.hypot(b.x-pos.x,b.y-pos.y):Math.hypot(a.x-pos.x,a.y-pos.y)-Math.hypot(b.x-pos.x,b.y-pos.y));const e=candidates[0];if(!e)break;
-   visited.add(e.id);this.fx({kind:'arc',x:pos.x,y:pos.y,points:[{x:pos.x,y:pos.y},{x:e.x,y:e.y}],size:3,color:'#c4a0ff',life:.18});this.fx({kind:'spark',x:e.x,y:e.y,size:28,color:'#e4ceff',life:.2});this.hit(e,damage*Math.pow(this.assembly.has('tempest')?1:.8,i),source);pos=e;
+   visited.add(e.id);this.fx({kind:'arc',x:pos.x,y:pos.y,points:[{x:pos.x,y:pos.y},{x:e.x,y:e.y}],size:3,color:'#c4a0ff',life:.18});this.fx({kind:'spark',x:e.x,y:e.y,size:28,color:'#e4ceff',life:.2});this.hit(e,damage*Math.pow(profile.falloff,i),source);pos=e;
   }
   if(source==='coil'&&visited.size>=3)this.advanceTrial('relay',pos);
  }
  private beam(start:{x:number;y:number},end:{x:number;y:number},damage:number,source:string,reflect=false){
-  const contacts=this.enemies.filter(e=>e.hp>0&&e.y>=155&&e.y<=1280&&segmentDistance(e.x,e.y,start.x,start.y,end.x,end.y)<e.r+9).sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y)).slice(0,this.assembly.has('drill')?8:3);
-  for(const e of contacts){this.hit(e,damage,source);if(this.assembly.has('burn')){e.burn=3;e.burnTick=.3;}}
+  const profile=flightProfile(this.assembly).optical,contacts=this.enemies.filter(e=>e.hp>0&&e.y>=155&&e.y<=1280&&segmentDistance(e.x,e.y,start.x,start.y,end.x,end.y)<e.r+9).sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y)).slice(0,profile.targets);
+  for(const e of contacts){this.hit(e,damage,source);if(profile.burn){e.burn=profile.burnTicks;e.burnTick=profile.burnInterval;}}
   if(source==='laser'&&contacts.length>=2)this.advanceTrial('beam',contacts[contacts.length-1]);
   this.fx({kind:'laser',x:start.x,y:start.y,points:[start,end],size:reflect?7:11,color:source==='sun'?'#ffe4a0':'#8af6ff',life:.18});
  }
  private attacks(dt:number){
-  const a=this.assembly,p=this.player;this.shotTimer-=dt;this.arcTimer-=dt;this.laserTimer-=dt;this.railTimer-=dt;this.empTimer-=dt;this.sunTimer-=dt;
-  if(this.shotTimer<=0){this.shotTimer+=a.has('arsenal')?.1:.16;this.shots++;this.bullet(p.x,p.y-42,0,-1050,7*a.power('split'),false,'pulse',0,a.has('flak')&&this.shots%4===0);
-   if(a.has('split')){const dirs=a.has('barrage')?[-.36,-.23,-.11,.11,.23,.36]:[-.17,.17];for(const ang of dirs){let vx=Math.sin(ang)*850,vy=-Math.cos(ang)*850;if(a.has('arsenal')){const e=this.enemies.filter(e=>e.hp>0&&e.y<p.y).sort((a,b)=>a.hp-b.hp)[0];if(e){const d=Math.hypot(e.x-p.x,e.y-p.y);vx=(e.x-p.x)/d*850+Math.sin(ang)*180;vy=(e.y-p.y)/d*850;}}this.bullet(p.x+Math.sign(ang)*38,p.y-24,vx,vy,5*a.power('split'),false,'wing');}}
+  const a=this.assembly,p=this.player,{guns:g,electric:em,optical:op}=flightProfile(a);this.shotTimer-=dt;this.arcTimer-=dt;this.laserTimer-=dt;this.railTimer-=dt;this.empTimer-=dt;this.sunTimer-=dt;
+  if(this.shotTimer<=0){this.shotTimer+=g.interval;this.shots++;this.bullet(p.x,p.y-42,0,-1050,g.damage,false,'pulse',0,g.flak&&this.shots%g.flakInterval===0);
+   if(g.wingCount){const dirs=g.wingCount===6?[-.36,-.23,-.11,.11,.23,.36]:[-.17,.17];for(const ang of dirs){let vx=Math.sin(ang)*850,vy=-Math.cos(ang)*850;if(g.seeking){const e=this.enemies.filter(e=>e.hp>0&&e.y<p.y).sort((a,b)=>a.hp-b.hp)[0];if(e){const d=Math.hypot(e.x-p.x,e.y-p.y);vx=(e.x-p.x)/d*850+Math.sin(ang)*180;vy=(e.y-p.y)/d*850;}}this.bullet(p.x+Math.sign(ang)*38,p.y-24,vx,vy,g.wingDamage,false,'wing');}}
    this.events.push({type:'fire'});
   }
-  if(a.has('rail')&&this.railTimer<=0){this.railTimer=1.1;this.bullet(p.x,p.y-48,0,-1350,38*a.power('rail'),false,'rail',4);}
-  if(a.has('coil')&&this.arcTimer<=0){this.arcTimer=.9;this.arc({x:p.x,y:p.y-38},18*a.power('coil'));if(a.has('tempest'))this.arc({x:p.x+65,y:p.y-20},18*a.power('tempest'),'tempest');this.events.push({type:'arc'});}
-  if(a.has('laser')&&this.laserTimer<=0){this.laserTimer=a.has('drill')?.8:1.4;const d=30*a.power('laser');for(const x of a.has('twin')?[p.x-64,p.x,p.x+64]:[p.x])this.beam({x,y:p.y-40},{x,y:110},d,'laser');
-   if(a.has('prism'))for(const side of[-1,1]){const x=side===-1?12:708,y=p.y-Math.abs(p.x-x)*1.2;this.beam({x:p.x,y:p.y-40},{x,y},d*.65,'prism',true);this.beam({x,y},{x:p.x,y:y-Math.abs(p.x-x)*1.2},d*.65,'prism',true);}this.events.push({type:'laser'});
+  if(g.rail&&this.railTimer<=0){this.railTimer=g.railInterval;this.bullet(p.x,p.y-48,0,-1350,g.railDamage,false,'rail',g.railPierce);}
+  if(em.enabled&&this.arcTimer<=0){this.arcTimer=em.interval;this.arc({x:p.x,y:p.y-38},em.damage);if(em.sources===2)this.arc({x:p.x+65,y:p.y-20},em.damage,'tempest');this.events.push({type:'arc'});}
+  if(op.enabled&&this.laserTimer<=0){this.laserTimer=op.interval;const d=op.damage;for(const x of op.beams===3?[p.x-64,p.x,p.x+64]:[p.x])this.beam({x,y:p.y-40},{x,y:110},d,'laser');
+   if(op.prism)for(const side of[-1,1]){const x=side===-1?12:708,y=p.y-Math.abs(p.x-x)*1.2;this.beam({x:p.x,y:p.y-40},{x,y},d*op.prismDamage,'prism',true);this.beam({x,y},{x:p.x,y:y-Math.abs(p.x-x)*1.2},d*op.prismDamage,'prism',true);}this.events.push({type:'laser'});
   }
-  if(a.has('emp')&&this.empTimer<=0){this.empTimer=5;this.fx({kind:'ring',x:p.x,y:p.y,size:260,color:'#c6a0ff',life:.5});for(const e of this.enemies)if(Math.hypot(e.x-p.x,e.y-p.y)<260)this.hit(e,65*a.power('emp'),'emp');for(const b of this.bullets)if(b.hostile&&Math.hypot(b.x-p.x,b.y-p.y)<260)b.life=0;this.events.push({type:'ion-storm'});}
-  if(a.has('sun')&&this.sunTimer<=0){this.sunTimer=4;for(let i=0;i<8;i++){const angle=-Math.PI/2+(i-3.5)*.16;this.beam({x:p.x,y:p.y-40},{x:p.x+Math.cos(angle)*1400,y:p.y+Math.sin(angle)*1400},45*a.power('sun'),'sun');}this.events.push({type:'laser'});}
+  if(em.emp&&this.empTimer<=0){this.empTimer=em.empInterval;this.fx({kind:'ring',x:p.x,y:p.y,size:em.empRadius,color:'#c6a0ff',life:.5});for(const e of this.enemies)if(Math.hypot(e.x-p.x,e.y-p.y)<em.empRadius)this.hit(e,em.empDamage,'emp');for(const b of this.bullets)if(b.hostile&&Math.hypot(b.x-p.x,b.y-p.y)<em.empRadius)b.life=0;this.events.push({type:'ion-storm'});}
+  if(op.sun&&this.sunTimer<=0){this.sunTimer=op.sunInterval;for(let i=0;i<op.sunBeams;i++){const angle=-Math.PI/2+(i-3.5)*.16;this.beam({x:p.x,y:p.y-40},{x:p.x+Math.cos(angle)*1400,y:p.y+Math.sin(angle)*1400},op.sunDamage,'sun');}this.events.push({type:'laser'});}
  }
  step(dt:number,targetX=this.player.x,targetY=this.player.y){
   if(this.phase==='dead'||!Number.isFinite(dt)||dt<=0)return;dt=clamp(dt,0,1/30);this.time+=dt;this.sectorTime+=dt;this.notice.time=Math.max(0,this.notice.time-dt);
-  const p=this.player;p.px=p.x;p.py=p.y;const dx=clamp(targetX,32,688)-p.x,dy=clamp(targetY,F.minY,F.maxY)-p.y,d=Math.hypot(dx,dy),f=Math.min(1,F.speed*dt/(d||1));p.x+=dx*f;p.y+=dy*f;p.invulnerable=Math.max(0,p.invulnerable-dt);
+  const p=this.player,parameters=flightProfile(this.assembly);p.px=p.x;p.py=p.y;const dx=clamp(targetX,32,688)-p.x,dy=clamp(targetY,F.minY,F.maxY)-p.y,d=Math.hypot(dx,dy),f=Math.min(1,F.speed*dt/(d||1));p.x+=dx*f;p.y+=dy*f;p.invulnerable=Math.max(0,p.invulnerable-dt);
   this.spawnTimer-=dt;if(this.phase==='running'&&this.sectorTime>=60){if(this.enemies.length<F.enemyLimit){this.phase='boss';this.spawn('boss',360,-140);this.notice={title:'旗舰接近',detail:'击破获得三系零件 · 注意实际弹幕',time:3};}}
   else if(this.phase==='running'&&this.spawnTimer<=0){this.spawnTimer=Math.max(1.45,3.3-this.sector*.18);this.spawnWave();}
   for(const e of this.enemies){e.px=e.x;e.py=e.y;e.age+=dt;e.hit=Math.max(0,e.hit-dt);if(e.y>155)e.timer-=dt;
@@ -114,7 +115,7 @@ export class FlightWorld{
    else if(e.kind==='diver'){e.y+=(e.age>1.8?300:90)*dt;e.x+=Math.sin(e.seed)*95*dt;}
    else{e.y+=((e.age<2||e.age>8)?105:12)*dt;e.x+=Math.cos(e.seed+e.age)*30*dt;}
    e.x=clamp(e.x,32,688);if(e.kind==='lancer'&&e.y>155&&e.timer<=.65&&e.aimX===undefined){e.aimX=p.x;e.aimY=p.y;}if(e.hp>0&&e.y>155&&e.timer<=0&&e.kind!=='diver')this.enemyShot(e);
-   if(e.burn>0){e.burnTick-=dt;if(e.burnTick<=0){e.burnTick=.3;e.burn--;this.hit(e,9*this.assembly.power('burn'),'burn');}}
+   if(e.burn>0){e.burnTick-=dt;if(e.burnTick<=0){e.burnTick=parameters.optical.burnInterval;e.burn--;this.hit(e,parameters.optical.burnDamage,'burn');}}
    if(e.hp>0&&segmentDistance(0,0,e.px-p.px,e.py-p.py,e.x-p.x,e.y-p.y)<e.r*.7+F.playerRadius)this.hurt();
   }
   if(p.hp<=0)return;this.attacks(dt);
@@ -123,9 +124,9 @@ export class FlightWorld{
    if(b.life<=0)continue;
    if(b.hostile){if(segmentDistance(0,0,b.px-p.px,b.py-p.py,b.x-p.x,b.y-p.y)<F.playerRadius+b.r){this.hurt();b.life=0;}}
    else for(const e of this.enemies){if(e.hp<=0||e.y<125||b.hits.has(e.id)||segmentDistance(0,0,b.px-e.px,b.py-e.py,b.x-e.x,b.y-e.y)>e.r+b.r)continue;b.hits.add(e.id);this.hit(e,b.damage,b.style==='rail'?'rail':'guns');this.fx({kind:'spark',x:b.x,y:b.y,size:b.style==='rail'?36:18,color:'#ffcf87',life:.16});
-    if(b.explosive){this.fx({kind:'explosion',x:e.x,y:e.y,size:130,color:'#ffd191',life:.4});for(const other of this.enemies)if(other.id!==e.id&&Math.hypot(other.x-e.x,other.y-e.y)<130)this.hit(other,b.damage*.65,'flak');}
-    if(this.assembly.has('bounce')&&b.style!=='rail'){const other=this.enemies.filter(o=>o.hp>0&&o.y>=155&&o.y<=1280&&!b.hits.has(o.id)&&Math.hypot(o.x-e.x,o.y-e.y)<280).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0];if(other){this.fx({kind:'arc',x:e.x,y:e.y,points:[{x:e.x,y:e.y},{x:other.x,y:other.y}],size:2,color:'#ffcc83',life:.14});this.hit(other,b.damage*.6,'bounce');}}
-    if(this.assembly.has('stormgun')&&++this.stormHits%3===0)this.arc(e,12*this.assembly.power('stormgun'),'stormgun');
+    if(b.explosive){this.fx({kind:'explosion',x:e.x,y:e.y,size:parameters.guns.flakRadius,color:'#ffd191',life:.4});for(const other of this.enemies)if(other.id!==e.id&&Math.hypot(other.x-e.x,other.y-e.y)<parameters.guns.flakRadius)this.hit(other,b.damage*parameters.guns.flakDamage,'flak');}
+    if(this.assembly.has('bounce')&&b.style!=='rail'){const other=this.enemies.filter(o=>o.hp>0&&o.y>=155&&o.y<=1280&&!b.hits.has(o.id)&&Math.hypot(o.x-e.x,o.y-e.y)<280).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0];if(other){this.fx({kind:'arc',x:e.x,y:e.y,points:[{x:e.x,y:e.y},{x:other.x,y:other.y}],size:2,color:'#ffcc83',life:.14});this.hit(other,b.damage*parameters.guns.bounceDamage,'bounce');}}
+    if(parameters.electric.storm&&++this.stormHits%parameters.electric.stormContacts===0)this.arc(e,parameters.electric.stormDamage,'stormgun');
     if(b.pierce>0)b.pierce--;else{b.life=0;break;}
    }
   }
