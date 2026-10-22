@@ -5,11 +5,11 @@ import{buildPreview}from'./build-preview';
 import{technologyArt,technologies,nextTechnology,technologyOptions,routeColors,routeIcons,type Technology,type TechRequirement}from'./technology';
 import type{CanvasControl}from'./canvas-runtime';
 import type{EquipmentChange}from'./equipment-receipt';
-import{weaponIcons}from'./technology';
+import{weaponPortrait}from'./technology';
 export type TechTab='base'|'combos'|'advanced';
 export interface TechView{tab:TechTab;selected:string}
 /** Canvas-native controls and diagrams, raster device illustrations, real World predicates. */
-function painter(c:CanvasRenderingContext2D,img?:HTMLImageElement){
+function painter(c:CanvasRenderingContext2D,img?:HTMLImageElement,mounted?:HTMLImageElement){
  const buttons:CanvasControl[]=[];
  const rect=(x:number,y:number,w:number,h:number,color:string)=>{c.fillStyle=color;c.fillRect(x,y,w,h);};
  const text=(s:string,x:number,y:number,size=24,color='#e4f4ff',align:CanvasTextAlign='center')=>{c.fillStyle=color;c.font=`600 ${size}px system-ui`;c.textAlign=align;c.textBaseline='middle';c.fillText(s,x,y);};
@@ -19,15 +19,15 @@ function painter(c:CanvasRenderingContext2D,img?:HTMLImageElement){
  const line=(x:number,y:number,tx:number,ty:number,color:string)=>{c.strokeStyle=color;c.lineWidth=3;c.beginPath();c.moveTo(x,y);c.lineTo(x,(y+ty)/2);c.lineTo(tx,(y+ty)/2);c.lineTo(tx,ty);c.stroke();c.beginPath();c.moveTo(tx-5,ty-8);c.lineTo(tx,ty);c.lineTo(tx+5,ty-8);c.stroke();};
  const check=(x:number,y:number,ready:boolean)=>{rect(x-10,y-10,20,20,ready?'#285854':'#182a38');text(ready?'✓':'○',x,y,20,ready?'#baffd9':'#8395a2');};
  const wrap=(s:string,x:number,y:number,width:number,size=22)=>{let part='',row=0;c.font=`600 ${size}px system-ui`;for(const ch of s){if(c.measureText(part+ch).width>width){text(part,x,y+row*29,size,'#bdd4df','left');part='';row++;if(row===2)break;}part+=ch;}if(part&&row<2)text(part,x,y+row*29,size,'#bdd4df','left');};
- const prerequisite=(r:TechRequirement,x:number,y:number)=>{art(r.icon,x,y,56,!r.ready);check(x+24,y+20,r.ready);text(r.label,x,y+40,19,r.ready?'#baffd9':'#9bafbc');if(r.node)buttons.push({x:x-43,y:y-29,w:86,h:87,label:'查看前驱：'+r.label,action:'tech-jump:'+r.node+'|'+r.label});};
+ const prerequisite=(r:TechRequirement,x:number,y:number)=>{if(r.weapon)weaponPortrait(c,mounted,r.weapon,x,y,56,!r.ready);else art(r.icon,x,y,56,!r.ready);check(x+24,y+20,r.ready);text(r.label,x,y+40,19,r.ready?'#baffd9':'#9bafbc');if(r.node)buttons.push({x:x-43,y:y-29,w:86,h:87,label:'查看前驱：'+r.label,action:'tech-jump:'+r.node+'|'+r.label});};
  return{buttons,rect,text,border,art,button,line,check,wrap,prerequisite};
 }
 export function advancedTechnologies(w:World):Technology[]{
  const rows:[Route,string,number,number,boolean][]=[['ballistic','雷暴精研',12,5,!!w.build.stormAugment],['electric','离子精研',13,2,!!w.build.ionAugment],['optical','双镜复合',11,6,!!w.build.opticalFusion],['ballistic','复合弹芯',5,10,!!w.build.ammoFusion],['electric','磁暴精研',15,0,!!w.build.magneticAugment],['optical','光链精研',6,1,!!w.build.photonAugment],['ballistic','裂甲精研',4,0,!!w.build.fractureAugment]];
  return rows.map(([route,name,icon,count,owned],i)=>{const requirements:TechRequirement[]=[{icon:route==='ballistic'?12:route==='electric'?13:14,label:({ballistic:'弹道',electric:'雷电',optical:'光学'})[route]+' 3',ready:w.build.ranks[route]>=3,node:route+':2'}];
   if(count)requirements.push({icon:routeIcons[route],label:`精调 ${Math.min(count,w.build.refinements[route])}/${count}`,ready:w.build.refinements[route]>=count,node:route+(w.build.ranks[route]>=3?':refine':':2')});
-  if(i===0)requirements.push({icon:0,label:'霰射 T3',ready:w.activeWeapons.includes('scatter')&&w.weaponStage('scatter')>=3});
-  if(i===1)requirements.push({icon:1,label:'电弧 T3',ready:w.activeWeapons.includes('arc')&&w.weaponStage('arc')>=3});
+  if(i===0)requirements.push({icon:0,weapon:'scatter',label:'霰射 T3',ready:w.activeWeapons.includes('scatter')&&w.weaponStage('scatter')>=3});
+  if(i===1)requirements.push({icon:1,weapon:'arc',label:'电弧 T3',ready:w.activeWeapons.includes('arc')&&w.weaponStage('arc')>=3});
   if(i===3)requirements.push({icon:3,label:'弹道 T3',ready:w.activeWeapons.some(k=>k!=='arc'&&w.weaponStage(k)>=3)});
   if(i===4)requirements.push({icon:15,label:'磁暴榴弹',ready:recipeStatus(w,'magnetic').ready,node:'recipe:magnetic'});
   if(i===5)requirements.push({icon:6,label:'电光连锁',ready:recipeStatus(w,'photon').ready,node:'recipe:photon'});
@@ -45,11 +45,11 @@ export function advancedTechnologies(w:World):Technology[]{
   return{id:'advanced:'+i,name,icon,route,owned,ready,requirements,milestone:true,effect:i===0?'串联电桥 / 聚雷破核':i===1?'风暴电核 / 离子长矛':i===2?'保留原透镜，再叠加一种光路':i===3?'保留原弹芯，再叠加一种弹道':i===4?'广域磁场 / 分流电桥':i===6?'双击破核 / 贯通冲击':'远链矩阵 / 聚焦增幅'};
  });
 }
-export function drawTechnologyTree(c:CanvasRenderingContext2D,img:HTMLImageElement|undefined,w:World,view:TechView,back:string,goal?:string){
- const p=painter(c,img),all=[...technologies(w),...advancedTechnologies(w),...routes.filter(r=>w.build.ranks[r]>=3).map(r=>nextTechnology(w,r))],selected=all.find(n=>n.id===view.selected)??all[0];
+export function drawTechnologyTree(c:CanvasRenderingContext2D,img:HTMLImageElement|undefined,w:World,view:TechView,back:string,goal?:string,mounted?:HTMLImageElement){
+ const p=painter(c,img,mounted),all=[...technologies(w),...advancedTechnologies(w),...routes.filter(r=>w.build.ranks[r]>=3).map(r=>nextTechnology(w,r))],selected=all.find(n=>n.id===view.selected)??all[0];
  p.rect(35,70,650,1170,'#0b1b28');p.border(35,70,650,1170,'#36576d');p.text('科技树',175,120,38);p.text(`◈ ${w.buildPoints-w.build.spent}`,(w.growth.mastery??0)>=16?405:575,120,30,'#85e9ff');
  for(const[i,tab]of(['base','combos','advanced']as const).entries())p.button(58+i*205,170,195,56,['基础路线','组合科技','进阶科技'][i],'tech-tab:'+tab,view.tab===tab?'#235570':'#142c3c');
- const tile=(n:Technology,x:number,y:number,size=86)=>{const color=routeColors[n.route],active=n.id===selected.id;p.rect(x-82,y-66,164,139,active?'#224050':'#102532');p.border(x-82,y-66,164,139,active?'#b4f4ff':n.owned?color:n.ready?'#66d9e9':'#345063',active?3:2);if(n.index===1&&!n.owned){for(const[i,icon]of(n.route==='ballistic'?[3,4,5]:n.route==='electric'?[6,7,8]:[9,10,11]).entries())p.art(icon,x-48+i*48,y-16,45,!n.ready);p.text('三选一',x,y+21,17,'#acc9da');}else p.art(n.icon,x,y-13,size,!n.owned&&!n.ready);p.text(n.name.split(' · ')[0],x,y+51,22,n.milestone?'#ffe1a0':'#e3f1fa');p.check(x+66,y-48,n.owned);p.buttons.push({x:x-84,y:y-69,w:168,h:145,label:`${n.owned?'已学':n.ready?'可研究':'查看未来科技'}：${n.name}`,action:'tech-node:'+n.id});};
+ const tile=(n:Technology,x:number,y:number,size=86)=>{const color=routeColors[n.route],active=n.id===selected.id,canStudy=n.ready&&w.buildPoints>w.build.spent&&w.player.hp>0&&w.phase!=='dead';p.rect(x-82,y-66,164,139,active?'#224050':'#102532');p.border(x-82,y-66,164,139,active?'#b4f4ff':n.owned?color:canStudy?'#66d9e9':'#345063',active?3:2);if(n.index===1&&!n.owned){for(const[i,icon]of(n.route==='ballistic'?[3,4,5]:n.route==='electric'?[6,7,8]:[9,10,11]).entries())p.art(icon,x-48+i*48,y-16,45,!n.ready);p.text('三选一',x,y+21,17,'#acc9da');}else p.art(n.icon,x,y-13,size,!n.owned&&!n.ready);p.text(n.name.split(' · ')[0],x,y+51,22,n.milestone?'#ffe1a0':'#e3f1fa');p.check(x+66,y-48,n.owned);p.buttons.push({x:x-84,y:y-69,w:168,h:145,label:`${n.owned?'已学':canStudy?'可研究':n.ready?'查看就绪科技':'查看未来科技'}：${n.name}`,action:'tech-node:'+n.id});};
  if(view.tab==='base'){
   for(const[i,route]of routes.entries()){const x=155+i*205;p.text(['弹道','雷电','光学'][i],x,245,22,routeColors[route]);for(let j=0;j<2;j++)p.line(x,399+j*185,x,439+j*185,w.build.ranks[route]>j?routeColors[route]:'#3b5061');}
   // A second, genuine AND predecessor, kept clear of cards and labels.
@@ -68,11 +68,11 @@ export function drawTechnologyTree(c:CanvasRenderingContext2D,img:HTMLImageEleme
  else p.text(selected.owned?'原能力保留 · 可继续精调':selected.ready?'需要 ◈ 1':'前驱缺项已用 ○ 标记',360,1107,23,'#b8ccda');
  p.button(185,1170,350,58,back,'tree-back');if((w.growth.mastery??0)>=16)p.button(505,91,150,50,'超载协议','overdrive-open');return p.buttons;
 }
-export function drawTechnologyChoices(c:CanvasRenderingContext2D,img:HTMLImageElement|undefined,w:World,pickup?:EquipmentChange){
+export function drawTechnologyChoices(c:CanvasRenderingContext2D,img:HTMLImageElement|undefined,w:World,pickup?:EquipmentChange,mounted?:HTMLImageElement){
  const p=painter(c,img);p.rect(35,140,650,1020,'#0b1b28');p.text('选择新科技',360,203,38);p.text(`◈ ${w.buildPoints-w.build.spent}`,pickup?566:360,263,28,'#87eaff');
- if(pickup){p.art(weaponIcons[pickup.kind],120,268,58);p.text(pickup.before?pickup.before.stage!==pickup.after.stage?`T${pickup.before.stage} → T${pickup.after.stage}`:`精校 ${pickup.before.calibration} → ${pickup.after.calibration}`:`+ T${pickup.after.stage}`,235,268,26,'#baffd9');}
+ if(pickup){weaponPortrait(c,mounted,pickup.kind,120,268,58);p.text(pickup.before?pickup.before.stage!==pickup.after.stage?`T${pickup.before.stage} → T${pickup.after.stage}`:`精校 ${pickup.before.calibration} → ${pickup.after.calibration}`:`+ T${pickup.after.stage}`,235,268,26,'#baffd9');}
  for(const[i,route]of routes.entries()){const n=nextTechnology(w,route),y=320+i*222,enabled=w.build.available(w.buildPoints).includes(route);p.rect(65,y,590,200,enabled?'#17384b':'#15232e');p.border(65,y,590,200,enabled?routeColors[route]:'#344856');p.art(n.icon,157,y+89,142,!enabled);p.text(n.name,435,y+40,30,routeColors[route]);
-  const rank=w.build.ranks[route];for(let j=0;j<3;j++){p.art(j===0?routeIcons[route]:j===1?(route==='ballistic'?3:route==='electric'?6:10):route==='ballistic'?12:route==='electric'?13:14,324+j*103,y+105,56,j>rank);if(j<2)p.line(360+j*103,y+105,383+j*103,y+105,'#8baabd');p.check(344+j*103,y+128,j<rank);}
+  const rank=w.build.ranks[route],path=technologies(w).filter(t=>t.route===route&&t.index!==undefined);for(let j=0;j<3;j++){p.art(path[j].icon,324+j*103,y+105,56,j>rank);if(j<2)p.line(360+j*103,y+105,383+j*103,y+105,'#8baabd');p.check(344+j*103,y+128,j<rank);}
   p.text(rank>=3?`精调 ${w.build.refinements[route]} → ${w.build.refinements[route]+1}`:enabled?'查看 / 研究':'需要导电线圈',435,y+172,22,enabled?'#b5eaff':'#9eacb6');
   if(enabled)p.buttons.push({x:65,y,w:590,h:200,label:n.name,action:'tech-choice:'+route});
  }

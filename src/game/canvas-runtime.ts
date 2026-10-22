@@ -1,5 +1,5 @@
 import{drawTechnologyTree,drawTechnologyChoices,drawTechnologyBranches,advancedTechnologies,type TechTab}from'./technology-screen';
-import{technologies,nextTechnology,technologyArt,weaponIcons}from'./technology';
+import{technologies,nextTechnology,weaponPortrait}from'./technology';
 import{supplyTag,type SupplyTag}from'./supply-tag';
 import { HeavyRuptures } from './heavy-rupture';
 import{RecipeTrialPlan,recipeTrialStatus}from'./recipe-trial';
@@ -1390,7 +1390,7 @@ export class CanvasRuntime {
     const closing=this.mode==='playing'&&w.phase==='running'&&w.closingStatus.total>0&&w.contract?.status!=='active';
     this.rect(0, 0, 720, y + (boss?210:closing?194:162), '#08131be8');
     const equipmentHud=this.mode==='playing'&&this.equipmentHud&&w.time<this.equipmentHud.until?this.equipmentHud:null;
-    if(equipmentHud)technologyArt(this.ctx,this.images.get('tech-icons-v1.png'),weaponIcons[equipmentHud.kind],43,y+12,38);
+    if(equipmentHud)weaponPortrait(this.ctx,this.images.get('mounted-modules-v1.png'),equipmentHud.kind,43,y+12,38);
     this.text(equipmentHud?.text??'分数',equipmentHud?70:30,y+6,equipmentHud?19:20,equipmentHud?.color??'#91adbf','left');
     const score=w.score.toString().padStart(6,'0');
     this.text(score,28,y+43,score.length<=6?42:Math.max(12,260/score.length),'#e9f6ff','left',true);
@@ -1796,7 +1796,7 @@ export class CanvasRuntime {
     this.button(current?.status==='active'?'继续挑战':this.contractReturn==='paused'?'返回暂停菜单':'返回当前火力',1080,current?.status==='active'?'resume':'contracts-back',true);
   }
   private drawBuildTree() {
-    this.buttons.push(...drawTechnologyTree(this.ctx,this.images.get('tech-icons-v1.png'),this.world,{tab:this.techTab,selected:this.techSelected},this.treeReturn==='choice'?'返回选择':'返回火力',this.save.recipeGoal??undefined));
+    this.buttons.push(...drawTechnologyTree(this.ctx,this.images.get('tech-icons-v1.png'),this.world,{tab:this.techTab,selected:this.techSelected},this.treeReturn==='choice'?'返回选择':'返回火力',this.save.recipeGoal??undefined,this.images.get('mounted-modules-v1.png')));
   }
   private drawBuildBranch(){
     this.buttons.push(...drawTechnologyBranches(this.ctx,this.images.get('tech-icons-v1.png'),this.world,this.branchRoute));
@@ -1821,7 +1821,7 @@ export class CanvasRuntime {
   }
   private drawBuildChoices() {
     this.buttons=[];
-    this.buttons.push(...drawTechnologyChoices(this.ctx,this.images.get('tech-icons-v1.png'),this.world,this.recentEquipment));
+    this.buttons.push(...drawTechnologyChoices(this.ctx,this.images.get('tech-icons-v1.png'),this.world,this.recentEquipment,this.images.get('mounted-modules-v1.png')));
   }
   private drawRunReport(){
     const w=this.world,r=runReport(w,this.runAchievements,this.save.achievements.unlocked,this.save.achievements.tracked);
