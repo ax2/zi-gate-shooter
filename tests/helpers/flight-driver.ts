@@ -7,8 +7,9 @@ export const flightOrders:Record<FlightRoute,string[]>={
  optical:['laser','twin','burn','split','bounce','prism','rail','drill','sun','coil','chain','seeker','stormgun','emp','flak','barrage','tempest','arsenal'],
 };
 const desiredKeystone={ballistic:'arsenal',electric:'tempest',optical:'sun'};
-export function flightChoice(w:FlightWorld,route:FlightRoute){const order=flightOrders[route];return order.find(id=>(!keystones.includes(id)||id===desiredKeystone[route])&&!w.assembly.has(id)&&w.assembly.can(id));}
-export function flightGoal(w:FlightWorld,route:FlightRoute){return flightOrders[route].find(id=>(!keystones.includes(id)||id===desiredKeystone[route])&&!w.assembly.has(id)&&!w.assembly.missing(id).length&&!w.assembly.lockedBy(id));}
+export const advancedOrders:Record<FlightRoute,string[]>={ballistic:['railburst','satellites'],electric:['stormlens','reversefield'],optical:['novaecho','lightwell']};
+export function flightChoice(w:FlightWorld,route:FlightRoute,variant=0){const order=[...flightOrders[route],...advancedOrders[route].slice().sort((a,b)=>a===advancedOrders[route][variant]?-1:b===advancedOrders[route][variant]?1:0)];return order.find(id=>(!keystones.includes(id)||id===desiredKeystone[route])&&!w.assembly.has(id)&&w.assembly.can(id));}
+export function flightGoal(w:FlightWorld,route:FlightRoute){return [...flightOrders[route],...advancedOrders[route]].find(id=>(!keystones.includes(id)||id===desiredKeystone[route])&&!w.assembly.has(id)&&!w.assembly.missing(id).length&&!w.assembly.lockedBy(id));}
 /** Test-only omniscient operator. Samples physical paths, never changes HP, loot,
  * enemies or damage. It is not a proof of human difficulty or device FPS. */
 export function flightTarget(w:FlightWorld){

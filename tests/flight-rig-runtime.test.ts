@@ -37,3 +37,6 @@ it('an earned terminal specialization blocks competing preview installation with
  }
  expect(r.world.assembly.keystone).toBe('tempest');r.activate('tree');r.activate('select:sun');const before=state(r);r.activate('rig-preview');expect(h.texts).toContain('本局已选择其他终极专精');expect(h.controls.some(c=>c.action==='rig-assemble')).toBe(false);expect(r.activate('rig-assemble')).toBe(false);expect(state(r)).toBe(before);
 });
+it('the advance picture page exposes all six routes and predecessor navigation returns to the real basic graph',async()=>{
+ const h=await setup(),r=h.r;r.activate('start:coil');r.activate('tree');const before=state(r);expect(r.activate('tree-page:1')).toBe(true);expect(r.diagnostics().treePage).toBe(1);expect(h.controls.filter(c=>c.action.startsWith('select:'))).toHaveLength(9);expect(new Set(h.controls.map(c=>c.action)).size).toBe(h.controls.length);r.activate('select:reversefield');r.activate('rig-preview');expect(h.texts.some(t=>t.startsWith('完整路径预览'))).toBe(true);expect(r.activate('rig-assemble')).toBe(false);expect(state(r)).toBe(before);r.activate('close-rig');r.activate('parent:tempest');expect(r.diagnostics().treePage).toBe(0);expect(r.selected).toBe('tempest');expect(h.controls.filter(c=>c.action.startsWith('select:'))).toHaveLength(18);expect(state(r)).toBe(before);expect(r.activate('tree-page:5')).toBe(false);
+});
