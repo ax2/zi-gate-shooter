@@ -1,9 +1,9 @@
 import{technologies,partInfo,parts,type Assembly,type Part}from'./technology';
 export const defenseRules={shotLife:5.5,orbLife:4.5,edge:32,fade:.5,armorDuration:6,armorRadius:43,armorEvery:6,receiptLife:3.5}as const;
 export type Supply=Part|'repair'|'armor';
-export interface PickupReceipt{part:Supply;amount:number;until:number;repaired:number}
+export interface PickupReceipt{part:Supply;amount:number;until:number;repaired:number;main?:{beforeCount:number;afterCount:number;beforeDamage:number;afterDamage:number}}
 export const supplyName=(p:Supply)=>p==='armor'?'光甲':p==='repair'?'维修':partInfo[p].name;
-/** The live wallet and prerequisites decide the link; collecting is never installing. */
+/** The live wallet and prerequisites decide the link; collecting strengthens the basic cannon but never installs a technology. */
 export function pickupOffer(a:Assembly,r:PickupReceipt){
  if(r.part==='repair'||r.part==='armor')return undefined;
  const col=parts.indexOf(r.part),eligible=technologies.filter(t=>t.column===col&&!a.has(t.id)&&!a.lockedBy(t.id)&&!a.missing(t.id).length);
