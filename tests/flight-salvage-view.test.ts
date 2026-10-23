@@ -19,7 +19,7 @@ it.each(['split','coil','laser'])('%s empty-wallet pictures show reachable recip
 });
 it('manual entry is visibly available with zero materials and cannot pay for unavailable or unoffered cards',async()=>{
  const h=await flightChoiceHarness(),r=h.r;expect(r.activate('parts')).toBe(false);r.activate('start:split');
- expect(h.texts).toContain('材料 → 点这里装配 ›');expect(h.controls.some(c=>c.action==='parts')).toBe(true);
+ expect(r.diagnostics().assemblyGuide.recipe?.id).toBe('hive');expect(h.controls.some(c=>c.action==='parts'&&c.label.includes('蜂巢副炮'))).toBe(true);
  const frozen=r.world.diagnostics(),timers=r.diagnostics().upgradeChoice;
  expect(r.activate('parts')).toBe(true);expect(r.mode).toBe('upgrade');expect(h.texts).toContain('拾取自动强化');
  expect(h.controls.some(c=>c.action.startsWith('upgrade-choice:'))).toBe(false);
