@@ -1,21 +1,22 @@
 import{flightProfile}from'./profile';
+import{bossPartRules,bossPartReward,bossPartSpec,bossPartPosition,bossPartMuzzles,type BossPart,type BossAssembly,type BossSalvage}from'./boss-parts';
 import{Assembly,parts,type Part}from'./technology';
 import{trials,starterTrial,type TrialId}from'./records';
 import{encounterTypes,type EncounterKind,type FlightEncounter,type EncounterRecord}from'./encounters';
 import{airspacePlan,airspaceFormation,maneuverPose,maneuverMuzzle,type Maneuver}from'./airspace';
 export const F={width:720,height:1280,minY:196,maxY:1198,speed:600,playerRadius:12,step:1/60,enemyLimit:26,hostileLimit:200,bulletLimit:280,lootLimit:32,fxLimit:220,fieldLimit:3}as const;
-export type EnemyKind='drone'|'diver'|'sentry'|'spinner'|'lancer'|'boss'|'courier'|'minelayer'|'mine'|'projector';
-export interface Enemy{id:number;kind:EnemyKind;x:number;y:number;px:number;py:number;hp:number;maxHp:number;r:number;age:number;timer:number;angle:number;seed:number;burn:number;burnTick:number;hit:number;aimX?:number;aimY?:number;keystoneHit?:string;shield?:number;shieldMax?:number;protectedBy?:number;retreat?:boolean;maneuver?:Maneuver}
+export type EnemyKind='drone'|'diver'|'sentry'|'spinner'|'lancer'|'boss'|'courier'|'minelayer'|'mine'|'projector'|'node';
+export interface Enemy{id:number;kind:EnemyKind;x:number;y:number;px:number;py:number;hp:number;maxHp:number;r:number;age:number;timer:number;angle:number;seed:number;burn:number;burnTick:number;hit:number;aimX?:number;aimY?:number;keystoneHit?:string;shield?:number;shieldMax?:number;protectedBy?:number;retreat?:boolean;maneuver?:Maneuver;bossPart?:BossPart;bossMine?:number}
 export interface Bullet{id:number;x:number;y:number;px:number;py:number;vx:number;vy:number;r:number;damage:number;hostile:boolean;age:number;life:number;bounce:number;pierce:number;style:'pulse'|'wing'|'rail'|'enemy'|'orb';hits:Set<number>;explosive:boolean;sourceEnemy?:number;damageSource?:string}
-export interface Loot{id:number;x:number;y:number;part:Part|'repair';amount:number;age:number;phase:number;trialReward?:boolean;encounterReward?:number}
+export interface Loot{id:number;x:number;y:number;part:Part|'repair';amount:number;age:number;phase:number;trialReward?:boolean;encounterReward?:number;bossPartReward?:number}
 export interface Effect{x:number;y:number;kind:'explosion'|'reactor'|'spark'|'arc'|'laser'|'ring'|'pickup'|'install';age:number;life:number;size:number;color:string;points?:{x:number;y:number}[];hostile?:boolean;icon?:number;label?:string}
 export interface TechField{id:number;kind:"reflect"|"well";x:number;y:number;age:number;life:number;radius:number;remaining:number;tick:number}
 export interface Notice{title:string;detail:string;time:number;icon?:number}
 export interface FlightEvent{type:string;value?:string}
 const clamp=(v:number,lo:number,hi:number)=>Math.max(lo,Math.min(hi,v));
 export function segmentDistance(x:number,y:number,ax:number,ay:number,bx:number,by:number){const dx=bx-ax,dy=by-ay,t=clamp(((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy||1),0,1);return Math.hypot(x-ax-dx*t,y-ay-dy*t);}
-const stats:Record<EnemyKind,{hp:number;r:number;score:number}>={drone:{hp:16,r:25,score:25},diver:{hp:25,r:28,score:40},sentry:{hp:70,r:35,score:80},spinner:{hp:95,r:39,score:110},lancer:{hp:75,r:34,score:90},boss:{hp:2400,r:110,score:1200},courier:{hp:180,r:45,score:200},minelayer:{hp:360,r:43,score:180},mine:{hp:14,r:22,score:10},projector:{hp:420,r:43,score:220}};
-export const lootLife=(l:Loot)=>l.trialReward||l.encounterReward!==undefined?30:18;
+const stats:Record<EnemyKind,{hp:number;r:number;score:number}>={drone:{hp:16,r:25,score:25},diver:{hp:25,r:28,score:40},sentry:{hp:70,r:35,score:80},spinner:{hp:95,r:39,score:110},lancer:{hp:75,r:34,score:90},boss:{hp:2400,r:110,score:1200},courier:{hp:180,r:45,score:200},minelayer:{hp:360,r:43,score:180},mine:{hp:14,r:22,score:10},projector:{hp:420,r:43,score:220},node:{hp:bossPartRules.hp,r:bossPartRules.radius,score:bossPartRules.score}};
+export const lootLife=(l:Loot)=>l.trialReward||l.encounterReward!==undefined||(l.bossPartReward??0)>0?30:18;
 /** Deterministic free-flight rules. Rendering, UI, audio and randomness do not share clocks. */
 export class FlightWorld{
  readonly assembly=new Assembly();
@@ -27,14 +28,15 @@ export class FlightWorld{
  readonly contribution:Record<string,number>={};fields:TechField[]=[];private railContacts=0;private railCooldown=0;private lensContacts=0;private coilCasts=0;private wellContacts=0;private lensCooldown=0;private novaCooldown=0;private wellCooldown=0;private satelliteTimer=0;
  encounter?:FlightEncounter;readonly encounterHistory:EncounterRecord[]=[];encountersStarted=0;encountersWon=0;ordnanceCleared=0;minesDeployed=0;shieldDamage=0;private encounterSector=-1;airspaceFormations=0;airspaceShots=0;private maneuverSector=-1;
  trial?:{id:TrialId;progress:number;completed:boolean;rewarded:boolean;claimed:boolean;rewardId?:number;pending?:{x:number;y:number}};
- private readonly keystoneWins=new Set<string>();
+ private readonly keystoneWins=new Set<string>();private readonly bossTactics=new Set<string>();
+ bossAssembly?:BossAssembly;bossModulesBroken=0;bossSalvageIssued=0;bossSalvageIssuedAmount=0;bossSalvageCollected=0;private bossSalvage:BossSalvage[]=[];
  target?:string;private rng:number;private serial=0;private wave=0;private spawnTimer=1;private shotTimer=0;private arcTimer=0;private laserTimer=0;private railTimer=0;private empTimer=5;private sunTimer=4;private shots=0;private stormHits=0;private dryKills=0;private nextAward=300;
  constructor(seed=Date.now()){this.rng=seed>>>0||1;}
  random(){let x=this.rng;x^=x<<13;x^=x>>>17;x^=x<<5;this.rng=x>>>0;return this.rng/4294967296;}
  start(id:string){if(this.time||this.assembly.installed.size||!['split','coil','laser'].includes(id))return false;const p=parts[['split','coil','laser'].indexOf(id)];this.assembly.inventory[p]=2;const ok=this.install(id);if(ok)this.trial={id:starterTrial[id],progress:0,completed:false,rewarded:false,claimed:false};return ok;}
  private advanceTrial(id:TrialId,at:{x:number;y:number}){const t=this.trial;if(!t||t.id!==id||t.completed||this.phase==='dead')return;t.progress++;if(t.progress>=trials[id].goal){t.completed=true;t.pending={x:at.x,y:at.y};this.tryTrialReward();}}
  private tryTrialReward(){const t=this.trial;if(!t?.pending||t.rewarded||this.phase==='dead')return;const info=trials[t.id],drop=this.addDrop(t.pending.x,t.pending.y,info.part,info.reward);if(!drop)return;drop.trialReward=true;drop.age=0;t.pending=undefined;t.rewarded=true;t.rewardId=drop.id;this.notice={title:'航线达成 · '+info.name,detail:`${info.reward}${{alloy:'弹芯',coil:'线圈',lens:'透镜'}[info.part]}已投送 · 飞近拾取`,time:3,icon:info.icon};this.events.push({type:'reward',value:t.id});}
- careerFacts(){return{kills:this.kills,bossKills:this.bossKills,score:this.score,trialCompleted:this.trial?.completed?this.trial.id:undefined,keystoneWins:[...this.keystoneWins]};}
+ careerFacts(){return{kills:this.kills,bossKills:this.bossKills,score:this.score,trialCompleted:this.trial?.completed?this.trial.id:undefined,keystoneWins:[...this.keystoneWins],bossTactics:[...this.bossTactics]};}
  install(id:string){const was=this.assembly.has(id);if(this.phase==='dead'||this.player.hp<=0||!this.assembly.install(id))return false;if(this.target===id)this.target=undefined;this.fx({kind:'install',x:this.player.x,y:this.player.y,size:100,color:'#a9f3e5',life:.8});this.notice={title:was?'组件精校 +1':'新组件已装配',detail:id,time:2,icon:undefined};this.events.push({type:'upgrade',value:id});return true;}
  private fx(e:Omit<Effect,'age'>){if(this.effects.length>=F.fxLimit){const index=this.effects.findIndex(f=>!f.hostile);if(index>=0)this.effects.splice(index,1);else if(!e.hostile)return;else this.effects.shift();}this.effects.push({...e,age:0});}
  private bullet(x:number,y:number,vx:number,vy:number,damage:number,hostile=false,style:Bullet['style']='pulse',pierce=0,explosive=false,sourceEnemy?:number){
@@ -48,6 +50,37 @@ export class FlightWorld{
  private gunCombination(b:Bullet){const p=flightProfile(this.assembly).breakthrough;if(!p.railburst||b.damageSource||b.style==='rail')return;this.railContacts=Math.min(p.railHits,this.railContacts+1);if(this.railContacts<p.railHits||this.railCooldown>0||this.bullets.filter(b=>!b.hostile).length>F.bulletLimit-3)return;this.railContacts=0;this.railCooldown=p.railCooldown;for(const side of[-1,0,1]){const shot=this.bullet(this.player.x+side*26,this.player.y-42,side*150,-1200,p.railDamage,false,'rail',2);if(shot)shot.damageSource='railburst';}this.events.push({type:'laser'});}
  private updateFields(dt:number){const p=flightProfile(this.assembly).breakthrough;for(const f of this.fields){f.age+=dt;if(f.kind==='reflect'){f.x=this.player.x;f.y=this.player.y;}else if(f.age<f.life){f.tick-=dt;if(f.tick<=0){f.tick=p.wellInterval;for(const offset of[0,Math.PI/2]){const a=f.age*1.4+offset,dx=Math.cos(a)*f.radius,dy=Math.sin(a)*f.radius;this.beam({x:f.x-dx,y:f.y-dy},{x:f.x+dx,y:f.y+dy},p.wellDamage,'lightwell');}}}}this.fields=this.fields.filter(f=>f.age<f.life&&(f.kind!=='reflect'||f.remaining>0));}
  private spawn(kind:EnemyKind,x:number,y=-60){if(this.enemies.length>=F.enemyLimit)return;const s=stats[kind],hp=s.hp*(1+this.sector*.4),enemy:Enemy={id:++this.serial,kind,x,y,px:x,py:y,hp,maxHp:hp,r:s.r,age:0,timer:kind==='drone'?2.1:1.4,angle:0,seed:this.random()*Math.PI*2,burn:0,burnTick:0,hit:0};this.enemies.push(enemy);return enemy;}
+ private beginBoss(){
+  const boss=this.spawn('boss',360,-140);if(!boss)return;
+  this.bossAssembly={parent:boss.id,sector:this.sector,deployed:false,nodes:[],broken:[],shots:[0,0],earlyDisarm:false,ended:false};this.deployBossParts();
+ }
+ private deployBossParts(){
+  const state=this.bossAssembly;if(this.phase!=='boss'||!state||state.ended||state.deployed||this.bossSalvage.length||this.enemies.length>F.enemyLimit-2)return;
+  const boss=this.enemies.find(e=>e.id===state.parent&&e.hp>0);if(!boss)return;const spec=bossPartSpec(state.sector);
+  for(const side of[-1,1]){const pos=bossPartPosition(boss,side,0),e=this.spawn('node',pos.x,pos.y)!;e.bossPart={parent:boss.id,side,kind:spec.kind};e.timer=(spec.kind==='lens'?2.1:1.6)+(side>0?.45:0);state.nodes.push(e.id);}state.deployed=true;
+ }
+ private tryBossSalvage(){
+  if(this.phase==='dead')return;for(const pending of this.bossSalvage.slice()){const l=this.addDrop(pending.x,pending.y,pending.part,pending.amount);if(!l)break;l.bossPartReward=(l.bossPartReward??0)+pending.amount;l.age=0;this.bossSalvageIssued++;this.bossSalvageIssuedAmount+=pending.amount;this.bossSalvage.splice(this.bossSalvage.indexOf(pending),1);}
+ }
+ private breakBossPart(e:Enemy){
+  const state=this.bossAssembly;if(!e.bossPart||!state||state.ended||state.parent!==e.bossPart.parent||!state.nodes.includes(e.id)||state.broken.includes(e.id))return;
+  const boss=this.enemies.find(n=>n.id===state.parent&&n.hp>0);if(!boss)return;state.approach??='disarm';state.broken.push(e.id);this.bossModulesBroken++;this.score+=bossPartRules.score;
+  if(state.approach==='disarm'&&state.broken.length===2&&boss.hp>=boss.maxHp*.5)state.earlyDisarm=true;
+  this.bossSalvage.push({node:e.id,x:e.x,y:e.y,part:bossPartSpec(state.sector).part,amount:bossPartReward(state)});this.tryBossSalvage();
+  this.fx({kind:'reactor',x:e.x,y:e.y,size:90,color:'#a0f3ff',life:.7});this.events.push({type:'kill'});this.awardScore(e);
+ }
+ private finishBossParts(boss:Enemy){
+  const state=this.bossAssembly;if(!state||state.parent!==boss.id||state.ended)return;
+  if(state.approach==='disarm'&&state.earlyDisarm)this.bossTactics.add('disarm');else if(state.approach==='core')this.bossTactics.add('core');state.ended=true;
+  for(const e of this.enemies)if(e.bossPart?.parent===boss.id||e.bossMine===boss.id){if(e.hp>0&&e.bossPart)this.fx({kind:'reactor',x:e.x,y:e.y,size:70,color:'#b4eaff',life:.5});e.hp=0;}
+ }
+ private bossPartShot(e:Enemy){
+  const state=this.bossAssembly,part=e.bossPart;if(this.phase==='dead'||!state||state.ended||!part||state.parent!==part.parent||!this.enemies.some(n=>n.id===part.parent&&n.hp>0))return;
+  const index=state.nodes.indexOf(e.id);if(index<0)return;const origins=bossPartMuzzles(e),speed=210+Math.min(90,this.sector*12);
+  if(part.kind==='gun'){const aim=Math.atan2(this.player.y-e.y,this.player.x-e.x);for(let i=0;i<3;i++){const p=origins[i],a=aim+(i-1)*.18;if(this.bullet(p.x,p.y,Math.cos(a)*speed*1.15,Math.sin(a)*speed*1.15,1,true,'enemy',0,false,e.id))state.shots[index]++;}e.timer=bossPartRules.gunInterval;}
+  else if(part.kind==='lens'){const p=origins[0],a=Math.atan2((e.aimY??this.player.y)-p.y,(e.aimX??this.player.x)-p.x),end={x:p.x+Math.cos(a)*1600,y:p.y+Math.sin(a)*1600};this.fx({kind:'laser',x:p.x,y:p.y,points:[p,end],size:12,color:'#ff927b',life:bossPartRules.lensLife,hostile:true});state.shots[index]++;if(segmentDistance(this.player.x,this.player.y,p.x,p.y,end.x,end.y)<F.playerRadius+6)this.hurt();e.aimX=undefined;e.aimY=undefined;e.timer=bossPartRules.lensInterval;}
+  else{const p=origins[0],mine=this.spawn('mine',p.x,p.y);if(mine){mine.bossMine=part.parent;this.minesDeployed++;state.shots[index]++;this.fx({kind:'spark',x:p.x,y:p.y,size:30,color:'#ffc78a',life:.2});}e.timer=bossPartRules.mineInterval;}
+ }
  private tryEncounter(){
   if(this.phase!=='running'||this.sectorTime<18||this.sectorTime>38||this.encounterSector===this.sector||this.encounter?.pending)return;
   const kind:EncounterKind=(['arms','mines','shield']as const)[this.sector%3],needed=kind==='shield'?3:1;if(this.enemies.length>F.enemyLimit-needed)return;
@@ -83,6 +116,7 @@ export class FlightWorld{
  private enemyShot(e:Enemy){
   const dx=(e.kind==='lancer'?e.aimX??this.player.x:this.player.x)-e.x,dy=(e.kind==='lancer'?e.aimY??this.player.y:this.player.y)-e.y,a=Math.atan2(dy,dx),speed=210+Math.min(90,this.sector*12);
   const emit=(angle:number,scale=1,style:Bullet['style']='enemy')=>this.bullet(e.x,e.y+e.r*.6,Math.cos(angle)*speed*scale,Math.sin(angle)*speed*scale,1,true,style);
+  if(e.bossPart){this.bossPartShot(e);return;}
   if(e.maneuver){
    const m=e.maneuver,origin=maneuverMuzzle(e),fire=(angle:number,scale=1,style:Bullet['style']='enemy')=>{if(this.bullet(origin.x,origin.y,Math.cos(angle)*speed*scale,Math.sin(angle)*speed*scale,1,true,style,0,false,e.id))this.airspaceShots++;};
    if(m.kind==='sweep'){const direction=Math.PI/2+Math.sin(e.angle)*.65;for(const offset of[-.16,0,.16])fire(direction+offset,1.1);e.angle+=.65*m.side;e.timer=1.65;}
@@ -102,9 +136,10 @@ export class FlightWorld{
    const end={x:e.x+Math.cos(a)*1600,y:e.y+Math.sin(a)*1600};this.fx({kind:'laser',x:e.x,y:e.y,points:[{x:e.x,y:e.y},end],size:11,color:'#ff7868',life:.2,hostile:true});
    if(segmentDistance(this.player.x,this.player.y,e.x,e.y,end.x,end.y)<F.playerRadius+5)this.hurt();e.timer=3.1;e.aimX=undefined;e.aimY=undefined;
   }else if(e.kind==='boss'){
-   if(this.sector%3===0){for(let i=0;i<14;i++)emit(e.angle+i*Math.PI/7,.8,'orb');for(const d of[-.3,-.15,0,.15,.3])emit(a+d,1.25);}
-   else if(this.sector%3===1){for(const side of[-1,1]){const x=e.x+side*90,y=e.y+40,aim=Math.atan2(this.player.y-y,this.player.x-x);for(const d of[-.34,-.17,0,.17,.34])this.bullet(x,y,Math.cos(aim+d)*speed*1.3,Math.sin(aim+d)*speed*1.3,1,true,'enemy');}}
-   else{for(let i=0;i<10;i++)emit(e.angle+i*Math.PI/5,.55,'orb');for(const side of[-1,1])for(const d of[-.1,0,.1])this.bullet(e.x+side*80,e.y+50,Math.sin(d)*speed,Math.cos(d)*speed*1.6,1,true);}
+   const modular=this.bossAssembly?.parent===e.id&&this.bossAssembly.deployed;
+   if(this.sector%3===0){for(let i=0;i<14;i++)emit(e.angle+i*Math.PI/7,.8,'orb');if(!modular)for(const d of[-.3,-.15,0,.15,.3])emit(a+d,1.25);}
+   else if(this.sector%3===1){for(const side of[-1,1]){const x=e.x+side*90,y=e.y+40,aim=Math.atan2(this.player.y-y,this.player.x-x);for(const d of(modular?[-.17,0,.17]:[-.34,-.17,0,.17,.34]))this.bullet(x,y,Math.cos(aim+d)*speed*1.3,Math.sin(aim+d)*speed*1.3,1,true,'enemy');}}
+   else{for(let i=0;i<10;i++)emit(e.angle+i*Math.PI/5,.55,'orb');if(!modular)for(const side of[-1,1])for(const d of[-.1,0,.1])this.bullet(e.x+side*80,e.y+50,Math.sin(d)*speed,Math.cos(d)*speed*1.6,1,true);}
    e.angle+=.21;e.timer=e.hp<e.maxHp*.5?1.05:1.6;
    if(this.enemies.length<5){this.spawn(this.sector%2?'diver':'sentry',100,-80);this.spawn('drone',620,-150);}
   }
@@ -112,8 +147,10 @@ export class FlightWorld{
  private hurt(){if(this.player.invulnerable>0||this.phase==='dead')return;this.player.hp--;this.damageTaken++;this.player.invulnerable=1.25;this.events.push({type:'hurt'});this.fx({kind:'ring',x:this.player.x,y:this.player.y,size:90,color:'#ff806d',life:.4});if(this.player.hp<=0){this.phase='dead';this.finishEncounter(false);this.events.push({type:'death'});this.fx({kind:'explosion',x:this.player.x,y:this.player.y,size:170,color:'#ffbe70',life:.8});}}
  private addDrop(x:number,y:number,part:Loot['part'],amount=1){if(this.loot.length>=F.lootLimit){const same=this.loot.find(l=>l.part===part);if(same){same.amount+=amount;return same;}return undefined;}const drop:Loot={id:++this.serial,x:clamp(x,40,680),y:clamp(y,158,1160),part,amount,age:0,phase:this.random()*6.28};this.loot.push(drop);return drop;}
  private randomPart():Part{const roll=this.random();if(this.target&&roll<.55){const cost=this.assembly.cost(this.target);const needed=parts.filter(p=>(cost[p]??0)>this.assembly.inventory[p]);if(needed.length)return needed[Math.floor(this.random()*needed.length)];}return parts[Math.floor(this.random()*parts.length)];}
- private hit(e:Enemy,amount:number,source:string){if(e.hp<=0||this.player.hp<=0||this.phase==='dead')return;if((e.shield??0)>0){const absorbed=Math.min(e.shield!,amount);e.shield!-=absorbed;this.shieldDamage+=absorbed;amount-=absorbed;e.hit=.1;this.fx({kind:'spark',x:e.x,y:e.y,size:40,color:'#91eaff',life:.12});if(amount<=0)return;}const dealt=Math.min(e.hp,amount);e.hp-=amount;e.hit=.07;const key=this.assembly.keystone;if(key&&(source===key||key==='arsenal'&&source==='guns'||source===this.assembly.breakthrough))e.keystoneHit=key;this.contribution[source]=(this.contribution[source]??0)+dealt;if(e.hp>0)return;
+ private hit(e:Enemy,amount:number,source:string){if(e.hp<=0||this.player.hp<=0||this.phase==='dead')return;if((e.shield??0)>0){const absorbed=Math.min(e.shield!,amount);e.shield!-=absorbed;this.shieldDamage+=absorbed;amount-=absorbed;e.hit=.1;this.fx({kind:'spark',x:e.x,y:e.y,size:40,color:'#91eaff',life:.12});if(amount<=0)return;}const dealt=Math.min(e.hp,amount);e.hp-=amount;e.hit=.07;const key=this.assembly.keystone;if(key&&(source===key||key==='arsenal'&&source==='guns'||source===this.assembly.breakthrough))e.keystoneHit=key;this.contribution[source]=(this.contribution[source]??0)+dealt;const state=this.bossAssembly;if(e.kind==='boss'&&state?.parent===e.id&&state.deployed&&!state.approach&&e.hp<=e.maxHp*.75&&state.nodes.length===2&&state.nodes.every(id=>this.enemies.some(n=>n.id===id&&n.hp>0)))state.approach='core';if(e.hp>0)return;
+  if(e.kind==='node')this.breakBossPart(e);if(e.kind==='boss')this.finishBossParts(e);
   const combo=flightProfile(this.assembly).breakthrough;if(e.kind!=='mine'&&combo.novaecho&&(e.burn>0||source==='burn')&&source!=='novaecho'&&this.novaCooldown<=0){this.novaCooldown=combo.novaCooldown;const targets=this.enemies.filter(n=>n.hp>0&&n.y>=155&&n.y<=1280).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y)).slice(0,4);for(let i=0;i<4;i++){const target=targets[i],angle=target?Math.atan2(target.y-e.y,target.x-e.x):-Math.PI/2+(i-1.5)*.45;this.beam({x:e.x,y:e.y},{x:e.x+Math.cos(angle)*1100,y:e.y+Math.sin(angle)*1100},combo.novaDamage,'novaecho');}}
+  if(e.kind==='node')return;
   if(e.kind==='mine'){this.ordnanceCleared++;this.score+=stats.mine.score;this.fx({kind:'reactor',x:e.x,y:e.y,size:100,color:'#9cf5ff',life:.45});this.events.push({type:'kill'});for(const other of this.enemies)if(other.id!==e.id&&other.hp>0&&Math.hypot(other.x-e.x,other.y-e.y)<115)this.hit(other,35*(1+this.sector*.2),'mineblast');this.awardScore(e);return;}
   this.kills++;this.score+=stats[e.kind].score;this.dryKills++;if(source==='bounce')this.advanceTrial('ricochet',e);if(e.kind==='boss'&&e.keystoneHit)this.keystoneWins.add(e.keystoneHit);
   this.fx({kind:'explosion',x:e.x,y:e.y,size:e.kind==='boss'?280:e.r*2.7,color:'#ffc383',life:.65});this.events.push({type:e.kind==='boss'?'boss-kill':'kill'});
@@ -156,22 +193,23 @@ export class FlightWorld{
  step(dt:number,targetX=this.player.x,targetY=this.player.y){
   if(this.phase==='dead'||!Number.isFinite(dt)||dt<=0)return;dt=clamp(dt,0,1/30);this.time+=dt;this.sectorTime+=dt;this.railCooldown=Math.max(0,this.railCooldown-dt);this.lensCooldown=Math.max(0,this.lensCooldown-dt);this.novaCooldown=Math.max(0,this.novaCooldown-dt);this.wellCooldown=Math.max(0,this.wellCooldown-dt);this.satelliteTimer=Math.max(0,this.satelliteTimer-dt);this.notice.time=Math.max(0,this.notice.time-dt);
   const p=this.player,parameters=flightProfile(this.assembly);p.px=p.x;p.py=p.y;const dx=clamp(targetX,32,688)-p.x,dy=clamp(targetY,F.minY,F.maxY)-p.y,d=Math.hypot(dx,dy),f=Math.min(1,F.speed*dt/(d||1));p.x+=dx*f;p.y+=dy*f;p.invulnerable=Math.max(0,p.invulnerable-dt);
-  this.spawnTimer-=dt;if(this.phase==='running'&&this.sectorTime>=60){if(this.enemies.length<F.enemyLimit){this.phase='boss';this.spawn('boss',360,-140);this.notice={title:'旗舰接近',detail:'击破获得三系零件 · 注意实际弹幕',time:3};}}
+  this.spawnTimer-=dt;if(this.phase==='running'&&this.sectorTime>=60){if(this.enemies.length<F.enemyLimit){this.phase='boss';this.beginBoss();this.notice={title:'旗舰接近',detail:'击破获得三系零件 · 注意实际弹幕',time:3};}}
   else if(this.phase==='running'&&this.spawnTimer<=0){this.spawnTimer=Math.max(1.45,3.3-this.sector*.18);this.spawnWave();}
-  this.tryEncounter();
+  this.tryEncounter();this.deployBossParts();
   for(const e of this.enemies){e.px=e.x;e.py=e.y;e.age+=dt;e.hit=Math.max(0,e.hit-dt);if(e.y>155)e.timer-=dt;
    if(e.retreat){e.y+=250*dt;}
+   else if(e.bossPart){const parent=this.enemies.find(n=>n.id===e.bossPart!.parent&&n.hp>0);if(parent){const at=bossPartPosition(parent,e.bossPart.side,e.age);e.x=at.x;e.y=at.y;}else e.hp=0;}
    else if(e.maneuver){const at=maneuverPose(e.maneuver,e.age);e.x=at.x;e.y=at.y;}
    else if(e.kind==='courier'){e.y+=90*dt;e.x+=Math.cos(e.seed+e.age*1.3)*110*dt;}
    else if(e.kind==='minelayer'){e.y+=(e.y<275?120:e.age>11?145:26)*dt;e.x+=Math.cos(e.seed+e.age*.8)*105*dt;}
    else if(e.kind==='mine'){e.y+=45*dt;}
    else if(e.kind==='projector'){e.y+=(e.y<275?120:e.age>11?145:20)*dt;e.x+=Math.cos(e.seed+e.age*.7)*26*dt;}
    else if(e.protectedBy!==undefined){const source=this.enemies.find(n=>n.id===e.protectedBy&&n.hp>0);if(source){e.x=source.x+e.angle*145;e.y=source.y+100;}}
-   else if(e.kind==='boss'){e.y=Math.min(285,e.y+130*dt);e.x=360+Math.sin(e.age*.5)*190;}
+   else if(e.kind==='boss'){e.y=Math.min(285,e.y+130*dt);e.x=360+Math.sin(e.age*.5)*(this.bossAssembly?.parent===e.id?bossPartRules.swing:190);}
    else if(e.kind==='drone'){e.y+=130*dt;e.x+=Math.cos(e.seed+e.age*2)*45*dt;}
    else if(e.kind==='diver'){e.y+=(e.age>1.8?300:90)*dt;e.x+=Math.sin(e.seed)*95*dt;}
    else{e.y+=((e.age<2||e.age>8)?105:12)*dt;e.x+=Math.cos(e.seed+e.age)*30*dt;}
-   e.x=clamp(e.x,32,688);if(e.kind==='lancer'&&e.y>155&&e.timer<=.65&&e.aimX===undefined){e.aimX=p.x;e.aimY=p.y;}if(e.hp>0&&e.y>155&&!e.retreat){if(e.kind==='mine'){if(e.age>=.9&&(e.age>=4.5||Math.hypot(e.x-p.x,e.y-p.y)<145))this.enemyShot(e);}else if(e.timer<=0&&(e.kind!=='diver'||!!e.maneuver))this.enemyShot(e);}
+   e.x=clamp(e.x,32,688);if((e.kind==='lancer'||e.bossPart?.kind==='lens')&&e.y>155&&e.timer<=(e.bossPart?bossPartRules.lensLock:.65)&&e.aimX===undefined){e.aimX=p.x;e.aimY=p.y;}if(e.hp>0&&e.y>155&&!e.retreat){if(e.kind==='mine'){if(e.age>=.9&&(e.age>=4.5||Math.hypot(e.x-p.x,e.y-p.y)<145))this.enemyShot(e);}else if(e.timer<=0&&(e.kind!=='diver'||!!e.maneuver))this.enemyShot(e);}
    if(e.burn>0){e.burnTick-=dt;if(e.burnTick<=0){e.burnTick=parameters.optical.burnInterval;e.burn--;this.hit(e,parameters.optical.burnDamage,'burn');}}
    if(e.hp>0&&(e.kind!=='mine'||e.age>=.9)&&segmentDistance(0,0,e.px-p.px,e.py-p.py,e.x-p.x,e.y-p.y)<e.r*.7+F.playerRadius)this.hurt();
   }
@@ -189,10 +227,10 @@ export class FlightWorld{
    }
   }
   for(const e of this.effects)if(e.hostile&&e.points&&e.age<e.life){const[a,b]=e.points;if(segmentDistance(p.x,p.y,a.x,a.y,b.x,b.y)<F.playerRadius+e.size/2)this.hurt();}
-  if(p.hp>0)for(const l of this.loot){l.age+=dt;if(l.age>=lootLife(l)||l.y>=1320)continue;l.y+=22*dt;const dx=p.x-l.x,dy=p.y-l.y,d=Math.hypot(dx,dy);if(d<155){l.x+=dx/d*360*dt||0;l.y+=dy/d*360*dt||0;}if(Math.hypot(l.x-p.x,l.y-p.y)<30){if(l.part==='repair')p.hp=Math.min(p.maxHp,p.hp+1);else{this.assembly.inventory[l.part]+=l.amount;this.partsCollected+=l.amount;}if(this.trial?.rewardId===l.id)this.trial.claimed=true;if(l.encounterReward!==undefined){if(this.encounter?.id===l.encounterReward)this.encounter.claimed=true;const record=this.encounterHistory.find(r=>r.id===l.encounterReward);if(record)record.claimed=true;}l.age=99;this.fx({kind:'pickup',x:p.x,y:p.y,size:56,color:l.part==='repair'?'#9df0ba':l.part==='alloy'?'#ffd28a':l.part==='coil'?'#c5a4ff':'#8bf3ff',life:.55,icon:l.part==='repair'?undefined:l.part==='alloy'?3:l.part==='coil'?1:2,label:l.part==='repair'?'+ 维修':`+${l.amount}`});this.events.push({type:'pickup',value:l.part});}}
-  this.enemies=this.enemies.filter(e=>e.hp>0&&e.y<1390);this.bullets=this.bullets.filter(b=>b.life>0&&b.age<b.life&&b.y>-100&&b.y<1390&&b.x>-120&&b.x<840);this.loot=this.loot.filter(l=>l.age<lootLife(l)&&l.y<1320);this.tryTrialReward();this.updateEncounter();this.tryEncounterReward();
+  if(p.hp>0)for(const l of this.loot){l.age+=dt;if(l.age>=lootLife(l)||l.y>=1320)continue;l.y+=22*dt;const dx=p.x-l.x,dy=p.y-l.y,d=Math.hypot(dx,dy);if(d<155){l.x+=dx/d*360*dt||0;l.y+=dy/d*360*dt||0;}if(Math.hypot(l.x-p.x,l.y-p.y)<30){if(l.part==='repair')p.hp=Math.min(p.maxHp,p.hp+1);else{this.assembly.inventory[l.part]+=l.amount;this.partsCollected+=l.amount;}if(this.trial?.rewardId===l.id)this.trial.claimed=true;if(l.encounterReward!==undefined){if(this.encounter?.id===l.encounterReward)this.encounter.claimed=true;const record=this.encounterHistory.find(r=>r.id===l.encounterReward);if(record)record.claimed=true;}this.bossSalvageCollected+=l.bossPartReward??0;l.age=99;this.fx({kind:'pickup',x:p.x,y:p.y,size:56,color:l.part==='repair'?'#9df0ba':l.part==='alloy'?'#ffd28a':l.part==='coil'?'#c5a4ff':'#8bf3ff',life:.55,icon:l.part==='repair'?undefined:l.part==='alloy'?3:l.part==='coil'?1:2,label:l.part==='repair'?'+ 维修':`+${l.amount}`});this.events.push({type:'pickup',value:l.part});}}
+  this.enemies=this.enemies.filter(e=>e.hp>0&&e.y<1390);this.bullets=this.bullets.filter(b=>b.life>0&&b.age<b.life&&b.y>-100&&b.y<1390&&b.x>-120&&b.x<840);this.loot=this.loot.filter(l=>l.age<lootLife(l)&&l.y<1320);this.tryTrialReward();this.updateEncounter();this.tryEncounterReward();this.tryBossSalvage();
   for(const e of this.effects)e.age+=dt;this.effects=this.effects.filter(e=>e.age<e.life);
  }
  drainEvents(){return this.events.splice(0);}
- diagnostics(){return{airspace:{...airspacePlan(this.sector),formations:this.airspaceFormations,shots:this.airspaceShots,active:this.enemies.filter(e=>e.hp>0&&e.maneuver).map(e=>e.id)},breakthrough:this.assembly.breakthrough,breakthroughProgress:this.breakthroughProgress(),fields:this.fields.map(f=>({...f})),encounter:this.encounter?{...this.encounter,pending:this.encounter.pending?{...this.encounter.pending}:undefined}:null,encounterHistory:this.encounterHistory.map(e=>({...e})),encountersStarted:this.encountersStarted,encountersWon:this.encountersWon,ordnanceCleared:this.ordnanceCleared,minesDeployed:this.minesDeployed,shieldDamage:this.shieldDamage,trial:this.trial?{...this.trial,pending:this.trial.pending?{...this.trial.pending}:undefined}:null,careerFacts:this.careerFacts(),time:this.time,sector:this.sector,sectorTime:this.sectorTime,phase:this.phase,player:{...this.player},kills:this.kills,score:this.score,nextAward:this.nextAward,scoreProgress:this.scoreProgress,scoreAwards:this.scoreAwards,partsCollected:this.partsCollected,installed:[...this.assembly.installed],keystone:this.assembly.keystone,inventory:{...this.assembly.inventory},calibrated:{...this.assembly.calibrated},ready:this.assembly.ready.map(t=>t.id),target:this.target,contribution:{...this.contribution},bossKills:this.bossKills,damageTaken:this.damageTaken,enemies:this.enemies.map(e=>({...e})),loot:this.loot.map(l=>({...l})),counts:{bullets:this.bullets.filter(b=>!b.hostile).length,hostiles:this.bullets.filter(b=>b.hostile).length,effects:this.effects.length}};}
+ diagnostics(){return{bossAssembly:this.bossAssembly?{...this.bossAssembly,nodes:[...this.bossAssembly.nodes],broken:[...this.bossAssembly.broken],shots:[...this.bossAssembly.shots]}:null,bossModulesBroken:this.bossModulesBroken,bossSalvageIssued:this.bossSalvageIssued,bossSalvageIssuedAmount:this.bossSalvageIssuedAmount,bossSalvageCollected:this.bossSalvageCollected,bossSalvagePending:this.bossSalvage.map(e=>({...e})),airspace:{...airspacePlan(this.sector),formations:this.airspaceFormations,shots:this.airspaceShots,active:this.enemies.filter(e=>e.hp>0&&e.maneuver).map(e=>e.id)},breakthrough:this.assembly.breakthrough,breakthroughProgress:this.breakthroughProgress(),fields:this.fields.map(f=>({...f})),encounter:this.encounter?{...this.encounter,pending:this.encounter.pending?{...this.encounter.pending}:undefined}:null,encounterHistory:this.encounterHistory.map(e=>({...e})),encountersStarted:this.encountersStarted,encountersWon:this.encountersWon,ordnanceCleared:this.ordnanceCleared,minesDeployed:this.minesDeployed,shieldDamage:this.shieldDamage,trial:this.trial?{...this.trial,pending:this.trial.pending?{...this.trial.pending}:undefined}:null,careerFacts:this.careerFacts(),time:this.time,sector:this.sector,sectorTime:this.sectorTime,phase:this.phase,player:{...this.player},kills:this.kills,score:this.score,nextAward:this.nextAward,scoreProgress:this.scoreProgress,scoreAwards:this.scoreAwards,partsCollected:this.partsCollected,installed:[...this.assembly.installed],keystone:this.assembly.keystone,inventory:{...this.assembly.inventory},calibrated:{...this.assembly.calibrated},ready:this.assembly.ready.map(t=>t.id),target:this.target,contribution:{...this.contribution},bossKills:this.bossKills,damageTaken:this.damageTaken,enemies:this.enemies.map(e=>({...e})),loot:this.loot.map(l=>({...l})),counts:{bullets:this.bullets.filter(b=>!b.hostile).length,hostiles:this.bullets.filter(b=>b.hostile).length,effects:this.effects.length}};}
 }

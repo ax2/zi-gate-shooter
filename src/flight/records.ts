@@ -18,14 +18,16 @@ export const achievements=[
  {id:'master-arsenal',name:'蜂群认证',icon:4,detail:'以蜂群武库实际击破旗舰'},
  {id:'master-tempest',name:'超导认证',icon:13,detail:'以超导风暴实际击破旗舰'},
  {id:'master-sun',name:'日冕认证',icon:14,detail:'以日冕阵列实际击破旗舰'},
+ {id:'tactic-disarm',name:'拆舱先锋',icon:4,detail:'优先拆双舱，主舰半血前完成并取胜'},
+ {id:'tactic-core',name:'直取中枢',icon:14,detail:'拆舱前先打掉主舰25%耐久，并取胜'},
  {id:'trinity',name:'三相工程师',icon:15,detail:'不同出击中完成三种终极认证'},
 ]as const;
 const keys=['arsenal','tempest','sun'];
 const counter=(v:unknown)=>typeof v==='number'&&Number.isFinite(v)?Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.floor(v))):0;
 const unique=(v:unknown,allowed:readonly string[])=>Array.isArray(v)?[...new Set(v.filter((x):x is string=>typeof x==='string'&&allowed.includes(x)))]:[];
 export function readFlightCareer(raw:unknown):FlightCareer{const r=raw&&typeof raw==='object'?raw as Record<string,unknown>:{};return{version:1,kills:counter(r.kills),bossKills:counter(r.bossKills),best:counter(r.best),trials:unique(r.trials,Object.keys(trials))as TrialId[],mastery:unique(r.mastery,keys),badges:unique(r.badges,achievements.map(a=>a.id))};}
-export function achievementProgress(id:string,c:FlightCareer){if(id==='hundred')return{current:Math.min(c.kills,100),target:100};if(id==='thousand')return{current:Math.min(c.kills,1000),target:1000};if(id==='captain')return{current:Math.min(c.bossKills,5),target:5};if(id==='score')return{current:Math.min(c.best,10000),target:10000};if(id==='trinity')return{current:c.mastery.length,target:3};return{current:id.startsWith('trial-')?Number(c.trials.includes(id.slice(6)as TrialId)):Number(c.mastery.includes(id.slice(7))),target:1};}
-export interface CareerFacts{kills:number;bossKills:number;score:number;trialCompleted?:TrialId;keystoneWins:readonly string[]}
+export function achievementProgress(id:string,c:FlightCareer){if(id.startsWith('tactic-'))return{current:Number(c.badges.includes(id)),target:1};if(id==='hundred')return{current:Math.min(c.kills,100),target:100};if(id==='thousand')return{current:Math.min(c.kills,1000),target:1000};if(id==='captain')return{current:Math.min(c.bossKills,5),target:5};if(id==='score')return{current:Math.min(c.best,10000),target:10000};if(id==='trinity')return{current:c.mastery.length,target:3};return{current:id.startsWith('trial-')?Number(c.trials.includes(id.slice(6)as TrialId)):Number(c.mastery.includes(id.slice(7))),target:1};}
+export interface CareerFacts{kills:number;bossKills:number;score:number;trialCompleted?:TrialId;keystoneWins:readonly string[];bossTactics?:readonly string[]}
 /** Per-run deltas prevent pause/menu/frame polling from counting the run twice. */
 export class CareerLedger{
  readonly data:FlightCareer;dirty=false;private seen={kills:0,bossKills:0};
@@ -33,7 +35,7 @@ export class CareerLedger{
  beginRun(){this.seen={kills:0,bossKills:0};}
  sync(f:CareerFacts){const c=this.data,before=JSON.stringify(c),kills=counter(f.kills),boss=counter(f.bossKills);c.kills=counter(c.kills+Math.max(0,kills-this.seen.kills));c.bossKills=counter(c.bossKills+Math.max(0,boss-this.seen.bossKills));c.best=Math.max(c.best,counter(f.score));this.seen={kills:Math.max(this.seen.kills,kills),bossKills:Math.max(this.seen.bossKills,boss)};
   if(f.trialCompleted&&!c.trials.includes(f.trialCompleted))c.trials.push(f.trialCompleted);for(const key of f.keystoneWins)if(keys.includes(key)&&!c.mastery.includes(key))c.mastery.push(key);
-  const earned:string[]=[];for(const a of achievements){const p=achievementProgress(a.id,c);if(p.current>=p.target&&!c.badges.includes(a.id)){c.badges.push(a.id);earned.push(a.id);}}this.dirty ||= JSON.stringify(c)!==before;return earned;
+  const earned:string[]=[];for(const tactic of (boss>0?f.bossTactics??[]:[])){if(!['disarm','core'].includes(tactic))continue;const id='tactic-'+tactic;if(!c.badges.includes(id)){c.badges.push(id);earned.push(id);}}for(const a of achievements){const p=achievementProgress(a.id,c);if(p.current>=p.target&&!c.badges.includes(a.id)){c.badges.push(a.id);earned.push(a.id);}}this.dirty ||= JSON.stringify(c)!==before;return earned;
  }
  saved(){this.dirty=false;}
 }
