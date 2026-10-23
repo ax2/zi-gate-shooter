@@ -1,3 +1,4 @@
+import{flightCanvas}from'./helpers/flight-canvas';
 import{bankUpgrade}from'./helpers/flight-runtime-driver';
 import{it,expect}from'vitest';
 import{FlightRuntime}from'../src/flight/runtime';
@@ -5,7 +6,7 @@ import{flightTarget}from'./helpers/flight-driver';
 import type{FlightCareer}from'../src/flight/records';
 import type{CanvasControl}from'../src/game/canvas-runtime';
 async function setup(raw:unknown=null){let clock=0,next=(_t:number)=>{},stored=raw,fail=false,writes=0;let controls:readonly CanvasControl[]=[];const texts:string[]=[];
- const ctx=new Proxy({}, {get(_t,k){if(k==='createLinearGradient')return()=>({addColorStop(){}});return(...a:unknown[])=>{if(k==='fillText')texts.push(String(a[0]));};},set(){return true;}})as CanvasRenderingContext2D;
+ const ctx=flightCanvas(texts);
  const r=new FlightRuntime({canvas:{width:390,height:693,getContext:()=>ctx}as unknown as HTMLCanvasElement,image:async()=>({width:768,height:256})as HTMLImageElement,controls:c=>controls=c,sound(){},now:()=>clock,frame:f=>next=f,readBest:()=>0,writeBest(){},readCareer:()=>stored,writeCareer:value=>{if(fail)throw Error('storage unavailable');stored=structuredClone(value);writes++;},seed:()=>1337});r.resize(390,693,1);await r.load();r.draw();
  const frame=()=>{clock+=1000/60;next(clock);bankUpgrade(r);};return{r,texts,get controls(){return controls;},get stored(){return stored as FlightCareer;},get writes(){return writes;},set fail(v:boolean){fail=v;},frame,play(n:number){let target={x:r.world.player.x,y:r.world.player.y};for(let i=0;i<n&&r.mode==='playing';i++){if(i%6===0)target=flightTarget(r.world);const s=r.diagnostics().viewport.scale;r.touchStart(1,0,0);r.touchMove(1,(target.x-r.world.player.x)*s,(target.y-r.world.player.y)*s);frame();}},advance(n:number){for(let i=0;i<n;i++)frame();}};
 }

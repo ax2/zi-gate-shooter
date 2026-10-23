@@ -1,0 +1,11 @@
+# 自由空战材料实物图 · Stage284
+
+内置image_gen，transparent_background=true，单张三格游戏素材atlas，无商业游戏引用。源图art/source/flight-materials-v1.png（2172×724 RGBA）按字节保留；tools/export-flight-materials.mjs按原三格分别等比缩至224×224，加16px透明安全边合成768×256。输出public/assets/flight-materials-v1.png，273807字节。未改变颜色、抠图、补画或覆盖旧武器资产。生成API不作为图片编辑脚本替代，导出只用于游戏切片/尺寸。
+
+三格alloy/coil/lens依次为弹芯匣、铜绕线圈、三角玻璃透镜。同图用于场中掉落、拾取浮字/顶部回执、库存及各科技费用/追踪材料；武器能力图仍沿用既有科技图标，避免把入仓材料误认为已安装武器。物理、掉落规则与数值未变。
+
+实际偏差：生成物边缘距离小于提示15%，但三格均有透明边且导出前逐像素检查3px边缘alpha>16为0；导出额外16px边。图中卡匣为四发可见弹芯而非提示三发，材质/剪影符合弹芯容器语义，不以图上弹芯数量代表游戏材料数量，实际数量始终用UI数值。视觉签收须按运行截图，不能由源图替代。
+
+完整生成提示：
+
+Use case: stylized-concept. Asset type: ONE game-ready inventory sprite atlas for an original high-detail sci-fi mechanical vertical spaceship shooter. Create a wide 3:1 atlas, exactly three equally spaced square cells in one horizontal row, on a truly transparent background. Each object centered in its own cell with 15 percent empty margin, identical scale, clear separate silhouette, no overlaps. Cell 1 left: a compact warm brass ammunition cassette containing three clearly visible short blunt energy cartridges held in a dark titanium clamp, amber mechanical highlights. It must look like a supply part or magazine, not a complete gun, vehicle or turret. Cell 2 middle: a violet copper electromagnetic induction coil assembly, chunky circular open ring with clearly visible copper windings, titanium connector tabs and a tiny restrained violet energy core; looks like a spare electrical component, not a lightning weapon. Cell 3 right: a cyan optical prism cartridge, one large faceted blue glass lens/prism set inside an open silver triangular mechanical support bracket; looks like optical material, not a laser gun. Polished rendered game-item illustration, consistent overhead three-quarter perspective, beveled machined metal, small screws and purposeful mechanical details, strong readable silhouettes at 32px, bright lit edges against dark game background, subtle material reflections. Crisp antialiasing and genuine alpha. Keep glows restrained and inside each silhouette. No text, letters, numbers, UI frame, background scene, characters, arrows, captions, watermark, commercial game references, floating magic blobs, or blurred neon blocks.

@@ -1,3 +1,4 @@
+import{flightCanvas}from'./helpers/flight-canvas';
 import{bankUpgrade}from'./helpers/flight-runtime-driver';
 import{it,expect}from'vitest';
 import{FlightRuntime}from'../src/flight/runtime';
@@ -8,7 +9,7 @@ import{techById}from'../src/flight/technology';
 import{componentPairs}from'../src/flight/early-parts';
 import type{CanvasControl}from'../src/game/canvas-runtime';
 async function setup(){let clock=0,next=(_t:number)=>{},best=0;let controls:readonly CanvasControl[]=[];const texts:string[]=[];
- const ctx=new Proxy({}, {get(_t,k){if(k==='createLinearGradient')return()=>({addColorStop(){}});return(...args:unknown[])=>{if(k==='fillText')texts.push(String(args[0]));};},set(){return true;}})as CanvasRenderingContext2D;
+ const ctx=flightCanvas(texts);
  const r=new FlightRuntime({canvas:{width:390,height:693,getContext:()=>ctx}as unknown as HTMLCanvasElement,image:async()=>({width:768,height:256})as HTMLImageElement,controls:c=>controls=c,sound(){},now:()=>clock,frame:cb=>next=cb,readBest:()=>best,writeBest:n=>best=n,seed:()=>1337});r.resize(390,693,1);await r.load();r.draw();
  return{r,get controls(){return controls;},texts,frame(){texts.length=0;clock+=1000/60;next(clock);bankUpgrade(r);},advance(n:number){for(let i=0;i<n;i++){clock+=1000/60;next(clock);bankUpgrade(r);}}};
 }

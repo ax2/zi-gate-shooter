@@ -100,3 +100,6 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 
 ## Stage271 图示科技
 内置imagegen原创概念与16格科技插画，源图和提示见art/source/Stage-271/PROVENANCE.md；public/assets/tech-icons-v1.png为确定性1024导出，UI只读取图块，文字/连线/按钮原生绘制。候选美术，未冒称用户正式签收。
+
+## Stage284 自由空战材料实物
+内置image_gen原创一张三格透明atlas，弹芯匣/铜绕线圈/三角透镜；原始2172×724 RGBA与完整提示保留在art/source/flight-materials-v1.png和FLIGHT_MATERIALS_V1.md。确定性导出768×256/273807字节，三个原格3px透明安全边通过，各额外16px透明边。用在真实掉落、拾取、库存和各科技费用，能力插画仍原样。候选美术，真人理解度/最终美术未签收。未改物理和材料收益。
