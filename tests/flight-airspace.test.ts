@@ -24,7 +24,7 @@ it.each([[0,40,4],[1,10,4],[3,10,6],[3,40,7]])('sector%s at%s keeps%s physical s
  const w=scene(sector);w.sectorTime=time;squad(w);expect(w.enemies).toHaveLength(count);expect(w.airspaceFormations).toBe(1);expect(w.enemies.some(e=>e.maneuver)).toBe(true);
 });
 it.each([[0,3],[1,2],[2,6]]as const)('sector%s has a real distinct hostile burst of%s from its moving body', (sector,count)=>{
- const w=scene(sector),e=squad(w)[0];e.x=360;e.y=350;e.px=357;w.bullets=[];core(w).enemyShot(e);const shots=w.bullets.filter(b=>b.hostile),origin=maneuverMuzzle(e);expect(shots).toHaveLength(count);expect(shots.every(b=>b.sourceEnemy===e.id&&b.x===origin.x&&b.y===origin.y&&b.life===9)).toBe(true);expect(new Set(shots.map(b=>Math.atan2(b.vy,b.vx).toFixed(3))).size).toBe(count);expect(w.airspaceShots).toBe(count);
+ const w=scene(sector),e=squad(w)[0];e.x=360;e.y=350;e.px=357;w.bullets=[];core(w).enemyShot(e);const shots=w.bullets.filter(b=>b.hostile),origin=maneuverMuzzle(e);expect(shots).toHaveLength(count);expect(shots.every(b=>b.sourceEnemy===e.id&&b.x===origin.x&&b.y===origin.y&&b.life===(b.style==='orb'?4.5:5.5))).toBe(true);expect(new Set(shots.map(b=>Math.atan2(b.vy,b.vx).toFixed(3))).size).toBe(count);expect(w.airspaceShots).toBe(count);
 });
 it.each([0,1,2])('sector%s first actual shot occurs after visible entry and a local warm-up',sector=>{
  const w=scene(sector),e=squad(w)[0];for(const key of['shotTimer','arcTimer','laserTimer','railTimer','empTimer','sunTimer'])core(w)[key]=1e6;let visible=-1,first=-1;

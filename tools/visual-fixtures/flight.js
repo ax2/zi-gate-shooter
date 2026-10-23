@@ -10,7 +10,7 @@ const starterOnly=query.get('assembly')==='starter';
 const desiredBoss=['gun','lens','minepod'].includes(query.get('boss'))?query.get('boss'):'gun',bossPolicy=['disarm','core'].includes(query.get('policy'))?query.get('policy'):'normal';let salvageStart;
 
 const maxComponents=Math.max(1,Math.min(17,Math.floor(Number(query.get('limit'))||17))),desiredManeuver=['sweep','cross','orbit'].includes(query.get('maneuver'))?query.get('maneuver'):'sweep';
-let desiredEncounter=['arms','mines','shield'].includes(query.get('encounter'))?query.get('encounter'):'arms';
+let defenseStart=0;let desiredEncounter=['arms','mines','shield'].includes(query.get('encounter'))?query.get('encounter'):'arms';
 const canvas=document.querySelector('canvas');let clock=0,next=()=>{},running=false,automatic=false,frame=0,stop='ready',until=0,wide=false,effectStart=0;
 const controls=createBrowserControls(canvas,a=>{if(!runtime.activate(a))throw Error('Rejected '+a);report();});
 const runtime=new FlightRuntime({canvas,image:src=>browserImage('/'+src),controls:controls.update,sound(){},now:()=>clock,frame:cb=>next=cb,readBest:()=>0,writeBest(){},readCareer:()=>{try{return JSON.parse(sessionStorage.getItem('firebreak-fixture-career-v1')??'null');}catch{return null;}},writeCareer:v=>sessionStorage.setItem('firebreak-fixture-career-v1',JSON.stringify(v)),seed:()=>Number(query.get('seed'))||1337});runtime.muted=true;
@@ -30,10 +30,12 @@ function step(){const w=runtime.world;if(runtime.mode==='menu')act('start:'+flig
  if(stop==='objective'&&subject&&subject.y>230||stop==='tactics'&&tactics||stop==='outcome'&&encounter?.kind===desiredEncounter&&encounter.outcome!=='active'||stop==='salvage'&&encounter?.kind===desiredEncounter&&encounter.claimed){running=false;report();return;}
  if(stop==='maneuver'&&w.enemies.some(e=>e.maneuver?.kind===desiredManeuver&&e.y>230&&e.y<850&&w.bullets.some(b=>b.hostile&&b.sourceEnemy===e.id&&b.age<.25))){running=false;report();return;}
  if(stop==='breakthrough'&&(goal==='reversefield'?w.fields.some(f=>f.kind==='reflect'&&f.remaining>0):goal==='lightwell'?w.fields.some(f=>f.kind==='well'):(w.contribution[damageSource]??0)>effectStart)){running=false;report();return;}
+ if(stop==='armor-drop'&&w.loot.some(l=>l.part==='armor')||stop==='armor-active'&&w.player.armor>0||stop==='armor-block'&&w.armorBlocks>defenseStart||stop==='intercept'&&w.shotInterceptions>defenseStart||stop==='receipt'&&w.pickupReceipt&&['alloy','coil','lens'].includes(w.pickupReceipt.part)&&w.pickupReceipt.until>w.time){running=false;report();return;}
  if(stop==='trial'&&w.trial?.completed||stop==='ready'&&w.assembly.ready.length||stop==='loot'&&w.loot.length||stop==='effect'&&(w.contribution[damageSource]??0)>effectStart||stop==='fight'&&w.time>=until||w.time>600||runtime.mode==='result'){running=false;if(stop==='ready'&&runtime.mode==='playing')act('tree');report();}
 }
 function pump(){if(!running)return;for(let i=0;i<120&&running;i++)step();report();if(running)setTimeout(pump,0);}
-function begin(mode,auto=false,seconds=3){if(runtime.mode==='tree')act('close-tree');if(runtime.mode==='paused')act('resume');stop=mode;automatic=auto;running=true;until=runtime.world.time+seconds;effectStart=runtime.world.contribution[damageSource]??0;pump();}
+function begin(mode,auto=false,seconds=3){defenseStart=mode==='armor-block'?runtime.world.armorBlocks:runtime.world.shotInterceptions;if(runtime.mode==='tree')act('close-tree');if(runtime.mode==='paused')act('resume');stop=mode;automatic=auto;running=true;until=runtime.world.time+seconds;effectStart=runtime.world.contribution[damageSource]??0;pump();}
+for(const mode of['armor-drop','armor-active','armor-block','intercept','receipt'])document.querySelector('#'+mode).onclick=()=>begin(mode,false);
 for(const kind of['arms','mines','shield'])document.querySelector('#'+kind).onclick=()=>{desiredEncounter=kind;begin('objective',true);};document.querySelector('#tactics').onclick=()=>begin('tactics',true);document.querySelector('#outcome').onclick=()=>begin('outcome',true);document.querySelector('#salvage').onclick=()=>begin('salvage',true);
 for(const mode of['bossattack','bossbreak','bossloot','bossvictory'])document.querySelector('#'+mode).onclick=()=>begin(mode,true);
 document.querySelector('#maneuver').onclick=()=>begin('maneuver',true);
