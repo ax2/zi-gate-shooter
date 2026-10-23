@@ -1,0 +1,75 @@
+{
+  "source": "art/source/flight-projectiles-v1.png",
+  "sourceSha256": "0833e5d3afc5f390218f6403a393baa74e9cb5ca097a51f382d8ad3bcb528a61",
+  "frames": [
+    {
+      "frame": 0,
+      "box": {
+        "left": 0,
+        "top": 0,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 22431
+    },
+    {
+      "frame": 1,
+      "box": {
+        "left": 512,
+        "top": 0,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 37914
+    },
+    {
+      "frame": 2,
+      "box": {
+        "left": 1024,
+        "top": 0,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 10893
+    },
+    {
+      "frame": 3,
+      "box": {
+        "left": 0,
+        "top": 512,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 60609
+    },
+    {
+      "frame": 4,
+      "box": {
+        "left": 512,
+        "top": 512,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 55998
+    },
+    {
+      "frame": 5,
+      "box": {
+        "left": 1024,
+        "top": 512,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 60487
+    }
+  ],
+  "export": "Whole cells preserved, resized224 and extended16; no threshold erasure, masking, recoloring or retouching. Runtime pivots correct source centering.",
+  "bytes": 186032,
+  "sha256": "d314894772d7d3ead48f6819d84d517a18e151d48a520c081f3e2ec66b8ccf64"
+}

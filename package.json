@@ -23,7 +23,8 @@
     "build:android": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-android.ps1",
     "assets:interceptor": "node tools/export-interceptor.mjs",
     "assets:reactor": "node tools/export-boss-reactor.mjs",
-    "assets:minelayer": "node tools/export-minelayer.mjs"
+    "assets:minelayer": "node tools/export-minelayer.mjs",
+    "assets:projectiles": "node tools/export-flight-projectiles.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",
