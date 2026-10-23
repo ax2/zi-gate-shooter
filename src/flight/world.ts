@@ -2,9 +2,10 @@ import{flightProfile}from'./profile';
 import{Assembly,parts,type Part}from'./technology';
 import{trials,starterTrial,type TrialId}from'./records';
 import{encounterTypes,type EncounterKind,type FlightEncounter,type EncounterRecord}from'./encounters';
+import{airspacePlan,airspaceFormation,maneuverPose,maneuverMuzzle,type Maneuver}from'./airspace';
 export const F={width:720,height:1280,minY:196,maxY:1198,speed:600,playerRadius:12,step:1/60,enemyLimit:26,hostileLimit:200,bulletLimit:280,lootLimit:32,fxLimit:220,fieldLimit:3}as const;
 export type EnemyKind='drone'|'diver'|'sentry'|'spinner'|'lancer'|'boss'|'courier'|'minelayer'|'mine'|'projector';
-export interface Enemy{id:number;kind:EnemyKind;x:number;y:number;px:number;py:number;hp:number;maxHp:number;r:number;age:number;timer:number;angle:number;seed:number;burn:number;burnTick:number;hit:number;aimX?:number;aimY?:number;keystoneHit?:string;shield?:number;shieldMax?:number;protectedBy?:number;retreat?:boolean}
+export interface Enemy{id:number;kind:EnemyKind;x:number;y:number;px:number;py:number;hp:number;maxHp:number;r:number;age:number;timer:number;angle:number;seed:number;burn:number;burnTick:number;hit:number;aimX?:number;aimY?:number;keystoneHit?:string;shield?:number;shieldMax?:number;protectedBy?:number;retreat?:boolean;maneuver?:Maneuver}
 export interface Bullet{id:number;x:number;y:number;px:number;py:number;vx:number;vy:number;r:number;damage:number;hostile:boolean;age:number;life:number;bounce:number;pierce:number;style:'pulse'|'wing'|'rail'|'enemy'|'orb';hits:Set<number>;explosive:boolean;sourceEnemy?:number;damageSource?:string}
 export interface Loot{id:number;x:number;y:number;part:Part|'repair';amount:number;age:number;phase:number;trialReward?:boolean;encounterReward?:number}
 export interface Effect{x:number;y:number;kind:'explosion'|'reactor'|'spark'|'arc'|'laser'|'ring'|'pickup'|'install';age:number;life:number;size:number;color:string;points?:{x:number;y:number}[];hostile?:boolean;icon?:number;label?:string}
@@ -24,7 +25,7 @@ export class FlightWorld{
  get scoreProgress(){const previous=this.scoreAwards?this.nextAward-(300+this.scoreAwards*150):0;return{next:this.nextAward,previous,ratio:clamp((this.score-previous)/(this.nextAward-previous),0,1)};}
  phase:'running'|'boss'|'dead'='running';notice:Notice={title:'自由空战',detail:'拖动任意方向 · 击敌拾取零件 · 点组装打开科技树',time:5};
  readonly contribution:Record<string,number>={};fields:TechField[]=[];private railContacts=0;private railCooldown=0;private lensContacts=0;private coilCasts=0;private wellContacts=0;private lensCooldown=0;private novaCooldown=0;private wellCooldown=0;private satelliteTimer=0;
- encounter?:FlightEncounter;readonly encounterHistory:EncounterRecord[]=[];encountersStarted=0;encountersWon=0;ordnanceCleared=0;minesDeployed=0;shieldDamage=0;private encounterSector=-1;
+ encounter?:FlightEncounter;readonly encounterHistory:EncounterRecord[]=[];encountersStarted=0;encountersWon=0;ordnanceCleared=0;minesDeployed=0;shieldDamage=0;private encounterSector=-1;airspaceFormations=0;airspaceShots=0;private maneuverSector=-1;
  trial?:{id:TrialId;progress:number;completed:boolean;rewarded:boolean;claimed:boolean;rewardId?:number;pending?:{x:number;y:number}};
  private readonly keystoneWins=new Set<string>();
  target?:string;private rng:number;private serial=0;private wave=0;private spawnTimer=1;private shotTimer=0;private arcTimer=0;private laserTimer=0;private railTimer=0;private empTimer=5;private sunTimer=4;private shots=0;private stormHits=0;private dryKills=0;private nextAward=300;
@@ -63,6 +64,13 @@ export class FlightWorld{
  private tryEncounterReward(){const e=this.encounter;if(!e?.pending||e.rewardId!==undefined||this.phase==='dead')return;const info=encounterTypes[e.kind],l=this.addDrop(e.pending.x,e.pending.y,info.part,4);if(!l)return;l.encounterReward=e.id;l.age=0;e.rewardId=l.id;e.pending=undefined;this.notice={title:'行动达成 · '+info.name,detail:'4'+{alloy:'弹芯',coil:'线圈',lens:'透镜'}[info.part]+'已掉落 · 飞近拾取',time:3,icon:info.icon};this.events.push({type:'reward',value:e.kind});}
  private updateEncounter(){const e=this.encounter;if(e?.outcome==='active'){const target=this.enemies.find(n=>n.id===e.target&&n.hp>0);if(!target||target.y>1320||this.time-e.started>=encounterTypes[e.kind].duration)this.finishEncounter(false);}}
  private spawnWave(){
+  if((this.wave+1)%4===2){
+   const needed=3+Math.min(3,this.sector)+(this.sectorTime>30?1:0);if(this.enemies.length>F.enemyLimit-needed){this.spawnTimer=.35;return;}
+   const plan=airspacePlan(this.sector),specs=airspaceFormation(this.sector,this.random()<.5?1:-1);this.wave++;
+   for(const spec of specs){const e=this.spawn(spec.kind,spec.x,spec.y)!;if(spec.maneuver){e.maneuver=spec.maneuver;e.timer=spec.maneuver.kind==='cross'?.9:1.25;}}
+   for(let i=3;i<needed;i++)this.spawn('drone',90+(i-2)*540/(needed-2),-380-(i-3)*75);
+   this.airspaceFormations++;if(this.maneuverSector!==this.sector){this.maneuverSector=this.sector;if(this.notice.time<=0)this.notice={title:plan.name,detail:plan.brief,time:3};}return;
+  }
   this.wave++;const p=this.sector%3,late=this.sectorTime>30,n=3+Math.min(3,this.sector),side=this.random()<.5?1:-1;
   if(this.wave%5===0){this.spawn(p===0?'lancer':p===1?'spinner':'sentry',120+this.random()*480);this.spawn('sentry',side===1?100:620,-240);return;}
   for(let i=0;i<n;i++){let x=90+(540/(n-1))*i,y=-60-i*62;
@@ -75,6 +83,13 @@ export class FlightWorld{
  private enemyShot(e:Enemy){
   const dx=(e.kind==='lancer'?e.aimX??this.player.x:this.player.x)-e.x,dy=(e.kind==='lancer'?e.aimY??this.player.y:this.player.y)-e.y,a=Math.atan2(dy,dx),speed=210+Math.min(90,this.sector*12);
   const emit=(angle:number,scale=1,style:Bullet['style']='enemy')=>this.bullet(e.x,e.y+e.r*.6,Math.cos(angle)*speed*scale,Math.sin(angle)*speed*scale,1,true,style);
+  if(e.maneuver){
+   const m=e.maneuver,origin=maneuverMuzzle(e),fire=(angle:number,scale=1,style:Bullet['style']='enemy')=>{if(this.bullet(origin.x,origin.y,Math.cos(angle)*speed*scale,Math.sin(angle)*speed*scale,1,true,style,0,false,e.id))this.airspaceShots++;};
+   if(m.kind==='sweep'){const direction=Math.PI/2+Math.sin(e.angle)*.65;for(const offset of[-.16,0,.16])fire(direction+offset,1.1);e.angle+=.65*m.side;e.timer=1.65;}
+   else if(m.kind==='cross'){for(const offset of[-.14,.14])fire(a+offset,1.15);e.timer=1.8;}
+   else{for(let i=0;i<6;i++)fire(e.angle+i*Math.PI/3,.85,'orb');e.angle+=.22*m.side;e.timer=2.25;}
+   return;
+  }
   if(e.kind==='courier'){for(const side of[-1,0,1]){const angle=a+side*.18;this.bullet(e.x+side*26,e.y+54,Math.cos(angle)*speed*1.1,Math.sin(angle)*speed*1.1,1,true,'enemy',0,false,e.id);}e.timer=1.8;}
   else if(e.kind==='minelayer'){for(const side of[-1,0,1])if(this.enemies.length<F.enemyLimit-1){const mine=this.spawn('mine',clamp(e.x+side*60,40,680),e.y+48);if(mine){this.minesDeployed++;this.fx({kind:'spark',x:mine.x,y:mine.y,size:25,color:'#ffbd78',life:.25});}}e.timer=1.8;}
   else if(e.kind==='projector'){for(let i=0;i<6;i++)emit(e.angle+i*Math.PI/3,.75,'orb');e.angle+=.3;e.timer=2.6;}
@@ -103,7 +118,7 @@ export class FlightWorld{
   this.kills++;this.score+=stats[e.kind].score;this.dryKills++;if(source==='bounce')this.advanceTrial('ricochet',e);if(e.kind==='boss'&&e.keystoneHit)this.keystoneWins.add(e.keystoneHit);
   this.fx({kind:'explosion',x:e.x,y:e.y,size:e.kind==='boss'?280:e.r*2.7,color:'#ffc383',life:.65});this.events.push({type:e.kind==='boss'?'boss-kill':'kill'});
   if(this.dryKills>=4||this.random()<.36||e.kind==='boss'){this.addDrop(e.x,e.y,this.randomPart(),e.kind==='boss'?3:1);this.dryKills=0;}
-  if(e.kind==='projector')this.releaseShields(e.id);if(e.kind==='boss'){this.finishEncounter(false);for(const [i,p]of parts.entries())this.addDrop(e.x+(i-1)*95,e.y+80,p,2);this.addDrop(e.x,e.y+150,'repair');this.bossKills++;this.sector++;this.sectorTime=0;this.phase='running';this.spawnTimer=2;this.notice={title:'空域突破',detail:['冷却港湾','侧翼突袭','重装封锁'][this.sector%3]+' · 首领留下组装零件',time:4};for(const b of this.bullets)if(b.hostile)b.life=0;}
+  if(e.kind==='projector')this.releaseShields(e.id);if(e.kind==='boss'){this.finishEncounter(false);for(const [i,p]of parts.entries())this.addDrop(e.x+(i-1)*95,e.y+80,p,2);this.addDrop(e.x,e.y+150,'repair');this.bossKills++;this.sector++;this.sectorTime=0;this.phase='running';this.spawnTimer=2;this.notice={title:'空域突破',detail:airspacePlan(this.sector).name+' · 首领留下组装零件',time:4};for(const b of this.bullets)if(b.hostile)b.life=0;}
   this.awardScore(e);if(this.encounter?.target===e.id)this.finishEncounter(true,e);
  }
  private awardScore(e:{x:number;y:number}){
@@ -146,6 +161,7 @@ export class FlightWorld{
   this.tryEncounter();
   for(const e of this.enemies){e.px=e.x;e.py=e.y;e.age+=dt;e.hit=Math.max(0,e.hit-dt);if(e.y>155)e.timer-=dt;
    if(e.retreat){e.y+=250*dt;}
+   else if(e.maneuver){const at=maneuverPose(e.maneuver,e.age);e.x=at.x;e.y=at.y;}
    else if(e.kind==='courier'){e.y+=90*dt;e.x+=Math.cos(e.seed+e.age*1.3)*110*dt;}
    else if(e.kind==='minelayer'){e.y+=(e.y<275?120:e.age>11?145:26)*dt;e.x+=Math.cos(e.seed+e.age*.8)*105*dt;}
    else if(e.kind==='mine'){e.y+=45*dt;}
@@ -155,7 +171,7 @@ export class FlightWorld{
    else if(e.kind==='drone'){e.y+=130*dt;e.x+=Math.cos(e.seed+e.age*2)*45*dt;}
    else if(e.kind==='diver'){e.y+=(e.age>1.8?300:90)*dt;e.x+=Math.sin(e.seed)*95*dt;}
    else{e.y+=((e.age<2||e.age>8)?105:12)*dt;e.x+=Math.cos(e.seed+e.age)*30*dt;}
-   e.x=clamp(e.x,32,688);if(e.kind==='lancer'&&e.y>155&&e.timer<=.65&&e.aimX===undefined){e.aimX=p.x;e.aimY=p.y;}if(e.hp>0&&e.y>155&&!e.retreat){if(e.kind==='mine'){if(e.age>=.9&&(e.age>=4.5||Math.hypot(e.x-p.x,e.y-p.y)<145))this.enemyShot(e);}else if(e.timer<=0&&e.kind!=='diver')this.enemyShot(e);}
+   e.x=clamp(e.x,32,688);if(e.kind==='lancer'&&e.y>155&&e.timer<=.65&&e.aimX===undefined){e.aimX=p.x;e.aimY=p.y;}if(e.hp>0&&e.y>155&&!e.retreat){if(e.kind==='mine'){if(e.age>=.9&&(e.age>=4.5||Math.hypot(e.x-p.x,e.y-p.y)<145))this.enemyShot(e);}else if(e.timer<=0&&(e.kind!=='diver'||!!e.maneuver))this.enemyShot(e);}
    if(e.burn>0){e.burnTick-=dt;if(e.burnTick<=0){e.burnTick=parameters.optical.burnInterval;e.burn--;this.hit(e,parameters.optical.burnDamage,'burn');}}
    if(e.hp>0&&(e.kind!=='mine'||e.age>=.9)&&segmentDistance(0,0,e.px-p.px,e.py-p.py,e.x-p.x,e.y-p.y)<e.r*.7+F.playerRadius)this.hurt();
   }
@@ -178,5 +194,5 @@ export class FlightWorld{
   for(const e of this.effects)e.age+=dt;this.effects=this.effects.filter(e=>e.age<e.life);
  }
  drainEvents(){return this.events.splice(0);}
- diagnostics(){return{breakthrough:this.assembly.breakthrough,breakthroughProgress:this.breakthroughProgress(),fields:this.fields.map(f=>({...f})),encounter:this.encounter?{...this.encounter,pending:this.encounter.pending?{...this.encounter.pending}:undefined}:null,encounterHistory:this.encounterHistory.map(e=>({...e})),encountersStarted:this.encountersStarted,encountersWon:this.encountersWon,ordnanceCleared:this.ordnanceCleared,minesDeployed:this.minesDeployed,shieldDamage:this.shieldDamage,trial:this.trial?{...this.trial,pending:this.trial.pending?{...this.trial.pending}:undefined}:null,careerFacts:this.careerFacts(),time:this.time,sector:this.sector,sectorTime:this.sectorTime,phase:this.phase,player:{...this.player},kills:this.kills,score:this.score,nextAward:this.nextAward,scoreProgress:this.scoreProgress,scoreAwards:this.scoreAwards,partsCollected:this.partsCollected,installed:[...this.assembly.installed],keystone:this.assembly.keystone,inventory:{...this.assembly.inventory},calibrated:{...this.assembly.calibrated},ready:this.assembly.ready.map(t=>t.id),target:this.target,contribution:{...this.contribution},bossKills:this.bossKills,damageTaken:this.damageTaken,enemies:this.enemies.map(e=>({...e})),loot:this.loot.map(l=>({...l})),counts:{bullets:this.bullets.filter(b=>!b.hostile).length,hostiles:this.bullets.filter(b=>b.hostile).length,effects:this.effects.length}};}
+ diagnostics(){return{airspace:{...airspacePlan(this.sector),formations:this.airspaceFormations,shots:this.airspaceShots,active:this.enemies.filter(e=>e.hp>0&&e.maneuver).map(e=>e.id)},breakthrough:this.assembly.breakthrough,breakthroughProgress:this.breakthroughProgress(),fields:this.fields.map(f=>({...f})),encounter:this.encounter?{...this.encounter,pending:this.encounter.pending?{...this.encounter.pending}:undefined}:null,encounterHistory:this.encounterHistory.map(e=>({...e})),encountersStarted:this.encountersStarted,encountersWon:this.encountersWon,ordnanceCleared:this.ordnanceCleared,minesDeployed:this.minesDeployed,shieldDamage:this.shieldDamage,trial:this.trial?{...this.trial,pending:this.trial.pending?{...this.trial.pending}:undefined}:null,careerFacts:this.careerFacts(),time:this.time,sector:this.sector,sectorTime:this.sectorTime,phase:this.phase,player:{...this.player},kills:this.kills,score:this.score,nextAward:this.nextAward,scoreProgress:this.scoreProgress,scoreAwards:this.scoreAwards,partsCollected:this.partsCollected,installed:[...this.assembly.installed],keystone:this.assembly.keystone,inventory:{...this.assembly.inventory},calibrated:{...this.assembly.calibrated},ready:this.assembly.ready.map(t=>t.id),target:this.target,contribution:{...this.contribution},bossKills:this.bossKills,damageTaken:this.damageTaken,enemies:this.enemies.map(e=>({...e})),loot:this.loot.map(l=>({...l})),counts:{bullets:this.bullets.filter(b=>!b.hostile).length,hostiles:this.bullets.filter(b=>b.hostile).length,effects:this.effects.length}};}
 }
