@@ -1,7 +1,8 @@
+import{componentPairs}from'./early-parts';
 export type Part='alloy'|'coil'|'lens';
 export const parts:Part[]=['alloy','coil','lens'];
 export const partInfo={alloy:{name:'弹芯',icon:3,color:'#ffc46a'},coil:{name:'线圈',icon:1,color:'#c3a2ff'},lens:{name:'透镜',icon:2,color:'#7ce8ff'}};
-export interface Technology{id:string;name:string;icon:number;column:number;tier:number;parents:string[];cost:Partial<Record<Part,number>>;effect:string;future:string}
+export interface Technology{id:string;name:string;icon:number;column:number;tier:number;parents:string[];cost:Partial<Record<Part,number>>;effect:string;future:string;component?:boolean}
 /** Every node changes an attack; no filler percentage nodes between these inventions. */
 export const technologies:Technology[]=[
  {id:'split',name:'双翼炮',icon:0,column:0,tier:0,parents:[],cost:{alloy:2},effect:'双翼追加 2 发斜射',future:'跳弹 / 轨道炮 / 雷暴机炮'},
@@ -28,6 +29,12 @@ export const technologies:Technology[]=[
  {id:'satellites',name:'棱镜卫星',icon:19,column:0,tier:7,parents:['arsenal','prism'],cost:{alloy:12,lens:8},effect:'双卫星环绕开火 · 弹墙反弹继续生效',future:'与磁轨齐射二选一 · 可持续精校'},
  {id:'reversefield',name:'反相护场',icon:20,column:1,tier:7,parents:['tempest','flak'],cost:{coil:12,lens:8},effect:'主电击5次 → 1.4秒护场 · 反射3发实弹',future:'与雷霆棱镜二选一 · 可持续精校'},
  {id:'lightwell',name:'重力光井',icon:21,column:2,tier:7,parents:['sun','emp'],cost:{lens:12,coil:8},effect:'主激光8次命中 → 旋转交叉光区',future:'与电浆焚星二选一 · 可持续精校'},
+ {id:'hive',name:'蜂巢副炮',icon:0,column:0,tier:8,component:true,parents:['split'],cost:{alloy:3},effect:'每1.1秒追加六发扇射 · 原炮保留',future:'可搭配：反弹 / 爆裂 / 雷暴机炮'},
+ {id:'needles',name:'磁钉阵列',icon:3,column:0,tier:8,component:true,parents:['split'],cost:{alloy:3},effect:'每1.5秒追加三路贯穿 · 每路最多4敌',future:'可搭配：雷暴机炮 / 同系精校'},
+ {id:'seekorb',name:'巡航雷球',icon:13,column:1,tier:8,component:true,parents:['coil'],cost:{coil:3},effect:'每1.6秒双雷球 · 命中再跳电',future:'可搭配：反弹 / 雷暴机炮'},
+ {id:'electrodes',name:'护航电极',icon:8,column:1,tier:8,component:true,parents:['coil'],cost:{coil:3},effect:'每1.1秒放电 · 每极可拦1近弹',future:'可搭配：近身机动 / 电磁精校'},
+ {id:'tracker',name:'追光镜',icon:10,column:2,tier:8,component:true,parents:['laser'],cost:{lens:3},effect:'每1.2秒追加索敌光束 · 不限正前方',future:'可搭配：灼烧 / 深穿光束'},
+ {id:'blades',name:'回旋光刃',icon:14,column:2,tier:8,component:true,parents:['laser'],cost:{lens:3},effect:'每0.5秒旋刃切割 · 半径230',future:'可搭配：灼烧 / 近身穿行'},
 ];
 export const chassis:Technology={id:'chassis',name:'飞船核心',icon:3,column:1,tier:-1,parents:[],cost:{},effect:'基础机炮与机动',future:'三系组件'};
 for(const n of technologies)if(!n.parents.length)n.parents=['chassis'];
@@ -45,7 +52,7 @@ export class Assembly{
  has(id:string){return id==='chassis'||this.installed.has(id);}
  get keystone(){return keystones.find(id=>this.has(id));}
  get breakthrough(){return breakthroughIds.find(id=>this.has(id));}
- lockedBy(id:string){const key=requiredKeystone.get(id);if(this.keystone&&key&&this.keystone!==key)return this.keystone;return breakthroughPairs.find(pair=>pair.includes(id))?.find(key=>key!==id&&this.has(key));}
+ lockedBy(id:string){const key=requiredKeystone.get(id);if(this.keystone&&key&&this.keystone!==key)return this.keystone;return [...breakthroughPairs,...componentPairs].find(pair=>pair.includes(id))?.find(key=>key!==id&&this.has(key));}
  cost(id:string):Partial<Record<Part,number>>{const n=techById.get(id);if(!n)return{};return this.has(id)?{[parts[n.column]]:4+2*(this.calibrated[id]??0)}:n.cost;}
  missing(id:string){return techById.get(id)?.parents.filter(p=>!this.has(p))??[];}
  can(id:string){const n=techById.get(id);return id!=='chassis'&&!!n&&!this.lockedBy(id)&&!this.missing(id).length&&Object.entries(this.cost(id)).every(([p,c])=>this.inventory[p as Part]>=c);}
