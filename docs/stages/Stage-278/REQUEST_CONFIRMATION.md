@@ -9,8 +9,10 @@
 - 反弹、雷电、激光等真实攻击，以及不同敌人的攻击手段。
 - 持续改善奖励反馈、关卡差异和选择意义；不把测试通过等同长期趣味成立。
 
-当前稳定默认入口为index.html→src/flight/entry.ts，Stage-277。旧数字门模式保留在canvas.html，仅为历史入口。Stage-278为独立候选分支stage278-breakthroughs，未覆盖稳定dist。
+凌晨暂停检查点的稳定默认入口为index.html→src/flight/entry.ts，Stage-277。旧数字门模式保留在canvas.html，仅为历史入口。Stage-278为独立候选分支stage278-breakthroughs，未覆盖稳定dist。
 
 本次不能确定用户界面里旧消息为何不可见；对话上下文与项目README仍能定位这项变更。没有据此恢复旧玩法。
 
 暂停截止保持北京时间2026-10-23 02:00，不能跨日顺延。候选尚需长时间/真人体验与最终视觉验收。
+
+恢复补注：本次active续跑完成Stage278验收并接入固定5178；雷电式需求继续有效。详见本阶段TEST_REPORT。
