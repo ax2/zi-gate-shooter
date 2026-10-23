@@ -7,7 +7,7 @@ export const supplyName=(p:Supply)=>p==='armor'?'光甲':p==='repair'?'维修':p
 export function pickupOffer(a:Assembly,r:PickupReceipt){
  if(r.part==='repair'||r.part==='armor')return undefined;
  const col=parts.indexOf(r.part),eligible=technologies.filter(t=>t.column===col&&!a.has(t.id)&&!a.lockedBy(t.id)&&!a.missing(t.id).length);
- return eligible.find(t=>a.can(t.id))??eligible[0];
+ return eligible.find(t=>t.evolution&&a.can(t.id))??eligible.find(t=>a.can(t.id))??eligible[0];
 }
 export function pickupHint(a:Assembly,r:PickupReceipt){
  if(r.part==='armor')return'立即挡弹6秒 · 激光/撞击仍需躲';

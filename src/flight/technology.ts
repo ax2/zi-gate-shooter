@@ -2,7 +2,7 @@ import{componentPairs}from'./early-parts';
 export type Part='alloy'|'coil'|'lens';
 export const parts:Part[]=['alloy','coil','lens'];
 export const partInfo={alloy:{name:'弹芯',icon:3,color:'#ffc46a'},coil:{name:'线圈',icon:1,color:'#c3a2ff'},lens:{name:'透镜',icon:2,color:'#7ce8ff'}};
-export interface Technology{id:string;name:string;icon:number;column:number;tier:number;parents:string[];cost:Partial<Record<Part,number>>;effect:string;future:string;component?:boolean}
+export interface Technology{id:string;name:string;icon:number;column:number;tier:number;parents:string[];cost:Partial<Record<Part,number>>;effect:string;future:string;component?:boolean;evolution?:boolean}
 /** Every node changes an attack; no filler percentage nodes between these inventions. */
 export const technologies:Technology[]=[
  {id:'split',name:'双翼炮',icon:0,column:0,tier:0,parents:[],cost:{alloy:2},effect:'双翼追加 2 发斜射',future:'跳弹 / 轨道炮 / 雷暴机炮'},
@@ -35,6 +35,12 @@ export const technologies:Technology[]=[
  {id:'electrodes',name:'护航电极',icon:8,column:1,tier:8,component:true,parents:['coil'],cost:{coil:3},effect:'每1.1秒放电 · 每极可拦1近弹',future:'可搭配：近身机动 / 电磁精校'},
  {id:'tracker',name:'追光镜',icon:10,column:2,tier:8,component:true,parents:['laser'],cost:{lens:3},effect:'每1.2秒追加索敌光束 · 不限正前方',future:'可搭配：灼烧 / 深穿光束'},
  {id:'blades',name:'回旋光刃',icon:14,column:2,tier:8,component:true,parents:['laser'],cost:{lens:3},effect:'每0.5秒旋刃切割 · 半径230',future:'可搭配：灼烧 / 近身穿行'},
+ {id:'starhive',name:'蜂巢爆星',icon:4,column:0,tier:9,component:true,evolution:true,parents:['hive','flak'],cost:{alloy:6,coil:3},effect:'追加双爆弹 · 追踪后范围爆裂',future:'双前驱组合 · 原副炮持续保留'},
+ {id:'thundernet',name:'磁钉雷网',icon:12,column:0,tier:9,component:true,evolution:true,parents:['needles','chain'],cost:{alloy:6,coil:3},effect:'追加三敌雷链 · 贯穿磁钉继续开火',future:'双前驱组合 · 原贯穿弹持续保留'},
+ {id:'plasmacore',name:'电浆星核',icon:18,column:1,tier:9,component:true,evolution:true,parents:['seekorb','burn'],cost:{coil:6,lens:3},effect:'追加重追踪球 · 爆裂后灼烧3次',future:'双前驱组合 · 原双雷球持续保留'},
+ {id:'aurorawing',name:'极光护航',icon:20,column:1,tier:9,component:true,evolution:true,parents:['electrodes','prism'],cost:{coil:6,lens:3},effect:'双极追加索敌光束 · 保留放电拦弹',future:'双前驱组合 · 原电极持续保留'},
+ {id:'huntprism',name:'天穹猎镜',icon:19,column:2,tier:9,component:true,evolution:true,parents:['tracker','seeker'],cost:{lens:6,coil:3},effect:'追加三路索敌束 · 优先蓄能敌机',future:'双前驱组合 · 原追光镜持续保留'},
+ {id:'bladewave',name:'光刃回响',icon:14,column:2,tier:9,component:true,evolution:true,parents:['blades','bounce'],cost:{lens:6,alloy:3},effect:'追加三枚出返飞刃 · 每刃可穿3敌',future:'双前驱组合 · 原旋刃持续保留'},
 ];
 export const chassis:Technology={id:'chassis',name:'飞船核心',icon:3,column:1,tier:-1,parents:[],cost:{},effect:'基础机炮与机动',future:'三系组件'};
 for(const n of technologies)if(!n.parents.length)n.parents=['chassis'];
@@ -45,6 +51,11 @@ export const breakthroughIds=breakthroughPairs.flat();
 const requiredKeystone=new Map<string,string|undefined>();
 function terminalFor(id:string):string|undefined{if(requiredKeystone.has(id))return requiredKeystone.get(id);const key=keystones.includes(id)?id:techById.get(id)?.parents.map(terminalFor).find(Boolean);requiredKeystone.set(id,key);return key;}
 for(const t of technologies)terminalFor(t.id);
+const choicePairs=[...breakthroughPairs,...componentPairs];
+const choiceOf=new Map(choicePairs.flatMap(pair=>pair.map(id=>[id,pair]as const)));
+const requiredChoices=new Map<string,string[]>();
+function choicesFor(id:string):string[]{const known=requiredChoices.get(id);if(known)return known;const choices=[...new Set([...(choiceOf.has(id)?[id]:[]),...(techById.get(id)?.parents.flatMap(choicesFor)??[])])];requiredChoices.set(id,choices);return choices;}
+for(const t of technologies)choicesFor(t.id);
 export class Assembly{
  readonly installed=new Set<string>();
  readonly inventory:Record<Part,number>={alloy:0,coil:0,lens:0};
@@ -52,9 +63,10 @@ export class Assembly{
  has(id:string){return id==='chassis'||this.installed.has(id);}
  get keystone(){return keystones.find(id=>this.has(id));}
  get breakthrough(){return breakthroughIds.find(id=>this.has(id));}
- lockedBy(id:string){const key=requiredKeystone.get(id);if(this.keystone&&key&&this.keystone!==key)return this.keystone;return [...breakthroughPairs,...componentPairs].find(pair=>pair.includes(id))?.find(key=>key!==id&&this.has(key));}
+ lockedBy(id:string):string|undefined{const key=requiredKeystone.get(id);if(this.keystone&&key&&this.keystone!==key)return this.keystone;for(const required of requiredChoices.get(id)??[]){const other=choiceOf.get(required)!.find(key=>key!==required&&this.has(key));if(other)return other;}return undefined;}
  cost(id:string):Partial<Record<Part,number>>{const n=techById.get(id);if(!n)return{};return this.has(id)?{[parts[n.column]]:4+2*(this.calibrated[id]??0)}:n.cost;}
  missing(id:string){return techById.get(id)?.parents.filter(p=>!this.has(p))??[];}
+ nextStep(id:string):string|undefined{const n=techById.get(id);if(!n||id==='chassis'||this.lockedBy(id))return undefined;for(const p of n.parents)if(!this.has(p))return this.nextStep(p);return id;}
  can(id:string){const n=techById.get(id);return id!=='chassis'&&!!n&&!this.lockedBy(id)&&!this.missing(id).length&&Object.entries(this.cost(id)).every(([p,c])=>this.inventory[p as Part]>=c);}
  install(id:string){if(!this.can(id))return false;for(const [p,c]of Object.entries(this.cost(id)))this.inventory[p as Part]-=c; if(this.has(id))this.calibrated[id]=(this.calibrated[id]??0)+1;else this.installed.add(id);return true;}
  power(id:string){const column=techById.get(id)?.column;return 1+Object.entries(this.calibrated).reduce((sum,[key,n])=>sum+(techById.get(key)?.column===column?n*.2:0),0);}

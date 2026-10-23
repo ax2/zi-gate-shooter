@@ -1,3 +1,4 @@
+import{bankUpgrade}from'./helpers/flight-runtime-driver';
 import {it,expect} from 'vitest';
 import {FlightRuntime} from '../src/flight/runtime';
 import {flightTarget,flightChoice} from './helpers/flight-driver';
@@ -7,7 +8,7 @@ async function setup(){
  let clock=0,next=(_time:number)=>{},controls:readonly CanvasControl[]=[],texts:string[]=[];
  const ctx=new Proxy({}, {get(_t,k){if(k==='createLinearGradient')return()=>({addColorStop(){}});return(...args:unknown[])=>{if(k==='fillText')texts.push(String(args[0]));};},set(){return true;}})as CanvasRenderingContext2D;
  const r=new FlightRuntime({canvas:{width:390,height:693,getContext:()=>ctx}as unknown as HTMLCanvasElement,image:async()=>({width:768,height:256})as HTMLImageElement,controls:c=>controls=c,sound(){},now:()=>clock,frame:f=>next=f,readBest:()=>0,writeBest(){},seed:()=>1337});r.resize(390,693,1);await r.load();r.draw();
- const frame=()=>{clock+=1000/60;next(clock);};
+ const frame=()=>{clock+=1000/60;next(clock);bankUpgrade(r);};
  return {r,get controls(){return controls;},get texts(){return texts;},advance(n:number){for(let i=0;i<n;i++)frame();},earn(required=3){r.activate('start:split');let target={x:360,y:1040};for(let i=0;i<3600&&(!r.world.assembly.can('bounce')||r.world.assembly.inventory.alloy<required)&&r.mode==='playing';i++){if(i%6===0)target=flightTarget(r.world);const s=r.diagnostics().viewport.scale;r.touchStart(1,0,0);r.touchMove(1,(target.x-r.world.player.x)*s,(target.y-r.world.player.y)*s);frame();}expect(r.world.assembly.can('bounce')).toBe(true);expect(r.world.assembly.inventory.alloy).toBeGreaterThanOrEqual(required);}};
 }
 const state=(r:FlightRuntime)=>JSON.stringify(r.world,(_key,value)=>value instanceof Set?[...value]:value instanceof Map?[...value]:value);

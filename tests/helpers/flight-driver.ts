@@ -1,7 +1,10 @@
 import{FlightWorld,F,segmentDistance,type Enemy}from'../../src/flight/world';
 import{bossPartRules,bossPartPosition,bossPartMuzzles}from'../../src/flight/boss-parts';
 import{maneuverPose}from'../../src/flight/airspace';
-import{technologies,keystones}from'../../src/flight/technology';
+import{technologies,keystones,techById}from'../../src/flight/technology';
+export function flightEvolutionPlan(id:string){const order:string[]=[],seen=new Set<string>();const add=(key:string)=>{if(key==='chassis'||seen.has(key))return;seen.add(key);for(const p of techById.get(key)?.parents??[])add(p);order.push(key);};add(id);return order;}
+export function flightEvolutionChoice(w:FlightWorld,id:string){return flightEvolutionPlan(id).find(key=>!w.assembly.has(key)&&w.assembly.can(key));}
+export function flightEvolutionGoal(w:FlightWorld,id:string){return flightEvolutionPlan(id).find(key=>!w.assembly.has(key)&&!w.assembly.lockedBy(key)&&!w.assembly.missing(key).length);}
 export type FlightRoute='ballistic'|'electric'|'optical';
 export const flightOrders:Record<FlightRoute,string[]>={
  ballistic:['split','bounce','rail','coil','chain','flak','stormgun','barrage','arsenal','laser','twin','burn','seeker','emp','drill','prism','tempest','sun'],
