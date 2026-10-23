@@ -34,13 +34,13 @@ export const technologies:Technology[]=[
  {id:'seekorb',name:'巡航雷球',icon:13,column:1,tier:8,component:true,parents:['coil'],cost:{coil:3},effect:'每1.6秒双雷球 · 命中再跳电',future:'可搭配：反弹 / 雷暴机炮'},
  {id:'electrodes',name:'护航电极',icon:8,column:1,tier:8,component:true,parents:['coil'],cost:{coil:3},effect:'每1.1秒放电 · 每极可拦1近弹',future:'可搭配：近身机动 / 电磁精校'},
  {id:'tracker',name:'追光镜',icon:10,column:2,tier:8,component:true,parents:['laser'],cost:{lens:3},effect:'每1.2秒追加索敌光束 · 不限正前方',future:'可搭配：灼烧 / 深穿光束'},
- {id:'blades',name:'回旋光刃',icon:14,column:2,tier:8,component:true,parents:['laser'],cost:{lens:3},effect:'每0.5秒旋刃切割 · 半径230',future:'可搭配：灼烧 / 近身穿行'},
+ {id:'blades',name:'回旋光刃',icon:22,column:2,tier:8,component:true,parents:['laser'],cost:{lens:3},effect:'每0.5秒旋刃切割 · 半径230',future:'可搭配：灼烧 / 近身穿行'},
  {id:'starhive',name:'蜂巢爆星',icon:4,column:0,tier:9,component:true,evolution:true,parents:['hive','flak'],cost:{alloy:6,coil:3},effect:'追加双爆弹 · 追踪后范围爆裂',future:'双前驱组合 · 原副炮持续保留'},
  {id:'thundernet',name:'磁钉雷网',icon:12,column:0,tier:9,component:true,evolution:true,parents:['needles','chain'],cost:{alloy:6,coil:3},effect:'追加三敌雷链 · 贯穿磁钉继续开火',future:'双前驱组合 · 原贯穿弹持续保留'},
  {id:'plasmacore',name:'电浆星核',icon:18,column:1,tier:9,component:true,evolution:true,parents:['seekorb','burn'],cost:{coil:6,lens:3},effect:'追加重追踪球 · 爆裂后灼烧3次',future:'双前驱组合 · 原双雷球持续保留'},
  {id:'aurorawing',name:'极光护航',icon:20,column:1,tier:9,component:true,evolution:true,parents:['electrodes','prism'],cost:{coil:6,lens:3},effect:'双极追加索敌光束 · 保留放电拦弹',future:'双前驱组合 · 原电极持续保留'},
  {id:'huntprism',name:'天穹猎镜',icon:19,column:2,tier:9,component:true,evolution:true,parents:['tracker','seeker'],cost:{lens:6,coil:3},effect:'追加三路索敌束 · 优先蓄能敌机',future:'双前驱组合 · 原追光镜持续保留'},
- {id:'bladewave',name:'光刃回响',icon:14,column:2,tier:9,component:true,evolution:true,parents:['blades','bounce'],cost:{lens:6,alloy:3},effect:'追加三枚出返飞刃 · 每刃可穿3敌',future:'双前驱组合 · 原旋刃持续保留'},
+ {id:'bladewave',name:'光刃回响',icon:23,column:2,tier:9,component:true,evolution:true,parents:['blades','bounce'],cost:{lens:6,alloy:3},effect:'追加三枚出返飞刃 · 每刃可穿3敌',future:'双前驱组合 · 原旋刃持续保留'},
 ];
 export const chassis:Technology={id:'chassis',name:'飞船核心',icon:3,column:1,tier:-1,parents:[],cost:{},effect:'基础机炮与机动',future:'三系组件'};
 for(const n of technologies)if(!n.parents.length)n.parents=['chassis'];

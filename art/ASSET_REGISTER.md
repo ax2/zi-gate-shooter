@@ -103,3 +103,6 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 
 ## Stage284 自由空战材料实物
 内置image_gen原创一张三格透明atlas，弹芯匣/铜绕线圈/三角透镜；原始2172×724 RGBA与完整提示保留在art/source/flight-materials-v1.png和FLIGHT_MATERIALS_V1.md。确定性导出768×256/273807字节，三个原格3px透明安全边通过，各额外16px透明边。用在真实掉落、拾取、库存和各科技费用，能力插画仍原样。候选美术，真人理解度/最终美术未签收。未改物理和材料收益。
+
+## Stage285 光刃专用atlas
+内置image_gen原创+定向编辑，候选/最终2172×724 RGBA、完整提示和偏差保留于art/source/flight-blades-v1-candidate.png、flight-blades-v1.png、FLIGHT_BLADES_V1.md。导出768×256/109023字节，三原格前景3px安全边通过；透明区裁切/等比缩放/16px边，未剪刀锋。基础/进化图与实际绕船、出返刀体同设计，不再复用激光枪。只此附加美术不改命中/伤害，最终用户美术未签收。
