@@ -1,0 +1,111 @@
+{
+  "source": "art/source/flight-impacts-v1.png",
+  "sourceSha256": "e6cb47dd6c194c38a6eff4668a850b31814792bf3525690a7c74c05fcbf3647b",
+  "frames": [
+    {
+      "frame": 0,
+      "box": {
+        "left": 0,
+        "top": 0,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 74065,
+      "bounds": {
+        "left": 70,
+        "top": 83,
+        "right": 460,
+        "bottom": 441
+      }
+    },
+    {
+      "frame": 1,
+      "box": {
+        "left": 512,
+        "top": 0,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 55074,
+      "bounds": {
+        "left": 105,
+        "top": 94,
+        "right": 419,
+        "bottom": 453
+      }
+    },
+    {
+      "frame": 2,
+      "box": {
+        "left": 1024,
+        "top": 0,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 81999,
+      "bounds": {
+        "left": 45,
+        "top": 41,
+        "right": 473,
+        "bottom": 475
+      }
+    },
+    {
+      "frame": 3,
+      "box": {
+        "left": 0,
+        "top": 512,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 75993,
+      "bounds": {
+        "left": 81,
+        "top": 33,
+        "right": 437,
+        "bottom": 463
+      }
+    },
+    {
+      "frame": 4,
+      "box": {
+        "left": 512,
+        "top": 512,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 109937,
+      "bounds": {
+        "left": 19,
+        "top": 33,
+        "right": 492,
+        "bottom": 459
+      }
+    },
+    {
+      "frame": 5,
+      "box": {
+        "left": 1024,
+        "top": 512,
+        "width": 512,
+        "height": 512
+      },
+      "edge": 0,
+      "visible": 65369,
+      "bounds": {
+        "left": 68,
+        "top": 67,
+        "right": 444,
+        "bottom": 433
+      }
+    }
+  ],
+  "export": "Whole original cells resized224 and extended16 transparent pixels; alpha preserved. No threshold erasure, masking, recoloring or retouching. Requested90px margins were not met; measured bounds are recorded.",
+  "bytes": 431351,
+  "sha256": "6f783fb900c12cfba2ad318fbf53b9e29263a7bde3f93fe9e44947f4530108f8"
+}
