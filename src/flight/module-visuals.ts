@@ -7,13 +7,13 @@ export type ModuleFragment='whole'|'rail'|'orb-left'|'orb-right';
 export interface ModulePose{id:string;frame:number;x:number;y:number;angle:number;w:number;h:number;fragment:ModuleFragment;activity:number;rank:number}
 /** Pure presentation: only actual source-labelled shots/effects trigger a firing pose.
  * No timers, target selection, attacks, inventory or random numbers are advanced here. */
-export function modulePoses(world:FlightWorld,profile:FlightProfile):ModulePose[]{
- const result:ModulePose[]=[],p=world.player;if(world.phase==='dead'||p.hp<=0)return result;
+export function modulePoses(world:FlightWorld,profile:FlightProfile,schematic=false):ModulePose[]{
+ const result:ModulePose[]=[],p=world.player;if(!schematic&&(world.phase==='dead'||p.hp<=0))return result;
  for(const[col,id]of profile.components.entries()){
   if(!id)continue;const rank=profile.componentRanks[col],shots=world.bullets.filter(b=>!b.hostile&&b.damageSource===id&&b.age>=0&&b.age<.18),effects=world.effects.filter(e=>!e.hostile&&e.source===id&&e.age>=0&&e.age<.18&&e.points);
   const add=(x:number,y:number,w:number,h:number,fragment:ModuleFragment='whole',angle=0,index=0)=>{
    const field=id==='electrodes'?effects.filter(e=>Math.hypot(e.points![0].x-x,e.points![0].y-y)<36):effects;
-   const age=Math.min(1,...shots.map(b=>b.age),...field.map(e=>e.age)),activity=Math.max(0,1-age/.18);
+   const age=Math.min(1,...shots.map(b=>b.age),...field.map(e=>e.age)),activity=schematic?0:Math.max(0,1-age/.18);
    const beam=id==='tracker'?field[index%Math.max(1,field.length)]:undefined;
    if(beam){const[a,b]=beam.points!;angle=Math.atan2(b.y-a.y,b.x-a.x)+Math.PI/2;}
    result.push({id,frame:moduleFrames[id],x,y,angle,w,h,fragment,activity,rank});
