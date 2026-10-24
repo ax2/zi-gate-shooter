@@ -57,6 +57,7 @@ const requiredChoices=new Map<string,string[]>();
 function choicesFor(id:string):string[]{const known=requiredChoices.get(id);if(known)return known;const choices=[...new Set([...(choiceOf.has(id)?[id]:[]),...(techById.get(id)?.parents.flatMap(choicesFor)??[])])];requiredChoices.set(id,choices);return choices;}
 for(const t of technologies)choicesFor(t.id);
 export class Assembly{
+ loadout?:{cannon:boolean;components:string[];evolutions:string[]};
  salvage=0;
  readonly installed=new Set<string>();
  readonly inventory:Record<Part,number>={alloy:0,coil:0,lens:0};
