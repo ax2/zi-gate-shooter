@@ -1,3 +1,4 @@
+import{prismPulse,prismSalvoRules}from'../../src/flight/prism-salvo';
 import{bossCoreMuzzle,bossCorePort}from'../../src/flight/boss-core';
 import{raiderPose}from'../../src/flight/raiders';
 import{squadPose}from'../../src/flight/squads';
@@ -38,6 +39,9 @@ export function flightTarget(w:FlightWorld,preferred?:{x:number;y:number}){
   for(let i=1;i<=8;i++){const t=i*.09,f=Math.min(1,t/(travel||1)),x=p.x+(q.x-p.x)*f,y=p.y+(q.y-p.y)*f;
    for(const b of w.bullets)if(b.hostile){const d=Math.hypot(b.x+b.vx*t-x,b.y+b.vy*t-y)-(b.r+F.playerRadius+10);if(d<0)risk+=10000;else if(d<50)risk+=(50-d)*3;}
    for(const e of w.enemies){const at=flightEnemyPose(w,e,t),d=Math.hypot(at.x-x,at.y-y)-e.r*.7-F.playerRadius-10;if(d<0)risk+=12000;else if(d<70)risk+=(70-d)*5;
+    // Test-only full-information operator: avoid the already locked salvo.
+    // This never paints future rays or changes the production World.
+    if(e.raider?.salvo){const locked=e.raider.salvo;for(let index=locked.index;index<prismSalvoRules.pulses;index++){const fire=Math.max(0,e.timer)+(index-locked.index)*prismSalvoRules.gap;if(t<fire||t>fire+prismSalvoRules.life)continue;const ray=prismPulse({...locked,index},flightEnemyPose(w,e,fire)),d=segmentDistance(x,y,ray.from.x,ray.from.y,ray.end.x,ray.end.y);if(d<35)risk+=15000;else if(d<65)risk+=(65-d)*30;}}
     const coreBeam=e.kind==='boss'&&w.bossCorePhase?.parent===e.id&&!w.bossCorePhase.ended&&w.bossCorePhase.kind==='crossbeam'&&w.bossCorePhase.casts%3!==2;if((e.kind==='lancer'||e.bossPart?.kind==='lens'||coreBeam)&&e.aimX!==undefined&&e.timer<t){const atFire=flightEnemyPose(w,e,Math.max(0,e.timer)),origin=e.bossPart?bossPartMuzzles({...e,x:atFire.x,y:atFire.y})[0]:coreBeam?bossCoreMuzzle(atFire,bossCorePort(w.bossCorePhase!)):atFire,a=Math.atan2((e.aimY??p.y)-origin.y,e.aimX-origin.x),d=segmentDistance(x,y,origin.x,origin.y,origin.x+Math.cos(a)*1600,origin.y+Math.sin(a)*1600);if(d<35)risk+=15000;}
    }
    for(const e of w.effects)if(e.hostile&&e.points){const[a,b]=e.points;if(segmentDistance(x,y,a.x,a.y,b.x,b.y)<32)risk+=15000;}
