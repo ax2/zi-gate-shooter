@@ -9,8 +9,8 @@ export const maneuverRules={entrySpeed:160,sweepWidth:145,crossWidth:440,crossTi
 const clamp=(n:number,lo:number,hi:number)=>Math.max(lo,Math.min(hi,n));
 export function airspacePlan(sector:number){
  const family=sector%3,variant=Math.floor(sector/3)%3;
- const names=[['炮列扫域','交叉截击','旋阵封锁'],['错列封锁','反翼猎袭','逆旋哨阵'],['折返炮列','纵深截击','双环压境']];
- return {kind:(['sweep','cross','orbit']as const)[family],variant,name:names[variant][family],brief:['炮口横扫 · 纵向换位找空隙','机群横穿 · 绕侧追击，留意近射','哨机环绕抛射 · 穿过实弹间隙'][family]};
+ const names=[['炮列扫域','交叉截击','旋阵封锁'],['错列封锁','反翼猎袭','折镜哨阵'],['折返炮列','纵深截击','双环折镜']];
+ return {kind:(['sweep','cross','orbit']as const)[family],variant,name:names[variant][family],brief:family===2&&variant>0?'镜弹撞墙一次 · 可用子弹击落':['炮口横扫 · 纵向换位找空隙','机群横穿 · 绕侧追击，留意近射','哨机环绕抛射 · 穿过实弹间隙'][family]};
 }
 function activePose(m:Maneuver,t:number){
  const r=maneuverRules,exit=Math.max(0,t-r.holdTime)*r.exitSpeed;
