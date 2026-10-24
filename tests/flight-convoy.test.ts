@@ -1,0 +1,44 @@
+import{it,expect}from'vitest';
+import{FlightWorld,F,type Enemy}from'../src/flight/world';
+import{encounterPlan,encounterRemaining,encounterTargets,convoyPose,convoyRules}from'../src/flight/encounters';
+import{destinationView}from'../src/flight/destinations';
+import{flightChoiceHarness}from'./helpers/flight-choice-harness';
+const core=(w:FlightWorld)=>w as any;
+/** Isolated fixtures are not normal income/balance evidence. */
+function scene(){const w=new FlightWorld(1337);w.start('split');w.sector=3;w.sectorTime=18;for(const key of['spawnTimer','shotTimer','arcTimer','laserTimer'])core(w)[key]=1e6;w.enemies=[];w.loot=[];w.bullets=[];w.effects=[];return w;}
+function event(w=scene()){core(w).tryEncounter();return{w,nodes:w.encounter!.convoy!.nodes.map(id=>w.enemies.find(e=>e.id===id)!)};}
+const kill=(w:FlightWorld,e:Enemy)=>core(w).hit(e,1e6,'guns');
+it('the first cycle stays unchanged, alternating later cannon visits have real dual targets and advertised six-part rewards',()=>{
+ expect([0,1,2].map(s=>encounterPlan(s,s))).toEqual(['arms','mines','shield']);expect([3,4,5].map(s=>encounterPlan(s,0))).toEqual(['convoy','convoy','convoy']);expect(encounterPlan(6,0)).toBe('arms');expect(encounterPlan(9,0)).toBe('convoy');expect(encounterPlan(4,1)).toBe('mines');expect(encounterPlan(5,2)).toBe('shield');
+ expect(destinationView(3,0)).toMatchObject({action:'双艇追缉',reward:6});expect(destinationView(0,0)?.reward).toBe(4);
+});
+it('two routes cross instead of copying the old courier drift, and first-loss urgency increases actual travel',()=>{
+ expect(convoyPose(-1,0).x).toBeLessThan(360);expect(convoyPose(1,0).x).toBeGreaterThan(360);expect(convoyPose(-1,7).x).toBeGreaterThan(360);expect(convoyPose(1,7).x).toBeLessThan(360);
+ expect(convoyPose(1,7,2).y-convoyPose(1,7).y).toBe(convoyRules.rushSpeed*2);const entry=340/convoyRules.entrySpeed;expect(convoyPose(1,entry+.001,1.002).y-convoyPose(1,entry-.001,1).y).toBeLessThan(1);
+});
+it('admission needs two free enemy slots and cannot leave one half-event behind or duplicate it',()=>{
+ const w=scene();for(let i=0;i<F.enemyLimit-1;i++)core(w).spawn('drone',50,-80);const before=w.enemies.map(e=>e.id);core(w).tryEncounter();expect(w.encounter).toBeUndefined();expect(w.enemies.map(e=>e.id)).toEqual(before);w.enemies.pop();core(w).tryEncounter();expect(w.encounter?.convoy?.nodes).toHaveLength(2);expect(w.enemies).toHaveLength(F.enemyLimit);core(w).tryEncounter();expect(w.encountersStarted).toBe(1);
+});
+it.each([0,1])('killing target%s first starts one chase but grants no group reward; the second completes once and only physical collection pays',first=>{
+ const{w,nodes}=event(),wallet={...w.assembly.inventory};w.time=4;nodes.forEach((e,i)=>{e.x=220+i*280;e.y=470;});kill(w,nodes[first]);expect(w.encounter!.outcome).toBe('active');expect(w.encounter!.convoy!.broken).toEqual([nodes[first].id]);expect(w.encounter!.convoy!.rush).toBe(4);expect(w.loot.some(l=>l.encounterReward!==undefined)).toBe(false);expect(encounterRemaining(w.encounter!,w.time)).toBe(6.5);
+ kill(w,nodes[first]);expect(w.encounter!.convoy!.broken).toHaveLength(1);w.time=5;kill(w,nodes[1-first]);expect(w.encountersWon).toBe(1);expect(w.encounter!.outcome).toBe('won');expect(w.assembly.inventory).toEqual(wallet);const reward=w.loot.find(l=>l.encounterReward===w.encounter!.id)!;expect(reward).toMatchObject({part:'alloy',amount:6,age:0});const id=reward.id;core(w).tryEncounterReward();expect(w.loot.filter(l=>l.id===id)).toHaveLength(1);w.loot=[reward];w.player.x=reward.x;w.player.y=reward.y;w.step(F.step,w.player.x,w.player.y);expect(w.encounter!.claimed).toBe(true);expect(w.assembly.inventory.alloy).toBe(wallet.alloy+6);expect(w.assembly.salvage).toBe(6);
+});
+it('one real area volley may finish both in the same simulation instant, without duplicate group rewards',()=>{const{w,nodes}=event();kill(w,nodes[0]);kill(w,nodes[1]);kill(w,nodes[1]);expect(w.encountersWon).toBe(1);expect(w.encounter!.convoy!.broken).toHaveLength(2);expect(w.loot.filter(l=>l.encounterReward===w.encounter!.id)).toHaveLength(1);});
+it.each(['duration','chase','exit']as const)('%s failure keeps earned kills/ordinary drops but cannot grant a late full-clear reward',reason=>{
+ const{w,nodes}=event();nodes.forEach(e=>e.y=450);kill(w,nodes[0]);const score=w.score,loot=w.loot.map(l=>l.id);if(reason==='duration')w.time=18;else if(reason==='chase')w.time=6.5;else nodes[1].y=1321;core(w).updateEncounter();expect(w.encounter!.outcome).toBe('escaped');expect(nodes[1].retreat).toBe(true);expect(w.score).toBe(score);expect(w.loot.map(l=>l.id)).toEqual(loot);kill(w,nodes[1]);expect(w.encountersWon).toBe(0);expect(w.loot.some(l=>l.encounterReward!==undefined)).toBe(false);
+});
+it('a second lethal hit at the exact chase deadline cannot race the end-of-frame timeout into a bonus',()=>{const{w,nodes}=event();kill(w,nodes[0]);w.time=6.5;kill(w,nodes[1]);expect(w.encounter!.outcome).toBe('escaped');expect(w.encountersWon).toBe(0);});
+it('the unbroken second target remains an active mission even after the primary target entity is removed',()=>{const{w,nodes}=event();kill(w,nodes[0]);w.enemies=w.enemies.filter(e=>e.hp>0);core(w).updateEncounter();expect(w.encounter!.outcome).toBe('active');expect(encounterTargets(w.encounter!)).toEqual(nodes.map(e=>e.id));});
+it('a full unlike loot pool preserves the promised six-part reward until space exists, without free remote growth',()=>{const{w,nodes}=event();for(let i=0;i<F.lootLimit;i++)w.loot.push({id:8000+i,x:50,y:400,part:'lens',amount:1,age:0,phase:0});nodes.forEach(e=>kill(w,e));expect(w.encounter!.pending).toBeDefined();expect(w.encounter!.rewardId).toBeUndefined();expect(w.assembly.salvage).toBe(0);w.loot.pop();core(w).tryEncounterReward();core(w).tryEncounterReward();expect(w.loot).toHaveLength(F.lootLimit);expect(w.loot.find(l=>l.encounterReward)!.amount).toBe(6);expect(w.assembly.salvage).toBe(0);});
+it('death or a boss transition cancels pursuit, preserves already-fired rounds, and prevents pending rewards from issuing after death',()=>{
+ const{w,nodes}=event();kill(w,nodes[0]);nodes[1].y=450;core(w).enemyShot(nodes[1]);const bullets=w.bullets.map(b=>b.id);w.player.hp=1;w.player.invulnerable=0;core(w).hurt();expect(w.encounter!.outcome).toBe('escaped');const frozen=w.diagnostics();w.step(F.step);core(w).tryEncounterReward();expect(w.diagnostics()).toEqual(frozen);expect(w.bullets.map(b=>b.id)).toEqual(bullets);
+ const t=event();t.w.sectorTime=60;t.w.step(F.step);expect(t.w.phase).toBe('boss');expect(t.w.encounter!.outcome).toBe('escaped');
+ const q=event();for(let i=0;i<F.lootLimit;i++)q.w.loot.push({id:9000+i,x:50,y:400,part:'lens',amount:1,age:0,phase:0});q.nodes.forEach(e=>kill(q.w,e));expect(q.w.encounter!.pending).toBeDefined();q.w.player.hp=1;q.w.player.invulnerable=0;core(q.w).hurt();q.w.loot.pop();const stopped=q.w.diagnostics();core(q.w).tryEncounterReward();q.w.step(F.step);expect(q.w.diagnostics()).toEqual(stopped);expect(q.w.loot.some(l=>l.encounterReward!==undefined)).toBe(false);
+});
+it('observers cannot edit the actual convoy group or first-loss timestamp',()=>{const{w,nodes}=event();kill(w,nodes[0]);const d=w.diagnostics();d.encounter!.convoy!.nodes.length=0;d.encounter!.convoy!.broken.length=0;d.encounter!.convoy!.rush=999;expect(w.encounter!.convoy!.nodes).toHaveLength(2);expect(w.encounter!.convoy!.broken).toHaveLength(1);expect(w.encounter!.convoy!.rush).toBe(0);});
+it('actual courier weapons remain inside the old hostile cap and finite lifetimes during pursuit',()=>{const{w,nodes}=event();nodes.forEach(e=>e.y=450);kill(w,nodes[0]);for(let i=0;i<F.hostileLimit-1;i++)core(w).bullet(50,400,0,100,1,true);core(w).enemyShot(nodes[1]);expect(w.bullets.filter(b=>b.hostile)).toHaveLength(F.hostileLimit);expect(w.bullets.filter(b=>b.hostile).every(b=>b.life<=5.5)).toBe(true);});
+it('a normal earned run reaches the convoy, pauses without spending chase time, and restart discards it',async()=>{
+ const h=await flightChoiceHarness(),r=h.r;r.activate('start:split');expect(h.firstChoice()).toBe(true);r.activate('upgrade-choice:hive');
+ for(let i=0;i<330*60&&r.world.phase!=='dead'&&r.world.encounter?.kind!=='convoy';i++){if(r.mode==='upgrade')r.activate('upgrade-bank');const a=r.world.assembly,id=a.nextStep('starhive');if(r.mode==='playing'&&id&&!a.has('starhive')&&a.can(id)){r.activate('tree');r.activate('select:'+id);r.activate('assemble');r.activate('close-tree');}h.tick();}
+ expect(r.world.player.hp).toBeGreaterThan(0);expect(r.world.encounter?.kind).toBe('convoy');expect(r.world.encounter!.convoy!.nodes).toHaveLength(2);expect(h.texts).toContain('两艇全歼 · 飞近回收');r.activate('pause');const before=r.world.diagnostics();r.activate('weak');r.resize(1100,800,1);for(let i=0;i<120;i++)h.tick(false);expect(r.world.diagnostics()).toEqual(before);r.activate('home');r.activate('start:laser');expect(r.world.encountersStarted).toBe(0);expect(r.world.encounter).toBeUndefined();
+},30000);

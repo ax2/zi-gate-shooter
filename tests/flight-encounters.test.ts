@@ -51,7 +51,7 @@ it('the same mine cannot explode or pay twice when later damage sources contact 
  const w=scene(),m=mechanics(w).spawn('mine',360,600)as Enemy;hit(w,m,20);hit(w,m,20);expect(w.ordnanceCleared).toBe(1);expect(w.score).toBe(10);expect(w.contribution.guns).toBe(14);
 });
 it('encounter history stays bounded over endless sectors while totals remain accurate',()=>{
- const w=scene();for(let i=0;i<25;i++){w.sector=i;w.enemies=[];w.loot=[];const target=event(w);hit(w,target,99999);}expect(w.encounterHistory).toHaveLength(12);expect(w.encounterHistory[0].id).toBe(14);expect(w.encountersStarted).toBe(25);expect(w.encountersWon).toBe(25);
+ const w=scene();for(let i=0;i<25;i++){w.sector=i;w.enemies=[];w.loot=[];event(w);for(const id of w.encounter!.convoy?.nodes??[w.encounter!.target])hit(w,w.enemies.find(e=>e.id===id)!,99999);}expect(w.encounterHistory).toHaveLength(12);expect(w.encounterHistory[0].id).toBe(14);expect(w.encountersStarted).toBe(25);expect(w.encountersWon).toBe(25);
 });
 it('the convoy keeps its shields and escorts physically in front of the moving source',()=>{
  const w=scene(2),target=event(w);for(let i=0;i<125;i++)w.step(F.step,360,1100);const escorts=w.enemies.filter(e=>e.protectedBy===target.id);expect(escorts).toHaveLength(2);for(const e of escorts){expect(e.y).toBeCloseTo(target.y+100);expect(e.x).toBeCloseTo(target.x+e.angle*145);expect(e.shield).toBeGreaterThan(0);}expect(target.y).toBeGreaterThan(165);
