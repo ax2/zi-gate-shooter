@@ -1,3 +1,4 @@
+import{assemblyRecipe}from'./assembly-recipe';
 import{salvageChoices}from'./salvage-view';
 import{parts,techById,type Assembly}from'./technology';
 import type{PickupReceipt}from'./defense';
@@ -9,9 +10,9 @@ export function materialCells(have:number,need:number){const slots=Math.min(6,ne
  * A tracked future node resolves to the next real prerequisite, not a free preview. */
 export function assemblyGuide(a:Assembly,target?:string,receipt?:PickupReceipt){
  const offers=salvageChoices(a,target,receipt),next=target?a.nextStep(target):undefined;
- const focus=next&&offers.includes(next)?next:offers[0];
- const recipe=focus?{id:focus,ready:a.can(focus),cost:parts.flatMap(part=>{
-  const need=a.cost(focus)[part]??0;
+ const bundle=target&&!a.has(target)?assemblyRecipe(a,target):undefined,focus=bundle?.ready&&bundle.nodes.length>1&&offers.includes(bundle.id)?bundle.id:next&&offers.includes(next)?next:offers[0],plan=focus?assemblyRecipe(a,focus):undefined;
+ const recipe=focus?{id:focus,ready:!!plan?.ready,path:plan?.nodes??[],cost:parts.flatMap(part=>{
+  const need=plan?.cost[part]??0;
   return need?[{part,need,have:a.inventory[part],filled:Math.min(need,a.inventory[part]),missing:Math.max(0,need-a.inventory[part])}]:[];
  })}:undefined;
  const installed=parts.map((_,column)=>[...a.installed].filter(id=>techById.get(id)?.column===column));

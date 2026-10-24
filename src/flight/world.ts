@@ -1,3 +1,4 @@
+import{applyAssemblyRecipe}from'./assembly-recipe';
 import{mirrorRules,mirrorMount,advanceMirror,pathContact,type WallTurn}from'./mirror-rounds';
 import{mainGunPorts}from'./pickup-growth';
 import{ImpactLedger}from'./impacts';
@@ -59,6 +60,7 @@ export class FlightWorld{
  private tryTrialReward(){const t=this.trial;if(!t?.pending||t.rewarded||this.phase==='dead')return;const info=trials[t.id],drop=this.addDrop(t.pending.x,t.pending.y,info.part,info.reward);if(!drop)return;drop.trialReward=true;drop.age=0;t.pending=undefined;t.rewarded=true;t.rewardId=drop.id;this.notice={title:'航线达成 · '+info.name,detail:`${info.reward}${{alloy:'弹芯',coil:'线圈',lens:'透镜'}[info.part]}已投送 · 飞近拾取`,time:3,icon:info.icon};this.events.push({type:'reward',value:t.id});}
  careerFacts(){return{kills:this.kills,bossKills:this.bossKills,score:this.score,trialCompleted:this.trial?.completed?this.trial.id:undefined,keystoneWins:[...this.keystoneWins],bossTactics:[...this.bossTactics]};}
  install(id:string){const was=this.assembly.has(id);if(this.phase==='dead'||this.player.hp<=0||!this.assembly.install(id))return false;if(this.target&&(this.target===id||this.assembly.lockedBy(this.target)))this.target=undefined;this.fx({kind:'install',x:this.player.x,y:this.player.y,size:100,color:'#a9f3e5',life:.8});this.notice={title:was?'组件精校 +1':'新组件已装配',detail:id,time:2,icon:undefined};this.events.push({type:'upgrade',value:id});return true;}
+ installPath(id:string){if(this.phase==='dead'||this.player.hp<=0)return false;const receipt=applyAssemblyRecipe(this.assembly,id);if(!receipt)return false;if(this.target&&(this.target===id||this.assembly.lockedBy(this.target)))this.target=undefined;this.fx({kind:'install',x:this.player.x,y:this.player.y,size:100,color:'#a9f3e5',life:.8});this.notice={title:'配方装配 · '+receipt.nodes.length+'件',detail:id,time:2};this.events.push({type:'upgrade',value:id});return receipt;}
  private fx(e:Omit<Effect,'age'>){if(this.effects.length>=F.fxLimit){const index=this.effects.findIndex(f=>!f.hostile);if(index>=0)this.effects.splice(index,1);else if(!e.hostile)return;else this.effects.shift();}this.effects.push({...e,age:0});}
  private bullet(x:number,y:number,vx:number,vy:number,damage:number,hostile=false,style:Bullet['style']='pulse',pierce=0,explosive=false,sourceEnemy?:number){
   if(this.bullets.filter(b=>b.hostile===hostile).length>=(hostile?F.hostileLimit:F.bulletLimit))return;
