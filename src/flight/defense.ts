@@ -2,7 +2,7 @@ import{technologies,partInfo,parts,type Assembly,type Part}from'./technology';
 import type{MainGunChange}from'./pickup-growth';
 export const defenseRules={shotLife:5.5,orbLife:4.5,edge:32,fade:.5,armorDuration:6,armorRadius:43,armorEvery:6,receiptLife:3.5}as const;
 export type Supply=Part|'repair'|'armor';
-export interface PickupReceipt{part:Supply;amount:number;until:number;repaired:number;main?:MainGunChange}
+export interface PickupReceipt{scoreSupply?:number;part:Supply;amount:number;until:number;repaired:number;main?:MainGunChange}
 export const supplyName=(p:Supply)=>p==='armor'?'光甲':p==='repair'?'维修':partInfo[p].name;
 /** The live wallet and prerequisites decide the link; collecting strengthens the basic cannon but never installs a technology. */
 export function pickupOffer(a:Assembly,r:PickupReceipt){
