@@ -21,7 +21,7 @@ it('manual entry is visibly available with zero materials and cannot pay for una
  const h=await flightChoiceHarness(),r=h.r;expect(r.activate('parts')).toBe(false);r.activate('start:split');
  expect(r.diagnostics().assemblyGuide.recipe?.id).toBe('hive');expect(h.controls.some(c=>c.action==='parts'&&c.label.includes('蜂巢副炮'))).toBe(true);
  const frozen=r.world.diagnostics(),timers=r.diagnostics().upgradeChoice;
- expect(r.activate('parts')).toBe(true);expect(r.mode).toBe('upgrade');expect(h.texts).toContain('拾取自动强化');
+ expect(r.activate('parts')).toBe(true);expect(r.mode).toBe('upgrade');expect(h.texts).toContain('拾取自动强化 · Lv1');
  expect(h.controls.some(c=>c.action.startsWith('upgrade-choice:'))).toBe(false);
  expect(r.activate('upgrade-choice:hive')).toBe(false);expect(r.activate('upgrade-choice:sun')).toBe(false);
  for(let i=0;i<60;i++)h.tick(false);r.hide();r.activate('weak');r.resize(1100,800,1);

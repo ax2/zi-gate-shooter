@@ -11,7 +11,7 @@ export function salvageView(a:Assembly){
  return{collected:p.main.collected,count:p.guns.count,damage:p.guns.damage,
   volley:p.guns.count*p.guns.damage,
   pickupVolleyPercent:Math.round((p.main.count*p.main.damageFactor-1)*100),
-  next:p.main.next,remaining:p.main.remaining};
+  next:p.main.next,remaining:p.main.remaining,rank:p.main.rank,nextKind:p.main.nextKind,progress:p.main.progress};
 }
 
 /** The same paid choices as the normal prompt. With an empty wallet show
