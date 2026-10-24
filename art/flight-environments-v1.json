@@ -1,0 +1,58 @@
+{
+  "created": "2026-10-24",
+  "tool": "Built-in image_gen",
+  "export": "Whole generated image; aspect-preserving resize to720px wide and JPEG84. No retouch, crop, erasure or recoloring.",
+  "assets": [
+    {
+      "name": "fleet-ocean-v1",
+      "source": "art/source/fleet-ocean-v1.png",
+      "sourceSha256": "e58ecb343c81fad514d1383ae52dd19b56b82734c67df432f928721e9f16ece3",
+      "sourceBytes": 3061572,
+      "width": 1024,
+      "height": 1536,
+      "runtime": "public/assets/fleet-ocean-v1.jpg",
+      "generator": "Built-in image_gen",
+      "generationFile": "exec-c82b134f-728b-4d68-ac76-564755c7efd9.png",
+      "prompt": "Use case: stylized-concept. Asset type: one production game background tile for an original portrait top-down sci-fi aerial shooter, not a screenshot or concept sheet. Primary request: a richly crafted aerial view over a huge industrial carrier fleet and open dark ocean far BELOW the combat aircraft. Portrait 2:3 composition. Orthographic straight-down camera, no horizon, no perspective vanishing point. Keep the central 65 percent of width mostly uncluttered dark desaturated blue ocean with subtle low-contrast wake texture. Put precise gunmetal carrier hull plating, deck machinery, antenna clusters, cranes and restrained amber navigation lights along the extreme left and right edges only, seen at small scale far below. Convincing detailed PBR painted metal, worn panel seams, restrained cinematic lighting, polished high-detail 3D game art, consistent mechanical science fiction. Intended to scroll vertically down: make the top and bottom borders visually connect, repeating ocean and fragmented fleet edges with matching scale, no single focal ship across the center. Background luminance stays low; the player, enemy bullets and bright weapons will be rendered separately on top. No aircraft, no enemies, no projectiles, no HUD, no words, no letters, no logos, no watermark, no sharp bright central lights, no impassable wall across the play area. Return only the finished background image.",
+      "approval": "Original generated candidate; not human art approval",
+      "runtimeSha256": "218d53f590f3311c11d60dd5fb2f65ecb0b7871fa2b633f6a36c059d2e44cfe1",
+      "runtimeBytes": 141859,
+      "runtimeWidth": 720,
+      "runtimeHeight": 1080
+    },
+    {
+      "name": "storm-clouds-v1",
+      "source": "art/source/storm-clouds-v1.png",
+      "sourceSha256": "c326cf93f1d779675748b1c399b616dc007fab43bf9417eedb286b54114c3e39",
+      "sourceBytes": 2387014,
+      "width": 1024,
+      "height": 1536,
+      "runtime": "public/assets/storm-clouds-v1.jpg",
+      "generator": "Built-in image_gen",
+      "generationFile": "exec-41cc30e2-b95d-4d4e-9d1e-538cff00fa87.png",
+      "prompt": "Use case: stylized-concept. Asset type: ONE original portrait 2:3 game background tile for a polished top-down sci-fi aerial shooter. Primary request: flying high above an immense storm cloud sea and distant magnetic power installations. Orthographic straight-down camera; no horizon or sky seen from the side. The central 65 percent is deep desaturated blue-violet cloud shadow with large soft organic cloud volumes at very low contrast, a calm readable corridor of empty air. Along the outer margins far BELOW the aircraft: fragmented floating induction platforms, finely detailed gunmetal turbine housings, copper coils and coolant vents partially submerged in haze, irregular rather than symmetrical walls. Very restrained distant violet electrical glow within clouds at the extreme edges only, no lightning beam crossing the center. Luxurious high-detail mechanical 3D game painting, precise wear and material detail at edges, atmospheric depth, subdued luminance for bright foreground enemies and projectiles. Vertical infinite scrolling: visually matching top and bottom boundary textures, no isolated focal object near the middle or boundary. No characters, no spacecraft in the play layer, no missiles, no UI, no text, no logos or watermark, no hard bright white strokes, no obstruction spanning the central play area. This is the finished background asset, not a concept sheet.",
+      "approval": "Original generated candidate; not human art approval",
+      "runtimeSha256": "d1dafa7238955467d35f02f5c64d337df81ff9bddfb76c38d2e4e55e54e0158f",
+      "runtimeBytes": 108785,
+      "runtimeWidth": 720,
+      "runtimeHeight": 1080
+    },
+    {
+      "name": "orbital-ring-v1",
+      "source": "art/source/orbital-ring-v1.png",
+      "sourceSha256": "cd7ff249e6cd8634c10c9eed11cdbfe474454250af8d6ad0b5c06daf15604f06",
+      "sourceBytes": 2819770,
+      "width": 1024,
+      "height": 1536,
+      "runtime": "public/assets/orbital-ring-v1.jpg",
+      "generator": "Built-in image_gen",
+      "generationFile": "exec-f7afdc99-44ae-4d6e-a6da-dc6216287fd7.png",
+      "prompt": "Use case: stylized-concept. Asset type: ONE finished original portrait 2:3 top-down sci-fi aerial shooter background tile. Primary request: a flight high above a colossal orbital ring construction site in deep space. Orthographic straight-down camera, no horizon, no vanishing point. Central 65 percent is mostly empty dark blue-black space with very faint tiny distant stars and a subtle desaturated planetary atmospheric haze far below, low contrast and free of busy objects. The extreme left and right margins show different curved fragments of a huge orbital megastructure far BELOW the combat plane: layered radial armor segments, precise ribs, docking trusses, tiny cyan navigation lights, dark crystal energy housings and believable brushed metal. Curved, radial structures clearly distinguish this from a straight industrial floor corridor; asymmetrical edge silhouettes, never a wall across the center. Beautiful refined high-detail PBR sci-fi 3D game painting with crisp edge craftsmanship and restrained cinematic light. Keep highlights subdued and no point that could be mistaken for a hostile projectile. Intended to scroll vertically: compatible sparse space textures at top and bottom, fragmented edge modules with consistent scale. No player ship, no enemies, no moving projectiles, no UI, no words, no numerals, no branding, no watermark, no large glows or beams through the play area. Return only the final usable background.",
+      "approval": "Original generated candidate; not human art approval",
+      "runtimeSha256": "577de7436bdc12e850983d405de3fda45839baa795ba85272a57ec4013568f63",
+      "runtimeBytes": 128238,
+      "runtimeWidth": 720,
+      "runtimeHeight": 1080
+    }
+  ]
+}
