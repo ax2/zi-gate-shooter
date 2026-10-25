@@ -111,3 +111,7 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 ## Stage315 固定防御机械kit
 
 原创内置image_gen透明2×2创建+布局编辑；候选/最终源1254RGBA及完整两轮提示均保留，非商业参考。运行512RGBA/167618字节，新增public/assets/flight-installations-v1.png，旧图片不覆盖。整体格缩放+透明pad导出，手校轴承/枪口与实际发射联动；详细来源、偏差、SHA与使用边界见FLIGHT_INSTALLATIONS_V1.md及FLIGHT_INSTALLATIONS_V1_PROMPT.md。阶段实际运行图为验证，未替代真人美术/听感/FPS签收。
+
+## Stage317 原创中立回收舱
+
+内置image_gen，完整源图/提示与SHA见[来源](FLIGHT_SALVAGE_V1.md)。256透明PNG整幅缩放保留alpha，非商业参考，无CLI/API回退。

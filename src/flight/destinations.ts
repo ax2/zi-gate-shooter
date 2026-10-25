@@ -12,4 +12,4 @@ export const destinationSpecs=[
 ]as const;
 export const destinationOptions=(previous:number)=>destinationSpecs.filter(d=>d.family!==previous).map(d=>d.family);
 export const patternIndex=(sector:number,family:number)=>Math.floor(sector/3)*3+family;
-export function destinationView(sector:number,family:number){const d=destinationSpecs[family];if(!d)return;const encounter=encounterPlan(sector,family),action=encounterTypes[encounter];return{...d,brief:family===2&&Math.floor(sector/3)%3>0?'折光三拍 · 移位或抢拆':d.brief,encounter,action:action.name,reward:action.reward,pattern:airspacePlan(patternIndex(sector,family)),core:bossCoreSpec(patternIndex(sector,family))};}
+export function destinationView(sector:number,family:number,economy=false){const d=destinationSpecs[family];if(!d)return;const encounter=encounterPlan(sector,family,economy),action=encounterTypes[encounter];return{...d,brief:family===2&&Math.floor(sector/3)%3>0?'折光三拍 · 移位或抢拆':d.brief,encounter,action:action.name,reward:action.reward,pattern:airspacePlan(patternIndex(sector,family)),core:bossCoreSpec(patternIndex(sector,family))};}
