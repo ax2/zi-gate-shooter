@@ -106,3 +106,8 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 
 ## Stage285 光刃专用atlas
 内置image_gen原创+定向编辑，候选/最终2172×724 RGBA、完整提示和偏差保留于art/source/flight-blades-v1-candidate.png、flight-blades-v1.png、FLIGHT_BLADES_V1.md。导出768×256/109023字节，三原格前景3px安全边通过；透明区裁切/等比缩放/16px边，未剪刀锋。基础/进化图与实际绕船、出返刀体同设计，不再复用激光枪。只此附加美术不改命中/伤害，最终用户美术未签收。
+
+
+## Stage315 固定防御机械kit
+
+原创内置image_gen透明2×2创建+布局编辑；候选/最终源1254RGBA及完整两轮提示均保留，非商业参考。运行512RGBA/167618字节，新增public/assets/flight-installations-v1.png，旧图片不覆盖。整体格缩放+透明pad导出，手校轴承/枪口与实际发射联动；详细来源、偏差、SHA与使用边界见FLIGHT_INSTALLATIONS_V1.md及FLIGHT_INSTALLATIONS_V1_PROMPT.md。阶段实际运行图为验证，未替代真人美术/听感/FPS签收。
