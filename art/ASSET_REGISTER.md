@@ -123,3 +123,7 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 ## Stage320 repair escort
 
 Original built-in image_gen transparent sprite, unchanged1254 source/whole384 runtime. Two visible repair nozzles, three cells. See FLIGHT_REPAIR_ESCORT_V1.md and complete prompt; no commercial reference or new dependency.
+
+## Stage321 main cannon milestones
+
+Original built-in image_gen transparent six modules: electric/optical at three tiers each. Whole-cell normalized atlas, no repaint/trim; source and full prompt retained. See FLIGHT_MAIN_MODULES_V1.md and exporter metadata.
