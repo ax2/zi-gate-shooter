@@ -9,7 +9,7 @@ function scene(){const w=new FlightWorld(1337);w.start('split');w.sector=3;w.sec
 function event(w=scene()){core(w).tryEncounter();return{w,nodes:w.encounter!.convoy!.nodes.map(id=>w.enemies.find(e=>e.id===id)!)};}
 const kill=(w:FlightWorld,e:Enemy)=>core(w).hit(e,1e6,'guns');
 it('the first cycle stays unchanged, alternating later cannon visits have real dual targets and advertised six-part rewards',()=>{
- expect([0,1,2].map(s=>encounterPlan(s,s))).toEqual(['arms','mines','shield']);expect([3,4,5].map(s=>encounterPlan(s,0))).toEqual(['convoy','convoy','convoy']);expect(encounterPlan(6,0)).toBe('arms');expect(encounterPlan(9,0)).toBe('convoy');expect(encounterPlan(4,1)).toBe('reactor');expect(encounterPlan(5,2)).toBe('shield');
+ expect([0,1,2].map(s=>encounterPlan(s,s))).toEqual(['arms','mines','shield']);expect([3,4,5].map(s=>encounterPlan(s,0))).toEqual(['convoy','convoy','convoy']);expect(encounterPlan(6,0)).toBe('arms');expect(encounterPlan(9,0)).toBe('convoy');expect(encounterPlan(4,1)).toBe('reactor');expect(encounterPlan(5,2)).toBe('citadel');
  expect(destinationView(3,0)).toMatchObject({action:'双艇追缉',reward:6});expect(destinationView(0,0)?.reward).toBe(4);
 });
 it('two routes cross instead of copying the old courier drift, and first-loss urgency increases actual travel',()=>{

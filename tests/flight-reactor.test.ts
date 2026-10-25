@@ -8,7 +8,7 @@ const core=(w:FlightWorld)=>w as any,hit=(w:FlightWorld,e:Enemy,n=e.hp)=>core(w)
 function scene(){const w=new FlightWorld(1337);w.start('split');w.sector=3;w.sectorTime=18;core(w).destinationFamily=1;for(const k of['spawnTimer','shotTimer','arcTimer','laserTimer'])core(w)[k]=1e6;return w;}
 function event(w=scene()){core(w).tryEncounter();const ship=w.enemies.find(e=>e.id===w.encounter!.target)!;ship.x=360;ship.y=320;const nodes=w.encounter!.reactor!.nodes.map(id=>w.enemies.find(e=>e.id===id)!);for(const n of nodes)Object.assign(n,reactorPodPosition(ship,n.reactorPod!.index));return{w,ship,nodes};}
 it('magnetic later visits alternate reactor tactics while the first three encounters and convoy remain distinct',()=>{
- expect([0,1,2].map(i=>encounterPlan(i,i))).toEqual(['arms','mines','shield']);expect(encounterPlan(3,0)).toBe('convoy');expect(encounterPlan(3,1)).toBe('reactor');expect(encounterPlan(6,1)).toBe('mines');expect(encounterPlan(9,1)).toBe('reactor');expect(encounterPlan(4,2)).toBe('shield');
+ expect([0,1,2].map(i=>encounterPlan(i,i))).toEqual(['arms','mines','shield']);expect(encounterPlan(3,0)).toBe('convoy');expect(encounterPlan(3,1)).toBe('reactor');expect(encounterPlan(6,1)).toBe('mines');expect(encounterPlan(9,1)).toBe('reactor');expect(encounterPlan(4,2)).toBe('citadel');
  expect(destinationView(3,1)).toMatchObject({encounter:'reactor',action:'连锁雷库',reward:6});expect(destinationView(3,0)?.encounter).toBe('convoy');
 });
 it('one core and three capacitors require four free slots with no half-event, repeated admission or extra mine weapons on passive pods',()=>{
