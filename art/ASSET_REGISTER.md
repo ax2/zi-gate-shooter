@@ -119,3 +119,7 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 ## Stage319 增援载机
 
 内置image_gen原创一张384透明载机，源/完整提示/导出SHA与校准见[来源](FLIGHT_CARRIER_V1.md)，未使用商业游戏参考、CLI/API回退或抠图补画。现有drone-v1复用作真实护卫。
+
+## Stage320 repair escort
+
+Original built-in image_gen transparent sprite, unchanged1254 source/whole384 runtime. Two visible repair nozzles, three cells. See FLIGHT_REPAIR_ESCORT_V1.md and complete prompt; no commercial reference or new dependency.

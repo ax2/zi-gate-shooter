@@ -1,0 +1,5 @@
+# Original repair escort sprite
+
+Generated with built-in image_gen, transparent RGBA, no reference/commercial assets, no CLI/API key. Exact prompt is FLIGHT_REPAIR_ESCORT_V1_PROMPT.md. Original generated artifact: C:/Users/ax2/.codex/generated_images/01a12920-34ce-71c3-86ff-acc7b3c3f824/exec-3fafaad3-669e-4d7c-b1f2-08a0c54d3ba5.png; copied unchanged to art/source/flight-repair-escort-v1.png. Whole square RGBA resize only to public/assets/flight-repair-escort-v1.png, no trimming/repaint/threshold. Export tool locks source SHA and preserves generated alpha.
+
+1254 square; strong alpha bounds x55..1200/y193..1036, source SHA e3fa323a1720209dfa28ca5d98a744414fb8d6af48a8d75ffb93bee432ff75eb. Width about91% rather than prompt72%, so stated8% horizontal margin not met; no cut alpha on 3px perimeter. Retained complete sprite with readable two repair arms and three cells; not an exact CAD model. Literal emitter samples384/1000 and856/986 drive actual effects, renderer128logical. Runtime output SHA/bytes and raw RGBA samples in build/art/flight-repair-escort-v1.json and archive export-record. Native runtime checks pending; generated art alone is not gameplay acceptance.
