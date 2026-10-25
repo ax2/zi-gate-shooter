@@ -39,6 +39,12 @@ export class FlightHangar{
  sale(id:string){const v=this.data.weapons[id];return v?v.paid?Math.floor(v.paid*.5):v.gift?0:Math.floor(hangarById.get(id)!.price*.35):0;}
  buy(id:string){const price=this.price(id);if(price===undefined||this.coins<price||this.requirement(id))return false;const old=this.data.weapons[id];this.data.coins-=price;this.data.weapons[id]={level:(old?.level??0)+1,paid:(old?.paid??0)+price,gift:old?.gift??false};this.revision++;return true;}
  equip(id:string,slot:number){const w=hangarById.get(id);if(!w||!this.level(id)||!integer(slot,1)||slot>=this.capacity(w.kind))return false;const list=this.data.equipped[w.kind],at=list.indexOf(id);if(at===slot)return false;if(at>=0){const other=list[slot];list[slot]=id;if(other)list[at]=other;else list.splice(at,1);}else list[slot]=id;this.data.equipped[w.kind]=list.filter(Boolean);this.revision++;return true;}
+ /** Validate both slots and research before changing either one. Replaced weapons stay owned. */
+ assemble(side:string,mainSlot:number,sideSlot:number){const w=hangarById.get(side),main=w?.combo?.weapon;
+  if(!main||this.level(main)<2||this.level(side)<3||!integer(mainSlot,1)||!integer(sideSlot,1)||mainSlot>=this.capacity('main')||sideSlot>=this.capacity('side'))return false;
+  if(this.data.equipped.main[mainSlot]===main&&this.data.equipped.side[sideSlot]===side)return false;
+  this.equip(main,mainSlot);this.equip(side,sideSlot);return true;
+ }
  unequip(kind:WeaponKind,slot:number){const list=this.data.equipped[kind];if(!integer(slot,1)||slot>=list.length||kind==='main'&&list.length===1)return false;list.splice(slot,1);this.revision++;return true;}
  canSell(id:string){return!!this.level(id)&&!(this.data.equipped.main.length===1&&this.data.equipped.main[0]===id);}
  sell(id:string){if(!this.canSell(id))return false;const price=this.sale(id),w=hangarById.get(id)!;this.data.equipped[w.kind]=this.data.equipped[w.kind].filter(key=>key!==id);delete this.data.weapons[id];this.data.coins=Math.min(hangarRules.maxCoins,this.coins+price);this.revision++;return true;}
