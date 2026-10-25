@@ -5,6 +5,23 @@ import { defaults } from '../src/ui/storage';
 
 afterEach(() => vi.unstubAllGlobals());
 
+it('magrail layers respect the real twelve-voice budget, release completely, and cannot create muted voices', async () => {
+  const f = audioFixture(); await f.audio.unlock();
+  for (let i = 0; i < 30; i++) {
+    for (const type of ['magrail-charge', 'magrail-fire', 'magrail-burst']) f.audio.event(type, 5);
+    f.advance(90);
+    expect(f.audio.activeNodes).toBeLessThanOrEqual(12);
+  }
+  expect(f.audio.activeNodes).toBe(12);
+  for (const voice of f.voices) voice.osc.onended?.();
+  expect(f.audio.activeNodes).toBe(0);
+  f.audio.enabled = false; f.advance(1000);
+  f.audio.event('magrail-burst', 5); expect(f.audio.activeNodes).toBe(0);
+  f.audio.enabled = true; f.advance(1000);
+  f.audio.event('magrail-burst', 5); expect(f.audio.activeNodes).toBe(3);
+  f.audio.stop(); expect(f.audio.activeNodes).toBe(0);
+});
+
 function audioFixture(fault = '') {
   let clock = 1000, currentFault = fault, contexts = 0;
   const voices: Array<{ osc: Record<string, any>; gain: Record<string, any> }> = [];

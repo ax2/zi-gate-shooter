@@ -13,11 +13,11 @@ export interface HangarPainter{
  line:(points:{x:number;y:number}[],color:string,width:number)=>void;
  ship:(x:number,y:number,size:number)=>void;
 }
-export function hangarStats(g:FlightHangar,id:string,level=Math.max(1,g.level(id))){const w=hangarById.get(id);if(!w)return'';const save=g.snapshot();save.weapons[id]={level,paid:0,gift:false};save.equipped[w.kind]=[id];const preview=new FlightHangar(save),a=new Assembly();preview.project(a);const p=flightProfile(a);
+export function hangarStats(g:FlightHangar,id:string,level=Math.max(1,g.level(id))){const w=hangarById.get(id);if(!w)return'';const save=g.snapshot();save.weapons[id]={level,paid:0,gift:false};if(!save.equipped[w.kind].includes(id))save.equipped[w.kind]=[id];const preview=new FlightHangar(save),a=new Assembly();preview.project(a);const p=flightProfile(a);
  if(id==='cannon')return`${p.guns.count}路 + 翼炮${p.guns.wingCount}发 · ${n(p.guns.damage)}伤 / ${p.guns.interval}s`;
  if(id==='coil')return`${p.electric.targets}敌 · ${n(p.electric.damage)}伤 / ${p.electric.interval}s`;
  if(id==='laser')return`${p.optical.beams}束 · ${n(p.optical.damage)}伤 / ${p.optical.interval}s`;
- if(id==='rail')return`${n(p.guns.railDamage)}伤 · 穿${p.guns.railPierce+1}敌 / ${p.guns.railInterval}s`;
+ if(id==='rail')return`${p.guns.railSalvo}轨 × ${n(p.guns.railDamage)}伤 · 穿${p.guns.railPierce+1}敌 / ${p.guns.railInterval}s`;
  return['hive','needles','seekorb','electrodes','tracker','blades'].includes(id)?`强度 ${Math.round(p.powers[w.column]*100)}% · ${w.steps[level-1]}`:'';
 }
 export function quoteHangar(g:FlightHangar,action:string):HangarQuote|undefined{const[id,key]=action.split(':'),weapon=hangarById.get(key);let price:number|undefined,title='',detail='',sale=false;
@@ -41,7 +41,7 @@ export function paintHangar(u:HangarPainter,g:FlightHangar,state:{tab:HangarTab;
   if(pages>1){u.button('hangar-page:'+Math.max(0,page-1),'‹',30,667,75,33);u.text((page+1)+' / '+pages,360,685,20,'#bcd4dc','center');u.button('hangar-page:'+Math.min(pages-1,page+1),'›',613,667,75,33);}
   const w=hangarById.get(state.selected)??hangarWeapons[0],level=g.level(w.id),view=Math.max(1,Math.min(5,state.level||Math.max(1,level)));u.box(28,719,664,425,'#0b2533','#547a88');u.icon(w.icon,83,763,67);u.text(w.name+'  '+(level?'Lv'+level:'未拥有'),136,750,29,'#edf0df');u.text(g.active(w.id)?'当前已装：'+w.steps[level-1]:'库存可随时换装 · 同一武器只占1槽',136,787,18,'#aecbd3');
   for(let i=0;i<5;i++){const x=91+i*132;if(i<4)u.line([{x:x+32,y:846},{x:x+100,y:846}],i<level-1?cyan:'#365464',3);const tech=i===2&&w.combo?w.combo.tech:w.techs[i].at(-1),icon=tech?techById.get(tech)?.icon??w.icon:w.icon;u.icon(icon,x,846,i===2||i===4?49:38,i>=level);if(i===2||i===4)u.text(i===4?'★':'◆',x+27,820,16,gold,'center');u.text('Lv'+(i+1),x,883,18,i+1===view?gold:'#d2dfe0','center');u.text(w.steps[i],x,912,16,i===2||i===4?gold:'#abc8cc','center');u.hit('hangar-level:'+(i+1),w.steps[i]+' Lv'+(i+1),x-43,813,86,139);}
-  u.text('预览 '+hangarStats(g,w.id,view),360,978,20,'#c7e4df','center');const required=g.requirement(w.id);if(w.combo)u.text('Lv3组合：同时装备 '+hangarById.get(w.combo.weapon)!.name+' Lv2',360,1007,18,required?'#f5c78e':'#9dbbc7','center');
+  u.text((g.active(w.id)?'搭配预览 ':'单装预览 ')+hangarStats(g,w.id,view),360,978,20,'#c7e4df','center');const required=g.requirement(w.id);if(w.combo)u.text('Lv3组合：同时装备 '+hangarById.get(w.combo.weapon)!.name+' Lv2',360,1007,18,required?'#f5c78e':'#9dbbc7','center');
   const price=g.price(w.id);if(price!==undefined&&!required)u.button('hangar-quote:buy:'+w.id,(level?'升级 Lv'+(level+1):'购买')+' ◈'+price,44,1033,310,48,g.coins>=price);else u.text(required?'先拥有 '+hangarById.get(required)!.name+' Lv2':'最高等级',197,1056,20,gold,'center');if(level&&g.canSell(w.id))u.button('hangar-quote:sell:'+w.id,'出售 +'+g.sale(w.id),376,1033,300,48);else if(level)u.text('保留至少1个主武器',526,1056,20,'#9ebbc7','center');
   if(level)for(let slot=0;slot<g.capacity(w.kind);slot++){const active=g.equipped(w.kind)[slot]===w.id,removable=active&&(w.kind==='side'||g.equipped('main').length>1);u.button(removable?'hangar-unequip:'+w.kind+':'+slot:'hangar-equip:'+w.id+':'+slot,(removable?'卸下入仓':active?'已装':'装备 / 替换')+' '+(w.kind==='main'?'主':'副')+(slot+1),44+slot*332,1090,310,42,active);}
  }

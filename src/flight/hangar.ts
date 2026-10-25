@@ -6,7 +6,7 @@ export const hangarWeapons:HangarWeapon[]=[
  {id:'cannon',name:'双翼机炮',kind:'main',icon:0,price:140,column:0,steps:['双翼齐射','弹墙反弹','爆裂弹芯','六翼弹幕','蜂群武库'],techs:[['split'],['bounce'],['flak'],['barrage'],['arsenal']]},
  {id:'coil',name:'雷电主炮',kind:'main',icon:1,price:160,column:1,steps:['双目标电弧','四目标连锁','远距索敌','磁暴清弹','双源风暴'],techs:[['coil'],['chain'],['seeker'],['emp'],['tempest']]},
  {id:'laser',name:'激光主炮',kind:'main',icon:2,price:180,column:2,steps:['贯穿光束','三路分光','命中灼烧','棱镜反射','深穿日冕'],techs:[['laser'],['twin'],['burn'],['prism'],['drill','sun']]},
- {id:'rail',name:'磁轨主炮',kind:'main',icon:3,price:220,column:0,steps:['高伤贯穿','强化线圈','重弹贯穿','超载齐射','磁轨突破'],techs:[['rail'],[],[],[],['railburst']]},
+ {id:'rail',name:'磁轨主炮',kind:'main',icon:3,price:220,column:0,steps:['单轨贯穿','双极贯穿','重型穿甲','三轨过载','磁轨突破'],techs:[['rail'],[],[],[],['railburst']]},
  {id:'hive',name:'蜂巢副炮',kind:'side',icon:24,price:120,column:0,steps:['六发扇射','强化炮芯','爆星组合','强化爆弹','精密弹仓'],techs:[['hive'],[],[],[],[]],combo:{weapon:'cannon',tech:'starhive'}},
  {id:'needles',name:'磁钉副炮',kind:'side',icon:25,price:140,column:0,steps:['三路贯穿','强化磁钉','雷网组合','强化雷网','精密磁轨'],techs:[['needles'],[],[],[],[]],combo:{weapon:'coil',tech:'thundernet'}},
  {id:'seekorb',name:'巡航雷球',kind:'side',icon:26,price:150,column:1,steps:['追踪双雷球','强化雷球','星核组合','强化星核','精密制导'],techs:[['seekorb'],[],[],[],[]],combo:{weapon:'laser',tech:'plasmacore'}},
@@ -51,6 +51,6 @@ export class FlightHangar{
  /** Project active weapons only. Ownership and levels remain in permanent storage. */
  project(a:Assembly){a.installed.clear();for(const key of Object.keys(a.calibrated))delete a.calibrated[key];for(const key of['alloy','coil','lens']as const)a.inventory[key]=0;a.salvage=this.level('cannon')&&this.active('cannon')?(this.level('cannon')-1)*10:0;const components:string[]=[],evolutions:string[]=[];
   for(const id of[...this.data.equipped.main,...this.data.equipped.side]){const w=hangarById.get(id)!,level=this.level(id);for(const set of w.techs.slice(0,level))for(const tech of set)a.installed.add(tech);const root=w.techs[0][0];a.calibrated[root]=(level-1)*2;if(w.kind==='side'){components.push(id);const combo=level>=3&&w.combo&&this.active(w.combo.weapon)&&this.level(w.combo.weapon)>=2?w.combo.tech:undefined;evolutions.push(combo??'');if(combo)a.installed.add(combo);}}
-  a.loadout={cannon:this.active('cannon'),components,evolutions};
+  a.loadout={railLevel:this.active('rail')?this.level('rail'):0,cannon:this.active('cannon'),components,evolutions};
  }
 }

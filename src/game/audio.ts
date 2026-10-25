@@ -3,6 +3,7 @@ import type { WeaponKind } from '../core/weapons';
 export class GameAudio {
   private context?: AudioContext;
   private lastShot = -Infinity;
+  private magrailAt={charge:-Infinity,fire:-Infinity,burst:-Infinity};
   private lastRefraction = -Infinity;
   private lastLaser = -Infinity;
   private lastFracture = -Infinity;
@@ -52,6 +53,12 @@ export class GameAudio {
     }
   }
   event(type: string, stage: number, weapon: WeaponKind = 'pulse') {
+    if(type==='magrail-charge'||type==='magrail-fire'||type==='magrail-burst'){
+      const key=type==='magrail-charge'?'charge':type==='magrail-fire'?'fire':'burst',now=this.now();if(now-this.magrailAt[key]<(key==='burst'?180:90))return;this.magrailAt[key]=now;
+      if(key==='charge')this.tone(380,1450,.16,.014,'sine');
+      else if(key==='fire'){this.tone(1600,190,.13,.034,'sawtooth');this.tone(140,48,.16,.025,'triangle');}
+      else{this.tone(1900,240,.23,.04,'sawtooth');this.tone(260,38,.28,.032,'triangle');this.tone(900,1800,.09,.012,'sine');}return;
+    }
     if(type==='alert'){this.tone(240,110,.2,.035,'triangle');return;}
     if(type==='boss-volley'){this.tone(135,42,.19,.04,'triangle');this.tone(450,90,.1,.025,'sawtooth');return;}
     if(type==='shield-down'){this.tone(480,1300,.2,.04,'sine');this.tone(220,70,.18,.025,'triangle');return;}
