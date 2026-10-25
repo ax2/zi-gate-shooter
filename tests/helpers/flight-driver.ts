@@ -1,3 +1,4 @@
+import{carrierPose,carrierRules}from'../../src/flight/carrier';
 import{prismPulse,prismSalvoRules}from'../../src/flight/prism-salvo';
 import{bossCoreMuzzle,bossCorePort}from'../../src/flight/boss-core';
 import{raiderPose}from'../../src/flight/raiders';
@@ -20,6 +21,7 @@ export const advancedOrders:Record<FlightRoute,string[]>={ballistic:['railburst'
 export function flightChoice(w:FlightWorld,route:FlightRoute,variant=0){const order=[...flightOrders[route],...advancedOrders[route].slice().sort((a,b)=>a===advancedOrders[route][variant]?-1:b===advancedOrders[route][variant]?1:0)];return order.find(id=>(!keystones.includes(id)||id===desiredKeystone[route])&&!w.assembly.has(id)&&w.assembly.can(id));}
 export function flightGoal(w:FlightWorld,route:FlightRoute){return [...flightOrders[route],...advancedOrders[route]].find(id=>(!keystones.includes(id)||id===desiredKeystone[route])&&!w.assembly.has(id)&&!w.assembly.missing(id).length&&!w.assembly.lockedBy(id));}
 function flightEnemyPose(w:FlightWorld,e:Enemy,t:number):{x:number;y:number}{
+ if(e.carrier)return carrierPose(e.age+t,e.carrier);if(e.carrierChild&&e.age<carrierRules.emerge){const u=Math.min(t,carrierRules.emerge-e.age);return{x:e.x+e.carrierChild.side*carrierRules.sideSpeed*u,y:e.y+carrierRules.downSpeed*u+Math.max(0,t-u)*130};}
  if(e.squad)return e.retreat?{x:e.x,y:e.y+250*t}:squadPose(e.squad,e.age+t);
  if(e.raider)return raiderPose(e.raider,e.age+t);
  if(e.kind==='boss')return{x:360+Math.sin((e.age+t)*.5)*(w.bossAssembly?.parent===e.id?bossPartRules.swing:190),y:Math.min(285,e.y+130*t)};

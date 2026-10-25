@@ -115,3 +115,7 @@ Stage-128：mounted-modules-v1，内置imagegen参考自有arc-player-v1生成�
 ## Stage317 原创中立回收舱
 
 内置image_gen，完整源图/提示与SHA见[来源](FLIGHT_SALVAGE_V1.md)。256透明PNG整幅缩放保留alpha，非商业参考，无CLI/API回退。
+
+## Stage319 增援载机
+
+内置image_gen原创一张384透明载机，源/完整提示/导出SHA与校准见[来源](FLIGHT_CARRIER_V1.md)，未使用商业游戏参考、CLI/API回退或抠图补画。现有drone-v1复用作真实护卫。
