@@ -1,0 +1,8 @@
+/** Friendly, non-solid mission craft. No enemy ID, weapon target, or permanent state. */
+export const supplyEscortRules={hp:16,guard:.45,radius:39,size:154,duration:16,coins:48,receipt:3.5}as const;
+export interface SupplyEscortState{x:number;y:number;px:number;py:number;hp:number;hits:number;absorbed:number;hit:number;side:number}
+export function supplyEscortPose(age:number,side:number){const t=Math.max(0,Math.min(1,age/supplyEscortRules.duration));return{x:360+side*140*Math.sin(t*Math.PI),y:1080-780*t};}
+export function createSupplyEscort(side:number):SupplyEscortState{const at=supplyEscortPose(0,side);return{...at,px:at.x,py:at.y,hp:supplyEscortRules.hp,hits:0,absorbed:0,hit:0,side};}
+interface Motion{x:number;y:number;px:number;py:number;wallTurn?:{x:number;y:number;t:number}}
+/** First entry, not closest approach: resolve ship/player contact in real time order. */
+export function escortContact(a:Motion,b:Motion,r:number){const sample=(p:Motion,t:number)=>{const k=p.wallTurn;if(!k)return{x:p.px+(p.x-p.px)*t,y:p.py+(p.y-p.py)*t};const first=t<=k.t,f=first?t/(k.t||1):(t-k.t)/(1-k.t||1);return first?{x:p.px+(k.x-p.px)*f,y:p.py+(k.y-p.py)*f}:{x:k.x+(p.x-k.x)*f,y:k.y+(p.y-k.y)*f};};const cuts=[0,...[a.wallTurn?.t,b.wallTurn?.t].filter((n):n is number=>n!==undefined&&n>0&&n<1),1].sort((a,b)=>a-b);for(let i=1;i<cuts.length;i++){const lo=cuts[i-1],hi=cuts[i];if(hi===lo)continue;const p=sample(a,lo),q=sample(b,lo),end=sample(a,hi),target=sample(b,hi),x=p.x-q.x,y=p.y-q.y,dx=end.x-target.x-x,dy=end.y-target.y-y,c=x*x+y*y-r*r;if(c<=0)return lo;const aa=dx*dx+dy*dy,bb=2*(x*dx+y*dy),disc=bb*bb-4*aa*c;if(aa===0||disc<0)continue;const t=(-bb-Math.sqrt(disc))/(2*aa);if(t>=0&&t<=1)return lo+(hi-lo)*t;}return undefined;}
