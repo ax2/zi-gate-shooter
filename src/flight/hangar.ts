@@ -1,3 +1,4 @@
+import{achievementLiveries}from'./liveries';
 import{type Assembly}from'./technology';
 export type WeaponKind='main'|'side';
 export interface HangarWeapon{id:string;name:string;kind:WeaponKind;icon:number;price:number;column:number;steps:string[];techs:string[][];combo?:{weapon:string;tech:string}}
@@ -24,7 +25,7 @@ export class FlightHangar{
   for(const w of hangarWeapons){const v=r.weapons?.[w.id];if(v&&integer(v.level,5)&&v.level>=1&&integer(v.paid,hangarRules.maxCoins))d.weapons[w.id]={level:v.level,paid:v.paid,gift:v.gift===true};}
   for(const kind of['main','side']as const){if(integer(r.slots?.[kind],2)&&r.slots[kind]>=1)d.slots[kind]=r.slots[kind];if(Array.isArray(r.equipped?.[kind]))d.equipped[kind]=[...new Set<string>(r.equipped[kind].filter((id:unknown)=>typeof id==='string'&&d.weapons[id]&&hangarById.get(id)?.kind===kind))].slice(0,d.slots[kind]);}
   if(!d.equipped.main.length){const first=hangarWeapons.find(w=>w.kind==='main'&&d.weapons[w.id]);if(first)d.equipped.main=[first.id];}
-  d.started=d.equipped.main.length>0;if(Array.isArray(r.skins)&&r.skins.includes('ember'))d.skins.push('ember');if(d.skins.includes(r.skin))d.skin=r.skin;this.data=d;
+  d.started=d.equipped.main.length>0;if(Array.isArray(r.skins))for(const id of['ember',...achievementLiveries.map(s=>s.id)])if(r.skins.includes(id))d.skins.push(id);if(d.skins.includes(r.skin))d.skin=r.skin;this.data=d;
  }
  get coins(){return this.data.coins;}get started(){return this.data.started;}get skin(){return this.data.skin;}
  snapshot():HangarSave{return structuredClone(this.data);}
@@ -49,6 +50,8 @@ export class FlightHangar{
  canSell(id:string){return!!this.level(id)&&!(this.data.equipped.main.length===1&&this.data.equipped.main[0]===id);}
  sell(id:string){if(!this.canSell(id))return false;const price=this.sale(id),w=hangarById.get(id)!;this.data.equipped[w.kind]=this.data.equipped[w.kind].filter(key=>key!==id);delete this.data.weapons[id];this.data.coins=Math.min(hangarRules.maxCoins,this.coins+price);this.revision++;return true;}
  unlock(kind:WeaponKind){if(!['main','side'].includes(kind)||this.capacity(kind)>=2)return false;const price=kind==='main'?hangarRules.mainSlot:hangarRules.sideSlot;if(this.coins<price)return false;this.data.coins-=price;this.data.slots[kind]++;this.revision++;return true;}
+ /** Only accepted badge IDs grant known cosmetic inventory; no money, loadout or auto-wear. */
+ unlockLiveries(badges:readonly string[]){const earned:string[]=[];for(const s of achievementLiveries)if(badges.includes(s.badge)&&!this.data.skins.includes(s.id)){this.data.skins.push(s.id);earned.push(s.id);this.revision++;}return earned;}
  buySkin(){if(this.data.skins.includes('ember')||this.coins<hangarRules.skin)return false;this.data.coins-=hangarRules.skin;this.data.skins.push('ember');this.revision++;return true;}
  wear(skin:string){if(!this.data.skins.includes(skin)||skin===this.skin)return false;this.data.skin=skin;this.revision++;return true;}
  supply(id:string,p:{hp:number;maxHp:number;armor:number},live:boolean){const price=id==='repair'?hangarRules.repair:id==='armor'?hangarRules.armor:Infinity;if(!live||this.coins<price||p.hp<=0||id==='repair'&&p.hp>=p.maxHp||id==='armor'&&p.armor>=6)return false;this.data.coins-=price;if(id==='repair')p.hp=Math.min(p.maxHp,p.hp+2);else p.armor=6;this.revision++;return true;}
