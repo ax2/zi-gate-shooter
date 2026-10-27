@@ -1,10 +1,10 @@
 export interface WeaponImpact{target:number;source:string;frame:number;x:number;y:number;age:number;life:number;size:number;angle:number;lethal:boolean}
 export const impactRules={limit:24,weakLimit:10,repeat:.085,lives:[.28,.3,.32,.3,.4,.34],maxSize:112}as const;
 const families:readonly string[][]=[
- ['guns','hive','bounce','satellites'],
- ['rail','needles','railburst'],
- ['coil','chain','seeker','stormgun','tempest','seekorb','electrodes','thundernet','stormlens','reversefield','emp'],
- ['laser','twin','drill','prism','sun','tracker','aurorawing','huntprism','lightwell'],
+ ['overload-cannon','guns','hive','bounce','satellites'],
+ ['overload-rail','rail','needles','railburst'],
+ ['overload-coil','coil','chain','seeker','stormgun','tempest','seekorb','electrodes','thundernet','stormlens','reversefield','emp'],
+ ['overload-laser','laser','twin','drill','prism','sun','tracker','aurorawing','huntprism','lightwell'],
  ['flak','starhive','plasmacore','burn','mineblast','novaecho'],
  ['blades','bladewave'],
 ];
