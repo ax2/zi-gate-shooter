@@ -1,3 +1,4 @@
+import{newNavigation,validateNavigation,planetById,adjacentPlanets,unlockedRegion,planetReward,type NavigationSave}from'./star-routes';
 import{achievementLiveries}from'./liveries';
 import{type Assembly}from'./technology';
 export type WeaponKind='main'|'side';
@@ -16,7 +17,7 @@ export const hangarWeapons:HangarWeapon[]=[
  {id:'blades',name:'回旋光刃',kind:'side',icon:29,price:160,column:2,steps:['环身切割','强化光刃','回响组合','强化回响','精密旋刃'],techs:[['blades'],[],[],[],[]],combo:{weapon:'cannon',tech:'bladewave'}},
 ];
 export const hangarById=new Map(hangarWeapons.map(w=>[w.id,w]));
-export interface HangarSave{version:1;coins:number;weapons:Record<string,{level:number;paid:number;gift:boolean}>;slots:{main:number;side:number};equipped:{main:string[];side:string[]};skins:string[];skin:string;started:boolean}
+export interface HangarSave{navigation?:NavigationSave;version:1;coins:number;weapons:Record<string,{level:number;paid:number;gift:boolean}>;slots:{main:number;side:number};equipped:{main:string[];side:string[]};skins:string[];skin:string;started:boolean}
 const integer=(n:unknown,max:number)=>typeof n==='number'&&Number.isSafeInteger(n)&&n>=0&&n<=max;
 const blank=():HangarSave=>({version:1,coins:0,weapons:{},slots:{main:1,side:1},equipped:{main:[],side:[]},skins:['standard'],skin:'standard',started:false});
 export class FlightHangar{
@@ -25,8 +26,11 @@ export class FlightHangar{
   for(const w of hangarWeapons){const v=r.weapons?.[w.id];if(v&&integer(v.level,5)&&v.level>=1&&integer(v.paid,hangarRules.maxCoins))d.weapons[w.id]={level:v.level,paid:v.paid,gift:v.gift===true};}
   for(const kind of['main','side']as const){if(integer(r.slots?.[kind],2)&&r.slots[kind]>=1)d.slots[kind]=r.slots[kind];if(Array.isArray(r.equipped?.[kind]))d.equipped[kind]=[...new Set<string>(r.equipped[kind].filter((id:unknown)=>typeof id==='string'&&d.weapons[id]&&hangarById.get(id)?.kind===kind))].slice(0,d.slots[kind]);}
   if(!d.equipped.main.length){const first=hangarWeapons.find(w=>w.kind==='main'&&d.weapons[w.id]);if(first)d.equipped.main=[first.id];}
-  d.started=d.equipped.main.length>0;if(Array.isArray(r.skins))for(const id of['ember',...achievementLiveries.map(s=>s.id)])if(r.skins.includes(id))d.skins.push(id);if(d.skins.includes(r.skin))d.skin=r.skin;this.data=d;
+  if(r.navigation)d.navigation=validateNavigation(r.navigation);d.started=d.equipped.main.length>0;if(Array.isArray(r.skins))for(const id of['ember',...achievementLiveries.map(s=>s.id)])if(r.skins.includes(id))d.skins.push(id);if(d.skins.includes(r.skin))d.skin=r.skin;this.data=d;
  }
+ enableNavigation(){if(!this.data.navigation){this.data.navigation=newNavigation();this.revision++;}}
+ get navigation(){return this.data.navigation?structuredClone(this.data.navigation):undefined;}
+ arrivePlanet(from:string,to:string){const n=this.data.navigation,p=planetById.get(to);if(!n||n.at!==from||!p||p.region>unlockedRegion(n)||!adjacentPlanets(from).includes(to))return;const first=!n.visited.includes(to),coins=planetReward(p,first);if(first){n.visited.push(to);n.visited.sort();}n.at=to;this.data.coins=Math.min(hangarRules.maxCoins,this.coins+coins);this.revision++;return{planet:to,first,coins};}
  get coins(){return this.data.coins;}get started(){return this.data.started;}get skin(){return this.data.skin;}
  snapshot():HangarSave{return structuredClone(this.data);}
  level(id:string){return this.data.weapons[id]?.level??0;}

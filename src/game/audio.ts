@@ -59,6 +59,9 @@ export class GameAudio {
       else if(key==='fire'){this.tone(1600,190,.13,.034,'sawtooth');this.tone(140,48,.16,.025,'triangle');}
       else{this.tone(1900,240,.23,.04,'sawtooth');this.tone(260,38,.28,.032,'triangle');this.tone(900,1800,.09,.012,'sine');}return;
     }
+    if(type==='rush-warning'){this.tone(660,660,.16,.035,'sine');this.tone(990,990,.32,.018,'triangle');return;}
+    if(type==='rush-start'||type==='engine-boost'){this.tone(100,450,.3,.035,'sawtooth');this.tone(220,880,.25,.018,'sine');return;}
+    if(type==='star-arrival'){this.tone(440,880,.32,.035,'sine');this.tone(660,1320,.45,.025,'triangle');return;}
     if(type==='alert'){this.tone(240,110,.2,.035,'triangle');return;}
     if(type==='boss-volley'){this.tone(135,42,.19,.04,'triangle');this.tone(450,90,.1,.025,'sawtooth');return;}
     if(type==='shield-down'){this.tone(480,1300,.2,.04,'sine');this.tone(220,70,.18,.025,'triangle');return;}
